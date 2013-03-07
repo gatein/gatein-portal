@@ -19,8 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
- 
- .UIAction {
+.UIAction {
     background-color: #F5F5F5;
     border-radius: 0 0 6px 6px;
     border-top: 1px solid #DDDDDD;
@@ -44,15 +43,13 @@
     border-radius: 0.28571428571429em;
     padding: 0.28571428571429em 0.85714285714286em;
     display: inline-block;
-}    
+}
 
-.UIAction .ActionButton.LightBlueStyle,
-.UIAction .ActionButton.DarkGrayButton {
+.UIAction .ActionButton.LightBlueStyle,.UIAction .ActionButton.DarkGrayButton {
     background: inherit;
 }
 
-.UIAction .ActionButton:hover
-{
- background-color: #014f87;
- color: #FFF; 
+.UIAction .ActionButton:hover {
+    background-color: #014f87;
+    color: #FFF;
 }

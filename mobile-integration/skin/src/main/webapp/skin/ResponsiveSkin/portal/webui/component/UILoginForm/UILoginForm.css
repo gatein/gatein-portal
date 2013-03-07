@@ -7,11 +7,11 @@
 }
 
 .UILogin .UIForgetPasswordWizard .UIFormGrid {
-width: 90%
+    width: 90%
 }
 
-.UILogin .FieldComponent.portlet-input-field input[type="text"]{
-width: 90%;
+.UILogin .FieldComponent.portlet-input-field input[type="text"] {
+    width: 90%;
 }
 
 .UILogin .SigninTitle {
@@ -34,9 +34,7 @@ width: 90%;
     padding-left: 0.93333333333333em;
 }
 
-.UILogin input.UserName,
-.UILogin input.Password,
-.UILogin input[type="text"] {
+.UILogin input.UserName,.UILogin input.Password,.UILogin input[type="text"] {
     border: 1px solid #ccc;
     width: 100%;
     height: 1.4285714285714em;
@@ -46,105 +44,75 @@ width: 90%;
     color: #555555;
     padding: 4px 6px;
     vertical-align: middle;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin-bottom: 0.6875em;
 }
 
-.UILogin input.UserName:focus,
-.UILogin input.Password:focus,
-.UILogin input:focus {
+.UILogin input.UserName:focus,.UILogin input.Password:focus,.UILogin input:focus {
     border-color: rgba(82, 168, 236, 0.8);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
     outline: 0 none;
 }
 
-
-.UILogin .RememberField td:nth-child(2),
-.UILogin .ForgetPass a {
+.UILogin .RememberField td:nth-child(2),.UILogin .ForgetPass a {
     font-size: 0.8125em;
     color: #999;
 }
 
-
 .UILogin .ForgetPass {
-text-align: center;
-padding-top: 1.5em;
+    text-align: center;
+    padding-top: 1.5em;
 }
-
 
 @media screen and (max-width: 25em) {
-
-.UILogin .UIFormGrid .UserNameField, .UILogin .UIFormGrid .PasswordField {
-display: block;
+    .UILogin .UIFormGrid .UserNameField,.UILogin .UIFormGrid .PasswordField {
+        display: block;
+    }
+    .UILogin td.FieldLabel {
+        padding-left: 1.5em;
+    }
+    .UILogin .UIFormGrid {
+        width: 100%;
+    }
+    .UILogin .UserNameField td.FieldLabel,.UILogin  #UIPortalLoginFormControl td.FieldLabel {
+        display: block;
+        padding-left: 1.5em;
+    }
+    .UILogin .UIFormGrid,.UILogin .UIFormGrid tbody,.UILogin .UIFormGrid tr,.UILogin .UIFormGrid td {
+        display: block;
+        text-align: left;
+    }
+    .UILogin .UIForm td:nth-child(2) {
+        padding: 0;
+        text-align: center;
+    }
+    .UILogin input.UserName,.UILogin input.Password {
+        width: 80%;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .UILogin tr.RememberField {
+        padding: 1em 0;
+    }
+    .UILogin .RememberField td {
+        display: inline;
+        text-align: center;
+    }
+    .UILogin .RememberField td.FieldLabel {
+        position: static;
+    }
+    .UILogin .RememberField td:nth-child(2) {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .UILogin .ForgetPass {
+        margin: 0;
+        text-align: left;
+        padding-left: 1.5em;
+        padding-top: 0;
+    }
+    .UILogin .ForgetPass a {
+        font-size: 0.75em;
+        margin: 0;
+    }
 }
-
-.UILogin td.FieldLabel {
-padding-left: 1.5em;
-}
-
-.UILogin .UIFormGrid {
-    width: 100%;
-}
-
-.UILogin .UserNameField td.FieldLabel,
-.UILogin  #UIPortalLoginFormControl td.FieldLabel {
-display: block;
-padding-left: 1.5em;
-}
-
-.UILogin .UIFormGrid,
-.UILogin .UIFormGrid tbody,
-.UILogin .UIFormGrid tr,
-.UILogin .UIFormGrid td 
-{
-    display: block;
-    text-align: left;
-}
-
-.UILogin .UIForm td:nth-child(2)
-{
-    padding: 0;
-    text-align: center;
-}
-
-.UILogin input.UserName,
-.UILogin input.Password {
-
-width: 80%;
-margin-right: auto;
-margin-left: auto;
-}
-
-
-.UILogin tr.RememberField {
-padding: 1em 0;
-}
-
-.UILogin .RememberField td {
-display: inline;
-text-align: center;
-}
-
-.UILogin .RememberField td.FieldLabel {
-position: static;
-}
-
-.UILogin .RememberField td:nth-child(2) {
-padding-left:0;
-padding-right:0;
-}
-
-.UILogin .ForgetPass {
-margin:0;
-text-align:left;
-padding-left:1.5em;
-padding-top:0;
-}
-
-.UILogin .ForgetPass a {
-font-size: 0.75em;
-margin: 0;
-}
-
-}
-

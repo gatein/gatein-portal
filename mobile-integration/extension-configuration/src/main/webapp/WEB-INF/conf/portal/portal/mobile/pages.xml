@@ -20,120 +20,118 @@
 
 -->
 
-<page-set
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+<page-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
-  <page>
-    <name>homepage</name>
-    <title>Home Page</title>
-    <access-permissions>Everyone</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>responsive-banner-portlet</application-ref>
-        <portlet-ref>ResponsiveBannerPortlet</portlet-ref>
-      </portlet>
-      <title>Banner portlet</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </portlet-application>
-    <portlet-application>
-      <portlet>
-        <application-ref>responsive-features-portlet</application-ref>
-        <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>features.title</name>
-            <value>whyUseGatein</value>
-          </preference>
-          <preference>
-            <name>features.node</name>
-            <value>/features</value>
-          </preference>
-        </preferences>
-      </portlet>
-      <title>Features portlet</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </portlet-application>
-  </page>
+    <page>
+        <name>homepage</name>
+        <title>Home Page</title>
+        <access-permissions>Everyone</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <portlet-application>
+            <portlet>
+                <application-ref>responsive-banner-portlet</application-ref>
+                <portlet-ref>ResponsiveBannerPortlet</portlet-ref>
+            </portlet>
+            <title>Banner portlet</title>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+            <show-application-state>false</show-application-state>
+            <show-application-mode>false</show-application-mode>
+        </portlet-application>
+        <portlet-application>
+            <portlet>
+                <application-ref>responsive-features-portlet</application-ref>
+                <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
+                <preferences>
+                    <preference>
+                        <name>features.title</name>
+                        <value>whyUseGatein</value>
+                    </preference>
+                    <preference>
+                        <name>features.node</name>
+                        <value>/features</value>
+                    </preference>
+                </preferences>
+            </portlet>
+            <title>Features portlet</title>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+            <show-application-state>false</show-application-state>
+            <show-application-mode>false</show-application-mode>
+        </portlet-application>
+    </page>
 
-  <page>
-    <name>groupnavigation</name>
-    <title>Group Navigation</title>
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>exoadmin</application-ref>
-        <portlet-ref>GroupNavigationPortlet</portlet-ref>
-      </portlet>
-      <title>Group Navigation</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
-  </page>
+    <page>
+        <name>groupnavigation</name>
+        <title>Group Navigation</title>
+        <access-permissions>*:/platform/users</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <portlet-application>
+            <portlet>
+                <application-ref>exoadmin</application-ref>
+                <portlet-ref>GroupNavigationPortlet</portlet-ref>
+            </portlet>
+            <title>Group Navigation</title>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+    </page>
 
-  <page>
-    <name>portalnavigation</name>
-    <title>Portal Navigation</title>
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>exoadmin</application-ref>
-        <portlet-ref>PortalNavigationPortlet</portlet-ref>
-      </portlet>
-      <title>Portal Navigation</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
-  </page>
+    <page>
+        <name>portalnavigation</name>
+        <title>Portal Navigation</title>
+        <access-permissions>*:/platform/users</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <portlet-application>
+            <portlet>
+                <application-ref>exoadmin</application-ref>
+                <portlet-ref>PortalNavigationPortlet</portlet-ref>
+            </portlet>
+            <title>Portal Navigation</title>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+    </page>
 
-  <page>
-    <name>register</name>
-    <title>Register</title>
-    <access-permissions>*:/platform/guests</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>exoadmin</application-ref>
-        <portlet-ref>RegisterPortlet</portlet-ref>
-      </portlet>
-      <title>Register Account</title>
-      <access-permissions>*:/platform/guests</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
-  </page>
-  <page>
-    <name>features</name>
-    <title>GateIn Features</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>responsive-features-portlet</application-ref>
-        <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>features.title</name>
-            <value>gateinFeatures</value>
-          </preference>
-          <preference>
-            <name>features.list</name>
-            <value>sso, ugm, ps, pb, asd, wsrp</value>
-          </preference>
-        </preferences>
-      </portlet>
-      <title>GateIn Features</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
-  </page>
+    <page>
+        <name>register</name>
+        <title>Register</title>
+        <access-permissions>*:/platform/guests</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <portlet-application>
+            <portlet>
+                <application-ref>exoadmin</application-ref>
+                <portlet-ref>RegisterPortlet</portlet-ref>
+            </portlet>
+            <title>Register Account</title>
+            <access-permissions>*:/platform/guests</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+    </page>
+    <page>
+        <name>features</name>
+        <title>GateIn Features</title>
+        <access-permissions>Everyone</access-permissions>
+        <edit-permission>*:/platform/administrators</edit-permission>
+        <portlet-application>
+            <portlet>
+                <application-ref>responsive-features-portlet</application-ref>
+                <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
+                <preferences>
+                    <preference>
+                        <name>features.title</name>
+                        <value>gateinFeatures</value>
+                    </preference>
+                    <preference>
+                        <name>features.list</name>
+                        <value>sso, ugm, ps, pb, asd, wsrp</value>
+                    </preference>
+                </preferences>
+            </portlet>
+            <title>GateIn Features</title>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+    </page>
 </page-set>

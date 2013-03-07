@@ -20,43 +20,41 @@
 
 -->
 
-<portal-config
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-  <portal-name>mobile</portal-name>
-  <label>Mobile</label>
-  <description>GateIn default mobile portal</description>
-  <locale>en</locale>
-  <access-permissions>Everyone</access-permissions>
-  <edit-permission>*:/platform/administrators</edit-permission>
-  <skin>ResponsiveSkin</skin>
-  <properties>
-    <entry key="sessionAlive">onDemand</entry>
-    <entry key="showPortletInfo">0</entry>
-  </properties>
+<portal-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3" xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    <portal-name>mobile</portal-name>
+    <label>Mobile</label>
+    <description>GateIn default mobile portal</description>
+    <locale>en</locale>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <skin>ResponsiveSkin</skin>
+    <properties>
+        <entry key="sessionAlive">onDemand</entry>
+        <entry key="showPortletInfo">0</entry>
+    </properties>
 
-  <portal-redirects>
-    <portal-redirect>
-      <redirect-site>classic</redirect-site>
-      <name>Desktop</name>
-      <enabled>true</enabled>
-      <node-mapping>
-        <use-node-name-matching>true</use-node-name-matching>
-      </node-mapping>
-    </portal-redirect>
-  </portal-redirects>
+    <portal-redirects>
+        <portal-redirect>
+            <redirect-site>classic</redirect-site>
+            <name>Desktop</name>
+            <enabled>true</enabled>
+            <node-mapping>
+                <use-node-name-matching>true</use-node-name-matching>
+            </node-mapping>
+        </portal-redirect>
+    </portal-redirects>
 
- 	<portal-layout>
-	  <portlet-application>
-      <portlet>
-        <application-ref>responsive-header-portlet</application-ref>
-        <portlet-ref>ResponsiveHeaderPortlet</portlet-ref>
-      </portlet>
-      <access-permissions>Everyone</access-permissions>
-	    <show-info-bar>false</show-info-bar>
-	  </portlet-application>
-          
+    <portal-layout>
+        <portlet-application>
+            <portlet>
+                <application-ref>responsive-header-portlet</application-ref>
+                <portlet-ref>ResponsiveHeaderPortlet</portlet-ref>
+            </portlet>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+
         <portlet-application>
             <portlet>
                 <application-ref>responsive-navigation-portlet</application-ref>
@@ -65,18 +63,18 @@
             <access-permissions>Everyone</access-permissions>
             <show-info-bar>false</show-info-bar>
         </portlet-application>
-	  
-	  <page-body> </page-body>
- 
-     <portlet-application>
-       <portlet>
-         <application-ref>responsive-footer-portlet</application-ref>
-         <portlet-ref>ResponsiveFooterPortlet</portlet-ref>
-       </portlet>
-       <access-permissions>Everyone</access-permissions>
-       <show-info-bar>false</show-info-bar>
-     </portlet-application>
 
-  </portal-layout>
-  
+        <page-body> </page-body>
+
+        <portlet-application>
+            <portlet>
+                <application-ref>responsive-footer-portlet</application-ref>
+                <portlet-ref>ResponsiveFooterPortlet</portlet-ref>
+            </portlet>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+        </portlet-application>
+
+    </portal-layout>
+
 </portal-config>

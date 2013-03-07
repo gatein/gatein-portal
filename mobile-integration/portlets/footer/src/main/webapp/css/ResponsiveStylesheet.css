@@ -20,7 +20,6 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA         *
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
  ******************************************************************************/
- 
 .gtnResponsiveFooterPortlet {
     margin: 0;
     padding: 0;
@@ -53,8 +52,7 @@
     white-space: nowrap;
 }
 
-.gtnResponsiveFooterPortlet .collapsibleRow.collapsed,
-.gtnResponsiveFooterPortlet .collapsibleRow.expanded {
+.gtnResponsiveFooterPortlet .collapsibleRow.collapsed,.gtnResponsiveFooterPortlet .collapsibleRow.expanded {
     white-space: inherit;
 }
 

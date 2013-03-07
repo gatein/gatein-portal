@@ -1,189 +1,213 @@
 .gtnResponsiveHeaderPortlet {
-margin: 0;
-padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-.gtnResponsiveHeaderPortlet .logo  {
-background-image: url('../images/gatein_logo_ltr.svg'); /* orientation=rt */
-background-image: url('../images/gatein_logo.svg'); /* orientation=lt */
-line-height: 1em;
-background-repeat: no-repeat;
-background-size: auto 2.5em;
-height: 2.5em;
-width: 10em;
-background-position: 1em 0.8em;
-padding: 0.8em 0 0.8em 1em;
-float: right; /* orientation=rt */
-float: left; /* orientation=lt */
-cursor: pointer;
+.gtnResponsiveHeaderPortlet .logo {
+    background-image: url("../images/gatein_logo_ltr.svg"); /* orientation=rt */
+    background-image: url("../images/gatein_logo.svg"); /* orientation=lt */
+    line-height: 1em;
+    background-repeat: no-repeat;
+    background-size: auto 2.5em;
+    height: 2.5em;
+    width: 10em;
+    background-position: 1em 0.8em;
+    padding: 0.8em 0 0.8em 1em;
+    float: right; /* orientation=rt */
+    float: left; /* orientation=lt */
+    cursor: pointer;
 }
 
 /* The default CSS for the button. */
 .gtnResponsiveHeaderPortlet .userpreferencebutton {
-background-image: url('../images/preference.svg');
-background-repeat: no-repeat;
-background-size: auto 2em;
-height: 2.5em;
-width: 2.5em;
-background-position: center;
-padding: 0.8em 1em 0.8em 1em;
-float: left; /* orientation=rt */
-float: right; /* orientation=lt */
-display: inline;
+    background-image: url("../images/preference.svg");
+    background-repeat: no-repeat;
+    background-size: auto 2em;
+    height: 2.5em;
+    width: 2.5em;
+    background-position: center;
+    padding: 0.8em 1em 0.8em 1em;
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
+    display: inline;
 }
 
 .gtnResponsiveHeaderPortlet .topmenu>li {
-background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=rt */
-background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=lt */
-padding: 1em;
-white-space: nowrap;
+    background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=rt */
+    background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=lt */
+    padding: 1em;
+    white-space: nowrap;
 }
 
 .gtnResponsiveHeaderPortlet .topmenu>li:first-child {
-background: none;
+    background: none;
 }
 
 .gtnResponsiveHeaderPortlet .submenu>li {
-margin: 1em;
+    margin: 1em;
 }
 
 .gtnResponsiveHeaderPortlet .icon {
-	display: inline;
-	float: right; /* orientation=rt */
-	float: left; /* orientation=lt */
+    display: inline;
+    float: right; /* orientation=rt */
+    float: left; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .options {
-        font-size: 95%;
-	display:inline;
-	float: left; /* orientation=rt */
-	float: right; /* orientation=lt */
-	text-align: left; /* orientation=rt */
-	text-align: right; /* orientation=lt */
+    font-size: 95%;
+    display: inline;
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
+    text-align: left; /* orientation=rt */
+    text-align: right; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .options>ol>li {
-	display: inline;
-	/*padding: 0 1em;*/
+    display: inline;
+    /*padding: 0 1em;*/
 }
 
 .gtnResponsiveHeaderPortlet .options a {
-        color: #1C5182;
-        text-decoration: none;
+    color: #1C5182;
+    text-decoration: none;
 }
 
 .gtnResponsiveHeaderPortlet .options a:hover {
-        color: #002559;
-        text-decoration: underline;
+    color: #002559;
+    text-decoration: underline;
 }
 
 .gtnResponsiveHeaderPortlet .options .topmenu.collapsed {
-	width: 100%;
+    width: 100%;
 }
 
 .gtnResponsiveHeaderPortlet .options .topmenu.collapsed ol li {
-	display: block;
-	padding: 0;
+    display: block;
+    padding: 0;
 }
 
 .gtnResponsiveHeaderPortlet .collapseButton {
-	display: none;
-	float: left; /* orientation=rt */
-	float: right; /* orientation=lt */
+    display: none;
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .collapseButton:after {
-content: "";
-border: 0.3em transparent solid;
-border-top-color: #666;
-position: absolute;
-right: 0.3em;
-top: 2em;
+    content: "";
+    border: 0.3em transparent solid;
+    border-top-color: #666;
+    position: absolute;
+    right: 0.3em;
+    top: 2em;
 }
 
 .gtnResponsiveHeaderPortlet .collapseButton.enabled:after {
-content: "";
-border: 0.3em transparent solid;
-border-bottom-color: #666;
-position: absolute;
-right: 0.3em;
-top: 1.6em;
+    content: "";
+    border: 0.3em transparent solid;
+    border-bottom-color: #666;
+    position: absolute;
+    right: 0.3em;
+    top: 1.6em;
 }
 
 .gtnResponsiveHeaderPortlet .collapsibleRow {
     white-space: nowrap;
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed,
-.gtnResponsiveHeaderPortlet .collapsibleRow.expanded {
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed,.gtnResponsiveHeaderPortlet .collapsibleRow.expanded {
     white-space: inherit;
 }
 
-
 .gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapseButton {
-        display: inline;
+    display: inline;
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapsibleContent:not(.display){
-	display: none;
-}
+.gtnResponsiveHeaderPortlet
 
+ 
+
+.collapsibleRow
+
+
+.collapsed
+>
+.collapsibleContent
+
+
+:not
+
+ 
+
+(
+.display
+
+ 
+
+){
+display
+
+
+:
+
+ 
+
+none
+
+
+;
+}
 .gtnResponsiveHeaderPortlet .collapsed>.collapsibleContent.display {
-        background-color: rgba(0,0,0,0.07);
+    background-color: rgba(0, 0, 0, 0.07);
 }
 
 .gtnResponsiveHeaderPortlet .collapseButton.enabled {
-        background-color: rgba(0,0,0,0.07);
+    background-color: rgba(0, 0, 0, 0.07);
 }
 
 .gtnResponsiveHeaderPortlet .clear {
-	clear: both;
-	width: 0;
+    clear: both;
+    width: 0;
 }
 
 .gtnResponsiveHeaderPortlet .submenu {
-	background-color: #EEE;
-	list-style-type: none;
-	padding: 0;
-	position: absolute;
-	z-index: 40;
-	white-space: nowrap;
+    background-color: #EEE;
+    list-style-type: none;
+    padding: 0;
+    position: absolute;
+    z-index: 40;
+    white-space: nowrap;
 }
 
-.gtnResponsiveHeaderPortlet .submenu .submenu
-{
-	position: relative;
+.gtnResponsiveHeaderPortlet .submenu .submenu {
+    position: relative;
 }
 
 .gtnResponsiveHeaderPortlet .menuelement.collapsed .submenu {
-	display: none;
+    display: none;
 }
 
-
-.gtnResponsiveHeaderPortlet .options .topmenu.collapsed .submenu
-{
-	position: static;
-	width: 100%;
+.gtnResponsiveHeaderPortlet .options .topmenu.collapsed .submenu {
+    position: static;
+    width: 100%;
 }
 
 .gtnResponsiveHeaderPortlet .submenu ol li {
-	margin: 0 0 0 0;
-	padding: 0 0 0 0;
-	text-indent: 1em;
-	display: block;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    text-indent: 1em;
+    display: block;
 }
 
 /* On browser which support :not this works very nicely when using a mouse. Unfortunately, iOS does not support it */
 /* .gtnResponsiveHeaderPortlet .menuelement.close:not(:hover)>.submenu { */
 /* 	display:none; */
 /* } */
-
 .gtnResponsiveHeaderPortlet .menuelement.close>.submenu {
-	display:none;
+    display: none;
 }
 
 .gtnResponsiveHeaderPortlet .menucategory {
-	display:inline;
+    display: inline;
 }
 
 .gtnResponsiveHeaderPortlet .menuelement.open {
@@ -195,41 +219,40 @@ top: 1.6em;
 }
 
 .gtnResponsiveHeaderPortlet .menuarrow {
-	border-width: 0.25em;
-	border-color: transparent;
-	border-style: solid;
-	display: inline-block;
-	cursor: pointer;
+    border-width: 0.25em;
+    border-color: transparent;
+    border-style: solid;
+    display: inline-block;
+    cursor: pointer;
 }
 
 /* TODO: figure out if there is a better way to handle this, its a pain that it doesn't inherit padding 0 from the parent */
 .gtnResponsiveHeaderPortlet ol.topmenu {
-	padding: 0;
+    padding: 0;
 }
 
 .gtnResponsiveHeaderPortlet .topmenu .menuelement.close .menuarrow {
-	border-color: black transparent transparent;
-	margin-top: 0.25em;
+    border-color: black transparent transparent;
+    margin-top: 0.25em;
 }
 
 .gtnResponsiveHeaderPortlet .topmenu .menuelement.open .menuarrow {
-	border-color: transparent transparent black;
-	margin-bottom: 0.25em;
+    border-color: transparent transparent black;
+    margin-bottom: 0.25em;
 }
 
 .gtnResponsiveHeaderPortlet .submenu .menuelement.close .menuarrow {
-	border-color: transparent transparent transparent black;
-	margin-top: 0.25em;
+    border-color: transparent transparent transparent black;
+    margin-top: 0.25em;
 }
 
 .gtnResponsiveHeaderPortlet .submenu .menuelement.open .menuarrow {
-	border-color: black transparent transparent;
-	margin-bottom: 0.125em;
+    border-color: black transparent transparent;
+    margin-bottom: 0.125em;
 }
 
 /* Do not display the UIToolbarContainer at the top of the page when using the responsive header portlet */
 /* TODO: find a way to disable the sharedlayout on a portal */
-div.UIToolbarContainer{
- display: none;
+div.UIToolbarContainer {
+    display: none;
 }
-

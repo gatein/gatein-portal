@@ -20,46 +20,44 @@
 
 -->
 
-<node-navigation
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-  <priority>1</priority>
+<node-navigation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3" xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    <priority>1</priority>
 
-  <page-nodes>
-    <node>
-      <uri>home</uri>
-      <name>home</name>
-      <label>Home</label>
-      <page-reference>portal::@owner@::homepage</page-reference>
-    </node>
-    <node>
-      <uri>features</uri>
-      <name>features</name>
-      <label>Features</label>
-      <visibility>DISPLAYED</visibility>
-      <page-reference>portal::@owner@::features</page-reference>
-    </node>
-    <node>
-      <uri>groupnavigation</uri>
-      <name>groupnavigation</name>
-      <label>Group Navigation</label>
-      <visibility>SYSTEM</visibility>
-      <page-reference>portal::@owner@::groupnavigation</page-reference>
-    </node>
-    <node>
-      <uri>portalnavigation</uri>
-      <name>portalnavigation</name>
-      <label>Portal Navigation</label>
-      <visibility>SYSTEM</visibility>
-      <page-reference>portal::@owner@::portalnavigation</page-reference>
-    </node> 
-    <node>
-	   <uri>register</uri>
-	   <name>register</name>
-	   <label>Register</label>
-      <visibility>SYSTEM</visibility>
-	   <page-reference>portal::@owner@::register</page-reference>	    
-	 </node>
-  </page-nodes>
+    <page-nodes>
+        <node>
+            <uri>home</uri>
+            <name>home</name>
+            <label>Home</label>
+            <page-reference>portal::@owner@::homepage</page-reference>
+        </node>
+        <node>
+            <uri>features</uri>
+            <name>features</name>
+            <label>Features</label>
+            <visibility>DISPLAYED</visibility>
+            <page-reference>portal::@owner@::features</page-reference>
+        </node>
+        <node>
+            <uri>groupnavigation</uri>
+            <name>groupnavigation</name>
+            <label>Group Navigation</label>
+            <visibility>SYSTEM</visibility>
+            <page-reference>portal::@owner@::groupnavigation</page-reference>
+        </node>
+        <node>
+            <uri>portalnavigation</uri>
+            <name>portalnavigation</name>
+            <label>Portal Navigation</label>
+            <visibility>SYSTEM</visibility>
+            <page-reference>portal::@owner@::portalnavigation</page-reference>
+        </node>
+        <node>
+            <uri>register</uri>
+            <name>register</name>
+            <label>Register</label>
+            <visibility>SYSTEM</visibility>
+            <page-reference>portal::@owner@::register</page-reference>
+        </node>
+    </page-nodes>
 </node-navigation>

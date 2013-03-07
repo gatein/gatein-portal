@@ -1,22 +1,21 @@
 .UIMaskWorkspace {
-
-position: fixed!important;
-left: 0!important;
-top:0!important;
-height: 100%!important;
-width: 100%!important;
-text-align: center;
-background-color:transparent;
-border: none;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    text-align: center;
+    background-color: transparent;
+    border: none;
 }
 
 .UIMaskWorkspace:before {
-content:"";
-display: inline-block;
-height:100%;
-vertical-align:middle;
-margin-left: -0.4em;
-width: 0;
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-left: -0.4em;
+    width: 0;
 }
 /*
 .UIMaskWorkspace:after {
@@ -31,35 +30,31 @@ width:0;
 }
 */
 .UIMaskWorkspace .MaskContainer {
-background-color: #fff;
-width: 300px;
-display: inline-block;
-vertical-align: middle;
-width: 35em;
-overflow:auto;
--webkit-overflow-scrolling: touch;
-max-height:100%;
-max-width:100%;
-text-align: left;
+    background-color: #fff;
+    width: 300px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 35em;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100%;
+    max-width: 100%;
+    text-align: left;
 }
 
 .UIMaskWorkspace .UIFormWithTitle {
-width: auto;
-padding: 0;
+    width: auto;
+    padding: 0;
 }
 
-@media  screen and (max-width: 30em)
-{
-
-.UIMaskWorkspace .MaskContainer {
-    width: 100%;
+@media screen and (max-width: 30em) {
+    .UIMaskWorkspace .MaskContainer {
+        width: 100%;
+    }
 }
 
-}
-
-@media screen and (max-height: 30em)
-{
-.UIMaskWorkspace .UITabContent {
-    height: auto;
-}
+@media screen and (max-height: 30em) {
+    .UIMaskWorkspace .UITabContent {
+        height: auto;
+    }
 }

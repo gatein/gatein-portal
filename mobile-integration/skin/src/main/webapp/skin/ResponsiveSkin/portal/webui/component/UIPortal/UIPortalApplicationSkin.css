@@ -1,31 +1,31 @@
 @font-face {
-  font-family: 'Ubuntu';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Ubuntu'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v4/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Ubuntu'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v4/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
 }
 
 body {
-	background: #EFEFEF url(images/uiportal-background.jpg) repeat left top;;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 100%;
-	margin: 0;
+    background: #EFEFEF url(images/uiportal-background.jpg) repeat left top;;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 100%;
+    margin: 0;
 }
 
-h1, h2, h3, h4, h5, h6 {
-	font-family: Ubuntu, sans-serif;
+h1,h2,h3,h4,h5,h6 {
+    font-family: Ubuntu, sans-serif;
 }
 
 a {
-	text-decoration: none;
-	color: #1C5182;
+    text-decoration: none;
+    color: #1C5182;
 }
 
 .UIWorkingWorkspace {
-	max-width: 73.125em;
-	width: 95%;
-	margin: 0 auto;
-        background: none;
+    max-width: 73.125em;
+    width: 95%;
+    margin: 0 auto;
+    background: none;
 }
 
 .UIPageBody {
@@ -37,55 +37,49 @@ a {
 }
 
 .UIPageBody .BLPagebody {
-	display: none;
+    display: none;
 }
 
 /*###############################################################################################*/
-
 .OverflowContainer {
-	overflow: hidden;
-	width: 100%;
+    overflow: hidden;
+    width: 100%;
 }
 
 .ClearFix:after {
-	content: "";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
 
 .ClearFix { !
-	display: inline-block; !
-	zoom: 1; !
-	display: block;
+    display: inline-block; !
+    zoom: 1; !
+    display: block;
 }
 
 .InlineContainer {
-	overflow: hidden;
+    overflow: hidden;
 }
 
 .FL {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+    float: left; /* orientation=lt */
+    float: right; /* orientation=rt */
 }
 
 .FR {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
+    float: left; /* orientation=rt */
 }
 
-
 /* Media Queries for Smaller Screened Devices */
-
 @media screen and (max-width: 30em) { /* 480px */
-
     .UIWorkingWorkspace {
-    	width: 100%;
+        width: 100%;
     }
-    
     .UIPageBody {
         border-radius: 0;
     }
-    	
 }

@@ -22,66 +22,64 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd" xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
     <external-component-plugins>
-      <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
-      <component-plugin>
+        <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
+        <component-plugin>
          <!-- The name of the plugin -->
-         <name>new.portal.config.user.listener</name>
+            <name>new.portal.config.user.listener</name>
          <!-- The name of the method to call on the UserPortalConfigService in order to register the NewPortalConfigs -->
-         <set-method>initListener</set-method>
+            <set-method>initListener</set-method>
          <!-- The full qualified name of the NewPortalConfigListener -->
-         <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
-         <description>this listener init the portal configuration</description>
-         <init-params>
-            <object-param>
-               <name>site.templates.location</name>
-               <description>description</description>
-               <object type="org.exoplatform.portal.config.SiteConfigTemplates">
-                 <field name="portalTemplates">
-                   <collection type="java.util.HashSet">
-                     <value>
-                       <string>mobile</string>
-                     </value>
-                   </collection>
-                 </field>
-                 <field name="location">
-                    <string>war:/conf/portal</string>
-                 </field>
-               </object>
-            </object-param>
-            <object-param>
-               <name>portal.configuration</name>
-               <description>description</description>
-               <object type="org.exoplatform.portal.config.NewPortalConfig">
-                  <field name="predefinedOwner">
-                     <collection type="java.util.HashSet">
-                        <value>
-                           <string>mobile</string>
-                        </value>
-                        <value>
-                           <string>classic</string>
-                        </value>
-                     </collection>
-                  </field>
-                  <field name="ownerType">
-                     <string>portal</string>
-                  </field>
-                  <field name="templateLocation">
-                     <string>war:/conf/portal</string>
-                  </field>
-                  <field name="importMode">
-                    <string>merge</string>
-                  </field>
-               </object>
-            </object-param>
-         </init-params>
-      </component-plugin>
-   </external-component-plugins>
+            <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
+            <description>this listener init the portal configuration</description>
+            <init-params>
+                <object-param>
+                    <name>site.templates.location</name>
+                    <description>description</description>
+                    <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+                        <field name="portalTemplates">
+                            <collection type="java.util.HashSet">
+                                <value>
+                                    <string>mobile</string>
+                                </value>
+                            </collection>
+                        </field>
+                        <field name="location">
+                            <string>war:/conf/portal</string>
+                        </field>
+                    </object>
+                </object-param>
+                <object-param>
+                    <name>portal.configuration</name>
+                    <description>description</description>
+                    <object type="org.exoplatform.portal.config.NewPortalConfig">
+                        <field name="predefinedOwner">
+                            <collection type="java.util.HashSet">
+                                <value>
+                                    <string>mobile</string>
+                                </value>
+                                <value>
+                                    <string>classic</string>
+                                </value>
+                            </collection>
+                        </field>
+                        <field name="ownerType">
+                            <string>portal</string>
+                        </field>
+                        <field name="templateLocation">
+                            <string>war:/conf/portal</string>
+                        </field>
+                        <field name="importMode">
+                            <string>merge</string>
+                        </field>
+                    </object>
+                </object-param>
+            </init-params>
+        </component-plugin>
+    </external-component-plugins>
 
 
 

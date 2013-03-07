@@ -5,28 +5,27 @@
 }
 
 .gtnResponsiveFeaturesPortlet h1 {
-color: #333;
-font-weight: normal;
-font-size: 1.75em;
+    color: #333;
+    font-weight: normal;
+    font-size: 1.75em;
 }
 
 .gtnResponsiveFeaturesPortlet h2 {
-font-size: 1.25em;
-font-weight: normal;
+    font-size: 1.25em;
+    font-weight: normal;
 }
 
 .gtnResponsiveFeaturesPortlet a {
-color: #1C5182;
+    color: #1C5182;
 }
 
 .gtnResponsiveFeaturesPortlet a:hover {
-text-decoration: underline;
-color: #666;
+    text-decoration: underline;
+    color: #666;
 }
 
 /*Creates a new row after 3 features are displayed on a page*/
-.gtnResponsiveFeaturesPortlet .features div:nth-of-type(6)
-{
+.gtnResponsiveFeaturesPortlet .features div:nth-of-type(6) {
     clear: both;
 }
 
@@ -52,83 +51,75 @@ color: #666;
 }
 
 @media only screen and (max-width: 50em) {
-
-.gtnResponsiveFeaturesPortlet div.feature {
-    float: none;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1em 0;
-    clear: both;
-}
-
-.gtnResponsiveFeaturesPortlet .separator {
-   background: url("../images/feature-separator.png");
-   background-size: 100% 150%;
-   background-repeat: no-repeat;
-   width: 100%;
-   height: 0.5em;
-   clear: both;
-}
-
-.gtnResponsiveFeaturesPortlet .feature img {
-    float:right; /* orientation=rt */
-float:left; /* orientation=lt */
-width: 40%;
-}
-
-.gtnResponsiveFeaturesPortlet .feature .text {
-    float:left; /* orientation=rt */
-float:right; /* orientation=lt */
-width: 56%;
-}
-
+    .gtnResponsiveFeaturesPortlet div.feature {
+        float: none;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1em 0;
+        clear: both;
+    }
+    .gtnResponsiveFeaturesPortlet .separator {
+        background: url("../images/feature-separator.png");
+        background-size: 100% 150%;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 0.5em;
+        clear: both;
+    }
+    .gtnResponsiveFeaturesPortlet .feature img {
+        float: right; /* orientation=rt */
+        float: left; /* orientation=lt */
+        width: 40%;
+    }
+    .gtnResponsiveFeaturesPortlet .feature .text {
+        float: left; /* orientation=rt */
+        float: right; /* orientation=lt */
+        width: 56%;
+    }
 }
 
 @media only screen and (max-width: 30em) {
-.gtnResponsiveFeaturesPortlet div.feature {
-    padding: 0;
-    margin: 2em 0;
-}
+    .gtnResponsiveFeaturesPortlet div.feature {
+        padding: 0;
+        margin: 2em 0;
+    }
 }
 
 @media only screen and (max-width: 30em) {
-.gtnResponsiveFeaturesPortlet {
-padding: 0.75em
-}
-.gtnResponsiveFeaturesPortlet h1 {
-font-size: 1.5em;
-}
-.gtnResponsiveFeaturesPortlet h2 {
-font-size: 1em;
-font-weight: bold;
-}
+    .gtnResponsiveFeaturesPortlet {
+        padding: 0.75em
+    }
+    .gtnResponsiveFeaturesPortlet h1 {
+        font-size: 1.5em;
+    }
+    .gtnResponsiveFeaturesPortlet h2 {
+        font-size: 1em;
+        font-weight: bold;
+    }
 }
 
 @media only screen and (max-width: 25em) {
-.gtnResponsiveFeaturesPortlet {
-padding: 0.5em
-}
-
-.gtnResponsiveFeaturesPortlet .feature img {
-width: 60%;
-margin-left: 20%;
-margin-right: 20%;
-float: none;
-padding: 0;
-}
-
-.gtnResponsiveFeaturesPortlet .feature .text {
-width: 100%;
-float: none;
-}
-
-.gtnResponsiveFeaturesPortlet h1 {
-font-size: 1.2em;
-font-weight: bold;
-}
-.gtnResponsiveFeaturesPortlet h2 {
-font-size: 1em;
-font-weight: bold;
-}
+    .gtnResponsiveFeaturesPortlet {
+        padding: 0.5em
+    }
+    .gtnResponsiveFeaturesPortlet .feature img {
+        width: 60%;
+        margin-left: 20%;
+        margin-right: 20%;
+        float: none;
+        padding: 0;
+    }
+    .gtnResponsiveFeaturesPortlet .feature .text {
+        width: 100%;
+        float: none;
+    }
+    .gtnResponsiveFeaturesPortlet h1 {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    .gtnResponsiveFeaturesPortlet h2 {
+        font-size: 1em;
+        font-weight: bold;
+    }
 }

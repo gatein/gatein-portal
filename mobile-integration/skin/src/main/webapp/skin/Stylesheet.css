@@ -1,63 +1,96 @@
 /*@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css); */
 /*@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/Stylesheet.css);*/
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIContainerList/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIPageBrowser/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIPageSelector/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIPortalToolPanel/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIDescription/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIChangeSkinForm/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIChangeLanguageForm/Stylesheet.css);
 /*@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIAccountSettingForm/Stylesheet.css); */
-
-
 
 /*Import the Stylesheets from the DefaultSkin*/
 /*@import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css); */
 @import url(/eXoResources/skin/PortletThemes/Stylesheet.css);
+
 @import url(/eXoResources/skin/Portlet/Stylesheet.css);
 
 /*Start @import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css); */
 @import url(/eXoResources/skin/DefaultSkin/skinIcons/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIBreadcumbs/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UICalendar/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIColorPicker/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIMouseActionBackground/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIGrid/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIPageIterator/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UISearch/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UITree/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIQuickHelp/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIWizard/Stylesheet.css);
 
 /*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIForms/Stylesheet.css); */
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIPopup/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UITabSystem/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UISelector/Stylesheet.css);
 /*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/Stylesheet.css);  */
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIUpload/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIMaskWorkspace/Stylesheet.css);
 
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIToolbar/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIDropDownControl/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIGroupInfoContainer/Stylesheet.css);
 
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UINotification/Stylesheet.css);
+
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIPageSearch/Stylesheet.css);
 /* End @import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css); */
 
 /*Overwritten WebUI Components*/
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIWorkspace/UIWorkspace.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIToolbar/UIToolbar.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UILoginForm/UILoginForm.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIChangeLanguageForm/UIChangeLanguageForm.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIMaskWorkspace/UIMaskWorkspace.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIForms/UIForms.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIAction/UIAction.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIFormTabPane/UIFormTabPane.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIFormWithTitle/UIFormWithTitle.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UITab/UITab.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIDashboard/UIDashboard.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIPopupWindow/UIPopupWindow.css);
 
 @import url(Portlet/Stylesheet.css);
