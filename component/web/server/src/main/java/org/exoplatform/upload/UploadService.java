@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItem;
@@ -110,7 +111,17 @@ public class UploadService {
 
         ServletFileUpload servletFileUpload = makeServletFileUpload(upResource);
         // parse request
-        List<FileItem> itemList = servletFileUpload.parseRequest(request);
+        List<FileItem> itemList = null;
+        try {
+            itemList = servletFileUpload.parseRequest(request);
+        } catch (FileUploadException uploadEx) {
+            if (uploadEx instanceof FileUploadBase.IOFileUploadException) {
+                log.debug("IOException while upload resource", uploadEx);
+            } else {
+                throw uploadEx;
+            }
+        }
+
         if (itemList == null || itemList.size() != 1 || itemList.get(0).isFormField()) {
             log.debug("Please upload 1 file per request");
             removeUploadResource(uploadId);
