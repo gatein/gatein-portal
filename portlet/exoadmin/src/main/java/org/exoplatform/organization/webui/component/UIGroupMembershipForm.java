@@ -21,6 +21,8 @@ package org.exoplatform.organization.webui.component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -101,9 +103,14 @@ public class UIGroupMembershipForm extends UIForm {
     private void loadData() throws Exception {
         listOption.clear();
         OrganizationService service = getApplicationComponent(OrganizationService.class);
-        List<?> collection = (List<?>) service.getMembershipTypeHandler().findMembershipTypes();
-        for (Object ele : collection) {
-            MembershipType mt = (MembershipType) ele;
+        List<MembershipType> memberships = (List<MembershipType>) service.getMembershipTypeHandler().findMembershipTypes();
+        Collections.sort(memberships, new Comparator<MembershipType>() {
+            @Override
+            public int compare(MembershipType o1, MembershipType o2) {
+                return (o1.getName()).compareTo(o2.getName());
+            }
+        });
+        for (MembershipType mt : memberships) {
             listOption.add(new SelectItemOption<String>(mt.getName(), mt.getName(), mt.getDescription()));
         }
     }
