@@ -22,8 +22,6 @@
 
 package org.gatein.api.management;
 
-import org.apache.commons.lang.LocaleUtils;
-import org.gatein.api.Portal;
 import org.gatein.api.common.i18n.LocalizedString;
 import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.Node;
@@ -42,10 +40,9 @@ import org.gatein.management.api.annotations.ManagedOperation;
 import org.gatein.management.api.annotations.ManagedRole;
 import org.gatein.management.api.annotations.MappedAttribute;
 import org.gatein.management.api.annotations.MappedPath;
-import org.gatein.management.api.exceptions.OperationException;
-import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.model.Model;
 import org.gatein.management.api.model.ModelList;
+import org.gatein.management.api.model.ModelNumber;
 import org.gatein.management.api.model.ModelObject;
 import org.gatein.management.api.model.ModelProvider;
 import org.gatein.management.api.model.ModelReference;
@@ -78,9 +75,6 @@ public class NavigationManagementResource {
     public ModelObject getNavigation(@ManagedContext OperationContext context,
                                      @MappedAttribute("scope") String scopeAttribute,
                                      @MappedAttribute("showAll") String showAllAttribute) {
-        // Populate the model
-        ModelObject model = modelProvider.newModel(ModelObject.class);
-
         NodeVisitor visitor = Nodes.visitChildren();
         int scope = 0;
         if (scopeAttribute != null) {
@@ -94,9 +88,19 @@ public class NavigationManagementResource {
             node = node.filter().showDefault();
         }
 
-        populateNavigationModel(node, scope, model, context);
+        return populateNavigationModel(node, scope, context);
+    }
 
-        return model;
+    @Managed
+    @ManagedOperation(name = OperationNames.UPDATE_RESOURCE, description = "Updates the navigation")
+    public ModelObject updateNavigation(@ManagedContext OperationContext context, @ManagedContext ModelObject navModel) {
+        ModelNumber priority = get(navModel, ModelNumber.class, "priority");
+        if (priority.isDefined()) {
+            navigation.setPriority(priority.getInt());
+        }
+
+        Node node = getNode(NodePath.root(), true, Nodes.visitChildren());
+        return populateNavigationModel(node, 0, context);
     }
 
     @Managed("{path: .*}")
@@ -196,7 +200,9 @@ public class NavigationManagementResource {
         return node;
     }
 
-    private void populateNavigationModel(Node rootNode, int scope, ModelObject model, OperationContext context) {
+    private ModelObject populateNavigationModel(Node rootNode, int scope, OperationContext context) {
+        ModelObject model = modelProvider.newModel(ModelObject.class);
+
         PathAddress address = context.getAddress();
 
         // Populate navigation fields
@@ -217,6 +223,8 @@ public class NavigationManagementResource {
                 }
             }
         }
+
+        return model;
     }
 
     private void populateNode(Node node, int scope, ModelObject model, PathAddress address) {
