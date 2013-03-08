@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+   http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+    <portlet>
+        <description>Responsive Features Portlet</description>
+        <portlet-name>ResponsiveFeaturesPortlet</portlet-name>
+        <display-name>Responsive Features Portlet</display-name>
+        <portlet-class>org.gatein.portlet.responsive.features.FeaturesPortlet</portlet-class>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <resource-bundle>locale.portlet.responsivefeatures</resource-bundle>
+        <portlet-info>
+            <title>GateIn Responsive Features Portlet</title>
+            <short-title>Features Portlet</short-title>
+            <keywords>System</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>features.title</name>
+                <value>gateinFeatures</value>
+            </preference>
+            <preference>
+                <name>features.list</name>
+                <value>sso, nui, ps</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+
+</portlet-app>

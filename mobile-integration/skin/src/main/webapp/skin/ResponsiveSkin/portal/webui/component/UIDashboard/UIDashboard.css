@@ -1,0 +1,11 @@
+/*@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIDashboard/Stylesheet.css);*/
+#UITabbedDashboardPortlet {
+    
+}
+
+#UITabbedDashboardPortlet .UITabPaneDashboard {
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    margin: 5px 0;
+    padding: 0;
+}

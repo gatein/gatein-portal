@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bundle>
+    <label>
+        <SignIn>تسجيل الدخول</SignIn>
+        <Register>تسجيل</Register>
+        <SignOut>تسجيل الخروج</SignOut>
+        <UserProfile>ﺎﻠﻤﻠﻓ ﺎﻠﺸﺨﺼﻳ</UserProfile>
+        <Dashboard>ﻝﻮﺣﺓ ﺎﻠﻘﻳﺍﺩﺓ</Dashboard>
+        <GroupPages>صفحات المجموعة</GroupPages>
+        <GroupPageTitleFormat>{groupName} صفحة</GroupPageTitleFormat>
+    </label>
+</bundle>

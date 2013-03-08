@@ -1,0 +1,115 @@
+/*
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2012, Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+.UITabPane .UIHorizontalTabs {
+    background-color: whiteSmoke;
+    box-shadow: 0 1px 0 white inset;
+    border-bottom: 1px solid #DDD;
+}
+
+.UITabPane .UIHorizontalTabs div {
+    display: inline-block;
+}
+
+.UITab .SelectedTab,.UITab .NormalTab,.UITab .DisabledTab {
+    border-radius: 0.25em 0.25em 0 0;
+    padding: 0.5em 1em 0.25em;
+    border: solid thin #333;
+}
+
+.UITabPane .UIHorizontalTabs div.LineSeparator {
+    display: none;
+}
+
+.UITab .SelectedTab {
+    background-color: #1C4E7E;
+}
+
+.UITab .SelectedTab a {
+    color: #FFF;
+}
+
+.UITab .NormalTab {
+    background-color: #A2A2A2;
+}
+
+.UITab .NormalTab a {
+    color: #333;
+}
+
+.UITab .DisabledTab {
+    color: grey;
+}
+
+.UIPopupMessages .UIHorizontalTabs,.UIPopupMessages .UIHorizontalTabs .TabsContainer {
+    height: auto;
+}
+
+.UIHorizontalTabs .MessageTabDialog .SelectedTab .RightTab,.UIHorizontalTabs .MessageTabDialog .SelectedTab .LeftTab,.UIHorizontalTabs .MessageTabDialog .SelectedTab .MiddleTab,.UIHorizontalTabs .CenterHorizontalTabs
+    {
+    background: none;
+}
+
+.UIPopupMessages {
+    -webkit-overflow-scrolling: touch;
+}
+
+.UITabContentContainer {
+    clear: both
+}
+
+@media only screen and (max-width: 30em) {
+    .UITabPane .TabPaneContent {
+        padding: 0;
+    }
+    .UIHorizontalTabs .UITab {
+        float: none;
+    }
+    .UITabPane .UIHorizontalTabs div {
+        display: block;
+        height: auto;
+    }
+    .UIPopupMessages .UIHorizontalTabs .TabsContainer,.UIPopupMessages .UIHorizontalTabs {
+        height: auto;
+    }
+    .UITab .SelectedTab,.UITab .NormalTab,.UITab .DisabledTab {
+        border-radius: 0.25em;
+        border: solid thin #333;
+        margin: 0.25em;
+        padding-left: 2em;
+    }
+    .UITab .SelectedTab {
+        background-image: url(ok-square.svg);
+        background-repeat: no-repeat;
+        background-position: 0.5em 0.5em;
+    }
+    .UITab .NormalTab,.UITab .DisabledTab {
+        background-image: url(square.svg);
+        background-repeat: no-repeat;
+        background-position: 0.5em 0.5em;
+    }
+    .UIHorizontalTabs .MessageTabDialog {
+        float: none;
+    }
+    .UIPopupMessages ul {
+        height: auto;
+    }
+}

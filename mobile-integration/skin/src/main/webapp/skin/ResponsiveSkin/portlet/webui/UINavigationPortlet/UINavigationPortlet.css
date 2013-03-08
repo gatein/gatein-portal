@@ -1,0 +1,12 @@
+@import url(/web/skin/portal/webui/component/UINavigationPortlet/DefaultStylesheet.css);
+
+.UINavigationPortlet {
+    padding: 0;
+    background: transparent;
+    margin-bottom: 5px;
+}
+
+.UINavigationPortlet .UINavigationBar {
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}

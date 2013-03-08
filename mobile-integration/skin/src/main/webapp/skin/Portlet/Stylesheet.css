@@ -1,0 +1,355 @@
+/******************************************************************************
+ * JBoss by Red Hat                                                           *
+ * Copyright 2010, Red Hat Middleware, LLC, and individual                    *
+ * contributors as indicated by the @authors tag. See the                     *
+ * copyright.txt in the distribution for a full listing of                    *
+ * individual contributors.                                                   *
+ *                                                                            *
+ * This is free software; you can redistribute it and/or modify it            *
+ * under the terms of the GNU Lesser General Public License as                *
+ * published by the Free Software Foundation; either version 2.1 of           *
+ * the License, or (at your option) any later version.                        *
+ *                                                                            *
+ * This software is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU           *
+ * Lesser General Public License for more details.                            *
+ *                                                                            *
+ * You should have received a copy of the GNU Lesser General Public           *
+ * License along with this software; if not, write to the Free                *
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA         *
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
+ ******************************************************************************/
+
+/** FONTS **/
+
+/* Font attributes for the normal  fragment font.
+Used for the display of non-accentuated information */
+.portlet-font {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+/* Font attributes similar to the portlet.font but the color is lighter */
+.portlet-font-dim {
+    color: #777777;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+}
+
+/** MESSAGES **/
+
+/* Status of the current operation. */
+.portlet-msg-status {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    color: #058bb6;
+}
+
+/* Help messages, general additional information, etc. */
+.portlet-msg-info {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 12px;
+    font-style: italic;
+    color: #000;
+}
+
+/* Error messages. */
+.portlet-msg-error {
+    color: red;
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Warning messages. */
+.portlet-msg-alert {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #821717;
+}
+
+/* Verification of the successful completion of a task. */
+.portlet-msg-success {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #359630;
+}
+
+/** SECTIONS **/
+
+/* Table or section header */
+.portlet-section-header {
+    font-weight: bold;
+}
+
+.portlet-section-body {
+    color: #333333;
+}
+
+.portlet-section-alternate {
+    background-color: #F2F2F2;
+}
+
+.portlet-section-selected {
+    background-color: #d9d8d9;
+}
+
+.portlet-section-subheader {
+    font-weight: bold;
+    padding: 5px 0px;
+}
+
+.portlet-section-footer {
+    font-size: 11px;
+    border-top: 1px solid #F2F2F2;
+}
+
+/* Text that belongs to the table but does not fall in one of the other categories
+(e.g. explanatory or help text that is associated with the section. */
+.portlet-section-text {
+    font-size: 12px;
+    font-style: italic;
+}
+
+/** TABLE **/
+
+/* Table header */
+.portlet-table-header {
+    background-color: #e9e8ed;
+    padding: 0 0px 0px 5px;
+    font-weight: bold;
+    color: #333333;
+    font-size: 12px;
+    border-bottom: 1px solid #d5d5d5;
+    line-height: 20px;
+}
+
+/* Normal text in a table cell */
+.portlet-table-body {
+    padding: 10px;
+}
+
+/* Text in every other row in the table */
+.portlet-table-alternate {
+    background-color: #e7e6eb;
+    border-bottom: 1px solid #d5d5d5;
+    padding: 5px 10px;
+}
+
+/* Text in a selected cell range */
+.portlet-table-selected {
+    color: #000;
+    background-color: #dddddd;
+    padding: 5px 10px;
+}
+
+/* Text of a subheading */
+.portlet-table-subheader {
+    font-weight: bold;
+    color: #777777;
+    font-size: 12px;
+    padding: 5px;
+}
+
+/* Table footer */
+.portlet-table-footer {
+    padding: 5px;
+    font-weight: bold;
+    color: #333333;
+    font-size: 12px;
+    border: none;
+    border-top: 1px solid #d5d5d5;
+}
+
+/* Text that belongs to the table but does not fall in one of the other categories (e.g. explanatory or help text that is associated with the table). */
+.portlet-table-text {
+    padding: 3px 5px;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+/** FORMS **/
+.portlet-form-label {
+    color: #333333;
+}
+
+/* Text of the user-input in an input field. not sure if we need this guy? */
+.portlet-form-input-field {
+    color: #000000;
+    font-size: 10px;
+}
+
+/* Form Button Style */
+.portlet-form-button {
+    font-size: 11px;
+    color: #5c5c5c;
+    background-color: #cfcfcf;
+    border-top: 1px solid #dadada;
+    border-left: 1px solid #dadada;
+    border-bottom: 1px solid #9a9a9a;
+    border-right: 1px solid #9a9a9a;
+    line-height: 22px;
+    padding: 0px 20px;
+}
+
+/* Text that appears beside a context dependent action icon */
+.portlet-icon-label {
+    
+}
+
+/* Text that appears beside a "standard" icon (e.g Ok, or Cancel)
+not sure if we need this one?.. */
+.portlet-dlg-icon-label {
+    
+}
+
+/* Text for form field labels */
+.portlet-form-field-label {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    color: #000;
+    white-space: nowrap
+}
+
+/* Text for a form field */
+.portlet-form-field {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 10px;
+    color: #000; /*margin-top: 10px;*/
+}
+
+/* Text for form field labels */
+.portlet-form-field-label {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    color: #000;
+    white-space: nowrap
+}
+
+/* Text for a form field */
+.portlet-form-field {
+    font-family: Verdana, Arial, Helvetica, Sans-Serif, sans-serif;
+    font-size: 10px;
+    color: #000; /*margin-top: 10px;*/
+}
+
+/** MENUS **/
+
+/*General menu settings such as background color, margins, etc. */
+.portlet-menu {
+    
+}
+
+/* Normal, unselected menu item. */
+.portlet-menu-item { /*background: #dddddd; */
+    color: #2e2e2e;
+    text-decoration: none;
+}
+
+/* Selected menu item. */
+.portlet-menu-item-selected {
+    background: #dddddd;
+    color: #058bb6;
+}
+
+.portlet-menu-item-hover {
+    background: #dddddd;
+    color: #058bb6;
+    text-decoration: none;
+}
+
+/* Selected menu item when the mouse hovers over it. */
+.portlet-menu-item-hover-selected {
+    background: #dddddd;
+    color: #058bb6;
+}
+
+/* Normal, unselected menu item that has sub-menus. */
+.portlet-menu-cascade-item {
+    background: #e9e8ed;
+    color: #636363;
+    text-decoration: none;
+}
+
+/* Selected sub-menu item that has sub-menus */
+.portlet-menu-cascade-item-selected {
+    background: #e9e8ed;
+    color: #252525;
+    text-decoration: none;
+}
+
+.porlet-menu-cascade {
+    background: #e9e8ed;
+    color: #636363;
+    text-decoration: none;
+}
+
+.portlet-menu-cascade-item-hover {
+    background: #e9e8ed;
+    color: #252525;
+    text-decoration: none;
+}
+
+.portlet-menu-cascade-item-hover-selected {
+    background: #e9e8ed;
+    color: #252525;
+    text-decoration: none;
+}
+
+.portlet-menu-separator {
+    
+}
+
+.portlet-menu-cascade-separator {
+    
+}
+
+.portlet-menu-content {
+    background: #f6f6f6;
+    color: #717171;
+    text-decoration: none;
+}
+
+.portlet-menu-content-selected {
+    background: #f6f6f6;
+    color: #272727;
+    text-decoration: none;
+}
+
+.portlet-menu-content-hover {
+    background: #f6f6f6;
+    color: #272727;
+    text-decoration: none;
+}
+
+.portlet-menu-content-hover-selected {
+    background: #f6f6f6;
+    color: #272727;
+    text-decoration: none;
+}
+
+.portlet-menu-indicator {
+    color: #8b8b8b;
+}
+
+.portlet-menu-indicator-selected {
+    color: #606060;
+}
+
+.portlet-menu-indicator-hover {
+    color: #606060;
+}
+
+.portlet-menu-indicator-hover-selected {
+    color: #606060;
+}
+
+.portlet-menu-description {
+    
+}
+
+.portlet-menu-caption {
+    
+}

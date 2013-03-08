@@ -1,0 +1,52 @@
+.UIChangeLanguageForm .UIItemSelector .RightColumnStyle .ItemDetailList .ItemDetail {
+    height: auto;
+    border: none;
+}
+
+.UIChangeLanguageForm .UITabPane .TabPaneContent .UITabContentContainer {
+    margin: 0.625em;
+    margin-bottom: 0;
+    border-top: 1px solid;
+    border-left: none;
+    border-color: #ccc;
+    border-right: none;
+}
+
+.UIChangeLanguageForm .UIItemSelector .ItemDetailContainer {
+    padding: 0;
+}
+
+.UIChangeLanguageForm .ItemDetail .NormalItem,.UIChangeLanguageForm .ItemDetail .SelectedItem {
+    border-top: none;
+    border-bottom: none;
+    height: auto;
+}
+
+.UIChangeLanguageForm .ItemDetail .NormalItem:last-child {
+    border: none;
+}
+
+.UIChangeLanguageForm .ItemDetail .NodeLabel,.UIChangeLanguageForm .ItemDetail .PercentLabel,.UIChangeLanguageForm .ItemDetail .SelectedItem
+    {
+    font-size: 0.875em;
+    color: #333;
+}
+
+.UIChangeLanguageForm .ItemDetail .SelectedItem {
+    font-size: 1em;
+}
+
+.UIChangeLanguageForm .ItemDetail>div:hover,.UIChangeLanguageForm .ItemDetail>div:nth-child(2n+1):hover {
+    background-color: #EBF0F5;
+}
+
+.UIChangeLanguageForm .ItemDetail>div:nth-child(2n+1) {
+    background-color: #F2F2F2;
+    border-radius: 3px;
+}
+
+.UIChangeLanguageForm .ItemDetail .SelectedItem .Icon {
+    background-image: url(images/icon-ok.png);
+    background-repeat: no-repeat;
+    background-position: 5px 3px;
+}

@@ -111,6 +111,15 @@
       <version>${org.gatein.wsrp.version}</version>
     </dependency>
 
+    <!--          -->
+    <!--  Mobile  -->
+    <!--          -->
+    <dependency>
+       <groupId>org.gatein.portal</groupId>
+       <artifactId>mobile-extension-ear</artifactId>
+       <type>ear</type>
+    </dependency>
+
     <!--         -->
     <!-- Samples -->
     <!--         -->

@@ -131,6 +131,7 @@
     <module>examples</module>
     <module>starter</module>
     <module>wsrp-integration</module>
+    <module>mobile-integration</module>
     <module>packaging</module>
     <module>testsuite</module>
   </modules>
@@ -734,6 +735,56 @@
         <artifactId>redirect</artifactId>
         <version>${project.version}</version>
         <type>war</type>
+      </dependency>
+
+      <!-- GateIn Mobile -->
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>responsive-skin</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>portlet.responsive.banner</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>portlet.responsive.features</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>portlet.responsive.footer</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>portlet.responsive.header</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>portlet.responsive.navigation</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>mobile-extension-configuration</artifactId>
+          <version>${project.version}</version>
+          <type>war</type>
+      </dependency>
+      <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>mobile-extension-ear</artifactId>
+          <version>${project.version}</version>
+          <type>ear</type>
       </dependency>
 
       <!-- Reflext -->

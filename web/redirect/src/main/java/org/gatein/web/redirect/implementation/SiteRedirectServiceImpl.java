@@ -91,7 +91,7 @@ public class SiteRedirectServiceImpl implements SiteRedirectService, Startable {
                 }
                 PortalConfig pConfig = dataStorage.getPortalConfig(origin);
 
-                if (pConfig == null) {
+                if (pConfig == null || pConfig.getPortalRedirects() == null) {
                     log.warn("No PortalConfig found for site : " + origin + ". Site redirection cannot be peformed.");
                     return null;
                 }

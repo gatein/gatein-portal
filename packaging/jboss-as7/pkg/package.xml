@@ -145,9 +145,6 @@
     <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/web.war">
       <fileset refid="org.gatein.portal:exo.portal.portlet.web:war"/>
     </copy>
-    <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/redirect-portlet.war">
-      <fileset refid="org.gatein.portal.portlet:redirect:war"/>
-    </copy>
 
 
     <!-- WSRP integration -->
@@ -161,6 +158,10 @@
       <fileset refid="org.gatein.wsrp:wsrp-admin-gui:war"/>
     </unzip>
 
+      <!-- Mobile Integration -->
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/gatein-mobile-integration.ear" overwrite="true">
+         <fileset refid="org.gatein.portal:mobile-extension-ear:ear"/>
+      </unzip>
 
     <!-- Deployment archives overrides -->
     <!-- Copy bin, modules, configuration files -->

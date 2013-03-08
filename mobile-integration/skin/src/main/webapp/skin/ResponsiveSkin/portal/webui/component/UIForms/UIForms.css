@@ -1,0 +1,50 @@
+.UIForm .UIFormGrid {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ActionButton {
+    background: white;
+    border: black 1px solid;
+    border-radius: 0.5em;
+    padding: 0.25em;
+}
+
+.ActionButton:hover {
+    background: #EEE;
+}
+
+@media only screen and (max-width: 30em) {
+    .UIForm .HorizontalLayout {
+        padding: 0px;
+    }
+    .UIFormWithTitle {
+        width: 100%;
+    }
+    .UIFormGrid .FieldLabel {
+        display: inline;
+    }
+    .UIFormGrid .FieldComponent {
+        display: block;
+        width: 100%;
+    }
+    .UIFormGrid .FieldComponent,.UIForm .HorizontalLayout input {
+        font-size: 16px;
+    }
+    .UIForm .FieldComponent .FieldComponent input {
+        width: auto;
+    }
+    .UIAction {
+        padding: 8px 20px 8px 0
+    }
+    .UIPopupWindow {
+        width: 100%;
+    }
+    .UIAction .ActionButton,.UIAction .ActionButton a,.UIAction a.ActionButton {
+        display: block;
+        padding: 0.5em;
+        float: none;
+        clear: both;
+        margin: 1em;
+    }
+}

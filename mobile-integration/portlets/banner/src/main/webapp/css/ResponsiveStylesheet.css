@@ -1,0 +1,70 @@
+.gtnResponsiveBannerPortlet {
+    text-align: center;
+    background: #003971 url(../images/banner-masthead-bg.jpg) repeat-x left top;
+    padding: 1em;
+    background-size: auto 100%;
+    border-radius: 0.5em 0.5em 0 0;
+    margin: -0.25em -0.25em 0 -0.25em; /* To cover up the border when placed on a page.*/
+}
+
+.gtnResponsiveBannerPortlet h1 {
+    color: white;
+    text-shadow: 0px 0.0625em 0.125em rgba(0, 0, 0, 0.5);
+    font-weight: normal;
+    font-size: 2.5em;
+}
+
+.gtnResponsiveBannerPortlet h2 {
+    color: #B2C6DB;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1.5em;
+    font-weight: normal;
+}
+
+.gtnResponsiveBannerPortlet h2 a,.gtnResponsiveBannerPortlet h2 a:hover {
+    color: #F6AD3C;
+}
+
+.gtnResponsiveBannerPortlet h2 a:hover {
+    background-color: rgba(178, 198, 219, 0.075);
+    border-radius: 0.1875em;
+    text-decoration: none;
+}
+
+/* Media Queries for Smaller Screened Devices*/
+@media only screen and (max-width: 62em) {
+    .gtnResponsiveBannerPortlet {
+        border-radius: 0 0 0 0;
+    }
+}
+
+@media only screen and (max-width: 30em) {
+    .gtnResponsiveBannerPortlet {
+        padding: 0.75em;
+    }
+    .gtnResponsiveBannerPortlet h1 {
+        font-size: 2em;
+    }
+    .gtnResponsiveBannerPortlet h2 {
+        font-size: 1.2em;
+    }
+}
+
+@media only screen and (max-width: 20em) {
+    .gtnResponsiveBannerPortlet {
+        padding: 0.5em
+    }
+    .gtnResponsiveBannerPortlet h1 {
+        font-size: 1.4em;
+    }
+    .gtnResponsiveBannerPortlet h2 {
+        font-size: 1em;
+    }
+}
+
+.gtnResponsiveBannerPortletShadow {
+    background: transparent url(../images/banner-shadow.png) no-repeat center top;
+    height: 0.5em;
+    margin-left: -0.25em;
+    margin-right: -0.25em;
+}

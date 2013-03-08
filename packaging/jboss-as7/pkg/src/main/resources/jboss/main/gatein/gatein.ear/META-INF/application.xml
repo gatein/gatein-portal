@@ -63,12 +63,6 @@
       <context-root>web</context-root>
     </web>
   </module>
-  <module>
-    <web>
-      <web-uri>redirect-portlet.war</web-uri>
-      <context-root>redirect-portlet</context-root>
-    </web>
-  </module>
   <!--module>
     <web>
       <web-uri>wsrp-admin-gui.war</web-uri>

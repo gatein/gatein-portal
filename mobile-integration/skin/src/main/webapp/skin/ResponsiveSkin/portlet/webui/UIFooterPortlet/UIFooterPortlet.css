@@ -1,0 +1,10 @@
+@import url(/web/skin/portal/webui/component/UIFooterPortlet/DefaultStylesheet.css);
+
+.UIFooterPortlet {
+    background: transparent;
+    padding: 1em;
+}
+
+.UIFooterPortlet .CopyrightInfo {
+    height: auto;
+}
