@@ -43,8 +43,9 @@
     display: block;
 }
 
-.gtnResponsiveNavigationPortlet .menuitem.collapsed .submenu,.gtnResponsiveNavigationPortlet .collapsibleRow.collapsed>.collapsibleContent:not
-     (.display  ),.gtnResponsiveNavigationPortlet .menuitem.close>.submenu {
+.gtnResponsiveNavigationPortlet .menuitem.collapsed .submenu,
+.gtnResponsiveNavigationPortlet .collapsibleRow.collapsed>.collapsibleContent:not(.display),
+.gtnResponsiveNavigationPortlet .menuitem.close>.submenu {
     display: none;
 }
 
@@ -202,7 +203,7 @@
         margin-left: 0;
     }
 
-    .gtnResponsiveNavigationPortlet .topmenu>.multilevel>.submenu:not(.inverse)) {
+    .gtnResponsiveNavigationPortlet .topmenu>.multilevel>.submenu:not(.inverse) {
     right: 0;
     left: auto;
 }

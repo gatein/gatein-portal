@@ -8,13 +8,10 @@
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}" />
 
 <%-- Using the comment tag hack to get rid of the whitespace --%>
-<ol class="${menuType} collapsibleContent">
-    <!--
+<ol class="${menuType} collapsibleContent"><!--
     <c:forEach var="child" items="${parentNode.children}">
         <c:if test="${(child.page || child.menuCategory) && !child.system}">
-            -->
-    <li
-        class="menuitem close <c:if test='${child.active}'>active</c:if> <c:if test='${(child.menuCategory) && (child.page)}'> multilevel</c:if>">
+            --><li class="menuitem close <c:if test='${child.active}'>active</c:if> <c:if test='${(child.menuCategory) && (child.page)}'> multilevel</c:if>">
         <c:choose>
             <%-- Node is a clickable page and contains children nodes --%>
             <c:when test="${child.page && child.menuCategory}">
@@ -33,13 +30,14 @@
             <c:otherwise>
 
             </c:otherwise>
-        </c:choose> <%-- Render a submenu if available --%> <c:if test='${child.menuCategory}'>
+            </c:choose>
+            <%-- Render a submenu if available --%>
+            <c:if test='${child.menuCategory}'>
             <c:set var="parentNode" value="${child}" scope="request" />
             <c:set var="menuType" value="submenu" scope="request" />
             <jsp:include page="node.jsp" />
         </c:if>
-    </li>
-    <!--
+            </li><!--
         </c:if>
     </c:forEach>
     -->
