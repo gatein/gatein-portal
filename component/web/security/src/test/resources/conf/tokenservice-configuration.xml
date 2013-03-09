@@ -35,15 +35,19 @@
     <type>org.exoplatform.web.security.security.SecureRandomService</type>
   </component>
 
+  <component>
+    <type>org.exoplatform.web.security.codec.CodecInitializer</type>
+    <value-param>
+      <name>gatein.conf.dir</name>
+      <value>jar:/conf</value>
+    </value-param>
+  </component>
+
   <!-- Default CookieTokenService with salted hashing -->
   <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
     <init-params>
-      <value-param>
-        <name>gatein.conf.dir</name>
-        <value>jar:/conf</value>
-      </value-param>
       <value-param>
         <name>cleanup.period.time</name>
         <value>0</value>
@@ -63,10 +67,6 @@
     <key>org.exoplatform.web.security.security.PlainCookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
     <init-params>
-      <value-param>
-        <name>gatein.conf.dir</name>
-        <value>jar:/conf</value>
-      </value-param>
       <value-param>
         <name>cleanup.period.time</name>
         <value>0</value>
@@ -90,10 +90,6 @@
     <key>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</key>
     <type>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</type>
     <init-params>
-      <value-param>
-        <name>gatein.conf.dir</name>
-        <value>jar:/conf</value>
-      </value-param>
       <value-param>
         <name>cleanup.period.time</name>
         <value>0</value>

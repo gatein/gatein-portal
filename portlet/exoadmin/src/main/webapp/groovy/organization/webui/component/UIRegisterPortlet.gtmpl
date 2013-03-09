@@ -1,11 +1,20 @@
 <%	
 	import org.exoplatform.portal.webui.register.UIRegisterEditMode;
 	import javax.portlet.PortletMode ;
+	import org.gatein.security.oauth.common.OAuthProviderType;
 %>
 <%
 if(_ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW)
 {
-  uicomponent.renderChildren();
+   uicomponent.renderChild("UIRegisterForm");
+   if (OAuthProviderType.isOAuthEnabled()) {
+%>
+      <div>Subscribe with:
+        <p>
+<%      uicomponent.renderChild("UISocialLoginButtons"); %>
+      </div>
+
+<% }
 }
 else
 {

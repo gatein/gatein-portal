@@ -19,6 +19,7 @@
 
 package org.exoplatform.account.webui.component;
 
+import org.exoplatform.portal.webui.login.UISocialLoginButtons;
 import org.exoplatform.portal.webui.register.UIRegisterEditMode;
 import org.exoplatform.portal.webui.register.UIRegisterForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -37,6 +38,7 @@ public class UIRegisterPortlet extends UIPortletApplication {
 
     public UIRegisterPortlet() throws Exception {
         addChild(UIRegisterForm.class, null, null);
+        addChild(UISocialLoginButtons.class, null, null);
         addChild(UIRegisterEditMode.class, null, null).setRendered(false);
     }
 }

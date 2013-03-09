@@ -1,11 +1,15 @@
-<% String fieldName; %>
+<%
+  import org.gatein.security.oauth.common.OAuthProviderType;
+  String fieldName;
+%>
 <div class="UIForm $uicomponent.id">
 	<%uiform.begin()%>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
 			<table class="UIFormGrid">
 				<%
-					for(field in uiform.getChildren()) {
+					for(OAuthProviderType oauthPrType : uicomponent.getOAuthProviderTypes()) {
+					    field = uicomponent.getUIStringInput(oauthPrType.getUserNameAttrName());
 						if(field.isRendered()) {
 				%>
 							<tr>
@@ -25,11 +29,11 @@
 								<%
 								    if (field.getValue() == null || field.getValue().length() == 0) {
 								        uicomponent.saveURLAfterLinkSocialAccount();
-								        String linkSocialAccountURL = uicomponent.getLinkSocialAccountURL(field.getName());
+								        String linkSocialAccountURL = uicomponent.getLinkSocialAccountURL(oauthPrType);
 								%>
 							            <a href="$linkSocialAccountURL" class="ActionButton LightBlueStyle">Link social account</a>
 								<%  } else {
-								        uicomponent.saveFieldNameForSocialAccountUnlink(field.getName());
+								        uicomponent.saveProviderForSocialAccountUnlink(oauthPrType);
 								        String link = uicomponent.event("UnlinkSocialAccount");
 								%>
 								        <a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle">Unlink social account</a>

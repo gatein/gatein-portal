@@ -248,6 +248,7 @@
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.scripting"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.api"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.controller"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.oauth-common"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.resources"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security-jboss"/>
@@ -323,8 +324,7 @@
     </module-def>
 
     <module-def name="org.gatein.oauth">
-      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.oauth"/>
-      <maven-resource group="org.picketlink" artifact="picketlink-social"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.oauth-web"/>
     </module-def>
 
     <module-def name="org.gatein.sso">

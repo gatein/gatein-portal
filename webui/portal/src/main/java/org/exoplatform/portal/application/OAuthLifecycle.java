@@ -45,7 +45,7 @@ import org.gatein.common.exception.GateInException;
 import org.gatein.common.exception.GateInExceptionConstants;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.utils.OAuthConstants;
+import org.gatein.security.oauth.common.OAuthConstants;
 
 /**
  * This lifecycle is used to update WebUI state based on OAuth events from Http filters

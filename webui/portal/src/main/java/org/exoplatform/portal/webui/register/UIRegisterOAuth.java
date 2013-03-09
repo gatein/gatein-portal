@@ -34,7 +34,6 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.organization.idm.UserImpl;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
@@ -50,8 +49,7 @@ import org.gatein.common.exception.GateInException;
 import org.gatein.common.exception.GateInExceptionConstants;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.utils.OAuthConstants;
-import org.picketlink.social.standalone.fb.FacebookProcessor;
+import org.gatein.security.oauth.common.OAuthConstants;
 
 /**
  * Registration form for user, which has been successfully authenticated via OAuth2

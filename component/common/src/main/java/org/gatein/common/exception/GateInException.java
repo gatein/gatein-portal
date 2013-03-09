@@ -63,6 +63,18 @@ public class GateInException extends RuntimeException {
         this.exceptionAttributes = exceptionAttributes == null ? new HashMap<String, Object>() : exceptionAttributes;
     }
 
+    public GateInException(int exceptionCode, String message) {
+        this(exceptionCode, null, message);
+    }
+
+    public GateInException(int exceptionCode, Throwable cause) {
+        this(exceptionCode, (Map<String, Object>)null, cause);
+    }
+
+    public GateInException(int exceptionCode, String message, Throwable cause) {
+        this(exceptionCode, null, message, cause);
+    }
+
     public int getExceptionCode() {
         return exceptionCode;
     }

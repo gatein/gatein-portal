@@ -44,7 +44,7 @@
 
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.web.oauth</artifactId>
+      <artifactId>exo.portal.component.web.oauth-common</artifactId>
     </dependency>
 
   </dependencies>

@@ -1,11 +1,13 @@
 <%  
   import org.exoplatform.web.application.JavascriptManager;
   import javax.servlet.http.HttpSession;
+  import org.gatein.security.oauth.common.OAuthProviderType;
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.addCustomizedOnLoadScript('document.getElementById("UIPortalComponentLogin").username.focus();');
   HttpSession session = rcontext.getRequest().getSession();
   String requestPath = rcontext.getInitialURI();
+  String contextPath = rcontext.getRequestContextPath();
   //session.setAttribute("initialURI", requestPath);
 %>
 <div class="UILoginForm">
@@ -21,7 +23,7 @@
       <div class="MiddleRightLoginDecorator">
         <div class="LoginDecoratorBackground">
           <div class="LoginDetailBox">
-            <form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= rcontext.getRequestContextPath() + "/login"%>" method="post" style="margin: 0px;">
+            <form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
               <input type="hidden" name="initialURI" value="<%=requestPath %>"/>
               <div class="VerticalLayout">
                 <table class="UIFormGrid">
@@ -44,7 +46,10 @@
                  <input type="button" name="discard" class="ActionButton SimpleStyle" value="<%=_ctx.appRes("UILoginForm.label.Discard")%>" onclick="<%=uicomponent.event("Close");%>"></input>
               </div> 
             </div>
-            </form>         
+            </form>
+
+            <% uicomponent.renderChildren(); %>
+
           </div>
         </div>
       </div>

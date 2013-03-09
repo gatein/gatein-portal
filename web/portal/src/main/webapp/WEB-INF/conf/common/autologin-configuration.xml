@@ -31,6 +31,10 @@
   </component>
 
   <component>
+    <type>org.exoplatform.web.security.codec.CodecInitializer</type>
+  </component>
+
+  <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
     <init-params>

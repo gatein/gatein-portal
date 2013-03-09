@@ -772,11 +772,11 @@
     <!-- GateIn OAuth -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.web.oauth</artifactId>
+      <artifactId>exo.portal.component.web.oauth-common</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.picketlink</groupId>
-      <artifactId>picketlink-social</artifactId>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.web.oauth-web</artifactId>
     </dependency>
 
     <!-- GateIn -->

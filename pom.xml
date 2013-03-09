@@ -501,14 +501,17 @@
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.security-jboss</artifactId>
-<<<<<<< HEAD
         <version>3.6.0.Beta02-SNAPSHOT</version>
-=======
       </dependency>
       <dependency>
-        <artifactId>exo.portal.component.web.oauth</artifactId>
-        <version>3.6.0.MO1-SNAPSHOT</version>
->>>>>>> Initial support for OAuth. Support for Facebook login. Saving informations about usernames and access tokens to UserProfile
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>exo.portal.component.web.oauth-common</artifactId>
+        <version>3.6.0.Beta02-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>exo.portal.component.web.oauth-web</artifactId>
+        <version>3.6.0.Beta02-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>

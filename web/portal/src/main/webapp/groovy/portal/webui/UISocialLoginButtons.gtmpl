@@ -1,0 +1,13 @@
+<%
+   import org.gatein.security.oauth.common.OAuthProviderType;
+   import org.exoplatform.portal.webui.util.Util;
+   String contextPath = Util.getPortalRequestContext().getRequestContextPath();
+
+   for (OAuthProviderType oauthProvType : OAuthProviderType.values()) {
+      if (oauthProvType.isEnabled()) {
+%>
+         <a href="<%= oauthProvType.getInitOAuthURL(contextPath); %>">SignIn with <%= oauthProvType.getFriendlyName(); %></a>
+<%
+      }
+   }
+%>

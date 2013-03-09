@@ -49,11 +49,11 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
-import org.gatein.common.exception.GateInException;
 import org.gatein.common.exception.GateInExceptionConstants;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.utils.OAuthConstants;
+import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.common.OAuthConstants;
 
 /**
  * Social networks tab of user profile
@@ -67,10 +67,18 @@ public class UIAccountSocial extends UIForm {
     private static final Logger log = LoggerFactory.getLogger(UIAccountSocial.class);
 
     public UIAccountSocial() throws Exception {
-        addReadOnlyInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME, OAuthConstants.PROFILE_FACEBOOK_USERNAME);
-        addReadOnlyInput(OAuthConstants.PROFILE_GOOGLE_USERNAME, OAuthConstants.PROFILE_GOOGLE_USERNAME);
+        for (OAuthProviderType oauthPrType : getOAuthProviderTypes()) {
+            UIFormStringInput uiInput = new UIFormStringInput(oauthPrType.getUserNameAttrName(), null);
+            uiInput.setReadOnly(true);
+            addUIFormInput(uiInput);
+        }
 
         updateUIFields();
+    }
+
+    public OAuthProviderType[] getOAuthProviderTypes() {
+        // For now return all available oauthProviderTypes
+        return OAuthProviderType.values();
     }
 
     @Override
@@ -80,28 +88,21 @@ public class UIAccountSocial extends UIForm {
     }
 
     private void updateUIFields() {
-        OAuthUsernames oauthUsernames = getOauthUsernamesFromBackend();
-        getUIStringInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME).setValue(oauthUsernames.facebookUsername);
-        getUIStringInput(OAuthConstants.PROFILE_GOOGLE_USERNAME).setValue(oauthUsernames.googleUsername);
+        for (OAuthProviderType oauthPrType : getOAuthProviderTypes()) {
+            String oauthUsername = getOauthUsernameFromUserProfile(oauthPrType);
+            getUIStringInput(oauthPrType.getUserNameAttrName()).setValue(oauthUsername);
+        }
     }
 
-    private OAuthUsernames getOauthUsernamesFromBackend() {
+    private String getOauthUsernameFromUserProfile(OAuthProviderType oauthProviderType) {
         UserProfile userProfile = (UserProfile)Util.getPortalRequestContext().getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
 
-        String facebookUsername = null;
-        String googleUsername = null;
+        String oauthUsername = null;
         if (userProfile != null) {
-            facebookUsername = userProfile.getAttribute(OAuthConstants.PROFILE_FACEBOOK_USERNAME);
-            googleUsername = userProfile.getAttribute(OAuthConstants.PROFILE_GOOGLE_USERNAME);
+            oauthUsername = userProfile.getAttribute(oauthProviderType.getUserNameAttrName());
         }
 
-        return new OAuthUsernames(facebookUsername, googleUsername);
-    }
-
-    private void addReadOnlyInput(String name, String bindingExpression) {
-        UIFormStringInput uiInput = new UIFormStringInput(name, null);
-        uiInput.setReadOnly(true);
-        addUIFormInput(uiInput);
+        return oauthUsername;
     }
 
     public void saveURLAfterLinkSocialAccount() {
@@ -110,19 +111,13 @@ public class UIAccountSocial extends UIForm {
         session.setAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT, prContext.getRequestURI());
     }
 
-    public String getLinkSocialAccountURL(String fieldName) {
+    public String getLinkSocialAccountURL(OAuthProviderType oauthPrType) {
         String reqContextPath = Util.getPortalRequestContext().getRequestContextPath();
-        if (OAuthConstants.PROFILE_FACEBOOK_USERNAME.equals(fieldName)) {
-             return reqContextPath + OAuthConstants.FACEBOOK_AUTHENTICATION_URL_PATH;
-        } else if (OAuthConstants.PROFILE_GOOGLE_USERNAME.equals(fieldName)) {
-            return reqContextPath + OAuthConstants.GOOGLE_AUTHENTICATION_URL_PATH;
-        } else {
-            throw new IllegalArgumentException("Unknown argument " + fieldName);
-        }
+        return oauthPrType.getInitOAuthURL(reqContextPath);
     }
 
-    public void saveFieldNameForSocialAccountUnlink(String fieldName) {
-        ConversationState.getCurrent().setAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK, fieldName);
+    public void saveProviderForSocialAccountUnlink(OAuthProviderType oauthProviderType) {
+        ConversationState.getCurrent().setAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK, oauthProviderType);
     }
 
     public static class UnlinkSocialAccountActionListener extends EventListener<UIAccountSocial> {
@@ -141,10 +136,10 @@ public class UIAccountSocial extends UIForm {
 
             if (user != null) {
                 UserProfile userProfile = (UserProfile)prContext.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
-                String socialAccountFieldToUnlink = (String)ConversationState.getCurrent().getAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK);
+                OAuthProviderType oauthProviderTypeToUnlink = (OAuthProviderType)ConversationState.getCurrent().getAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK);
 
-                if (socialAccountFieldToUnlink != null) {
-                    userProfile.setAttribute(socialAccountFieldToUnlink, null);
+                if (oauthProviderTypeToUnlink != null) {
+                    userProfile.setAttribute(oauthProviderTypeToUnlink.getUserNameAttrName(), null);
                 } else {
                     log.warn("Social account field to unlink not found");
                 }
@@ -152,7 +147,7 @@ public class UIAccountSocial extends UIForm {
                 service.getUserProfileHandler().saveUserProfile(userProfile, true);
 
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME, socialAccountFieldToUnlink);
+                map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME, oauthProviderTypeToUnlink.getUserNameAttrName());
                 map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME, userName);
                 Object[] args = UIUserProfileInputSet.convertOAuthExceptionAttributes(context, "UIAccountSocial.label.", map);
                 uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.successful-unlink", args));
@@ -174,13 +169,4 @@ public class UIAccountSocial extends UIForm {
         }
     }
 
-    private static class OAuthUsernames {
-        private final String facebookUsername;
-        private final String googleUsername;
-
-        public OAuthUsernames(String fb, String google) {
-            this.facebookUsername = fb;
-            this.googleUsername = google;
-        }
-    }
 }

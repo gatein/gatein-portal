@@ -35,6 +35,7 @@ import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.codec.AbstractCodec;
 import org.exoplatform.web.security.codec.AbstractCodecBuilder;
+import org.exoplatform.web.security.codec.CodecInitializer;
 import org.exoplatform.web.security.hash.JCASaltedHashService;
 import org.exoplatform.web.security.hash.SaltedHashException;
 import org.exoplatform.web.security.hash.SaltedHashService;
@@ -128,7 +129,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
 
     private final Logger log = LoggerFactory.getLogger(CookieTokenService.class);
 
-    public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
+    public CookieTokenService(InitParams initParams, ChromatticManager chromatticManager, CodecInitializer codecInitializer)
             throws TokenServiceInitializationException {
         super(initParams);
 
@@ -145,98 +146,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         } else {
             saltedHashService = (SaltedHashService) hashServiceParam.getObject();
         }
-
-        ValueParam gateinConfParam = initParams.getValueParam("gatein.conf.dir");
-        String gateinConfDir = null;
-        if (gateinConfParam != null) {
-            gateinConfDir = gateinConfParam.getValue();
-        }
-
-        initCodec(gateinConfDir);
-    }
-
-    private void initCodec(String confDir) throws TokenServiceInitializationException {
-        String builderType = PropertyManager.getProperty("gatein.codec.builderclass");
-        Map<String, String> config = new HashMap<String, String>();
-
-        if (builderType != null) {
-            // If there is config for codec in configuration.properties, we read the config parameters from config file
-            // referenced in configuration.properties
-            String configFile = PropertyManager.getProperty("gatein.codec.config");
-            InputStream in = null;
-            try {
-                File f = new File(configFile);
-                in = new FileInputStream(f);
-                Properties properties = new Properties();
-                properties.load(in);
-                for (Map.Entry<?, ?> entry : properties.entrySet()) {
-                    config.put((String) entry.getKey(), (String) entry.getValue());
-                }
-                config.put("gatein.codec.config.basedir", f.getParentFile().getAbsolutePath());
-            } catch (IOException e) {
-                throw new TokenServiceInitializationException("Failed to read the config parameters from file '" + configFile
-                        + "'.", e);
-            } finally {
-                IOTools.safeClose(in);
-            }
-        } else {
-            // If there is no config for codec in configuration.properties, we generate key if it does not exist and setup the
-            // default config
-            builderType = "org.exoplatform.web.security.codec.JCASymmetricCodecBuilder";
-            String gtnConfDir = null;
-            if (confDir != null) {
-                ConfigurationManager confManager = (ConfigurationManager) RootContainer.getInstance().getComponentInstanceOfType(ConfigurationManager.class);
-                try {
-                    gtnConfDir = confManager.getResource(confDir).getPath();
-                } catch (Exception ex) {
-                    log.error("Failed to process the path to gateinConfDir", ex);
-                }
-            }
-
-            if (gtnConfDir == null) {
-                gtnConfDir = PropertyManager.getProperty("gatein.conf.dir");
-                if (gtnConfDir == null || gtnConfDir.length() == 0) {
-                    throw new TokenServiceInitializationException("'gatein.conf.dir' property must be set.");
-                }
-            }
-            File f = new File(gtnConfDir + "/codec/codeckey.txt");
-            if (!f.exists()) {
-                File codecDir = f.getParentFile();
-                if (!codecDir.exists()) {
-                    codecDir.mkdir();
-                }
-                OutputStream out = null;
-                try {
-                    KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-                    keyGen.init(128);
-                    SecretKey key = keyGen.generateKey();
-                    KeyStore store = KeyStore.getInstance("JCEKS");
-                    store.load(null, "gtnStorePass".toCharArray());
-                    store.setEntry("gtnKey", new KeyStore.SecretKeyEntry(key),
-                            new KeyStore.PasswordProtection("gtnKeyPass".toCharArray()));
-                    out = new FileOutputStream(f);
-                    store.store(out, "gtnStorePass".toCharArray());
-                } catch (Exception e) {
-                    throw new TokenServiceInitializationException(e);
-                } finally {
-                    IOTools.safeClose(out);
-                }
-            }
-            config.put("gatein.codec.jca.symmetric.keyalg", "AES");
-            config.put("gatein.codec.jca.symmetric.keystore", "codeckey.txt");
-            config.put("gatein.codec.jca.symmetric.storetype", "JCEKS");
-            config.put("gatein.codec.jca.symmetric.alias", "gtnKey");
-            config.put("gatein.codec.jca.symmetric.keypass", "gtnKeyPass");
-            config.put("gatein.codec.jca.symmetric.storepass", "gtnStorePass");
-            config.put("gatein.codec.config.basedir", f.getParentFile().getAbsolutePath());
-        }
-
-        try {
-            this.codec = Class.forName(builderType).asSubclass(AbstractCodecBuilder.class).newInstance().build(config);
-            log.info("Initialized CookieTokenService.codec using builder " + builderType);
-        } catch (Exception e) {
-            throw new TokenServiceInitializationException("Could not initialize CookieTokenService.codec.", e);
-        }
+        this.codec = codecInitializer.initCodec();
     }
 
     /*

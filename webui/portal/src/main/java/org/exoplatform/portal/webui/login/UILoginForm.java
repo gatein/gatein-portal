@@ -24,6 +24,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
@@ -31,12 +33,13 @@ import org.exoplatform.webui.event.EventListener;
 /**
  * Created by The eXo Platform SARL Author : Nhu Dinh Thuan nhudinhthuan@exoplatform.com Jul 11, 2006
  */
-@ComponentConfig(template = "system:/groovy/portal/webui/UILoginForm.gtmpl", events = {
+@ComponentConfig(lifecycle= Lifecycle.class, template = "system:/groovy/portal/webui/UILoginForm.gtmpl", events = {
         @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class),
         @EventConfig(phase = Phase.DECODE, listeners = UILoginForm.ForgetPasswordActionListener.class) })
-public class UILoginForm extends UIComponent {
+public class UILoginForm extends UIContainer {
 
-    public UILoginForm() {
+    public UILoginForm() throws Exception {
+        addChild(UISocialLoginButtons.class, null, null);
     }
 
     public static class ForgetPasswordActionListener extends EventListener<UILoginForm> {
