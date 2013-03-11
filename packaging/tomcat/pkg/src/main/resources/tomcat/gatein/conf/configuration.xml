@@ -80,6 +80,9 @@
               <value>
                 <string>web</string>
               </value>
+              <value>
+                <string>gatein-mobile-configuration</string>
+              </value>
             </collection>
           </field>
         </object>
