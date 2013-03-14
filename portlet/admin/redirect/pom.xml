@@ -1,0 +1,155 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>exo.portal.portlet</artifactId>
+    <version>3.6.0.MO1-SNAPSHOT</version>
+    <relativePath>../..</relativePath>
+  </parent>
+
+  <groupId>org.gatein.portal.portlet</groupId>
+  <artifactId>redirect-admin-ui</artifactId>
+
+  <packaging>war</packaging>
+
+  <name>GateIn Redirect Admin UI Portlet</name>
+
+  <properties>
+    <version.richfaces>4.3.0-SNAPSHOT</version.richfaces>
+    <qualifier.richfaces>jbas71</qualifier.richfaces>
+    <version.richfaces.bootstrap>4.3.0-SNAPSHOT</version.richfaces.bootstrap>
+
+    <!-- JSF2 Implementations -->
+    <version.mojarra2>2.1.13</version.mojarra2>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.gatein.api</groupId>
+      <artifactId>gatein-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-common</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+      <version>${org.exoplatform.kernel.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.chromattic</groupId>
+          <artifactId>chromattic.api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.chromattic</groupId>
+          <artifactId>chromattic.apt</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.chromattic</groupId>
+          <artifactId>chromattic.common</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.chromattic</groupId>
+          <artifactId>chromattic.metamodel</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.chromattic</groupId>
+          <artifactId>chromattic.spi</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.faces</groupId>
+      <artifactId>jsf-api</artifactId>
+      <version>${version.mojarra2}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.portletbridge</groupId>
+      <artifactId>richfaces4-depchain</artifactId>
+      <type>pom</type>
+      <version>${org.jboss.portletbridge.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.richfaces.ui</groupId>
+      <artifactId>richfaces-components-ui</artifactId>
+      <version>${version.richfaces}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.richfaces.core</groupId>
+      <artifactId>richfaces-core-impl</artifactId>
+      <version>${version.richfaces}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.richfaces.sandbox.ui.bootstrap</groupId>
+      <artifactId>bootstrap-ui</artifactId>
+      <version>${version.richfaces.bootstrap}</version>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <!-- For tomcat we need to bundle the JSF libs in WEB-INF/lib -->
+    <profile>
+      <id>tomcat7</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>tomcat7</value>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun.faces</groupId>
+          <artifactId>jsf-api</artifactId>
+          <version>${version.mojarra2}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.sun.faces</groupId>
+          <artifactId>jsf-impl</artifactId>
+          <version>${version.mojarra2}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>tomcat</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>tomcat</value>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>com.sun.faces</groupId>
+          <artifactId>jsf-api</artifactId>
+          <version>${version.mojarra2}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.sun.faces</groupId>
+          <artifactId>jsf-impl</artifactId>
+          <version>${version.mojarra2}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
+  <build>
+    <finalName>redirect-admin</finalName>
+  </build>
+</project>

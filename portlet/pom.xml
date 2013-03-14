@@ -39,6 +39,7 @@
     <module>exoadmin</module>
     <module>web</module>
     <module>redirect</module>
+    <module>admin/redirect</module>
   </modules>
 
 </project>

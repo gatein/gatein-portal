@@ -193,6 +193,13 @@
       <type>war</type>
     </dependency>
 
+    <!-- Site Redirection Admin Portlet -->
+    <dependency>
+      <groupId>org.gatein.portal.portlet</groupId>
+      <artifactId>redirect-admin-ui</artifactId>
+      <type>war</type>
+    </dependency>
+
     <!-- Need to declare this artifact to have access to its path from package.xml -->
     <dependency>
       <groupId>org.gatein.portal</groupId>

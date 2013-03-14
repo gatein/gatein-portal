@@ -1,0 +1,267 @@
+<ui:composition template="/template.xhtml"
+				xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+<ui:define name="content">
+	<h:form id="add_form" styleClass="form-horizontal">
+		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> Site Redirection</h1>
+		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}">Add Redirect</a4j:commandLink>
+	</h:form>
+		<h:form id="sum_form" styleClass="form-horizontal">
+			<!-- No site selected -->
+			<h:panelGroup rendered="#{empty rdrs.siteName}">
+				<h2 class="initial">Select a site to set up redirects.</h2>
+				<p class="initial">Redirect to an alternative site based on the device, browser or user preferences.</p>
+				<h:graphicImage class="initial" library="img" name="site-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
+			</h:panelGroup>
+
+			<!-- Site selected, with no redirects -->
+			<h:panelGroup rendered="#{not empty rdrs.siteName and rdrs.redirects.size() eq 0}">
+				<h2 class="initial">You have not set up any redirects.</h2>
+				<p class="initial">Redirect to an alternative site based on the device, browser or user preferences.</p>
+				<h:graphicImage class="initial" library="img" name="site-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
+			</h:panelGroup>
+
+			<h:panelGroup id="pgRedirectSummary" rendered="#{rdrs.redirects.size() > 0}">
+				<table id="redirect-table" class="table table-striped">
+					<thead id="redirect-summary-header" class="redirect-summary">
+						<tr>
+							<th>Status</th>
+							<th>Redirect name</th>
+							<th>Configurations</th>
+							<th class="actions hidden-element">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+					<ui:repeat value="#{rdrs.redirects}" var="r" varStatus="status">
+						<!-- Redirect Summary Row -->
+						<tr id="rdr_sum_#{status.index}" class="redirect-summary">
+							<td>
+								<div class="onoffswitch">
+									<h:selectBooleanCheckbox id="rdr_toggle" styleClass="onoffswitch-checkbox" value="#{r.isEnabled()}" />
+									<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
+										<f:ajax event="click" render="@this" listener="#{rdrEdit.toggleEnabled(rdrs.siteName, r.name)}" />
+										<span class="onoffswitch-inner">
+											<span class="onoffswitch-active">ON</span>
+											<span class="onoffswitch-inactive">OFF</span>
+										</span>
+										<span class="onoffswitch-switch"></span>
+									</h:outputLabel>
+								</div>
+							</td>
+							<td>#{r.name}</td>
+							<td>Redirect to #{r.redirectSite} <span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
+							<td class="actions" style="text-align: center;">
+								<h:commandLink styleClass="configure-redirect redirect-summary">
+									<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" />
+									<i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i>
+								</h:commandLink>
+								<h:commandLink styleClass="deletee-redirect redirect-summary">
+									<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.deleteRedirect(rdrs.siteName, r.name)}" />
+									<i class="icon-trash tooltipTrigger" data-original-title="Delete Redirect">Delete Redirect</i>
+								</h:commandLink>
+							</td>
+						</tr>
+					</ui:repeat>
+					</tbody>
+				</table>
+			</h:panelGroup>
+		</h:form>
+
+		<!-- Edit Redirect Table -->
+		<h:form id="edit_form" styleClass="form-horizontal">
+		<h:panelGroup id="edit_group" styleClass="edit-group" style="display: none;">
+			<table id="edit_redirect-table" class="table table-striped">
+				<tbody>
+					<tr style="display: none;"><td></td></tr>
+					<tr id="redirect_cfg" class="form-site-redirect">
+						<td colspan="4" style="padding-top: 10px;">
+								<fieldset class="header-site-redirect">
+									<legend class="hidden-element">
+										<span>General Settings</span>
+									</legend>
+									<div class="onoffswitch">
+										<h:selectBooleanCheckbox name="onoffswitch" styleClass="onoffswitch-checkbox" id="redirect3" value="#{rdrEdit.enabled}"/>
+										<h:outputLabel for="redirect3" styleClass="onoffswitch-label">
+											<span class="onoffswitch-inner">
+												<span class="onoffswitch-active">ON</span>
+												<span class="onoffswitch-inactive">OFF</span>
+											</span>
+											<span class="onoffswitch-switch"></span>
+										</h:outputLabel>
+									</div>
+									<div class="control-group">
+										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
+										<div class="controls">
+											<b:input scale="medium" style="margin-left: -45px;" id="name" placeholder="Redirect Name" value="#{rdrEdit.name}" />
+										</div>
+									</div>
+									<div class="control-group">
+										<h:outputLabel for="redirect" style="margin-left: 65px;" styleClass="control-label">Redirect to</h:outputLabel>
+										<div class="controls">
+											<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
+												<f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
+												<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
+											</h:selectOneMenu>
+										</div>
+									</div><!-- End .control-group -->
+								</fieldset>
+								<fieldset>
+									<legend>
+										<span class="toggle">Conditions</span>
+									</legend>
+									<div>
+										<h:panelGroup id="conditions-group" styleClass="control-group">
+											<div class="controls">
+												<b:commandButton styleClass="btn btn-small inside-table add-condition" value="Add Condition" action="#{rdrEdit.addCondition}" oncomplete="$('#modal-condition').modal('show');" execute="@this" render=":condition_form" />
+												<table class="table table-striped button-small">
+													<thead style="#{empty rdrEdit.conditions ? 'display: none;' : ''}">
+														<tr>
+															<th>Condition Name</th>
+															<th>Settings</th>
+															<th class="hidden-element actions">Actions</th>
+														</tr>
+													</thead>
+													<tbody class="sortable">
+														<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
+														<tr class="ui-state-default">
+															<td>#{rc.name}</td>
+															<td> 
+																<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
+																	<h:panelGroup rendered="#{cnt_st.first}">
+																	<strong>Contains </strong>
+																	</h:panelGroup>
+																	<h:panelGroup rendered="#{not cnt_st.first}">
+																	 OR 
+																	</h:panelGroup>
+																	'#{rcUACcont}'
+																</ui:repeat>
+																<ui:repeat value="#{rc.userAgentConditions.doesNotContain}" var="rcUACnotcont" varStatus="dnc_st">
+																	<h:panelGroup rendered="#{dnc_st.first}">
+																	<strong>Does not contain </strong>
+																	</h:panelGroup>
+																	<h:panelGroup rendered="#{not dnc_st.first}">
+																	 OR 
+																	</h:panelGroup>
+																	'#{rcUACnotcont}'
+																</ui:repeat>
+															</td>
+															<td class="actions">
+																<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#modal-condition').modal()"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit Condition">Edit Condition</i></a4j:commandLink>
+																<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="conditions-group" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Condition</i></a4j:commandLink>
+															</td>
+														</tr>
+														</ui:repeat>
+													</tbody>
+												</table>							
+											</div>
+										</h:panelGroup><!-- End .control-group -->
+									</div>
+								</fieldset>
+								<fieldset>
+									<legend>
+										<span class="toggle">Node Mappings</span>
+									</legend>
+									<div>
+										<div class="control-group">
+											<label for="matching" class="control-label">Matching</label>
+											<div class="controls">
+												<label class="checkbox">
+													<h:selectBooleanCheckbox name="matching" id="matching" value="#{rdrEdit.useNodeNameMatching}"/>Use node name matching
+													<i class="icon-info-sign icon-gray tooltipTrigger" title="Origin Node Name matches Redirect Node Name" data-placement="right">Origin Node Name matches Redirect Node Name</i>
+												</label>
+											</div>
+										</div><!-- End .control-group -->
+										<h:panelGroup layout="block" id="mappingsWrapper" styleClass="control-group">
+											<label class="control-label">Mappings</label>
+											<div class="controls">
+												<a4j:commandLink action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').last().focus();">Add Mapping</a4j:commandLink>
+												<table class="table table-striped action-button" id="mappings">
+													<thead style="#{empty rdrEdit.mappings.mappings ? 'display: none;' : ''}">
+														<tr>
+															<th>Origin Node Name</th>
+															<th>Redirect Node Name</th>
+															<th class="hidden-element actions">Actions</th>
+														</tr>
+													</thead>
+													<tbody id="mappings-tbody">
+														<ui:repeat value="#{rdrEdit.mappings.mappings}" var="m" varStatus="counter">
+														<tr class="node-mapping-viewer #{empty m.originNode or empty m.redirectNode ? 'hidden-element' : ''}">
+															<td>#{m.originNode}</td>
+															<td>#{m.redirectNode}</td>
+															<td class="actions">
+																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" onclick="editMappingEntry(this)"><i class="icon-pencil">Edit Node Mapping</i></a>
+																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="Delete Node Mapping" render="mappingsWrapper" onclick="$(this).tooltip('hide'); return false;"><i class="icon-trash">Delete Node Mapping</i></a4j:commandLink>
+															</td>
+														</tr>
+														<!-- Just so that we keep the odd/even colors -->
+														<tr class="node-mapping-spacer" style="display: none;"><td></td></tr>
+														<tr class="node-mapping-editor #{empty m.originNode or empty m.redirectNode ? '' : 'hidden-element'}">
+															<td>
+																<b:input scale="medium" placeholder="e.g. homepage" value="#{m.originNode}" styleClass="origin-node-name-input">
+																	<!-- <b:autocomplete suggestions="#{rdrEdit.originNodeNames}" /> -->
+																	<f:facet name="append">
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
+																	</f:facet>
+																</b:input>
+															</td>
+															<td>
+																<b:input scale="medium" placeholder="e.g. home_page" value="#{m.redirectNode}" styleClass="redirect-node-name-input">
+																	<!-- <b:autocomplete suggestions="#{rdrEdit.redirectNodeNames}" /> -->
+																	<f:facet name="append">
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(false)}"><i class="icon-list" ></i></b:commandButton>
+																	</f:facet>
+																</b:input>
+															</td>
+															<td class="actions">
+																<a href="#" class="delete-node-mapping tooltipTrigger" title="Delete Node Mapping" onclick="deleteMappingEntry(this); return false;"><i class="icon-trash">Delete Node Mapping</i></a>
+															</td>
+														</tr>
+														</ui:repeat>
+													</tbody>
+												</table>							
+											</div>
+										</h:panelGroup><!-- End .control-group -->
+										<div class="control-group">
+											<label class="control-label" for="nodes">Unresolved nodes</label>
+											<div class="controls">
+												<h:selectOneMenu id="nodes" style="height: 30px; line-height: 30px;" value="#{rdrEdit.mappings.unresolvedNode}">
+													<f:selectItem itemValue="REDIRECT" itemLabel="Redirect" />
+													<f:selectItem itemValue="NO_REDIRECT" itemLabel="No Redirect" />
+													<f:selectItem itemValue="ROOT" itemLabel="Redirect to root" />
+													<f:selectItem itemValue="COMMON_ANCESTOR_NAME_MATCH" itemLabel="Ancestor Name Match" />
+												</h:selectOneMenu>
+											</div>
+										</div><!-- End .control-group -->
+									</div>
+								</fieldset>
+								<div class="form-actions" style="background: none;">
+									<button id="edit_cancel" class="btn" type="submit">Cancel</button>
+									<b:commandButton value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary" oncomplete="closeRedirectEdit()"/>
+								</div><!-- End .form-actions -->
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</h:panelGroup>
+		</h:form><!-- End .form-horizontal -->
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var nodeInput = null;
+			});
+		</script>
+
+		<ui:include src="/admin/redirects/modals/modals.xhtml" />
+		<ui:include src="/admin/redirects/modals/modal-condition.xhtml" />
+		<ui:include src="/admin/redirects/modals/modal-select_node.xhtml" />
+		<ui:include src="/admin/redirects/modals/modal-delete_site.xhtml" />
+		<ui:include src="/admin/redirects/modals/modal-import_site.xhtml" />
+
+	</ui:define>
+</ui:composition>

@@ -58,6 +58,12 @@
         <label>Site Export/Import</label>
         <page-reference>group::/platform/administrators::siteExportImport</page-reference>
       </node>
+
+      <node>
+        <name>siteRedirects</name>
+        <label>Site Redirects</label>
+        <page-reference>group::/platform/administrators::siteRedirects</page-reference>
+      </node>
     </node>
   </page-nodes>
 </node-navigation>

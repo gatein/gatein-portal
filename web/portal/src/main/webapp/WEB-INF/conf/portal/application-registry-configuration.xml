@@ -197,6 +197,38 @@
                       </field>
                     </object>
                   </value>
+                  <value>
+                    <object type="org.exoplatform.application.registry.Application">
+                      <field name="applicationName">
+                        <string>RedirectsAdminPortlet</string>
+                      </field>
+                      <field name="categoryName">
+                        <string>administration</string>
+                      </field>
+                      <field name="displayName">
+                        <string>Site Redirects</string>
+                      </field>
+                      <field name="description">
+                        <string>Site Redirects</string>
+                      </field>
+                      <field name="type">
+                        <string>portlet</string>
+                      </field>
+                      <field name="contentId">
+                        <string>redirect-admin/RedirectsAdminPortlet</string>
+                      </field>
+                      <field name="accessPermissions">
+                        <collection type="java.util.ArrayList" item-type="java.lang.String">
+                          <value>
+                            <string>*:/platform/administrators</string>
+                          </value>
+                          <value>
+                            <string>*:/organization/management/executive-board</string>
+                          </value>
+                        </collection>
+                      </field>
+                    </object>
+                  </value>
                 </collection>
               </field>
             </object>

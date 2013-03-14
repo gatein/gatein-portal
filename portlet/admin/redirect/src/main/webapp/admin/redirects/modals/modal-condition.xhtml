@@ -1,0 +1,169 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+			 xmlns:h="http://java.sun.com/jsf/html"
+			 xmlns:f="http://java.sun.com/jsf/core"
+			 xmlns:ui="http://java.sun.com/jsf/facelets"
+			 xmlns:rich="http://richfaces.org/rich"
+			 xmlns:a4j="http://richfaces.org/a4j"
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+	<h:form id="condition_form">
+	<div class="modal confirmation hide" id="modal-condition">
+		<h:panelGroup layout="block" id="modal-condition-wrapper">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">Close</button>
+			<h3>Add Condition</h3>
+		</div>
+		<div class="modal-body">
+			<p class="subtitle">All fields are required</p>
+			<div class="control-group">
+				<label class="control-label" for="condition_name">Condition Name </label>
+				<b:input mode="client" styleClass="input-large" required="true" requiredMessage="Value required" id="condition_name" value="#{rdrEdit.editedCondition.name}" placeholder="Condition Name" onkeyup="validateCondition()">
+				</b:input>
+				<h:message id="condition_name-message" for="condition_name" />
+			</div><!-- End .control-group -->
+			<div class="control-group">
+				<h:panelGroup id="uasHolder">
+				<table class="table table-striped" id="condition-string">
+					<thead>
+						<tr>
+							<th>User Agent String</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<label>Contains</label>
+								<ui:param name="isContainsEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.contains == null or rdrEdit.editedCondition.userAgentConditions.contains.size() == 0}" />
+								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.contains}" var="rcUACcont" varStatus="counter">
+									<div class="#{counter.index > 0 ? 'more-condition' : 'condition'}">
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
+										<b:input id="rcuaccont" styleClass="contains-input" value="#{rdrEdit.editedCondition.userAgentConditions.contains[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
+										<div class="action">
+											<a4j:commandLink action="#{rdrEdit.removeContains(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
+											<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+										</div>
+									</div>
+								</ui:repeat>
+								<div class="#{isContainsEmpty ? 'condition' : 'more-condition'}" style="#{isContainsEmpty ? '' : 'display: none;'}">
+									<h:panelGroup styleClass="td-condition" rendered="#{not isContainsEmpty}">OR</h:panelGroup>
+									<h:inputText id="rcuaccont" style="visibility: hidden;"/>
+									<div class="action">
+										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeContains(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
+										<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+									</div>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label>Does not contain</label>
+								<ui:param name="isDoesNotContainEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain.size() == 0}" />
+								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain}" var="rcUACdncont" varStatus="counter">
+									<div class="#{counter.index == 0 ? 'condition' : 'more-condition'}">
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
+										<b:input id="rcuacdncont" styleClass="doesnotcontain-input" value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
+										<div class="action">
+											<a4j:commandLink action="#{rdrEdit.removeDoesNotContain(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
+											<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+										</div>
+									</div>
+								</ui:repeat>
+								<div class="#{isDoesNotContainEmpty ? 'condition' : 'more-condition'}" style="#{isDoesNotContainEmpty ? '' : 'display: none;'}">
+									<h:panelGroup styleClass="td-condition" rendered="#{not isDoesNotContainEmpty}">OR</h:panelGroup>
+									<h:inputText id="rcuacdncont" style="visibility: hidden;" />
+									<div class="action">
+										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeDoesNotContain(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
+										<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</h:panelGroup>
+			</div><!-- End .control-group -->
+
+			<h:panelGroup id="condition_properties" styleClass="control-group">
+				<h:panelGroup style="#{rdrEdit.editedCondition.deviceProperties == null or rdrEdit.editedCondition.deviceProperties.size() == 0 ? '' : 'display:none;'}">
+					<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="btn btn-mini pull-right" render="condition_properties" oncomplete="$('.property-name-input').last().focus();">Add Properties</a4j:commandLink>
+				</h:panelGroup>
+				<table class="table table-striped button-mini" id="condition-properties" style="#{rdrEdit.editedCondition.deviceProperties == null ? 'display: none;' : ''}">
+					<thead>
+						<tr>
+							<th>Property</th>
+							<th class="hidden-element actions">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<ui:repeat value="#{rdrEdit.editedCondition.deviceProperties}" var="rcDevProp" varStatus="counter">
+						<tr>
+							<td class="condition" colspan="2">
+ 								<ui:param name="rcDevPropOp" value="#{rcDevProp.equals != null ?  'eq' : rcDevProp.greaterThan != null ? (rcDevProp.lessThan != null ? 'bt' : 'gt') : rcDevProp.lessThan != null ? 'lt' : 'mt'}" />
+								<h:inputText id="name-rcDevProp" styleClass="property property-name-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].propertyName}" />
+								<!-- For some reason this causes the components to stop working.. using pure HTML
+ 								<h:selectOneMenu id="op-rcDevProp" styleClass="attribute" style="height: 30px;" onchange="propertyFields(this);" value="#{rdrEdit.getPropertyOperator(counter.index)}">
+									<f:selectItem id="eq" itemLabel="Equals" itemValue="eq" />
+									<f:selectItem id="gt" itemLabel="Greater than" itemValue="gt" />
+									<f:selectItem id="lt" itemLabel="Less than" itemValue="lt" />
+									<f:selectItem id="bt" itemLabel="Between" itemValue="bt" />
+									<f:selectItem id="mt" itemLabel="Matches" itemValue="mt" />
+								</h:selectOneMenu>
+								-->
+								<select id="op-rcDevProp" class="attribute" style="height: 30px;" onchange="changePropertyFields(this);" >
+									<option value="eq" selected='#{rcDevPropOp == "eq" ? "selected" : ""}'>Equals</option>
+									<option value="gt" selected='#{rcDevPropOp == "gt" ? "selected" : ""}'>Greater than</option>
+									<option value="lt" selected='#{rcDevPropOp == "lt" ? "selected" : ""}'>Less than</option>
+									<option value="mt" selected='#{rcDevPropOp == "mt" ? "selected" : ""}'>Matches</option>
+									<option value="bt" selected='#{rcDevPropOp == "bt" ? "selected" : ""}'>Between</option>
+								</select>
+								<span id="value-holder">
+ 									<h:panelGroup styleClass="pp-bt" style="#{rcDevPropOp == 'bt' ? '' : 'display:none'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_bt_gt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].greaterThan}" />
+										</div>
+										<span class="td-condition">AND</span>
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_bt_lt" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].lessThan}" />
+										</div>
+									</h:panelGroup>
+									<h:panelGroup styleClass="pp-eq" style="#{rcDevPropOp == 'eq' ? '' : 'display:none'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_eq" styleClass="property-value-input" style="width: 128px;" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].equals}" converter="PropertiesConverter" />
+										</div>
+									</h:panelGroup>
+									<h:panelGroup styleClass="pp-mt" style="#{rcDevPropOp == 'mt' ? '' : 'display:none'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_mt" styleClass="property-value-input" style="width: 128px;" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].matches}" converter="PropertiesConverter" />
+										</div>
+									</h:panelGroup>
+									<h:panelGroup styleClass="pp-gt" style="#{rcDevPropOp == 'gt' ? '' : 'display:none'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_gt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].greaterThan}" />
+										</div>
+									</h:panelGroup>
+									<h:panelGroup styleClass="pp-lt" style="#{rcDevPropOp == 'lt' ? '' : 'display:none'}">
+										<div class="input-append-inline">
+											<h:inputText id="val-rcDevProp_lt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].lessThan}" />
+										</div>
+									</h:panelGroup>
+ 								</span>
+							</td>
+ 							<td class="actions" style="width: 50px;" >
+								<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" styleClass="tooltipTrigger" title="Delete Property" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
+								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="Add Property" render="condition_properties" onclick="$(this).tooltip('hide');" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Property</i></a4j:commandLink>
+							</td>
+						</tr>
+						</ui:repeat>
+ 					</tbody>
+				</table>
+			</h:panelGroup><!-- End .control-group -->
+		</div><!-- End .modal-body -->
+		<h:panelGroup layout="block" id="condition_footer" styleClass="modal-footer">
+			<b:commandButton value="Cancel" action="#{rdrEdit.rollbackCondition}" oncomplete="$('#modal-condition').modal('hide');" execute="@form" />
+			<b:commandButton id="save-condition-button" value="Save Changes!" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group" />
+		</h:panelGroup>
+	</h:panelGroup><!-- end .modal -->
+	</div><!-- end .modal -->
+	</h:form>
+
+</ui:fragment>

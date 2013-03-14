@@ -901,6 +901,13 @@
       <type>war</type>
     </dependency>
 
+    <dependency>
+      <?rename redirect-admin.war?>
+      <groupId>org.gatein.portal.portlet</groupId>
+      <artifactId>redirect-admin-ui</artifactId>
+      <type>war</type>
+    </dependency>
+
   </dependencies>
 
   <build>

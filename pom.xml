@@ -737,6 +737,14 @@
         <type>war</type>
       </dependency>
 
+      <!-- GateIn Redirect Admin -->
+      <dependency>
+        <groupId>org.gatein.portal.portlet</groupId>
+        <artifactId>redirect-admin-ui</artifactId>
+        <version>${project.version}</version>
+        <type>war</type>
+      </dependency>
+
       <!-- GateIn Mobile -->
       <dependency>
           <groupId>org.gatein.portal</groupId>

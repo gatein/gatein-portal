@@ -1,0 +1,30 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+			 xmlns:h="http://java.sun.com/jsf/html"
+			 xmlns:f="http://java.sun.com/jsf/core"
+			 xmlns:ui="http://java.sun.com/jsf/facelets"
+			 xmlns:rich="http://richfaces.org/rich"
+			 xmlns:a4j="http://richfaces.org/a4j"
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+	<h:form id="form-delete-site">
+	<input type="hidden" id="delete-site-id-input" name="delete-site-id-input" value="UNDEFINED"/>
+	<div class="modal hide" id="modal-delete-site">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">Close</button>
+			<h3>Delete Site</h3>
+		</div>
+		<div class="modal-body">
+			<p>
+				<strong>Are you sure you want to permanently delete the site "<span id="delete-site-id-text">UNDEFINED</span>" ?</strong>
+				<br />
+				<span>You can't undo this action.</span>
+			</p>
+		</div><!-- End .modal-body -->
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
+			<a href="#" id="button-select-node" class="btn btn-danger">Delete Site</a>
+		</div>
+	</div><!-- end .modal -->
+	</h:form>
+
+</ui:fragment>

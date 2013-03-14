@@ -894,6 +894,13 @@
     </dependency>
 
     <dependency>
+      <?rename redirect-admin.war?>
+      <groupId>org.gatein.portal.portlet</groupId>
+      <artifactId>redirect-admin-ui</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
       <?rename gatein-mobile-configuration.war?>
       <groupId>org.gatein.portal</groupId>
       <artifactId>mobile-extension-configuration</artifactId>

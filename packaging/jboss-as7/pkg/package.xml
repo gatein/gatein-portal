@@ -130,6 +130,9 @@
     <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/exoadmin.war">
       <fileset refid="org.gatein.portal:exo.portal.portlet.exoadmin:war"/>
     </copy>
+    <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/redirect-admin.war">
+      <fileset refid="org.gatein.portal.portlet:redirect-admin-ui:war"/>
+    </copy>
     <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/eXoGadgets.war">
       <fileset refid="org.gatein.portal:exo.portal.eXoGadgets:war"/>
     </copy>

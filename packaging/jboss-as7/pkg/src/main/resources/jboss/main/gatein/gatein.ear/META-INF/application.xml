@@ -23,6 +23,12 @@
   </module>
   <module>
     <web>
+      <web-uri>redirect-admin.war</web-uri>
+      <context-root>redirect-admin</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
       <web-uri>exoadmin.war</web-uri>
       <context-root>exoadmin</context-root>
     </web>

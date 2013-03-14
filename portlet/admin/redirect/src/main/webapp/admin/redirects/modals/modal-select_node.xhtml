@@ -1,0 +1,33 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+			 xmlns:h="http://java.sun.com/jsf/html"
+			 xmlns:f="http://java.sun.com/jsf/core"
+			 xmlns:ui="http://java.sun.com/jsf/facelets"
+			 xmlns:rich="http://richfaces.org/rich"
+			 xmlns:a4j="http://richfaces.org/a4j"
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+	<h:form id="form-select-node">
+	<div class="modal hide" id="modal-select-node">
+		<h:panelGroup layout="block" id="modal-select-node-wrapper">
+			<div class="modal-header">
+				<button class="close" data-dismiss="modal">Close</button>
+				<h3>Select Node - #{rdrEdit.currentNodesSiteName}</h3>
+			</div>
+			<div class="modal-body">
+				<div class="window-list">
+					<ul class="clearfix">
+						<ui:repeat value="#{rdrEdit.currentNodeNames}" var="n" varStatus="status">
+							<li><label for="#{n}" class="#{status.first ? 'active' : ''}"><input class="radio-node" type="radio" id="#{n}" name="user-group" checked="#{status.first ? 'checked' : ''}"/>#{n}</label></li>
+						</ui:repeat>
+					</ul>
+				</div><!-- End .windowList -->
+			</div><!-- End .modal-body -->
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
+				<a href="#" id="button-select-node" class="btn btn-primary" onclick="selectNodeFromList(); return false;">Select this node</a>
+			</div>
+		</h:panelGroup>
+	</div><!-- end .modal -->
+	</h:form>
+
+</ui:fragment>

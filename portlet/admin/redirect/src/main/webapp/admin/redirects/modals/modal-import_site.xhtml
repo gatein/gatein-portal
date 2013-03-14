@@ -1,0 +1,41 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+			 xmlns:h="http://java.sun.com/jsf/html"
+			 xmlns:f="http://java.sun.com/jsf/core"
+			 xmlns:ui="http://java.sun.com/jsf/facelets"
+			 xmlns:rich="http://richfaces.org/rich"
+			 xmlns:a4j="http://richfaces.org/a4j"
+			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+	<h:form id="form-import-site">
+	<div class="modal hide" id="modal-import-site">
+		<div class="modal-header">
+			<button class="close" data-dismiss="modal">Close</button>
+			<h3>Import Site</h3>
+		</div>
+		<div class="modal-body">
+			<div id="file-input-holder" class="control-group">
+				<label class="control-label" for="file">File to import </label>
+				<input type="file" class="input-xlarge" id="file" />
+				<div id="file-attachment" class="attachment" style="display: none;">
+					<span id="fileName" class="text-side-label">UNDEFINED</span>
+					<button id="file-remove-btn"><i class="icon-remove"> Delete File</i></button>
+				</div>
+			</div><!-- End .control-group -->
+			<div class="control-group">
+				<label class="control-label" for="mode">Import Mode </label>
+				<select id="mode">
+					<option>Conserve</option>
+					<option>Insert</option>
+					<option selected="selected">Merge</option>
+					<option>Overwrite</option>
+				</select>
+			</div><!-- End .control-group -->
+		</div><!-- End .modal-body -->
+		<div class="modal-footer">
+			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
+			<a href="#" id="button-import-site" class="btn btn-primary">Import</a>
+		</div>
+	</div><!-- end .modal -->
+	</h:form>
+
+</ui:fragment>

@@ -118,4 +118,20 @@
       <show-info-bar>false</show-info-bar>
     </gadget-application>
   </page>
+
+  <page>
+    <name>siteRedirects</name>
+    <title>Site Redirects</title>
+    <access-permissions>manager:/platform/administrators</access-permissions>
+    <edit-permission>manager:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>redirect-admin</application-ref>
+        <portlet-ref>RedirectsAdminPortlet</portlet-ref>
+      </portlet>
+      <title>Site Redirects</title>
+      <access-permissions>manager:/platform/administrators</access-permissions>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
+  </page>
 </page-set>

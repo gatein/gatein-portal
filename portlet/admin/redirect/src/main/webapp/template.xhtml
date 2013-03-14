@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-US"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:b="http://richfaces.org/sandbox/bootstrap">
+
+	<h:head>
+		<link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css' />
+	</h:head>
+
+	<h:body style="background: url('#{resource['/img/body-bg.jpg']}') repeat left top">
+		<h:outputStylesheet library="css" name="bootstrap.css" target="head" />
+		<h:outputStylesheet library="css" name="bootstrap-responsive.css" target="head" />
+		<h:outputStylesheet library="css" name="admin-responsive.css" target="head" />
+		<h:outputStylesheet library="css" name="admin.css" target="head" />
+
+		<!-- Fonts -->
+		<!--h:outputStylesheet library="font-awesome" name="css/font-awesome.css" target="head" /-->
+
+		<!-- JS -->
+		<h:outputScript library="js" name="bootstrap.js" />
+		<h:outputScript library="js" name="bootstrap-dropdown.js" />
+		<h:outputScript library="js" name="bootstrap-tooltip.js" />
+		<h:outputScript library="js" name="bootstrap-button.js" />
+		<h:outputScript library="js" name="bootstrap-alert.js" />
+		<h:outputScript library="js" name="bootstrap-modal.js" />
+		<!-- <h:outputScript library="js" name="bootstrap-popover.js" /> -->
+		<h:outputScript library="js" name="admin.js" />
+
+		<ui:insert name="params" />
+
+		<b:gridContainer fluid="#{sessionBean.fluid}">
+			<b:gridRow styleClass="show-grid" fluid="#{sessionBean.fluid}">
+				<b:gridColumn span="3"><ui:include src="/admin/redirects/menu.xhtml"/></b:gridColumn>
+				<div id="container-right" class="span9" style="margin-top: 20px;"><ui:insert name="content">Content</ui:insert></div>
+			</b:gridRow>
+ 		</b:gridContainer>
+	</h:body>
+</html>
