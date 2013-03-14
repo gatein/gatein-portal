@@ -34,6 +34,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.organization.idm.UserImpl;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
@@ -45,11 +46,12 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
-import org.gatein.common.exception.GateInException;
-import org.gatein.common.exception.GateInExceptionConstants;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.common.OAuthPrincipal;
 
 /**
  * Registration form for user, which has been successfully authenticated via OAuth2
@@ -150,27 +152,27 @@ public class UIRegisterOAuth extends UIContainer {
 
                 AuthenticationRegistry authRegistry = uiRegisterForm.getApplicationComponent(AuthenticationRegistry.class);
                 HttpServletRequest httpRequest = portalRequestContext.getRequest();
-                User portalUserFromOAuth = (User)authRegistry.getAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER);
-                String oauthUsername = portalUserFromOAuth.getUserName();
+                OAuthPrincipal oauthPrincipal = (OAuthPrincipal)authRegistry.getAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL);
 
-                // TODO: Google and others
-                newUserProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_USERNAME, oauthUsername);
+                newUserProfile.setAttribute(oauthPrincipal.getOauthProviderType().getUserNameAttrName(), oauthPrincipal.getUserName());
                 try {
                     profileHandler.saveUserProfile(newUserProfile, true);
-                } catch (GateInException gtnOauthException) {
+                } catch (OAuthException gtnOAuthException) {
                     // Show warning message if user with this facebookUsername (or googleUsername) already exists
                     // NOTE: It could happen only in case of parallel registration of same oauth user from more browser windows
-                    if (gtnOauthException.getExceptionCode() == GateInExceptionConstants.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
+                    if (gtnOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
 
                         // Drop new user
                         orgService.getUserHandler().removeUser(newUser.getUserName(), true);
 
                         // Clear previous message about successful creation of user because we dropped him. Add message about duplicate oauth username
-                        uiApp.clearMessages();
-                        UIUserProfileInputSet.addOAuthExceptionMessage(context, gtnOauthException, uiApp);
+                        Object[] args = new Object[] {gtnOAuthException.getExceptionAttribute(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME),
+                                gtnOAuthException.getExceptionAttribute(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_NAME)};
+                        ApplicationMessage appMessage = new ApplicationMessage("UIAccountSocial.msg.failed-registration", args, ApplicationMessage.WARNING);
+                        uiApp.addMessage(appMessage);
                         return;
                     } else {
-                        throw gtnOauthException;
+                        throw gtnOAuthException;
                     }
                 }
 

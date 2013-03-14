@@ -29,18 +29,18 @@ import java.security.Principal;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class OAuthPrincipal implements Principal {
+public class OAuthPrincipal<T> implements Principal {
 
     private final String userName;
     private final String firstName;
     private final String lastName;
     private final String displayName;
     private final String email;
-    private final String accessToken;
-    private final OAuthProviderType oauthProviderType;
+    private final T accessToken;
+    private final OAuthProviderType<T> oauthProviderType;
 
 
-    public OAuthPrincipal(String userName, String firstName, String lastName, String displayName, String email, String accessToken, OAuthProviderType oauthProviderType) {
+    public OAuthPrincipal(String userName, String firstName, String lastName, String displayName, String email, T accessToken, OAuthProviderType oauthProviderType) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -76,7 +76,7 @@ public class OAuthPrincipal implements Principal {
         return email;
     }
 
-    public String getAccessToken() {
+    public T getAccessToken() {
         return accessToken;
     }
 

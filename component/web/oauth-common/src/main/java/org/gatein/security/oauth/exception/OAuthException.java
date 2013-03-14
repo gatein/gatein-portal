@@ -21,7 +21,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.common.exception;
+package org.gatein.security.oauth.exception;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,52 +30,52 @@ import java.util.Map;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class GateInException extends RuntimeException {
+public class OAuthException extends RuntimeException {
     static final long serialVersionUID = -7034897190745768339L;
 
     // Specify error code
-    private final int exceptionCode;
+    private final OAuthExceptionCode exceptionCode;
 
     // Context with additional attributes about error
     private final Map<String, Object> exceptionAttributes;
 
-    public GateInException() {
+    public OAuthException() {
         super();
-        this.exceptionCode = GateInExceptionConstants.EXCEPTION_CODE_UNSPECIFIED;
+        this.exceptionCode = OAuthExceptionCode.EXCEPTION_UNSPECIFIED;
         this.exceptionAttributes = new HashMap<String, Object>();
     }
 
-    public GateInException(int exceptionCode, Map<String, Object> exceptionAttributes, String message) {
+    public OAuthException(OAuthExceptionCode exceptionCode, Map<String, Object> exceptionAttributes, String message) {
         super(message);
         this.exceptionCode = exceptionCode;
         this.exceptionAttributes = exceptionAttributes == null ? new HashMap<String, Object>() : exceptionAttributes;
     }
 
-    public GateInException(int exceptionCode, Map<String, Object> exceptionAttributes, String message, Throwable cause) {
+    public OAuthException(OAuthExceptionCode exceptionCode, Map<String, Object> exceptionAttributes, String message, Throwable cause) {
         super(message, cause);
         this.exceptionCode = exceptionCode;
         this.exceptionAttributes = exceptionAttributes == null ? new HashMap<String, Object>() : exceptionAttributes;
     }
 
-    public GateInException(int exceptionCode, Map<String, Object> exceptionAttributes, Throwable cause) {
+    public OAuthException(OAuthExceptionCode exceptionCode, Map<String, Object> exceptionAttributes, Throwable cause) {
         super(cause);
         this.exceptionCode = exceptionCode;
         this.exceptionAttributes = exceptionAttributes == null ? new HashMap<String, Object>() : exceptionAttributes;
     }
 
-    public GateInException(int exceptionCode, String message) {
+    public OAuthException(OAuthExceptionCode exceptionCode, String message) {
         this(exceptionCode, null, message);
     }
 
-    public GateInException(int exceptionCode, Throwable cause) {
+    public OAuthException(OAuthExceptionCode exceptionCode, Throwable cause) {
         this(exceptionCode, (Map<String, Object>)null, cause);
     }
 
-    public GateInException(int exceptionCode, String message, Throwable cause) {
+    public OAuthException(OAuthExceptionCode exceptionCode, String message, Throwable cause) {
         this(exceptionCode, null, message, cause);
     }
 
-    public int getExceptionCode() {
+    public OAuthExceptionCode getExceptionCode() {
         return exceptionCode;
     }
 
@@ -85,6 +85,11 @@ public class GateInException extends RuntimeException {
 
     public Object getExceptionAttribute(String attrName) {
         return exceptionAttributes.get(attrName);
+    }
+
+    @Override
+    public String getMessage() {
+        return exceptionCode + ": " + super.getMessage();
     }
 
 }

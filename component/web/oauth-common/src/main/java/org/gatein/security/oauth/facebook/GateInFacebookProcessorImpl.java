@@ -32,10 +32,13 @@ import javax.servlet.http.HttpSession;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
-import org.gatein.common.exception.GateInException;
-import org.gatein.common.exception.GateInExceptionConstants;
+import org.exoplatform.services.organization.UserProfile;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.security.oauth.common.OAuthCodec;
+import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.social.FacebookProcessor;
 
@@ -49,19 +52,19 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     private FacebookProcessor facebookProcessor;
 
     public GateInFacebookProcessorImpl(ExoContainerContext context, InitParams params) {
-        String appid = params.getValueParam("appid").getValue();
-        String appsecret = params.getValueParam("appsecret").getValue();
+        String appid = params.getValueParam("clientId").getValue();
+        String appsecret = params.getValueParam("clientSecret").getValue();
         String scope = params.getValueParam("scope").getValue();
-        String redirectURL = params.getValueParam("redirectUrl").getValue();
+        String redirectURL = params.getValueParam("redirectURL").getValue();
 
         if (appid == null || appid.length() == 0 || appid.trim().equals("<<to be replaced>>")) {
-            throw new IllegalArgumentException("Property 'appid' of FacebookFilter needs to be provided. The value should be " +
-                    "appId (clientId) of your Facebook application");
+            throw new IllegalArgumentException("Property 'clientId' needs to be provided. The value should be " +
+                    "clientId of your Facebook application");
         }
 
         if (appsecret == null || appsecret.length() == 0 || appsecret.trim().equals("<<to be replaced>>")) {
-            throw new IllegalArgumentException("Property 'appsecret' of FacebookFilter needs to be provided. The value should be " +
-                    "appSecret (clientSecret) of your Facebook application");
+            throw new IllegalArgumentException("Property 'clientSecret' needs to be provided. The value should be " +
+                    "clientSecret of your Facebook application");
         }
 
         if (scope == null || scope.length() == 0) {
@@ -69,13 +72,13 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
         }
 
         if (redirectURL == null || redirectURL.length() == 0) {
-            redirectURL = "http://localhost:8080/" + context.getName() + "/facebookAuth";
+            redirectURL = "http://localhost:8080/" + context.getName() + OAuthConstants.FACEBOOK_AUTHENTICATION_URL_PATH;
         }  else {
             redirectURL = redirectURL.replaceAll("@@portal.container.name@@", context.getName());
         }
 
-        log.debug("configuration: appid=" + appid +
-                ", appsecret=" + appsecret +
+        log.debug("configuration: clientId=" + appid +
+                ", clientSecret=" + appsecret +
                 ", scope=" + scope +
                 ", redirectURL=" + redirectURL);
 
@@ -104,7 +107,7 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
             FacebookPrincipal principal = (FacebookPrincipal)facebookProcessor.getPrincipal(httpRequest, httpResponse);
 
             if (principal == null) {
-                throw new GateInException(GateInExceptionConstants.EXCEPTION_CODE_OAUTH_UNSPECIFIED, null, "Principal was null. Maybe login modules need to be configured properly.");
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_UNSPECIFIED, null, "Principal was null. Maybe login modules need to be configured properly.");
             } else {
                 state = FacebookProcessor.STATES.FINISH.name();
                 httpRequest.getSession().setAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE, state);
@@ -119,5 +122,28 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     @Override
     public FacebookPrincipal getPrincipal(String accessToken) {
         return (FacebookPrincipal)facebookProcessor.readInIdentity(accessToken);
+    }
+
+    @Override
+    public void saveAccessTokenAttributesToUserProfile(UserProfile userProfile, OAuthCodec codec, String accessToken) {
+        String encodedAccessToken = codec.encodeString(accessToken);
+        userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN, encodedAccessToken);
+    }
+
+    @Override
+    public String getAccessTokenFromUserProfile(UserProfile userProfile, OAuthCodec codec) {
+        String encodedAccessToken = userProfile.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN);
+        return codec.decodeString(encodedAccessToken);
+    }
+
+    @Override
+    public void removeAccessTokenFromUserProfile(UserProfile userProfile) {
+        userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN, null);
+    }
+
+    @Override
+    public void revokeToken(String accessToken) {
+        // TODO: implement
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

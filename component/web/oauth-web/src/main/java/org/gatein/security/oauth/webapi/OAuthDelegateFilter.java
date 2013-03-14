@@ -49,7 +49,10 @@ public class OAuthDelegateFilter extends SSODelegateFilter {
     private static final Logger log = LoggerFactory.getLogger(OAuthDelegateFilter.class);
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (OAuthProviderType.isOAuthEnabled()) {
+        Map<SSOInterceptor, String> oauthInterceptors = getInterceptors();
+
+        // skip this filter if no oauthInterceptors are declared
+        if (!oauthInterceptors.isEmpty()) {
             OAuthFilterChain oauthChain = new OAuthFilterChain(chain, getInterceptors(), this);
             oauthChain.doFilter(request, response);
         } else {
@@ -63,7 +66,9 @@ public class OAuthDelegateFilter extends SSODelegateFilter {
                 if (oauthInterceptors == null) {
                     OAuthFilterIntegrator oauthFilterIntegrator = (OAuthFilterIntegrator)getContainer().getComponentInstanceOfType(OAuthFilterIntegrator.class);
                     oauthInterceptors = oauthFilterIntegrator.getOAuthInterceptors();
-                    log.info("Initialized OAuth integrator with interceptors: " + oauthInterceptors);
+                    if (!oauthInterceptors.isEmpty()) {
+                        log.info("Initialized OAuth integrator with interceptors: " + oauthInterceptors);
+                    }
                 }
             }
         }

@@ -46,15 +46,18 @@ public class OAuthConstants {
 
     public static final String ERROR_PARAMETER = "error";
 
+    // Used in twitter
+    public static final String OAUTH_VERIFIER = "oauth_verifier";
+
     // Properties from configuration.properties
 
     public static final String PROPERTY_FACEBOOK_ENABLED = "gatein.oauth.facebook.enabled";
 
-    public static final String PROPERTY_FACEBOOK_APPID = "gatein.oauth.facebook.appid";
+    public static final String PROPERTY_FACEBOOK_CLIENT_ID = "gatein.oauth.facebook.clientId";
 
-    public static final String PROPERTY_FACEBOOK_APPSECRET = "gatein.oauth.facebook.appsecret";
+    public static final String PROPERTY_FACEBOOK_CLIENT_SECRET = "gatein.oauth.facebook.clientSecret";
 
-    public static final String PROPERTY_FACEBOOK_REDIRECT_URL = "gatein.oauth.facebook.redirecturl";
+    public static final String PROPERTY_FACEBOOK_REDIRECT_URL = "gatein.oauth.facebook.redirectURL";
 
     public static final String PROPERTY_FACEBOOK_SCOPE = "gatein.oauth.facebook.scope";
 
@@ -62,10 +65,25 @@ public class OAuthConstants {
 
     public static final String PROPERTY_GOOGLE_ENABLED = "gatein.oauth.google.enabled";
 
-    public static final String PROPERTY_GOOGLE_CLIENTID = "gatein.oauth.google.clientid";
+    public static final String PROPERTY_GOOGLE_CLIENT_ID = "gatein.oauth.google.clientId";
 
-    public static final String PROPERTY_GOOGLE_CLIENTSECRET = "gatein.oauth.google.clientsecret";
+    public static final String PROPERTY_GOOGLE_CLIENT_SECRET = "gatein.oauth.google.clientSecret";
 
+    public static final String PROPERTY_TWITTER_ENABLED = "gatein.oauth.twitter.enabled";
+
+    public static final String PROPERTY_TWITTER_CLIENT_ID = "gatein.oauth.twitter.clientId";
+
+    public static final String PROPERTY_TWITTER_CLIENTSECRET = "gatein.oauth.twitter.clientSecret";
+
+    public static final String PROPERTY_TWITTER_REDIRECT_URL = "gatein.oauth.twitter.redirectURL";
+
+    // Key of OAuthProviders
+
+    public static final String OAUTH_PROVIDER_KEY_FACEBOOK = "FACEBOOK";
+
+    public static final String OAUTH_PROVIDER_KEY_TWITTER = "TWITTER";
+
+    public static final String OAUTH_PROVIDER_KEY_GOOGLE = "GOOGLE";
 
     // User profile attributes
 
@@ -73,9 +91,19 @@ public class OAuthConstants {
 
     public static final String PROFILE_GOOGLE_USERNAME = "user.social-info.google.userName";
 
+    public static final String PROFILE_TWITTER_USERNAME = "user.social-info.twitter.userName";
+
     public static final String PROFILE_FACEBOOK_ACCESS_TOKEN = "user.social-info.facebook.accessToken";
 
     public static final String PROFILE_GOOGLE_ACCESS_TOKEN = "user.social-info.google.accessToken";
+
+    public static final String PROFILE_GOOGLE_REFRESH_TOKEN = "user.social-info.google.refreshToken";
+
+    public static final String PROFILE_GOOGLE_SCOPE = "user.social-info.google.scope";
+
+    public static final String PROFILE_TWITTER_ACCESS_TOKEN = "user.social-info.twitter.accessToken";
+
+    public static final String PROFILE_TWITTER_ACCESS_TOKEN_SECRET = "user.social-info.twitter.accessTokenSecret";
 
 
     // Session (or AuthenticationRegistry) attributes
@@ -88,9 +116,15 @@ public class OAuthConstants {
 
     public static final String ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK = "_socialNetworkProviderToUnlink";
 
-    public static final String ATTRIBUTE_LINKED_OAUTH_PROVIDER_USERNAME_ATTR_NAME = "_linkedOAuthProviderUsernameAttrName";
+    public static final String ATTRIBUTE_LINKED_OAUTH_PROVIDER = "_linkedOAuthProviderUsernameAttrName";
 
     public static final String ATTRIBUTE_EXCEPTION_AFTER_FAILED_LINK = "_oauthExceptionAfterFailedLink";
+
+    public static final String ATTRIBUTE_TWITTER_REQUEST_TOKEN = "_twitterRequestToken";
+
+    public static final String ATTRIBUTE_AUTH_STATE = "_authState";
+
+    public static final String ATTRIBUTE_VERIFICATION_STATE = "_verificationState";
 
     // URL
 
@@ -98,11 +132,22 @@ public class OAuthConstants {
 
     public static final String GOOGLE_AUTHENTICATION_URL_PATH = "/googleAuth";
 
+    public static final String TWITTER_AUTHENTICATION_URL_PATH = "/twitterAuth";
+
 
     // Request parameters
 
     public static final String PARAM_OAUTH_INTERACTION = "_oauthInteraction";
 
     public static final String PARAM_OAUTH_INTERACTION_VALUE_START = "start";
+
+
+    // Exception constants
+
+    public static final String EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME = "OAuthProviderUsernameAttributeName";
+
+    public static final String EXCEPTION_OAUTH_PROVIDER_USERNAME = "OAuthProviderUsername";
+
+    public static final String EXCEPTION_OAUTH_PROVIDER_NAME = "OAuthProviderName";
 
 }

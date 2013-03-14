@@ -23,8 +23,7 @@
 
 package org.exoplatform.portal.account;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
@@ -39,32 +38,37 @@ import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.application.Parameter;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
+import org.exoplatform.webui.core.lifecycle.Lifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.organization.UIUserProfileInputSet;
-import org.gatein.common.exception.GateInExceptionConstants;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthProviderType;
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
+import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 
 /**
  * Social networks tab of user profile
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/portal/UIAccountSocial.gtmpl",
+@ComponentConfig(lifecycle = Lifecycle.class, template = "system:/groovy/portal/webui/portal/UIAccountSocial.gtmpl",
                  events    = { @EventConfig(listeners = UIAccountSocial.UnlinkSocialAccountActionListener.class) })
 public class UIAccountSocial extends UIForm {
 
     private static final Logger log = LoggerFactory.getLogger(UIAccountSocial.class);
+
+    private static final String PARAM_PROVIDER_FOR_UNLINK = "_paramProviderForUnlink";
 
     public UIAccountSocial() throws Exception {
         for (OAuthProviderType oauthPrType : getOAuthProviderTypes()) {
@@ -76,9 +80,9 @@ public class UIAccountSocial extends UIForm {
         updateUIFields();
     }
 
-    public OAuthProviderType[] getOAuthProviderTypes() {
+    public Collection<OAuthProviderType> getOAuthProviderTypes() {
         // For now return all available oauthProviderTypes
-        return OAuthProviderType.values();
+        return getApplicationComponent(OAuthProviderTypeRegistry.class).getEnabledOAuthProviders();
     }
 
     @Override
@@ -88,21 +92,17 @@ public class UIAccountSocial extends UIForm {
     }
 
     private void updateUIFields() {
-        for (OAuthProviderType oauthPrType : getOAuthProviderTypes()) {
-            String oauthUsername = getOauthUsernameFromUserProfile(oauthPrType);
-            getUIStringInput(oauthPrType.getUserNameAttrName()).setValue(oauthUsername);
-        }
-    }
-
-    private String getOauthUsernameFromUserProfile(OAuthProviderType oauthProviderType) {
         UserProfile userProfile = (UserProfile)Util.getPortalRequestContext().getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
 
-        String oauthUsername = null;
-        if (userProfile != null) {
-            oauthUsername = userProfile.getAttribute(oauthProviderType.getUserNameAttrName());
+        if (userProfile == null) {
+            return;
         }
 
-        return oauthUsername;
+        for (OAuthProviderType oauthPrType : getOAuthProviderTypes()) {
+            String usernameAttrName = oauthPrType.getUserNameAttrName();
+            String oauthUsername = userProfile.getAttribute(usernameAttrName);
+            getUIStringInput(usernameAttrName).setValue(oauthUsername);
+        }
     }
 
     public void saveURLAfterLinkSocialAccount() {
@@ -116,8 +116,9 @@ public class UIAccountSocial extends UIForm {
         return oauthPrType.getInitOAuthURL(reqContextPath);
     }
 
-    public void saveProviderForSocialAccountUnlink(OAuthProviderType oauthProviderType) {
-        ConversationState.getCurrent().setAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK, oauthProviderType);
+    public String getUnlinkSocialAccountURL(OAuthProviderType oauthPrType) throws Exception {
+        Parameter[] params = new Parameter[] { new Parameter(PARAM_PROVIDER_FOR_UNLINK, oauthPrType.getKey()) };
+        return super.event("UnlinkSocialAccount", null, params);
     }
 
     public static class UnlinkSocialAccountActionListener extends EventListener<UIAccountSocial> {
@@ -136,20 +137,37 @@ public class UIAccountSocial extends UIForm {
 
             if (user != null) {
                 UserProfile userProfile = (UserProfile)prContext.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
-                OAuthProviderType oauthProviderTypeToUnlink = (OAuthProviderType)ConversationState.getCurrent().getAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK);
 
+                String unlinkProviderKey = prContext.getRequestParameter(PARAM_PROVIDER_FOR_UNLINK);
+                OAuthProviderType oauthProviderTypeToUnlink = uiForm.getApplicationComponent(OAuthProviderTypeRegistry.class).getOAuthProvider(unlinkProviderKey);
+
+                // Obtain current accessToken
+                Object accessToken = uiForm.getApplicationComponent(SocialNetworkService.class).getOAuthAccessToken(oauthProviderTypeToUnlink, userName);
+
+                // Unlink social account in userProfile (AccessTokenInvalidationListener will automatically remove accessToken)
                 if (oauthProviderTypeToUnlink != null) {
                     userProfile.setAttribute(oauthProviderTypeToUnlink.getUserNameAttrName(), null);
                 } else {
                     log.warn("Social account field to unlink not found");
                 }
-
                 service.getUserProfileHandler().saveUserProfile(userProfile, true);
 
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME, oauthProviderTypeToUnlink.getUserNameAttrName());
-                map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME, userName);
-                Object[] args = UIUserProfileInputSet.convertOAuthExceptionAttributes(context, "UIAccountSocial.label.", map);
+                // Revoke accessToken remotely
+                if (accessToken != null) {
+                    try {
+                        oauthProviderTypeToUnlink.getOauthProviderProcessor().revokeToken(accessToken);
+                    } catch (OAuthException oe) {
+                        if (OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED.equals(oe.getExceptionCode())) {
+                            Throwable t = oe.getCause() != null ? oe.getCause() : oe;
+                            uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.failed-revoke", new Object[] { t.getMessage() }, ApplicationMessage.WARNING));
+                            log.warn("Revocation of accessToken failed", t);
+                        } else {
+                            throw oe;
+                        }
+                    }
+                }
+
+                Object[] args = { oauthProviderTypeToUnlink.getFriendlyName(), userName};
                 uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.successful-unlink", args));
 
                 prContext.setAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME, userProfile);

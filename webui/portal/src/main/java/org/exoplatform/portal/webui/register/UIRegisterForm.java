@@ -24,15 +24,21 @@ import java.util.List;
 
 import nl.captcha.Captcha;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.registration.PostRegistrationService;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
+import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
@@ -74,7 +80,9 @@ public class UIRegisterForm extends UIForm {
 
     static final String ATTR_USER = "UIRegisterForm$User";
 
-    public UIRegisterForm() throws Exception {
+    static final String SKIP_CAPTCHA_PARAM_NAME = "skipCaptcha";
+
+    public UIRegisterForm(InitParams params) throws Exception {
         String skipCaptchaParam = params.getParam(SKIP_CAPTCHA_PARAM_NAME).getValue();
         boolean skipCaptcha = Boolean.parseBoolean(skipCaptchaParam);
 

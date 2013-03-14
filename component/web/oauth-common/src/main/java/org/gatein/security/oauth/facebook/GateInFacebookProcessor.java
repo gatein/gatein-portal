@@ -28,12 +28,13 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.gatein.security.oauth.common.OAuthProviderProcessor;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface GateInFacebookProcessor {
+public interface GateInFacebookProcessor extends OAuthProviderProcessor<String> {
 
     FacebookPrincipal getPrincipal(String accessToken);
 

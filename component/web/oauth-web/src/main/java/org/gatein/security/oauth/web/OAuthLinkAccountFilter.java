@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.gatein.common.exception.GateInException;
-import org.gatein.common.exception.GateInExceptionConstants;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
@@ -84,14 +84,14 @@ public class OAuthLinkAccountFilter extends AbstractSSOInterceptor {
                     oauthPrincipal.getUserName(), oauthPrincipal.getAccessToken());
 
             // Add some attribute to session, which will be read by OAuthLifecycle
-            session.setAttribute(OAuthConstants.ATTRIBUTE_LINKED_OAUTH_PROVIDER_USERNAME_ATTR_NAME, oauthPrincipal.getOauthProviderType().getUserNameAttrName());
-        } catch (GateInException gtnOauthException) {
+            session.setAttribute(OAuthConstants.ATTRIBUTE_LINKED_OAUTH_PROVIDER, oauthPrincipal.getOauthProviderType().getFriendlyName());
+        } catch (OAuthException gtnOauthOAuthException) {
             // Show warning message if user with this facebookUsername (or googleUsername) already exists
-            if (gtnOauthException.getExceptionCode() == GateInExceptionConstants.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
+            if (gtnOauthOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
                 // Add some attribute to session, which will be read by OAuthLifecycle
-                session.setAttribute(OAuthConstants.ATTRIBUTE_EXCEPTION_AFTER_FAILED_LINK, gtnOauthException);
+                session.setAttribute(OAuthConstants.ATTRIBUTE_EXCEPTION_AFTER_FAILED_LINK, gtnOauthOAuthException);
             } else {
-                throw gtnOauthException;
+                throw gtnOauthOAuthException;
             }
         }
 

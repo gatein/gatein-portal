@@ -1055,7 +1055,6 @@
         <version>${org.gatein.sso.version}</version>
       </dependency>
 
-      <!-- GateIn CDI -->
       <dependency>
         <groupId>org.gatein.cdi</groupId>
         <artifactId>gatein-cdi-injection</artifactId>
@@ -1517,6 +1516,11 @@ memory option properties. This should be removed when we can just set the compil
     <repository>
       <id>oauth</id>
       <url>http://oauth.googlecode.com/svn/code/maven</url>
+    </repository>
+    <!--  Needed for Google+ OAuth2 integration -->
+    <repository>
+      <id>google-api-services</id>
+      <url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
     </repository>
 
     <!-- Redefine legacy jboss repository to go to JBoss Nexus instead to http://repository.jboss.org/maven2 -->

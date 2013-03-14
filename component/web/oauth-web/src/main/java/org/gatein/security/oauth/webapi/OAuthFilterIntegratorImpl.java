@@ -23,8 +23,12 @@
 
 package org.gatein.security.oauth.webapi;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.sso.agent.filter.api.SSOInterceptor;
 import org.gatein.sso.integration.SSOFilterIntegratorImpl;
 
@@ -36,8 +40,22 @@ import org.gatein.sso.integration.SSOFilterIntegratorImpl;
  */
 public class OAuthFilterIntegratorImpl extends SSOFilterIntegratorImpl implements OAuthFilterIntegrator {
 
+    private static final Logger log = LoggerFactory.getLogger(OAuthFilterIntegratorImpl.class);
+
+    private final OAuthProviderTypeRegistry oAuthProviderTypeRegistry;
+
+    public OAuthFilterIntegratorImpl(OAuthProviderTypeRegistry oAuthProviderTypeRegistry) {
+        this.oAuthProviderTypeRegistry = oAuthProviderTypeRegistry;
+    }
+
     @Override
     public Map<SSOInterceptor, String> getOAuthInterceptors() {
-        return getSSOInterceptors();
+        if (oAuthProviderTypeRegistry.isOAuthEnabled()) {
+            return getSSOInterceptors();
+        } else {
+            // return empty map if oauth is disabled (we don't have any OAuthProviders configured)
+            log.debug("OAuth2 is disabled as there are not any OAuthProviderTypes configured. OAuth interceptors will be skipped");
+            return new HashMap<SSOInterceptor, String>();
+        }
     }
 }

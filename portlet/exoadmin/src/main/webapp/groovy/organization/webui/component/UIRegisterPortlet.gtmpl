@@ -1,13 +1,14 @@
 <%	
 	import org.exoplatform.portal.webui.register.UIRegisterEditMode;
 	import javax.portlet.PortletMode ;
-	import org.gatein.security.oauth.common.OAuthProviderType;
+	import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 %>
 <%
 if(_ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW)
 {
    uicomponent.renderChild("UIRegisterForm");
-   if (OAuthProviderType.isOAuthEnabled()) {
+   OAuthProviderTypeRegistry registry = uicomponent.getApplicationComponent(OAuthProviderTypeRegistry.class);
+   if (registry.isOAuthEnabled()) {
 %>
       <div>Subscribe with:
         <p>

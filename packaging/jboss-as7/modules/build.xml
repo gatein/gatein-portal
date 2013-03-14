@@ -62,6 +62,7 @@
     ~ +++++++   KEEP THIS LIST ALPHABETICAL BY MODULE NAME!   +++++++
     ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     -->
+<<<<<<< HEAD
     <module-def name="com.google.guava" slot="gatein">
       <maven-resource group="com.google.guava" artifact="guava"/>
     </module-def>
@@ -200,6 +201,15 @@
       <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util"/>
     </module-def>
 
+    <module-def name="com.google.apis">
+      <maven-resource group="com.google.oauth-client" artifact="google-oauth-client"/>
+      <maven-resource group="com.google.api-client" artifact="google-api-client"/>
+      <maven-resource group="com.google.http-client" artifact="google-http-client"/>
+      <maven-resource group="com.google.http-client" artifact="google-http-client-jackson"/>
+      <maven-resource group="com.google.apis" artifact="google-api-services-plus"/>
+      <maven-resource group="com.google.apis" artifact="google-api-services-oauth2"/>
+    </module-def>
+
     <module-def name="org.gatein">
       <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension"/>
     </module-def>
@@ -298,7 +308,7 @@
       <maven-resource group="org.gatein.shindig" artifact="shindig-features"/>
       <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets"/>
       <maven-resource group="org.gatein.shindig" artifact="shindig-social-api"/>
-      -->
+        -->
     </module-def>
 
     <module-def name="org.gatein.wci">

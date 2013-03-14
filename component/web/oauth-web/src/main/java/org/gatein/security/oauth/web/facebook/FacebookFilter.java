@@ -39,6 +39,7 @@ import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.common.OAuthPrincipal;
 import org.gatein.security.oauth.facebook.FacebookInteractionState;
 import org.gatein.security.oauth.facebook.GateInFacebookProcessor;
+import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.social.FacebookProcessor;
 import org.gatein.security.oauth.utils.OAuthUtils;
@@ -55,11 +56,13 @@ public class FacebookFilter extends AbstractSSOInterceptor {
 
     private AuthenticationRegistry authenticationRegistry;
     private GateInFacebookProcessor facebookProcessor;
+    private OAuthProviderTypeRegistry oAuthProviderTypeRegistry;
 
     @Override
     protected void initImpl() {
         authenticationRegistry = (AuthenticationRegistry)getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
         facebookProcessor = (GateInFacebookProcessor)getExoContainer().getComponentInstanceOfType(GateInFacebookProcessor.class);
+        oAuthProviderTypeRegistry = (OAuthProviderTypeRegistry)getExoContainer().getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
     }
 
     @Override
@@ -90,7 +93,7 @@ public class FacebookFilter extends AbstractSSOInterceptor {
                     log.trace("Facebook accessToken: " + principal.getAccessToken());
                 }
 
-                OAuthPrincipal oauthPrincipal = OAuthUtils.convertFacebookPrincipalToOAuthPrincipal(principal);
+                OAuthPrincipal<String> oauthPrincipal = OAuthUtils.convertFacebookPrincipalToOAuthPrincipal(principal, oAuthProviderTypeRegistry);
 
                 // Remove attribute with state of facebookLogin
                 httpRequest.getSession().removeAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE);

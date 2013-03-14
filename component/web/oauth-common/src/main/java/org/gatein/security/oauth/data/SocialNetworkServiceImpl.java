@@ -32,22 +32,25 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.web.security.codec.AbstractCodec;
 import org.exoplatform.web.security.codec.CodecInitializer;
-import org.gatein.common.exception.GateInException;
+import org.exoplatform.web.security.security.TokenServiceInitializationException;
+import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.security.oauth.common.OAuthCodec;
+import org.gatein.security.oauth.common.OAuthProviderProcessor;
 import org.gatein.security.oauth.common.OAuthProviderType;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class SocialNetworkServiceImpl implements SocialNetworkService {
+public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCodec {
 
     private static Logger log = LoggerFactory.getLogger(SocialNetworkServiceImpl.class);
 
     private OrganizationService orgService;
     private AbstractCodec codec;
 
-    public SocialNetworkServiceImpl(OrganizationService orgService, CodecInitializer codecInitializer) {
+    public SocialNetworkServiceImpl(OrganizationService orgService, CodecInitializer codecInitializer) throws TokenServiceInitializationException {
         this.orgService = orgService;
         this.codec = codecInitializer.initCodec();
     }
@@ -71,17 +74,16 @@ public class SocialNetworkServiceImpl implements SocialNetworkService {
     }
 
     @Override
-    public void updateOAuthAccessToken(OAuthProviderType oauthProviderType, String username, String accessToken) {
+    public <T> void updateOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username, T accessToken) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
 
-            String encryptedAccessTokenValue = encryptAccessToken(accessToken);
-
-            userProfile.setAttribute(oauthProviderType.getAccessTokenAttrName(), encryptedAccessTokenValue);
+            OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
+            oauthProviderProcessor.saveAccessTokenAttributesToUserProfile(userProfile, this, accessToken);
 
             userProfileHandler.saveUserProfile(userProfile, true);
-        } catch (GateInException gtnEx) {
+        } catch (OAuthException gtnEx) {
             throw gtnEx;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -89,51 +91,66 @@ public class SocialNetworkServiceImpl implements SocialNetworkService {
     }
 
     @Override
-    public String getOAuthAccessToken(OAuthProviderType oauthProviderType, String username) {
+    public <T> T getOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
 
-            String encryptedAccessToken = userProfile.getAttribute(oauthProviderType.getAccessTokenAttrName());
-
-            return decryptAccessToken(encryptedAccessToken);
+            OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
+            return oauthProviderProcessor.getAccessTokenFromUserProfile(userProfile, this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void updateOAuthInfo(OAuthProviderType oauthProviderType, String username, String oauthUsername, String accessToken) {
+    public <T> void removeOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
 
-            String encryptedAccessToken = encryptAccessToken(accessToken);
+            OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
+            oauthProviderProcessor.removeAccessTokenFromUserProfile(userProfile);
 
-            userProfile.setAttribute(oauthProviderType.getAccessTokenAttrName(), encryptedAccessToken);
+            userProfileHandler.saveUserProfile(userProfile, true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T> void updateOAuthInfo(OAuthProviderType<T> oauthProviderType, String username, String oauthUsername, T accessToken) {
+        try {
+            UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
+            UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
+
             userProfile.setAttribute(oauthProviderType.getUserNameAttrName(), oauthUsername);
 
+            OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
+            oauthProviderProcessor.saveAccessTokenAttributesToUserProfile(userProfile, this, accessToken);
             userProfileHandler.saveUserProfile(userProfile, true);
-        } catch (GateInException gtnEx) {
+        } catch (OAuthException gtnEx) {
             throw gtnEx;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    protected String encryptAccessToken(String accessToken) {
-        if (accessToken == null) {
+    @Override
+    public String encodeString(String input) {
+        if (input == null) {
             return null;
         } else {
-            return codec.encode(accessToken);
+            return codec.encode(input);
         }
     }
 
-    protected String decryptAccessToken(String accessToken) {
-        if (accessToken == null) {
+    @Override
+    public String decodeString(String input) {
+        if (input == null) {
             return null;
         } else {
-            return codec.decode(accessToken);
+            return codec.decode(input);
         }
     }
 

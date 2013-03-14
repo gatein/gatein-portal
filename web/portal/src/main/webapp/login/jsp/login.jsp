@@ -24,6 +24,7 @@
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
 <%@ page import="org.gatein.security.oauth.common.OAuthProviderType"%>
+<%@ page import="org.gatein.security.oauth.registry.OAuthProviderTypeRegistry"%>;
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
 <%@ page language="java"%>
@@ -41,6 +42,8 @@
   PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());
   ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
+
+  OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) portalContainer.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
   
   Cookie cookie = new Cookie(org.exoplatform.web.login.LoginServlet.COOKIE_NAME, "");
     cookie.setPath(request.getContextPath());
@@ -107,12 +110,10 @@
                 <%/*End form*/%>
 
 
-<%              for (OAuthProviderType oauthProvType : OAuthProviderType.values()) {
-                  if (oauthProvType.isEnabled()) {
+<%              for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) {
 %>
                     <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>">SignIn with <%= oauthProvType.getFriendlyName() %></a>
 <%
-                  }
                 }
 %>
         </div>

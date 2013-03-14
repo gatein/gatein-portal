@@ -21,29 +21,46 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.webapi;
+package org.gatein.security.oauth.twitter;
 
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.xml.InitParams;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
 
 /**
- * {@link OAuthFilterIntegrator}, which is always enabled if at least one {@link OAuthProviderType} is enabled
- *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class CustomOAuthFilterIntegratorPlugin extends OAuthFilterIntegratorPlugin {
+public class TwitterInteractionState {
 
-    public CustomOAuthFilterIntegratorPlugin(InitParams params, ExoContainerContext containerContext) {
-        super(params, containerContext);
+    public enum STATE {
+        AUTH, FINISH
     }
 
-    /**
-     *
-     * @return true if at least one {@link org.gatein.security.oauth.common.OAuthProviderType} is enabled
-     */
-    @Override
-    public boolean isEnabled() {
-        return OAuthProviderType.isOAuthEnabled();
+    private final STATE state;
+    private final RequestToken requestToken;
+    private final AccessToken accessToken;
+    private final User user;
+
+    TwitterInteractionState(STATE state, RequestToken requestToken, AccessToken accessToken, User user) {
+        this.state = state;
+        this.requestToken = requestToken;
+        this.accessToken = accessToken;
+        this.user = user;
+    }
+
+    public STATE getState() {
+        return state;
+    }
+
+    public RequestToken getRequestToken() {
+        return requestToken;
+    }
+
+    public AccessToken getAccessToken() {
+        return accessToken;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -43,8 +43,6 @@ import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.web.security.security.TokenServiceInitializationException;
-import org.gatein.common.exception.GateInException;
-import org.gatein.common.exception.GateInExceptionConstants;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -85,7 +83,7 @@ public class CodecInitializer {
                 }
                 config.put("gatein.codec.config.basedir", f.getParentFile().getAbsolutePath());
             } catch (IOException e) {
-                throw new GateInException(GateInExceptionConstants.EXCEPTION_CODEC_INITIALIZATION, "Failed to read the config parameters from file '" + configFile
+                throw new TokenServiceInitializationException("Failed to read the config parameters from file '" + configFile
                         + "'.", e);
             } finally {
                 IOTools.safeClose(in);
@@ -130,7 +128,7 @@ public class CodecInitializer {
                     out = new FileOutputStream(f);
                     store.store(out, "gtnStorePass".toCharArray());
                 } catch (Exception e) {
-                    throw new GateInException(GateInExceptionConstants.EXCEPTION_CODEC_INITIALIZATION, e);
+                    throw new TokenServiceInitializationException(e);
                 } finally {
                     IOTools.safeClose(out);
                 }
@@ -148,7 +146,7 @@ public class CodecInitializer {
             log.info("Initialized codec using builder " + builderType);
             return Class.forName(builderType).asSubclass(AbstractCodecBuilder.class).newInstance().build(config);
         } catch (Exception e) {
-            throw new GateInException(GateInExceptionConstants.EXCEPTION_CODEC_INITIALIZATION, "Could not initialize codec.", e);
+            throw new TokenServiceInitializationException("Could not initialize codec.", e);
         }
     }
 }

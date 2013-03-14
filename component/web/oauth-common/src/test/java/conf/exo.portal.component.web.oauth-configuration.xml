@@ -31,7 +31,84 @@
   </component>
 
   <component>
+    <key>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</key>
+    <type>org.gatein.security.oauth.registry.OAuthProviderTypeRegistryImpl</type>
+  </component>
+
+  <component>
     <type>org.exoplatform.web.security.codec.CodecInitializer</type>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.facebook.GateInFacebookProcessor</key>
+    <type>org.gatein.security.oauth.facebook.GateInFacebookProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>clientId</name>
+        <value>${gatein.oauth.facebook.clientId}</value>
+      </value-param>
+      <value-param>
+        <name>clientSecret</name>
+        <value>${gatein.oauth.facebook.clientSecret}</value>
+      </value-param>
+      <!-- URL to redirect from Facebook during Facebook OAuth authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.facebook.redirectURL}</value>
+      </value-param>
+      <value-param>
+        <name>scope</name>
+        <value>${gatein.oauth.facebook.scope}</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.twitter.TwitterProcessor</key>
+    <type>org.gatein.security.oauth.twitter.TwitterProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>clientId</name>
+        <value>${gatein.oauth.twitter.clientId}</value>
+      </value-param>
+      <value-param>
+        <name>clientSecret</name>
+        <value>${gatein.oauth.twitter.clientSecret}</value>
+      </value-param>
+      <!-- URL to redirect from Twitter during Twitter OAuth authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.twitter.redirectURL}</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.google.GoogleProcessor</key>
+    <type>org.gatein.security.oauth.google.GoogleProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>clientId</name>
+        <value>${gatein.oauth.google.clientId}</value>
+      </value-param>
+      <value-param>
+        <name>clientSecret</name>
+        <value>${gatein.oauth.google.clientSecret}</value>
+      </value-param>
+      <!-- URL to redirect from Google during Google OAuth2 authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.google.redirectURL}</value>
+      </value-param>
+      <value-param>
+        <name>scope</name>
+        <value>${gatein.oauth.google.scope}</value>
+      </value-param>
+      <value-param>
+        <name>accessType</name>
+        <value>${gatein.oauth.google.accessType}</value>
+      </value-param>
+    </init-params>
   </component>
 
   <external-component-plugins>
@@ -49,6 +126,111 @@
       <name>AccessTokenInvalidationListener</name>
       <set-method>addListenerPlugin</set-method>
       <type>org.gatein.security.oauth.data.AccessTokenInvalidationListener</type>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>FacebookOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>FACEBOOK</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>true</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.facebook.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.facebook.GateInFacebookProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/facebookAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>Facebook</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>TwitterOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>TWITTER</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>true</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.twitter.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.twitter.TwitterProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/twitterAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>Twitter</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>GoogleOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>GOOGLE</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>true</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.google.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.google.GoogleProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/googleAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>Google+</value>
+        </value-param>
+      </init-params>
     </component-plugin>
   </external-component-plugins>
 

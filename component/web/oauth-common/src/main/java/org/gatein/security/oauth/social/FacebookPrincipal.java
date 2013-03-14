@@ -146,15 +146,7 @@ public class FacebookPrincipal implements Principal, Serializable {
         if (jsonObject == null) {
             return null;
         } else {
-            try {
-                return jsonObject.getString(attributeName);
-            } catch (JSONException jsonEx) {
-                if (jsonEx.getMessage() != null && jsonEx.getMessage().contains("not found")) {
-                    return null;
-                } else {
-                    throw new RuntimeException(jsonEx);
-                }
-            }
+            return jsonObject.optString(attributeName);
         }
     }
 

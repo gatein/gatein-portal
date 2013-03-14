@@ -1,7 +1,6 @@
 <%  
   import org.exoplatform.web.application.JavascriptManager;
   import javax.servlet.http.HttpSession;
-  import org.gatein.security.oauth.common.OAuthProviderType;
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
   jsmanager.addCustomizedOnLoadScript('document.getElementById("UIPortalComponentLogin").username.focus();');

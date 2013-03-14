@@ -33,10 +33,12 @@ public interface SocialNetworkService {
 
     User findUserByOAuthProviderUsername(OAuthProviderType oauthProviderType, String oauthProviderUsername);
 
-    void updateOAuthAccessToken(OAuthProviderType oauthProviderType, String username, String accessToken);
+    <T> void updateOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username, T accessToken);
 
-    String getOAuthAccessToken(OAuthProviderType oauthProviderType, String username);
+    <T> T getOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username);
 
-    void updateOAuthInfo(OAuthProviderType oauthProviderType, String username, String oauthUsername, String accessToken);
+    <T> void updateOAuthInfo(OAuthProviderType<T> oauthProviderType, String username, String oauthUsername, T accessToken);
+
+    <T> void removeOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username);
 
 }

@@ -26,31 +26,26 @@ package org.gatein.security.oauth.common;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public enum OAuthProviderType {
+public class OAuthProviderType<T> {
 
-    FACEBOOK(OAuthConstants.PROPERTY_FACEBOOK_ENABLED,
-            OAuthConstants.PROFILE_FACEBOOK_USERNAME,
-            OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN,
-            OAuthConstants.FACEBOOK_AUTHENTICATION_URL_PATH + "?" + OAuthConstants.PARAM_OAUTH_INTERACTION + "=" + OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START,
-            "Facebook"),
-    GOOGLE(OAuthConstants.PROPERTY_GOOGLE_ENABLED,
-            OAuthConstants.PROFILE_GOOGLE_USERNAME,
-            OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN,
-            OAuthConstants.GOOGLE_AUTHENTICATION_URL_PATH + "?" + OAuthConstants.PARAM_OAUTH_INTERACTION + "=" + OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START,
-            "Google+");
-
+    private final String key;
     private final boolean enabled;
     private final String userNameAttrName;
-    private final String accessTokenAttrName;
+    private final OAuthProviderProcessor<T> oauthProviderProcessor;
     private final String initOAuthURL;
     private final String friendlyName;
 
-    OAuthProviderType(String enabledPropertyName, String userNameAttrName, String accessTokenAttrName, String initOAuthURL, String friendlyName) {
-        this.enabled = Boolean.getBoolean(enabledPropertyName);
+    public OAuthProviderType(String key, boolean enabled, String userNameAttrName, OAuthProviderProcessor<T> oauthProviderProcessor, String initOAuthURL, String friendlyName) {
+        this.key = key;
+        this.enabled = enabled;
         this.userNameAttrName = userNameAttrName;
-        this.accessTokenAttrName = accessTokenAttrName;
+        this.oauthProviderProcessor = oauthProviderProcessor;
         this.initOAuthURL = initOAuthURL;
         this.friendlyName = friendlyName;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public boolean isEnabled() {
@@ -61,28 +56,27 @@ public enum OAuthProviderType {
         return userNameAttrName;
     }
 
-    public String getAccessTokenAttrName() {
-        return accessTokenAttrName;
+    public OAuthProviderProcessor<T> getOauthProviderProcessor() {
+        return oauthProviderProcessor;
     }
 
     public String getInitOAuthURL(String contextPath) {
-        return contextPath + initOAuthURL;
+        return contextPath + initOAuthURL + "?" + OAuthConstants.PARAM_OAUTH_INTERACTION + "=" + OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START;
     }
 
     public String getFriendlyName() {
         return friendlyName;
     }
 
-    /**
-     * @return true if at least one OAuth provider is enabled
-     */
-    public static boolean isOAuthEnabled() {
-        OAuthProviderType[] allProviders = OAuthProviderType.values();
-        for (OAuthProviderType current : allProviders) {
-            if (current.isEnabled())
-                return true;
-        }
-
-        return false;
+    @Override
+    public String toString() {
+        return new StringBuilder("OAuthProviderType [ ")
+                .append("key=" + key)
+                .append(", enabled=" + enabled)
+                .append(", userNameAttrName=" + userNameAttrName)
+                .append(", oauthProviderProcessor=" + oauthProviderProcessor)
+                .append(", initOAuthURL=" + initOAuthURL)
+                .append(", friendlyName=" + friendlyName)
+                .append(" ]").toString();
     }
 }

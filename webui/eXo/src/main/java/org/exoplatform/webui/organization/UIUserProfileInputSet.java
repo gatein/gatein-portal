@@ -50,9 +50,11 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.gatein.common.exception.GateInException;
-import org.gatein.common.exception.GateInExceptionConstants;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 28, 2006
@@ -66,8 +68,6 @@ public class UIUserProfileInputSet extends UIFormInputSet {
     public static final String MALE = "male";
 
     public static final String FEMALE = "female";
-
-    public static final String[] SOCIAL_INFO_KEYS = { OAuthConstants.PROFILE_FACEBOOK_USERNAME, OAuthConstants.PROFILE_GOOGLE_USERNAME };
 
     public UIUserProfileInputSet() {
     }
@@ -91,7 +91,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         addUIFormInput(businessInputSet);
 
         UIFormInputSet socialInputSet = new UIFormInputSet("SocialNetworksInfo");
-        addInput(socialInputSet, SOCIAL_INFO_KEYS);
+        addInput(socialInputSet, getSocialInfoKeys());
         socialInputSet.setRendered(false);
         addUIFormInput(socialInputSet);
     }
@@ -189,6 +189,16 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         langSelectBox.setOptions(lang);
     }
 
+    private String[] getSocialInfoKeys() {
+        List<String> result = new ArrayList<String>();
+        OAuthProviderTypeRegistry registry = getApplicationComponent(OAuthProviderTypeRegistry.class);
+        for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) {
+            String oauthUsernameAttrName = oauthProvType.getUserNameAttrName();
+            result.add(oauthUsernameAttrName);
+        }
+        return result.toArray(new String[] {});
+    }
+
     @SuppressWarnings("deprecation")
     public void setUserProfile(String user) throws Exception {
         user_ = user;
@@ -238,13 +248,13 @@ public class UIUserProfileInputSet extends UIFormInputSet {
 
         try {
             hanlder.saveUserProfile(userProfile, true);
-        } catch (GateInException gtnOauthException) {
+        } catch (OAuthException gtnOauthOAuthException) {
             // Show warning message if user with this facebookUsername (or googleUsername) already exists
-            if (gtnOauthException.getExceptionCode() == GateInExceptionConstants.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
-                addOAuthExceptionMessage(context, gtnOauthException, uiApp);
+            if (gtnOauthOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
+                addOAuthExceptionMessage(context, gtnOauthOAuthException, uiApp);
                 return false;
             } else {
-                throw gtnOauthException;
+                throw gtnOauthOAuthException;
             }
         }
 
@@ -283,15 +293,15 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         }
     }
 
-    public static final void addOAuthExceptionMessage(WebuiRequestContext context, GateInException gtnOauthException, UIApplication uiApp) {
-        Object[] args = convertOAuthExceptionAttributes(context, "UIAccountSocial.label.", gtnOauthException.getExceptionAttributes());
+    private void addOAuthExceptionMessage(WebuiRequestContext context, OAuthException gtnOauthOAuthException, UIApplication uiApp) {
+        Object[] args = convertOAuthExceptionAttributes(context, "UIAccountSocial.label.", gtnOauthOAuthException.getExceptionAttributes());
         ApplicationMessage appMessage = new ApplicationMessage("UIUserProfileInputSet.msg.oauth-username-exists", args, ApplicationMessage.WARNING);
         appMessage.setArgsLocalized(false);
         uiApp.addMessage(appMessage);
     }
 
-    public static Object[] convertOAuthExceptionAttributes(WebuiRequestContext context, String messageKeyPrefix, Map<String, Object> exceptionAttribs) {
-        String oauthProviderUsernameAttrName = (String)exceptionAttribs.get(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME);
+    private Object[] convertOAuthExceptionAttributes(WebuiRequestContext context, String messageKeyPrefix, Map<String, Object> exceptionAttribs) {
+        String oauthProviderUsernameAttrName = (String)exceptionAttribs.get(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME);
         ResourceBundle resBundle = context.getApplicationResourceBundle();
         String localizedOAuthProviderUsernameAttrName;
         try {
@@ -300,7 +310,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
             localizedOAuthProviderUsernameAttrName = oauthProviderUsernameAttrName;
         }
 
-        Object oauthProviderUsername = exceptionAttribs.get(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME);
+        Object oauthProviderUsername = exceptionAttribs.get(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME);
 
         return new Object[] { localizedOAuthProviderUsernameAttrName, oauthProviderUsername };
     }

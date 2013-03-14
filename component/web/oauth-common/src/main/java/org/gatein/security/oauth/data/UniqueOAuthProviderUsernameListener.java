@@ -29,9 +29,11 @@ import java.util.Map;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileEventListener;
-import org.gatein.common.exception.GateInException;
-import org.gatein.common.exception.GateInExceptionConstants;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
+import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -39,14 +41,16 @@ import org.gatein.security.oauth.common.OAuthProviderType;
 public class UniqueOAuthProviderUsernameListener extends UserProfileEventListener {
 
     private final SocialNetworkService socialNetworkService;
+    private final OAuthProviderTypeRegistry oauthProviderTypeRegistry;
 
-    public UniqueOAuthProviderUsernameListener(SocialNetworkService socialNetworkService) {
+    public UniqueOAuthProviderUsernameListener(SocialNetworkService socialNetworkService, OAuthProviderTypeRegistry oauthProviderTypeRegistry) {
         this.socialNetworkService = socialNetworkService;
+        this.oauthProviderTypeRegistry = oauthProviderTypeRegistry;
     }
 
     @Override
     public void preSave(UserProfile user, boolean isNew) throws Exception {
-        for (OAuthProviderType opt : OAuthProviderType.values()) {
+        for (OAuthProviderType opt : oauthProviderTypeRegistry.getEnabledOAuthProviders()) {
             String oauthProviderUsername = user.getAttribute(opt.getUserNameAttrName());
 
             if (oauthProviderUsername == null) {
@@ -58,10 +62,11 @@ public class UniqueOAuthProviderUsernameListener extends UserProfileEventListene
                 String message = "Attempt to save " + opt.getUserNameAttrName() + " with value " + oauthProviderUsername +
                         " but it already exists. currentUser=" + user.getUserName() + ", userWithThisOAuthUsername=" + foundUser.getUserName();
                 Map<String, Object> exceptionAttribs = new HashMap<String, Object>();
-                exceptionAttribs.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME, opt.getUserNameAttrName());
-                exceptionAttribs.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME, oauthProviderUsername);
+                exceptionAttribs.put(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME, opt.getUserNameAttrName());
+                exceptionAttribs.put(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME, oauthProviderUsername);
+                exceptionAttribs.put(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_NAME, opt.getFriendlyName());
 
-                throw new GateInException(GateInExceptionConstants.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME, exceptionAttribs, message);
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME, exceptionAttribs, message);
             }
         }
     }
