@@ -59,6 +59,10 @@
         file="${maven.dependency.org.gatein.wci.wci-tomcat7.jar.path}"
         todir="${maven.project.build.directory}/tomcat/lib"/>
 
+    <copy 
+	file="${maven.project.build.directory}/exo.portal.packaging.tomcat.tomcat7-${project.version}.jar"
+	todir="${maven.project.build.directory}/tomcat/lib"/>
+
     <!-- WCI integration -->
     <copy todir="${maven.project.build.directory}/tomcat/webapps/integration/">
       <fileset dir="${maven.project.basedir}/src/main/webapp"/>

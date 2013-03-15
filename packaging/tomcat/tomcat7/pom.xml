@@ -9,7 +9,7 @@
     <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.tomcat7</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>GateIn for Tomcat 7 packaging</name>
 
   <properties>
@@ -28,11 +28,33 @@
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.packaging.common</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-catalina</artifactId>
+      <version>${version.apache.tomcat}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
-    <plugins>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <excludes>
+          <exclude>tomcat/**</exclude>
+        </excludes>
+      </resource>
+    </resources>  
 
+    <plugins>
       <!-- Ensure your environment is correctly setup -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -96,14 +118,14 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>prepare-package</id>
-            <phase>prepare-package</phase>
+            <id>package</id>
+            <phase>package</phase>
             <goals>
               <goal>run</goal>
             </goals>
@@ -156,14 +178,14 @@
                 <phase>none</phase>
               </execution>
             </executions>
-          </plugin>
+          </plugin>          
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
+            <executions>              
               <execution>
-                <id>prepare-package</id>
-                <phase>prepare-package</phase>
+                <id>package</id>
+                <phase>package</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
