@@ -403,7 +403,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                                 i++;
                             } else if (c == '\n') {
                                 singleComment = false;
-                            } else if (Character.isLetterOrDigit(c)) {
+                            } else if (!Character.isWhitespace(c) && !Character.isSpaceChar(c) && !Character.isISOControl(c)) {
                                 skip = false;
                             }
 
