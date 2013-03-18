@@ -124,7 +124,7 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
-            <id>package</id>
+            <id>prepare-package</id>
             <phase>package</phase>
             <goals>
               <goal>run</goal>
@@ -184,7 +184,7 @@
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>              
               <execution>
-                <id>package</id>
+                <id>prepare-package</id>
                 <phase>package</phase>
                 <goals>
                   <goal>run</goal>
