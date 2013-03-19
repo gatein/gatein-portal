@@ -43,4 +43,21 @@
         <css-path>/skin/ResponsiveSkin/portlet/webui/UINavigationPortlet/UINavigationPortlet.css</css-path>
     </portlet-skin>
 
+    <!-- RedirectPortlet skin -->
+    <portlet-skin>
+        <application-name>redirect-portlet</application-name>
+        <portlet-name>SiteRedirectPortlet</portlet-name>
+        <skin-name>ResponsiveSkin</skin-name>
+        <css-path>/skin/ResponsiveSkin/portlet/redirect/Redirect.css</css-path>
+    </portlet-skin>
+
+    <!-- AccountPortlet skin -->
+    <portlet-skin>
+        <application-name>exoadmin</application-name>
+        <portlet-name>AccountPortlet</portlet-name>
+        <skin-name>ResponsiveSkin</skin-name>
+        <css-path>/skin/ResponsiveSkin/portlet/webui/UIAccountPortlet/UIAccountPortlet.css</css-path>
+    </portlet-skin>
+
+
 </gatein-resources>

@@ -47,6 +47,10 @@ width:0;
     padding: 0;
 }
 
+.UIMaskWorkspace .UITabContent {
+    height: auto;
+}
+
 @media screen and (max-width: 30em) {
     .UIMaskWorkspace .MaskContainer {
         width: 100%;

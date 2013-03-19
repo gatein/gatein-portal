@@ -3,8 +3,25 @@
     border: none;
 }
 
+.UIToolbarContainer .UIHorizontalTabs .UITab {
+   font-weight: normal;
+}
+
+.UIToolbarContainer .TitleBar {
+   font-size: 1em;
+   font-weight: normal;
+}
+
+.UIToolbarContainer .UIHorizontalTabs .UITab {
+    margin: 0;
+}
+ 
+.UIToolbarContainer .Name a {
+    color: #1C4E7E;
+}
+
 /* Media Queries for Smaller Screened Devices*/
-@media only screen and (max-width: 40em) {
+@media only screen and (max-width: 45em) {
     .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>a {
         font-size: 0;
     }

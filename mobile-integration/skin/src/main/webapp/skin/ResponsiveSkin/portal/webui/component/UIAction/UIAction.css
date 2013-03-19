@@ -29,8 +29,8 @@
     text-align: right;
 }
 
-.UIAction .ActionButton {
-    background-repeat: repeat-x;
+.UIForm .UIAction .ActionButton {
+    background: none;
     border-style: solid;
     border-width: 1px;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -42,11 +42,12 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     border-radius: 0.28571428571429em;
     padding: 0.28571428571429em 0.85714285714286em;
-    display: inline-block;
+    width: auto;
 }
 
 .UIAction .ActionButton.LightBlueStyle,.UIAction .ActionButton.DarkGrayButton {
     background: inherit;
+    padding: 0.25em;
 }
 
 .UIAction .ActionButton:hover {

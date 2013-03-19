@@ -1,0 +1,14 @@
+/*TODO: figure out why the cascade isn't working for just .UIBannerPortlet, this css file should be imported after the other one ... */
+.UIBannerPortlet.UIApplication {
+    background: none;
+}
+
+.UIBannerPortlet.UIApplication .RightBanner {
+    background: no-repeat right url("gatein_logo_ltr.svg"); /* orientation=rt */
+    background: no-repeat left url("gatein_logo.svg"); /* orientation=lt */
+    background-size: auto 32px;
+}
+
+.UIBannerPortlet.UIApplication .LeftBanner {
+    border-top: none;
+}

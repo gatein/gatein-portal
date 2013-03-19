@@ -19,15 +19,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-.TitleBar {
+.UIFormWithTitle {
+    max-width: 500px;
+    width: auto;
+}
+
+.UIFormWithTitle .TitleBar,.UIBarStyle .TitleBar .LeftBar .RightBar .MiddleBar {
     font-family: Ubuntu, sans-serif;
     font-size: 1.5em;
     padding-top: 0.625em;
     padding-left: 0.625em;
     padding-bottom: 0.41666666666667em;
-    border-bottom: 1px solid #eee;
+    border: none;
     display: block;
     line-height: inherit;
     color: inherit;
     font-weight: inherit;
+    background: none;
+    height: auto;
+}
+
+.UIBarStyle .TitleBar .LeftBar,.UIBarStyle .TitleBar .RightBar,.UIBarStyle .TitleBar .MiddleBar {
+    background: none;
+    height: auto;
 }

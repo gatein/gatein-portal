@@ -21,6 +21,12 @@ a {
     color: #1C5182;
 }
 
+table {
+    width: 100%;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
 .UIWorkingWorkspace {
     max-width: 73.125em;
     width: 95%;
@@ -34,6 +40,8 @@ a {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-top: 0;
     padding: 0.25em;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch
 }
 
 .UIPageBody .BLPagebody {

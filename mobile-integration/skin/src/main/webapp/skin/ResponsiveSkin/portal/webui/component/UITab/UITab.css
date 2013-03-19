@@ -25,14 +25,18 @@
     border-bottom: 1px solid #DDD;
 }
 
-.UITabPane .UIHorizontalTabs div {
-    display: inline-block;
-}
-
 .UITab .SelectedTab,.UITab .NormalTab,.UITab .DisabledTab {
     border-radius: 0.25em 0.25em 0 0;
     padding: 0.5em 1em 0.25em;
     border: solid thin #333;
+}
+
+.UITabPane .UIHorizontalTabs {
+    border: none;
+}
+
+.UITabPane .UITabContentContainer {
+    border: solid 1px #aeaeae;
 }
 
 .UITabPane .UIHorizontalTabs div.LineSeparator {
@@ -59,6 +63,15 @@
     color: grey;
 }
 
+.UIHorizontalTabs .TabsContainer {
+    height: auto;
+}
+
+.UIHorizontalTabs .TabsContainer .UITab .LeftTab,.UIHorizontalTabs .TabsContainer .UITab .RightTab,.UIHorizontalTabs .TabsContainer .UITab .MiddleTab
+    {
+    background: none;
+}
+
 .UIPopupMessages .UIHorizontalTabs,.UIPopupMessages .UIHorizontalTabs .TabsContainer {
     height: auto;
 }
@@ -76,12 +89,17 @@
     clear: both
 }
 
+.UIHorizontalTabs .NormalTabStyle .SelectedTab {
+    color: white;
+}
+
 @media only screen and (max-width: 30em) {
     .UITabPane .TabPaneContent {
         padding: 0;
     }
     .UIHorizontalTabs .UITab {
         float: none;
+        margin: 0.5em;
     }
     .UITabPane .UIHorizontalTabs div {
         display: block;

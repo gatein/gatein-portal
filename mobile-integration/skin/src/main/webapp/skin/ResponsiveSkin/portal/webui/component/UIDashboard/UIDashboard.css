@@ -8,4 +8,47 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin: 5px 0;
     padding: 0;
+    background-color: #1C4E7E;
+    overflow: auto;
+}
+
+.UITabPaneDashboard .AddDashboard {
+    margin: 0.5em;
+    height: 1.5em;
+    width: 1.5em;
+    background: none;
+    line-height: 24px;
+    background-color: #E6E6E6;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 0px 6px 0px 6px;
+    text-align: center;
+}
+
+.UITabPaneDashboard .AddDashboard:after {
+    content: "+";
+    font-weight: bold;
+    text-shadow: 0 0.0625em 0 #FFF;
+}
+
+.UITabPaneDashboard .UITab {
+    margin: 0.5em 0 0.5em 0.5em;
+}
+
+.UIDashboardPortlet {
+    border: none;
+}
+
+.UIDashboardContainer .GadgetContainer .UIColumn {
+    width: auto !important; /* Otherwise this is set to 33% as an inline style by javascript */
+    min-width: 32%;
+}
+
+@media only screen and (max-width: 30em) {
+    .UITabPaneDashboard .AddDashboard {
+        display: block;
+        width: auto;
+        float: none;
+    }
 }

@@ -9,4 +9,13 @@
 .UINavigationPortlet .UINavigationBar {
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #1C4E7E;
+}
+
+.UINavigationPortlet .SelectedNavigationTab a {
+    color: #1C5182;
+}
+
+.UINavigationPortlet .GroupNavigation .HighlightNavigationTab>span {
+    background-color: #A2A2A2;
 }

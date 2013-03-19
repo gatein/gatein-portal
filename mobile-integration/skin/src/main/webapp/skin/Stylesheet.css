@@ -1,4 +1,6 @@
 /*@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css); */
+@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/Stylesheet.css);
+
 /*@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/Stylesheet.css);*/
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIContainerList/Stylesheet.css);
 
@@ -21,50 +23,7 @@
 
 @import url(/eXoResources/skin/Portlet/Stylesheet.css);
 
-/*Start @import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css); */
-@import url(/eXoResources/skin/DefaultSkin/skinIcons/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIBreadcumbs/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UICalendar/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIColorPicker/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIMouseActionBackground/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIGrid/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIPageIterator/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UISearch/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UITree/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIQuickHelp/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIWizard/Stylesheet.css);
-
-/*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIForms/Stylesheet.css); */
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIPopup/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UITabSystem/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UISelector/Stylesheet.css);
-/*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/Stylesheet.css);  */
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIUpload/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIMaskWorkspace/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIToolbar/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIDropDownControl/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIGroupInfoContainer/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UINotification/Stylesheet.css);
-
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIPageSearch/Stylesheet.css);
-/* End @import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css); */
+@import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css);
 
 /*Overwritten WebUI Components*/
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
@@ -92,5 +51,9 @@
 @import url(ResponsiveSkin/portal/webui/component/UIDashboard/UIDashboard.css);
 
 @import url(ResponsiveSkin/portal/webui/component/UIPopupWindow/UIPopupWindow.css);
+
+@import url(ResponsiveSkin/portal/webui/component/UIBreadCrumbs/UIBreadCrumbs.css);
+
+@import url(ResponsiveSkin/portal/webui/component/UIBannerPortlet/UIBannerPortlet.css);
 
 @import url(Portlet/Stylesheet.css);
