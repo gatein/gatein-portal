@@ -80,6 +80,13 @@
     </dependency>
 
     <dependency>
+      <groupId>com.sun.faces</groupId>
+      <artifactId>jsf-impl</artifactId>
+      <version>${version.mojarra2}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.jboss.portletbridge</groupId>
       <artifactId>richfaces4-depchain</artifactId>
       <type>pom</type>
@@ -103,53 +110,26 @@
     </dependency>
   </dependencies>
 
-  <profiles>
-    <!-- For tomcat we need to bundle the JSF libs in WEB-INF/lib -->
-    <profile>
-      <id>tomcat7</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>tomcat7</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun.faces</groupId>
-          <artifactId>jsf-api</artifactId>
-          <version>${version.mojarra2}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.sun.faces</groupId>
-          <artifactId>jsf-impl</artifactId>
-          <version>${version.mojarra2}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>tomcat</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>tomcat</value>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.sun.faces</groupId>
-          <artifactId>jsf-api</artifactId>
-          <version>${version.mojarra2}</version>
-        </dependency>
-        <dependency>
-          <groupId>com.sun.faces</groupId>
-          <artifactId>jsf-impl</artifactId>
-          <version>${version.mojarra2}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-  </profiles>
-
   <build>
     <finalName>redirect-admin</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>redirect-admin</id>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/jsf-bundled.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>

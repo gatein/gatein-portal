@@ -14,7 +14,14 @@
           <xsl:attribute name="todir"><xsl:value-of select="$lib.dir"/></xsl:attribute>
           <xsl:for-each select="//mvn:dependencies/mvn:dependency[(count(mvn:type)=0 or mvn:type/text()='jar') and mvn:artifactId/text()!='exo.portal.packaging.common']">
             <xsl:element name="fileset">
-              <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:jar</xsl:attribute>
+              <xsl:choose>
+                <xsl:when test="./mvn:classifier">
+                  <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:jar:<xsl:value-of select="./mvn:classifier"/></xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:jar</xsl:attribute>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:element>
           </xsl:for-each>
         </xsl:element>
@@ -29,7 +36,14 @@
               <xsl:element name="copy">
                 <xsl:attribute name="todir"><xsl:value-of select="$webapps.dir"/></xsl:attribute>
                 <xsl:element name="fileset">
-                  <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:war</xsl:attribute>
+                  <xsl:choose>
+                    <xsl:when test="./mvn:classifier">
+                      <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:war:<xsl:value-of select="./mvn:classifier"/></xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:war</xsl:attribute>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:element>
               </xsl:element>
             </xsl:when>
@@ -37,7 +51,14 @@
               <xsl:element name="copy">
                 <xsl:attribute name="tofile"><xsl:value-of select="$webapps.dir"/>/<xsl:value-of select="$webapps.name"/></xsl:attribute>
                 <xsl:element name="fileset">
-                  <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:war</xsl:attribute>
+                  <xsl:choose>
+                    <xsl:when test="./mvn:classifier">
+                      <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:war:<xsl:value-of select="./mvn:classifier"/></xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:war</xsl:attribute>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:element>
               </xsl:element>
             </xsl:otherwise>

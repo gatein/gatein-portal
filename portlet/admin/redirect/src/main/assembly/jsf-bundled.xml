@@ -1,0 +1,38 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+  <!-- This assembly descriptor takes the war created by maven and adds 2 JSF libs to WEB-INF/lib -->
+
+  <id>jsf-bundled</id>
+  <formats>
+    <format>war</format>
+  </formats>
+
+  <includeBaseDirectory>false</includeBaseDirectory>
+
+  <!-- Copy the built war -->
+  <fileSets>
+    <fileSet>
+      <directory>${project.build.directory}/${project.build.finalName}</directory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+
+  <!-- Bundle JSF libraries -->
+  <dependencySets>
+    <dependencySet>
+      <includes>
+        <!-- jsf libs that need to be bundled -->
+        <include>com.sun.faces:jsf-api</include>
+        <include>com.sun.faces:jsf-impl</include>
+      </includes>
+      <outputDirectory>WEB-INF/lib</outputDirectory>
+      <scope>provided</scope>
+    </dependencySet>
+  </dependencySets>
+
+</assembly>

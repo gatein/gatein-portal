@@ -905,6 +905,7 @@
       <?rename redirect-admin.war?>
       <groupId>org.gatein.portal.portlet</groupId>
       <artifactId>redirect-admin-ui</artifactId>
+      <classifier>jsf-bundled</classifier>
       <type>war</type>
     </dependency>
 
