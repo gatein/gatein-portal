@@ -8,7 +8,10 @@
     <locale>en</locale>
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-
+    <properties>
+      <entry key="sessionAlive">onDemand</entry>
+      <entry key="showPortletInfo">0</entry>
+    </properties>
     <portal-redirects>
         <portal-redirect>
             <redirect-site>mobile</redirect-site>

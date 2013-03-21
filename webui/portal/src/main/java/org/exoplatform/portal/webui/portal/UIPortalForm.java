@@ -97,6 +97,8 @@ public class UIPortalForm extends UIFormTabPane {
 
     private static final String FIELD_SHOW_INFOBAR = "showInfobar";
 
+    private static final String FIELD_VIEWPORT = "viewport";
+
     private static final String FIELD_LABEL = "label";
 
     private static final String FIELD_DESCRIPTION = "description";
@@ -250,6 +252,11 @@ public class UIPortalForm extends UIFormTabPane {
                 FIELD_SHOW_INFOBAR, true);
         uiShowInfobarBox.setOnChange("CheckShowInfobar");
         uiPropertiesSet.addChild(uiShowInfobarBox);
+
+        UIFormStringInput uiViewportInput = new UIFormStringInput(FIELD_VIEWPORT, FIELD_VIEWPORT, null);
+        uiViewportInput.setReadOnly(false);
+        uiPropertiesSet.addChild(uiViewportInput);
+
         addUIFormInput(uiPropertiesSet);
 
         UIFormInputSet uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);

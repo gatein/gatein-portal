@@ -250,6 +250,14 @@ public class PortalConfig extends ModelObject {
         }
     }
 
+    public String getViewport() {
+        return getProperty(PortalProperties.VIEWPORT);
+    }
+
+    public void setViewport(String viewport) {
+        setProperty(PortalProperties.VIEWPORT, viewport);
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }

@@ -35,4 +35,6 @@ public class PortalProperties {
     public static final String GADGET_SERVER = "gadgetServer";
 
     public static final String SHOW_PORTLET_INFO = "showPortletInfo";
+
+    public static final String VIEWPORT = "viewport";
 }

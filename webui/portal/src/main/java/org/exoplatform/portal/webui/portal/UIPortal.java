@@ -290,6 +290,14 @@ public class UIPortal extends UIContainer {
         }
     }
 
+    public String getViewport() {
+        return getProperty(PortalProperties.VIEWPORT);
+    }
+
+    public void setViewport(String viewport) {
+        setProperty(PortalProperties.VIEWPORT, viewport);
+    }
+
     public String getLabel() {
         return label;
     }

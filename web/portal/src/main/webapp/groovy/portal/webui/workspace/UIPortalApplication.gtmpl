@@ -34,8 +34,18 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="$lang" lang="$lang" dir="$dir">
 	<head id="head">
+                <% 
+                      UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
+                 %>
 		<title><%=HTMLEntityEncoder.getInstance().encode(title)%></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                <% 
+                        if (portal.viewport != null) {
+                 %>
+                        <meta name="viewport" content = "${portal.viewport}"/>
+                <%
+                        }
+                 %>
 		<%
 			if(metaInformation!= null) {
 				Iterator<String> keys = metaInformation.keySet().iterator();
@@ -81,7 +91,6 @@
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
 			<% 
-				UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
 				String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
 				boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
 			%>
