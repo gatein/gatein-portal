@@ -50,11 +50,11 @@ public class ResourceBundleDescription implements Serializable {
         if (id_ == null) {
             StringBuffer b = new StringBuffer();
             b.append(name_);
-            if (language_ != null)
+            if (language_ != null && !language_.isEmpty())
                 b.append('_').append(language_);
-            if (country_ != null)
+            if (country_ != null && !country_.isEmpty())
                 b.append('_').append(country_);
-            if (variant_ != null)
+            if (variant_ != null && !variant_.isEmpty())
                 b.append('_').append(variant_);
             id_ = b.toString();
         }

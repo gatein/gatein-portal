@@ -41,13 +41,13 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.resources.ExoResourceBundle;
 import org.exoplatform.services.resources.IdentityResourceBundle;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.PropertiesClassLoader;
 import org.exoplatform.services.resources.Query;
 import org.exoplatform.services.resources.ResourceBundleData;
-import org.exoplatform.services.resources.ResourceBundleLoader;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.picocontainer.Startable;
 
@@ -196,18 +196,16 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
                 Locale locale = localeConfig.getLocale();
                 String language = locale.getLanguage();
                 String country = locale.getCountry();
+                String variant = locale.getVariant();
 
                 String content = getResourceBundleContent(name, locale, defaultLocale, cl);
                 if (content != null) {
                     // save the content
                     ResourceBundleData data = new ResourceBundleData();
-                    if (country != null && country.length() > 0) {
-                        data.setId(baseName + "_" + language + "_" + country);
-                    } else {
-                        data.setId(baseName + "_" + language);
-                    }
                     data.setName(baseName);
                     data.setLanguage(language);
+                    data.setCountry(country);
+                    data.setVariant(variant);
                     data.setData(content);
                     saveResourceBundle(data);
                 }
@@ -261,9 +259,15 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
 
         String language = locale.getLanguage();
         String country = locale.getCountry().toUpperCase();
+        String variant = locale.getVariant();
 
         String defaultLanguage = defaultLocale.getLanguage();
         String defaultCountry = defaultLocale.getCountry().toUpperCase();
+        String defaultVariant = defaultLocale.getVariant();
+
+        if (variant != null && variant.length() > 0) {
+            candidateFiles.add(baseName + "_" + language + "_" + country + "_" + variant + ".properties");
+        }
 
         if (country != null && country.length() > 0) {
             candidateFiles.add(baseName + "_" + language + "_" + country + ".properties");
@@ -271,6 +275,10 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
 
         if (language != null && language.length() > 0) {
             candidateFiles.add(baseName + "_" + language + ".properties");
+        }
+
+        if (defaultVariant != null && defaultVariant.length() > 0) {
+            candidateFiles.add(baseName + "_" + defaultLanguage + "_" + defaultCountry + "_" + defaultVariant + ".properties");
         }
 
         if (defaultCountry != null && defaultCountry.length() > 0) {
@@ -282,6 +290,9 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
         }
 
         candidateFiles.add(baseName + ".properties");
+
+        //fallback to en locale help to remove ant script that generates base properties file
+        candidateFiles.add(baseName + "_" + Locale.ENGLISH.getLanguage() + ".properties");
 
         cl = new PropertiesClassLoader(cl, true);
         String fileName = null;
@@ -332,8 +343,11 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
         }
 
         String country = locale.getCountry();
+        String variant = locale.getVariant();
         String id;
-        if (country != null && country.length() > 0) {
+        if (variant != null && variant.length() > 0) {
+            id = name + "_" + locale.getLanguage() + "_" + country + "_" + variant;
+        } else if (country != null && country.length() > 0) {
             id = name + "_" + locale.getLanguage() + "_" + locale.getCountry();
         } else {
             id = name + "_" + locale.getLanguage();
@@ -348,22 +362,25 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
 
         // Case 1: ResourceBundle of portlets, standard java API is used
         if (isClasspathResource) {
+            ResourceBundleFromCPContext ctx = new ResourceBundleFromCPContext(name, locale, cl);
+            ResourceBundle result;
             // Cache classpath resource bundle while running portal in non-dev mode
             if (isCacheable) {
-                ResourceBundleLoaderContext ctx = new ResourceBundleLoaderContext(name, locale, cl);
-                ResourceBundle result = getFutureCache().get(ctx, id);
-                if (ctx.e != null) {
-                    // Throw the RuntimeException if it occurs to remain compatible with the old behavior
-                    throw ctx.e;
-                }
-                return result;
+                result = getFutureCache().get(ctx, id);
             } else {
-                return ResourceBundleLoader.load(name, locale, cl);
+                result = ctx.get(id);
             }
-        }
 
-        // Case 2: ResourceBundle of portal
-        return getFutureCache().get(new GetResourceBundleFromDbContext(name, locale), id);
+            if (ctx.e != null) {
+                // Throw the RuntimeException if it occurs to remain compatible with the old behavior
+                throw ctx.e;
+            } else {
+                return result;
+            }
+        } else {
+            // Case 2: ResourceBundle of portal
+            return getFutureCache().get(new GetResourceBundleFromDbContext(name, locale), id);
+        }
     }
 
     public ResourceBundle getResourceBundle(String[] name, Locale locale, ClassLoader cl) {
@@ -402,10 +419,9 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
     }
 
     /**
-     * The class defining the context required to load a ResourceBundle thanks to the method
-     * <code>ResourceBundleLoader.load(String name, Locale locale, ClassLoader cl)</code>
+     * The class defining the context required to load a ResourceBundle from classpath
      */
-    private static class ResourceBundleLoaderContext extends ResourceBundleContext {
+    private  class ResourceBundleFromCPContext extends ResourceBundleContext {
         private final String name;
 
         private final Locale locale;
@@ -414,7 +430,7 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
 
         private RuntimeException e;
 
-        public ResourceBundleLoaderContext(String name, Locale locale, ClassLoader cl) {
+        public ResourceBundleFromCPContext(String name, Locale locale, ClassLoader cl) {
             this.name = name;
             this.locale = locale;
             this.cl = cl;
@@ -425,10 +441,35 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
          */
         @Override
         ResourceBundle get(String id) {
+            ResourceBundle parent =  null, result = null;
             try {
-                return ResourceBundleLoader.load(name, locale, cl);
-            } catch (RuntimeException e) {
-                this.e = e;
+                Locale defaultLocale = localeService_.getDefaultLocaleConfig().getLocale();
+
+                String rootId = name + "_" + defaultLocale.getLanguage();
+                parent = getContent(rootId, null, defaultLocale);
+                result = getContent(name, parent, defaultLocale);
+            } catch (Exception e) {
+                this.e = new RuntimeException(e);
+            }
+
+            if (result != null) {
+                return result;
+            } else {
+                return parent;
+            }
+        }
+
+        private ResourceBundle getContent(String _name, ResourceBundle parent, Locale defaultLocale) throws Exception {
+            String content = getResourceBundleContent(_name.replace('.', '/'), locale, defaultLocale, cl);
+            if (content != null) {
+                ResourceBundleData data = new ResourceBundleData();
+                data.setName(_name);
+                data.setLanguage(locale.getLanguage());
+                data.setCountry(locale.getCountry());
+                data.setVariant(locale.getVariant());
+                data.setData(content);
+
+                return new ExoResourceBundle(data, parent);
             }
             return null;
         }
@@ -457,10 +498,9 @@ public abstract class BaseResourceBundleService implements ResourceBundleService
             try {
                 String rootId = name + "_" + localeService_.getDefaultLocaleConfig().getLanguage();
                 ResourceBundle parent = getResourceBundleFromDb(rootId, null, locale);
-                if (parent != null) {
-                    res = getResourceBundleFromDb(id, parent, locale);
-                    if (res == null)
-                        res = parent;
+                res = getResourceBundleFromDb(id, parent, locale);
+                if (res == null) {
+                    res = parent;
                 }
             } catch (Exception ex) {
                 log_.error("Error: " + id, ex);
