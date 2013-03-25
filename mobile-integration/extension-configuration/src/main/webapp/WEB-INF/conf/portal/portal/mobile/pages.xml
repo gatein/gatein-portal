@@ -60,6 +60,17 @@
             <show-application-state>false</show-application-state>
             <show-application-mode>false</show-application-mode>
         </portlet-application>
+        <portlet-application>
+            <portlet>
+                <application-ref>responsive-community-portlet</application-ref>
+                <portlet-ref>ResponsiveCommunityPortlet</portlet-ref>                
+            </portlet>
+            <title>Community portlet</title>
+            <access-permissions>Everyone</access-permissions>
+            <show-info-bar>false</show-info-bar>
+            <show-application-state>false</show-application-state>
+            <show-application-mode>false</show-application-mode>
+        </portlet-application>
     </page>
 
     <page>

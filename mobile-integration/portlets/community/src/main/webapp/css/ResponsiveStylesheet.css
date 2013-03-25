@@ -1,0 +1,279 @@
+.gtnResponsiveCommunityPortlet {
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:1em;
+    color: #333333;
+    overflow: hidden;
+    padding: 1em;
+}
+
+.gtnResponsiveCommunityPortlet h4 {
+    font-family: Ubuntu;
+    font-size: 1.5em;
+    font-weight: normal;
+    margin-bottom: .8332em;
+    margin-top: 0;
+}
+
+.gtnResponsiveCommunityPortlet .btn {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    background-image: linear-gradient(to bottom, #FFFFFF, #E6E6E6);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #A2A2A2;
+    border-image: none;
+    border-radius: .25em .25em .25em .25em;
+    border-style: solid;
+    border-width: .07142em;
+    box-shadow: 0 .07142em 0 rgba(255, 255, 255, 0.2) inset, 0 .07142em .14284em rgba(0, 0, 0, 0.05);
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.875em;
+    line-height: 1.4284em;
+    margin-bottom: 0;
+    padding: .28568em .85704em;
+    text-align: center;
+    text-shadow: 0 .07142em .07142em rgba(255, 255, 255, 0.75);
+    vertical-align: middle;
+}
+
+.gtnResponsiveCommunityPortlet .btn:hover {
+    background-color: #E6E6E6;
+    background-position: 0 -1.07130em;
+    color: #333333;
+    text-decoration: none;
+    transition: background-position 0.1s linear 0s;
+}
+
+.gtnResponsiveCommunityPortlet #documentation,
+.gtnResponsiveCommunityPortlet #willing,
+.gtnResponsiveCommunityPortlet #conversation {
+    margin-bottom: 1em;
+}
+
+.gtnResponsiveCommunityPortlet #documentation {
+    background-color: #E5EEF4;
+    border-radius: .625em;
+}
+
+.gtnResponsiveCommunityPortlet #willing {
+    margin-left: 2%;
+}
+
+.gtnResponsiveCommunityPortlet #willing div span {
+    color: #999999;
+    display: inline-block;
+    margin: 0 .35714em;
+    font-size:.875em;
+}
+
+.gtnResponsiveCommunityPortlet #willing a:last-child {
+    font-size:.875em;
+}
+
+.gtnResponsiveCommunityPortlet #willing a:last-child:hover {
+    text-decoration: underline;
+}
+
+.gtnResponsiveCommunityPortlet #conversation {
+    margin-left: 2%;
+}
+
+.gtnResponsiveCommunityPortlet #conversation > div {
+    border-bottom: .0625em solid #CCCCCC;
+}
+
+.gtnResponsiveCommunityPortlet #conversation h6 {
+    font-size: 0.9em;
+    font-weight: normal;
+    margin: 1em 0 0 0;
+}
+
+.gtnResponsiveCommunityPortlet #conversation ul {
+    padding-left: 1.25em;
+    margin: 0 0 0.3em 0;
+}
+
+.gtnResponsiveCommunityPortlet #conversation h6:hover, .gtnResponsiveCommunityPortlet #conversation .info a:hover {
+    text-decoration: underline;
+}
+
+.gtnResponsiveCommunityPortlet #conversation .info a {
+    color: #777777;
+    font-size: 0.75em;
+}
+
+.gtnResponsiveCommunityPortlet #conversation .info > span:last-child {
+    font-size: 0.75em;
+    margin-left: 0.5em;
+    color:#999;
+}
+
+.gtnResponsiveCommunityPortlet #conversation .info > span:last-child:before {
+    content: "·";
+    margin-right: 0.5em;
+}
+
+.gtnResponsiveCommunityPortlet #conversation .accordion-body > a {
+    float: right;
+    font-size: .8125em;
+    margin-bottom: .38461em;
+}
+
+.gtnResponsiveCommunityPortlet #conversation a:not(.accordion-toggle):hover {
+    text-decoration: underline;
+}
+
+.gtnResponsiveCommunityPortlet #blog-content-mobile, .gtnResponsiveCommunityPortlet #tweets-content-mobile {
+    overflow: hidden;
+}
+
+
+.gtnResponsiveCommunityPortlet #tweets-content-mobile ul {
+    list-style: none;
+}
+
+.gtnResponsiveCommunityPortlet #tweets-content-mobile p {
+    font-size: 0.875em;
+    margin-bottom: 0;
+}
+
+.gtnResponsiveCommunityPortlet #documentation {
+    margin-left: 2%;
+    /*width: 45%;    */
+    padding: 1em;
+    margin-top: 1em;
+}
+
+.gtnResponsiveCommunityPortlet #documentation p {
+    color: #7A7A7A;
+    line-height: 1.4em;
+    margin-bottom: 0;
+    text-shadow: 0 .0666em 0 #FFFFFF;
+    font-size:.9375em;
+}
+
+.gtnResponsiveCommunityPortlet a {
+    color: #1C5182;
+    text-decoration: none;
+}
+
+.gtnResponsiveCommunityPortlet #documentation h4 {
+    color: #505050;
+    font-size: 1.25em;
+    margin-bottom: 0.5em;
+    margin-top: 0;
+    text-shadow: 0 0.1em 0 #FFFFFF;
+}
+
+.gtnResponsiveCommunityPortlet #conversation .accordion-toggle {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #CCCCCC -moz-use-text-color transparent transparent;
+    border-image: none;
+    border-style: solid none solid solid;
+    border-width: .07142em medium .07142em .07142em;
+    color: #333333;
+    display: block;
+    font-size: 0.875em;
+    font-weight: bold;
+    line-height: 2.14285em;
+    padding: 0 3.57143%;
+}
+
+.gtnResponsiveCommunityPortlet .accordion-toggle {
+    cursor: pointer;
+}
+
+.gtnResponsiveCommunityPortlet a {
+    color: #1C5182;
+    text-decoration: none;
+}
+
+#conversation .accordion-toggle {
+    font-size: 1.4em;
+}
+
+.gtnResponsiveCommunityPortlet #conversation .accordion-toggle i {
+    margin-right: .35714em;
+    margin-top: .14285em;
+    margin-bottom: -.2em;
+}
+
+.gtnResponsiveCommunityPortlet #conversation #tweets-content-mobile {
+    display:none;
+}
+
+.gtnResponsiveCommunityPortlet .icon-blog {
+    background-image: url("../images/rss.png");
+}
+
+.gtnResponsiveCommunityPortlet .icon-twitter {
+    background-image: url("../images/twitter.png");
+}
+
+.gtnResponsiveCommunityPortlet .icon-gray {
+    background-repeat: no-repeat;
+    width: 1.14285em;
+    height: 1.14285em;
+    display: inline-block;
+}
+
+.gtnResponsiveCommunityPortlet #documentation i {
+    display: none;
+}
+
+.gtnResponsiveCommunityPortlet i {
+    text-align: left;
+    text-indent: -99999px;
+}
+
+@media only screen and (min-width: 30em) {
+    .gtnResponsiveCommunityPortlet #documentation i {
+        background: url("../images/welcome-book.png") no-repeat scroll left top transparent;
+        display: block;
+        float: left;
+        height: 3.5625em;
+        margin-right: .9375em;
+        margin-top: .125em;
+        width: 4.5625em;
+    }
+
+    .gtnResponsiveCommunityPortlet #documentation h4 {
+        margin-left: 4.4em;
+    }
+
+    .gtnResponsiveCommunityPortlet #documentation p {
+        margin-left: 5.86666em;
+    }
+}
+
+@media only screen and (min-width: 48em) {
+    .gtnResponsiveCommunityPortlet {
+        padding: 0;
+    }
+
+    .gtnResponsiveCommunityPortlet #willing,
+    .gtnResponsiveCommunityPortlet #conversation,
+    .gtnResponsiveCommunityPortlet #documentation {
+        width: 45%;
+    }
+
+    .gtnResponsiveCommunityPortlet #willing {
+        float: left;
+    }
+
+    .gtnResponsiveCommunityPortlet #conversation {
+        float: right;
+        margin-right: 2%;
+    }
+
+    .gtnResponsiveCommunityPortlet #documentation {
+        float: left;
+    }
+}

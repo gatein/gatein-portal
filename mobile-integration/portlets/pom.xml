@@ -19,6 +19,7 @@
         <module>banner</module>
         <module>navigation</module>
         <module>features</module>
+        <module>community</module>
         <module>header</module>
         <module>footer</module>
     </modules>

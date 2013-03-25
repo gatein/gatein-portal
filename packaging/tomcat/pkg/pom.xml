@@ -930,6 +930,13 @@
     </dependency>
 
     <dependency>
+      <?rename responsive-community-portlet.war?>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.community</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
       <?rename responsive-features-portlet.war?>
       <groupId>org.gatein.portal</groupId>
       <artifactId>portlet.responsive.features</artifactId>
