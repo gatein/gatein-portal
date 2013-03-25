@@ -114,6 +114,7 @@
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.controller"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.resources"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security-jboss"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.server"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.gadgets-core"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.core"/>
