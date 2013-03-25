@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2011, Red Hat Middleware, LLC, and individual
+ * Copyright 2013, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -21,7 +21,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.login;
+package org.gatein.portal.security.jboss;
 
 import java.io.IOException;
 
@@ -42,8 +42,7 @@ import org.apache.catalina.connector.Response;
 import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.exoplatform.container.ExoContainer;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
+import org.jboss.logging.Logger;
 
 /**
  * Helper valve for supporting JBoss clustered SSO Valve. Re-authentication is not initiated by JBoss as it is not aware that
@@ -55,7 +54,7 @@ import org.gatein.common.logging.LoggerFactory;
  */
 public class PortalClusteredSSOSupportValve extends ValveBase implements Lifecycle {
 
-    private static final Logger log = LoggerFactory.getLogger(PortalClusteredSSOSupportValve.class);
+    private static final Logger log = Logger.getLogger(PortalClusteredSSOSupportValve.class);
 
     private final LifecycleSupport support = new LifecycleSupport(this);
 

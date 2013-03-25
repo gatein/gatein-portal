@@ -500,6 +500,11 @@
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
+        <artifactId>exo.portal.component.web.security-jboss</artifactId>
+        <version>3.6.0.MO1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.server</artifactId>
         <version>3.5.4.Final-SNAPSHOT</version>
       </dependency>

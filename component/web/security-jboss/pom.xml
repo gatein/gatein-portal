@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>exo.portal.component.web</artifactId>
+    <groupId>org.gatein.portal</groupId>
+    <version>3.6.0.MO1-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.portal.component.web.security-jboss</artifactId>
+  <packaging>jar</packaging>
+  <name>GateIn Portal Component Web Security JBoss</name>
+  <description>GateIn Portal Component Web Security JBoss</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.jbossas</groupId>
+      <artifactId>jboss-as-tomcat</artifactId>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>jpl-pattern</groupId>
+          <artifactId>jpl-pattern</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>jpl-util</groupId>
+          <artifactId>jpl-util</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>cglib</groupId>
+          <artifactId>cglib</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.security</groupId>
+          <artifactId>jacc</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.security</groupId>
+          <artifactId>jaas</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>sun-jaxws</groupId>
+          <artifactId>jsr181-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>sun-jaxws</groupId>
+          <artifactId>jaxws-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>trove</groupId>
+          <artifactId>trove</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>apache-log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+
+</project>
