@@ -51,7 +51,7 @@ public class RememberMeFilter extends AbstractFilter {
 
     private void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain) throws IOException,
             ServletException {
-        if (req.getRemoteUser() == null && "GET".equals(req.getMethod())) {
+        if (req.getRemoteUser() == null) {
             String token = LoginServlet.getRememberMeTokenCookie(req);
             if (token != null) {
                 ExoContainer container = getContainer();
