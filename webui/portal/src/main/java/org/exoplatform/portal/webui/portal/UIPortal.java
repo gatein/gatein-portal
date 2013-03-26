@@ -298,6 +298,14 @@ public class UIPortal extends UIContainer {
         setProperty(PortalProperties.VIEWPORT, viewport);
     }
 
+    public String getSharedLayout() {
+        return getProperty(PortalProperties.SHARED_LAYOUT, PortalProperties.SHARED_LAYOUT_ALL);
+    }
+
+    public void setSharedLayout(String type) {
+        setProperty(PortalProperties.SHARED_LAYOUT, type);
+    }
+
     public String getLabel() {
         return label;
     }

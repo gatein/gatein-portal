@@ -1,13 +1,21 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+    import org.exoplatform.portal.webui.portal.UIPortal;
 	
 	def rcontext = _ctx.getRequestContext();
 
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
+    UIPortal uiPortal = uiPortalApp.getCurrentSite();
+    String sharedLayout = uiPortal.getProperty("sharedLayout");
+    if (sharedLayout != null && sharedLayout.equals("adminsOnly")) {
+        String[] permissions = {"*:/platform/administrators"};
+        uicomponent.setAccessPermissions(permissions);
+    }
+
 	boolean hasPermission = uicomponent.hasPermission();
 	if(!uiPortalApp.isEditing() && !hasPermission) return;
-	
+
   if (uiPortalApp.isEditing())
   {
      def reqJS = rcontext.getJavascriptManager().require("SHARED/portal", "portal");
@@ -85,5 +93,4 @@
 	</div>	
 	
 </div>
-
 

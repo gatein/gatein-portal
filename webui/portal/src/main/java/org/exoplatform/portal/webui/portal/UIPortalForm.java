@@ -99,6 +99,8 @@ public class UIPortalForm extends UIFormTabPane {
 
     private static final String FIELD_VIEWPORT = "viewport";
 
+    private static final String FIELD_SHARED_LAYOUT = "sharedLayout";
+
     private static final String FIELD_LABEL = "label";
 
     private static final String FIELD_DESCRIPTION = "description";
@@ -258,6 +260,13 @@ public class UIPortalForm extends UIFormTabPane {
         uiPropertiesSet.addChild(uiViewportInput);
 
         addUIFormInput(uiPropertiesSet);
+
+        List<SelectItemOption<String>> listSharedLayout = new ArrayList<SelectItemOption<String>>();
+        listSharedLayout.add(new SelectItemOption<String>(PortalProperties.SHARED_LAYOUT_ALL, PortalProperties.SHARED_LAYOUT_ALL));
+        listSharedLayout.add(new SelectItemOption<String>(PortalProperties.SHARED_LAYOUT_ADMINS, PortalProperties.SHARED_LAYOUT_ADMINS));
+        UIFormSelectBox sharedLayoutSelectBox = new UIFormSelectBox(FIELD_SHARED_LAYOUT, FIELD_SHARED_LAYOUT, listSharedLayout);
+        sharedLayoutSelectBox.setValue(PortalProperties.SHARED_LAYOUT_ALL);
+        uiPropertiesSet.addUIFormInput(sharedLayoutSelectBox);
 
         UIFormInputSet uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
         addUIComponentInput(uiPermissionSetting);

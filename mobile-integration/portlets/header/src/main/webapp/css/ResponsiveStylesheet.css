@@ -220,9 +220,3 @@
     border-color: black transparent transparent;
     margin-bottom: 0.125em;
 }
-
-/* Do not display the UIToolbarContainer at the top of the page when using the responsive header portlet */
-/* TODO: find a way to disable the sharedlayout on a portal */
-div.UIToolbarContainer {
-    display: none;
-}

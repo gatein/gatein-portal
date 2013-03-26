@@ -37,4 +37,10 @@ public class PortalProperties {
     public static final String SHOW_PORTLET_INFO = "showPortletInfo";
 
     public static final String VIEWPORT = "viewport";
+
+    public static final String SHARED_LAYOUT = "sharedLayout";
+
+    public static final String SHARED_LAYOUT_ALL = "allUsers";
+
+    public static final String SHARED_LAYOUT_ADMINS = "adminsOnly";
 }

@@ -258,6 +258,14 @@ public class PortalConfig extends ModelObject {
         setProperty(PortalProperties.VIEWPORT, viewport);
     }
 
+    public String getSharedLayout() {
+        return getProperty(PortalProperties.SHARED_LAYOUT, PortalProperties.SHARED_LAYOUT_ALL);
+    }
+
+    public void setSharedLayout(String type) {
+        setProperty(PortalProperties.SHARED_LAYOUT, PortalProperties.SHARED_LAYOUT_ALL);
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
