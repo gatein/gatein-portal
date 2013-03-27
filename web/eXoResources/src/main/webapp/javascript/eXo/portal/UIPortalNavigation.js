@@ -548,6 +548,11 @@
 	        portalNav.mouseLeaveTab($(this), actualClass);
 	      });
 	
+              tab.click(function()
+              {
+                portalNav.clickTab($(this), highlightClass, actualClass);
+              }); 
+         
 	      tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
 	    });
 	
@@ -618,7 +623,6 @@
 	      portalNav.cancelHideMenuContainer(menuItemContainer.attr("id"));
 	      portalNav.showMenu(tab, menuItemContainer);
 	    }
-	    return false;
 	  },
 	
 	  /**
@@ -637,7 +641,21 @@
 	    {
 	      portalNav.hideMenuTimeoutIds[conts[0].id] = window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 0);
 	    }
-	    return false;
+	  },
+
+          clickTab : function (tab, newClass, oldClass)
+          {
+            var portalNav = portalNavigation;
+
+            
+            if (tab.attr("class") == newClass) //the menu is open
+            {
+              portalNav.mouseLeaveTab(tab, oldClass);
+            }
+            else //we don't have a submenu, create it
+            {
+              portalNav.mouseEnterTab(tab, newClass);
+            }
 	  },
 	
 	  /**

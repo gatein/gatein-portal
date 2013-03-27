@@ -92,12 +92,16 @@
 %> 	
 <ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
-		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
+		<span class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></span>
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer portlet-menu-cascade">
 		<% for(nav in groupNavigations) {
 				renderGroupPageNavigation(nav, nodeURL);
 		} %>
+                  <li class="HorizontalSeparator"></li>
+                    <li class="MenuItem portlet-menu-cascade-item">
+                    <a class="EditorIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.editGroup")%></a>
+                  <li>
 		</ul>
 		<% } %>
 	</li>

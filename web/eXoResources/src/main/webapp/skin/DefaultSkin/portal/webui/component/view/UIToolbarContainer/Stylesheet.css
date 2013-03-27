@@ -57,6 +57,12 @@
 	margin: 0px;
 }
 
+.UIToolbarContainer .HorizontalSeparator {
+  background-color: #9E9FA5;
+  width: 100%;
+  height: 1px;
+}
+
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer {	
 	background: url('background/ToolbarContainer.gif') repeat-x left top;	
 	height: 32px;

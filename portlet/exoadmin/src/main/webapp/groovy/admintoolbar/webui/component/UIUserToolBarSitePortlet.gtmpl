@@ -55,8 +55,20 @@
 					</li>
 				""";
 			}
+                        def currentPortal = uicomponent.getCurrentPortal();
+                        def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
+                        def nodes = uicomponent.getNavigationNodes(navigation);
+                        _ctx.getRequestContext().setAttribute("nodes", nodes);
+
+                        def editSitesLink = nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString();
+                        label = _ctx.appRes("UIUserToolBarSitePortlet.editSite");
 			print """
 				
+                        <li class="HorizontalSeparator"></li>
+                        <li class="MenuItem portlet-menu-cascade-item">
+                          <a class="EditorIcon TBIcon" href="$editSitesLink">$label</a>
+                        </li>
+
 				</ul>
 			""";
 	}
@@ -128,17 +140,13 @@
 			</li>
 		""" ;			
 	}
-	def currentPortal = uicomponent.getCurrentPortal();
-	def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
-	def nodes = uicomponent.getNavigationNodes(navigation);
-	_ctx.getRequestContext().setAttribute("nodes", nodes);
 %> 
 
 <ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
-		<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString() %>">
+                <span class="SitesIcon TBIcon">
 			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
-		</a>		
+		</span>		
 		<% renderPortalNavigations(nodeURL) %>
 	</li>
 </ul>	
