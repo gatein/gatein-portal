@@ -46,7 +46,6 @@
     <module name="org.jboss.xb"/>
     <module name="org.jboss.common-core"/>
     <module name="org.apache.commons-fileupload"/>
-    <module name="org.apache.commons-httpclient" slot="gatein"/>
     <module name="com.google.guava"/>
   </dependencies>
 </module>
