@@ -18,9 +18,9 @@
   <name>GateIn Redirect Admin UI Portlet</name>
 
   <properties>
-    <version.richfaces>4.3.0-SNAPSHOT</version.richfaces>
+    <version.richfaces>4.3.1.Final</version.richfaces>
     <qualifier.richfaces>jbas71</qualifier.richfaces>
-    <version.richfaces.bootstrap>4.3.0-SNAPSHOT</version.richfaces.bootstrap>
+    <version.richfaces.bootstrap>0.1.0.Final</version.richfaces.bootstrap>
 
     <!-- JSF2 Implementations -->
     <version.mojarra2>2.1.13</version.mojarra2>
@@ -132,4 +132,10 @@
       </plugin>
     </plugins>
   </build>
+    <repositories>
+      <repository>
+	<id>JBoss Releases Staging Repository</id>
+	<url>https://repository.jboss.org/nexus/content/repositories/jboss_releases_staging_profile-112/</url>
+      </repository>
+    </repositories>
 </project>

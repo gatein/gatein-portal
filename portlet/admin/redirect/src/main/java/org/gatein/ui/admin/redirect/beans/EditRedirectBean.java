@@ -24,7 +24,7 @@ package org.gatein.ui.admin.redirect.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -148,19 +148,27 @@ public class EditRedirectBean implements Serializable {
         toggleEnabled(siteName, redirectName);
     }
 
-    public String deleteRedirect(String site, String name) {
+    String deleteSite = null;
+    String deleteRedirect = null;
+
+    public void setDeleteRedirect(String site, String redirect) {
+        this.deleteSite = site;
+        this.deleteRedirect = redirect;
+    }
+
+    public String deleteRedirect() {
         try {
             // FIXME: Use webui Util.getUIPortal();
             if (ds == null) {
                 ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
             }
 
-            cfg = ds.getPortalConfig(site);
+            cfg = ds.getPortalConfig(deleteSite);
             ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
 
             int index = -1;
             for (int i = 0; i < redirects.size(); i++) {
-                if (redirects.get(i).getName().equals(name)) {
+                if (redirects.get(i).getName().equals(deleteRedirect)) {
                     index = i;
                     break;
                 }
@@ -320,10 +328,6 @@ public class EditRedirectBean implements Serializable {
         this.conditionsChanged = false;
     }
 
-    public ArrayList<String> getContains(String condition) {
-        return editedCondition.getUserAgentConditions().getContains();
-    }
-
     public void addCondition() {
         this.editedCondition = createNewCondition();
         isNewCondition = true;
@@ -349,8 +353,12 @@ public class EditRedirectBean implements Serializable {
         newRC.setName("");
         newRC.setDeviceProperties(new ArrayList<DevicePropertyCondition>());
         UserAgentConditions newUAC = new UserAgentConditions();
-        newUAC.setContains(new ArrayList<String>());
-        newUAC.setDoesNotContain(new ArrayList<String>());
+        ArrayList<String> emptyContains = new ArrayList<String>();
+        emptyContains.add("");
+        newUAC.setContains(emptyContains);
+        ArrayList<String> emptyDoesNotContain = new ArrayList<String>();
+        emptyDoesNotContain.add("");
+        newUAC.setDoesNotContain(emptyDoesNotContain);
         newRC.setUserAgentConditions(newUAC);
 
         return newRC;
@@ -402,6 +410,9 @@ public class EditRedirectBean implements Serializable {
      * @return
      */
     public String saveCondition() {
+        // remove all empty entries from User Agent Conditions
+        editedCondition.getUserAgentConditions().getContains().removeAll(Collections.singleton(""));
+        editedCondition.getUserAgentConditions().getDoesNotContain().removeAll(Collections.singleton(""));
         if (isNewCondition) {
             this.pr.getConditions().add(editedCondition);
             isNewCondition = false;

@@ -64,10 +64,10 @@ function removeUAString(element) {
 	parent.children('div:last').find('button.add-user-agent-string').show();
 }
 
-function addProperty(element) {
-	$(element).closest('tbody').append($('tbody.tt-pp').html());
-	$(element).closest('tbody').children('tr:last').children('input').focus();
-	$(element).hide();
+function afterAddProperty() {
+	$('.property-name-input').last().focus();
+	// disable all which are hidden
+	$('span[class^="pp-"]').filter(function() { return $(this).css("display") == "none"; }).children("div").children("input").prop('disabled', true);
 }
 
 function removeProperty(element) {
@@ -141,6 +141,13 @@ function validateCondition() {
 
 }
 
+function deleteRedirect(siteName, redirectName) {
+	$('#delete-redirect-site-input').attr("value", siteName);
+	$('#delete-redirect-site-text').text(siteName);
+	$('#delete-redirect-name-input').attr("value", redirectName);
+	$('#delete-redirect-name-text').text(redirectName);
+	$('#modal-delete-redirect').modal();
+}
 // $("body").on("click", "a.delete-node-mapping", function() {
 // 	$(this).tooltip("hide");
 // 	parentTR = $(this).parent("td").parent("tr");
@@ -203,7 +210,7 @@ bootstrapTooltip = function() {
 bootstrapAlert = function() {
 	$('.alert').alert();
 	$('.alert button.close').click(function(){
-		$(this).parent.parent.alert('hide');	
+		$(this).parent.parent.alert('hide');
 	});
 };
 
@@ -217,8 +224,8 @@ bootstrapPopover = function() {
 
 // Enabling radio buttons
 bootstrapButton = function() {
-	$('.radio-group').button()
-}
+	$('.radio-group').button();
+};
 
 // Modal
 bootstrapModal = function() {
@@ -240,9 +247,6 @@ bootstrapModal = function() {
 		$(this).parent().parent().removeClass("open");
 		$('#modal-delete-site').modal();
 	});
-	$('.delete-redirect').click(function() {
-		$('#modal-delete-redirect').modal();
-	});
 	$('#import-site').click(function() {
 		$('#file').bind("change", function (e) {
 			//get the file path
@@ -252,14 +256,14 @@ bootstrapModal = function() {
 			//show to user
 			$('#fileName').text(file);
 			$('#file').fadeOut(300, function() {
-				$('#file-attachment').fadeIn(300)
+				$('#file-attachment').fadeIn(300);
 			});
 		});
 
 		$('#file-remove-btn').click(function() {
 			$('#file').val("");
 			$('#file-attachment').fadeOut(300, function() {
-				$('#file').fadeIn(300)
+				$('#file').fadeIn(300);
 			});
 		});
 
@@ -270,7 +274,7 @@ bootstrapModal = function() {
 	$('#create-group').click(function() {
 		$('#modal-create-group').modal();
 	});
-	
+
 	$('.modal button.close').click(function() {
 		$(this).parent.parent.modal('hide');
 	});
@@ -278,7 +282,7 @@ bootstrapModal = function() {
 
 // Typeahead
 bootstrapTypeahead = function() {
-	$('.typeahead').typeahead()
+	$('.typeahead').typeahead();
 };
 
 // Do not move screen when clicking in a button
@@ -295,15 +299,15 @@ toggleContent = function() {
 		$(this).parent().next().toggleClass('hidden-element');
 	});
 	if ($('aside .toggle').hasClass('closed')) {
-    	alert('test');
-    };
+		alert('test');
+    }
 };
 
 // Show / Hide More
 showHideMore = function() {
 	$('nav .more').on('click', function() {
 		$(this).text($(this).text() == "Show more" ? "Hide more" : "Show more");
-		$(this).parent().next('ul').find('.extra').toggleClass('hidden-element');	
+		$(this).parent().next('ul').find('.extra').toggleClass('hidden-element');
 	});
 };
 
@@ -321,7 +325,7 @@ footer = function() {
 	var footerFixed = windowHeight - containerRightHeight;
 	if (footerFixed > 69){
 		$('footer').addClass('fixed');
-	};
+	}
 };
 
 // Background for selected item
@@ -337,7 +341,7 @@ radioBackground = function() {
 clearInputTextValue = function() {
 	$('.clear-input button').click(function() {
 		$(this).parent().find('input').val('').focus();
-	});		
+	});
 };
 
 // Switch Group View
@@ -348,14 +352,14 @@ switchGroupView = function() {
 		$('.window-list').removeClass('hidden-element');
 		$('.window-tree').addClass('hidden-element');
 		return false;
-	});	
+	});
 	$('#tree-view').click(function() {
 		$(this).addClass('active');
 		$('#list-view').removeClass('active');
 		$('.window-tree').removeClass('hidden-element');
 		$('.window-list').addClass('hidden-element');
 		return false;
-	});	
+	});
 };
 
 // Select Group in Hierarchical View
@@ -376,16 +380,16 @@ selectGroupInHierarchicalView = function() {
 	if (ulHeight > 375){
 		$('.window-tree div ul').addClass('scroll');
 	}
-	$('.window-tree a').click(function() { 
+	$('.window-tree a').click(function() {
 		$('.window-tree a').parent().removeClass('active');
 		$(this).parent().addClass('active');
 		return false;
 	});
-	$('.window-tree li.parent a').click(function() { 
+	$('.window-tree li.parent a').click(function() {
 		$(this).parent().parent().parent().children('ul').removeClass('hidden-element');
 		$(this).parent().parent().parent().next('div').children('ul').removeClass('hidden-element');
 		$(this).parent('li.parent').addClass('opened');
-	});	
+	});
 };
 
 
@@ -424,9 +428,9 @@ accessPermissionButton = function() {
 		$(this).parent().parent().find('a').addClass('hidden-element');
 		$(this).parent().parent().find('table').addClass('hidden-element');
 		$(this).parent().parent().find('.alert').addClass('hidden-element');
-	});	
-};	
-			
+	});
+};
+
 // Show table in "Permission to Access"
 accessPermissionTable = function() {
 	$('#access-permission a').click(function() {
@@ -453,12 +457,12 @@ editRedirect = function() {
 		// fade summary out (if present)...
 		$('.redirect-summary').fadeOut(300, function() {
 			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300)
+			$('.edit-group').fadeIn(300);
 		});
 		// fade initial out (if present)...
 		$('.initial').fadeOut(300, function() {
 			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300)
+			$('.edit-group').fadeIn(300);
 		});
 
 		// clear the form
@@ -469,12 +473,12 @@ editRedirect = function() {
 		$('.add-redirect').css("visibility", "hidden");
 
 		// fade summary out...
-		$('.redirect-summary').fadeOut(300, function() {
+		$('#redirectSummaryWrapper').fadeOut(300, function() {
 			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300)
+			$('.edit-group').fadeIn(300);
 		});
 	});
-	
+
 	// Avoid showing summary and edit when edit is loaded. maybe show modal to confirm if there are changes made ?
 	$('.site-link').live('click', function(){
 		$(".edit-group").hide();
@@ -483,23 +487,25 @@ editRedirect = function() {
 	// On "Cancel" hide the edit form and show the summary
 	$('#edit_cancel').click(function(){
 		$('.edit-group').fadeOut(300, function() {
-			$('.redirect-summary').fadeIn(300)
+			$('.redirect-summary').fadeIn(300);
 		});
 		$('.add-redirect').css("visibility", "visible");
 	});
 
 	$('#modal-delete-redirect .btn-primary').click(function(){
 		$(this).parent().parent().modal('hide');
-		$('.alert-container').removeClass('hidden-element');	
+		$('.alert-container').removeClass('hidden-element');
 	});
-	
 };
 
+/*
+ * When on Redirect Configure view and the save changes or cancel button is pressed.
+ */
 function closeRedirectEdit() {
 	$('.edit-group').fadeOut(300, function() {
-		$('.redirect-summary').fadeIn(300)
+		$('#redirectSummaryWrapper').fadeIn(300);
+		$('.add-redirect').css("visibility", "visible");
 	});
-	$('.add-redirect').css("visibility", "visible");
 }
 
 function showNodeList() {
@@ -515,7 +521,7 @@ function selectNodeFromList() {
 	window.setTimeout(function() {
 		nodeInput.focus();
 		nodeInput.val(sNode);
-	}, 50)
+	}, 50);
 	$('#modal-select-node').modal('hide');
 	return false;
 }
@@ -531,7 +537,7 @@ anchorAnimation = function() {
 	
 	jQuery.fn.anchorAnimate = function(settings) {
 	
-	 	settings = jQuery.extend({
+		settings = jQuery.extend({
 			speed : 500
 		}, settings);	
 		

@@ -6,23 +6,24 @@
 			 xmlns:a4j="http://richfaces.org/a4j"
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
-	<h:form id="form-delete-site">
-	<input type="hidden" id="delete-site-id-input" name="delete-site-id-input" value="UNDEFINED"/>
-	<div class="modal hide" id="modal-delete-site">
+	<h:form id="form-delete-redirect">
+	<div class="modal hide" id="modal-delete-redirect">
 		<div class="modal-header">
 			<button class="modal-close" data-dismiss="modal">Close</button>
-			<h3>Delete Site</h3>
+			<h3>Delete Redirect</h3>
 		</div>
 		<div class="modal-body">
 			<p>
-				<strong>Are you sure you want to permanently delete the site "<span id="delete-site-id-text">UNDEFINED</span>" ?</strong>
+				<strong>Are you sure you want to permanently delete the redirect "<span id="delete-redirect-name-text">UNDEFINED</span>" for the "<span id="delete-redirect-site-text">UNDEFINED</span>" site ?</strong>
 				<br />
 				<span>You can't undo this action.</span>
 			</p>
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
-			<a href="#" id="button-select-node" class="btn btn-danger">Delete Site</a>
+			<h:commandLink styleClass="btn btn-danger" onclick="$('#modal-delete-redirect').modal('hide')">
+				<f:ajax event="action" render=":sum_form" listener="#{rdrEdit.deleteRedirect()}" />Delete Redirect
+			</h:commandLink>
 		</div>
 	</div><!-- end .modal -->
 	</h:form>

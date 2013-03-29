@@ -13,8 +13,8 @@
 	<h:body style="background: url('#{resource['/img/body-bg.jpg']}') repeat left top">
 		<h:outputStylesheet library="css" name="bootstrap.css" target="head" />
 		<h:outputStylesheet library="css" name="bootstrap-responsive.css" target="head" />
-		<h:outputStylesheet library="css" name="admin-responsive.css" target="head" />
 		<h:outputStylesheet library="css" name="admin.css" target="head" />
+		<h:outputStylesheet library="css" name="admin-responsive.css" target="head" />
 
 		<!-- Fonts -->
 		<!--h:outputStylesheet library="font-awesome" name="css/font-awesome.css" target="head" /-->
@@ -34,7 +34,7 @@
 		<b:gridContainer fluid="#{sessionBean.fluid}">
 			<b:gridRow styleClass="show-grid" fluid="#{sessionBean.fluid}">
 				<b:gridColumn span="3"><ui:include src="/admin/redirects/menu.xhtml"/></b:gridColumn>
-				<div id="container-right" class="span9" style="margin-top: 20px;"><ui:insert name="content">Content</ui:insert></div>
+				<div id="container-right" class="span9"><ui:insert name="content">Content</ui:insert></div>
 			</b:gridRow>
  		</b:gridContainer>
 	</h:body>

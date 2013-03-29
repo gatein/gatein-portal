@@ -9,7 +9,7 @@
 
 <ui:define name="content">
 	<h:form id="add_form" styleClass="form-horizontal">
-		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> Site Redirection</h1>
+		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects</h1>
 		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}">Add Redirect</a4j:commandLink>
 	</h:form>
 		<h:form id="sum_form" styleClass="form-horizontal">
@@ -27,50 +27,54 @@
 				<h:graphicImage class="initial" library="img" name="site-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
 			</h:panelGroup>
 
-			<h:panelGroup id="pgRedirectSummary" rendered="#{rdrs.redirects.size() > 0}">
-				<table id="redirect-table" class="table table-striped">
-					<thead id="redirect-summary-header" class="redirect-summary">
-						<tr>
-							<th>Status</th>
-							<th>Redirect name</th>
-							<th>Configurations</th>
-							<th class="actions hidden-element">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-					<ui:repeat value="#{rdrs.redirects}" var="r" varStatus="status">
-						<!-- Redirect Summary Row -->
-						<tr id="rdr_sum_#{status.index}" class="redirect-summary">
-							<td>
-								<div class="onoffswitch">
-									<h:selectBooleanCheckbox id="rdr_toggle" styleClass="onoffswitch-checkbox" value="#{r.isEnabled()}" />
-									<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
-										<f:ajax event="click" render="@this" listener="#{rdrEdit.toggleEnabled(rdrs.siteName, r.name)}" />
-										<span class="onoffswitch-inner">
-											<span class="onoffswitch-active">ON</span>
-											<span class="onoffswitch-inactive">OFF</span>
-										</span>
-										<span class="onoffswitch-switch"></span>
-									</h:outputLabel>
-								</div>
-							</td>
-							<td>#{r.name}</td>
-							<td>Redirect to #{r.redirectSite} <span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
-							<td class="actions" style="text-align: center;">
-								<h:commandLink styleClass="configure-redirect redirect-summary">
-									<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" />
-									<i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i>
-								</h:commandLink>
-								<h:commandLink styleClass="deletee-redirect redirect-summary">
-									<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.deleteRedirect(rdrs.siteName, r.name)}" />
-									<i class="icon-trash tooltipTrigger" data-original-title="Delete Redirect">Delete Redirect</i>
-								</h:commandLink>
-							</td>
-						</tr>
-					</ui:repeat>
-					</tbody>
-				</table>
-			</h:panelGroup>
+			<span id="redirectSummaryWrapper">
+				<h:panelGroup id="pgRedirectSummary" rendered="#{rdrs.redirects.size() > 0}">
+					<table id="redirect-table" class="table table-striped">
+						<thead id="redirect-summary-header" class="redirect-summary">
+							<tr>
+								<th>Status</th>
+								<th>Redirect name</th>
+								<th>Configurations</th>
+								<th class="actions hidden-element">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+						<ui:repeat value="#{rdrs.redirects}" var="r" varStatus="status">
+							<!-- Redirect Summary Row -->
+							<tr id="rdr_sum_#{status.index}" class="redirect-summary">
+								<td>
+									<div class="onoffswitch">
+										<h:selectBooleanCheckbox id="rdr_toggle" styleClass="onoffswitch-checkbox" value="#{r.isEnabled()}" />
+										<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
+											<f:ajax event="click" render="@this" listener="#{rdrEdit.toggleEnabled(rdrs.siteName, r.name)}" />
+											<span class="onoffswitch-inner">
+												<span class="onoffswitch-active">ON</span>
+												<span class="onoffswitch-inactive">OFF</span>
+											</span>
+											<span class="onoffswitch-switch"></span>
+										</h:outputLabel>
+									</div>
+								</td>
+								<td>#{r.name}</td>
+								<td>Redirect to #{r.redirectSite} <span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
+								<td class="actions" style="text-align: center;">
+									<h:commandLink styleClass="configure-redirect redirect-summary">
+										<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" />
+										<i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i>
+									</h:commandLink>
+									<!-- <a href="#" style="delete-redirect redirect-summary" onclick="deleteRedirect('#{rdrs.siteName}','#{r.name}')"><i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i></a> -->
+									
+									<h:commandLink styleClass="delete-redirect redirect-summary">
+										<f:ajax event="action" listener="#{rdrEdit.setDeleteRedirect(rdrs.siteName, r.name)}" onevent="deleteRedirect('#{rdrs.siteName}','#{r.name}')" />
+										<i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i>
+									</h:commandLink>
+								</td>
+							</tr>
+						</ui:repeat>
+						</tbody>
+					</table>
+				</h:panelGroup>
+			</span>
 		</h:form>
 
 		<!-- Edit Redirect Table -->
@@ -97,18 +101,14 @@
 									</div>
 									<div class="control-group">
 										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
-										<div class="controls">
-											<b:input scale="medium" style="margin-left: -45px;" id="name" placeholder="Redirect Name" value="#{rdrEdit.name}" />
-										</div>
+										<b:input scale="medium" id="name" placeholder="Redirect Name" value="#{rdrEdit.name}" />
 									</div>
 									<div class="control-group">
-										<h:outputLabel for="redirect" style="margin-left: 65px;" styleClass="control-label">Redirect to</h:outputLabel>
-										<div class="controls">
-											<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
-												<f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
-												<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
-											</h:selectOneMenu>
-										</div>
+										<h:outputLabel for="redirect" styleClass="control-label">Redirect to</h:outputLabel>
+										<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
+        								    <f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
+    										<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
+										</h:selectOneMenu>
 									</div><!-- End .control-group -->
 								</fieldset>
 								<fieldset>
@@ -117,53 +117,52 @@
 									</legend>
 									<div>
 										<h:panelGroup id="conditions-group" styleClass="control-group">
-											<div class="controls">
-												<b:commandButton styleClass="btn btn-small inside-table add-condition" value="Add Condition" action="#{rdrEdit.addCondition}" oncomplete="$('#modal-condition').modal('show');" execute="@this" render=":condition_form" />
-												<table class="table table-striped button-small">
-													<thead style="#{empty rdrEdit.conditions ? 'display: none;' : ''}">
-														<tr>
-															<th>Condition Name</th>
-															<th>Settings</th>
-															<th class="hidden-element actions">Actions</th>
-														</tr>
-													</thead>
-													<tbody class="sortable">
-														<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
-														<tr class="ui-state-default">
-															<td>#{rc.name}</td>
-															<td> 
-																<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
-																	<h:panelGroup rendered="#{cnt_st.first}">
-																	<strong>Contains </strong>
-																	</h:panelGroup>
-																	<h:panelGroup rendered="#{not cnt_st.first}">
-																	 OR 
-																	</h:panelGroup>
-																	'#{rcUACcont}'
-																</ui:repeat>
-																<ui:repeat value="#{rc.userAgentConditions.doesNotContain}" var="rcUACnotcont" varStatus="dnc_st">
-																	<h:panelGroup rendered="#{dnc_st.first}">
-																	<strong>Does not contain </strong>
-																	</h:panelGroup>
-																	<h:panelGroup rendered="#{not dnc_st.first}">
-																	 OR 
-																	</h:panelGroup>
-																	'#{rcUACnotcont}'
-																</ui:repeat>
-															</td>
-															<td class="actions">
-																<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#modal-condition').modal()"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit Condition">Edit Condition</i></a4j:commandLink>
-																<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="conditions-group" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Condition</i></a4j:commandLink>
-															</td>
-														</tr>
-														</ui:repeat>
-													</tbody>
-												</table>							
-											</div>
+											<div class="alert" style="#{empty rdrEdit.conditions ? '' : 'display: none;'}">You haven't set conditions yet.</div>
+											<b:commandButton styleClass="btn btn-small inside-table add-condition" value="Add Condition" action="#{rdrEdit.addCondition}" oncomplete="$('#conditionOp').text('Add'); $('#modal-condition').modal('show'); $('input[id$=&quot;condition_name&quot;]').focus();" execute="@this" render=":condition_form" />
+											<table class="table table-striped button-small" id="conditions-table">
+												<thead style="#{empty rdrEdit.conditions ? 'display: none;' : ''}">
+													<tr>
+														<th>Condition Name</th>
+														<th>Settings</th>
+														<th class="hidden-element actions">Actions</th>
+													</tr>
+												</thead>
+												<tbody class="sortable">
+													<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
+													<tr class="ui-state-default">
+														<td>#{rc.name}</td>
+														<td> 
+															<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
+																<h:panelGroup rendered="#{cnt_st.first}">
+																<strong>Contains </strong>
+																</h:panelGroup>
+																<h:panelGroup rendered="#{not cnt_st.first}">
+																 OR 
+																</h:panelGroup>
+																'#{rcUACcont}'
+															</ui:repeat>
+															<ui:repeat value="#{rc.userAgentConditions.doesNotContain}" var="rcUACnotcont" varStatus="dnc_st">
+																<h:panelGroup rendered="#{dnc_st.first}">
+																<strong>Does not contain </strong>
+																</h:panelGroup>
+																<h:panelGroup rendered="#{not dnc_st.first}">
+																 OR 
+																</h:panelGroup>
+																'#{rcUACnotcont}'
+															</ui:repeat>
+														</td>
+														<td class="actions">
+															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('Edit'); $('#modal-condition').modal()"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit">Edit</i></a4j:commandLink>
+															<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" title="Delete" render="conditions-group" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete</i></a4j:commandLink>
+														</td>
+													</tr>
+													</ui:repeat>
+												</tbody>
+											</table>							
 										</h:panelGroup><!-- End .control-group -->
 									</div>
 								</fieldset>
-								<fieldset>
+								<fieldset id="node-mappings">
 									<legend>
 										<span class="toggle">Node Mappings</span>
 									</legend>
@@ -173,13 +172,14 @@
 											<div class="controls">
 												<label class="checkbox">
 													<h:selectBooleanCheckbox name="matching" id="matching" value="#{rdrEdit.useNodeNameMatching}"/>Use node name matching
-													<i class="icon-info-sign icon-gray tooltipTrigger" title="Origin Node Name matches Redirect Node Name" data-placement="right">Origin Node Name matches Redirect Node Name</i>
 												</label>
+												<i class="icon-info-sign icon-gray tooltipTrigger" title="Origin Node Name matches Redirect Node Name" data-placement="right">Origin Node Name matches Redirect Node Name</i>
 											</div>
 										</div><!-- End .control-group -->
 										<h:panelGroup layout="block" id="mappingsWrapper" styleClass="control-group">
 											<label class="control-label">Mappings</label>
 											<div class="controls">
+												<div class="alert" style="#{empty rdrEdit.mappings.mappings ? '' : 'display: none;'}">You haven't set node mappings yet.</div>
 												<a4j:commandLink action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').last().focus();">Add Mapping</a4j:commandLink>
 												<table class="table table-striped action-button" id="mappings">
 													<thead style="#{empty rdrEdit.mappings.mappings ? 'display: none;' : ''}">
@@ -236,12 +236,13 @@
 													<f:selectItem itemValue="ROOT" itemLabel="Redirect to root" />
 													<f:selectItem itemValue="COMMON_ANCESTOR_NAME_MATCH" itemLabel="Ancestor Name Match" />
 												</h:selectOneMenu>
+												<i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Nodes which don't match and are not mapped">Nodes which don't match and are not mapped</i>												
 											</div>
 										</div><!-- End .control-group -->
 									</div>
 								</fieldset>
-								<div class="form-actions" style="background: none;">
-									<button id="edit_cancel" class="btn" type="submit">Cancel</button>
+								<div class="form-actions">
+									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(); return false;" >Cancel</button>
 									<b:commandButton value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary" oncomplete="closeRedirectEdit()"/>
 								</div><!-- End .form-actions -->
 						</td>
@@ -261,6 +262,7 @@
 		<ui:include src="/admin/redirects/modals/modal-condition.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-select_node.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-delete_site.xhtml" />
+		<ui:include src="/admin/redirects/modals/modal-delete_redirect.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-import_site.xhtml" />
 
 	</ui:define>
