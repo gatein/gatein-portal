@@ -72,21 +72,25 @@ public abstract class AbstractCookieTokenServiceTest extends AbstractTokenServic
         String tokenId = service.createToken(new Credentials("root", "gtn"));
         assertNotSame(service.getToken(tokenId), service.deleteToken(tokenId));
         assertNull(service.getToken(tokenId));
-        assertEquals(service.size(), 0);
+        assertEquals(0, service.size());
         service.deleteToken(tokenId);
     }
 
     @Override
     public void testCleanExpiredTokens() throws Exception {
         assertEquals(service.getValidityTime(), 2);
-        service.createToken(new Credentials("user1", "gtn"));
+        String tokenId1 = service.createToken(new Credentials("user1", "gtn"));
         Thread.sleep(1000);
-        service.createToken(new Credentials("user2", "gtn"));
+        String tokenId2 = service.createToken(new Credentials("user2", "gtn"));
         assertEquals(service.size(), 2);
         Thread.sleep(1500);
         service.cleanExpiredTokens();
         /* Here we should be cca 2.5 seconds after the creation of user1, so it should have been cleaned as expred already */
         assertEquals(service.size(), 1);
+
+        service.deleteToken(tokenId1);
+        service.deleteToken(tokenId2);
+
     }
 
 }

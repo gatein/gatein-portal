@@ -157,6 +157,8 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
          * one
          */
         assertEquals(service.size(), 1);
+
+        clearAllTokens();
     }
 
 }
