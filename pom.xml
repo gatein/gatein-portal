@@ -51,7 +51,7 @@
     <org.picketlink.idm>1.4.1.Final</org.picketlink.idm>
     <org.gatein.wsrp.version>2.2.2.Final</org.gatein.wsrp.version>
     <org.gatein.mop.version>1.2.0.Final</org.gatein.mop.version>
-    <org.gatein.mgmt.version>2.0.0-Alpha2</org.gatein.mgmt.version>
+    <org.gatein.mgmt.version>2.0.0.Beta01</org.gatein.mgmt.version>
     <org.slf4j.version>1.6.1</org.slf4j.version>
     <commons-pool.version>1.5.5</commons-pool.version>
     <rhino.version>1.6R5</rhino.version>
