@@ -455,7 +455,7 @@ editRedirect = function() {
 		$('.add-redirect').css("visibility", "hidden");
 
 		// fade summary out (if present)...
-		$('.redirect-summary').fadeOut(300, function() {
+		$('#redirectSummaryWrapper').fadeOut(300, function() {
 			// .. and when done, fade config in
 			$('.edit-group').fadeIn(300);
 		});
@@ -487,7 +487,7 @@ editRedirect = function() {
 	// On "Cancel" hide the edit form and show the summary
 	$('#edit_cancel').click(function(){
 		$('.edit-group').fadeOut(300, function() {
-			$('.redirect-summary').fadeIn(300);
+			$('#redirectSummaryWrapper').fadeIn(300);
 		});
 		$('.add-redirect').css("visibility", "visible");
 	});
