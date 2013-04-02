@@ -22,7 +22,7 @@
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
 			<h:commandLink styleClass="btn btn-danger" onclick="$('#modal-delete-redirect').modal('hide')">
-				<f:ajax event="action" render=":sum_form" listener="#{rdrEdit.deleteRedirect()}" />Delete Redirect
+				<f:ajax event="action" render=":sum_form" listener="#{rdrEdit.deleteRedirect()}" onevent="showAlert('Redirect Deleted!', 'The redirect has been successfully deleted.', 'alert-danger')"/>Delete Redirect
 			</h:commandLink>
 		</div>
 	</div><!-- end .modal -->

@@ -2,15 +2,6 @@ $(document).ready(function(){
 	init();
 });
 
-// because when we get new content through ajax, it needs to be initialized too...
-// $(window).load(function () {
-// 	jsf.ajax.addOnEvent(function(data) {
-// 		if (data.status === 'success') {
-// 			init();
-// 		}
-// 	});
-// });
-
 function init() {
 	// Bootstrap js
 	bootstrapDropdown();
@@ -148,39 +139,27 @@ function deleteRedirect(siteName, redirectName) {
 	$('#delete-redirect-name-text').text(redirectName);
 	$('#modal-delete-redirect').modal();
 }
-// $("body").on("click", "a.delete-node-mapping", function() {
-// 	$(this).tooltip("hide");
-// 	parentTR = $(this).parent("td").parent("tr");
-// 	if ($(parentTR).hasClass("node-mapping-viewer")) {
-// 		spacerTR = $(parentTR).next("tr");
-// 		editorTR = $(spacerTR).next("tr");
-// 		$(parentTR).remove();
-// 		$(spacerTR).remove();
-// 		$(editorTR).remove();
-// 	}
-// 	else if ($(parentTR).hasClass("node-mapping-editor")) {
-// 		if($(parentTR).prev("tr").hasClass("node-mapping-spacer")) {
-// 			spacerTR = $(parentTR).prev("tr");
-// 			editorTR = $(spacerTR).prev("tr");
-// 			$(parentTR).remove();
-// 			$(spacerTR).remove();
-// 			$(editorTR).remove();
-// 		}
-// 		else {
-// 			$(parentTR).remove();
-// 		}
-// 	}
-// 	return false;
-// });
 
-// $('#btn-add-mapping').click(function() {
-// 	addMappingEntry();
-// });
+function showAlert(title, message, aclass) {
+	$('#main-alert-title').text(title);
+	$('#main-alert-message').text(message);
+	$('#main-alert').addClass(aclass);
+	$('#main-alert').animate({
+		opacity: 1
+	}, 1000, function() {
+		setTimeout(function(){hideAlert(aclass);}, 2000);
+	});
+}
 
-
-
-
-
+function hideAlert(aclass) {
+	$('#main-alert').animate({
+		opacity: 0
+	}, 1000, function() {
+		$('#main-alert').removeClass(aclass);
+		$('#main-alert-title').text("<undefined>");
+		$('#main-alert-message').text("<undefined>");
+	});
+}
 
 
 
@@ -500,11 +479,15 @@ editRedirect = function() {
 
 /*
  * When on Redirect Configure view and the save changes or cancel button is pressed.
+ * @ param save if there was a save invoked
  */
-function closeRedirectEdit() {
+function closeRedirectEdit(save) {
 	$('.edit-group').fadeOut(300, function() {
 		$('#redirectSummaryWrapper').fadeIn(300);
 		$('.add-redirect').css("visibility", "visible");
+		if(save) {
+			showAlert('Well Done!', 'The changes have been successfully saved.', 'alert-success');
+		}
 	});
 }
 
@@ -518,7 +501,7 @@ function showNodeList() {
 
 function selectNodeFromList() {
 	sNode = $(".radio-node:checked").attr("id");
-	window.setTimeout(function() {
+	setTimeout(function() {
 		nodeInput.focus();
 		nodeInput.val(sNode);
 	}, 50);

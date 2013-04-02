@@ -350,7 +350,7 @@ public class EditRedirectBean implements Serializable {
      */
     private RedirectCondition createNewCondition() {
         RedirectCondition newRC = new RedirectCondition();
-        newRC.setName("");
+        newRC.setName(this.siteName + "_" + redirectName +"_condition" + (pr.getConditions().size()+1));
         newRC.setDeviceProperties(new ArrayList<DevicePropertyCondition>());
         UserAgentConditions newUAC = new UserAgentConditions();
         ArrayList<String> emptyContains = new ArrayList<String>();

@@ -10,6 +10,11 @@
 <ui:define name="content">
 	<h:form id="add_form" styleClass="form-horizontal">
 		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects</h1>
+		<div id="main-alert" class="alert" style="opacity: 0;">
+			<!-- <button data-dismiss="alert" class="modal-close">Close</button> -->
+			<strong id="main-alert-title"></strong> <span id="main-alert-message"></span>
+		</div><!-- End .alert -->
+
 		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}">Add Redirect</a4j:commandLink>
 	</h:form>
 		<h:form id="sum_form" styleClass="form-horizontal">
@@ -61,9 +66,7 @@
 									<h:commandLink styleClass="configure-redirect redirect-summary">
 										<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" />
 										<i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i>
-									</h:commandLink>
-									<!-- <a href="#" style="delete-redirect redirect-summary" onclick="deleteRedirect('#{rdrs.siteName}','#{r.name}')"><i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i></a> -->
-									
+									</h:commandLink>									
 									<h:commandLink styleClass="delete-redirect redirect-summary">
 										<f:ajax event="action" listener="#{rdrEdit.setDeleteRedirect(rdrs.siteName, r.name)}" onevent="deleteRedirect('#{rdrs.siteName}','#{r.name}')" />
 										<i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i>
@@ -242,8 +245,8 @@
 									</div>
 								</fieldset>
 								<div class="form-actions">
-									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(); return false;" >Cancel</button>
-									<b:commandButton value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary" oncomplete="closeRedirectEdit()"/>
+									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >Cancel</button>
+									<b:commandButton value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary" oncomplete="closeRedirectEdit(true);"/>
 								</div><!-- End .form-actions -->
 						</td>
 					</tr>
@@ -258,7 +261,6 @@
 			});
 		</script>
 
-		<ui:include src="/admin/redirects/modals/modals.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-condition.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-select_node.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-delete_site.xhtml" />

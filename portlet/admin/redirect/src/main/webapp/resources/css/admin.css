@@ -796,6 +796,9 @@ footer ul li a {font-size: 12px;}
 	padding-bottom: 3px;
 	display: inline-block;
 	font-size: 14px;
+	position: relative;
+	top: 3px;
+	cursor: default;
 }
 
 
