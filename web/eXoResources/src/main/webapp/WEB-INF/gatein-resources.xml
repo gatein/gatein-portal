@@ -533,4 +533,14 @@
     </depends>
   </module>
 
+  <!-- Container Javascript -->
+  <module>
+    <name>toggleContainer</name>
+    <script>
+      <path>/javascript/eXo/portal/ToggleContainer.js</path>
+    </script>
+    <depends>
+      <module>jquery</module>
+    </depends>
+  </module>
 </gatein-resources>

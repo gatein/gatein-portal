@@ -167,6 +167,18 @@
 	*/
 }
 
+/****************** Toggle Container *********************/
+
+/*Note: we only want this to apply to the first SwitchingContianer and not nested ones.
+ *      Ideally the markup for contianers would be more simple than this...           */
+.UISwitchingContainer>.UIComponentBlock>div>div>.UISwitchingColumn>.TRContainer>.SwitchingContainer {
+	display: table-cell;
+}
+
+.UISwitchingContainer.ToggledRow>.UIComponentBlock>div>div>.UISwitchingColumn>.TRContainer>.SwitchingContainer {
+       display: block;
+}
+
 /*##############################- PortletLayoutDecorator	-################################*/
 
 .PortletLayoutDecorator {

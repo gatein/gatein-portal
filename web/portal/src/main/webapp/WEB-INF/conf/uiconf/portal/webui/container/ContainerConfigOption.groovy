@@ -146,4 +146,23 @@ import org.exoplatform.webui.core.model.SelectItemOption ;
         "OneRow2Column1RowContainerLayout")) ;
   templates.add(mixed);
 
+  SelectItemCategory switching = new SelectItemCategory("switchingContainer");
+    switching.addSelectItemOption(new SelectItemOption("twoSwitchingContainers",
+        "<container template=\"system:/groovy/portal/webui/container/UISwitchingContainer.gtmpl\">" +
+        "  <factory-id>SwitchingContainer</factory-id>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "</container>",
+        "TwoColumnContainerLayout")) ;
+    switching.addSelectItemOption(new SelectItemOption("threeSwitchingContainers",
+        "<container template=\"system:/groovy/portal/webui/container/UISwitchingContainer.gtmpl\">" +
+        "  <factory-id>SwitchingContainer</factory-id>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "  <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "</container>",
+        "ThreeColumnContainerLayout"));
+  templates.add(switching);
+
+
 return templates;
