@@ -64,6 +64,14 @@
 	cursor: pointer ; 
 }
 
+.UIChangeSkinForm .UIItemSelector .TemplateContainer .ResponsiveSkinImage {
+        margin: auto;
+        width: auto;
+        height: 204px;
+        background: url('background/ChangeSkinResponsive.png') no-repeat center;
+        background-size: 275px auto; 
+        cursor: pointer;
+}
 
 .UIChangeSkinForm .UIItemSelector .ItemListContainer .ItemList {
 	background: white url('background/ItemListBg167x127.gif') no-repeat bottom ; 
