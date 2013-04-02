@@ -55,12 +55,7 @@
 					</li>
 				""";
 			}
-                        def currentPortal = uicomponent.getCurrentPortal();
-                        def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
-                        def nodes = uicomponent.getNavigationNodes(navigation);
-                        _ctx.getRequestContext().setAttribute("nodes", nodes);
-
-                        def editSitesLink = nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString();
+                        def editSitesLink = nodeURL.setResource(new NavigationResource(SiteType.PORTAL, uicomponent.getCurrentPortal(), "portalnavigation")).toString();
                         label = _ctx.appRes("UIUserToolBarSitePortlet.editSite");
 			print """
 				
@@ -140,6 +135,10 @@
 			</li>
 		""" ;			
 	}
+        def currentPortal = uicomponent.getCurrentPortal();
+        def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
+        def nodes = uicomponent.getNavigationNodes(navigation);
+        _ctx.getRequestContext().setAttribute("nodes", nodes);
 %> 
 
 <ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
