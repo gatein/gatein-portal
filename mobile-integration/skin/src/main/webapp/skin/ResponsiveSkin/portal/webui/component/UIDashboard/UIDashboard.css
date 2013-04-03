@@ -51,4 +51,8 @@
         width: auto;
         float: none;
     }
+
+   .UITabPaneDashboard .UITab {
+    margin: 0.5em;
+    }
 }

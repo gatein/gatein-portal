@@ -22,13 +22,17 @@
 
 /* Media Queries for Smaller Screened Devices*/
 @media only screen and (max-width: 45em) {
-    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>a {
+    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>a,
+    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>span {
         font-size: 0;
     }
-    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>a {
+    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>a,
+    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>span {
         font-size: 0;
     }
-    .UIToolbarContainer .UIUserInfoPortlet .Name>a {
+
+    .UIToolbarContainer .UIUserInfoPortlet .Name>a,
+    .UIToolbarContainer .UIUserInfoPortlet .Name>span{
         font-size: 0;
     }
 }

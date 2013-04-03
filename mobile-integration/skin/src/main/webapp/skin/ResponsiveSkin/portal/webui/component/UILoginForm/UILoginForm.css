@@ -24,14 +24,11 @@
     display: block;
 }
 
-.UILogin td.FieldLabel {
+.UILogin .UILoginForm td.FieldLabel {
     font-size: 0.875em;
     text-align: right;
     line-height: 1.25em;
-    padding-top: 0.28571428571429em;
-    padding-right: 0.71428571428571em;
-    padding-bottom: 0.9375em;
-    padding-left: 0.93333333333333em;
+    padding: 0.28571428571429em 0.71428571428571em 0.9375em 0.93333333333333em;
 }
 
 .UILogin input.UserName,.UILogin input.Password,.UILogin input[type="text"] {
@@ -64,6 +61,11 @@
     padding-top: 1.5em;
 }
 
+.UILogin .UIForm .UIAction .ActionButton {
+    display: inline;
+}
+
+
 @media screen and (max-width: 25em) {
     .UILogin .UIFormGrid .UserNameField,.UILogin .UIFormGrid .PasswordField {
         display: block;
@@ -77,11 +79,17 @@
     .UILogin .UserNameField td.FieldLabel,.UILogin  #UIPortalLoginFormControl td.FieldLabel {
         display: block;
         padding-left: 1.5em;
+        text-align:left;
     }
     .UILogin .UIFormGrid,.UILogin .UIFormGrid tbody,.UILogin .UIFormGrid tr,.UILogin .UIFormGrid td {
         display: block;
         text-align: left;
     }
+    
+    .UIForm .UIFormGrid td.FieldLabel {
+          text-align: left;
+    }
+
     .UILogin .UIForm td:nth-child(2) {
         padding: 0;
         text-align: center;
@@ -114,5 +122,10 @@
     .UILogin .ForgetPass a {
         font-size: 0.75em;
         margin: 0;
+    }
+
+    .UILogin .UIForm .UIAction .ActionButton {
+        width: 90%;
+        display: block;
     }
 }

@@ -28,7 +28,13 @@
 .UITab .SelectedTab,.UITab .NormalTab,.UITab .DisabledTab {
     border-radius: 0.25em 0.25em 0 0;
     padding: 0.5em 1em 0.25em;
-    border: solid thin #333;
+    border: solid thin #aeaeae;
+    position: relative;
+    top: 1px;
+}
+
+.UITab .NormalTab, .UITab .DisabledTab {
+    border: none;
 }
 
 .UITabPane .UIHorizontalTabs {
@@ -43,20 +49,29 @@
     display: none;
 }
 
+.UITabPane .UITabContentContainer .UITabContent {
+    padding: 0;
+}
+
+.UITabPane .UITabContentContainer .UITabContent {
+    background: white;
+}
+
 .UITab .SelectedTab {
-    background-color: #1C4E7E;
+      border-bottom: solid thick #FFF;
 }
 
 .UITab .SelectedTab a {
-    color: #FFF;
+    color: #000;
 }
 
 .UITab .NormalTab {
-    background-color: #A2A2A2;
+    background-color: #DDD;
+    border-bottom: solid thick #DDD;
 }
 
 .UITab .NormalTab a {
-    color: #333;
+    color: #1C5182;
 }
 
 .UITab .DisabledTab {
@@ -93,6 +108,11 @@
     color: white;
 }
 
+.UIHorizontalTabs .UITab {
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+}
+
 @media only screen and (max-width: 30em) {
     .UITabPane .TabPaneContent {
         padding: 0;
@@ -112,17 +132,10 @@
         border-radius: 0.25em;
         border: solid thin #333;
         margin: 0.25em;
-        padding-left: 2em;
-    }
-    .UITab .SelectedTab {
-        background-image: url(ok-square.svg);
-        background-repeat: no-repeat;
-        background-position: 0.5em 0.5em;
     }
     .UITab .NormalTab,.UITab .DisabledTab {
-        background-image: url(square.svg);
-        background-repeat: no-repeat;
-        background-position: 0.5em 0.5em;
+        background: none;
+        border: none;
     }
     .UIHorizontalTabs .MessageTabDialog {
         float: none;

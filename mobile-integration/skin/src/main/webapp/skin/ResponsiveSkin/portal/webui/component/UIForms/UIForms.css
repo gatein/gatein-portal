@@ -32,9 +32,13 @@
         display: block;
         width: 100%;
     }
-    .UIFormGrid .FieldComponent,.UIForm .HorizontalLayout input {
+    .UIForm .HorizontalLayout input {
         font-size: 100%;
-        width: 90%;
+        width: auto;
+    }
+    .UIForm .UIFormGrid .FieldComponent {
+       width: 100%;
+       font-size: 100%;
     }
     .UIForm .FieldComponent .FieldComponent input {
         width: auto;
