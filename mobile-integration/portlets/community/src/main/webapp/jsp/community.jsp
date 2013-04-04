@@ -33,25 +33,35 @@
                     <i class="icon-blog icon-gray"></i>${resourceBundle.getString("conversation.blog.label")}
                 </a>
                 <div class="accordion-body collapse in" id="blog-content-mobile">
-                    <ul>
-                        <c:forEach var="blogArticle" items="${blogRSSBean.feedTitles}">
-                            <h6>
-                                <a href="${blogArticle.link}">${blogArticle.title}</a>
-                            </h6>
-                            <div class="info">
-                                <span>
-                                    <c:forEach var="author" items="${blogArticle.authors}">
-                                        <a href="${blogRSSBean.authorUrlPrefix}${author.uri}">${author.name}</a>
-                                    </c:forEach>
-                                </span>
+                    <c:choose>
+                        <c:when test="${blogRSSBean.valid}">
+                            <ul>
+                                <c:forEach var="blogArticle" items="${blogRSSBean.feedTitles}">
+                                    <h6>
+                                        <a href="${blogArticle.link}">${blogArticle.title}</a>
+                                    </h6>
+                                    <div class="info">
+                                        <span>
+                                            <c:forEach var="author" items="${blogArticle.authors}">
+                                                <a href="${blogRSSBean.authorUrlPrefix}${author.uri}">${author.name}</a>
+                                            </c:forEach>
+                                        </span>
 
-                                <span>
-                                    <fmt:formatDate value="${blogArticle.publishedDate}" pattern="dd MMM" />
-                                </span>
+                                        <span>
+                                            <fmt:formatDate value="${blogArticle.publishedDate}" pattern="dd MMM" />
+                                        </span>
+                                    </div>
+                                </c:forEach>
+                            </ul>
+                            <a href="${blogRSSBean.contentSource}">${resourceBundle.getString("conversation.blog.link")}</a>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="errorPane">
+                                <p>${resourceBundle.getString("conversation.io.error")}</p>
+                                <a href="${blogRSSBean.sourceIO}">${blogRSSBean.sourceIO}</a>
                             </div>
-                        </c:forEach>
-                    </ul>
-                    <a href="${blogRSSBean.contentSource}">${resourceBundle.getString("conversation.blog.link")}</a>
+                        </c:otherwise>
+                    </c:choose>                    
                 </div>
             </div>
 
@@ -60,21 +70,29 @@
                     <i class="icon-twitter icon-gray"></i>${resourceBundle.getString("conversation.twitter.label")}
                 </a>
                 <div class="accordion-body collapse" id="tweets-content-mobile">
-                    <ul>
-                        <c:forEach var="twitterTweet" items="${twitterRSSBean.feedTitles}">
-                            <li>
-                                <p>
-                                    <a href="${twitterTweet.link}">${twitterTweet.title}</a>
-                                </p>
-                                <div class="info">
-                                    <span>
-                                        <fmt:formatDate value="${twitterTweet.publishedDate}" pattern="dd MMM" />
-                                    </span>
-                                </div>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                    <a href="${twitterRSSBean.contentSource}">${resourceBundle.getString("conversation.twitter.link")}</a>
+                    <c:choose>
+                        <c:when test="${twitterRSSBean.valid}">
+                            <ul>
+                                <c:forEach var="twitterTweet" items="${twitterRSSBean.feedTitles}">
+                                    <li>
+                                        <a href="${twitterTweet.link}">${twitterTweet.title}</a>
+                                        <div class="info">
+                                            <span>
+                                                <fmt:formatDate value="${twitterTweet.publishedDate}" pattern="dd MMM" />
+                                            </span>
+                                        </div>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                            <a href="${twitterRSSBean.contentSource}">${resourceBundle.getString("conversation.twitter.link")}</a>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="errorPane">
+                                <p>${resourceBundle.getString("conversation.io.error")}</p>
+                                <a href="${twitterRSSBean.sourceIO}">${twitterRSSBean.sourceIO}</a>
+                            </div>    
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>

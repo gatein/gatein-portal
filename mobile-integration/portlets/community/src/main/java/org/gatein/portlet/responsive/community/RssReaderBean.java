@@ -36,6 +36,25 @@ public class RssReaderBean {
     private String authorUrlPrefix = "";
     private List<RssTitleBean> feedTitles = new ArrayList<RssTitleBean>();
 
+    private boolean valid = true;
+    private String sourceIO = "";
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean isValid) {
+        this.valid = isValid;
+    }
+
+    public String getSourceIO() {
+        return sourceIO;
+    }
+
+    public void setSourceIO(String sourceIO) {
+        this.sourceIO = sourceIO;
+    }
+
     public String getAuthorUrlPrefix() {
         return authorUrlPrefix;
     }

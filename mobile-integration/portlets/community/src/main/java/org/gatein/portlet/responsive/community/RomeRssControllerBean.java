@@ -37,54 +37,50 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 /**
-* @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
-* @version $Revision$
-*/
+ * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
+ * @version $Revision$
+ */
 public class RomeRssControllerBean {
 
     private static final Logger log = LoggerFactory.getLogger(RomeRssControllerBean.class);
 
-    public List<RssTitleBean> getFeedTitles(URL source, int headsize) {
+    public static List<RssTitleBean> getFeedTitles(URL source, int headsize) throws IOException {
         List<RssTitleBean> rssTitleBeanList = new ArrayList<RssTitleBean>();
         XmlReader reader = null;
 
         try {
-            try {
-                reader = new XmlReader(source);
-                SyndFeed feed = new SyndFeedInput().build(reader);
+            reader = new XmlReader(source);
+            SyndFeed feed = new SyndFeedInput().build(reader);
 
-                for (Iterator i = feed.getEntries().iterator(); i.hasNext() && (headsize-- > 0);) {
-                    SyndEntry entry = (SyndEntry) i.next();
+            for (Iterator i = feed.getEntries().iterator(); i.hasNext() && (headsize-- > 0);) {
+                SyndEntry entry = (SyndEntry) i.next();
 
-                    RssTitleBean rssTitleBean = new RssTitleBean();
-                    rssTitleBean.setTitle(entry.getTitle());
-                    rssTitleBean.setLink(entry.getLink());
-                    rssTitleBean.setPublishedDate(entry.getPublishedDate());
+                RssTitleBean rssTitleBean = new RssTitleBean();
+                rssTitleBean.setTitle(entry.getTitle());
+                rssTitleBean.setLink(entry.getLink());
+                rssTitleBean.setPublishedDate(entry.getPublishedDate());
 
-                    List<RssAuthorBean> rssAuthors = new ArrayList<RssAuthorBean>();
+                List<RssAuthorBean> rssAuthors = new ArrayList<RssAuthorBean>();
 
-                    for (SyndPerson author : (List<SyndPerson>) entry.getAuthors()) {
-                        RssAuthorBean rssAuthorBean = new RssAuthorBean();
-                        rssAuthorBean.setName(author.getName());
-                        rssAuthorBean.setUri(author.getUri());
+                for (SyndPerson author : (List<SyndPerson>) entry.getAuthors()) {
+                    RssAuthorBean rssAuthorBean = new RssAuthorBean();
+                    rssAuthorBean.setName(author.getName());
+                    rssAuthorBean.setUri(author.getUri());
 
-                        rssAuthors.add(rssAuthorBean);
-                    }
-
-                    rssTitleBean.setAuthors(rssAuthors);
-
-                    rssTitleBeanList.add(rssTitleBean);
+                    rssAuthors.add(rssAuthorBean);
                 }
-            } catch (FeedException e) {
-                log.error("RSS Feed related exception: " + e);
 
-            } finally {
-                if (reader != null) {
-                    reader.close();
-                }
+                rssTitleBean.setAuthors(rssAuthors);
+
+                rssTitleBeanList.add(rssTitleBean);
             }
-        } catch (IOException e) {
-            log.error("Unable to open RSS feed url: " + e);
+        } catch (FeedException e) {
+            log.error("RSS Feed related exception: " + e);
+
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
         }
 
         return rssTitleBeanList;

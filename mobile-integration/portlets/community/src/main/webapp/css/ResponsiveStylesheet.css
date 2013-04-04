@@ -136,8 +136,10 @@
     list-style: none;
 }
 
-.gtnResponsiveCommunityPortlet #tweets-content-mobile p {
+.gtnResponsiveCommunityPortlet #tweets-content-mobile a {
+    display: block;
     font-size: 0.875em;
+    margin-top: .75em;
     margin-bottom: 0;
 }
 
@@ -231,6 +233,18 @@
 .gtnResponsiveCommunityPortlet i {
     text-align: left;
     text-indent: -99999px;
+}
+
+.gtnResponsiveCommunityPortlet .errorPane {
+    margin: .25em 1.25em 1.25em 1.25em;
+    color: #e33;
+}
+
+.gtnResponsiveCommunityPortlet #tweets-content-mobile .errorPane a,
+.gtnResponsiveCommunityPortlet .errorPane > a,
+.gtnResponsiveCommunityPortlet .errorPane > p {
+    font-size: 1em;
+    margin: 0;
 }
 
 @media only screen and (min-width: 30em) {

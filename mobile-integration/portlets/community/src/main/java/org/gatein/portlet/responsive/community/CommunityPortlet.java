@@ -30,11 +30,13 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletRequestDispatcher;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
-* @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
-* @version $Revision$
-*/
+ * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
+ * @version $Revision$
+ */
 public class CommunityPortlet extends GenericPortlet {
 
     private String DEFAULT_URL = "/#";
@@ -43,6 +45,7 @@ public class CommunityPortlet extends GenericPortlet {
     private String URL_CONTENT_BLOG = "url.blog";
     private String URL_CONTENT_TWITTER = "url.twitter";
     private String PFX_BLOG_AUTHOR = "pfx.url.author";
+    private static final Logger log = LoggerFactory.getLogger(CommunityPortlet.class);
 
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
@@ -55,25 +58,30 @@ public class CommunityPortlet extends GenericPortlet {
         String urlContentTwitter = portletPreferences.getValue(URL_CONTENT_TWITTER, DEFAULT_URL);
         String pfxBlogAuthor = portletPreferences.getValue(PFX_BLOG_AUTHOR, "");
 
-        RomeRssControllerBean romeRssControllerBean = new RomeRssControllerBean();
-
-        URL gateInBlog = new URL(urlRssBlog);
-
-        RssReaderBean gateInBlogRssReader = new RssReaderBean();
-        gateInBlogRssReader.setFeedTitles(romeRssControllerBean.getFeedTitles(gateInBlog, 2));
-        gateInBlogRssReader.setAuthorUrlPrefix(pfxBlogAuthor);
-        gateInBlogRssReader.setContentSource(new URL(urlContentBlog));
-
-        URL gateInTwitter = new URL(urlRssTwitter);
-
-        RssReaderBean gateInTwitterRssReader = new RssReaderBean();
-        gateInTwitterRssReader.setFeedTitles(romeRssControllerBean.getFeedTitles(gateInTwitter, 2));
-        gateInTwitterRssReader.setContentSource(new URL(urlContentTwitter));
+        RssReaderBean gateInBlogRssReader = makeReaderBean(urlRssBlog, urlContentBlog, 2, pfxBlogAuthor);
+        RssReaderBean gateInTwitterRssReader = makeReaderBean(urlRssTwitter, urlContentTwitter, 2, null);
 
         request.setAttribute("blogRSSBean", gateInBlogRssReader);
         request.setAttribute("twitterRSSBean", gateInTwitterRssReader);
 
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/community.jsp");
         prd.include(request, response);
+    }
+
+    private RssReaderBean makeReaderBean(String urlRss, String urlContent, int head, String pfxBlogAuthor) {
+        RssReaderBean rssReaderBean = new RssReaderBean();
+
+        try {
+            URL rssSourceUrl = new URL(urlRss);
+            rssReaderBean.setFeedTitles(RomeRssControllerBean.getFeedTitles(rssSourceUrl, head));
+            rssReaderBean.setContentSource(new URL(urlContent));
+            rssReaderBean.setAuthorUrlPrefix(pfxBlogAuthor);
+        } catch (IOException e) {
+            rssReaderBean.setValid(false);
+            rssReaderBean.setSourceIO(urlRss);
+            log.error("Unable to open RSS feed url: " + e);
+        }
+
+        return rssReaderBean;
     }
 }
