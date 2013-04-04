@@ -68,9 +68,10 @@ public class PostRegistrationService {
         try {
             String subject = replaceTokens(mailSubject, user);
             String message = replaceTokens(mailMessage, user);
+            String to = replaceTokens(mailTo, user);
 
             log.debug("Sending mail about the creating of user " + user.getUserName());
-            mailService.sendMessage(mailFrom, mailTo, subject, message);
+            mailService.sendMessage(mailFrom, to, subject, message);
         } catch (Exception e) {
             log.error("Error when sending mail to admin after registration of user " + user.getUserName(), e);
         }
