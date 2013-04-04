@@ -116,8 +116,8 @@ public class GateInApiManagementResource {
 
     // ------------------------------------------------- Portal Sites --------------------------------------------------//
     @Managed("/sites")
-    public ModelList getSites(@ManagedContext PathAddress address) {
-        return _getSites(SITE_QUERY, address);
+    public ModelList getSites(@ManagedContext PathAddress address, @MappedAttribute("emptySites") String emptySites) {
+        return _getSites(SITE_QUERY, address, emptySites);
     }
 
     @Managed("/sites/{site-name}")
@@ -164,8 +164,8 @@ public class GateInApiManagementResource {
 
     // --------------------------------------------- Group Sites (Spaces) ----------------------------------------------//
     @Managed("/spaces")
-    public ModelList getSpaces(@ManagedContext PathAddress address) {
-        return _getSites(SPACE_QUERY, address);
+    public ModelList getSpaces(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll) {
+        return _getSites(SPACE_QUERY, address, showAll);
     }
 
     @Managed("/spaces/{group-name: .*}")
@@ -212,8 +212,8 @@ public class GateInApiManagementResource {
 
     // -------------------------------------------- User Sites (Dashboard) ---------------------------------------------//
     @Managed("/dashboards")
-    public ModelList getDashboards(@ManagedContext PathAddress address) {
-        return _getSites(DASHBOARD_QUERY, address);
+    public ModelList getDashboards(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll) {
+        return _getSites(DASHBOARD_QUERY, address, showAll);
     }
 
     @Managed("/dashboards/{user-name}")
@@ -273,7 +273,11 @@ public class GateInApiManagementResource {
         return new PageManagementResource(portal, modelProvider, siteId);
     }
 
-    private ModelList _getSites(SiteQuery query, PathAddress address) {
+    private ModelList _getSites(SiteQuery query, PathAddress address, String emptySites) {
+        boolean include = Boolean.valueOf(emptySites);
+        if (include) {
+            query = new SiteQuery.Builder().from(query).includeEmptySites(true).build();
+        }
         List<Site> sites = portal.findSites(query);
         return populateModel(sites, modelProvider.newModel(ModelList.class), address);
     }
