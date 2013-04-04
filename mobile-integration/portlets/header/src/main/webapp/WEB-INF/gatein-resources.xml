@@ -29,8 +29,17 @@
     <portlet-skin>
         <application-name>responsive-header-portlet</application-name>
         <portlet-name>ResponsiveHeaderPortlet</portlet-name>
+        <skin-name>ResponsiveSkin</skin-name>
         <css-path>/css/ResponsiveStylesheet.css</css-path>
     </portlet-skin>
+    
+    <portlet-skin>
+        <application-name>responsive-header-portlet</application-name>
+        <portlet-name>ResponsiveHeaderPortlet</portlet-name>
+        <skin-name>Default</skin-name>
+        <css-path>/css/ResponsiveStylesheet.css</css-path>
+    </portlet-skin>
+    
 
     <portlet>
         <name>ResponsiveHeaderPortlet</name>

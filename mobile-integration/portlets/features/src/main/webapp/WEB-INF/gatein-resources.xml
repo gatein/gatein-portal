@@ -6,6 +6,14 @@
     <portlet-skin>
         <application-name>responsive-features-portlet</application-name>
         <portlet-name>ResponsiveFeaturesPortlet</portlet-name>
+        <skin-name>ResponsiveSkin</skin-name>
+        <css-path>/css/ResponsiveStylesheet.css</css-path>
+    </portlet-skin>
+    
+    <portlet-skin>
+        <application-name>responsive-features-portlet</application-name>
+        <portlet-name>ResponsiveFeaturesPortlet</portlet-name>
+        <skin-name>Default</skin-name>
         <css-path>/css/ResponsiveStylesheet.css</css-path>
     </portlet-skin>
 
