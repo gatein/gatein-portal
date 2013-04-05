@@ -35,6 +35,7 @@ import org.gatein.api.Portal;
 import org.gatein.api.PortalRequest;
 import org.gatein.api.Util;
 import org.gatein.api.common.Attributes;
+import org.gatein.api.common.Pagination;
 import org.gatein.api.common.URIResolver;
 import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.NodePath;
@@ -116,8 +117,9 @@ public class GateInApiManagementResource {
 
     // ------------------------------------------------- Portal Sites --------------------------------------------------//
     @Managed("/sites")
-    public ModelList getSites(@ManagedContext PathAddress address, @MappedAttribute("emptySites") String emptySites) {
-        return _getSites(SITE_QUERY, address, emptySites);
+    public ModelList getSites(@ManagedContext PathAddress address, @MappedAttribute("emptySites") String emptySites,
+                              @MappedAttribute("offset") String offset, @MappedAttribute("limit") String limit) {
+        return _getSites(SITE_QUERY, address, emptySites, offset, limit);
     }
 
     @Managed("/sites/{site-name}")
@@ -164,8 +166,9 @@ public class GateInApiManagementResource {
 
     // --------------------------------------------- Group Sites (Spaces) ----------------------------------------------//
     @Managed("/spaces")
-    public ModelList getSpaces(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll) {
-        return _getSites(SPACE_QUERY, address, showAll);
+    public ModelList getSpaces(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll,
+                               @MappedAttribute("offset") String offset, @MappedAttribute("limit") String limit) {
+        return _getSites(SPACE_QUERY, address, showAll, offset, limit);
     }
 
     @Managed("/spaces/{group-name: .*}")
@@ -212,8 +215,9 @@ public class GateInApiManagementResource {
 
     // -------------------------------------------- User Sites (Dashboard) ---------------------------------------------//
     @Managed("/dashboards")
-    public ModelList getDashboards(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll) {
-        return _getSites(DASHBOARD_QUERY, address, showAll);
+    public ModelList getDashboards(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll,
+                                   @MappedAttribute("offset") String offset, @MappedAttribute("limit") String limit) {
+        return _getSites(DASHBOARD_QUERY, address, showAll, offset, limit);
     }
 
     @Managed("/dashboards/{user-name}")
@@ -273,11 +277,12 @@ public class GateInApiManagementResource {
         return new PageManagementResource(portal, modelProvider, siteId);
     }
 
-    private ModelList _getSites(SiteQuery query, PathAddress address, String emptySites) {
-        boolean include = Boolean.valueOf(emptySites);
-        if (include) {
-            query = new SiteQuery.Builder().from(query).includeEmptySites(true).build();
-        }
+    private ModelList _getSites(SiteQuery query, PathAddress address, String emptySitesParam, String offsetParam, String limitParam) {
+        boolean emptySites = Boolean.valueOf(offsetParam);
+        Pagination pagination = getPagination(offsetParam, limitParam, query.getPagination());
+        query = new SiteQuery.Builder().from(query).includeEmptySites(emptySites).withPagination(pagination).build();
+
+        // Query sites
         List<Site> sites = portal.findSites(query);
         return populateModel(sites, modelProvider.newModel(ModelList.class), address);
     }

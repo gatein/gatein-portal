@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
@@ -41,8 +40,6 @@ import org.exoplatform.portal.mop.page.PageServiceException;
 import org.exoplatform.portal.mop.page.PageServiceImpl;
 import org.exoplatform.portal.mop.page.PageServiceWrapper;
 import org.exoplatform.portal.mop.page.PageState;
-import org.exoplatform.portal.resource.SkinService;
-import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.Identity;
@@ -74,8 +71,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:boleslaw.dawidowicz@redhat.com">Boleslaw Dawidowicz</a>
@@ -200,10 +195,11 @@ public class PortalImpl implements Portal {
                 if (offset >= size) {
                     return Collections.emptyList();
                 } else if (offset + limit > size) {
-                    return Arrays.asList(access.load(offset, size - offset));
-                } else {
-                    return Arrays.asList(access.load(offset, limit));
+                    pagination = new Pagination(offset, size-offset);
                 }
+
+                T[] loaded = access.load(0, pagination.getOffset() + pagination.getLimit());
+                return Arrays.asList(loaded).subList(pagination.getOffset(), pagination.getOffset() + pagination.getLimit());
             } else {
                 return dataStorage.find(query, comparator).getAll();
             }

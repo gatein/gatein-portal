@@ -25,6 +25,7 @@ package org.gatein.api.management;
 import org.apache.commons.lang.LocaleUtils;
 import org.gatein.api.Portal;
 import org.gatein.api.PortalRequest;
+import org.gatein.api.common.Pagination;
 import org.gatein.api.common.i18n.Localized;
 import org.gatein.api.common.i18n.LocalizedString;
 import org.gatein.api.internal.StringJoiner;
@@ -247,6 +248,31 @@ class Utils {
         }
 
         return permission;
+    }
+
+    public static Pagination getPagination(String offsetParam, String limitParam, Pagination pagination) {
+        if (offsetParam != null) {
+            try {
+                int offset = Integer.parseInt(offsetParam);
+                pagination = new Pagination(offset, pagination.getLimit());
+            } catch (NumberFormatException nfe) {
+                throw invalidRequestParameter("offset", offsetParam);
+            }
+        }
+        if (limitParam != null) {
+            try {
+                int limit = Integer.parseInt(limitParam);
+                pagination = new Pagination(pagination.getOffset(), limit);
+            } catch (NumberFormatException nfe) {
+                throw invalidRequestParameter("limit", limitParam);
+            }
+        }
+
+        return pagination;
+    }
+
+    public static InvalidDataException invalidRequestParameter(String name, String value) {
+        throw new InvalidDataException("Invalid value '" + value + "' for request parameter " + name);
     }
 
     public static InvalidDataException invalidValue(String value, String...names) {

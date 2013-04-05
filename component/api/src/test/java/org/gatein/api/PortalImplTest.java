@@ -442,6 +442,20 @@ public class PortalImplTest extends AbstractApiTest {
     }
 
     @Test
+    public void findSites_Paged_NonZeroOffset() {
+        // This test makes sure the proper amount of results are loaded at first, instead of starting at offset 0 and inc
+        for (int i = 0; i < 22; i++) {
+            createSite(new SiteId("site" + (i + 1)));
+        }
+
+        SiteQuery query = new SiteQuery.Builder().withPagination(11, 5).build();
+        List<Site> sites = portal.findSites(query);
+        assertEquals(5, sites.size());
+        assertEquals("site12", sites.get(0).getName());
+        assertEquals("site16", sites.get(4).getName());
+    }
+
+    @Test
     public void getPage() {
         createSite(new SiteId("get-page"), "bar");
 

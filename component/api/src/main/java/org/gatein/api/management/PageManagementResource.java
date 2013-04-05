@@ -25,6 +25,7 @@ package org.gatein.api.management;
 import org.gatein.api.EntityAlreadyExistsException;
 import org.gatein.api.EntityNotFoundException;
 import org.gatein.api.Portal;
+import org.gatein.api.common.Pagination;
 import org.gatein.api.page.Page;
 import org.gatein.api.page.PageId;
 import org.gatein.api.page.PageQuery;
@@ -67,8 +68,11 @@ public class PageManagementResource {
     }
 
     @Managed(description = "Retrieves all pages for given site")
-    public ModelList getPages(@ManagedContext PathAddress address) {
-        List<Page> pages = portal.findPages(pagesQuery);
+    public ModelList getPages(@ManagedContext PathAddress address,
+                              @MappedAttribute("offset") String offsetParam,
+                              @MappedAttribute("limit") String limitParam) {
+        Pagination pagination = getPagination(offsetParam, limitParam, pagesQuery.getPagination());
+        List<Page> pages = portal.findPages(new PageQuery.Builder().from(pagesQuery).withPagination(pagination).build());
 
         // Populate model
         return populateModel(pages, modelProvider.newModel(ModelList.class), address);
