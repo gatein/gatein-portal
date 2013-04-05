@@ -852,6 +852,10 @@
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.gadgets-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.gatein.cdi</groupId>
+      <artifactId>gatein-cdi-injection</artifactId>
+    </dependency>
 
     <!-- Device Detection and Redirection-->
     <dependency>

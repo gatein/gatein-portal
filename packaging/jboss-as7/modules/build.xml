@@ -188,6 +188,7 @@
       <maven-resource group="com.experlog" artifact="xapool"/>
       <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans"/>
       <maven-resource group="com.thoughtworks.xstream" artifact="xstream"/>
+      <maven-resource group="org.gatein.cdi" artifact="gatein-cdi-injection"/>
     </module-def>
 
     <module-def name="org.gatein.wci">

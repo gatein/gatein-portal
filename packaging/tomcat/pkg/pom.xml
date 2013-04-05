@@ -364,6 +364,16 @@
       <artifactId>jboss-dmr</artifactId>
     </dependency>
 
+    <!-- GateIn CDI -->
+    <dependency>
+      <groupId>org.gatein.cdi</groupId>
+      <artifactId>gatein-cdi-injection</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.enterprise</groupId>
+      <artifactId>cdi-api</artifactId>
+    </dependency>
+
     <!-- Staxnav -->
     <dependency>
       <groupId>org.staxnav</groupId>
