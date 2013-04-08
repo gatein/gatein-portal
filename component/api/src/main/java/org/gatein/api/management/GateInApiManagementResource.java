@@ -166,9 +166,9 @@ public class GateInApiManagementResource {
 
     // --------------------------------------------- Group Sites (Spaces) ----------------------------------------------//
     @Managed("/spaces")
-    public ModelList getSpaces(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll,
+    public ModelList getSpaces(@ManagedContext PathAddress address, @MappedAttribute("emptySites") String emptySites,
                                @MappedAttribute("offset") String offset, @MappedAttribute("limit") String limit) {
-        return _getSites(SPACE_QUERY, address, showAll, offset, limit);
+        return _getSites(SPACE_QUERY, address, emptySites, offset, limit);
     }
 
     @Managed("/spaces/{group-name: .*}")
@@ -215,9 +215,9 @@ public class GateInApiManagementResource {
 
     // -------------------------------------------- User Sites (Dashboard) ---------------------------------------------//
     @Managed("/dashboards")
-    public ModelList getDashboards(@ManagedContext PathAddress address, @MappedAttribute("showAll") String showAll,
+    public ModelList getDashboards(@ManagedContext PathAddress address, @MappedAttribute("emptySites") String emptySites,
                                    @MappedAttribute("offset") String offset, @MappedAttribute("limit") String limit) {
-        return _getSites(DASHBOARD_QUERY, address, showAll, offset, limit);
+        return _getSites(DASHBOARD_QUERY, address, emptySites, offset, limit);
     }
 
     @Managed("/dashboards/{user-name}")
@@ -278,7 +278,7 @@ public class GateInApiManagementResource {
     }
 
     private ModelList _getSites(SiteQuery query, PathAddress address, String emptySitesParam, String offsetParam, String limitParam) {
-        boolean emptySites = Boolean.valueOf(offsetParam);
+        boolean emptySites = Boolean.valueOf(emptySitesParam);
         Pagination pagination = getPagination(offsetParam, limitParam, query.getPagination());
         query = new SiteQuery.Builder().from(query).includeEmptySites(emptySites).withPagination(pagination).build();
 
