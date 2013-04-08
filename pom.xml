@@ -852,12 +852,6 @@
       <dependency>
         <groupId>org.gatein.shindig</groupId>
         <artifactId>shindig-gadgets</artifactId>
-        <exclusions>
-          <exclusion>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-          </exclusion>
-        </exclusions>
         <version>${org.shindig.version}</version>
       </dependency>
       <dependency>
@@ -869,24 +863,12 @@
         <groupId>org.gatein.shindig</groupId>
         <artifactId>shindig-common</artifactId>
         <version>${org.shindig.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.gatein.shindig</groupId>
         <artifactId>shindig-common</artifactId>
         <classifier>tests</classifier>
         <version>${org.shindig.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
 
       <dependency>
