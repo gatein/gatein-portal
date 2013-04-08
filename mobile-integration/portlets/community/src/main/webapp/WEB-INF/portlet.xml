@@ -59,7 +59,7 @@
 
             <preference>
                 <name>url.docs</name>
-                <value>http://docs.jboss.com/gatein/portal/latest/user-guide/en-US/html/</value>
+                <value>https://docs.jboss.org/author/display/GTNPORTALDOC/Home</value>
             </preference>
         </portlet-preferences>
     </portlet>
