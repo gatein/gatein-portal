@@ -192,7 +192,13 @@ public class UIPageForm extends UIFormTabPane {
         if (pConfig != null && acl.hasEditPermission(pConfig)) {
             ownerTypes.add(new SelectItemOption<String>(SiteType.PORTAL.getName()));
         }
-        ownerTypes.add(new SelectItemOption<String>(SiteType.GROUP.getName()));
+        
+        UserPortalConfigService userPortalConfigService = getApplicationComponent(UserPortalConfigService.class);
+        List<String> groups = userPortalConfigService.getMakableNavigations(pcontext.getRemoteUser(), true);
+        if (groups.size() > 0) {
+            ownerTypes.add(new SelectItemOption<String>(SiteType.GROUP.getName()));
+        }
+
         ownerTypes.add(new SelectItemOption<String>(SiteType.USER.getName()));
         UIFormSelectBox uiSelectBoxOwnerType = new UIFormSelectBox(OWNER_TYPE, OWNER_TYPE, ownerTypes);
         uiSelectBoxOwnerType.setOnChange("ChangeOwnerType");
