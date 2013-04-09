@@ -32,15 +32,8 @@
     <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>HomePagePortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>template</name>
-            <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
+        <application-ref>portal</application-ref>
+        <portlet-ref>HelloPortlet</portlet-ref>
       </portlet>
       <title>Home Page portlet</title>
       <access-permissions>Everyone</access-permissions>

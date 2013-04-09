@@ -121,6 +121,18 @@
       <type>pom</type>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt.core.compiler</groupId>
+      <artifactId>ecj</artifactId>
+      <version>3.7</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet.jsp</groupId>
+      <artifactId>jsp-api</artifactId>
+      <version>2.2</version>
+      <scope>test</scope>
+    </dependency>
 <!--
     <dependency>
       <groupId>org.gatein.pc</groupId>

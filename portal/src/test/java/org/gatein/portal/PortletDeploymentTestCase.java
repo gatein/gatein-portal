@@ -75,7 +75,7 @@ public class PortletDeploymentTestCase {
                 resolve(coordinates.toCanonicalForm()).
                 withoutTransitivity().asSingleResolvedArtifact();
         InputStream in = resolved.asInputStream();
-        WebArchive war = ShrinkWrap.create(WebArchive.class);
+        WebArchive war = ShrinkWrap.create(WebArchive.class, "samples.war");
         war.as(ZipImporter.class).importFrom(in);
         return war;
     }

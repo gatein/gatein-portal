@@ -23,7 +23,10 @@ import javax.servlet.ServletContext;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletInvoker;
+import org.gatein.pc.api.invocation.RenderInvocation;
+import org.gatein.pc.api.state.AccessMode;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
 import org.gatein.pc.portlet.aspects.ConsumerCacheInterceptor;
 import org.gatein.pc.portlet.aspects.PortletCustomizationInterceptor;
@@ -34,6 +37,11 @@ import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.deployment.DeploymentException;
 import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
+import org.gatein.pc.portlet.impl.spi.AbstractInstanceContext;
+import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
+import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
+import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
+import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
@@ -79,6 +87,20 @@ public class PortletAppManager implements WebAppListener, Startable {
         //
         this.invoker = consumerPortletInvoker;
         this.deployer = deployer;
+    }
+
+    public RenderInvocation render(String id, Portlet portlet) {
+        RenderInvocation render = new RenderInvocation(new GateInPortletInvocationContext());
+        render.setClientContext(new GateInClientContext());
+        render.setPortalContext(new AbstractPortalContext());
+        render.setInstanceContext(new AbstractInstanceContext(id, AccessMode.READ_ONLY));
+        render.setWindowContext(new AbstractWindowContext(id));
+        render.setUserContext(new AbstractUserContext());
+        render.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
+        render.setRequest(ClientRequestFilter.currentRequest.get());
+        render.setResponse(ClientRequestFilter.currentResponse.get());
+        render.setTarget(portlet.getContext());
+        return render;
     }
 
     /**

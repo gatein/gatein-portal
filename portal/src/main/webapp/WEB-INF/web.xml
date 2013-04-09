@@ -19,6 +19,15 @@
     <servlet-name>PortalServlet</servlet-name>
   </filter-mapping>
 
+  <filter>
+    <filter-name>ClientRequestFilter</filter-name>
+    <filter-class>org.gatein.portal.portlet.ClientRequestFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ClientRequestFilter</filter-name>
+    <servlet-name>PortalServlet</servlet-name>
+  </filter-mapping>
+
   <!-- WCI integration for Tomcat7 -->
   <servlet>
     <servlet-name>ContainerServlet</servlet-name>
