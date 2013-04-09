@@ -62,8 +62,8 @@ public class PortalTestCase {
 
     @Test
     public void testHello() {
-        driver.get(deploymentURL.toString());
+        driver.get(deploymentURL.toString() + "/foo/bar");
         WebElement element = driver.findElement(By.className("gatein"));
-        Assert.assertEquals("Hello GateIn", element.getText());
+        Assert.assertEquals("Hello GateIn to /foo/bar", element.getText());
     }
 }

@@ -23,7 +23,9 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import juzu.Param;
 import juzu.Response;
+import juzu.Route;
 import juzu.View;
 import org.exoplatform.container.PortalContainer;
 import org.gatein.portal.impl.mop.ram.RamStore;
@@ -45,11 +47,12 @@ public class Aggregator {
     @Inject
     RamStore persistence;
 
-    @View
-    public Response.Render index() throws IOException {
+    @View()
+    @Route("/{path}")
+    public Response.Content index(@Param(pattern = ".*") String path) throws IOException {
         System.out.println("Portal container " + current);
         System.out.println("Persistence " + persistence);
         persistence.dump(System.out);
-        return Response.render("<div class='gatein'>Hello GateIn<div>");
+        return Response.ok("<div class='gatein'>Hello GateIn to " + path + "<div>");
     }
 }
