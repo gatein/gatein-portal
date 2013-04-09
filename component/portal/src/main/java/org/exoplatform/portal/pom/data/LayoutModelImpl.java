@@ -21,11 +21,13 @@ package org.exoplatform.portal.pom.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.Property;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -45,14 +47,14 @@ public class LayoutModelImpl implements NodeModel<ComponentData, ElementState> {
             return new ContainerData(
                     context.getId(),
                     container.id,
-                    container.name,
-                    container.icon,
-                    container.template,
-                    container.factoryId,
-                    container.title,
-                    container.description,
-                    container.width,
-                    container.height,
+                    container.properties.get(ElementState.Container.NAME),
+                    container.properties.get(ElementState.Container.ICON),
+                    container.properties.get(ElementState.Container.TEMPLATE),
+                    container.properties.get(ElementState.Container.FACTORY_ID),
+                    container.properties.get(ElementState.Container.TITLE),
+                    container.properties.get(ElementState.Container.DESCRIPTION),
+                    container.properties.get(ElementState.Container.WIDTH),
+                    container.properties.get(ElementState.Container.HEIGHT),
                     container.accessPermissions,
                     null
             ) {
@@ -66,22 +68,29 @@ public class LayoutModelImpl implements NodeModel<ComponentData, ElementState> {
 
         } else if (state instanceof ElementState.Window) {
             ElementState.Window window = (ElementState.Window) state;
+            HashMap<String, String> properties = new HashMap<String, String>();
+            for (Property p : window.properties) {
+                if (p instanceof Property.Raw) {
+                    Property.Raw  raw = (Property.Raw) p;
+                    properties.put(raw.getName(), raw.getValue());
+                }
+            }
             return new ApplicationData(
                     context.getId(),
                     context.getName(),
                     window.type,
                     window.state,
                     null,
-                    window.title,
-                    window.icon,
-                    window.description,
-                    window.showInfoBar,
-                    window.showApplicationState,
-                    window.showApplicationMode,
-                    window.theme,
-                    window.width,
-                    window.height,
-                    window.properties,
+                    window.properties.get(ElementState.Window.TITLE),
+                    window.properties.get(ElementState.Window.ICON),
+                    window.properties.get(ElementState.Window.DESCRIPTION),
+                    window.properties.get(ElementState.Window.SHOW_INFO_BAR),
+                    window.properties.get(ElementState.Window.SHOW_APPLICATION_STATE),
+                    window.properties.get(ElementState.Window.SHOW_APPLICATION_MODE),
+                    window.properties.get(ElementState.Window.THEME),
+                    window.properties.get(ElementState.Window.WIDTH),
+                    window.properties.get(ElementState.Window.HEIGHT),
+                    properties,
                     window.accessPermissions
             );
         } else  {

@@ -71,8 +71,8 @@ public class TestLayout extends AbstractMopServiceTest {
         assertEquals(2, context.getNodeSize());
         Element foo = context.getNode(0);
         Element bar = context.getNode(1);
-        assertEquals("foo", ((ElementState.Window) foo.getState()).title);
-        assertEquals("bar", ((ElementState.Window) bar.getState()).title);
+        assertEquals("foo", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
 
         // Add a new portlet in the background
         createElements(layoutId, Element.portlet("app/juu").title("juu"));
@@ -83,9 +83,9 @@ public class TestLayout extends AbstractMopServiceTest {
         foo = context.getNode(0);
         bar = context.getNode(1);
         Element juu = context.getNode(2);
-        assertEquals("foo", ((ElementState.Window) foo.getState()).title);
-        assertEquals("bar", ((ElementState.Window) bar.getState()).title);
-        assertEquals("juu", ((ElementState.Window) juu.getState()).title);
+        assertEquals("foo", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("juu", ((ElementState.Window) juu.getState()).properties.get(ElementState.Window.TITLE));
 
         // Test move
         context.add(1, context.get(2));
@@ -94,9 +94,9 @@ public class TestLayout extends AbstractMopServiceTest {
         foo = context.getNode(0);
         juu = context.getNode(1);
         bar = context.getNode(2);
-        assertEquals("foo", ((ElementState.Window) foo.getState()).title);
-        assertEquals("juu", ((ElementState.Window) juu.getState()).title);
-        assertEquals("bar", ((ElementState.Window) bar.getState()).title);
+        assertEquals("foo", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("juu", ((ElementState.Window) juu.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
 
         //
         NodeData<ElementState> root = getElement(layoutId);
@@ -107,7 +107,7 @@ public class TestLayout extends AbstractMopServiceTest {
         layoutService.saveLayout(context, null);
 
         //
-        assertEquals("foodesc", ((ElementState.Window)getElement(context.getNode(0).getId()).getState()).description);
+        assertEquals("foodesc", ((ElementState.Window)getElement(context.getNode(0).getId()).getState()).properties.get(ElementState.Window.DESCRIPTION));
 
         // Test destroy
         assertTrue(context.get(0).removeNode());

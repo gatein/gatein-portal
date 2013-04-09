@@ -19,11 +19,11 @@
 
 package org.gatein.portal.mop.layout;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.hierarchy.ModelNode;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
@@ -52,30 +52,14 @@ public class Element extends ModelNode<Element, ElementState> {
         return new ElementState.WindowBuilder(
                 ApplicationType.PORTLET,
                 new TransientApplicationState(portletId),
-                null,
-                null,
-                null,
-                false,
-                false,
-                false,
-                null,
-                null,
-                null,
-                new HashMap<String, String>(),
+                Properties.EMPTY,
                 ElementState.EMPTY_STRINGS);
     }
 
     public static ElementState.ContainerBuilder container() {
         return new ElementState.ContainerBuilder(
                 null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
+                Properties.EMPTY,
                 ElementState.EMPTY_STRINGS,
                 false
         );

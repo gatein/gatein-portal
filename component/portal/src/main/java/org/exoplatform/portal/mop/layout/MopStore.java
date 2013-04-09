@@ -48,6 +48,8 @@ import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.mop.core.util.Tools;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutStore;
+import org.gatein.portal.mop.Properties;
+import org.gatein.portal.mop.Property;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -211,33 +213,33 @@ public class MopStore implements LayoutStore {
             ProtectedResource pr = container.adapt(ProtectedResource.class);
             pr.setAccessPermissions(containerState.accessPermissions);
             Described described = container.adapt(Described.class);
-            described.setName(containerState.title);
-            described.setDescription(containerState.description);
+            described.setName(containerState.properties.get(ElementState.Container.TITLE));
+            described.setDescription(containerState.properties.get(ElementState.Container.DESCRIPTION));
             Attributes dstAttrs = container.getAttributes();
             dstAttrs.setValue(MappedAttributes.ID, containerState.id);
             dstAttrs.setValue(MappedAttributes.TYPE, containerState.dashboard ? "dashboard" : null);
-            dstAttrs.setValue(MappedAttributes.ICON, containerState.icon);
-            dstAttrs.setValue(MappedAttributes.TEMPLATE, containerState.template);
-            dstAttrs.setValue(MappedAttributes.FACTORY_ID, containerState.factoryId);
-            dstAttrs.setValue(MappedAttributes.WIDTH, containerState.width);
-            dstAttrs.setValue(MappedAttributes.HEIGHT, containerState.height);
-            dstAttrs.setValue(MappedAttributes.NAME, containerState.name);
+            dstAttrs.setValue(MappedAttributes.ICON, containerState.properties.get(ElementState.Container.ICON));
+            dstAttrs.setValue(MappedAttributes.TEMPLATE, containerState.properties.get(ElementState.Container.TEMPLATE));
+            dstAttrs.setValue(MappedAttributes.FACTORY_ID, containerState.properties.get(ElementState.Container.FACTORY_ID));
+            dstAttrs.setValue(MappedAttributes.WIDTH, containerState.properties.get(ElementState.Container.WIDTH));
+            dstAttrs.setValue(MappedAttributes.HEIGHT, containerState.properties.get(ElementState.Container.HEIGHT));
+            dstAttrs.setValue(MappedAttributes.NAME, containerState.properties.get(ElementState.Container.NAME));
         } else if (component instanceof UIWindow) {
             UIWindow window = (UIWindow) component;
             ElementState.Window windowState = (ElementState.Window) state;
             ProtectedResource pr = window.adapt(ProtectedResource.class);
             pr.setAccessPermissions(windowState.accessPermissions);
             Described described = window.adapt(Described.class);
-            described.setName(windowState.title);
-            described.setDescription(windowState.description);
+            described.setName(windowState.properties.get(ElementState.Window.TITLE));
+            described.setDescription(windowState.properties.get(ElementState.Window.DESCRIPTION));
             Attributes attrs = window.getAttributes();
-            attrs.setValue(MappedAttributes.SHOW_INFO_BAR, windowState.showInfoBar);
-            attrs.setValue(MappedAttributes.SHOW_WINDOW_STATE, windowState.showApplicationState);
-            attrs.setValue(MappedAttributes.SHOW_MODE, windowState.showApplicationMode);
-            attrs.setValue(MappedAttributes.THEME, windowState.theme);
-            attrs.setValue(MappedAttributes.ICON, windowState.icon);
-            attrs.setValue(MappedAttributes.WIDTH, windowState.width);
-            attrs.setValue(MappedAttributes.HEIGHT, windowState.height);
+            attrs.setValue(MappedAttributes.SHOW_INFO_BAR, windowState.properties.get(ElementState.Window.SHOW_INFO_BAR));
+            attrs.setValue(MappedAttributes.SHOW_WINDOW_STATE, windowState.properties.get(ElementState.Window.SHOW_APPLICATION_STATE));
+            attrs.setValue(MappedAttributes.SHOW_MODE, windowState.properties.get(ElementState.Window.SHOW_APPLICATION_MODE));
+            attrs.setValue(MappedAttributes.THEME, windowState.properties.get(ElementState.Window.THEME));
+            attrs.setValue(MappedAttributes.ICON, windowState.properties.get(ElementState.Window.ICON));
+            attrs.setValue(MappedAttributes.WIDTH, windowState.properties.get(ElementState.Window.WIDTH));
+            attrs.setValue(MappedAttributes.HEIGHT, windowState.properties.get(ElementState.Window.HEIGHT));
             save(windowState.properties, attrs, windowPropertiesBlackList);
             ApplicationState instanceState = windowState.state;
             // We modify only transient portlet state
@@ -336,11 +338,14 @@ public class MopStore implements LayoutStore {
         }
     }
 
-    public static void save(Map<String, String> src, Attributes dst, Set<String> blackList) {
-        for (Map.Entry<String, String> property : src.entrySet()) {
-            String name = property.getKey();
-            if (!blackList.contains(name) && !propertiesBlackList.contains(name)) {
-                dst.setString(name, property.getValue());
+    public static void save(Properties src, Attributes dst, Set<String> blackList) {
+        for (Property property : src) {
+            if (property instanceof Property.Raw) {
+                Property.Raw rawProperty = (Property.Raw) property;
+                String name = property.getName();
+                if (!blackList.contains(name) && !propertiesBlackList.contains(name)) {
+                    dst.setString(name, rawProperty.getValue());
+                }
             }
         }
     }

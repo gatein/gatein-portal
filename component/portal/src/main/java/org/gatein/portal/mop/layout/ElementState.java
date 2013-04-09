@@ -21,7 +21,6 @@ package org.gatein.portal.mop.layout;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +28,8 @@ import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.Utils;
+import org.gatein.portal.mop.Properties;
+import org.gatein.portal.mop.PropertyType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 
@@ -62,6 +63,10 @@ public abstract class ElementState implements Serializable {
 
     public abstract Builder<? extends ElementState> builder();
 
+    public abstract Properties getProperties();
+
+    public abstract List<String> getAccessPermissions();
+
     public abstract static class Builder<E extends ElementState> {
 
         public abstract E build();
@@ -71,43 +76,56 @@ public abstract class ElementState implements Serializable {
     public static class Window<S> extends ElementState {
 
         /** . */
+        public static final PropertyType<String> TITLE = new PropertyType<String>("title,", String.class){};
+
+        /** . */
+        public static final PropertyType<String> ICON = new PropertyType<String>("icon", String.class){};
+
+        /** . */
+        public static final PropertyType<String> DESCRIPTION = new PropertyType<String>("description", String.class){};
+
+        /** . */
+        public static final PropertyType<Boolean> SHOW_INFO_BAR = new PropertyType<Boolean>("show-info-bar", Boolean.class){};
+
+        /** . */
+        public static final PropertyType<Boolean> SHOW_APPLICATION_STATE = new PropertyType<Boolean>("show-application-state", Boolean.class){};
+
+        /** . */
+        public static final PropertyType<Boolean> SHOW_APPLICATION_MODE = new PropertyType<Boolean>("show-application-mode", Boolean.class){};
+
+        /** . */
+        public static final PropertyType<String> THEME = new PropertyType<String>("theme", String.class){};
+
+        /** . */
+        public static final PropertyType<String> WIDTH = new PropertyType<String>("width", String.class){};
+
+        /** . */
+        public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", String.class){};
+
+        /** . */
         public final ApplicationType<S> type;
 
         /** . */
         public final ApplicationState<S> state;
 
         /** . */
-        public final String title;
-
-        /** . */
-        public final String icon;
-
-        /** . */
-        public final String description;
-
-        /** . */
-        public final boolean showInfoBar;
-
-        /** . */
-        public final boolean showApplicationState;
-
-        /** . */
-        public final boolean showApplicationMode;
-
-        /** . */
-        public final String theme;
-
-        /** . */
-        public final String width;
-
-        /** . */
-        public final String height;
-
-        /** . */
-        public final Map<String, String> properties;
+        public final Properties properties;
 
         /** . */
         public final List<String> accessPermissions;
+
+        public Window(
+                ApplicationType<S> type,
+                ApplicationState<S> state,
+                Properties properties,
+                List<String> accessPermissions) {
+
+            //
+            this.type = type;
+            this.state = state;
+            this.properties = properties;
+            this.accessPermissions = accessPermissions;
+        }
 
         public Window(
                 ApplicationType<S> type,
@@ -123,18 +141,24 @@ public abstract class ElementState implements Serializable {
                 String height,
                 Map<String, String> properties,
                 List<String> accessPermissions) {
+
+            //
+            Properties.Builder builder = Properties.EMPTY.builder();
+            builder.set(TITLE, title);
+            builder.set(ICON, icon);
+            builder.set(DESCRIPTION, description);
+            builder.set(SHOW_INFO_BAR, showInfoBar);
+            builder.set(SHOW_APPLICATION_STATE, showApplicationState);
+            builder.set(SHOW_APPLICATION_MODE, showApplicationMode);
+            builder.set(THEME, theme);
+            builder.set(WIDTH, width);
+            builder.set(HEIGHT, height);
+            builder.set(properties);
+
+            //
             this.type = type;
             this.state = state;
-            this.title = title;
-            this.icon = icon;
-            this.description = description;
-            this.showInfoBar = showInfoBar;
-            this.showApplicationState = showApplicationState;
-            this.showApplicationMode = showApplicationMode;
-            this.theme = theme;
-            this.width = width;
-            this.height = height;
-            this.properties = properties;
+            this.properties = builder.build();
             this.accessPermissions = accessPermissions;
         }
 
@@ -143,21 +167,21 @@ public abstract class ElementState implements Serializable {
             ElementState.Window that = (Window)o;
             return Safe.equals(type, that.type) &&
                     Safe.equals(state, that.state) &&
-                    Safe.equals(title, that.title) &&
-                    Safe.equals(icon, that.icon) &&
-                    Safe.equals(description, that.description) &&
-                    Safe.equals(showInfoBar, that.showInfoBar) &&
-                    Safe.equals(showApplicationState, that.showApplicationState) &&
-                    Safe.equals(showApplicationMode, that.showApplicationMode) &&
-                    Safe.equals(theme, that.theme) &&
-                    Safe.equals(width, that.width) &&
-                    Safe.equals(height, that.height) &&
                     Safe.equals(properties, that.properties) &&
                     Safe.equals(accessPermissions, that.accessPermissions);
         }
 
+        @Override
+        public List<String> getAccessPermissions() {
+            return accessPermissions;
+        }
+
+        @Override
+        public Properties getProperties() {
+            return properties;
+        }
+
         public WindowBuilder builder() {
-            HashMap<String, String> properties = this.properties != null ? new HashMap<String, String>(this.properties) : new HashMap<String, String>();
             String[] accessPermissions;
             if (this.accessPermissions == null) {
                 accessPermissions = EMPTY_STRINGS;
@@ -167,15 +191,6 @@ public abstract class ElementState implements Serializable {
             return new WindowBuilder(
                     type,
                     state,
-                    title,
-                    icon,
-                    description,
-                    showInfoBar,
-                    showApplicationState,
-                    showApplicationMode,
-                    theme,
-                    width,
-                    height,
                     properties,
                     accessPermissions
             );
@@ -191,34 +206,7 @@ public abstract class ElementState implements Serializable {
         private ApplicationState state;
 
         /** . */
-        private String title;
-
-        /** . */
-        private String icon;
-
-        /** . */
-        private String description;
-
-        /** . */
-        private boolean showInfoBar;
-
-        /** . */
-        private boolean showApplicationState;
-
-        /** . */
-        private boolean showApplicationMode;
-
-        /** . */
-        private String theme;
-
-        /** . */
-        private String width;
-
-        /** . */
-        private String height;
-
-        /** . */
-        private Map<String, String> properties;
+        private Properties.Builder properties;
 
         /** . */
         private String[] accessPermissions;
@@ -226,29 +214,11 @@ public abstract class ElementState implements Serializable {
         public WindowBuilder(
                 ApplicationType type,
                 ApplicationState state,
-                String title,
-                String icon,
-                String description,
-                boolean showInfoBar,
-                boolean showApplicationState,
-                boolean showApplicationMode,
-                String theme,
-                String width,
-                String height,
-                Map<String, String> properties,
+                Properties properties,
                 String[] accessPermissions) {
             this.type = type;
             this.state = state;
-            this.title = title;
-            this.icon = icon;
-            this.description = description;
-            this.showInfoBar = showInfoBar;
-            this.showApplicationState = showApplicationState;
-            this.showApplicationMode = showApplicationMode;
-            this.theme = theme;
-            this.width = width;
-            this.height = height;
-            this.properties = properties;
+            this.properties = properties.builder();
             this.accessPermissions = accessPermissions;
         }
 
@@ -263,57 +233,57 @@ public abstract class ElementState implements Serializable {
         }
 
         public WindowBuilder title(String title) {
-            this.title = title;
+            properties.set(Window.TITLE, title);
             return this;
         }
 
         public WindowBuilder icon(String icon) {
-            this.icon = icon;
+            properties.set(Window.ICON, icon);
             return this;
         }
 
         public WindowBuilder description(String description) {
-            this.description = description;
+            properties.set(Window.DESCRIPTION, description);
             return this;
         }
 
         public WindowBuilder showInfoBar(boolean showInfoBar) {
-            this.showInfoBar = showInfoBar;
+            properties.set(Window.SHOW_INFO_BAR, showInfoBar);
             return this;
         }
 
         public WindowBuilder showApplicationState(boolean showApplicationState) {
-            this.showApplicationState = showApplicationState;
+            properties.set(Window.SHOW_APPLICATION_STATE, showApplicationState);
             return this;
         }
 
         public WindowBuilder showApplicationMode(boolean showApplicationMode) {
-            this.showApplicationMode = showApplicationMode;
+            properties.set(Window.SHOW_APPLICATION_MODE, showApplicationMode);
             return this;
         }
 
         public WindowBuilder theme(String theme) {
-            this.theme = theme;
+            properties.set(Window.THEME, theme);
             return this;
         }
 
         public WindowBuilder width(String width) {
-            this.width = width;
+            properties.set(Window.WIDTH, width);
             return this;
         }
 
         public WindowBuilder height(String height) {
-            this.height = height;
+            properties.set(Window.HEIGHT, height);
             return this;
         }
 
         public WindowBuilder properties(Map<String, String> properties) {
-            this.properties = properties;
+            this.properties.set(properties);
             return this;
         }
 
         public WindowBuilder property(String name, String value) {
-            properties.put(name, value);
+            properties.set(name, value);
             return this;
         }
 
@@ -327,16 +297,7 @@ public abstract class ElementState implements Serializable {
             return new Window(
                     type,
                     state,
-                    title,
-                    icon,
-                    description,
-                    showInfoBar,
-                    showApplicationState,
-                    showApplicationMode,
-                    theme,
-                    width,
-                    height,
-                    Collections.unmodifiableMap(new HashMap<String, String>(properties)),
+                    properties.build(),
                     Utils.safeImmutableList(accessPermissions)
             );
         }
@@ -348,6 +309,16 @@ public abstract class ElementState implements Serializable {
         public boolean equals(Object o) {
             Body that = (Body) o;
             return true;
+        }
+
+        @Override
+        public Properties getProperties() {
+            return Properties.EMPTY;
+        }
+
+        @Override
+        public List<String> getAccessPermissions() {
+            return Collections.emptyList();
         }
 
         public BodyBuilder builder() {
@@ -368,37 +339,51 @@ public abstract class ElementState implements Serializable {
     public static class Container extends ElementState {
 
         /** . */
+        public static final PropertyType<String> NAME = new PropertyType<String>("name", String.class){};
+
+        /** . */
+        public static final PropertyType<String> ICON = new PropertyType<String>("icon", String.class){};
+
+        /** . */
+        public static final PropertyType<String> TEMPLATE = new PropertyType<String>("template", String.class){};
+
+        /** . */
+        public static final PropertyType<String> FACTORY_ID = new PropertyType<String>("factory_id", String.class){};
+
+        /** . */
+        public static final PropertyType<String> TITLE = new PropertyType<String>("title", String.class){};
+
+        /** . */
+        public static final PropertyType<String> DESCRIPTION = new PropertyType<String>("description", String.class){};
+
+        /** . */
+        public static final PropertyType<String> WIDTH = new PropertyType<String>("width", String.class){};
+
+        /** . */
+        public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", String.class){};
+
+        /** . */
         public final String id;
 
         /** . */
-        public final String name;
-
-        /** . */
-        public final String icon;
-
-        /** . */
-        public final String template;
-
-        /** . */
-        public final String factoryId;
-
-        /** . */
-        public final String title;
-
-        /** . */
-        public final String description;
-
-        /** . */
-        public final String width;
-
-        /** . */
-        public final String height;
+        public final Properties properties;
 
         /** . */
         public final List<String> accessPermissions;
 
         /** . */
         public final boolean dashboard;
+
+        public Container(
+                String id,
+                Properties properties,
+                List<String> accessPermissions,
+                boolean dashboard) {
+            this.id = id;
+            this.properties = properties;
+            this.accessPermissions = accessPermissions;
+            this.dashboard = dashboard;
+        }
 
         public Container(
                 String id,
@@ -412,31 +397,40 @@ public abstract class ElementState implements Serializable {
                 String height,
                 List<String> accessPermissions,
                 boolean dashboard) {
+
+            //
+            Properties.Builder builder = Properties.EMPTY.builder();
+            builder.set(NAME, name);
+            builder.set(ICON, icon);
+            builder.set(TEMPLATE, template);
+            builder.set(FACTORY_ID, factoryId);
+            builder.set(TITLE, title);
+            builder.set(DESCRIPTION, description);
+            builder.set(WIDTH, width);
+            builder.set(HEIGHT, height);
+
+            //
             this.id = id;
-            this.name = name;
-            this.icon = icon;
-            this.template = template;
-            this.factoryId = factoryId;
-            this.title = title;
-            this.description = description;
-            this.width = width;
-            this.height = height;
+            this.properties = builder.build();
             this.accessPermissions = accessPermissions;
             this.dashboard = dashboard;
+        }
+
+        @Override
+        public Properties getProperties() {
+            return properties;
+        }
+
+        @Override
+        public List<String> getAccessPermissions() {
+            return accessPermissions;
         }
 
         @Override
         public boolean equals(Object o) {
             Container that = (Container) o;
             return Safe.equals(id, that.id) &&
-                    Safe.equals(name, that.name) &&
-                    Safe.equals(icon, that.icon) &&
-                    Safe.equals(template, that.template) &&
-                    Safe.equals(factoryId, that.factoryId) &&
-                    Safe.equals(title, that.title) &&
-                    Safe.equals(description, that.description) &&
-                    Safe.equals(width, that.width) &&
-                    Safe.equals(height, that.height) &&
+                    Safe.equals(properties, that.properties) &&
                     Safe.equals(accessPermissions, that.accessPermissions) &&
                     Safe.equals(dashboard, that.dashboard);
         }
@@ -444,14 +438,7 @@ public abstract class ElementState implements Serializable {
         public ContainerBuilder builder() {
             return new ContainerBuilder(
                     id,
-                    name,
-                    icon,
-                    template,
-                    factoryId,
-                    title,
-                    description,
-                    width,
-                    height,
+                    properties,
                     accessPermissions.toArray(new String[accessPermissions.size()]),
                     dashboard
             );
@@ -465,28 +452,7 @@ public abstract class ElementState implements Serializable {
         private String id;
 
         /** . */
-        private String name;
-
-        /** . */
-        private String icon;
-
-        /** . */
-        private String template;
-
-        /** . */
-        private String factoryId;
-
-        /** . */
-        private String title;
-
-        /** . */
-        private String description;
-
-        /** . */
-        private String width;
-
-        /** . */
-        private String height;
+        private Properties.Builder properties;
 
         /** . */
         private String[] accessPermissions;
@@ -496,25 +462,11 @@ public abstract class ElementState implements Serializable {
 
         public ContainerBuilder(
                 String id,
-                String name,
-                String icon,
-                String template,
-                String factoryId,
-                String title,
-                String description,
-                String width,
-                String height,
+                Properties properties,
                 String[] accessPermissions,
                 boolean dashboard) {
             this.id = id;
-            this.name = name;
-            this.icon = icon;
-            this.template = template;
-            this.factoryId = factoryId;
-            this.title = title;
-            this.description = description;
-            this.width = width;
-            this.height = height;
+            this.properties = properties.builder();
             this.accessPermissions = accessPermissions;
             this.dashboard = dashboard;
         }
@@ -525,42 +477,42 @@ public abstract class ElementState implements Serializable {
         }
 
         public ContainerBuilder name(String name) {
-            this.name = name;
+            this.properties.set(Container.NAME, name);
             return this;
         }
 
         public ContainerBuilder icon(String icon) {
-            this.icon = icon;
+            this.properties.set(Container.ICON, icon);
             return this;
         }
 
         public ContainerBuilder template(String template) {
-            this.template = template;
+            this.properties.set(Container.TEMPLATE, template);
             return this;
         }
 
         public ContainerBuilder factoryId(String factoryId) {
-            this.factoryId = factoryId;
+            this.properties.set(Container.FACTORY_ID, factoryId);
             return this;
         }
 
         public ContainerBuilder title(String title) {
-            this.title = title;
+            this.properties.set(Container.TITLE, title);
             return this;
         }
 
         public ContainerBuilder description(String description) {
-            this.description = description;
+            this.properties.set(Container.DESCRIPTION, description);
             return this;
         }
 
         public ContainerBuilder width(String width) {
-            this.width = width;
+            this.properties.set(Container.WIDTH, width);
             return this;
         }
 
         public ContainerBuilder height(String height) {
-            this.height = height;
+            this.properties.set(Container.HEIGHT, height);
             return this;
         }
 
@@ -572,14 +524,7 @@ public abstract class ElementState implements Serializable {
         public Container build() {
             return new Container(
                     id,
-                    name,
-                    icon,
-                    template,
-                    factoryId,
-                    title,
-                    description,
-                    width,
-                    height,
+                    properties.build(),
                     Utils.safeImmutableList(accessPermissions),
                     dashboard
             );
