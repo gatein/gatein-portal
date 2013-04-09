@@ -66,11 +66,11 @@ public class ListTree<T extends ListTree<T>> {
 
         @SuppressWarnings("unchecked")
         T clone = (T) super.clone();
-        clone.parent = null;
-        clone.previous = null;
-        clone.next = null;
+        ((ListTree<T>)clone).parent = null;
+        ((ListTree<T>)clone).previous = null;
+        ((ListTree<T>)clone).next = null;
 
-        clone.foo(head);
+        ((ListTree<T>)clone).foo(head);
 
         return clone;
 
@@ -79,15 +79,15 @@ public class ListTree<T extends ListTree<T>> {
     private T foo(T current) throws CloneNotSupportedException {
         if (current != null) {
             T clone = current.clone();
-            clone.parent = (T)this;
-            if (current.previous == null) {
+            ((ListTree<T>)clone).parent = (T)this;
+            if (((ListTree<T>)current).previous == null) {
                 head = clone;
             }
-            if (current.next == null) {
+            if (((ListTree<T>)current).next == null) {
                 tail = clone;
             } else {
-                clone.next = foo(current.next);
-                clone.next.previous = clone;
+                ((ListTree<T>)clone).next = foo(((ListTree<T>)current).next);
+                ((ListTree<T>)((ListTree<T>)clone).next).previous = clone;
             }
             return clone;
         } else {
@@ -103,7 +103,7 @@ public class ListTree<T extends ListTree<T>> {
      */
     public final int getDepth() {
         int depth = 0;
-        for (T current = parent; current != null; current = current.parent) {
+        for (T current = parent; current != null; current = ((ListTree<T>) current).parent) {
             depth++;
         }
         return depth;
@@ -184,7 +184,7 @@ public class ListTree<T extends ListTree<T>> {
             if (index == 0) {
                 break;
             } else {
-                current = current.next;
+                current = ((ListTree<T>) current).next;
                 index--;
             }
         }
@@ -220,7 +220,7 @@ public class ListTree<T extends ListTree<T>> {
                         throw new IndexOutOfBoundsException();
                     }
                     index--;
-                    a = a.next;
+                    a = ((ListTree<T>) a).next;
                 }
 
                 //
@@ -266,11 +266,11 @@ public class ListTree<T extends ListTree<T>> {
         }
         if (head == null) {
             beforeInsert(tree);
-            if (tree.parent != null) {
+            if (((ListTree<T>) tree).parent != null) {
                 tree.remove();
             }
             head = tail = tree;
-            tree.parent = (T) this;
+            ((ListTree<T>) tree).parent = (T) this;
             size++;
             afterInsert(tree);
         } else {
@@ -294,19 +294,19 @@ public class ListTree<T extends ListTree<T>> {
         }
         if (this != tree) {
             parent.beforeInsert(tree);
-            if (tree.parent != null) {
+            if (((ListTree<T>) tree).parent != null) {
                 tree.remove();
             }
-            tree.previous = (T) this;
-            tree.next = next;
+            ((ListTree<T>) tree).previous = (T) this;
+            ((ListTree<T>) tree).next = next;
             if (next == null) {
-                parent.tail = tree;
+                ((ListTree<T>) parent).tail = tree;
             } else {
-                next.previous = tree;
+                ((ListTree<T>) next).previous = tree;
             }
             next = tree;
-            tree.parent = parent;
-            parent.size++;
+            ((ListTree<T>) tree).parent = parent;
+            ((ListTree<T>) parent).size++;
             parent.afterInsert(tree);
         }
     }
@@ -327,19 +327,19 @@ public class ListTree<T extends ListTree<T>> {
         }
         if (this != tree) {
             parent.beforeInsert(tree);
-            if (tree.parent != null) {
+            if (((ListTree<T>) tree).parent != null) {
                 tree.remove();
             }
-            tree.previous = previous;
-            tree.next = (T) this;
+            ((ListTree<T>) tree).previous = previous;
+            ((ListTree<T>) tree).next = (T) this;
             if (previous == null) {
-                parent.head = tree;
+                ((ListTree<T>) parent).head = tree;
             } else {
-                previous.next = tree;
+                ((ListTree<T>) previous).next = tree;
             }
             previous = tree;
-            tree.parent = parent;
-            parent.size++;
+            ((ListTree<T>) tree).parent = parent;
+            ((ListTree<T>) parent).size++;
             parent.afterInsert(tree);
         }
     }
@@ -355,20 +355,20 @@ public class ListTree<T extends ListTree<T>> {
         }
         parent.beforeRemove((T) this);
         if (previous == null) {
-            parent.head = next;
+            ((ListTree<T>) parent).head = next;
         } else {
-            previous.next = next;
+            ((ListTree<T>) previous).next = next;
         }
         if (next == null) {
-            parent.tail = previous;
+            ((ListTree<T>) parent).tail = previous;
         } else {
-            next.previous = previous;
+            ((ListTree<T>) next).previous = previous;
         }
         T _parent = parent;
         parent = null;
         previous = null;
         next = null;
-        _parent.size--;
+        ((ListTree<T>) _parent).size--;
         _parent.afterRemove((T) this);
     }
 
@@ -392,7 +392,7 @@ public class ListTree<T extends ListTree<T>> {
 
                     //
                     previous = next;
-                    next = next.next;
+                    next = ((ListTree<T>) next).next;
                     index++;
                     return current;
                 } else {
@@ -410,7 +410,7 @@ public class ListTree<T extends ListTree<T>> {
 
                     //
                     next = previous;
-                    previous = previous.previous;
+                    previous = ((ListTree<T>) previous).previous;
                     index--;
                     return current;
                 } else {
@@ -433,8 +433,8 @@ public class ListTree<T extends ListTree<T>> {
                 if (current == previous) {
                     index--;
                 }
-                next = current.next;
-                previous = current.previous;
+                next = ((ListTree<T>) current).next;
+                previous = ((ListTree<T>) current).previous;
                 current.remove();
                 current = null;
             }
@@ -451,7 +451,7 @@ public class ListTree<T extends ListTree<T>> {
                 }
                 index++;
                 previous = tree;
-                next = tree.next;
+                next = ((ListTree<T>) tree).next;
             }
         };
     }
