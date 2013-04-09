@@ -92,6 +92,8 @@ public class EditRedirectBean implements Serializable {
         this.pr.setConditions(new ArrayList<RedirectCondition>());
         RedirectMappings rm = new RedirectMappings();
         rm.setMappings(new ArrayList<NodeMap>());
+        this.originNodeNames = loadOriginNodes(site);
+        this.redirectNodeNames = loadRedirectNodes();
         this.pr.setMappings(rm);
         this.mappings = pr.getMappings();
         isNewRedirect = true;
