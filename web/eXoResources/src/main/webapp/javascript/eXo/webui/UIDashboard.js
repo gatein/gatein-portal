@@ -427,10 +427,10 @@
 				"mouseover": function() {
 					eXoDashBoard.enableContainer(this);
 				}, 
-				"mouseout": function() {
+				"mouseout touchleave": function() {
 					eXoDashBoard.disableContainer(this);
 				},
-				"mousedown": function() {
+				"mousedown touchstart": function() {
 					portalControl.VerticalScrollManager.initScroll(this, $(this).hasClass("TopItemContainer"), 10);
 				}
 			});

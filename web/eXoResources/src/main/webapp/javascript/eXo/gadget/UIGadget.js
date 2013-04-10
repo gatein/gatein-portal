@@ -124,19 +124,20 @@
 	      gadgetTitle.css("display", "block");      
 	    }
 	
-	    gadget.find(".CloseGadget").on("click", function() {
+            gadget.find(".CloseGadget, .MaximizeAction, .MinimizeAction, .EditGadget").on("mousedown touchstart", false);
+	
+	    gadget.find(".CloseGadget").on("click touchstart", function() {
 	    	eXoGadget.deleteGadget(this);
 	    });
-	    gadget.find(".MaximizeAction").on("click", function() {
+	    gadget.find(".MaximizeAction").on("click touchstart", function() {
 	    	eXoGadget.maximizeGadget(this);
 	    });
-	    gadget.find(".MinimizeAction").on("click", function() {
+	    gadget.find(".MinimizeAction").on("click touchstart", function() {
 	    	eXoGadget.minimizeGadget(this);
 	    });
-	    gadget.find(".EditGadget").on("click", function() {
+	    gadget.find(".EditGadget").on("click touchstart", function() {
 	    	eXoGadget.editGadget(gadget.attr("id"));
 	    });
-	    gadget.find(".CloseGadget, .MaximizeAction, .MinimizeAction, .EditGadget").on("mousedown", false);
 	    
 	    if (!gadget.parent().hasClass("UIPageDesktop")) {
 	      gadget.css("width", "auto");    	

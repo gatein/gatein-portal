@@ -1,19 +1,29 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-    import org.exoplatform.portal.webui.portal.UIPortal;
+        import org.exoplatform.portal.webui.portal.UIPortal;
+        import org.exoplatform.container.ExoContainer;
+        import org.exoplatform.container.ExoContainerContext        
+        import org.exoplatform.portal.config.UserACL;
 	
 	def rcontext = _ctx.getRequestContext();
 
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-    UIPortal uiPortal = uiPortalApp.getCurrentSite();
-    String sharedLayout = uiPortal.getProperty("sharedLayout");
-    if (sharedLayout != null && sharedLayout.equals("adminsOnly")) {
-        String[] permissions = {"*:/platform/administrators"};
-        uicomponent.setAccessPermissions(permissions);
-    }
+        UIPortal uiPortal = uiPortalApp.getCurrentSite();
+        String sharedLayout = uiPortal.getProperty("sharedLayout");
+        boolean hasPermission = false;
+        if (sharedLayout != null && sharedLayout.equals("adminsOnly")) {
+            ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+            UserACL acl = (UserACL) exoContainer.getComponentInstanceOfType(UserACL.class); 
+        
+            if (acl.hasPermission("*:/platform/administrators")){
+               hasPermission = true;
+            }
 
-	boolean hasPermission = uicomponent.hasPermission();
+        } else {
+          hasPermission = uicomponent.hasPermission();
+        }
+
 	if(!uiPortalApp.isEditing() && !hasPermission) return;
 
   if (uiPortalApp.isEditing())

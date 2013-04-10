@@ -22,7 +22,7 @@
         <portlet-preferences>
             <preference>
                 <name>enable.dashboard.link</name>
-                <value>false</value>
+                <value>true</value>
             </preference>
             <preference>
                 <name>enable.grouppages.link</name>

@@ -45,7 +45,7 @@
 	    var resizeBtn = $(popup).find("span.ResizeButton")[0];
 	    if (resizeBtn) {
 	    	resizeBtn.style.display = 'block';
-	    	resizeBtn.onmousedown = this.startResizeEvt;
+	    	$(resizeBtn).on("mousedown touchstart", this.startResizeEvt);
 	    }    	
 	
 	    if (isShowMask)
@@ -151,15 +151,15 @@
 			if (document.onmousedown) {
 				popupWindow.backupEvent = document.onmousedown;
 			}
-			document.onmousedown = function() {return false};		
+			$(document).on("mousedown touchstart", function() {return false});		
 		}
 		
 		var targetPopup = $(this).parents(".UIPopupWindow")[0];
 		popupWindow.resizedPopup = targetPopup;
 		popupWindow.backupPointerY = base.Browser.findMouseRelativeY(targetPopup, evt) ;	
 	
-	    document.onmousemove = popupWindow.resize;
-	    document.onmouseup = popupWindow.endResizeEvt;
+	    $(document).on("mousemove touchmove", popupWindow.resize);
+	    $(document).on("mouseup  touchend", popupWindow.endResizeEvt);
 	  },
 	
 	  /**
@@ -195,14 +195,13 @@
 	   */
 	  endResizeEvt : function(evt) {
 		popupWindow.resizedPopup = null;
-	    this.onmousemove = null;
-	    this.onmouseup = null;
+	    $(this).off("mousemove touchmove mouseup touchstop");
 	    
 	    //enable select text
 		if (navigator.userAgent.indexOf("MSIE") >= 0) {
 			document.onselectstart = popupWindow.backupEvent;
 		} else {                
-			document.onmousedown = popupWindow.backupEvent;
+			$(document).off("mousedown touchstart").on("mousedown touchstart", popupWindow.backupEvent);
 		}
 		popupWindow.backupEvent = null;
 	  },

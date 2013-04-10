@@ -33,7 +33,7 @@ function initTabbedDashboardPortlet(id)
       showAddTabInput(this); 
     });
 
-    tab.on("dblclick", ".SelectedTab > span", function() {
+    tab.on("click", ".SelectedTab > span", function() {
       var span = $(this);
       showEditLabelInput(this, span.attr("id"), span.text()); 
     });

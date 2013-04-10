@@ -440,7 +440,7 @@
 		  var posXObject = browser.findPosX(object,isRTL) ;	  
 		  if (!e) e = window.event;
 		  e = $.event.fix(e);
-		  var mouseX = e.pageX;  
+		  var mouseX = e.pageX || e.originalEvent.touches[0].pageX;  
 		  return mouseX == -1 ? -1 : mouseX - posXObject ;
 		},
 		
@@ -452,7 +452,7 @@
 		  var posYObject = $(object).offset().top;
 		  if (!e) e = window.event;
 		  e = $.event.fix(e);
-		  var mouseY = e.pageY;  
+		  var mouseY = e.pageY || e.originalEvent.touches[0].pageY;  
 		  return  mouseY == -1 ? -1 : mouseY - posYObject ;
 		},
 		

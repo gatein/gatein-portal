@@ -368,7 +368,7 @@
 		  var workspaceHeight = $("#UIWorkingWorkspace").height();
 		  var browserHeight = jWin.height();
 		  if(workspaceHeight <= browserHeight) return;
-		  var mouseY = e.clientY;
+		  var mouseY = e.clientY || e.originalEvent.touches[0].clientY;
 		  var deltaTop = mouseY - (Math.round(browserHeight * 5/6));
 		  var deltaBottom = mouseY - (Math.round(browserHeight/6));
 		  

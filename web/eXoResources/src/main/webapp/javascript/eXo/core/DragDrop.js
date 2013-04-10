@@ -23,8 +23,8 @@
 		
 		DragDrop.prototype.init = function(o, oRoot) {
 			var jObj = $(o);
-			jObj.off("mousedown");
-			jObj.on("mousedown", eXo.core.DragDrop.start);
+			jObj.off("mousedown touchstart");
+			jObj.on("mousedown touchstart", eXo.core.DragDrop.start);
 	
 			o.root = oRoot && oRoot != null ? oRoot : o ;
 			
@@ -41,21 +41,21 @@
 				return false;
 			}
 			var position = jRoot.position();
-			o.lastMouseX = e.pageX;
-			o.lastMouseY = e.pageY;
+			o.lastMouseX = e.pageX || e.originalEvent.touches[0].pageX;
+			o.lastMouseY = e.pageY || e.originalEvent.touches[0].pageY;
 			o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
-			$(document).on({"mousemove" : eXo.core.DragDrop.drag,
-				"mouseup" : eXo.core.DragDrop.end,
+			$(document).on({"mousemove touchmove" : eXo.core.DragDrop.drag,
+				"mouseup touchend" : eXo.core.DragDrop.end,
 				"keydown" : eXo.core.DragDrop.onKeyDownEvt,
-				"mouseout" : eXo.core.DragDrop.cancel});
+				"mouseout touchleave" : eXo.core.DragDrop.cancel});
 			jRoot.data("dragging", true);
 			return false;
 		};
 		
 		DragDrop.prototype.drag = function(e) {
 			var o = obj;
-			var ey = e.pageY;
-			var ex = e.pageX;
+			var ey = e.pageY || e.originalEvent.touches[0].pageY;
+			var ex = e.pageX || e.originalEvent.touches[0].pageX;
 			
 			var jRoot = $(o.root);
 			var y = parseInt(jRoot.css("top"));
@@ -75,14 +75,14 @@
 		};
 		
 		DragDrop.prototype.end = function(e) {
-			$(document).off("mousemove mouseup mouseout keydown");
+			$(document).off("mousemove touchmove mouseup touchend mouseout touchleave keydown");
 			
 			var jRoot = $(obj.root);
 			var position = jRoot.position();
 			var y = position.top;
 			var x = position.left;
 			
-			obj.root.onDragEnd( position.left, position.top, e.clientX, e.clientY, e);
+			obj.root.onDragEnd( position.left, position.top, e.clientX || e.originalEvent.changedTouches[0].clientX, e.clientY || e.originalEvent.changedTouches[0].clientY, e);
 			obj = null;
 			jRoot.removeData("dragging");
 			return false;
