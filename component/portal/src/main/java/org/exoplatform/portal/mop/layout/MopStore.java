@@ -41,7 +41,6 @@ import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
@@ -242,41 +241,12 @@ public class MopStore implements LayoutStore {
             attrs.setValue(MappedAttributes.HEIGHT, windowState.properties.get(ElementState.Window.HEIGHT));
             save(windowState.properties, attrs, windowPropertiesBlackList);
             ApplicationState instanceState = windowState.state;
-            // We modify only transient portlet state
-            // and we ignore any persistent portlet state
             if (instanceState instanceof TransientApplicationState) {
-                //
-                TransientApplicationState transientState = (TransientApplicationState) instanceState;
-                // The current site
-                Site currentSite = window.getPage().getSite();
-                // The content id
-                String contentId = transientState.getContentId();
-                ContentType contentType = windowState.type.getContentType();
-                // The customization that we will inherit from if not null
-                Customization<?> customization = null;
-                // Destroy existing window previous customization
                 if (window.getCustomization() != null) {
                     window.getCustomization().destroy();
                 }
-                // If the existing customization is not null and matches the content id
-                Customization dstCustomization;
-                if (customization != null && customization.getType().equals(contentType)
-                        && customization.getContentId().equals(contentId)) {
-                    // If it's a customization of the current site we extend it
-                    if (customization.getContext() == currentSite) {
-                        dstCustomization = window.customize(customization);
-                    } else {
-                        // Otherwise we clone it propertly
-                        Object state_ = customization.getVirtualState();
-                        dstCustomization = window.customize(contentType, contentId, state_);
-                    }
-                } else {
-                    // Otherwise we create an empty customization
-                    dstCustomization = window.customize(contentType, contentId, null);
-                }
-                // At this point we have customized the window
-                // now if we have any additional state payload we must merge it
-                // with the current state
+                TransientApplicationState transientState = (TransientApplicationState) instanceState;
+                Customization dstCustomization = window.customize(windowState.type.getContentType(), transientState.getContentId(), null);
                 Object state_ = ((TransientApplicationState) instanceState).getContentState();
                 if (state_ != null) {
                     dstCustomization.setState(state_);
@@ -286,7 +256,7 @@ public class MopStore implements LayoutStore {
                 Customization<?> customization = session.findCustomizationById(cloneState.getStorageId());
                 window.customize(customization);
             } else if (instanceState instanceof PersistentApplicationState) {
-                // Do nothing
+                // We ignore any persistent portlet state
             } else {
                 throw new IllegalArgumentException("Cannot save application with state " + instanceState);
             }
