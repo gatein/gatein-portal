@@ -20,6 +20,7 @@
 package org.exoplatform.portal.pom.config;
 
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,6 +50,8 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
 import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.Property;
+import org.gatein.portal.mop.customization.CustomizationContext;
+import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -60,7 +63,6 @@ import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteService;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
-import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.BodyData;
@@ -122,6 +124,9 @@ public class POMDataStorage implements ModelDataStorage {
     /** . */
     private final PageService pageService;
 
+    /** . */
+    private final CustomizationService customizationService;
+
     public POMDataStorage(
             final POMSessionManager pomMgr,
             ConfigurationManager confManager,
@@ -129,7 +134,8 @@ public class POMDataStorage implements ModelDataStorage {
             SiteService siteService,
             PageService pageService,
             JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService,
-            ListenerService listenerService) {
+            ListenerService listenerService,
+            CustomizationService customizationService) {
 
         // Invalidation bridge : listen for PageService events and invalidate the DataStorage cache
         Listener<?, org.gatein.portal.mop.page.PageKey> invalidator = new Listener<Object, org.gatein.portal.mop.page.PageKey>() {
@@ -151,6 +157,7 @@ public class POMDataStorage implements ModelDataStorage {
         this.siteService = siteService;
         this.layoutService = layoutService;
         this.pageService = pageService;
+        this.customizationService = customizationService;
     }
 
     public PortalData getPortalConfig(PortalKey key) throws Exception {
@@ -400,17 +407,16 @@ public class POMDataStorage implements ModelDataStorage {
         if (state instanceof TransientApplicationState) {
             TransientApplicationState tstate = (TransientApplicationState) state;
             contentId = tstate.getContentId();
-        } else if (state instanceof PersistentApplicationState) {
-            PersistentApplicationState pstate = (PersistentApplicationState) state;
-            contentId = pomMgr.execute(new PreferencesTask.GetContentId<S>(pstate.getStorageId()));
-        } else if (state instanceof CloneApplicationState) {
-            CloneApplicationState cstate = (CloneApplicationState) state;
-            contentId = pomMgr.execute(new PreferencesTask.GetContentId<S>(cstate.getStorageId()));
         } else {
-            throw new AssertionError();
+            String storageId;
+            if (state instanceof CloneApplicationState) {
+                storageId = ((CloneApplicationState<S>) state).getStorageId();
+            } else {
+                storageId = ((PersistentApplicationState<S>) state).getStorageId();
+            }
+            CustomizationContext context = customizationService.loadCustomization(storageId);
+            contentId = context.getContentId();
         }
-
-        //
         return contentId;
     }
 
@@ -420,13 +426,15 @@ public class POMDataStorage implements ModelDataStorage {
             TransientApplicationState<S> transientState = (TransientApplicationState<S>) state;
             S prefs = transientState.getContentState();
             return prefs != null ? prefs : null;
-        } else if (state instanceof CloneApplicationState) {
-            PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((CloneApplicationState<S>) state).getStorageId(), clazz);
-            return pomMgr.execute(load);
         } else {
-            PreferencesTask.Load<S> load = new PreferencesTask.Load<S>(((PersistentApplicationState<S>) state).getStorageId(),
-                    clazz);
-            return pomMgr.execute(load);
+            String storageId;
+            if (state instanceof CloneApplicationState) {
+                storageId = ((CloneApplicationState<S>) state).getStorageId();
+            } else {
+                storageId = ((PersistentApplicationState<S>) state).getStorageId();
+            }
+            CustomizationContext context = customizationService.loadCustomization(storageId);
+            return (S) context.getState();
         }
     }
 
@@ -434,15 +442,15 @@ public class POMDataStorage implements ModelDataStorage {
         if (state instanceof TransientApplicationState) {
             throw new AssertionError("Does not make sense");
         } else {
+            String storageId;
             if (state instanceof PersistentApplicationState) {
-                PreferencesTask.Save<S> save = new PreferencesTask.Save<S>(
-                        ((PersistentApplicationState<S>) state).getStorageId(), preferences);
-                pomMgr.execute(save);
+                storageId = ((PersistentApplicationState<S>) state).getStorageId();
             } else {
-                PreferencesTask.Save<S> save = new PreferencesTask.Save<S>(((CloneApplicationState<S>) state).getStorageId(),
-                        preferences);
-                pomMgr.execute(save);
+                storageId = ((CloneApplicationState<S>) state).getStorageId();
             }
+            CustomizationContext context = customizationService.loadCustomization(storageId);
+            context.setState((Serializable) preferences);
+            customizationService.saveCustomization(context);
             return state;
         }
     }

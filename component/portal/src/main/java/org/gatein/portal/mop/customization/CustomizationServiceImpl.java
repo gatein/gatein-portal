@@ -1,0 +1,72 @@
+/*
+ * Copyright (C) 2012 eXo Platform SAS.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+package org.gatein.portal.mop.customization;
+
+import java.io.Serializable;
+
+/**
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
+public class CustomizationServiceImpl implements CustomizationService {
+
+    /** . */
+    private final CustomizationStore store;
+
+    public CustomizationServiceImpl(CustomizationStore store) throws NullPointerException {
+        if (store == null) {
+            throw new NullPointerException("No null store allowed");
+        }
+        this.store = store;
+    }
+
+    @Override
+    public <S extends Serializable> CustomizationContext<S> loadCustomization(String id) throws NullPointerException {
+        if (id == null) {
+            throw new NullPointerException("No null id accepted");
+        }
+        CustomizationData<S> data = store.loadCustomization(id);
+        if (data != null) {
+            return new CustomizationContext<S>(data.id, data);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public <S extends Serializable> void saveCustomization(CustomizationContext<S> customization) {
+        if (customization == null) {
+            throw new NullPointerException("No null customization accepted");
+        }
+        if (customization.update != null) {
+            customization.data = store.saveCustomization(customization.id, customization.update);
+            customization.update = null;
+        }
+    }
+
+    @Override
+    public <S extends Serializable> CustomizationContext<S> cloneCustomization(String srcId, String dstId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void destroyCustomization(String id) {
+        throw new UnsupportedOperationException();
+    }
+}

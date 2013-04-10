@@ -127,9 +127,8 @@ public class MopStore implements LayoutStore {
             Attributes attrs = window.getAttributes();
             Customization<?> customization = window.getCustomization();
             ContentType<?> contentType = customization.getType();
-            String customizationid = customization.getId();
             ApplicationType applicationType = ApplicationType.getType(contentType);
-            PersistentApplicationState instanceState = new PersistentApplicationState(customizationid);
+            PersistentApplicationState instanceState = new PersistentApplicationState(window.getObjectId());
             HashMap<String, String> properties = new HashMap<String, String>();
             load(attrs, properties, windowPropertiesBlackList);
             List<String> accessPermissions = Collections.emptyList();
@@ -253,8 +252,8 @@ public class MopStore implements LayoutStore {
                 }
             } else if (instanceState instanceof CloneApplicationState) {
                 CloneApplicationState cloneState = (CloneApplicationState) instanceState;
-                Customization<?> customization = session.findCustomizationById(cloneState.getStorageId());
-                window.customize(customization);
+                UIWindow customization = (UIWindow)session.findObjectById(cloneState.getStorageId());
+                window.customize(customization.getCustomization());
             } else if (instanceState instanceof PersistentApplicationState) {
                 // We ignore any persistent portlet state
             } else {

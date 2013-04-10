@@ -22,6 +22,7 @@ package org.gatein.portal.mop.layout;
 import java.util.UUID;
 
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.hierarchy.ModelNode;
@@ -49,9 +50,21 @@ public class Element extends ModelNode<Element, ElementState> {
     }
 
     public static ElementState.WindowBuilder portlet(String portletId) {
+        return portlet(portletId, null);
+    }
+
+    public static ElementState.WindowBuilder portlet(String portletId, Object portletState) {
         return new ElementState.WindowBuilder(
                 ApplicationType.PORTLET,
-                new TransientApplicationState(portletId),
+                new TransientApplicationState(portletId, portletState),
+                Properties.EMPTY,
+                ElementState.EMPTY_STRINGS);
+    }
+
+    public static ElementState.WindowBuilder clonePortlet(String customizationId) {
+        return new ElementState.WindowBuilder(
+                ApplicationType.PORTLET,
+                new CloneApplicationState(customizationId),
                 Properties.EMPTY,
                 ElementState.EMPTY_STRINGS);
     }

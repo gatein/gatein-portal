@@ -33,7 +33,6 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.gatein.portal.mop.page.PageService;
-import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.data.ModelChange;
 
 /**
@@ -151,7 +150,6 @@ public interface DataStorage {
     /**
      * Return content state. If can't find, return null
      *
-     * @see PreferencesTask
      * @param state - ApplicationState object
      * @param type - ApplicationType object
      */

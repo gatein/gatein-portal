@@ -44,7 +44,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         super.setUp();
 
         //
-        persistence = context.getDescriptionPersistence();
+        persistence = context.getDescriptionStore();
     }
 
     public void testResolveNoDescription() throws Exception {

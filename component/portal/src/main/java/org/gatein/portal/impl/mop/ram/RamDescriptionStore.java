@@ -34,7 +34,7 @@ import org.gatein.portal.mop.navigation.NodeState;
 public class RamDescriptionStore implements DescriptionStore {
 
     /** . */
-    private Store store;
+    private final Store store;
 
     public RamDescriptionStore(RamStore persistence) {
         this.store = persistence.store;

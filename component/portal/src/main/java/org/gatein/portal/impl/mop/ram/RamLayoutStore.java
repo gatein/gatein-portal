@@ -22,6 +22,7 @@ package org.gatein.portal.impl.mop.ram;
 import java.util.Collections;
 import java.util.List;
 
+import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutStore;
@@ -58,11 +59,21 @@ public class RamLayoutStore implements LayoutStore {
         String parentId = parentNode.getState() instanceof ElementState ? parent : null;
         List<String> children = current.getChildren(nodeId);
         Node element = current.getNode(nodeId);
+        ElementState state = (ElementState) element.getState();
+        if (state instanceof ElementState.Window) {
+            ElementState.Window windowState = (ElementState.Window) state;
+            state = new ElementState.Window(
+                    windowState.type,
+                    new PersistentApplicationState(nodeId),
+                    windowState.properties,
+                    windowState.accessPermissions
+            );
+        }
         return new NodeData<ElementState>(
                 parentId,
                 nodeId,
                 element.getName(),
-                (ElementState)element.getState(),
+                state,
                 children.toArray(new String[children.size()]));
     }
 

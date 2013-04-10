@@ -131,6 +131,10 @@
     <key>org.gatein.portal.mop.description.DescriptionService</key>
     <type>org.gatein.portal.mop.description.DescriptionServiceWrapper</type>
   </component>
+  <component>
+    <key>org.gatein.portal.mop.customization.CustomizationService</key>
+    <type>org.gatein.portal.mop.customization.CustomizationServiceWrapper</type>
+  </component>
 
   <component>
     <key>org.exoplatform.portal.config.UserPortalConfigService</key>
