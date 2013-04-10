@@ -29,15 +29,15 @@
   <display-name>sample-portal</display-name>
 
   <context-param>
+    <description>Binary assets workspace name</description>
     <param-name>org.exoplatform.frameworks.jcr.command.web.fckeditor.digitalAssetsWorkspace</param-name>
     <param-value>portal</param-value>
-    <description>Binary assets workspace name</description>
   </context-param>
 
   <context-param>
+    <description>Binary assets path</description>
     <param-name>org.exoplatform.frameworks.jcr.command.web.fckeditor.digitalAssetsPath</param-name>
     <param-value>/</param-value>
-    <description>Binary assets path</description>
   </context-param>
 
   <!-- ================================================================== -->
@@ -162,8 +162,8 @@
   </servlet>
 
   <servlet>
-    <servlet-name>RestServer</servlet-name>
     <description>eXo - Platform REST Server</description>
+    <servlet-name>RestServer</servlet-name>
     <servlet-class>org.exoplatform.services.rest.servlet.RestServlet</servlet-class>
     <load-on-startup>4</load-on-startup>
   </servlet>
