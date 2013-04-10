@@ -40,7 +40,7 @@ public class OAuthPrincipal<T> implements Principal {
     private final OAuthProviderType<T> oauthProviderType;
 
 
-    public OAuthPrincipal(String userName, String firstName, String lastName, String displayName, String email, T accessToken, OAuthProviderType oauthProviderType) {
+    public OAuthPrincipal(String userName, String firstName, String lastName, String displayName, String email, T accessToken, OAuthProviderType<T> oauthProviderType) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;

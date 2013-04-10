@@ -159,7 +159,9 @@ public class UIAccountSocial extends UIForm {
                     } catch (OAuthException oe) {
                         if (OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED.equals(oe.getExceptionCode())) {
                             Throwable t = oe.getCause() != null ? oe.getCause() : oe;
-                            uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.failed-revoke", new Object[] { t.getMessage() }, ApplicationMessage.WARNING));
+                            ApplicationMessage appMessage = new ApplicationMessage("UIAccountSocial.msg.failed-revoke", new Object[] { t.getMessage() }, ApplicationMessage.WARNING);
+                            appMessage.setArgsLocalized(false);
+                            uiApp.addMessage(appMessage);
                             log.warn("Revocation of accessToken failed", t);
                         } else {
                             throw oe;
@@ -168,7 +170,9 @@ public class UIAccountSocial extends UIForm {
                 }
 
                 Object[] args = { oauthProviderTypeToUnlink.getFriendlyName(), userName};
-                uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.successful-unlink", args));
+                ApplicationMessage appMessage = new ApplicationMessage("UIAccountSocial.msg.successful-unlink", args);
+                appMessage.setArgsLocalized(false);
+                uiApp.addMessage(appMessage);
 
                 prContext.setAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME, userProfile);
                 uiForm.updateUIFields();

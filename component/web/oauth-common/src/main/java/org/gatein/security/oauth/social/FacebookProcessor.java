@@ -18,12 +18,8 @@
 package org.gatein.security.oauth.social;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -39,6 +35,8 @@ import javax.servlet.http.HttpSession;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.facebook.GateInFacebookProcessorImpl;
 import org.gatein.security.oauth.utils.OAuthUtils;
 import org.json.JSONException;
@@ -141,12 +139,15 @@ public class FacebookProcessor {
         return facebookPrincipal;
     }
 
-    protected Principal handleAuthenticationResponse(HttpServletRequest request, HttpServletResponse response) {
+    protected Principal handleAuthenticationResponse(HttpServletRequest request, HttpServletResponse response) throws OAuthException {
         String error = request.getParameter(OAuthConstants.ERROR_PARAMETER);
         if (error != null) {
-            throw new RuntimeException("error:" + error);
+            if (OAuthConstants.ERROR_ACCESS_DENIED.equals(error)) {
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_USER_DENIED_SCOPE, error);
+            } else {
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_UNSPECIFIED, error);
+            }
         } else {
-            String returnUrl = returnURL;
             String authorizationCode = request.getParameter(OAuthConstants.CODE_PARAMETER);
             if (authorizationCode == null) {
                 log.error("Authorization code parameter not found");
@@ -207,19 +208,16 @@ public class FacebookProcessor {
 
             facebookPrincipal = new FacebookPrincipal();
             facebookPrincipal.setAccessToken(accessToken);
-            facebookPrincipal.setId(jsonObject.getString("id"));
-            facebookPrincipal.setName(jsonObject.getString("name"));
-            facebookPrincipal.setUsername(jsonObject.getString("username"));
-            facebookPrincipal.setFirstName(jsonObject.getString("first_name"));
-            facebookPrincipal.setLastName(jsonObject.getString("last_name"));
-            facebookPrincipal.setGender(jsonObject.getString("gender"));
-            facebookPrincipal.setTimezone(jsonObject.getString("timezone"));
-            facebookPrincipal.setLocale(jsonObject.getString("locale"));
+            facebookPrincipal.setId(jsonObject.optString("id"));
+            facebookPrincipal.setName(jsonObject.optString("name"));
+            facebookPrincipal.setUsername(jsonObject.optString("username"));
+            facebookPrincipal.setFirstName(jsonObject.optString("first_name"));
+            facebookPrincipal.setLastName(jsonObject.optString("last_name"));
+            facebookPrincipal.setGender(jsonObject.optString("gender"));
+            facebookPrincipal.setTimezone(jsonObject.optString("timezone"));
+            facebookPrincipal.setLocale(jsonObject.optString("locale"));
+            facebookPrincipal.setEmail(jsonObject.optString("email"));
             facebookPrincipal.setJsonObject(jsonObject);
-            if (jsonObject.has("email")) {
-                facebookPrincipal.setName(jsonObject.getString("email"));
-                facebookPrincipal.setEmail(jsonObject.getString("email"));
-            }
         } catch (JSONException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

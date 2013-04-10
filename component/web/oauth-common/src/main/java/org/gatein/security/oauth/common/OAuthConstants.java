@@ -46,6 +46,8 @@ public class OAuthConstants {
 
     public static final String ERROR_PARAMETER = "error";
 
+    public static final String ERROR_ACCESS_DENIED = "access_denied";
+
     // Used in twitter
     public static final String OAUTH_VERIFIER = "oauth_verifier";
 
@@ -93,7 +95,11 @@ public class OAuthConstants {
 
     public static final String PROFILE_TWITTER_USERNAME = "user.social-info.twitter.userName";
 
-    public static final String PROFILE_FACEBOOK_ACCESS_TOKEN = "user.social-info.facebook.accessToken";
+    // Facebook accessToken could be very long, so we need to split to two attributes
+    public static final String PROFILE_FACEBOOK_ACCESS_TOKEN_1 = "user.social-info.facebook.accessToken.1";
+    public static final String PROFILE_FACEBOOK_ACCESS_TOKEN_2 = "user.social-info.facebook.accessToken.2";
+
+    public static final String PROFILE_FACEBOOK_SCOPE = "user.social-info.facebook.scope";
 
     public static final String PROFILE_GOOGLE_ACCESS_TOKEN = "user.social-info.google.accessToken";
 
@@ -114,7 +120,7 @@ public class OAuthConstants {
 
     public static final String ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT = "_urlToRedirectAfterLinkSocialAccount";
 
-    public static final String ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK = "_socialNetworkProviderToUnlink";
+    public static final String ATTRIBUTE_EXCEPTION_OAUTH = "_oauthException";
 
     public static final String ATTRIBUTE_LINKED_OAUTH_PROVIDER = "_linkedOAuthProviderUsernameAttrName";
 
@@ -125,6 +131,8 @@ public class OAuthConstants {
     public static final String ATTRIBUTE_AUTH_STATE = "_authState";
 
     public static final String ATTRIBUTE_VERIFICATION_STATE = "_verificationState";
+
+    public static final String ATTRIBUTE_OAUTH_SCOPE = "_oauthScope";
 
     // URL
 
@@ -138,6 +146,8 @@ public class OAuthConstants {
     // Request parameters
 
     public static final String PARAM_OAUTH_INTERACTION = "_oauthInteraction";
+
+    public static final String PARAM_CUSTOM_SCOPE = "_oauthCustomScope";
 
     public static final String PARAM_OAUTH_INTERACTION_VALUE_START = "start";
 

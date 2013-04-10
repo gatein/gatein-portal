@@ -32,10 +32,12 @@ public class FacebookInteractionState {
 
     private final String state;
     private final FacebookPrincipal facebookPrincipal;
+    private final String scope;
 
-    public FacebookInteractionState(String state, FacebookPrincipal facebookPrincipal) {
+    public FacebookInteractionState(String state, FacebookPrincipal facebookPrincipal, String scope) {
         this.state = state;
         this.facebookPrincipal = facebookPrincipal;
+        this.scope = scope;
     }
 
     public String getState() {
@@ -44,5 +46,18 @@ public class FacebookInteractionState {
 
     public FacebookPrincipal getFacebookPrincipal() {
         return facebookPrincipal;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("FacebookInteractionState[state=")
+                .append(state)
+                .append(", principal=" + facebookPrincipal)
+                .append(", scope=" + scope)
+                .append("]").toString();
     }
 }

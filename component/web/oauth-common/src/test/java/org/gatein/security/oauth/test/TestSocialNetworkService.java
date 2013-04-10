@@ -45,6 +45,7 @@ import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.common.OAuthProviderType;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
 import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
 
@@ -122,7 +123,7 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertEquals(foundUser3.getUserName(), user2.getUserName());
 
         // Try to change facebook username for user1 with socialNetworkService
-        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "joseph.doyle.changed", "someToken");
+        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "joseph.doyle.changed", createFacebookAccessToken("someToken"));
 
         User foundUser4 = socialNetworkService.findUserByOAuthProviderUsername(getFacebookProvider(), "joseph.doyle.changed");
         assertNotNull(foundUser4);
@@ -130,7 +131,7 @@ public class TestSocialNetworkService extends AbstractKernelTest {
 
         try {
             // This should fail because of duplicated facebook username
-            socialNetworkService.updateOAuthInfo(getFacebookProvider(), user2.getUserName(), "joseph.doyle.changed", "someToken");
+            socialNetworkService.updateOAuthInfo(getFacebookProvider(), user2.getUserName(), "joseph.doyle.changed", createFacebookAccessToken("someToken"));
 
             fail("Exception should occur because of duplicated facebook username");
         } catch (OAuthException gtnOauthOAuthException) {
@@ -149,8 +150,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         orgService.getUserHandler().createUser(user2, false);
 
         // Update some facebook accessTokens
-        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user1.getUserName(), "aaa123");
-        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user2.getUserName(), "bbb456");
+        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user1.getUserName(), createFacebookAccessToken("aaa123"));
+        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user2.getUserName(), createFacebookAccessToken("bbb456"));
 
         // Update some google accessToken
         GoogleTokenResponse grc = createGoogleTokenResponse("ccc789", "rfrc487", "http://someScope");
@@ -161,8 +162,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         socialNetworkService.updateOAuthAccessToken(getTwitterProvider(), user1.getUserName(), twitterToken);
 
         // Verify that FB accessTokens could be obtained
-        assertEquals("aaa123", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
-        assertEquals("bbb456", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user2.getUserName()));
+        assertEquals("aaa123", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
+        assertEquals("bbb456", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user2.getUserName()).getAccessToken());
 
         // Verify that Google accessToken could be obtained
         grc = createGoogleTokenResponse("ccc789", "rfrc487", "http://someScope");
@@ -176,8 +177,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         // Directly obtain accessTokens from userProfile and verify that they are encoded
         UserProfile userProfile1 = orgService.getUserProfileHandler().findUserProfileByName("testUser1");
         UserProfile userProfile2 = orgService.getUserProfileHandler().findUserProfileByName("testUser2");
-        String encodedAccessToken1 = userProfile1.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN);
-        String encodedAccessToken2 = userProfile2.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN);
+        String encodedAccessToken1 = userProfile1.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1);
+        String encodedAccessToken2 = userProfile2.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1);
         assertFalse("aaa123".equals(encodedAccessToken1));
         assertFalse("bbb456".equals(encodedAccessToken2));
         assertTrue(codec.encode("aaa123").equals(encodedAccessToken1));
@@ -198,12 +199,12 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         orgService.getUserHandler().createUser(user1, false);
 
         // Update some accessToken and verify that it's available
-        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", "fbAccessToken1");
-        assertEquals("fbAccessToken1", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
+        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", createFacebookAccessToken("fbAccessToken1"));
+        assertEquals("fbAccessToken1", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
 
         // Update some accessToken again
-        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", "fbAccessToken2");
-        assertEquals("fbAccessToken2", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
+        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", createFacebookAccessToken("fbAccessToken2"));
+        assertEquals("fbAccessToken2", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
 
         // Update userProfile and change FB username. AccessToken should be invalidated
         UserProfile userProfile1 = orgService.getUserProfileHandler().findUserProfileByName(user1.getUserName());
@@ -212,8 +213,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertNull(socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
 
         // Update some accessToken and verify it's here now
-        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user1.getUserName(), "fbAccessToken3");
-        assertEquals("fbAccessToken3", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
+        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user1.getUserName(), createFacebookAccessToken("fbAccessToken3"));
+        assertEquals("fbAccessToken3", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
 
         // Null FB username and verify that accessToken is invalidated
         userProfile1 = orgService.getUserProfileHandler().findUserProfileByName(user1.getUserName());
@@ -240,7 +241,24 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertNull(socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
     }
 
-    private OAuthProviderType<String> getFacebookProvider() {
+    public void testLongAccessToken() throws Exception {
+        // Create some example token of length 320
+        String longAccessToken = "1234567890";
+        for (int i=0 ; i<5 ; i++) {
+            longAccessToken = longAccessToken + longAccessToken;
+        }
+
+        User user1 = new UserImpl("testUser1");
+        orgService.getUserHandler().createUser(user1, false);
+
+        // Update some accessToken and verify that it's available
+        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", createFacebookAccessToken(longAccessToken));
+
+        // Assert that obtained long access token is equal to original access token
+        assertEquals(longAccessToken, socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
+    }
+
+    private OAuthProviderType<FacebookAccessTokenContext> getFacebookProvider() {
         return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK);
     }
 
@@ -261,6 +279,10 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         grc.setTokenType("Bearer");
         grc.setIdToken("someTokenId");
         return grc;
+    }
+
+    private FacebookAccessTokenContext createFacebookAccessToken(String accessToken) {
+        return new FacebookAccessTokenContext(accessToken, "email,publish_stream");
     }
 
 }

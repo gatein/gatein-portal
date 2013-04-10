@@ -37,10 +37,12 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.services.oauth2.model.Userinfo;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.UserImpl;
+import org.gatein.security.oauth.common.OAuthProviderType;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.common.OAuthPrincipal;
+import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
 import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
@@ -52,10 +54,11 @@ public class OAuthUtils {
 
     // Converting objects
 
-    public static OAuthPrincipal<String> convertFacebookPrincipalToOAuthPrincipal(FacebookPrincipal facebookPrincipal, OAuthProviderTypeRegistry registry) {
-        return new OAuthPrincipal<String>(facebookPrincipal.getUsername(), facebookPrincipal.getFirstName(), facebookPrincipal.getLastName(),
-                facebookPrincipal.getAttribute("name"), facebookPrincipal.getEmail(), facebookPrincipal.getAccessToken(),
-                registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK));
+    public static OAuthPrincipal<FacebookAccessTokenContext> convertFacebookPrincipalToOAuthPrincipal(FacebookPrincipal facebookPrincipal, OAuthProviderTypeRegistry registry, String scope) {
+        FacebookAccessTokenContext fbAccessTokenContext = new FacebookAccessTokenContext(facebookPrincipal.getAccessToken(), scope);
+        OAuthProviderType<FacebookAccessTokenContext> facebookProviderType = registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK);
+        return new OAuthPrincipal<FacebookAccessTokenContext>(facebookPrincipal.getUsername(), facebookPrincipal.getFirstName(), facebookPrincipal.getLastName(),
+                facebookPrincipal.getAttribute("name"), facebookPrincipal.getEmail(), fbAccessTokenContext, facebookProviderType);
     }
 
     public static OAuthPrincipal<TwitterAccessTokenContext> convertTwitterUserToOAuthPrincipal(twitter4j.User twitterUser, TwitterAccessTokenContext accessToken,
@@ -74,8 +77,9 @@ public class OAuthUtils {
             lastName = null;
         }
 
+        OAuthProviderType<TwitterAccessTokenContext> twitterProviderType = registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER);
         return new OAuthPrincipal<TwitterAccessTokenContext>(twitterUser.getScreenName(), firstName, lastName, fullName, null, accessToken,
-                registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER));
+                twitterProviderType);
     }
 
     public static OAuthPrincipal<GoogleTokenResponse> convertGoogleInfoToOAuthPrincipal(Userinfo userInfo, GoogleTokenResponse accessToken,
@@ -83,8 +87,9 @@ public class OAuthUtils {
         // Assume that username is first part of email
         String email = userInfo.getEmail();
         String username = email.substring(0, email.indexOf('@'));
+        OAuthProviderType<GoogleTokenResponse> googleProviderType = registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE);
         return new OAuthPrincipal<GoogleTokenResponse>(username, userInfo.getGivenName(), userInfo.getFamilyName(), userInfo.getName(), userInfo.getEmail(),
-                accessToken, registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE));
+                accessToken, googleProviderType);
     }
 
     public static User convertOAuthPrincipalToGateInUser(OAuthPrincipal principal) {
@@ -101,8 +106,8 @@ public class OAuthUtils {
     /**
      * Given a {@link java.util.Map} of params, construct a query string
      *
-     * @param params
-     * @return
+     * @param params parameters for query
+     * @return query string
      */
     public static String createQueryString(Map<String, String> params) {
         StringBuilder queryString = new StringBuilder();

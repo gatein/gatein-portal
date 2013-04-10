@@ -37,6 +37,9 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.common.OAuthPrincipal;
+import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
 import org.gatein.security.oauth.facebook.FacebookInteractionState;
 import org.gatein.security.oauth.facebook.GateInFacebookProcessor;
 import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
@@ -57,12 +60,14 @@ public class FacebookFilter extends AbstractSSOInterceptor {
     private AuthenticationRegistry authenticationRegistry;
     private GateInFacebookProcessor facebookProcessor;
     private OAuthProviderTypeRegistry oAuthProviderTypeRegistry;
+    private SocialNetworkService socialNetworkService;
 
     @Override
     protected void initImpl() {
         authenticationRegistry = (AuthenticationRegistry)getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
         facebookProcessor = (GateInFacebookProcessor)getExoContainer().getComponentInstanceOfType(GateInFacebookProcessor.class);
         oAuthProviderTypeRegistry = (OAuthProviderTypeRegistry)getExoContainer().getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
+        socialNetworkService = (SocialNetworkService)getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
     }
 
     @Override
@@ -80,7 +85,28 @@ public class FacebookFilter extends AbstractSSOInterceptor {
             httpRequest.getSession().removeAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE);
         }
 
-        FacebookInteractionState interactionState = facebookProcessor.processFacebookAuthInteraction(httpRequest, httpResponse);
+        // Possibility to init interaction with custom scope. It's needed when custom portlets want bigger scope then the one available in configuration
+        String scopeToUse = obtainCustomScopeIfAvailable(httpRequest);
+
+        FacebookInteractionState interactionState;
+
+        try {
+            if (scopeToUse == null) {
+                interactionState = facebookProcessor.processFacebookAuthInteraction(httpRequest, httpResponse);
+            } else {
+                if (log.isTraceEnabled()) {
+                    log.trace("Process facebook oauth interaction with scope: " + scopeToUse);
+                }
+                interactionState = facebookProcessor.processFacebookAuthInteraction(httpRequest, httpResponse, scopeToUse);
+            }
+        } catch (OAuthException ex) {
+            log.warn("Error during Facebook OAuth flow: " + ex.getMessage());
+
+            // Save exception to request, it will be processed later on portal side
+            httpRequest.setAttribute(OAuthConstants.ATTRIBUTE_EXCEPTION_OAUTH, ex);
+            chain.doFilter(request, response);
+            return;
+        }
 
         if (FacebookProcessor.STATES.FINISH.name().equals(interactionState.getState())) {
             FacebookPrincipal principal = interactionState.getFacebookPrincipal();
@@ -89,11 +115,11 @@ public class FacebookFilter extends AbstractSSOInterceptor {
                 log.error("Principal was null. Maybe login modules need to be configured properly.");
             } else {
                 if (log.isTraceEnabled()) {
-                    log.trace("Obtained principal from Facebook authentication: " + principal);
+                    log.trace("Finished Facebook OAuth2 flow with state: " + interactionState);
                     log.trace("Facebook accessToken: " + principal.getAccessToken());
                 }
 
-                OAuthPrincipal<String> oauthPrincipal = OAuthUtils.convertFacebookPrincipalToOAuthPrincipal(principal, oAuthProviderTypeRegistry);
+                OAuthPrincipal<FacebookAccessTokenContext> oauthPrincipal = OAuthUtils.convertFacebookPrincipalToOAuthPrincipal(principal, oAuthProviderTypeRegistry, interactionState.getScope());
 
                 // Remove attribute with state of facebookLogin
                 httpRequest.getSession().removeAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE);
@@ -111,6 +137,33 @@ public class FacebookFilter extends AbstractSSOInterceptor {
                 // Continue with request
                 chain.doFilter(request, response);
             }
+        }
+    }
+
+
+
+    protected String obtainCustomScopeIfAvailable(HttpServletRequest httpRequest) {
+        // It's sufficient to use request parameter, because scope is needed only for facebookProcessor.initialInteraction
+        String customScope = httpRequest.getParameter(OAuthConstants.PARAM_CUSTOM_SCOPE);
+        if (customScope != null) {
+            String currentUser = httpRequest.getRemoteUser();
+            if (currentUser == null) {
+                log.warn("Parameter " + OAuthConstants.PARAM_CUSTOM_SCOPE + " found but there is no user available. Ignoring it.");
+                return null;
+            } else {
+                FacebookAccessTokenContext currentAccessToken = (FacebookAccessTokenContext)socialNetworkService.getOAuthAccessToken(
+                        oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK), currentUser);
+
+                if (currentAccessToken != null) {
+                    // Add new customScope to set of existing scopes, so accessToken will be obtained for all of them
+                    currentAccessToken.addScope(customScope);
+                    return currentAccessToken.getScopesAsString();
+                } else {
+                    return customScope;
+                }
+            }
+        } else {
+            return null;
         }
     }
 }

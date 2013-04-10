@@ -65,5 +65,12 @@ public enum OAuthExceptionCode {
     /**
      * Error when revoking of accessToken of any provider failed
      */
-    EXCEPTION_CODE_TOKEN_REVOKE_FAILED
+    EXCEPTION_CODE_TOKEN_REVOKE_FAILED,
+
+    /**
+     * Error when OAuth2 flow failed because user denied to permit privileges (scope) for OAuth provider
+     */
+    EXCEPTION_CODE_USER_DENIED_SCOPE;
+
+
 }

@@ -32,6 +32,7 @@ import org.gatein.security.oauth.common.OAuthProviderType;
  */
 public interface OAuthProviderTypeRegistry {
 
+    // TODO: more type-safety by passing type?
     <T> OAuthProviderType<T> getOAuthProvider(String key);
 
     Collection<OAuthProviderType> getEnabledOAuthProviders();
