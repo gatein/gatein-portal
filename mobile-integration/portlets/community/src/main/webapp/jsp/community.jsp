@@ -29,7 +29,7 @@
         <h4>${resourceBundle.getString("conversation.label")}</h4>
         <div id="conversation-accordion" class="accordion">
             <div class="accordion-group">
-                <a href="#blog-content-mobile" class="accordion-toggle">
+                <a href="#<portlet:namespace/>blog-content-mobile" id="<portlet:namespace/>blog-content-mobile" class="accordion-toggle">
                     <i class="icon-blog icon-gray"></i>${resourceBundle.getString("conversation.blog.label")}
                 </a>
                 <div class="accordion-body collapse in" id="blog-content-mobile">
@@ -66,7 +66,7 @@
             </div>
 
             <div class="accordion-group">
-                <a href="#tweets-content-mobile" class="accordion-toggle">
+                <a href="#<portlet:namespace/>tweets-content-mobile" id="<portlet:namespace/>tweets-content-mobile" class="accordion-toggle">
                     <i class="icon-twitter icon-gray"></i>${resourceBundle.getString("conversation.twitter.label")}
                 </a>
                 <div class="accordion-body collapse" id="tweets-content-mobile">

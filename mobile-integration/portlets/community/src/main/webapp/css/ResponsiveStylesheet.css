@@ -172,11 +172,7 @@
 }
 
 .gtnResponsiveCommunityPortlet #conversation .accordion-toggle {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: #CCCCCC -moz-use-text-color transparent transparent;
+    border-color: #CCCCCC transparent transparent;
     border-image: none;
     border-style: solid none solid solid;
     border-width: .07142em medium .07142em .07142em;
