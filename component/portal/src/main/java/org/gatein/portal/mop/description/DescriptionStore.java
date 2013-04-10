@@ -26,15 +26,14 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public interface DescriptionStore {
-    DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException;
 
-    DescriptionState getDescription(String id, Locale locale);
+    DescriptionState loadDescription(String id, Locale locale, boolean resolve);
 
-    void setDescription(String id, Locale locale, DescriptionState description);
+    void saveDescription(String id, Locale locale, DescriptionState description);
 
-    void setDescription(String id, DescriptionState description);
+    void loadDescription(String id, DescriptionState description);
 
-    Map<Locale, DescriptionState> getDescriptions(String id);
+    Map<Locale, DescriptionState> loadDescriptions(String id);
 
-    void setDescriptions(String id, Map<Locale, DescriptionState> descriptions);
+    void saveDescriptions(String id, Map<Locale, DescriptionState> descriptions);
 }

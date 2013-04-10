@@ -73,7 +73,7 @@ public interface DescriptionService {
      * @return the description
      * @throws NullPointerException if the id argument is null
      */
-    DescriptionState getDescription(String id) throws NullPointerException;
+    DescriptionState loadDescription(String id) throws NullPointerException;
 
     /**
      * Update the default description to the new description or remove it if the description argument is null.
@@ -82,7 +82,7 @@ public interface DescriptionService {
      * @param description the new description
      * @throws NullPointerException if the id argument is null
      */
-    void setDescription(String id, DescriptionState description) throws NullPointerException;
+    void saveDescription(String id, DescriptionState description) throws NullPointerException;
 
     /**
      * Returns a description for the specified locale argument or null if it does not exist.
@@ -92,7 +92,7 @@ public interface DescriptionService {
      * @return the description
      * @throws NullPointerException if the id or locale argument is null
      */
-    DescriptionState getDescription(String id, Locale locale) throws NullPointerException;
+    DescriptionState loadDescription(String id, Locale locale) throws NullPointerException;
 
     /**
      * Update the description for the specified locale to the new description or remove it if the description argument is null.
@@ -103,7 +103,7 @@ public interface DescriptionService {
      * @throws NullPointerException if the id or locale argument is null
      * @throws IllegalArgumentException if the locale is not valid
      */
-    void setDescription(String id, Locale locale, DescriptionState description) throws NullPointerException,
+    void saveDescription(String id, Locale locale, DescriptionState description) throws NullPointerException,
             IllegalArgumentException;
 
     /**
@@ -113,7 +113,7 @@ public interface DescriptionService {
      * @return the map the description map
      * @throws NullPointerException if the id is null
      */
-    Map<Locale, DescriptionState> getDescriptions(String id) throws NullPointerException;
+    Map<Locale, DescriptionState> loadDescriptions(String id) throws NullPointerException;
 
     /**
      * Updates the description of the specified object or remove the internationalized characteristic of the object if the
@@ -124,7 +124,7 @@ public interface DescriptionService {
      * @throws NullPointerException if the id is null
      * @throws IllegalArgumentException if the map contains an invalid locale
      */
-    void setDescriptions(String id, Map<Locale, DescriptionState> descriptions) throws NullPointerException,
+    void saveDescriptions(String id, Map<Locale, DescriptionState> descriptions) throws NullPointerException,
             IllegalArgumentException;
 
 }

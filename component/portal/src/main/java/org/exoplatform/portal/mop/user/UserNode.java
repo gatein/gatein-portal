@@ -201,7 +201,7 @@ public class UserNode {
 
         DescriptionState description = new DescriptionState(label, null);
 
-        descriptionService.setDescription(id, userLocale, description);
+        descriptionService.saveDescription(id, userLocale, description);
         this.resolvedLabel = label;
     }
 

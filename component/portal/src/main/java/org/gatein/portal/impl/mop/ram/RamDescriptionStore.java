@@ -66,16 +66,7 @@ public class RamDescriptionStore implements DescriptionStore {
     }
 
     @Override
-    public DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException {
-        return getDescription(id, locale, true);
-    }
-
-    @Override
-    public DescriptionState getDescription(String id, Locale locale) {
-        return getDescription(id, locale, false);
-    }
-
-    private DescriptionState getDescription(String id, Locale locale, boolean resolve) {
+    public DescriptionState loadDescription(String id, Locale locale, boolean resolve) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
         Node node = current.getNode(id);
@@ -103,7 +94,7 @@ public class RamDescriptionStore implements DescriptionStore {
     }
 
     @Override
-    public void setDescription(String id, Locale locale, DescriptionState state) {
+    public void saveDescription(String id, Locale locale, DescriptionState state) {
         validateLocale(locale);
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
@@ -120,7 +111,7 @@ public class RamDescriptionStore implements DescriptionStore {
     }
 
     @Override
-    public void setDescription(String id, DescriptionState description) {
+    public void loadDescription(String id, DescriptionState description) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
         NodeState state = (NodeState) current.getNode(id).getState();
@@ -129,7 +120,7 @@ public class RamDescriptionStore implements DescriptionStore {
     }
 
     @Override
-    public Map<Locale, DescriptionState> getDescriptions(String id) {
+    public Map<Locale, DescriptionState> loadDescriptions(String id) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
         String descriptions = current.getChild(id, "descriptions");
@@ -148,7 +139,7 @@ public class RamDescriptionStore implements DescriptionStore {
     }
 
     @Override
-    public void setDescriptions(String id, Map<Locale, DescriptionState> states) {
+    public void saveDescriptions(String id, Map<Locale, DescriptionState> states) {
         for (Locale locale : states.keySet()) {
             validateLocale(locale);
         }

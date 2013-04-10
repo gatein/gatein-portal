@@ -141,7 +141,7 @@ public class UIPageCreationWizard extends UIPageWizard {
             descriptions.put(locale, new DescriptionState(cachedLabels.get(strLocale), null));
         }
 
-        descriptionService.setDescriptions(createdNode.getId(), descriptions);
+        descriptionService.saveDescriptions(createdNode.getId(), descriptions);
         return createdNode;
     }
 

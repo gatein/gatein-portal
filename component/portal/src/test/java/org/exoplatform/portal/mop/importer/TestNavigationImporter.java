@@ -308,7 +308,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The fully explicit case
         NodeContext<?, NodeState> a = node.get("a");
-        Map<Locale, DescriptionState> aDesc = descriptionService.getDescriptions(a.getId());
+        Map<Locale, DescriptionState> aDesc = descriptionService.loadDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
         assertEquals(new DescriptionState("a_en", null), aDesc.get(Locale.ENGLISH));
@@ -317,7 +317,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // No explicit language means to use the portal locale
         NodeContext<?, NodeState> b = node.get("b");
-        Map<Locale, DescriptionState> bDesc = descriptionService.getDescriptions(b.getId());
+        Map<Locale, DescriptionState> bDesc = descriptionService.loadDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
         assertEquals(new DescriptionState("b_en", null), bDesc.get(Locale.ENGLISH));
@@ -326,7 +326,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The simple use case : one single label without the xml:lang attribute
         NodeContext<?, NodeState> c = node.get("c");
-        Map<Locale, DescriptionState> cDesc = descriptionService.getDescriptions(c.getId());
+        Map<Locale, DescriptionState> cDesc = descriptionService.loadDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("c_en", c.getState().getLabel());
 
@@ -350,7 +350,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The fully explicit case
         a = node.get("a");
-        aDesc = descriptionService.getDescriptions(a.getId());
+        aDesc = descriptionService.loadDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ITALIAN, Locale.GERMAN), aDesc.keySet());
         assertEquals(new DescriptionState("a_it", null), aDesc.get(Locale.ITALIAN));
@@ -359,7 +359,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // No explicit language means to use the portal locale
         b = node.get("b");
-        bDesc = descriptionService.getDescriptions(b.getId());
+        bDesc = descriptionService.loadDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.ITALIAN), bDesc.keySet());
         assertEquals(new DescriptionState("foo_b_en", null), bDesc.get(Locale.ENGLISH));
@@ -368,7 +368,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The simple use case : one single label without the xml:lang attribute
         c = node.get("c");
-        cDesc = descriptionService.getDescriptions(c.getId());
+        cDesc = descriptionService.loadDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("foo_c_en", c.getState().getLabel());
 
@@ -394,7 +394,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The fully explicit case
         a = node.get("a");
-        aDesc = descriptionService.getDescriptions(a.getId());
+        aDesc = descriptionService.loadDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
         assertEquals(new DescriptionState("bar_a_en", null), aDesc.get(Locale.ENGLISH));
@@ -403,7 +403,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // No explicit language means to use the portal locale
         b = node.get("b");
-        bDesc = descriptionService.getDescriptions(b.getId());
+        bDesc = descriptionService.loadDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
         assertEquals(new DescriptionState("bar_b_en", null), bDesc.get(Locale.ENGLISH));
@@ -412,7 +412,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The simple use case : one single label without the xml:lang attribute
         c = node.get("c");
-        cDesc = descriptionService.getDescriptions(c.getId());
+        cDesc = descriptionService.loadDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("bar_c_en", c.getState().getLabel());
     }

@@ -49,27 +49,26 @@ public class MopStore implements DescriptionStore {
     }
 
     @Override
-    public DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException {
-        POMSession session = manager.getSession();
-        return cache.getState(session, new CacheKey(locale, id));
-    }
-
-    @Override
-    public DescriptionState getDescription(String id, Locale locale) {
-        POMSession session = manager.getSession();
-        WorkspaceObject obj = session.findObjectById(id);
-        I18NAdapter able = obj.adapt(I18NAdapter.class);
-        Described desc;
-        if (locale != null) {
-            desc = able.getI18NMixin(Described.class, locale, false);
+    public DescriptionState loadDescription(String id, Locale locale, boolean resolve) {
+        if (resolve) {
+            POMSession session = manager.getSession();
+            return cache.getState(session, new CacheKey(locale, id));
         } else {
-            desc = able.getMixin(Described.class, false);
+            POMSession session = manager.getSession();
+            WorkspaceObject obj = session.findObjectById(id);
+            I18NAdapter able = obj.adapt(I18NAdapter.class);
+            Described desc;
+            if (locale != null) {
+                desc = able.getI18NMixin(Described.class, locale, false);
+            } else {
+                desc = able.getMixin(Described.class, false);
+            }
+            return desc != null ? desc.getState() : null;
         }
-        return desc != null ? desc.getState() : null;
     }
 
     @Override
-    public void setDescription(String id, Locale locale, DescriptionState description) {
+    public void saveDescription(String id, Locale locale, DescriptionState description) {
         POMSession session = manager.getSession();
         WorkspaceObject obj = session.findObjectById(id);
         I18NAdapter able = obj.adapt(I18NAdapter.class);
@@ -79,7 +78,7 @@ public class MopStore implements DescriptionStore {
     }
 
     @Override
-    public void setDescription(String id, DescriptionState description) {
+    public void loadDescription(String id, DescriptionState description) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
@@ -95,7 +94,7 @@ public class MopStore implements DescriptionStore {
     }
 
     @Override
-    public Map<Locale, DescriptionState> getDescriptions(String id) {
+    public Map<Locale, DescriptionState> loadDescriptions(String id) {
         POMSession session = manager.getSession();
         WorkspaceObject obj = session.findObjectById(id);
         I18NAdapter able = obj.adapt(I18NAdapter.class);
@@ -111,7 +110,7 @@ public class MopStore implements DescriptionStore {
     }
 
     @Override
-    public void setDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
+    public void saveDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }

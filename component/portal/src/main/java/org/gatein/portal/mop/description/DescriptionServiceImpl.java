@@ -52,58 +52,58 @@ public class DescriptionServiceImpl implements DescriptionService {
         }
 
         //
-        DescriptionState state = store.resolveDescription(id, locale1);
+        DescriptionState state = store.loadDescription(id, locale1, true);
         if (state == null && locale2 != null) {
-            state = store.resolveDescription(id, locale2);
+            state = store.loadDescription(id, locale2, true);
         }
         return state;
     }
 
-    public DescriptionState getDescription(String id, Locale locale) {
+    public DescriptionState loadDescription(String id, Locale locale) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
         if (locale == null) {
             throw new NullPointerException("No null locale accepted");
         }
-        return store.getDescription(id, locale);
+        return store.loadDescription(id, locale, false);
     }
 
-    public DescriptionState getDescription(String id) {
+    public DescriptionState loadDescription(String id) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        return store.getDescription(id, null);
+        return store.loadDescription(id, null, false);
     }
 
-    public void setDescription(String id, Locale locale, DescriptionState description) {
+    public void saveDescription(String id, Locale locale, DescriptionState description) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
         if (locale == null) {
             throw new NullPointerException("No null locale accepted");
         }
-        store.setDescription(id, locale, description);
+        store.saveDescription(id, locale, description);
     }
 
-    public void setDescription(String id, DescriptionState description) {
+    public void saveDescription(String id, DescriptionState description) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        store.setDescription(id, description);
+        store.loadDescription(id, description);
     }
 
-    public Map<Locale, DescriptionState> getDescriptions(String id) {
+    public Map<Locale, DescriptionState> loadDescriptions(String id) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        return store.getDescriptions(id);
+        return store.loadDescriptions(id);
     }
 
-    public void setDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
+    public void saveDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        store.setDescriptions(id, descriptions);
+        store.saveDescriptions(id, descriptions);
     }
 }

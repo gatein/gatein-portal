@@ -67,7 +67,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         HashMap<Locale, DescriptionState> descriptions = new HashMap<Locale, DescriptionState>();
         descriptions.put(Locale.ENGLISH, new DescriptionState("name_en", null));
         descriptions.put(Locale.UK, new DescriptionState("name_en_GB", null));
-        persistence.setDescriptions(id, descriptions);
+        persistence.saveDescriptions(id, descriptions);
 
         //
         assertEquals(null, descriptionService.resolveDescription(id, null, Locale.GERMAN));
@@ -87,7 +87,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         HashMap<Locale, DescriptionState> descriptions = new HashMap<Locale, DescriptionState>();
         descriptions.put(Locale.ENGLISH, new DescriptionState("name_en", null));
         descriptions.put(Locale.UK, new DescriptionState("name_en_GB", null));
-        persistence.setDescriptions(id, descriptions);
+        persistence.saveDescriptions(id, descriptions);
 
         //
         assertEquals(null, descriptionService.resolveDescription(id, null, Locale.GERMAN));
@@ -104,17 +104,17 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         getNavigationPersistence().updateNode(id, NodeState.INITIAL.builder().label("foo_name").build());
 
         //
-        assertEquals(new DescriptionState("foo_name", null), descriptionService.getDescription(id));
+        assertEquals(new DescriptionState("foo_name", null), descriptionService.loadDescription(id));
     }
 
     public void testSetDefaultDescription() throws Exception {
         String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
-        assertNull(descriptionService.getDescription(id));
+        assertNull(descriptionService.loadDescription(id));
 
         //
-        descriptionService.setDescription(id, new DescriptionState("foo_name", null));
+        descriptionService.saveDescription(id, new DescriptionState("foo_name", null));
 
         //
         NodeState state = getNavigationPersistence().loadNode(id).state;
@@ -126,17 +126,17 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         getNavigationPersistence().updateNode(id, NodeState.INITIAL.builder().label("foo_name").build());
 
         //
-        descriptionService.setDescription(id, null);
+        descriptionService.saveDescription(id, null);
     }
 
     public void testSetLocalizedDescription() throws Exception {
         String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
-        descriptionService.setDescription(id, Locale.ENGLISH, new DescriptionState("foo_english", null));
+        descriptionService.saveDescription(id, Locale.ENGLISH, new DescriptionState("foo_english", null));
 
         //
-        DescriptionState state = persistence.getDescription(id, Locale.ENGLISH);
+        DescriptionState state = persistence.loadDescription(id, Locale.ENGLISH, false);
         assertEquals("foo_english", state.getName());
     }
 
@@ -145,14 +145,14 @@ public class TestDescriptionService extends AbstractMopServiceTest {
 
         //
         try {
-            descriptionService.setDescription(id, new Locale("", "GB"), new DescriptionState("foo_invalid", null));
+            descriptionService.saveDescription(id, new Locale("", "GB"), new DescriptionState("foo_invalid", null));
             fail();
         } catch (IllegalArgumentException e) {
         }
 
         //
         try {
-            descriptionService.setDescription(id, new Locale("en", "GB", "variant"), new DescriptionState("foo_invalid", null));
+            descriptionService.saveDescription(id, new Locale("en", "GB", "variant"), new DescriptionState("foo_invalid", null));
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -160,13 +160,13 @@ public class TestDescriptionService extends AbstractMopServiceTest {
 
     public void testAddLocalizedDescription() throws Exception {
         String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
-        persistence.setDescription(id, Locale.ENGLISH, new DescriptionState("add_english", null));
+        persistence.saveDescription(id, Locale.ENGLISH, new DescriptionState("add_english", null));
 
         //
-        descriptionService.setDescription(id, Locale.FRENCH, new DescriptionState("add_french", null));
+        descriptionService.saveDescription(id, Locale.FRENCH, new DescriptionState("add_french", null));
 
         //
-        Map<Locale, DescriptionState> descriptions = persistence.getDescriptions(id);
+        Map<Locale, DescriptionState> descriptions = persistence.loadDescriptions(id);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), descriptions.keySet());
         assertEquals("add_english", descriptions.get(Locale.ENGLISH).getName());
         assertEquals("add_french", descriptions.get(Locale.FRENCH).getName());
@@ -176,16 +176,16 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
-        assertNull(descriptionService.getDescriptions(id));
+        assertNull(descriptionService.loadDescriptions(id));
 
         //
         Map<Locale, DescriptionState> descriptions = new HashMap<Locale, DescriptionState>();
         descriptions.put(Locale.ENGLISH, new DescriptionState("foo_english", null));
         descriptions.put(Locale.FRENCH, new DescriptionState("foo_french", null));
-        persistence.setDescriptions(id, descriptions);
+        persistence.saveDescriptions(id, descriptions);
 
         //
-        descriptions = descriptionService.getDescriptions(id);
+        descriptions = descriptionService.loadDescriptions(id);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), descriptions.keySet());
         assertEquals(new DescriptionState("foo_english", null), descriptions.get(Locale.ENGLISH));
         assertEquals(new DescriptionState("foo_french", null), descriptions.get(Locale.FRENCH));
@@ -195,16 +195,16 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
-        assertNull(descriptionService.getDescriptions(id));
+        assertNull(descriptionService.loadDescriptions(id));
 
         //
         Map<Locale, DescriptionState> description = new HashMap<Locale, DescriptionState>();
         description.put(Locale.ENGLISH, new DescriptionState("bar_english", null));
         description.put(Locale.FRENCH, new DescriptionState("bar_french", null));
-        descriptionService.setDescriptions(id, description);
+        descriptionService.saveDescriptions(id, description);
 
         //
-        description = descriptionService.getDescriptions(id);
+        description = descriptionService.loadDescriptions(id);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), description.keySet());
         assertEquals(new DescriptionState("bar_english", null), description.get(Locale.ENGLISH));
         assertEquals(new DescriptionState("bar_french", null), description.get(Locale.FRENCH));
@@ -212,10 +212,10 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         //
         description = new HashMap<Locale, DescriptionState>();
         description.put(Locale.ENGLISH, new DescriptionState("bar_english_2", null));
-        descriptionService.setDescriptions(id, description);
+        descriptionService.saveDescriptions(id, description);
 
         //
-        description = descriptionService.getDescriptions(id);
+        description = descriptionService.loadDescriptions(id);
         assertEquals(Tools.toSet(Locale.ENGLISH), description.keySet());
         assertEquals(new DescriptionState("bar_english_2", null), description.get(Locale.ENGLISH));
     }
@@ -225,13 +225,13 @@ public class TestDescriptionService extends AbstractMopServiceTest {
 
         //
         try {
-            descriptionService.setDescriptions(id,
+            descriptionService.saveDescriptions(id,
                     Collections.singletonMap(new Locale("", "GB"), new DescriptionState("bar_invalid", null)));
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
-            descriptionService.setDescriptions(id,
+            descriptionService.saveDescriptions(id,
                     Collections.singletonMap(new Locale("en", "GB", "variant"), new DescriptionState("bar_invalid", null)));
             fail();
         } catch (IllegalArgumentException e) {

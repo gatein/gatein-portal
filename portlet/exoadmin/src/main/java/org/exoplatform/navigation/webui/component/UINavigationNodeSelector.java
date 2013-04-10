@@ -225,7 +225,7 @@ public class UINavigationNodeSelector extends UIContainer {
                 if (node != null) {
                     Map<Locale, DescriptionState> labels = i18nizedLabels.get(treeNodeId);
                     if (labels != null && labels.size() > 0) {
-                        descriptionService.setDescriptions(node.getNode().getId(), labels);
+                        descriptionService.saveDescriptions(node.getNode().getId(), labels);
                     }
                 }
 
@@ -284,7 +284,7 @@ public class UINavigationNodeSelector extends UIContainer {
     private void invokeI18NizedLabels(TreeNode node) {
         DescriptionService descriptionService = this.getApplicationComponent(DescriptionService.class);
         try {
-            Map<Locale, DescriptionState> labels = descriptionService.getDescriptions(node.getId());
+            Map<Locale, DescriptionState> labels = descriptionService.loadDescriptions(node.getId());
             node.setI18nizedLabels(labels);
         } catch (NullPointerException npe) {
             // set label list is null if Described mixin has been removed or not exists.

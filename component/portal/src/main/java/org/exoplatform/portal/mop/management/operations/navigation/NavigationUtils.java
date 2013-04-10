@@ -152,7 +152,7 @@ public class NavigationUtils {
         pageNode.setName(node.getName());
 
         if (node.getState().getLabel() == null) {
-            Map<Locale, DescriptionState> descriptions = service.getDescriptions(node.getId());
+            Map<Locale, DescriptionState> descriptions = service.loadDescriptions(node.getId());
             if (descriptions != null && !descriptions.isEmpty()) {
                 I18NString labels = new I18NString();
                 for (Map.Entry<Locale, DescriptionState> entry : descriptions.entrySet()) {
