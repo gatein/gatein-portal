@@ -124,5 +124,31 @@
         <module>jboss-as7</module>
       </modules>
     </profile>
+    <profile>
+      <id>pkg-jbossas720</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas720</value>
+        </property>
+      </activation>
+      <modules>
+        <module>common</module>
+        <module>jboss-as7</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>pkg-eap</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>eap</value>
+        </property>
+      </activation>
+      <modules>
+        <module>common</module>
+        <module>jboss-as7</module>
+      </modules>
+    </profile>
   </profiles>
 </project>

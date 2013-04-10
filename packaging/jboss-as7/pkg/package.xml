@@ -176,8 +176,12 @@
     <antcall target="package-version-copy" inheritAll="true" inheritRefs="true"/>
 
     <!-- Copy modules -->
-    <copy todir="${jbossas.target.dir}/modules" preservelastmodified="true" overwrite="true">
+    <copy todir="${jbossas.modules.target.dir}" preservelastmodified="true" overwrite="true">
       <fileset dir="${maven.project.basedir}/../modules/target/${server.name}/gatein/modules"/>
+      <filterset begintoken="$${" endtoken="}">
+        <filter token="ws.security.consumer.dir" value="${ws.security.consumer.dir}"/>
+        <filter token="ws.security.producer.dir" value="${ws.security.producer.dir}"/>
+      </filterset>
     </copy>
 
     <!-- Extract common config from packaging.common artifact to gatein/conf -->

@@ -1021,10 +1021,10 @@
       <groupId>com.jhlabs</groupId>
       <artifactId>filters</artifactId>
     </dependency>
-    <!--<dependency>-->
-    <!--<groupId>com.google.guava</groupId>-->
-    <!--<artifactId>guava</artifactId>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>

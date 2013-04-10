@@ -38,6 +38,7 @@
     <module name="org.jboss.modules"/>
     <module name="org.jboss.staxmapper"/>
     <module name="org.jboss.vfs"/>
+    <module name="org.gatein.wsrp.integration"/>
     <module name="org.gatein.lib"/>
     <module name="org.picocontainer"/>
   </dependencies>
