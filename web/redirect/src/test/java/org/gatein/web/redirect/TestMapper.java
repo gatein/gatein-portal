@@ -34,14 +34,14 @@ public class TestMapper extends TestConfig {
     /*
      * Components of Mapper - use-node-name-matching -> T/F - unresolved nodes: - REDIRECT - NO_REDIRECT - ROOT -
      * COMMON_ANCESTOR_NAME_MATCH - the actual mappings
-     *
-     *
+     * 
+     * 
      * TESTS:
-     *
+     * 
      * NODE NAME MATCHING: 1) if using node name matching - check that we get a hit when node names match - check that we do not
      * get a hit when node names do not match 2) if not using node name matching - check that we do not get a hit when node
      * names match - check that we do not get a hit when node names do not match
-     *
+     * 
      * **TEST ABOVE ALSO WITH REDIRECT/NO_REDIRECT/ROOT/COMMON_ANCESTOR_NAME_MATCHING **CHECK ALSO WITH THE ACTUAL MAP, MAKE
      * SURE IT OVERWRITES WHAT WE SHOULD BE EXPECTING
      */
@@ -71,34 +71,56 @@ public class TestMapper extends TestConfig {
 
         // check that mappings are working
         String redirectPath = redirectService.getRedirectPath("origin", "redirectA", null);
-        assertEquals("redirect_root", redirectPath);
+        assertEquals("/redirect_root", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "");
-        assertEquals("redirect_root", redirectPath);
+        assertEquals("/redirect_root", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/");
-        assertEquals("redirect_root", redirectPath);
+        assertEquals("/redirect_root", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "root");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "foo");
-        assertEquals("bar", redirectPath);
+        assertEquals("/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "hello/world");
-        assertEquals("redirect/hello/world", redirectPath);
+        assertEquals("/redirect/hello/world", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "hello/world");
-        assertEquals("redirect/hello/world", redirectPath);
+        assertEquals("/redirect/hello/world", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "ABC/123/XYZ");
-        assertEquals("123", redirectPath);
+        assertEquals("/123", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/with_slash");
+        assertEquals("/with_slash", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "without_slash");
+        assertEquals("/with_slash_two", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/with_slash_two");
+        assertEquals("/without_slash", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "with_slash");
+        assertEquals("/with_slash", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/without_slash");
+        assertEquals("/with_slash_two", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "with_slash_two");
+        assertEquals("/without_slash", redirectPath);
 
         // check that node name matching is working
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "foo/bar");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/foo/bar");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "foo/bar/baz");
-        assertEquals("foo/bar/baz", redirectPath);
+        assertEquals("/foo/bar/baz", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/foo/bar/baz");
+        assertEquals("/foo/bar/baz", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "hello");
-        assertEquals("hello", redirectPath);
+        assertEquals("/hello", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/hello");
+        assertEquals("/hello", redirectPath);
 
         // check unresolved nodes (redirectA defaults to NO_REDIRECT)
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "this-node-does-not-exist");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/this-node-does-not-exist");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectA", "this/node/does/not/exist");
+        assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectA", "/this/node/does/not/exist");
         assertEquals(null, redirectPath);
 
         RequestLifeCycle.end();
@@ -113,34 +135,54 @@ public class TestMapper extends TestConfig {
 
         // check that mappings are working
         String redirectPath = redirectService.getRedirectPath("origin", "redirectB", null);
-        assertEquals("redirect_root", redirectPath);
+        assertEquals("/redirect_root", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "");
-        assertEquals("redirect_root", redirectPath);
+        assertEquals("/redirect_root", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/");
-        assertEquals("redirect_root", redirectPath);
+        assertEquals("/redirect_root", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "root");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/root");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "foo");
-        assertEquals("bar", redirectPath);
+        assertEquals("/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/foo");
+        assertEquals("/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "hello/world");
-        assertEquals("redirect/hello/world", redirectPath);
+        assertEquals("/redirect/hello/world", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/hello/world");
+        assertEquals("/redirect/hello/world", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "hello/world");
-        assertEquals("redirect/hello/world", redirectPath);
+        assertEquals("/redirect/hello/world", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/hello/world");
+        assertEquals("/redirect/hello/world", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "ABC/123/XYZ");
-        assertEquals("123", redirectPath);
+        assertEquals("/123", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/ABC/123/XYZ");
+        assertEquals("/123", redirectPath);
 
         // check that node name matching is _not_ working, since for redirectB its disabled
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "foo/bar");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/foo/bar");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "foo/bar/baz");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/foo/bar/baz");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "hello");
+        assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/hello");
         assertEquals(null, redirectPath);
 
         // check unresolved nodes (redirectA defaults to NO_REDIRECT)
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "this-node-does-not-exist");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/this-node-does-not-exist");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectB", "this/node/does/not/exist");
+        assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectB", "/this/node/does/not/exist");
         assertEquals(null, redirectPath);
 
         RequestLifeCycle.end();
@@ -155,29 +197,43 @@ public class TestMapper extends TestConfig {
 
         // check that mappings are working
         String redirectPath = redirectService.getRedirectPath("origin", "redirectC", "foo");
-        assertEquals("bar", redirectPath);
+        assertEquals("/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/foo");
+        assertEquals("/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "hello/world");
-        assertEquals("redirect/hello/world", redirectPath);
+        assertEquals("/redirect/hello/world", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/hello/world");
+        assertEquals("/redirect/hello/world", redirectPath);
 
         // check that node name matching is working
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "foo/bar");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/foo/bar");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "foo/bar/baz");
-        assertEquals("foo/bar/baz", redirectPath);
+        assertEquals("/foo/bar/baz", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/foo/bar/baz");
+        assertEquals("/foo/bar/baz", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "hello");
-        assertEquals("hello", redirectPath);
+        assertEquals("/hello", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/hello");
+        assertEquals("/hello", redirectPath);
 
         // check unresolved nodes
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", null);
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "this-node-does-not-exist");
-        assertEquals("this-node-does-not-exist", redirectPath);
+        assertEquals("/this-node-does-not-exist", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/this-node-does-not-exist");
+        assertEquals("/this-node-does-not-exist", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectC", "this/node/does/not/exist");
-        assertEquals("this/node/does/not/exist", redirectPath);
+        assertEquals("/this/node/does/not/exist", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectC", "/this/node/does/not/exist");
+        assertEquals("/this/node/does/not/exist", redirectPath);
 
         RequestLifeCycle.end();
     }
@@ -191,21 +247,31 @@ public class TestMapper extends TestConfig {
 
         // check unresolved nodes
         String redirectPath = redirectService.getRedirectPath("origin", "redirectD", "foo/bar");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectD", "/foo/bar");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", "foo/bar/baz");
-        assertEquals("foo/bar/baz", redirectPath);
+        assertEquals("/foo/bar/baz", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectD", "/foo/bar/baz");
+        assertEquals("/foo/bar/baz", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", "hello");
-        assertEquals("hello", redirectPath);
+        assertEquals("/hello", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectD", "/hello");
+        assertEquals("/hello", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", null);
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", "");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", "/");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", "this-node-does-not-exist");
-        assertEquals("this-node-does-not-exist", redirectPath);
+        assertEquals("/this-node-does-not-exist", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectD", "/this-node-does-not-exist");
+        assertEquals("/this-node-does-not-exist", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", "redirectD", "this/node/does/not/exist");
-        assertEquals("this/node/does/not/exist", redirectPath);
+        assertEquals("/this/node/does/not/exist", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", "redirectD", "/this/node/does/not/exist");
+        assertEquals("/this/node/does/not/exist", redirectPath);
 
         RequestLifeCycle.end();
     }
@@ -221,22 +287,32 @@ public class TestMapper extends TestConfig {
 
         // check node name matching
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar/baz");
-        assertEquals("foo/bar/baz", redirectPath);
+        assertEquals("/foo/bar/baz", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar/baz");
+        assertEquals("/foo/bar/baz", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "hello");
-        assertEquals("hello", redirectPath);
+        assertEquals("/hello", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/hello");
+        assertEquals("/hello", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, null);
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "/");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
 
         // check unresolved nodes
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this-node-does-not-exist");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this-node-does-not-exist");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
+        assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this/node/does/not/exist");
         assertEquals(null, redirectPath);
 
         RequestLifeCycle.end();
@@ -254,9 +330,15 @@ public class TestMapper extends TestConfig {
         // check unresolved nodes
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar/baz");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar/baz");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "hello");
+        assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/hello");
         assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, null);
         assertEquals(null, redirectPath);
@@ -266,7 +348,11 @@ public class TestMapper extends TestConfig {
         assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this-node-does-not-exist");
         assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this-node-does-not-exist");
+        assertEquals(null, redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
+        assertEquals(null, redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this/node/does/not/exist");
         assertEquals(null, redirectPath);
 
         RequestLifeCycle.end();
@@ -283,23 +369,33 @@ public class TestMapper extends TestConfig {
 
         // check node name matching
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar/baz");
-        assertEquals("foo/bar/baz", redirectPath);
+        assertEquals("/foo/bar/baz", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar/baz");
+        assertEquals("/foo/bar/baz", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "hello");
-        assertEquals("hello", redirectPath);
+        assertEquals("/hello", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/hello");
+        assertEquals("/hello", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, null);
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "/");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
 
         // check unresolved nodes
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this-node-does-not-exist");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this-node-does-not-exist");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this/node/does/not/exist");
+        assertEquals("/", redirectPath);
 
         RequestLifeCycle.end();
     }
@@ -315,21 +411,31 @@ public class TestMapper extends TestConfig {
 
         // check unresolved nodes
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar/baz");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar/baz");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "hello");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/hello");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, null);
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "/");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this-node-does-not-exist");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "this-node-does-not-exist");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
+        assertEquals("/", redirectPath);
 
         RequestLifeCycle.end();
     }
@@ -345,30 +451,46 @@ public class TestMapper extends TestConfig {
 
         // check node name matching
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar/baz");
-        assertEquals("foo/bar/baz", redirectPath);
+        assertEquals("/foo/bar/baz", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar/baz");
+        assertEquals("/foo/bar/baz", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "hello");
-        assertEquals("hello", redirectPath);
+        assertEquals("/hello", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/hello");
+        assertEquals("/hello", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, null);
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "/");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
 
         // check unresolved nodes
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bat");
-        assertEquals("foo", redirectPath);
+        assertEquals("/foo", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bat");
+        assertEquals("/foo", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "foo/bar/bat");
-        assertEquals("foo/bar", redirectPath);
+        assertEquals("/foo/bar", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/foo/bar/bat");
+        assertEquals("/foo/bar", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "hello/world/123");
-        assertEquals("hello/world", redirectPath);
+        assertEquals("/hello/world", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/hello/world/123");
+        assertEquals("/hello/world", redirectPath);
 
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this-node-does-not-exist");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "/this-node-does-not-exist");
+        assertEquals("/", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
-        assertEquals("", redirectPath);
+        assertEquals("/", redirectPath);
+        redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
+        assertEquals("/", redirectPath);
 
         RequestLifeCycle.end();
     }
@@ -379,11 +501,12 @@ public class TestMapper extends TestConfig {
         SiteRedirectService redirectService = (SiteRedirectService) container
                 .getComponentInstanceOfType(SiteRedirectService.class);
         assertNotNull(redirectService);
-        
+
         assertNull(redirectService.getRedirectPath("noredirects", "foo", null));
         assertNull(redirectService.getRedirectPath("noredirects", "foo", ""));
         assertNull(redirectService.getRedirectPath("noredirects", "foo", "/"));
         assertNull(redirectService.getRedirectPath("noredirects", "foo", "bar"));
+        assertNull(redirectService.getRedirectPath("noredirects", "foo", "/bar"));
         RequestLifeCycle.end();
     }
 
@@ -398,6 +521,7 @@ public class TestMapper extends TestConfig {
         assertNull(redirectService.getRedirectPath("emptyredirects", "foo", ""));
         assertNull(redirectService.getRedirectPath("emptyredirects", "foo", "/"));
         assertNull(redirectService.getRedirectPath("emptyredirects", "foo", "bar"));
+        assertNull(redirectService.getRedirectPath("emptyredirects", "foo", "/bar"));
 
         RequestLifeCycle.end();
     }

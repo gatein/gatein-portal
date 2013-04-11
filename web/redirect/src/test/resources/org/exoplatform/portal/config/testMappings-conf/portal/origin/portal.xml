@@ -56,6 +56,18 @@
           <origin-node>ABC/123/XYZ</origin-node>
           <redirect-node>123</redirect-node>
         </node-map>
+        <node-map>
+          <origin-node>/with_slash</origin-node>
+          <redirect-node>/with_slash</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>/with_slash_two</origin-node>
+          <redirect-node>without_slash</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>without_slash</origin-node>
+          <redirect-node>/with_slash_two</redirect-node>
+        </node-map>
       </node-mapping>
     </portal-redirect>
     <portal-redirect>

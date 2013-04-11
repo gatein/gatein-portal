@@ -112,11 +112,14 @@ public class SiteRedirectServiceImpl implements SiteRedirectService, Startable {
 
                 if (pRedirect != null) {
                     String redirectPath = mapper.getRedirectPath(origin, redirect, originRequestPath, pRedirect.getMappings());
-                    if (redirectPath != null && redirectPath.equals("/")) {
-                        return "";
-                    } else {
-                        return redirectPath;
-                    }
+                    if (redirectPath != null) {
+                        if (redirectPath.startsWith("/")) {
+                            return redirectPath;
+                        } else {
+                            return "/" + redirectPath;
+                        }
+                    } else
+                        return redirectPath; // aka null;
                 } else {
                     log.debug("Site '" + origin + "' does not have a redirect configured for site '" + redirect
                             + "'. Cannot perform redirect.");

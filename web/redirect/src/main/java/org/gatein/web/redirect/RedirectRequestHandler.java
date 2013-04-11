@@ -259,6 +259,11 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                 SiteKey siteKey = new SiteKey(SiteType.PORTAL, redirect.getRedirect());
                 PortalURLContext urlContext = new PortalURLContext(context, siteKey);
                 NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
+
+                if (redirectLocation.startsWith("/")) {
+                    redirectLocation = redirectLocation.substring(1);
+                }
+
                 String s = url.setResource(new NavigationResource(SiteType.PORTAL, redirect.getRedirect(), redirectLocation))
                         .toString();
 

@@ -65,8 +65,26 @@ public class Mapper {
 
         Map<String, String> mappings = redirectMappings.getMap();
         // first check if we have explicit mappings for this requestPath, always blindly follow any explicit mappings
-        if (mappings != null && mappings.get(requestPath) != null) {
-            return mappings.get(requestPath);
+        if (mappings != null) {
+            String redirectRequestPath = mappings.get(requestPath);
+
+            if (redirectRequestPath == null) {
+                if (requestPath.startsWith("/")) {
+                    // it has a leading / so check without the '/'
+                    redirectRequestPath = mappings.get(requestPath.substring(1));
+                } else {
+                    // otherwise it doesn't have a leading '/' check with one.
+                    redirectRequestPath = mappings.get("/" + requestPath);
+                }
+            }
+
+            if (redirectRequestPath != null) {
+                if (redirectRequestPath.startsWith("/")) {
+                    return redirectRequestPath;
+                } else {
+                    return "/" + redirectRequestPath;
+                }
+            }
         }
 
         // next check if we use node name matching
@@ -75,7 +93,11 @@ public class Mapper {
                     redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.COMMON_ANCESTOR_NAME_MATCH);
             {
                 if (redirectRequestPath != null) {
-                    return redirectRequestPath;
+                    if (redirectRequestPath.startsWith("/")) {
+                        return redirectRequestPath;
+                    } else {
+                        return "/" + redirectRequestPath;
+                    }
                 }
             }
         }
@@ -84,9 +106,13 @@ public class Mapper {
         if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.NO_REDIRECT) {
             return null;
         } else if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.REDIRECT) {
-            return requestPath;
+            if (requestPath.startsWith("/")) {
+                return requestPath;
+            } else {
+                return "/" + requestPath;
+            }
         } else if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.ROOT) {
-            return "";
+            return "/";
         } else {
             log.warn("Unknown redirect configuration option for an unknown node [" + redirectMappings.getUnresolvedNode()
                     + "]. Will not perform redirect.");
@@ -111,18 +137,23 @@ public class Mapper {
         {
             log.warn("Cannot preform redirect since can't retrieve navigation for site : " + redirectSite);
             return null;
-        } else if (requestPath == null || requestPath.isEmpty()) // a nav context exists and we are checking the root node, no
-                                                                 // need to check anything else
-        {
-            return "";
+        } else if (requestPath == null || requestPath.isEmpty() || requestPath.equals("/")) {
+            // a nav context exists and we are checking the root node, no need to check anything else
+            return "/";
         }
 
-        String[] path = requestPath.split("/");
+        String[] path = new String[0];
+        if (requestPath.startsWith("/")) {
+            path = requestPath.substring(1).split("/");
+        } else {
+            path = requestPath.split("/");
+        }
+
         NodeContext nodeContext = navService.loadNode(NodeModel.SELF_MODEL, navContext,
                 GenericScope.branchShape(path, Scope.ALL), null);
 
         boolean found = true;
-        String lastCommonAncestor = "";
+        String lastCommonAncestor = "/";
 
         for (String nodeName : path) {
             nodeContext = nodeContext.get(nodeName);
@@ -130,7 +161,7 @@ public class Mapper {
                 found = false;
                 break;
             } else {
-                if (lastCommonAncestor.equals("")) {
+                if (lastCommonAncestor.equals("/")) {
                     lastCommonAncestor += nodeContext.getName();
                 } else {
                     lastCommonAncestor += "/" + nodeContext.getName();
@@ -139,7 +170,11 @@ public class Mapper {
         }
 
         if (found == true) {
-            return requestPath;
+            if (requestPath.startsWith("/")) {
+                return requestPath;
+            } else {
+                return "/" + requestPath;
+            }
         } else if (useCommonAncestor) {
             return lastCommonAncestor;
         } else {
