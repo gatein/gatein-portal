@@ -23,10 +23,14 @@
 
 package org.gatein.common.classloader;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -102,5 +106,67 @@ public class DelegatingClassLoader extends ClassLoader {
         }
 
         return null;
+    }
+
+    @Override
+    public Enumeration<URL> getResources(String name) throws IOException {
+        DelegateEnumeration<URL> ret = new DelegateEnumeration<URL>();
+        for (ClassLoader delegate : delegates) {
+            Enumeration<URL> e = delegate.getResources(name);
+            if (e != null) {
+                if (e.hasMoreElements()) {
+                    ret.addEnumeration(e);
+                    continue;
+                }
+            }
+            if (log.isTraceEnabled()) {
+                log.trace("URL " + name + " not found with classloader: " + delegate + ". Trying other delegates");
+            }
+        }
+
+        return ret;
+    }
+
+    private static class DelegateEnumeration<E> implements Enumeration<E> {
+
+        private ArrayList<Enumeration<E>> delegates = new ArrayList<Enumeration<E>>();
+        private int current = 0;
+
+        private void addEnumeration(Enumeration<E> enumeration) {
+            delegates.add(enumeration);
+        }
+
+        @Override
+        public boolean hasMoreElements() {
+            Enumeration<E> e = getCurrent();
+            return e != null && e.hasMoreElements();
+        }
+
+        @Override
+        public E nextElement() {
+            Enumeration<E> e = getCurrent();
+            if (e != null)
+                return e.nextElement();
+            throw new NoSuchElementException();
+        }
+
+        private Enumeration<E> getCurrent() {
+            if (delegates.size() == 0)
+                return null;
+
+            if (current >= delegates.size())
+                return null;
+
+            Enumeration<E> e = delegates.get(current);
+            if (!e.hasMoreElements()) {
+                current += 1;
+                if (current < delegates.size()) {
+                    return delegates.get(current);
+                } else {
+                    return null;
+                }
+            }
+            return e;
+        }
     }
 }
