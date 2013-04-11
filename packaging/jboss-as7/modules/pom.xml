@@ -441,6 +441,12 @@
       <groupId>org.jboss.portletbridge</groupId>
       <artifactId>portletbridge-impl</artifactId>
     </dependency>
+      
+    <!-- CDI/Portlet Integration Library -->
+    <dependency>
+      <groupId>org.gatein</groupId>
+      <artifactId>cdi-portlet-integration</artifactId>
+    </dependency>     
 
     <!-- Reflext -->
     <dependency>

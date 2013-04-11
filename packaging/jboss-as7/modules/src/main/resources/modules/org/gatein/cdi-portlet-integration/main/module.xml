@@ -22,25 +22,13 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.0" name="org.gatein">
+<module xmlns="urn:jboss:module:1.0" name="org.gatein.cdi-portlet-integration">
   <resources>
     <!-- Insert resources here -->
   </resources>
-
+  
   <dependencies>
-    <module name="org.jboss.as.controller"/>
-    <module name="org.jboss.as.ee"/>
-    <module name="org.jboss.as.server"/>
-    <module name="org.jboss.as.web"/>
-    <module name="org.jboss.as.weld"/>
-    <module name="org.jboss.as.transactions"/>
-    <module name="org.jboss.logging"/>
-    <module name="org.jboss.metadata"/>
-    <module name="org.jboss.modules"/>
-    <module name="org.jboss.staxmapper"/>
-    <module name="org.jboss.vfs"/>
-    <module name="org.gatein.wsrp.integration"/>
-    <module name="org.gatein.lib"/>
-    <module name="org.picocontainer"/>
+    <module name="javax.portlet.api" />
+    <module name="javax.servlet.api" />
   </dependencies>
 </module>

@@ -66,6 +66,10 @@
       <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension"/>
     </module-def>
 
+    <module-def name="org.gatein.cdi-portlet-integration">
+      <maven-resource group="org.gatein" artifact="cdi-portlet-integration"/>
+    </module-def>
+      	
     <module-def name="org.gatein.lib">
       <!-- maven-resource group="javax.activation" artifact="activation" / -->
       <maven-resource group="aopalliance" artifact="aopalliance"/>

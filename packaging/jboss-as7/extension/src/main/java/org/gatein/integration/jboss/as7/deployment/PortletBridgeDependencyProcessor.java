@@ -39,6 +39,7 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.web.deployment.WarMetaData;
+import org.jboss.as.weld.WeldDeploymentMarker;
 import org.jboss.logging.Logger;
 import org.jboss.metadata.javaee.spec.ParamValueMetaData;
 import org.jboss.metadata.web.spec.WebFragmentMetaData;
@@ -55,15 +56,29 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
 
     private static final Logger log = Logger.getLogger(PortletBridgeDependencyProcessor.class);
 
+    private static final ModuleIdentifier CDI_PORTLET_INTEGRATION = ModuleIdentifier
+            .create("org.gatein.cdi-portlet-integration");
     private static final ModuleIdentifier COMMONS_FILEUPLOAD = ModuleIdentifier.create("org.apache.commons-fileupload");
     private static final ModuleIdentifier JSF_API = ModuleIdentifier.create("javax.faces.api");
     private static final ModuleIdentifier JSF_IMPL = ModuleIdentifier.create("com.sun.jsf-impl");
     private static final ModuleIdentifier PORTLETBRIDGE_API = ModuleIdentifier.create("org.jboss.portletbridge.api");
     private static final ModuleIdentifier PORTLETBRIDGE_IMPL = ModuleIdentifier.create("org.jboss.portletbridge.impl");
 
+    private static final String cdiPortletIntegrationVersion = getCdiPortletIntegrationVersion();
+
     private static final String portletBridgeVersion = getPortletBridgeVersion();
 
     public static final String WAR_BUNDLES_PORTLETBRIDGE_PARAM = "org.gatein.portletbridge.WAR_BUNDLES_PORTLETBRIDGE";
+
+    private static String getCdiPortletIntegrationVersion() {
+        try {
+            Module module = Module.getBootModuleLoader().loadModule(CDI_PORTLET_INTEGRATION);
+            Manifest mf = new Manifest(module.getClassLoader().getResourceAsStream("/META-INF/MANIFEST.MF"));
+            return mf.getMainAttributes().getValue("Implementation-Version");
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
     private static String getPortletBridgeVersion() {
         try {
@@ -73,6 +88,12 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
         } catch (Exception e) {
             return "";
         }
+    }
+
+    private void addCdiPortletIntegration(DeploymentUnit deploymentUnit, ModuleSpecification moduleSpecification,
+            ModuleLoader moduleLoader) {
+        ModuleDependency pbr = new ModuleDependency(moduleLoader, CDI_PORTLET_INTEGRATION, false, false, false, false);
+        moduleSpecification.addSystemDependency(pbr);
     }
 
     private void addPortletBridgeApi(DeploymentUnit deploymentUnit, ModuleSpecification moduleSpecification,
@@ -124,7 +145,17 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
             addPortletBridgeApi(deploymentUnit, moduleSpecification, moduleLoader);
             addPortletBridgeImpl(deploymentUnit, moduleSpecification, moduleLoader);
             addPortletBridgeDependencies(deploymentUnit, moduleSpecification, moduleLoader);
+
+            if (isCdiDeployment(deploymentUnit)) {
+                log.infof("Adding CDI Portlet Integration %s to \"%s\"", cdiPortletIntegrationVersion, deploymentUnit.getName());
+
+                addCdiPortletIntegration(deploymentUnit, moduleSpecification, moduleLoader);
+            }
         }
+    }
+
+    private boolean isCdiDeployment(DeploymentUnit deploymentUnit) {
+        return WeldDeploymentMarker.isPartOfWeldDeployment(deploymentUnit);
     }
 
     private boolean isJsfDependencies(ModuleSpecification moduleSpecification) {

@@ -64,6 +64,7 @@
     <commons-dbcp.version>1.2.2</commons-dbcp.version>
     <com.google.javascript.version>r1592</com.google.javascript.version>
     <org.jboss.portletbridge.version>3.2.0.Final</org.jboss.portletbridge.version>
+    <version.cdi.portlet.integration>1.0.0.Final</version.cdi.portlet.integration>
 
     <!-- TODO: Move to gatein dep -->
     <org.infinispan.version>5.1.7.Final</org.infinispan.version>
@@ -1009,6 +1010,13 @@
         <artifactId>portletbridge-impl</artifactId>
         <version>${org.jboss.portletbridge.version}</version>
       </dependency>
+
+      <!-- CDI/Portlet Integration Library -->
+      <dependency>
+        <groupId>org.gatein</groupId>
+        <artifactId>cdi-portlet-integration</artifactId>
+        <version>${version.cdi.portlet.integration}</version>
+      </dependency>      
 
       <!-- needed for the IBM jdk, should be remove in the future when IBM fixes its jdk (see GTNPORTAL-636) -->
       <dependency>
