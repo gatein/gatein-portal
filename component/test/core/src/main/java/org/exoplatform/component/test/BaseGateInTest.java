@@ -38,10 +38,10 @@ public class BaseGateInTest extends TestCase {
     public static <T> T assertInstanceOf(Object o, Class<T> expectedType) {
         if (expectedType != null) {
             if (expectedType.isInstance(o)) {
-                fail();
-                return null;
-            } else {
                 return expectedType.cast(o);
+            } else {
+                fail("Was expecting " + o + " to be instanceof of " + expectedType);
+                return null;
             }
         } else {
             fail("Need an expected type");
