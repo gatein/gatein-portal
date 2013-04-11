@@ -249,7 +249,7 @@ public class MopStore implements PageStore {
                     if (parentCtx == srcPage) {
                         dstParent = dstPage.getCustomizationContext().getCustomization(name);
                         if (dstParent == null) {
-                            Object state = parent.getVirtualState();
+                            Object state = parent.getState();
                             dstParent = dstPage.getCustomizationContext().customize(name, contentType, contentId, state);
                         }
                     }
@@ -258,11 +258,11 @@ public class MopStore implements PageStore {
                         Customization dstCustomization = dstWindow.customize(dstParent);
                         dstCustomization.setState(state);
                     } else {
-                        Object state = customization.getVirtualState();
+                        Object state = customization.getState();
                         dstWindow.customize(contentType, contentId, state);
                     }
                 } else {
-                    Object state = customization.getVirtualState();
+                    Object state = customization.getState();
                     dstWindow.customize(contentType, contentId, state);
                 }
             } else if (srcChild instanceof UIContainer) {

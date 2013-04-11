@@ -81,7 +81,7 @@ public abstract class PreferencesTask<S> {
             Customization<S> customization = (Customization<S>) session.findCustomizationById(storageId);
             if (customization == null)
                 return null;
-            return customization.getVirtualState();
+            return customization.getState();
         }
 
         @Override

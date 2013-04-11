@@ -891,7 +891,7 @@ public class Mapper {
                     dstCustomization = dst.customize(bilto);
                 } else {
                     // Otherwise we clone it propertly
-                    S state = bilto.getVirtualState();
+                    S state = bilto.getState();
                     dstCustomization = dst.customize(contentType, contentId, state);
                 }
             } else {
