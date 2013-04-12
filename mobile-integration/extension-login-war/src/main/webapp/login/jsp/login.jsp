@@ -24,6 +24,8 @@
 <%@ page import="javax.servlet.http.Cookie"%>
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
+<%@ page import="org.gatein.security.oauth.common.OAuthProviderType"%>
+<%@ page import="org.gatein.security.oauth.registry.OAuthProviderTypeRegistry"%>;
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
 <%@ page language="java"%>
@@ -38,10 +40,12 @@
     username = encoder.encode(username);
   }
 
-  ResourceBundleService service = (ResourceBundleService) PortalContainer.getCurrentInstance(session.getServletContext())
-                                                        .getComponentInstanceOfType(ResourceBundleService.class);
+  PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());
+  ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
   
+  OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) portalContainer.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
+
   Cookie cookie = new Cookie(org.exoplatform.web.login.LoginServlet.COOKIE_NAME, "");
     cookie.setPath(request.getContextPath());
     cookie.setMaxAge(0);
@@ -80,7 +84,20 @@
         <% } %>
         <form id="login-form" name="login-form" action="<%= contextPath + "/login"%>" method="post">
             <fieldset>
-                <legend>Sign in</legend>                
+                <legend>Sign in</legend>
+                <% if(registry.isOAuthEnabled()) { %>
+                <div id="social-login">
+                    <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
+                    <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
+                        <div><%= res.getString("UILoginForm.label.SignInWith") %> <%= oauthProvType.getFriendlyName() %></div>
+                    </a>
+                    <% } %>
+                </div>
+
+                <div class="SignInDelimiter">
+                    <span>or</span>
+                </div>   
+                <% } %>
                 <label for="username"><%=res.getString("UILoginForm.label.UserName")%></label>
                 <input type="text" id="username" name="username" value=""/>
 

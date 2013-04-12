@@ -32,7 +32,7 @@
 									    <td class="FieldComponent portlet-input-field" colspan="2"><% uiform.renderField(field) %>
 								<%  } %>
 
-								    <td class="FieldComponent portlet-input-field">
+								    <td class="FieldComponent UIAction portlet-input-field">
 								<%
 								      if (field.getValue() == null || field.getValue().length() == 0) {
 								          uicomponent.saveURLAfterLinkSocialAccount();

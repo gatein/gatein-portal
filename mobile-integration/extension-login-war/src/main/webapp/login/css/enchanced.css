@@ -247,6 +247,11 @@
     label[for=rememberme], #forgot {
         font-size: 0.84em;
     }
+    
+    #social-login a.login-button {
+        display: inline-block;
+        margin: 10px 5px 5px 5px;
+    }
 }
 
 /* Big screen devices ( >600px ) */

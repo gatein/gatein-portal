@@ -21,6 +21,7 @@
     <div class="MiddleLeftLoginDecorator">
       <div class="MiddleRightLoginDecorator">
         <div class="LoginDecoratorBackground">
+          <% uicomponent.renderChildren(); %>
           <div class="LoginDetailBox">
             <form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
               <input type="hidden" name="initialURI" value="<%=requestPath %>"/>
@@ -46,9 +47,6 @@
               </div> 
             </div>
             </form>
-
-            <% uicomponent.renderChildren(); %>
-
           </div>
         </div>
       </div>

@@ -347,6 +347,14 @@
 	padding-right: 30px; /* orientation=rt */
 }
 
+.UIItemSelector .RightColumnBigItemStyle .ItemList .Item .UserSocialNetworksInfoIcon {
+	height: 32px;
+	background: url('background/Social.gif') no-repeat left; /* orientation=lt */
+	background: url('background/Social-rt.gif') no-repeat right; /* orientation=rt */
+	padding-left: 30px; /* orientation=lt */
+	padding-right: 30px; /* orientation=rt */
+}
+
 .UIItemSelector .RightColumnBigItemStyle .ItemList .Item .ItemName {
 	height: 32px; line-height: 32px;
 	background: url('background/SelectedItem.gif') no-repeat right -322px; /* orientation=lt */
@@ -409,6 +417,12 @@
 	height: 32px;
 	background: url('background/SelectedItem.gif') no-repeat left -290px; /* orientation=lt */
 	background: url('background/SelectedItem-rt.gif') no-repeat right -290px; /* orientation=rt */
+}
+
+.UIItemSelector .RightColumnBigItemStyle .ItemList .SelectedItem .UserSocialNetworksInfoIcon {
+	height: 32px;
+	background: url('background/SocialSelected.gif') no-repeat left; /* orientation=lt */
+	background: url('background/SocialSelected-rt.gif') no-repeat right; /* orientation=rt */
 }
 
 .UIItemSelector .RightColumnBigItemStyle .ItemList .SelectedItem .ItemName {
