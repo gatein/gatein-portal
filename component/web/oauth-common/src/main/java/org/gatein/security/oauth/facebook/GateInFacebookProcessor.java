@@ -38,16 +38,4 @@ public interface GateInFacebookProcessor extends OAuthProviderProcessor<Facebook
 
     FacebookPrincipal getPrincipal(String accessToken);
 
-    FacebookInteractionState processFacebookAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException;
-
-    /**
-     * Possibility to create new OAuth interaction with custom scope (not just the scope which is provided in configuration)
-     *
-     * @param httpRequest
-     * @param httpResponse
-     * @param scope custom scope
-     * @return
-     * @throws IOException
-     */
-    FacebookInteractionState processFacebookAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws IOException;
 }

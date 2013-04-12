@@ -23,10 +23,16 @@
 
 package org.gatein.security.oauth.twitter;
 
+import java.io.Serializable;
+
+import org.gatein.security.oauth.common.AccessTokenContext;
+
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class TwitterAccessTokenContext {
+public class TwitterAccessTokenContext extends AccessTokenContext implements Serializable {
+
+    private static final long serialVersionUID = -7034897191845766989L;
 
     private final String accessToken;
     private final String accessTokenSecret;
@@ -50,11 +56,7 @@ public class TwitterAccessTokenContext {
 
     @Override
     public boolean equals(Object that) {
-        if (that == this) {
-            return true;
-        }
-
-        if (!(that instanceof TwitterAccessTokenContext)) {
+        if (!super.equals(that)) {
             return false;
         }
 
@@ -63,6 +65,6 @@ public class TwitterAccessTokenContext {
     }
 
     public int hashCode() {
-        return accessToken.hashCode() * 13 + accessTokenSecret.hashCode();
+        return super.hashCode() * 13 + accessToken.hashCode() * 11 + accessTokenSecret.hashCode();
     }
 }

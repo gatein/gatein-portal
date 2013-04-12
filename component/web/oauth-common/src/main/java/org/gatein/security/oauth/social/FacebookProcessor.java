@@ -21,12 +21,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +35,9 @@ import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
-import org.gatein.security.oauth.facebook.GateInFacebookProcessorImpl;
+import org.gatein.security.oauth.utils.HttpResponseContext;
 import org.gatein.security.oauth.utils.OAuthUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,46 +48,31 @@ import org.json.JSONObject;
  * @since Sep 22, 2011
  */
 public class FacebookProcessor {
-    public static final String FB_AUTH_STATE_SESSION_ATTRIBUTE = "FB_AUTH_STATE_SESSION_ATTRIBUTE";
 
-    private static Logger log = LoggerFactory.getLogger(GateInFacebookProcessorImpl.class);
+    private static Logger log = LoggerFactory.getLogger(FacebookProcessor.class);
 
     protected boolean trace = log.isTraceEnabled();
 
-    protected List<String> roles = new ArrayList<String>();
-
-    public enum STATES {
-        AUTH, AUTHZ, FINISH
-    };
 
     protected String clientID;
     protected String clientSecret;
     protected String scope;
     protected String returnURL;
 
-    public FacebookProcessor(String clientID, String clientSecret, String scope, String returnURL, List<String> requiredRoles) {
+    public FacebookProcessor(String clientID, String clientSecret, String scope, String returnURL) {
         super();
         this.clientID = clientID;
         this.clientSecret = clientSecret;
         this.scope = scope;
         this.returnURL = returnURL;
-        this.roles.addAll(requiredRoles);
     }
 
-    public void setRoleString(String roleStr) {
-        if (roleStr == null)
-            throw new RuntimeException("Role String is null in configuration");
-        StringTokenizer st = new StringTokenizer(roleStr, ",");
-        while (st.hasMoreElements()) {
-            roles.add(st.nextToken());
-        }
-    }
 
-    public boolean initialInteraction(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession();
+    public boolean initialInteraction(HttpServletRequest request, HttpServletResponse response, String verificationState) throws IOException {
         Map<String, String> params = new HashMap<String, String>();
         params.put(OAuthConstants.REDIRECT_URI_PARAMETER, returnURL);
         params.put(OAuthConstants.CLIENT_ID_PARAMETER, clientID);
+        params.put(OAuthConstants.STATE_PARAMETER, verificationState);
 
         if (scope != null) {
             params.put(OAuthConstants.SCOPE_PARAMETER, scope);
@@ -97,7 +81,6 @@ public class FacebookProcessor {
         String location = new StringBuilder(FacebookConstants.SERVICE_URL).append("?").append(OAuthUtils.createQueryString(params))
                 .toString();
         try {
-            session.setAttribute(FB_AUTH_STATE_SESSION_ATTRIBUTE, STATES.AUTH.name());
             if (trace)
                 log.trace("Redirect:" + location);
             response.sendRedirect(location);
@@ -107,39 +90,7 @@ public class FacebookProcessor {
         }
     }
 
-    public boolean handleAuthStage(HttpServletRequest request, HttpServletResponse response) {
-        request.getSession().setAttribute(FB_AUTH_STATE_SESSION_ATTRIBUTE, STATES.AUTHZ.name());
-        sendAuthorizeRequest(this.returnURL, response);
-        return false;
-    }
-
-    protected void sendAuthorizeRequest(String returnUrl, HttpServletResponse response) {
-        String returnUri = returnUrl;
-
-        Map<String, String> params = new HashMap<String, String>();
-        params.put(OAuthConstants.REDIRECT_URI_PARAMETER, returnUri);
-        params.put(OAuthConstants.CLIENT_ID_PARAMETER, clientID);
-        if (scope != null) {
-            params.put(OAuthConstants.SCOPE_PARAMETER, scope);
-        }
-        String location = new StringBuilder(FacebookConstants.AUTHENTICATION_ENDPOINT_URL).append("?")
-                .append(OAuthUtils.createQueryString(params)).toString();
-        try {
-            response.sendRedirect(location);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Principal getPrincipal(HttpServletRequest request, HttpServletResponse response) {
-        Principal facebookPrincipal = handleAuthenticationResponse(request, response);
-        if (facebookPrincipal == null)
-            return null;
-
-        return facebookPrincipal;
-    }
-
-    protected Principal handleAuthenticationResponse(HttpServletRequest request, HttpServletResponse response) throws OAuthException {
+    public String getAccessToken(HttpServletRequest request, HttpServletResponse response) throws OAuthException {
         String error = request.getParameter(OAuthConstants.ERROR_PARAMETER);
         if (error != null) {
             if (OAuthConstants.ERROR_ACCESS_DENIED.equals(error)) {
@@ -154,24 +105,38 @@ public class FacebookProcessor {
                 return null;
             }
 
-            URLConnection connection = sendAccessTokenRequest(authorizationCode);
-
-            Map<String, String> params = OAuthUtils.formUrlDecode(OAuthUtils.readUrlContent(connection));
-            String accessToken = params.get(OAuthConstants.ACCESS_TOKEN_PARAMETER);
-            String expires = params.get(FacebookConstants.EXPIRES);
-
-            if (trace)
-                log.trace("Access Token=" + accessToken + " :: Expires=" + expires);
-
-            if (accessToken == null) {
-                throw new RuntimeException("No access token found");
+            String stateFromSession = (String)request.getSession().getAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE);
+            String stateFromRequest = request.getParameter(OAuthConstants.STATE_PARAMETER);
+            if (stateFromSession == null || stateFromRequest == null || !stateFromSession.equals(stateFromRequest)) {
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_INVALID_STATE, "Validation of state parameter failed. stateFromSession="
+                        + stateFromSession + ", stateFromRequest=" + stateFromRequest);
             }
 
-            return readInIdentity(accessToken);
+            String accessToken = new FacebookRequest<String>() {
+
+                @Override
+                protected URL createURL(String authorizationCode) throws IOException {
+                    return sendAccessTokenRequest(authorizationCode);
+                }
+
+                @Override
+                protected String parseResponse(String httpResponse) throws JSONException {
+                    Map<String, String> params = OAuthUtils.formUrlDecode(httpResponse);
+                    String accessToken = params.get(OAuthConstants.ACCESS_TOKEN_PARAMETER);
+                    String expires = params.get(FacebookConstants.EXPIRES);
+                    if (trace)
+                        log.trace("Access Token=" + accessToken + " :: Expires=" + expires);
+
+                    return accessToken;
+                }
+
+            }.executeRequest(authorizationCode);
+
+            return accessToken;
         }
     }
 
-    protected URLConnection sendAccessTokenRequest(String authorizationCode) {
+    protected URL sendAccessTokenRequest(String authorizationCode) throws IOException {
         String returnUri = returnURL;
 
         Map<String, String> params = new HashMap<String, String>();
@@ -183,48 +148,110 @@ public class FacebookProcessor {
         String location = new StringBuilder(FacebookConstants.ACCESS_TOKEN_ENDPOINT_URL).append("?")
                 .append(OAuthUtils.createQueryString(params)).toString();
 
-        try {
-            if (trace)
-                log.trace("AccessToken Request=" + location);
-            URL url = new URL(location);
-            URLConnection connection = url.openConnection();
-            return connection;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        if (trace)
+            log.trace("AccessToken Request=" + location);
+        return new URL(location);
     }
 
-    public Principal readInIdentity(String accessToken) {
-        FacebookPrincipal facebookPrincipal;
-        try {
-            String urlString = new StringBuilder(FacebookConstants.PROFILE_ENDPOINT_URL).append("?access_token=")
-                    .append(URLEncoder.encode(accessToken, "UTF-8")).toString();
-            if (trace)
-                log.trace("Profile read:" + urlString);
+    public Set<String> getScopes(String accessToken) {
+        Set<String> scopes = new FacebookRequest<Set<String>>() {
 
-            URL profileUrl = new URL(urlString);
-            String profileContent = OAuthUtils.readUrlContent(profileUrl.openConnection());
-            JSONObject jsonObject = new JSONObject(profileContent);
+            @Override
+            protected URL createURL(String accessToken) throws IOException {
+                String urlString = new StringBuilder(FacebookConstants.PROFILE_ENDPOINT_URL).append("/permissions").append("?access_token=")
+                        .append(URLEncoder.encode(accessToken, "UTF-8")).toString();
+                if (trace)
+                    log.trace("Read info about available scopes:" + urlString);
 
-            facebookPrincipal = new FacebookPrincipal();
-            facebookPrincipal.setAccessToken(accessToken);
-            facebookPrincipal.setId(jsonObject.optString("id"));
-            facebookPrincipal.setName(jsonObject.optString("name"));
-            facebookPrincipal.setUsername(jsonObject.optString("username"));
-            facebookPrincipal.setFirstName(jsonObject.optString("first_name"));
-            facebookPrincipal.setLastName(jsonObject.optString("last_name"));
-            facebookPrincipal.setGender(jsonObject.optString("gender"));
-            facebookPrincipal.setTimezone(jsonObject.optString("timezone"));
-            facebookPrincipal.setLocale(jsonObject.optString("locale"));
-            facebookPrincipal.setEmail(jsonObject.optString("email"));
-            facebookPrincipal.setJsonObject(jsonObject);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                return new URL(urlString);
+            }
+
+            @Override
+            protected Set<String> parseResponse(String httpResponse) throws JSONException {
+                JSONObject jsonObject = new JSONObject(httpResponse);
+
+                JSONArray json = jsonObject.getJSONArray("data");
+                if (json != null) {
+                    jsonObject = json.optJSONObject(0);
+                    if (jsonObject != null) {
+                        String[] names = JSONObject.getNames(jsonObject);
+                        if (names != null) {
+                            Set<String> scopes = new HashSet<String>();
+                            for (String name : names) {
+                                scopes.add(name);
+                            }
+                            return scopes;
+                        }
+                    }
+                }
+
+                return new HashSet<String>();
+            }
+
+        }.executeRequest(accessToken);
+
+        return scopes;
+    }
+
+    public FacebookPrincipal getPrincipal(String accessToken) {
+        FacebookPrincipal facebookPrincipal = new FacebookRequest<FacebookPrincipal>() {
+
+            private String accessToken;
+
+            @Override
+            protected URL createURL(String accessToken) throws IOException {
+                String urlString = new StringBuilder(FacebookConstants.PROFILE_ENDPOINT_URL).append("?access_token=")
+                        .append(URLEncoder.encode(accessToken, "UTF-8")).toString();
+                if (trace)
+                    log.trace("Profile read:" + urlString);
+
+                // Little hack but sufficient for now
+                this.accessToken = accessToken;
+
+                return new URL(urlString);
+            }
+
+            @Override
+            protected FacebookPrincipal parseResponse(String httpResponse) throws JSONException {
+                JSONObject jsonObject = new JSONObject(httpResponse);
+
+                FacebookPrincipal facebookPrincipal = new FacebookPrincipal();
+                facebookPrincipal.setAccessToken(accessToken);
+                facebookPrincipal.setId(jsonObject.optString("id"));
+                facebookPrincipal.setName(jsonObject.optString("name"));
+                facebookPrincipal.setUsername(jsonObject.optString("username"));
+                facebookPrincipal.setFirstName(jsonObject.optString("first_name"));
+                facebookPrincipal.setLastName(jsonObject.optString("last_name"));
+                facebookPrincipal.setGender(jsonObject.optString("gender"));
+                facebookPrincipal.setTimezone(jsonObject.optString("timezone"));
+                facebookPrincipal.setLocale(jsonObject.optString("locale"));
+                facebookPrincipal.setEmail(jsonObject.optString("email"));
+                facebookPrincipal.setJsonObject(jsonObject);
+                return facebookPrincipal;
+            }
+
+        }.executeRequest(accessToken);
 
         return facebookPrincipal;
+    }
+
+    public void revokeToken(String accessToken) {
+        try {
+            String urlString = new StringBuilder(FacebookConstants.PROFILE_ENDPOINT_URL).append("/permissions?access_token=")
+                    .append(URLEncoder.encode(accessToken, "UTF-8")).append("&method=delete").toString();
+            URL revokeUrl = new URL(urlString);
+            HttpResponseContext revokeContent = OAuthUtils.readUrlContent(revokeUrl.openConnection());
+            if (revokeContent.getResponseCode() != 200) {
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED,
+                        "Error when revoking token. Http response code: " + revokeContent.getResponseCode() + ", Error details: " + revokeContent.getResponse());
+            }
+
+            if (log.isTraceEnabled()) {
+                log.trace("Successfully revoked facebook accessToken " + accessToken + ", revokeContent=" + revokeContent);
+            }
+        } catch (IOException ioe) {
+            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED, "Error when revoking token", ioe);
+        }
     }
 
 }

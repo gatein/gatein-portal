@@ -37,16 +37,14 @@ import org.gatein.security.oauth.common.OAuthProviderProcessor;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface GoogleProcessor extends OAuthProviderProcessor<GoogleTokenResponse> {
+public interface GoogleProcessor extends OAuthProviderProcessor<GoogleAccessTokenContext> {
 
-    GoogleInteractionState processGoogleAuthInteraction(HttpServletRequest request, HttpServletResponse response) throws IOException;
+    Userinfo obtainUserInfo(GoogleAccessTokenContext accessTokenContext);
 
-    Userinfo obtainUserInfo(GoogleTokenResponse tokenResponse) throws IOException;
+    Oauth2 getOAuth2Instance(GoogleAccessTokenContext accessTokenContext);
 
-    Oauth2 getOAuth2Instance(GoogleTokenResponse tokenResponse);
+    Plus getPlusService(GoogleAccessTokenContext accessTokenContext);
 
-    Plus getPlusService(GoogleTokenResponse tokenData);
-
-    void refreshToken(GoogleTokenResponse tokenData);
+    void refreshToken(GoogleAccessTokenContext accessTokenContext);
 
 }

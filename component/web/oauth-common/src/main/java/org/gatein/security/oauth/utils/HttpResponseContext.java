@@ -21,43 +21,32 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.facebook;
-
-import org.gatein.security.oauth.social.FacebookPrincipal;
+package org.gatein.security.oauth.utils;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class FacebookInteractionState {
+public class HttpResponseContext {
 
-    private final String state;
-    private final FacebookPrincipal facebookPrincipal;
-    private final String scope;
+    private final int responseCode;
+    private final String response;
+    private final String errorResponse;
 
-    public FacebookInteractionState(String state, FacebookPrincipal facebookPrincipal, String scope) {
-        this.state = state;
-        this.facebookPrincipal = facebookPrincipal;
-        this.scope = scope;
+    public HttpResponseContext(int responseCode, String response, String errorResponse) {
+        this.responseCode = responseCode;
+        this.response = response;
+        this.errorResponse = errorResponse;
     }
 
-    public String getState() {
-        return state;
+    public int getResponseCode() {
+        return responseCode;
     }
 
-    public FacebookPrincipal getFacebookPrincipal() {
-        return facebookPrincipal;
+    public String getResponse() {
+        return response;
     }
 
-    public String getScope() {
-        return scope;
-    }
-
-    @Override
-    public String toString() {
-        return new StringBuilder("FacebookInteractionState[state=")
-                .append(state)
-                .append(", principal=" + facebookPrincipal)
-                .append(", scope=" + scope)
-                .append("]").toString();
+    public String getErrorResponse() {
+        return errorResponse;
     }
 }

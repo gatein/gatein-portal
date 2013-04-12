@@ -23,17 +23,22 @@
 
 package org.gatein.security.oauth.common;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.exoplatform.services.organization.UserProfile;
+import org.gatein.security.oauth.exception.OAuthException;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface OAuthProviderProcessor<T> {
+public interface OAuthProviderProcessor<T extends AccessTokenContext> {
 
     void saveAccessTokenAttributesToUserProfile(UserProfile userProfile, OAuthCodec codec, T accessToken);
 
     /**
-     *
      * @param userProfile
      * @param codec
      * @return null if accessToken is not found in persistent storage
@@ -42,5 +47,33 @@ public interface OAuthProviderProcessor<T> {
 
     void removeAccessTokenFromUserProfile(UserProfile userProfile);
 
-    void revokeToken(T accessToken);
+
+
+    InteractionState<T> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws
+            IOException, OAuthException;
+
+
+    /**
+     * Possibility to create new OAuth interaction with custom scope (not just the scope which is provided in configuration)
+     *
+     * @param httpRequest
+     * @param httpResponse
+     * @param scope custom scope
+     * @return
+     * @throws IOException
+     */
+    InteractionState<T> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws
+            IOException, OAuthException;
+
+
+
+    void revokeToken(T accessToken) throws OAuthException;
+
+    /**
+     * Send request to OAuth Provider to validate if given access token is valid and ask for scopes, which are available for given accessToken.
+     *
+     * @param accessToken accessToken which will be used to ask OAuthProvider about validation and for available scopes
+     * @return accessTokenContext, which will be quite same as the one from accessToken parameter. It will have some info updated (like scopes)
+     */
+    T validateTokenAndUpdateScopes(T accessToken) throws OAuthException;
 }

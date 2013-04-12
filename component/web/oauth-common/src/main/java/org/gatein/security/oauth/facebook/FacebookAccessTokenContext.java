@@ -24,85 +24,60 @@
 package org.gatein.security.oauth.facebook;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.gatein.security.oauth.common.AccessTokenContext;
+
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class FacebookAccessTokenContext implements Serializable {
+public class FacebookAccessTokenContext extends AccessTokenContext implements Serializable {
+
+    private static final long serialVersionUID = -7264897192745766989L;
 
     private final String accessToken;
-    private final Set<String> scopes = new HashSet<String>();
 
     public FacebookAccessTokenContext(String accessToken, String... scopes) {
+        super(scopes);
         this.accessToken = accessToken;
-        for (String scope : scopes) {
-            this.scopes.add(scope);
-        }
     }
 
     public FacebookAccessTokenContext(String accessToken, String scopesAsString) {
+        super(scopesAsString);
         this.accessToken = accessToken;
-        String[] scopes = scopesAsString.split(",");
-        for (String scope : scopes) {
-            this.scopes.add(scope);
-        }
+    }
+
+    public FacebookAccessTokenContext(String accessToken, Collection<String> scopes) {
+        super(scopes);
+        this.accessToken = accessToken;
     }
 
     public String getAccessToken() {
         return accessToken;
     }
 
-    public boolean isScopeAvailable(String scope) {
-        return scopes.contains(scope);
-    }
-
-    public String getScopesAsString() {
-        Iterator<String> iterator = scopes.iterator();
-        StringBuilder result;
-
-        if (iterator.hasNext()) {
-            result = new StringBuilder(iterator.next());
-        } else {
-            return "";
-        }
-
-        while (iterator.hasNext()) {
-            result.append("," + iterator.next());
-        }
-        return result.toString();
-    }
-
-    public boolean addScope(String scope) {
-        return scopes.add(scope);
-    }
-
     @Override
     public String toString() {
         return new StringBuilder("FacebookAccessTokenContext [")
                 .append("accessToken=" + accessToken)
-                .append(", scope=" + getScopesAsString())
-                .append("]").toString();
+                .append(super.toString())
+                .toString();
     }
 
     @Override
     public boolean equals(Object that) {
-        if (that == this) {
-            return true;
-        }
-
-        if (!(that instanceof FacebookAccessTokenContext)) {
+        if (!super.equals(that)) {
             return false;
         }
-
         FacebookAccessTokenContext thatt = (FacebookAccessTokenContext)that;
-        return this.accessToken.equals(thatt.getAccessToken()) && this.scopes.equals(thatt.scopes);
+        return this.accessToken.equals(thatt.getAccessToken());
     }
 
     @Override
     public int hashCode() {
-        return accessToken.hashCode() * 13 + scopes.hashCode();
+        return super.hashCode() * 13 + accessToken.hashCode();
     }
 }

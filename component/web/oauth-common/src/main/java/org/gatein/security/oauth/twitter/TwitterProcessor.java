@@ -37,8 +37,6 @@ import twitter4j.Twitter;
  */
 public interface TwitterProcessor extends OAuthProviderProcessor<TwitterAccessTokenContext> {
 
-    TwitterInteractionState processTwitterAuthInteraction(HttpServletRequest request, HttpServletResponse response) throws
-            IOException, OAuthException;
-
     Twitter getAuthorizedTwitterInstance(TwitterAccessTokenContext accessTokenContext);
+
 }

@@ -46,6 +46,7 @@ import org.gatein.security.oauth.common.OAuthProviderType;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.data.SocialNetworkService;
 import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
+import org.gatein.security.oauth.google.GoogleAccessTokenContext;
 import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
 
@@ -154,8 +155,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user2.getUserName(), createFacebookAccessToken("bbb456"));
 
         // Update some google accessToken
-        GoogleTokenResponse grc = createGoogleTokenResponse("ccc789", "rfrc487", "http://someScope");
-        socialNetworkService.updateOAuthAccessToken(getGoogleProvider(), user1.getUserName(), grc);
+        GoogleAccessTokenContext googleToken = createGoogleAccessToken("ccc789", "rfrc487", "http://someScope");
+        socialNetworkService.updateOAuthAccessToken(getGoogleProvider(), user1.getUserName(), googleToken);
 
         // Update some twitter accessToken
         TwitterAccessTokenContext twitterToken = new TwitterAccessTokenContext("tok1", "secret1");
@@ -166,8 +167,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertEquals("bbb456", socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user2.getUserName()).getAccessToken());
 
         // Verify that Google accessToken could be obtained
-        grc = createGoogleTokenResponse("ccc789", "rfrc487", "http://someScope");
-        assertEquals(grc, socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
+        googleToken = createGoogleAccessToken("ccc789", "rfrc487", "http://someScope");
+        assertEquals(googleToken, socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
         assertNull(socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user2.getUserName()));
 
         // Verify that twitter accessToken could be obtained
@@ -232,7 +233,7 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertNull(socialNetworkService.getOAuthAccessToken(getTwitterProvider(), user1.getUserName()));
 
         // Test this with Google
-        GoogleTokenResponse grc = createGoogleTokenResponse("token1", "rf1", "http://someScope");
+        GoogleAccessTokenContext grc = createGoogleAccessToken("token1", "rf1", "http://someScope");
         socialNetworkService.updateOAuthInfo(getGoogleProvider(), user1.getUserName(), "googleUsername1", grc);
 
         userProfile1 = orgService.getUserProfileHandler().findUserProfileByName(user1.getUserName());
@@ -262,7 +263,7 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK);
     }
 
-    private OAuthProviderType<GoogleTokenResponse> getGoogleProvider() {
+    private OAuthProviderType<GoogleAccessTokenContext> getGoogleProvider() {
         return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE);
     }
 
@@ -270,15 +271,14 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER);
     }
 
-    private GoogleTokenResponse createGoogleTokenResponse(String accessToken, String refreshToken, String scope) {
+    private GoogleAccessTokenContext createGoogleAccessToken(String accessToken, String refreshToken, String scope) {
         GoogleTokenResponse grc = new GoogleTokenResponse();
         grc.setAccessToken(accessToken);
         grc.setRefreshToken(refreshToken);
-        grc.setScope(scope);
         grc.setExpiresInSeconds(1000L);
         grc.setTokenType("Bearer");
         grc.setIdToken("someTokenId");
-        return grc;
+        return new GoogleAccessTokenContext(grc, scope);
     }
 
     private FacebookAccessTokenContext createFacebookAccessToken(String accessToken) {

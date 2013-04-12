@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,8 @@ import javax.servlet.http.HttpSession;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.organization.UserProfile;
+import org.exoplatform.web.security.security.SecureRandomService;
+import org.gatein.security.oauth.common.InteractionState;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
@@ -60,8 +63,19 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     private final String scope;
     private final String redirectURL;
     private final FacebookProcessor facebookProcessor;
+    private final SecureRandomService secureRandomService;
 
-    public GateInFacebookProcessorImpl(ExoContainerContext context, InitParams params) {
+    // Only for unit test purpose
+    public GateInFacebookProcessorImpl() {
+        this.clientId = null;
+        this.clientSecret = null;
+        this.scope = null;
+        this.redirectURL = null;
+        this.facebookProcessor = null;
+        this.secureRandomService = null;
+    }
+
+    public GateInFacebookProcessorImpl(ExoContainerContext context, InitParams params, SecureRandomService secureRandomService) {
         this.clientId = params.getValueParam("clientId").getValue();
         this.clientSecret = params.getValueParam("clientSecret").getValue();
         String scope = params.getValueParam("scope").getValue();
@@ -91,27 +105,25 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
                 ", redirectURL=" + this.redirectURL);
 
         // Use empty rolesList because we don't need rolesList for GateIn integration
-        this.facebookProcessor = new FacebookProcessor(this.clientId , this.clientSecret, this.scope, this.redirectURL, Arrays.asList(new String[]{}));
+        this.facebookProcessor = new FacebookProcessor(this.clientId , this.clientSecret, this.scope, this.redirectURL);
+        this.secureRandomService = secureRandomService;
     }
 
     @Override
-    public FacebookInteractionState processFacebookAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws IOException {
-        // Save custom scope as attribute into session
-        httpRequest.getSession().setAttribute(OAuthConstants.ATTRIBUTE_OAUTH_SCOPE, scope);
-
-        return processFacebookAuthInteractionImpl(httpRequest, httpResponse, new FacebookProcessor(this.clientId , this.clientSecret, scope, this.redirectURL, Arrays.asList(new String[]{})));
+    public InteractionState<FacebookAccessTokenContext> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws IOException {
+        return processOAuthInteractionImpl(httpRequest, httpResponse, new FacebookProcessor(this.clientId, this.clientSecret, scope, this.redirectURL));
     }
 
 
     @Override
-    public FacebookInteractionState processFacebookAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
-        return processFacebookAuthInteractionImpl(httpRequest, httpResponse, this.facebookProcessor);
+    public InteractionState<FacebookAccessTokenContext> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
+        return processOAuthInteractionImpl(httpRequest, httpResponse, this.facebookProcessor);
     }
 
 
-    protected FacebookInteractionState processFacebookAuthInteractionImpl(HttpServletRequest httpRequest, HttpServletResponse httpResponse, FacebookProcessor facebookProcessor) throws IOException {
+    protected InteractionState<FacebookAccessTokenContext> processOAuthInteractionImpl(HttpServletRequest httpRequest, HttpServletResponse httpResponse, FacebookProcessor facebookProcessor) throws IOException {
         HttpSession session = httpRequest.getSession();
-        String state = (String) session.getAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE);
+        String state = (String) session.getAttribute(OAuthConstants.ATTRIBUTE_AUTH_STATE);
 
         if (log.isTraceEnabled()) {
             log.trace("state=" + state);
@@ -119,38 +131,40 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
 
         // Very initial request to portal
         if (state == null || state.isEmpty()) {
-            facebookProcessor.initialInteraction(httpRequest, httpResponse);
-            state = (String) session.getAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE);
-            return new FacebookInteractionState(state, null, null);
+            String verificationState = String.valueOf(secureRandomService.getSecureRandom().nextLong());
+            facebookProcessor.initialInteraction(httpRequest, httpResponse, verificationState);
+            state = InteractionState.State.AUTH.name();
+            session.setAttribute(OAuthConstants.ATTRIBUTE_AUTH_STATE, state);
+            session.setAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE, verificationState);
+            return new InteractionState<FacebookAccessTokenContext>(InteractionState.State.valueOf(state), null);
         }
 
         // We are authenticated in Facebook and our app is authorized. Finish OAuth handshake by obtaining accessToken and initial info
-        if (state.equals(FacebookProcessor.STATES.AUTH.name())) {
-            FacebookPrincipal principal = (FacebookPrincipal)facebookProcessor.getPrincipal(httpRequest, httpResponse);
+        if (state.equals(InteractionState.State.AUTH.name())) {
+            String accessToken = facebookProcessor.getAccessToken(httpRequest, httpResponse);
 
-            if (principal == null) {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_UNSPECIFIED, null, "Principal was null. Maybe login modules need to be configured properly.");
+            if (accessToken == null) {
+                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_FACEBOOK_ERROR, "AccessToken was null");
             } else {
-                state = FacebookProcessor.STATES.FINISH.name();
-                session.setAttribute(FacebookProcessor.FB_AUTH_STATE_SESSION_ATTRIBUTE, state);
+                Set<String> scopes = facebookProcessor.getScopes(accessToken);
+                state = InteractionState.State.FINISH.name();
 
-                // Try to obtain scope to use from session. Use default one if it's not available in session
-                String scope = (String)session.getAttribute(OAuthConstants.ATTRIBUTE_OAUTH_SCOPE);
-                if (scope == null) {
-                    scope = this.scope;
-                }
+                // Clear session attributes
+                session.removeAttribute(OAuthConstants.ATTRIBUTE_AUTH_STATE);
+                session.removeAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE);
 
-                return new FacebookInteractionState(state, principal, scope);
+                FacebookAccessTokenContext accessTokenContext = new FacebookAccessTokenContext(accessToken, scopes);
+                return new InteractionState<FacebookAccessTokenContext>(InteractionState.State.valueOf(state), accessTokenContext);
             }
         }
 
         // Likely shouldn't happen...
-        return new FacebookInteractionState(state, null, null);
+        return new InteractionState<FacebookAccessTokenContext>(InteractionState.State.valueOf(state), null);
     }
 
     @Override
     public FacebookPrincipal getPrincipal(String accessToken) {
-        return (FacebookPrincipal)facebookProcessor.readInIdentity(accessToken);
+        return facebookProcessor.getPrincipal(accessToken);
     }
 
     @Override
@@ -200,17 +214,13 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
 
     @Override
     public void revokeToken(FacebookAccessTokenContext accessToken) {
-        try {
-            String realAccessToken = accessToken.getAccessToken();
-            String urlString = new StringBuilder(FacebookConstants.PROFILE_ENDPOINT_URL).append("/permissions?access_token=")
-                    .append(URLEncoder.encode(realAccessToken, "UTF-8")).append("&method=delete").toString();
-            URL revokeUrl = new URL(urlString);
-            String revokeContent = OAuthUtils.readUrlContent(revokeUrl.openConnection());
-            if (log.isTraceEnabled()) {
-                log.trace("Successfully revoked facebook accessToken " + realAccessToken + ", revokeContent=" + revokeContent);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        String realAccessToken = accessToken.getAccessToken();
+        facebookProcessor.revokeToken(realAccessToken);
+    }
+
+    @Override
+    public FacebookAccessTokenContext validateTokenAndUpdateScopes(FacebookAccessTokenContext accessToken) throws OAuthException {
+        Set<String> scopes = facebookProcessor.getScopes(accessToken.getAccessToken());
+        return new FacebookAccessTokenContext(accessToken.getAccessToken(), scopes);
     }
 }

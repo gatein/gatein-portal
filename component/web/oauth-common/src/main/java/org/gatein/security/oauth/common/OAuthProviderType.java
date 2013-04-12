@@ -26,7 +26,7 @@ package org.gatein.security.oauth.common;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class OAuthProviderType<T> {
+public class OAuthProviderType<T extends AccessTokenContext> {
 
     private final String key;
     private final boolean enabled;

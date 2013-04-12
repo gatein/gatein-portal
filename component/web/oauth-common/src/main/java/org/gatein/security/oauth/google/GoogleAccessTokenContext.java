@@ -23,37 +23,49 @@
 
 package org.gatein.security.oauth.google;
 
+import java.io.Serializable;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import com.google.api.services.oauth2.model.Userinfo;
+import org.gatein.security.oauth.common.AccessTokenContext;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class GoogleInteractionState {
+public class GoogleAccessTokenContext extends AccessTokenContext implements Serializable {
 
-    public enum STATE {
-        AUTH, FINISH
+    private static final long serialVersionUID = -7038197192745766989L;
+
+    private final GoogleTokenResponse tokenData;
+
+    public GoogleAccessTokenContext(GoogleTokenResponse tokenData, String... scopes) {
+        // Obtain scopes from token response
+        super(scopes);
+        this.tokenData = tokenData;
     }
 
-    private final STATE state;
-    private final GoogleTokenResponse tokenResponse;
-    private final Userinfo userInfo;
-
-    public GoogleInteractionState(STATE state, GoogleTokenResponse tokenResponse, Userinfo userInfo) {
-        this.state = state;
-        this.tokenResponse = tokenResponse;
-        this.userInfo = userInfo;
+    public GoogleTokenResponse getTokenData() {
+        return tokenData;
     }
 
-    public STATE getState() {
-        return state;
+    @Override
+    public String toString() {
+        return new StringBuilder("GoogleAccessTokenContext [")
+                .append("accessToken=" + tokenData)
+                .append(super.toString())
+                .toString();
     }
 
-    public GoogleTokenResponse getTokenResponse() {
-        return tokenResponse;
+    @Override
+    public boolean equals(Object that) {
+        if (!super.equals(that)) {
+            return false;
+        }
+        GoogleAccessTokenContext thatt = (GoogleAccessTokenContext)that;
+        return this.tokenData.equals(thatt.getTokenData());
     }
 
-    public Userinfo getUserInfo() {
-        return userInfo;
+    @Override
+    public int hashCode() {
+        return super.hashCode() * 13 + tokenData.hashCode();
     }
 }

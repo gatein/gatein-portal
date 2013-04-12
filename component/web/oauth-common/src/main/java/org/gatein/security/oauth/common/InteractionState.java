@@ -21,46 +21,30 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.twitter;
-
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
+package org.gatein.security.oauth.common;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class TwitterInteractionState {
+public class InteractionState<T extends AccessTokenContext> {
 
-    public enum STATE {
+    private final State state;
+    private final T accessTokenContext;
+
+    public enum State {
         AUTH, FINISH
     }
 
-    private final STATE state;
-    private final RequestToken requestToken;
-    private final AccessToken accessToken;
-    private final User user;
-
-    TwitterInteractionState(STATE state, RequestToken requestToken, AccessToken accessToken, User user) {
+    public InteractionState(State state, T accessTokenContext) {
         this.state = state;
-        this.requestToken = requestToken;
-        this.accessToken = accessToken;
-        this.user = user;
+        this.accessTokenContext = accessTokenContext;
     }
 
-    public STATE getState() {
+    public State getState() {
         return state;
     }
 
-    public RequestToken getRequestToken() {
-        return requestToken;
-    }
-
-    public AccessToken getAccessToken() {
-        return accessToken;
-    }
-
-    public User getUser() {
-        return user;
+    public T getAccessTokenContext() {
+        return accessTokenContext;
     }
 }

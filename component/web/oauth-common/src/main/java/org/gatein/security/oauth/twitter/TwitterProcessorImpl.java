@@ -33,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.organization.UserProfile;
+import org.gatein.security.oauth.common.InteractionState;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
@@ -91,7 +92,7 @@ public class TwitterProcessorImpl implements TwitterProcessor {
     }
 
     @Override
-    public TwitterInteractionState processTwitterAuthInteraction(HttpServletRequest request, HttpServletResponse response) throws
+    public InteractionState<TwitterAccessTokenContext> processOAuthInteraction(HttpServletRequest request, HttpServletResponse response) throws
             IOException, OAuthException {
         Twitter twitter = twitterFactory.getInstance();
 
@@ -114,27 +115,36 @@ public class TwitterProcessorImpl implements TwitterProcessor {
                 // Redirect to twitter to perform authentication
                 response.sendRedirect(requestToken.getAuthenticationURL());
 
-                return new TwitterInteractionState(TwitterInteractionState.STATE.AUTH, requestToken, null, null);
+                return new InteractionState<TwitterAccessTokenContext>(InteractionState.State.AUTH, null);
             } else {
                 String verifier = request.getParameter(OAuthConstants.OAUTH_VERIFIER);
 
-                // Obtain accessToken and user object from twitter
+                // User denied scope
+                if (request.getParameter(OAuthConstants.OAUTH_DENIED) != null) {
+                    throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_USER_DENIED_SCOPE, "User denied scope on Twitter authorization page");
+                }
+
+                // Obtain accessToken from twitter
                 AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-                User twitterUser = twitter.verifyCredentials();
 
                 if (log.isTraceEnabled()) {
-                    log.trace("Obtained user from Twitter authentication: " + twitterUser);
                     log.trace("Twitter accessToken: " + accessToken);
                 }
 
                 // Remove requestToken from session. We don't need it anymore
                 session.removeAttribute(OAuthConstants.ATTRIBUTE_TWITTER_REQUEST_TOKEN);
+                TwitterAccessTokenContext accessTokenContext = new TwitterAccessTokenContext(accessToken.getToken(), accessToken.getTokenSecret());
 
-                return new TwitterInteractionState(TwitterInteractionState.STATE.FINISH, null, accessToken, twitterUser);
+                return new InteractionState<TwitterAccessTokenContext>(InteractionState.State.FINISH, accessTokenContext);
             }
         } catch (TwitterException twitterException) {
             throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, twitterException);
         }
+    }
+
+    @Override
+    public InteractionState<TwitterAccessTokenContext> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws IOException, OAuthException {
+        throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, "Thsi is currently not supported for Twitter");
     }
 
     @Override
@@ -170,6 +180,19 @@ public class TwitterProcessorImpl implements TwitterProcessor {
         }
     }
 
+
+    @Override
+    public TwitterAccessTokenContext validateTokenAndUpdateScopes(TwitterAccessTokenContext accessToken) throws OAuthException {
+        try {
+            // Perform validation by obtaining some info about user
+            Twitter twitter = getAuthorizedTwitterInstance(accessToken);
+            twitter.verifyCredentials();
+            return accessToken;
+        } catch (TwitterException tw) {
+            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, tw);
+        }
+    }
+
     @Override
     public void removeAccessTokenFromUserProfile(UserProfile userProfile) {
         userProfile.setAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN, null);
@@ -179,6 +202,5 @@ public class TwitterProcessorImpl implements TwitterProcessor {
     @Override
     public void revokeToken(TwitterAccessTokenContext accessToken) {
         // TODO: (if it's possible with Twitter... Maybe it's noop)
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

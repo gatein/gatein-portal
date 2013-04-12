@@ -33,6 +33,7 @@ import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.web.security.codec.AbstractCodec;
 import org.exoplatform.web.security.codec.CodecInitializer;
 import org.exoplatform.web.security.security.TokenServiceInitializationException;
+import org.gatein.security.oauth.common.AccessTokenContext;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -74,7 +75,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
     }
 
     @Override
-    public <T> void updateOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username, T accessToken) {
+    public <T extends AccessTokenContext> void updateOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username, T accessToken) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
@@ -91,7 +92,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
     }
 
     @Override
-    public <T> T getOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username) {
+    public <T extends AccessTokenContext> T getOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
@@ -104,7 +105,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
     }
 
     @Override
-    public <T> void removeOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username) {
+    public <T extends AccessTokenContext> void removeOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
@@ -119,7 +120,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
     }
 
     @Override
-    public <T> void updateOAuthInfo(OAuthProviderType<T> oauthProviderType, String username, String oauthUsername, T accessToken) {
+    public <T extends AccessTokenContext> void updateOAuthInfo(OAuthProviderType<T> oauthProviderType, String username, String oauthUsername, T accessToken) {
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);

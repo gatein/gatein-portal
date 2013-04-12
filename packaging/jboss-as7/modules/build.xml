@@ -62,7 +62,6 @@
     ~ +++++++   KEEP THIS LIST ALPHABETICAL BY MODULE NAME!   +++++++
     ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     -->
-<<<<<<< HEAD
     <module-def name="com.google.guava" slot="gatein">
       <maven-resource group="com.google.guava" artifact="guava"/>
     </module-def>
@@ -397,6 +396,10 @@
 
     <module-def name="org.staxnav">
       <maven-resource group="org.staxnav" artifact="staxnav.core"/>
+    </module-def>
+
+    <module-def name="org.twitter4j">
+      <maven-resource group="org.twitter4j" artifact="twitter4j-core"/>
     </module-def>
 
     <module-def name="javax.portlet.api">

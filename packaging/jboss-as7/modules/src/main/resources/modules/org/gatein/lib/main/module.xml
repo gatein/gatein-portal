@@ -41,6 +41,7 @@
     <module name="javax.ws.rs.api"/>
     <module name="javax.xml.bind.api"/>
 
+    <module name="com.google.apis" />
     <module name="com.google.guava" slot="gatein"/>
     <module name="com.google.javascript"/>
     <module name="com.h2database.h2"/>
@@ -89,7 +90,6 @@
     <module name="org.infinispan"/>
     <module name="org.jibx"/>
     <module name="org.jboss.as.web"/>
-    <module name="com.google.apis" />
     <module name="org.jboss.common-core"/>
     <module name="org.jboss.logging"/>
     <module name="org.jboss.jts"/>
@@ -102,6 +102,7 @@
     <module name="org.picocontainer"/>
     <module name="org.slf4j"/>
     <module name="org.staxnav"/>
+    <module name="org.twitter4j" />
 
     <system export="true">
       <paths>

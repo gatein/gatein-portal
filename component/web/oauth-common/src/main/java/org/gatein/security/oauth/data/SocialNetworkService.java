@@ -24,6 +24,7 @@
 package org.gatein.security.oauth.data;
 
 import org.exoplatform.services.organization.User;
+import org.gatein.security.oauth.common.AccessTokenContext;
 import org.gatein.security.oauth.common.OAuthProviderType;
 
 /**
@@ -33,12 +34,12 @@ public interface SocialNetworkService {
 
     User findUserByOAuthProviderUsername(OAuthProviderType oauthProviderType, String oauthProviderUsername);
 
-    <T> void updateOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username, T accessToken);
+    <T extends AccessTokenContext> void updateOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username, T accessToken);
 
-    <T> T getOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username);
+    <T extends AccessTokenContext> T getOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username);
 
-    <T> void updateOAuthInfo(OAuthProviderType<T> oauthProviderType, String username, String oauthUsername, T accessToken);
+    <T extends AccessTokenContext> void updateOAuthInfo(OAuthProviderType<T> oauthProviderType, String username, String oauthUsername, T accessToken);
 
-    <T> void removeOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username);
+    <T extends AccessTokenContext> void removeOAuthAccessToken(OAuthProviderType<T> oauthProviderType, String username);
 
 }

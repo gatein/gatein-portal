@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -43,6 +44,7 @@ import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.common.OAuthPrincipal;
 import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
+import org.gatein.security.oauth.google.GoogleAccessTokenContext;
 import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
@@ -54,15 +56,14 @@ public class OAuthUtils {
 
     // Converting objects
 
-    public static OAuthPrincipal<FacebookAccessTokenContext> convertFacebookPrincipalToOAuthPrincipal(FacebookPrincipal facebookPrincipal, OAuthProviderTypeRegistry registry, String scope) {
-        FacebookAccessTokenContext fbAccessTokenContext = new FacebookAccessTokenContext(facebookPrincipal.getAccessToken(), scope);
-        OAuthProviderType<FacebookAccessTokenContext> facebookProviderType = registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK);
+    public static OAuthPrincipal<FacebookAccessTokenContext> convertFacebookPrincipalToOAuthPrincipal(FacebookPrincipal facebookPrincipal,
+                                            OAuthProviderType<FacebookAccessTokenContext> facebookProviderType, FacebookAccessTokenContext fbAccessTokenContext) {
         return new OAuthPrincipal<FacebookAccessTokenContext>(facebookPrincipal.getUsername(), facebookPrincipal.getFirstName(), facebookPrincipal.getLastName(),
                 facebookPrincipal.getAttribute("name"), facebookPrincipal.getEmail(), fbAccessTokenContext, facebookProviderType);
     }
 
     public static OAuthPrincipal<TwitterAccessTokenContext> convertTwitterUserToOAuthPrincipal(twitter4j.User twitterUser, TwitterAccessTokenContext accessToken,
-                                                                    OAuthProviderTypeRegistry registry) {
+                                                             OAuthProviderType<TwitterAccessTokenContext> twitterProviderType) {
         String fullName = twitterUser.getName();
         String firstName;
         String lastName;
@@ -77,18 +78,16 @@ public class OAuthUtils {
             lastName = null;
         }
 
-        OAuthProviderType<TwitterAccessTokenContext> twitterProviderType = registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER);
         return new OAuthPrincipal<TwitterAccessTokenContext>(twitterUser.getScreenName(), firstName, lastName, fullName, null, accessToken,
                 twitterProviderType);
     }
 
-    public static OAuthPrincipal<GoogleTokenResponse> convertGoogleInfoToOAuthPrincipal(Userinfo userInfo, GoogleTokenResponse accessToken,
-                                                                   OAuthProviderTypeRegistry registry) {
+    public static OAuthPrincipal<GoogleAccessTokenContext> convertGoogleInfoToOAuthPrincipal(Userinfo userInfo, GoogleAccessTokenContext accessToken,
+                                                               OAuthProviderType<GoogleAccessTokenContext> googleProviderType) {
         // Assume that username is first part of email
         String email = userInfo.getEmail();
-        String username = email.substring(0, email.indexOf('@'));
-        OAuthProviderType<GoogleTokenResponse> googleProviderType = registry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE);
-        return new OAuthPrincipal<GoogleTokenResponse>(username, userInfo.getGivenName(), userInfo.getFamilyName(), userInfo.getName(), userInfo.getEmail(),
+        String username = email != null ? email.substring(0, email.indexOf('@')) : userInfo.getGivenName();
+        return new OAuthPrincipal<GoogleAccessTokenContext>(username, userInfo.getGivenName(), userInfo.getFamilyName(), userInfo.getName(), userInfo.getEmail(),
                 accessToken, googleProviderType);
     }
 
@@ -148,19 +147,27 @@ public class OAuthUtils {
      * @param connection
      * @return whole HTTP response as String
      */
-    public static String readUrlContent(URLConnection connection) {
+    public static HttpResponseContext readUrlContent(URLConnection connection) throws IOException {
         StringBuilder result = new StringBuilder();
+
+        HttpURLConnection httpURLConnection = (HttpURLConnection)connection;
+        int statusCode = httpURLConnection.getResponseCode();
+
+        Reader reader;
         try {
-            Reader reader = new InputStreamReader(connection.getInputStream());
-            char[] buffer = new char[50];
-            int nrOfChars;
-            while ((nrOfChars = reader.read(buffer)) != -1) {
-                result.append(buffer, 0, nrOfChars);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            reader = new InputStreamReader(connection.getInputStream());
+        } catch (IOException ioe) {
+            reader = new InputStreamReader(httpURLConnection.getErrorStream());
         }
-        return result.toString();
+
+        char[] buffer = new char[50];
+        int nrOfChars;
+        while ((nrOfChars = reader.read(buffer)) != -1) {
+            result.append(buffer, 0, nrOfChars);
+        }
+
+        String response = result.toString();
+        return new HttpResponseContext(statusCode, response, null);
     }
 
     /**

@@ -25,6 +25,7 @@ package org.gatein.security.oauth.registry;
 
 import java.util.Collection;
 
+import org.gatein.security.oauth.common.AccessTokenContext;
 import org.gatein.security.oauth.common.OAuthProviderType;
 
 /**
@@ -33,7 +34,7 @@ import org.gatein.security.oauth.common.OAuthProviderType;
 public interface OAuthProviderTypeRegistry {
 
     // TODO: more type-safety by passing type?
-    <T> OAuthProviderType<T> getOAuthProvider(String key);
+    <T extends AccessTokenContext> OAuthProviderType<T> getOAuthProvider(String key);
 
     Collection<OAuthProviderType> getEnabledOAuthProviders();
 

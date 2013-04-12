@@ -29,7 +29,7 @@ import java.security.Principal;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class OAuthPrincipal<T> implements Principal {
+public class OAuthPrincipal<T extends AccessTokenContext> implements Principal {
 
     private final String userName;
     private final String firstName;

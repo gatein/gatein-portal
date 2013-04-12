@@ -27,13 +27,14 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
+import org.gatein.security.oauth.common.AccessTokenContext;
 import org.gatein.security.oauth.common.OAuthProviderProcessor;
 import org.gatein.security.oauth.common.OAuthProviderType;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class OauthProviderTypeRegistryPlugin<T> extends BaseComponentPlugin {
+public class OauthProviderTypeRegistryPlugin<T extends AccessTokenContext> extends BaseComponentPlugin {
 
     private final OAuthProviderType oauthPrType;
 

@@ -50,6 +50,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.security.oauth.common.AccessTokenContext;
 import org.gatein.security.oauth.common.OAuthProviderType;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.data.SocialNetworkService;
@@ -142,7 +143,7 @@ public class UIAccountSocial extends UIForm {
                 OAuthProviderType oauthProviderTypeToUnlink = uiForm.getApplicationComponent(OAuthProviderTypeRegistry.class).getOAuthProvider(unlinkProviderKey);
 
                 // Obtain current accessToken
-                Object accessToken = uiForm.getApplicationComponent(SocialNetworkService.class).getOAuthAccessToken(oauthProviderTypeToUnlink, userName);
+                AccessTokenContext accessToken = uiForm.getApplicationComponent(SocialNetworkService.class).getOAuthAccessToken(oauthProviderTypeToUnlink, userName);
 
                 // Unlink social account in userProfile (AccessTokenInvalidationListener will automatically remove accessToken)
                 if (oauthProviderTypeToUnlink != null) {
@@ -159,10 +160,10 @@ public class UIAccountSocial extends UIForm {
                     } catch (OAuthException oe) {
                         if (OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED.equals(oe.getExceptionCode())) {
                             Throwable t = oe.getCause() != null ? oe.getCause() : oe;
-                            ApplicationMessage appMessage = new ApplicationMessage("UIAccountSocial.msg.failed-revoke", new Object[] { t.getMessage() }, ApplicationMessage.WARNING);
+                            ApplicationMessage appMessage = new ApplicationMessage("UIAccountSocial.msg.failed-revoke", null, ApplicationMessage.WARNING);
                             appMessage.setArgsLocalized(false);
                             uiApp.addMessage(appMessage);
-                            log.warn("Revocation of accessToken failed", t);
+                            log.warn("Revocation of accessToken failed for user " + userName + ". Details: " + t.getClass() + ": " + t.getMessage());
                         } else {
                             throw oe;
                         }

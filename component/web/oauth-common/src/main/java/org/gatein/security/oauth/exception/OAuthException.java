@@ -31,7 +31,8 @@ import java.util.Map;
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthException extends RuntimeException {
-    static final long serialVersionUID = -7034897190745768339L;
+
+    static final long serialVersionUID = -7034897190745766989L;
 
     // Specify error code
     private final OAuthExceptionCode exceptionCode;

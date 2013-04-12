@@ -40,6 +40,8 @@ public class OAuthConstants {
 
     public static final String SCOPE_PARAMETER = "scope";
 
+    public static final String STATE_PARAMETER = "state";
+
     public static final String REDIRECT_URI_PARAMETER = "redirect_uri";
 
     public static final String ACCESS_TOKEN_PARAMETER = "access_token";
@@ -50,6 +52,8 @@ public class OAuthConstants {
 
     // Used in twitter
     public static final String OAUTH_VERIFIER = "oauth_verifier";
+
+    public static final String OAUTH_DENIED = "denied";
 
     // Properties from configuration.properties
 
@@ -131,8 +135,6 @@ public class OAuthConstants {
     public static final String ATTRIBUTE_AUTH_STATE = "_authState";
 
     public static final String ATTRIBUTE_VERIFICATION_STATE = "_verificationState";
-
-    public static final String ATTRIBUTE_OAUTH_SCOPE = "_oauthScope";
 
     // URL
 

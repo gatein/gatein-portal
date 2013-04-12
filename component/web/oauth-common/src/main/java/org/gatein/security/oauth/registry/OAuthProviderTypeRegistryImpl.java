@@ -32,6 +32,7 @@ import java.util.Map;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.security.oauth.common.AccessTokenContext;
 import org.gatein.security.oauth.common.OAuthProviderType;
 
 /**
@@ -60,7 +61,7 @@ public class OAuthProviderTypeRegistryImpl implements OAuthProviderTypeRegistry 
     }
 
     @Override
-    public <T> OAuthProviderType<T> getOAuthProvider(String key) {
+    public <T extends AccessTokenContext> OAuthProviderType<T> getOAuthProvider(String key) {
         return (OAuthProviderType<T>)oauthProviderTypes.get(key);
     }
 
