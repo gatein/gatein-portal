@@ -94,10 +94,6 @@
     </dependency>
     <dependency>
       <groupId>org.gatein.wsrp</groupId>
-      <artifactId>wsrp-wss-jboss5</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.wsrp</groupId>
       <artifactId>wsrp-wss</artifactId>
     </dependency>
   </dependencies>
@@ -173,10 +169,6 @@
             <jarModule>
               <groupId>org.gatein.wsrp</groupId>
               <artifactId>wsrp-integration-api</artifactId>
-            </jarModule>
-            <jarModule>
-              <groupId>org.gatein.wsrp</groupId>
-              <artifactId>wsrp-wss-jboss5</artifactId>
             </jarModule>
             <jarModule>
               <groupId>org.gatein.wsrp</groupId>

@@ -49,7 +49,7 @@
     <org.gatein.pc.version>2.4.1.CR03</org.gatein.pc.version>
     <org.gatein.sso.version>1.3.2.Final</org.gatein.sso.version>
     <org.picketlink.idm>1.4.1.Final</org.picketlink.idm>
-    <org.gatein.wsrp.version>2.2.4.Final</org.gatein.wsrp.version>
+    <org.gatein.wsrp.version>2.2.5.Final</org.gatein.wsrp.version>
     <org.gatein.mop.version>1.2.0.Final</org.gatein.mop.version>
     <org.gatein.mgmt.version>2.0.0.Beta01</org.gatein.mgmt.version>
     <org.slf4j.version>1.6.1</org.slf4j.version>
@@ -461,12 +461,6 @@
       <dependency>
         <groupId>org.gatein.wsrp</groupId>
         <artifactId>wsrp-cxf-integration</artifactId>
-        <scope>provided</scope>
-        <version>${org.gatein.wsrp.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.wsrp</groupId>
-        <artifactId>wsrp-wss-jboss5</artifactId>
         <scope>provided</scope>
         <version>${org.gatein.wsrp.version}</version>
       </dependency>

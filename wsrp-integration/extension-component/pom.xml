@@ -64,11 +64,6 @@
     </dependency>
     <dependency>
       <groupId>org.gatein.wsrp</groupId>
-      <artifactId>wsrp-wss-jboss5</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.wsrp</groupId>
       <artifactId>wsrp-wss-jboss7</artifactId>
       <scope>provided</scope>
     </dependency>

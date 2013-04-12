@@ -40,51 +40,10 @@
 
   <description>GateIn WSRP Integration extension parent</description>
 
-  <profiles>
-    <profile>
-      <id>pkg-all</id>
-      <activation>
-        <property>
-          <name>!gatein.dev</name>
-        </property>
-      </activation>
-      <modules>
-        <module>extension-config</module>
-        <module>extension-component</module>
-        <module>extension-war</module>
-        <module>extension-ear</module>
-        <module>extension-ear-as7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas711</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas711</value>
-        </property>
-      </activation>
-      <modules>
-        <module>extension-config</module>
-        <module>extension-component</module>
-        <module>extension-war</module>
-        <module>extension-ear</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas713</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas713</value>
-        </property>
-      </activation>
-      <modules>
-        <module>extension-config</module>
-        <module>extension-component</module>
-        <module>extension-war</module>
-        <module>extension-ear</module>
-      </modules>
-    </profile>
-  </profiles>
+  <modules>
+     <module>extension-config</module>
+     <module>extension-component</module>
+     <module>extension-war</module>
+     <module>extension-ear</module>
+  </modules>
 </project>
