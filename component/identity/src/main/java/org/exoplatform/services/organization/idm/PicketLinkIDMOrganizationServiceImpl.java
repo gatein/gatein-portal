@@ -178,7 +178,9 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                 }
                 jtaTransactionLifecycleService.finishJTATransaction();
             } else {
-                idmService_.getIdentitySession().getTransaction().commit();
+                if (idmService_.getIdentitySession().getTransaction().isActive()) {
+                    idmService_.getIdentitySession().getTransaction().commit();
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
