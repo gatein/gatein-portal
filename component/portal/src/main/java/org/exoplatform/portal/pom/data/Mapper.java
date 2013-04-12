@@ -272,14 +272,10 @@ public class Mapper {
                     redirect.setEnabled(redirectData.isEnabled());
 
                     if (redirectData.getConditions() != null) {
+                        redirect.getConditions().clear(); // clear the map so that we can rebuild it
                         for (RedirectConditionData conditionData : redirectData.getConditions()) {
-                            Condition condition = redirect.getConditions().get(conditionData.getRedirectName());
-                            if (condition == null) {
-                                condition = redirect.createCondition();
-                                redirect.getConditions().put(conditionData.getRedirectName(), condition);
-                            }
-                            // condition.setName(conditionData.getRedirectName());
-
+                            Condition condition = redirect.createCondition();
+                            redirect.getConditions().put(conditionData.getRedirectName(), condition);
                             buildCondition(conditionData, condition);
                         }
                     }
