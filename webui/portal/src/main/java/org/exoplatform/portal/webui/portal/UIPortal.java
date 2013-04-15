@@ -174,7 +174,6 @@ public class UIPortal extends UIContainer {
      */
     public UIPage getUIPage(String pageReference) {
         if (all_UIPages == null) {
-            this.all_UIPages = new HashMap<String, UIPage>(5);
             return null;
         }
         return this.all_UIPages.get(pageReference);
