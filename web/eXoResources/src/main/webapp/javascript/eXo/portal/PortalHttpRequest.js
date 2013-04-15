@@ -528,7 +528,14 @@
 		instance.updateBlocks = function(blocksToUpdate, parentId) {
 		  if(!blocksToUpdate) return;
 		  var parentBlock = null;
-		  if(parentId && parentId != "") parentBlock =  $("#" + parentId);
+		  if(parentId && parentId != "") {
+		    parentBlock =  $("#" + parentId);
+		    
+		    // Workaround: In the case of the Portlet is being rendered/displayed in Edit Layout mode
+		    if (parentBlock.length == 0) {
+		      parentBlock = $("#UIPortlet-" + parentId);
+		    }
+		  }
 		  parentBlock = !parentBlock ? $(document) : parentBlock;
 		  
 		  $.each(blocksToUpdate, function() {
