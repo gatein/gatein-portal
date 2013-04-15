@@ -44,6 +44,23 @@ public class GadgetTokenInfoService extends PlainTokenService<GadgetToken, Basic
         chromatticLifeCycle = chromatticManager.getLifeCycle("gadgettokens");
     }
 
+    @Override
+    public void start() {
+        try {
+            chromatticLifeCycle.getManager().beginRequest();
+            ChromatticSession session = chromatticLifeCycle.openContext().getSession();
+            GadgetTokenContainer tkContainer = session.findByPath(GadgetTokenContainer.class, "gadgettokens");
+            if (tkContainer == null) {
+                session.insert(GadgetTokenContainer.class, "gadgettokens");
+            }
+
+        } finally {
+            chromatticLifeCycle.getManager().endRequest(true);
+        }
+
+        super.start();
+    }
+
     public GadgetToken createToken(final BasicOAuthStoreTokenIndex key, final TokenInfo tokenInfo) {
         return new TokenTask<GadgetToken>() {
             @Override
@@ -123,12 +140,9 @@ public class GadgetTokenInfoService extends PlainTokenService<GadgetToken, Basic
         private SessionContext context;
 
         protected final GadgetTokenContainer getGadgetTokenContainer() {
+
             ChromatticSession session = context.getSession();
-            GadgetTokenContainer container = session.findByPath(GadgetTokenContainer.class, "gadgettokens");
-            if (container == null) {
-                container = session.insert(GadgetTokenContainer.class, "gadgettokens");
-            }
-            return container;
+            return session.findByPath(GadgetTokenContainer.class, "gadgettokens");
         }
 
         @Override

@@ -48,18 +48,6 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
     protected void setUp() throws Exception {
         PortalContainer container = getContainer();
         service = (GadgetTokenInfoService) container.getComponentInstanceOfType(GadgetTokenInfoService.class);
-
-        // hack to make sure database is initialized before running tests (see GTNPORTAL-2710 and GTNPORTAL-2711)
-        Thread t = new Thread() {
-            public void run() {
-                try {
-                    service.getAllTokens();
-                } catch (Throwable t) {
-                }
-            }
-        };
-        t.start();
-        t.join();
     }
 
     private LinkedList<BasicOAuthStoreTokenIndex> createTokens() {
