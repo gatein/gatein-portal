@@ -258,6 +258,17 @@ public class UIPortalApplication extends UIApplication {
         this.all_UIPortals.remove(new SiteKey(ownerType, ownerId));
     }
 
+    /**
+     * Invalidate any UIPage cache object associated to UIPortal objects
+     *
+     * @param pageRef
+     */
+    public void invalidateUIPage(String pageRef) {
+        for (UIPortal tmp : all_UIPortals.values()) {
+            tmp.clearUIPage(pageRef);
+        }
+    }
+
     public boolean isSessionOpen() {
         return isSessionOpen;
     }

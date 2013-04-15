@@ -624,7 +624,8 @@ public class UIPortalComposer extends UIContainer {
              * if it is a edition of the current page and it is not available to current remote user anymore.
              */
             PortalRequestContext pContext = Util.getPortalRequestContext();
-            if (page.getStorageId() != null && portalConfigService.getPageService().loadPage(PageKey.parse(pageId)) == null) {
+            PageKey pageKey = PageKey.parse(pageId);
+            if (page.getStorageId() != null && portalConfigService.getPageService().loadPage(pageKey) == null) {
                 uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[] { pageId },
                         ApplicationMessage.WARNING));
                 uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
@@ -663,7 +664,7 @@ public class UIPortalComposer extends UIContainer {
                 PageState pageState = new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(),
                         page.getFactoryId(), page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions())
                                 : null, page.getEditPermission());
-                pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+                pageService.savePage(new PageContext(pageKey, pageState));
                 dataService.save(page);
             } catch (StaleModelException ex) {
                 // Temporary solution to concurrency-related issue
@@ -675,13 +676,12 @@ public class UIPortalComposer extends UIContainer {
             // mandatory to have consequent edit actions (on the same page) work properly
             uiPage.getChildren().clear();
             page = dataService.getPage(page.getPageId());
-            PageContext pageContext = configService.getPage(PageKey.parse(page.getPageId()));
+            PageContext pageContext = configService.getPage(pageKey);
             pageContext.update(page);
             PortalDataMapper.toUIPage(uiPage, page);
 
-            // Update UIPage cache on UIPortal
-            uiPortal.setUIPage(pageId, uiPage);
-            uiPortal.refreshUIPage();
+            // Invalidate UIPage cache on UIPortal
+            uiPortalApp.invalidateUIPage(pageId);
 
             if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive())) {
                 uiPortalApp.setSessionOpen(true);
