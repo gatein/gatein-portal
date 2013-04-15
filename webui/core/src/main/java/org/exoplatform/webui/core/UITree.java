@@ -296,12 +296,12 @@ public class UITree extends UIComponent {
         }
         if (uiPopupMenu_ == null) {
             builder.append(" <a href=\"javascript:void(0);\" class=\"NodeIcon ").append(iconGroup).append(note).append("\"")
-                    .append(" title=\"").append(getFieldValue(obj, beanLabelField_)).append("\"").append(">")
+                    .append(" title=\"").append(fieldValue).append("\"").append(">")
                     .append(fieldValue).append("</a>");
         } else {
             builder.append("<a href=\"javascript:void(0);\" class=\"NodeIcon ").append(iconGroup).append(note).append("\" ")
                     .append(uiPopupMenu_.getJSOnclickShowPopup(objId, null)).append(" title=\"")
-                    .append(getFieldValue(obj, beanLabelField_)).append("\"").append(">").append(fieldValue).append("</a>");
+                    .append(fieldValue).append("\"").append(">").append(fieldValue).append("</a>");
         }
         builder.append(" </div>");
         return builder.toString();
