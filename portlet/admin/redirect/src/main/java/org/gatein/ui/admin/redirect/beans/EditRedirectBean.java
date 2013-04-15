@@ -72,7 +72,6 @@ public class EditRedirectBean implements Serializable {
 
     protected String redirectName;
     protected boolean enabled;
-    protected String redirectSite;
 
     protected RedirectMappings mappings;
 
@@ -275,6 +274,7 @@ public class EditRedirectBean implements Serializable {
 
     public void setRedirectSite(String redirectSite) {
         this.pr.setRedirectSite(redirectSite);
+        loadRedirectNodes();
     }
 
     // ----- CONDITIONS -----
@@ -552,7 +552,7 @@ public class EditRedirectBean implements Serializable {
             this.nodesSiteName = siteName;
         } else {
             this.currentNodeNames = redirectNodeNames;
-            this.nodesSiteName = redirectSite;
+            this.nodesSiteName = this.pr.getRedirectSite();
         }
     }
 
@@ -576,7 +576,6 @@ public class EditRedirectBean implements Serializable {
                     this.redirectName = pr.getName();
                     this.originalName = pr.getName();
                     this.enabled = pr.isEnabled();
-                    this.redirectSite = pr.getRedirectSite();
                     this.mappings = pr.getMappings();
                     this.originNodeNames = loadOriginNodes(site);
                     this.redirectNodeNames = loadRedirectNodes();
@@ -612,8 +611,8 @@ public class EditRedirectBean implements Serializable {
     public List<String> loadRedirectNodes() {
         try {
             ArrayList<String> nodes = new ArrayList<String>();
-            if (redirectSite != null) {
-                Node n = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(redirectSite))
+            if (this.pr.getRedirectSite() != null) {
+                Node n = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(this.pr.getRedirectSite()))
                         .getRootNode(Nodes.visitAll());
                 for (Node node : Nodes.asList(n)) {
                     nodes.add(node.getNodePath().toString());
