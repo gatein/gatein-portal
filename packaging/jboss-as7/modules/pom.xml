@@ -441,12 +441,12 @@
       <groupId>org.jboss.portletbridge</groupId>
       <artifactId>portletbridge-impl</artifactId>
     </dependency>
-      
+
     <!-- CDI/Portlet Integration Library -->
     <dependency>
       <groupId>org.gatein</groupId>
       <artifactId>cdi-portlet-integration</artifactId>
-    </dependency>     
+    </dependency>
 
     <!-- Reflext -->
     <dependency>
@@ -861,6 +861,10 @@
     <dependency>
       <groupId>org.gatein.cdi</groupId>
       <artifactId>gatein-cdi-injection</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.cdi</groupId>
+      <artifactId>gatein-cdi-contexts</artifactId>
     </dependency>
 
     <!-- Device Detection and Redirection-->

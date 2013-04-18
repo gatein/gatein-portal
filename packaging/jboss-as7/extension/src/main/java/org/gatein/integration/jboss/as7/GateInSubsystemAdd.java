@@ -26,6 +26,8 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
 
 import java.util.List;
 
+import org.gatein.integration.jboss.as7.deployment.CdiContextDependencyProcessor;
+import org.gatein.integration.jboss.as7.deployment.CdiContextExtensionProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInWarStructureDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.DeploymentScannerService;
 import org.gatein.integration.jboss.as7.deployment.GateInCleanupDeploymentProcessor;
@@ -65,9 +67,11 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
     static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0B80;
     static final int DEPENDENCIES_PORTLET_MODULE = 0x1100;
     static final int DEPENDENCIES_PORTLET_BRIDGE_MODULE = 0x2300;
+    static final int DEPENDENCIES_CDI_CONTEXT_MODULE = 0x2400;
     static final int STRUCTURE_WSRP = 0x2001;
     static final int STRUCTURE_GATEIN = 0x2000;
     static final int POST_MODULE_GATEIN_INIT = 0x2000;
+    static final int POST_MODULE_CDI_CONTEXT_EXTENSION = 0x1000;
     static final int INSTALL_GATEIN_CHILD_WARS = 0x4000;
     static final int INSTALL_GATEIN_START = 0x4000;
     static final int MANIFEST_DEPENDENCIES_GATEIN = 0x4000;
@@ -123,11 +127,15 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
                         new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
                 processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_BRIDGE_MODULE,
                         new PortletBridgeDependencyProcessor());
+                processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_CDI_CONTEXT_MODULE,
+                        new CdiContextDependencyProcessor());
 
                 processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT,
                         new WSRPPostModuleDeploymentProcessor());
                 processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT,
                         new GateInInitDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_CDI_CONTEXT_EXTENSION,
+                        new CdiContextExtensionProcessor());
                 processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START,
                         new GateInStarterDeploymentProcessor());
                 processorTarget.addDeploymentProcessor(Phase.CLEANUP, CLEANUP_ATTACHMENTS,

@@ -42,5 +42,6 @@
 
   <modules>
     <module>injection</module>
+    <module>contexts</module>
   </modules>
 </project>

@@ -80,6 +80,10 @@
       <artifactId>wsrp-integration-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.gatein.cdi</groupId>
+      <artifactId>gatein-cdi-contexts</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
