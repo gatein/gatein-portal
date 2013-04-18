@@ -47,7 +47,7 @@
     <module name="org.reflext"/>
     <module name="org.chromattic"/>
     <module name="org.apache.cxf"/>
-    <module name="org.apache.cxf.impl">
+    <module name="org.apache.cxf.impl" optional="true">
       <imports>
         <include-set>
           <path name="org/apache/cxf/ws/policy"/>
