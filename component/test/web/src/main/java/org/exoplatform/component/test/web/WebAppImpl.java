@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 
 import org.gatein.common.NotYetImplemented;
 import org.gatein.wci.WebApp;
@@ -75,5 +76,15 @@ public class WebAppImpl implements WebApp {
 
     public boolean invalidateSession(String sessId) {
         throw new NotYetImplemented();
+    }
+
+    @Override
+    public void fireRequestDestroyed(ServletRequest servletRequest) {
+        //Do Nothing
+    }
+
+    @Override
+    public void fireRequestInitialized(ServletRequest servletRequest) {
+        //Do Nothing
     }
 }
