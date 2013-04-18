@@ -142,7 +142,7 @@ button {
 }
 
 .table-striped tbody tr.yellow.fade-in td {
-	background-color: #f6f6f6;;
+	background-color: #f9f9f9;;
 	opacity: 1;
 }
 
@@ -429,7 +429,7 @@ td textarea,
 td select {margin-bottom: 0;}
 
 .table-striped tbody tr:nth-child(2n+1) td, 
-.table-striped tbody tr:nth-child(2n+1) th {background-color: #F6F6F6;}
+.table-striped tbody tr:nth-child(2n+1) th {background-color: #F9F9F9;}
 
 .table tbody tr:hover td {background-color: #f2f2f2;}
 
@@ -619,9 +619,9 @@ a.inside-table, button.inside-table {float: right;}
 /* ammendoca: for some reason, padding is already added, this 20px makes it way out.
 .table-striped tbody .table-striped tbody tr td.actions {padding-right: 20px;}
 */
-.table-striped tbody .table-striped tbody tr td.actions {padding-right: 0px;}
+.table-striped tbody .table-striped tbody tr td.actions {padding-right: 0;}
 
-.table-striped tbody .table-striped tbody tr:nth-child(2n+1) td {background-color: #f6f6f6;}
+.table-striped tbody .table-striped tbody tr:nth-child(2n+1) td {background-color: #F9F9F9;}
 
 .table-striped tbody .table-striped tbody tr:hover td {background-color: #f2f2f2;}
 
@@ -642,11 +642,15 @@ tbody.sortable tr:hover {
 
 .table-striped tbody.sortable tr td:nth-child(1) {padding-left: 12px;}
 
-tbody.sortable tr:hover td:nth-child(1) {background: url(#{resource['/img/icon-grippy.png']}) no-repeat 5px center;}
+tbody.sortable tr:hover td:nth-child(1) {
+	background-repeat: no-repeat;
+	background-position: 5px center;
+	background-image: url(#{resource['/img/icon-grippy.png']});
+}
 
-tbody.sortable tr td:nth-child(1) {width: 110px;}
+/*tbody.sortable tr td:nth-child(1) {width: 110px;}
 tbody.sortable tr td:nth-child(2) {width: 290px;}
-tbody.sortable tr td:nth-child(3) {width: 50px;} /* ammendonca: was 110px */
+tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 
 
 /* ON OFF Switch */

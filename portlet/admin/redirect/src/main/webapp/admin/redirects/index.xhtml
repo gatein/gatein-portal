@@ -43,7 +43,7 @@
 								<th class="actions hidden-element">Actions</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody class="sortable sortable-rdr">
 						<ui:repeat value="#{rdrs.redirects}" var="r" varStatus="status">
 							<!-- Redirect Summary Row -->
 							<tr id="rdr_sum_#{status.index}" class="redirect-summary">
@@ -66,7 +66,7 @@
 									<h:commandLink styleClass="configure-redirect redirect-summary">
 										<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" />
 										<i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i>
-									</h:commandLink>									
+									</h:commandLink>
 									<h:commandLink styleClass="delete-redirect redirect-summary">
 										<f:ajax event="action" listener="#{rdrEdit.setDeleteRedirect(rdrs.siteName, r.name)}" onevent="deleteRedirect('#{rdrs.siteName}','#{r.name}')" />
 										<i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i>
@@ -76,6 +76,7 @@
 						</ui:repeat>
 						</tbody>
 					</table>
+					<h:outputScript>sortable();</h:outputScript>
 				</h:panelGroup>
 			</span>
 		</h:form>
@@ -130,11 +131,11 @@
 														<th class="hidden-element actions">Actions</th>
 													</tr>
 												</thead>
-												<tbody class="sortable">
+												<tbody class="sortable sortable-cnd">
 													<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
 													<tr class="ui-state-default">
 														<td>#{rc.name}</td>
-														<td> 
+														<td>
 															<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
 																<h:panelGroup rendered="#{cnt_st.first}">
 																<strong>Contains </strong>
@@ -161,7 +162,8 @@
 													</tr>
 													</ui:repeat>
 												</tbody>
-											</table>							
+											</table>
+											<h:outputScript>sortable();</h:outputScript>
 										</h:panelGroup><!-- End .control-group -->
 									</div>
 								</fieldset>
@@ -227,7 +229,7 @@
 														</tr>
 														</ui:repeat>
 													</tbody>
-												</table>							
+												</table>
 											</div>
 										</h:panelGroup><!-- End .control-group -->
 										<div class="control-group">
@@ -239,7 +241,7 @@
 													<f:selectItem itemValue="ROOT" itemLabel="Redirect to root" />
 													<f:selectItem itemValue="COMMON_ANCESTOR_NAME_MATCH" itemLabel="Ancestor Name Match" />
 												</h:selectOneMenu>
-												<i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Nodes which don't match and are not mapped">Nodes which don't match and are not mapped</i>												
+												<i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Nodes which don't match and are not mapped">Nodes which don't match and are not mapped</i>
 											</div>
 										</div><!-- End .control-group -->
 									</div>
@@ -254,6 +256,13 @@
 			</table>
 		</h:panelGroup>
 		</h:form><!-- End .form-horizontal -->
+
+		<h:form id="sortForm" style="display: none;">
+			<h:inputHidden id="sortFrom" value="#{rdrEdit.sortFrom}" />
+			<h:inputHidden id="sortTo" value="#{rdrEdit.sortTo}" />
+			<a4j:commandLink action="#{rdrEdit.doSortCondition}" id="doSortCndBtn" value="" render="@form" execute="@form" />
+			<a4j:commandLink action="#{rdrEdit.doSortRedirect}"  id="doSortRdrBtn" value="" render="@form" execute="@form" />
+		</h:form>
 
 		<script type="text/javascript">
 			$(document).ready(function(){

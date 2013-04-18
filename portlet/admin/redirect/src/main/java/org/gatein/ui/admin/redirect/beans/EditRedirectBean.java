@@ -65,6 +65,13 @@ public class EditRedirectBean implements Serializable {
     DataStorage ds = null;
     PortalConfig cfg = null;
 
+    private void fetchDataStorage() {
+        // FIXME: Use webui Util.getUIPortal() ?
+        if (ds == null) {
+            ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
+        }
+    }
+
     protected PortalRedirect pr;
 
     // So we keep a reference to redirects with updated name
@@ -127,10 +134,7 @@ public class EditRedirectBean implements Serializable {
      */
     public void toggleEnabled(String site, String name) {
         try {
-            // FIXME: Use webui Util.getUIPortal();
-            if (ds == null) {
-                ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
-            }
+            fetchDataStorage();
 
             cfg = ds.getPortalConfig(site);
             for (PortalRedirect pr : cfg.getPortalRedirects()) {
@@ -159,10 +163,7 @@ public class EditRedirectBean implements Serializable {
 
     public String deleteRedirect() {
         try {
-            // FIXME: Use webui Util.getUIPortal();
-            if (ds == null) {
-                ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
-            }
+            fetchDataStorage();
 
             cfg = ds.getPortalConfig(deleteSite);
             ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
@@ -196,10 +197,7 @@ public class EditRedirectBean implements Serializable {
      */
     public String saveRedirect() {
         try {
-            // FIXME: Use webui Util.getUIPortal();
-            if (ds == null) {
-                ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
-            }
+            fetchDataStorage();
 
             cfg = ds.getPortalConfig(siteName);
             ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
@@ -563,10 +561,7 @@ public class EditRedirectBean implements Serializable {
 
         this.siteName = site;
 
-        // FIXME: Use webui Util.getUIPortal();
-        if (ds == null) {
-            ds = (DataStorage) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(DataStorage.class);
-        }
+        fetchDataStorage();
 
         try {
             cfg = ds.getPortalConfig(site);
@@ -624,6 +619,46 @@ public class EditRedirectBean implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    // sortable
+
+    private int sortFrom = -1;
+    private int sortTo = -1;
+
+    public int getSortFrom() {
+        return sortFrom;
+    }
+
+    public void setSortFrom(int sortFrom) {
+        this.sortFrom = sortFrom;
+    }
+
+    public int getSortTo() {
+        return sortTo;
+    }
+
+    public void setSortTo(int sortTo) {
+        this.sortTo = sortTo;
+    }
+
+    public void doSortCondition() {
+        ArrayList<RedirectCondition> conds = pr.getConditions();
+        conds.add(sortTo, conds.remove(sortFrom));
+    }
+
+    public void doSortRedirect() {
+        fetchDataStorage();
+
+        try {
+            cfg = ds.getPortalConfig(siteName);
+            ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
+            redirects.add(sortTo, redirects.remove(sortFrom));
+            ds.save(cfg);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

@@ -292,8 +292,20 @@ showHideMore = function() {
 
 //Sortable
 sortable = function() {
-	$( ".sortable" ).sortable();
-	$( ".sortable" ).disableSelection();
+	$(".sortable-rdr").sortable({
+		start: function(event, ui) { $("[id$='sortFrom']").val(ui.item.index()); },
+		update: function(event, ui) {
+			$("[id$='sortTo']").val(ui.item.index());
+			$("[id$='doSortRdrBtn']").click();
+		}
+	}).disableSelection();
+	$(".sortable-cnd").sortable({
+		start: function(event, ui) { $("[id$='sortFrom']").val(ui.item.index()); },
+		update: function(event, ui) {
+			$("[id$='sortTo']").val(ui.item.index());
+			$("[id$='doSortCndBtn']").click();
+		}
+	}).disableSelection();
 };
 
 
@@ -454,7 +466,9 @@ editRedirect = function() {
 		// fade summary out...
 		$('#redirectSummaryWrapper').fadeOut(300, function() {
 			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300);
+			$('.edit-group').fadeIn(300, function() {
+				sortable();
+			});
 		});
 	});
 
@@ -541,5 +555,4 @@ anchorAnimation = function() {
 */
 
 /* Modal Import Site */
-
 
