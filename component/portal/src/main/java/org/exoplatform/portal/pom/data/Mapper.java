@@ -248,24 +248,11 @@ public class Mapper {
 
             List<RedirectData> redirectsData = src.getRedirects();
 
-            if (redirectsData != null) {
-
-                // A list of stored redirect names which have not been found in the current RedirectData list.
-                //
-                // This is because during a save we receive a list of RedirectData, and we need to keep track if an existing
-                // stored redirect has been deleted or not.
-                Set<String> notFoundRedirects = new HashSet<String>(redirects.keySet());
+            redirects.clear(); // clear the redirects map since we need to rebuild it based on the new redirects
+            if (src.getRedirects() != null) {
                 for (RedirectData redirectData : redirectsData) {
-                    Redirect redirect;
-                    // if the redirect doesn't current exist, then create it
-                    if (!redirects.containsKey(redirectData.getRedirectName())) {
-                        redirect = redirectable.createRedirect();
-                        redirectable.getRedirects().put(redirectData.getRedirectName(), redirect);
-                    } else {
-                    // otherwise retrieve the redirect and remove it from the list of non-found redirects
-                        redirect = redirects.get(redirectData.getRedirectName());
-                        notFoundRedirects.remove(redirectData.getRedirectName());
-                    }
+                    Redirect redirect = redirectable.createRedirect();
+                    redirects.put(redirectData.getRedirectName(), redirect);
 
                     redirect.setName(redirectData.getRedirectName());
                     redirect.setSite(redirectData.getRedirectSiteName());
@@ -288,11 +275,6 @@ public class Mapper {
                         }
                         buildMappings(redirectData.getMappings(), mappings);
                     }
-                }
-
-                //remove all the Redirects which were not in the RedirectData list
-                for (String redirectName : notFoundRedirects) {
-                    redirects.remove(redirectName);
                 }
             }
 
