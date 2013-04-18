@@ -177,11 +177,19 @@
 
     <!-- Copy modules -->
     <copy todir="${jbossas.modules.target.dir}" preservelastmodified="true" overwrite="true">
-      <fileset dir="${maven.project.basedir}/../modules/target/${server.name}/gatein/modules"/>
+      <fileset dir="${maven.project.basedir}/../modules/target/${server.name}/gatein/modules">
+        <include name="**/module.xml" />
+      </fileset>
       <filterset begintoken="$${" endtoken="}">
         <filter token="ws.security.consumer.dir" value="${ws.security.consumer.dir}"/>
         <filter token="ws.security.producer.dir" value="${ws.security.producer.dir}"/>
       </filterset>
+    </copy>
+
+    <copy todir="${jbossas.modules.target.dir}" preservelastmodified="true" overwrite="true">
+      <fileset dir="${maven.project.basedir}/../modules/target/${server.name}/gatein/modules">
+        <exclude name="**/module.xml" />
+      </fileset>
     </copy>
 
     <!-- Extract common config from packaging.common artifact to gatein/conf -->
