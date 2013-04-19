@@ -90,10 +90,13 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         businessInputSet.setRendered(false);
         addUIFormInput(businessInputSet);
 
-        UIFormInputSet socialInputSet = new UIFormInputSet("SocialNetworksInfo");
-        addInput(socialInputSet, getSocialInfoKeys());
-        socialInputSet.setRendered(false);
-        addUIFormInput(socialInputSet);
+        OAuthProviderTypeRegistry registry = getApplicationComponent(OAuthProviderTypeRegistry.class);
+        if (registry.isOAuthEnabled()) {
+            UIFormInputSet socialInputSet = new UIFormInputSet("SocialNetworksInfo");
+            addInput(socialInputSet, getSocialInfoKeys());
+            socialInputSet.setRendered(false);
+            addUIFormInput(socialInputSet);
+        }
     }
 
     public void reset() {

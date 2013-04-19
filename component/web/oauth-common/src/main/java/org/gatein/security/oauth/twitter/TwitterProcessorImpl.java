@@ -144,7 +144,7 @@ public class TwitterProcessorImpl implements TwitterProcessor {
 
     @Override
     public InteractionState<TwitterAccessTokenContext> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws IOException, OAuthException {
-        throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, "Thsi is currently not supported for Twitter");
+        throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, "This is currently not supported for Twitter");
     }
 
     @Override

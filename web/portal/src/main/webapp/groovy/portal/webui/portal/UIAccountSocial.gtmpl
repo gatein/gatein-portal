@@ -12,7 +12,7 @@
 				   Collection<OAuthProviderType> oauthProviders = uicomponent.getOAuthProviderTypes();
 				   if (oauthProviders.size() == 0) {
 				%>
-				       <tr><td>No Social networks available</td></tr>
+				       <tr><td><%=_ctx.appRes("UIAccountSocial.msg.disabled")%></td></tr>
 				<%
 				   } else {
 				      for(OAuthProviderType oauthPrType : oauthProviders) {
@@ -38,11 +38,11 @@
 								          uicomponent.saveURLAfterLinkSocialAccount();
 								          String linkSocialAccountURL = uicomponent.getLinkSocialAccountURL(oauthPrType);
 								%>
-							              <a href="$linkSocialAccountURL" class="ActionButton LightBlueStyle">Link social account</a>
+							              <a href="$linkSocialAccountURL" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIAccountSocial.action.link")%></a>
 								<%    } else {
 								          String link = uicomponent.getUnlinkSocialAccountURL(oauthPrType);
 								%>
-								          <a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle">Unlink social account</a>
+								          <a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIAccountSocial.action.unlink")%></a>
 								<%    } %>
 								    </td>
 							</tr>
