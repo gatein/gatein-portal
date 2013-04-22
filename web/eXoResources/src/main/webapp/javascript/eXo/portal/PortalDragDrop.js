@@ -364,22 +364,32 @@
 		},
 	
 		scrollOnDrag : function(dragObject, e) {
-	      var jWin = $(window);
-		  var workspaceHeight = $("#UIWorkingWorkspace").height();
+	          var jWin = $(window);
 		  var browserHeight = jWin.height();
-		  if(workspaceHeight <= browserHeight) return;
+                  var browserWidth = jWin.width();
 		  var mouseY = e.clientY || e.originalEvent.touches[0].clientY;
+                  var mouseX = e.clientX || e.originalEvent.touches[0].clientX;
 		  var deltaTop = mouseY - (Math.round(browserHeight * 5/6));
 		  var deltaBottom = mouseY - (Math.round(browserHeight/6));
-		  
+		  var deltaLeft = mouseX - (Math.round(browserWidth * 5/6));
+                  var deltaRight = mouseX - (Math.round(browserWidth/6));
 		  var scrollTop = jWin.scrollTop();
+                  var scrollLeft = jWin.scrollLeft();
 		  if(deltaTop > 0) {		  
 			  jWin.scrollTop(scrollTop + deltaTop - 5);
 		  }
 		  
 		  if(deltaBottom < 0 && scrollTop > 0) {
 			  jWin.scrollTop(scrollTop + deltaBottom);
-		  }	  
+		  }
+
+                  if(deltaLeft > 0) {
+                          jWin.scrollLeft(scrollLeft + deltaLeft - 5);
+                  }
+
+                  if(deltaRight < 0 && scrollLeft > 0) {
+                          jWin.scrollLeft(scrollLeft + deltaRight);
+                  }
 		},
 	
 		/**

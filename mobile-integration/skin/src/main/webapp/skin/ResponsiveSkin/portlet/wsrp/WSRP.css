@@ -1,0 +1,10 @@
+.UIWsrpPortlet {
+   overflow: auto;
+}
+
+@media screen and (max-width: 52em) {
+
+.UIWsrpPortlet .wsrp-consumers-ui {
+   width: 52em;
+}
+}

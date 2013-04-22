@@ -40,7 +40,6 @@ table {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-top: 0;
     padding: 0.25em;
-    overflow-y: auto;
     -webkit-overflow-scrolling: touch
 }
 

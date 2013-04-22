@@ -28,6 +28,8 @@
 /*Overwritten WebUI Components*/
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
 
+@import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalComponents.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIWorkspace/UIWorkspace.css);
 
 @import url(ResponsiveSkin/portal/webui/component/UIToolbar/UIToolbar.css);
@@ -55,5 +57,13 @@
 @import url(ResponsiveSkin/portal/webui/component/UIBreadCrumbs/UIBreadCrumbs.css);
 
 @import url(ResponsiveSkin/portal/webui/component/UIBannerPortlet/UIBannerPortlet.css);
+
+@import url(ResponsiveSkin/portal/webui/component/EditInline/EditInline.css);
+
+@import url(ResponsiveSkin/portlet/webui/UIPageManagementPortlet/UIPageManagementPortlet.css);
+
+@import url(ResponsiveSkin/portlet/redirect-admin/RedirectAdmin.css);
+
+@import url(ResponsiveSkin/portlet/wsrp/WSRP.css);
 
 @import url(Portlet/Stylesheet.css);

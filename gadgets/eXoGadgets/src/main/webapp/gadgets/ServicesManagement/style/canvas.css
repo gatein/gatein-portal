@@ -10,6 +10,12 @@ body, th, td, div, span, p {
 	font-size: 12px;
 }
 
+.ServicesManagement {
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+}
+
 img {
 	border: none;
 }
@@ -45,6 +51,7 @@ a {
 .UIGadget {
 	font-size: 11px;
 	width: 100%;
+    min-width: 750px;
 }
 
 .TopGadget {

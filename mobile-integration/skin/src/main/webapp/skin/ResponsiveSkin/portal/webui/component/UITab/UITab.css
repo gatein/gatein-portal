@@ -31,14 +31,7 @@
     border: solid thin #aeaeae;
     position: relative;
     top: 1px;
-}
-
-.UITab .NormalTab, .UITab .DisabledTab {
-    border: none;
-}
-
-.UITabPane .UIHorizontalTabs {
-    border: none;
+    background-color: white;
 }
 
 .UITabPane .UITabContentContainer {
@@ -105,13 +98,25 @@
 }
 
 .UIHorizontalTabs .NormalTabStyle .SelectedTab {
-    color: white;
+    color: #000;
 }
 
 .UIHorizontalTabs .UITab {
     margin-left: 0.1em;
     margin-right: 0.1em;
 }
+
+.UITabSelector .UIHorizontalTabs,
+     .UITabSelector .UIHorizontalTabs .CenterHorizontalTabs,
+    .UITabSelector .UIHorizontalTabs .TabsContainer {
+        height: auto;
+        background: none;
+    }
+
+    .UITabSelector .UIHorizontalTabs .LeftHorizontalTabs,
+    .UITabSelector .UIHorizontalTabs .RightHorizontalTabs {
+        background: none;
+    }
 
 @media only screen and (max-width: 30em) {
     .UITabPane .TabPaneContent {
@@ -128,6 +133,19 @@
     .UIPopupMessages .UIHorizontalTabs .TabsContainer,.UIPopupMessages .UIHorizontalTabs {
         height: auto;
     }
+
+.UITabSelector .UIHorizontalTabs,
+     .UITabSelector .UIHorizontalTabs .CenterHorizontalTabs,
+    .UITabSelector .UIHorizontalTabs .TabsContainer {
+        height: auto;
+        background: none;
+    }
+
+    .UITabSelector .UIHorizontalTabs .LeftHorizontalTabs,
+    .UITabSelector .UIHorizontalTabs .RightHorizontalTabs {
+        background: none;
+    }
+
     .UITab .SelectedTab,.UITab .NormalTab,.UITab .DisabledTab {
         border-radius: 0.25em;
         border: solid thin #333;

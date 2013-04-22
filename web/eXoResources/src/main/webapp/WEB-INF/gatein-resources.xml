@@ -531,6 +531,9 @@
     <depends>
       <module>jquery</module>
     </depends>
+    <depends>
+      <module>portalDragDrop</module>
+    </depends>
   </module>
 
   <!-- Container Javascript -->

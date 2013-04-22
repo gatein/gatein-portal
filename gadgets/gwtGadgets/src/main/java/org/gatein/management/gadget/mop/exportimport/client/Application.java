@@ -47,6 +47,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -105,9 +106,14 @@ public class Application extends Gadget<UserPreferences> {
         TreeImages images = GWT.create(TreeImages.class);
 
         RootPanel rootPanel = RootPanel.get();
+
+        FlowPanel gadgetPanel = new FlowPanel();
+        gadgetPanel.setStyleName("ImportExportContent");
+        rootPanel.add(gadgetPanel);
+
         DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
         decoratedTabPanel.setAnimationEnabled(true);
-        rootPanel.add(decoratedTabPanel, 10, 10);
+        gadgetPanel.add(decoratedTabPanel);
         decoratedTabPanel.setSize("870px", "480px");
 
         AbsolutePanel absolutePanel = new AbsolutePanel();
@@ -152,7 +158,7 @@ public class Application extends Gadget<UserPreferences> {
 
         this.frame = new NamedFrame("download-frame");
         frame.setStyleName("download-frame");
-        rootPanel.add(frame);
+        gadgetPanel.add(frame);
 
         this.exportButton = new Button("Export site", new ClickHandler() {
 

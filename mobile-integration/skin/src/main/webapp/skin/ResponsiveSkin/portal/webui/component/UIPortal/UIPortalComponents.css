@@ -1,0 +1,55 @@
+.EDITION-BLOCK .DragControlArea {
+   width: 2em;
+}
+
+.UIWizard .UIWizardContent .UIDropDownControl .UIDropDownAnchor,
+.UIDropDownControl .UIDropDownAnchor {
+   z-index: 10;
+   position: static !important;
+   width: 100%;
+}
+
+.UIPageBrowser {
+   min-width: 60em;
+}
+
+.UIPageSelector {
+   width: auto;
+}
+
+@media screen and (max-width: 30em) {
+.UIGroupMembershipSelector .MembershipSelector,
+.UIGroupMembershipSelector .GroupSelector {
+    float: none;
+    width: 100%;
+    margin-left:0;
+    margin-right:0;
+}
+.UIGroupMembershipSelector .UITrees .TreeContainer {
+    height: auto;
+}
+
+.UISiteManagement .Content>div,
+.UISiteManagement .Image {
+    display: none;
+}
+
+.UIPortalNavigationPortlet div.UIManagement table.ManagementBlock td.Content {
+    width: 35%;
+}
+
+.UISiteManagement .Content .Label {
+    display: block;
+}
+
+.UIManagement .ManagementBlock .ActionBlock a {
+    margin: 0.5em;
+    height: auto;
+}
+
+.UIGroupMembershipSelector .MembershipTitle {
+    height: auto;
+    background: none;
+}
+}
+

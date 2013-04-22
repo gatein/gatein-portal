@@ -54,7 +54,7 @@
 		<script type="text/javascript">
 			gadgets.util.registerOnLoadHandler(eXo.gadget.ServicesManagement.init);			
 		</script>
-
+                <div class="ServicesManagement">
 			<div class="UIGadget">
 			  <div class="TopGadget">
                 <div class="ServicesBox ClearFix">
@@ -131,7 +131,7 @@
                 </table> 
                 <!--End Properties UIGrid-->
                </div>		
-            						
+               </div>						
 		</div>				
 
 	]]>
@@ -145,7 +145,8 @@
 		<script type="text/javascript">
 			gadgets.util.registerOnLoadHandler(eXo.gadget.ServicesManagement.init);
 		</script>
-		
+	
+                  <div class="ServicesManagement">	
 		  <div class="UIGadget">
 			<div class="TopGadget">
 				<table cellspacing="0" style="margin: 0px auto;">
@@ -198,6 +199,7 @@
 		    </div>
 			<div class="BoxFile" id="resultMessage"></div>
 		</div>
+                </div>
 	]]>
   </Content>
 </Module>

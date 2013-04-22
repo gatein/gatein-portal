@@ -4,20 +4,37 @@
     max-height: 100%;
 }
 
+.PopupContent,
 .PopupWindow {
     max-width: 100%;
     max-height: 100%;
 }
 
+.UIPopupWindow,
 .UIPopupMessages {
     -webkit-overflow-scrolling: touch;
 }
 
+.UIPopupWindow .PopupContent {
+    height: auto !important;
+}
+
+.UIPopupWindow {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+@media screen and (max-width: 30em) {
+    .UIPopupWindow {
+        width: 100%;
+    }
+}
+
+
 @media only screen and (max-height: 30em) {
     .UIPopupWindow {
-        height: 100%;
-    }
-    .UIPopupWindow .PopupContent {
-        height: auto !important;
+        max-height: 100%;
     }
 }

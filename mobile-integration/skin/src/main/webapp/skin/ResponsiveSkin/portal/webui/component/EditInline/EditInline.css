@@ -1,0 +1,148 @@
+.UIEditInlineWS .UIPopupWindow {
+   max-width: 75%;
+   top: 0 !important;
+   left: 75% !important;
+   max-height: none;
+   height: auto;
+   overflow: visible; /*drag-n-drop object: android and chrome */
+}
+
+.UIEditInlineWS .UIPagePreview {
+   width: 75%;
+}
+
+.UIEditInlineWS .UIPortalComposer .UIHorizontalTabs .TabsContainer {
+   height: auto;
+}
+
+.UIEditInlineWS .PopupContent {
+   height: auto !important;
+   overflow: visible; /*drag-n-drop objects: mobile safari */
+}
+
+.UIEditInlineWS .PopupContent .UITabContent {
+   overflow: visible !important; /*drag-n-drop objects: mobile safari */
+}
+
+.UITabPane .UITabContentContainer .UITabContent {
+   overflow: visible;
+}
+
+.UIEditInlineWS .UIWizardContent .WizardStepTitleBar,
+.UIWizard .UIWizardContent .WizardControlBar {
+   background: #F5F5F5;
+   height: auto;
+}  
+
+.UIWizard .UIWizardContent .WizardControlBar .StepNavigationBar {
+   width: auto;
+}
+
+.UIWizard .UIWizardContent .WizardControlBar .OverflowContainer {
+   height: auto;
+}
+
+.UIWizard .UIWizardContent .UIAction {
+   background: none;
+   border-top: none;
+   box-shadow: none;
+}
+
+.UIWizard .UIWizardContent .WizardControlBar .ActionBar {
+   width: auto;
+}
+
+.UIWizard .UIWizardContent .WizardStepTitleBar {
+   height: auto;
+   background: none;
+}
+
+.UIWizard .LayoutHolder {
+   width: auto;
+}
+
+.UIWizard .UIInfoBar .BlueRoundedStyle {
+   background: #e4e4e7;
+   height: auto;
+}
+
+.WizardDecorator .LAYOUT-PORTLET {
+   width: 75%;
+}
+
+@media screen and (max-width: 30em) {
+   .UIWizard .UIWizardContent .WizardControlBar .ActionBar {
+       width: 100%;
+   }
+
+   .UIWizard .UIWizardContent .UIDropDownControl,
+   .UIItemSelector .RightColumnStyle .ItemListContainer,
+   .UIItemSelector .RightColumnStyle .ItemDetailList {
+       width: 100%;
+       float: left;
+   }
+
+   .UIItemSelector.UINodeIconSelector .ItemListContainer {
+       width: 100%;
+   }
+
+   .UIItemSelector.UINodeIconSelector .ItemDetailList {
+       margin-left: 0;
+   }
+
+   .UIItemSelector.UINodeIconSelector .ItemDetailList .CategoryContainer {
+       width: 100%;
+   }
+
+   .UIItemSelector.UIFormInputThemeSelector .ItemDetailList {
+       margin-left: 0;
+       float: left;
+       width: 100%;
+   }
+
+   .UINodeIconSelector .LeftColumnStyle .ItemListContainer .ItemList {
+       height: auto;
+       background: none;
+   }
+ 
+   .UIFormInputThemeSelector .LeftColumnStyle .ItemListContainer {
+      width: 100%;
+   }
+
+   .UIItemSelector .ItemListContainer .ItemList {
+      height: auto;
+   }
+
+   .UIItemSelector .LeftColumnStyle .Title,
+   .UIItemSelector .LeftColumnStyle .ViewListIcon,
+   .UIFormInputThemeSelector .LeftColumnStyle .ItemDetailList .DetailView {
+      
+   }
+
+   .UIWizardPageSelectLayoutForm .UIItemSelector .RightColumnStyle .ItemListContainer .ItemListBackground {
+     height: auto;
+     background: white;
+   }
+
+   .UIEditInlineWS .UIPortalComposer .UIHorizontalTabs .TabsContainer {
+     padding: 0.5em;
+   }
+
+}
+
+@media screen and (max-width: 45em) {
+   .UIWizard .UIWizardPageSetInfo .SelectedPageInfo {
+      margin-left: 0;
+   }
+
+   .UIWizard .UIWizardPageSetInfo .PageNodeContainer {
+      width: 100%;
+   }
+
+   .UIWizard .UIWizardPageSetInfo .UIPageNodeSelector {
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 1em;
+   }
+}

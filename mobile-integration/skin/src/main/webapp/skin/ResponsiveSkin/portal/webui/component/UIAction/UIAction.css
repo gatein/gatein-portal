@@ -29,7 +29,7 @@
     text-align: right;
 }
 
-.UIForm .UIAction .ActionButton {
+.UIAction .ActionButton {
     background: none;
     border-style: solid;
     border-width: 1px;
@@ -53,4 +53,12 @@
 .UIAction .ActionButton:hover {
     background-color: #014f87;
     color: #FFF;
+}
+
+.UIAction .ActionButton:hover a {
+    color: #FFF;
+}
+
+.UIAction .SimpleStyle1 {
+    background: none;
 }

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-(function($, base, common, portalControl) {	
+(function($, base, common, portalControl, portalDragDrop) {	
 	var uiDashboardUtil = {
 	
 		findPosX : function(obj) {
@@ -212,7 +212,8 @@
 	    {
 	
 	      eXoDashBoard.scrollOnDrag(dragObj);
-	
+              portalDragDrop.scrollOnDrag(dragObj, e);
+ 
 	      var targetArea = eXoDashBoard.targetObj;
 	      var isInGadgetPopup = UTIL.isIn(ex, ey, gadgetPopup.get()[0]);
 	      if (UTIL.isIn(ex, ey, gadgetContainer[0]) && !isInGadgetPopup)
@@ -577,4 +578,4 @@
 		UIDashboard : eXoDashBoard,		
 		UIDashboardUtil : uiDashboardUtil
 	};
-})($, base, common, portalControl);
+})($, base, common, portalControl, portalDragDrop);

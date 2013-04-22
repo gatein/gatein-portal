@@ -64,6 +64,23 @@ body {
 }
 */
 
+html,
+body {
+   width: 100%;
+   height: 100%;
+}
+
+.ImportExportContent {
+   width: 100%;
+   height: 100%;
+   overflow: auto;
+}
+
+.gwt-DecoratedTabPanel {
+   padding-top: 10px;
+   padding-left: 10px;
+}
+
 .rootpanelstyle {
    border: #AAAAAA solid 2px;
    -moz-border-radius: 4px;
@@ -75,7 +92,7 @@ body {
 
 .download-frame {
    border: 0px;
-   visibility: hidden;
+   display: none;
 }
 
 .header-style {
