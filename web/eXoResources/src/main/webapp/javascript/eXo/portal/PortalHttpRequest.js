@@ -448,16 +448,23 @@
 				var script = markupHeadElements.scripts[i];
 				
 				if (script.src) {
-					if (base.Browser.isIE()) {
-						script.onreadystatechange = function () {
-							if (/loaded|complete/.test(script.readyState)) {
-								script.onreadystatechange = null;
-								appendScript.apply(that);
-							}
-						};          
+					if (script.onreadystatechange !== undefined) {
+						script.onreadystatechange = (function(sci) {
+							return function () {
+								if (!sci.readyState ||  /loaded|complete/.test(sci.readyState)) {
+									sci.onreadystatechange = null;
+									appendScript.apply(that);
+								}
+							};
+						})(script);
 					} else {
-						script.onload = script.onerror = function() {appendScript.apply(that);};
-					}				
+						script.onload = (function(sci) {
+							return function() {sci.onload = null; appendScript.apply(that);};
+						})(script);
+					}
+					script.onerror = (function(sci) {
+						return function() {sci.onerror = null; appendScript.apply(that);};
+					})(script);
 				}
 			}
 			appendScript.apply(that);
