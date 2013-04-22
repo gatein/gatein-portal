@@ -58,13 +58,36 @@ public class CodecInitializer {
 
     private final String confDir;
 
+    private AbstractCodec codec;
+
     public CodecInitializer(InitParams initParams) {
         ValueParam gateinConfParam = initParams.getValueParam("gatein.conf.dir");
 
         this.confDir = gateinConfParam != null ? gateinConfParam.getValue() : null;
     }
 
-    public AbstractCodec initCodec() throws TokenServiceInitializationException {
+    /**
+     * @return shared instance of codec. If shared instance is not available, then new instance will be initialized
+     * @throws TokenServiceInitializationException if some error happen during codec initialization
+     */
+    public AbstractCodec getCodec() throws TokenServiceInitializationException {
+        if (codec == null) {
+            synchronized(this) {
+                if (codec == null) {
+                    codec = initCodec();
+                }
+            }
+        }
+        return codec;
+    }
+
+
+    /**
+     * Codec initialization. Method is protected, so it could be overriden if needed
+     * @return Initialized codec
+     * @throws TokenServiceInitializationException if some error happen during initialization
+     */
+    protected AbstractCodec initCodec() throws TokenServiceInitializationException {
         String builderType = PropertyManager.getProperty("gatein.codec.builderclass");
         Map<String, String> config = new HashMap<String, String>();
 

@@ -23,12 +23,9 @@
 
 package org.gatein.security.oauth.test;
 
-import java.io.File;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.net.URL;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
@@ -42,15 +39,17 @@ import org.exoplatform.web.security.codec.AbstractCodec;
 import org.exoplatform.web.security.codec.CodecInitializer;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.exception.OAuthException;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
 import org.gatein.security.oauth.google.GoogleAccessTokenContext;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
 
 /**
+ * Test persistence of data with usage of {@link SocialNetworkService}
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 @ConfiguredBy({
@@ -64,26 +63,13 @@ public class TestSocialNetworkService extends AbstractKernelTest {
     private AbstractCodec codec;
 
     @Override
-    protected void beforeRunBare() {
-        String foundGateInConfDir = PropertyManager.getProperty("gatein.conf.dir");
-        if (foundGateInConfDir == null || foundGateInConfDir.length() == 0) {
-            /* A way to get the conf directory path */
-            URL tokenserviceConfUrl = Thread.currentThread().getContextClassLoader()
-                    .getResource("conf/exo.portal.component.web.oauth-configuration.xml");
-            File confDir = new File(tokenserviceConfUrl.getPath()).getParentFile();
-            PropertyManager.setProperty("gatein.conf.dir", confDir.getAbsolutePath());
-        }
-        super.beforeRunBare();
-    }
-
-    @Override
     protected void setUp() throws Exception {
         PortalContainer portalContainer = PortalContainer.getInstance();
         orgService = (OrganizationService) portalContainer.getComponentInstanceOfType(OrganizationService.class);
         socialNetworkService = (SocialNetworkService) portalContainer.getComponentInstanceOfType(SocialNetworkService.class);
         oAuthProviderTypeRegistry = (OAuthProviderTypeRegistry) portalContainer.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
         CodecInitializer codecInitializer = (CodecInitializer) portalContainer.getComponentInstanceOfType(CodecInitializer.class);
-        this.codec = codecInitializer.initCodec();
+        this.codec = codecInitializer.getCodec();
         begin();
     }
 
@@ -136,7 +122,7 @@ public class TestSocialNetworkService extends AbstractKernelTest {
 
             fail("Exception should occur because of duplicated facebook username");
         } catch (OAuthException gtnOauthOAuthException) {
-            assertEquals(OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME, gtnOauthOAuthException.getExceptionCode());
+            assertEquals(OAuthExceptionCode.DUPLICATE_OAUTH_PROVIDER_USERNAME, gtnOauthOAuthException.getExceptionCode());
             assertEquals(OAuthConstants.PROFILE_FACEBOOK_USERNAME, gtnOauthOAuthException.getExceptionAttribute(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME));
             assertEquals("joseph.doyle.changed", gtnOauthOAuthException.getExceptionAttribute(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME));
         } catch (Exception e) {
@@ -259,19 +245,38 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertEquals(longAccessToken, socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
     }
 
+    public void testAccessTokensWithMoreScopes() throws Exception {
+        User user1 = new UserImpl("testUser1");
+        orgService.getUserHandler().createUser(user1, false);
+
+        // Update some google accessToken with two scopes
+        GoogleAccessTokenContext googleToken = createGoogleAccessToken("ccc789", "rfrc487", "http://someScope", "http://someScope2");
+        socialNetworkService.updateOAuthAccessToken(getGoogleProvider(), user1.getUserName(), googleToken);
+
+        // Verify that Google accessTokens could be obtained and are equals to saved access token
+        assertEquals(googleToken, socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
+
+        // Update some google accessToken with two scopes
+        FacebookAccessTokenContext facebookToken = createFacebookAccessToken("ddd789", "rfrc4876", "email", "publish_stream");
+        socialNetworkService.updateOAuthAccessToken(getFacebookProvider(), user1.getUserName(), facebookToken);
+
+        // Verify that Facebook accessTokens could be obtained and are equals to saved access token
+        assertEquals(facebookToken, socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
+    }
+
     private OAuthProviderType<FacebookAccessTokenContext> getFacebookProvider() {
-        return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK);
+        return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK, FacebookAccessTokenContext.class);
     }
 
     private OAuthProviderType<GoogleAccessTokenContext> getGoogleProvider() {
-        return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE);
+        return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE, GoogleAccessTokenContext.class);
     }
 
     private OAuthProviderType<TwitterAccessTokenContext> getTwitterProvider() {
-        return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER);
+        return oAuthProviderTypeRegistry.getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER, TwitterAccessTokenContext.class);
     }
 
-    private GoogleAccessTokenContext createGoogleAccessToken(String accessToken, String refreshToken, String scope) {
+    private GoogleAccessTokenContext createGoogleAccessToken(String accessToken, String refreshToken, String... scope) {
         GoogleTokenResponse grc = new GoogleTokenResponse();
         grc.setAccessToken(accessToken);
         grc.setRefreshToken(refreshToken);
@@ -281,8 +286,11 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         return new GoogleAccessTokenContext(grc, scope);
     }
 
-    private FacebookAccessTokenContext createFacebookAccessToken(String accessToken) {
-        return new FacebookAccessTokenContext(accessToken, "email,publish_stream");
+    private FacebookAccessTokenContext createFacebookAccessToken(String accessToken, String... scope) {
+        if (scope == null) {
+            scope = new String[] { "email" };
+        }
+        return new FacebookAccessTokenContext(accessToken, scope);
     }
 
 }

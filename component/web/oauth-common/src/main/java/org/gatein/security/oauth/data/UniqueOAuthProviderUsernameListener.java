@@ -32,10 +32,17 @@ import org.exoplatform.services.organization.UserProfileEventListener;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthProviderType;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 
 /**
+ * Listener to validate that OAuth username of given user is unique, because we can't have 2 users in portal with same OAuth username
+ * for same {@link OAuthProviderType}
+ *
+ * If OAuth username is not unique, then {@link OAuthException} with code {@link OAuthExceptionCode#DUPLICATE_OAUTH_PROVIDER_USERNAME}
+ * will be thrown and it will encapsulate some other needed info (useful for showing error message)
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class UniqueOAuthProviderUsernameListener extends UserProfileEventListener {
@@ -66,7 +73,7 @@ public class UniqueOAuthProviderUsernameListener extends UserProfileEventListene
                 exceptionAttribs.put(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME, oauthProviderUsername);
                 exceptionAttribs.put(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_NAME, opt.getFriendlyName());
 
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME, exceptionAttribs, message);
+                throw new OAuthException(OAuthExceptionCode.DUPLICATE_OAUTH_PROVIDER_USERNAME, exceptionAttribs, message);
             }
         }
     }

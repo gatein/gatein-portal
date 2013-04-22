@@ -25,13 +25,12 @@ package org.gatein.security.oauth.facebook;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
-import org.gatein.security.oauth.common.AccessTokenContext;
+import org.gatein.security.oauth.spi.AccessTokenContext;
 
 /**
+ * Encapsulate informations about Facebook access token
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class FacebookAccessTokenContext extends AccessTokenContext implements Serializable {
@@ -42,11 +41,17 @@ public class FacebookAccessTokenContext extends AccessTokenContext implements Se
 
     public FacebookAccessTokenContext(String accessToken, String... scopes) {
         super(scopes);
+        if (accessToken == null) {
+            throw new IllegalArgumentException("accessToken is null");
+        }
         this.accessToken = accessToken;
     }
 
     public FacebookAccessTokenContext(String accessToken, String scopesAsString) {
         super(scopesAsString);
+        if (accessToken == null) {
+            throw new IllegalArgumentException("accessToken is null");
+        }
         this.accessToken = accessToken;
     }
 
@@ -55,6 +60,7 @@ public class FacebookAccessTokenContext extends AccessTokenContext implements Se
         this.accessToken = accessToken;
     }
 
+    @Override
     public String getAccessToken() {
         return accessToken;
     }

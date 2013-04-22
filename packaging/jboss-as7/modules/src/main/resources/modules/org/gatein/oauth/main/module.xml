@@ -30,11 +30,13 @@
     <module name="javax.api"/>
     <module name="javax.servlet.api"/>
     <module name="javax.servlet.jsp.api"/>
+    <module name="com.google.apis"/>
     <module name="org.gatein.common"/>
     <module name="org.gatein.lib"/>
     <module name="org.gatein.wci"/>
     <module name="org.gatein.sso"/>
     <module name="org.apache.log4j" />
+    <module name="org.twitter4j"  />
   </dependencies>
 </module>
 

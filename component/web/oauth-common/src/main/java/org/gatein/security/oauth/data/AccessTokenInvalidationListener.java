@@ -30,12 +30,14 @@ import org.exoplatform.services.organization.UserProfileEventListener;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.OAuthCodec;
-import org.gatein.security.oauth.common.OAuthProviderProcessor;
-import org.gatein.security.oauth.common.OAuthProviderType;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.OAuthCodec;
+import org.gatein.security.oauth.spi.OAuthProviderProcessor;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 /**
+ * Listener for invalidate access token of particular user, if OAuth username of this user is changed to different value
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class AccessTokenInvalidationListener extends UserProfileEventListener {

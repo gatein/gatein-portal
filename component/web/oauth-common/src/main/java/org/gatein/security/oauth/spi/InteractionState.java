@@ -21,9 +21,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.common;
+package org.gatein.security.oauth.spi;
 
 /**
+ * State of OAuth workflow
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class InteractionState<T extends AccessTokenContext> {

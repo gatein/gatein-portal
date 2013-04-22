@@ -27,11 +27,14 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
-import org.gatein.security.oauth.common.AccessTokenContext;
-import org.gatein.security.oauth.common.OAuthProviderProcessor;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.common.classloader.DelegatingClassLoader;
+import org.gatein.security.oauth.spi.AccessTokenContext;
+import org.gatein.security.oauth.spi.OAuthProviderProcessor;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 
 /**
+ * Kernel plugin wrapping data about single {@link org.gatein.security.oauth.spi.OAuthProviderType}
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OauthProviderTypeRegistryPlugin<T extends AccessTokenContext> extends BaseComponentPlugin {
@@ -49,9 +52,10 @@ public class OauthProviderTypeRegistryPlugin<T extends AccessTokenContext> exten
         boolean enabled = Boolean.parseBoolean(enabledPar);
 
         if (enabled) {
-            // TODO: better classloading
             ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-            Class<OAuthProviderProcessor<T>> processorClass = (Class<OAuthProviderProcessor<T>>)tccl.loadClass(oauthProviderProcessorClass);
+            ClassLoader oauth = OAuthProviderType.class.getClassLoader();
+            ClassLoader delegating = new DelegatingClassLoader(tccl, oauth);
+            Class<OAuthProviderProcessor<T>> processorClass = (Class<OAuthProviderProcessor<T>>)delegating.loadClass(oauthProviderProcessorClass);
             OAuthProviderProcessor<T> oauthProviderProcessor = (OAuthProviderProcessor<T>)containerContext.getContainer().getComponentInstanceOfType(processorClass);
 
             oauthPrType = new OAuthProviderType<T>(key, enabled, usernameAttributeName, oauthProviderProcessor, initOAuthURL, friendlyName);

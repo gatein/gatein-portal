@@ -21,26 +21,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.facebook;
-
-
-import org.gatein.security.oauth.spi.OAuthProviderProcessor;
-import org.gatein.security.oauth.exception.OAuthException;
-import org.gatein.security.oauth.social.FacebookPrincipal;
+package org.gatein.security.oauth.spi;
 
 /**
- * OAuth processor for calling Facebook operations
+ * Contract for encode/decode strings (Informations about OAuth access tokens should be encoded with symmetric encryption before
+ * they are saved to DB)
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface GateInFacebookProcessor extends OAuthProviderProcessor<FacebookAccessTokenContext> {
+public interface OAuthCodec {
 
-    /**
-     * Obtain informations about user from Facebook and wrap them into FacebookPrincipal object
-     *
-     * @param accessTokenContext Facebook access token
-     * @return FacebookPrincipal
-     */
-    FacebookPrincipal getPrincipal(FacebookAccessTokenContext accessTokenContext) throws OAuthException;
+    String encodeString(String input);
 
+    String decodeString(String input);
 }

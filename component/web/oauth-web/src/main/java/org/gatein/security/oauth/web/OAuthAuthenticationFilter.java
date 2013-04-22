@@ -37,14 +37,16 @@ import org.exoplatform.web.security.AuthenticationRegistry;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
-import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.security.oauth.utils.OAuthUtils;
-import org.gatein.sso.agent.GenericAgent;
 import org.gatein.sso.agent.filter.api.AbstractSSOInterceptor;
 
 /**
  * This filter has already access to authenticated OAuth principal, so it's work starts after successful OAuth authentication.
+ *
+ * Filter is useful only for anonymous user
+ *
  * Responsibility of this filter is to handle integration with GateIn (Redirect to GateIn registration if needed, establish context
  * and redirect to JAAS to finish GateIn authentication etc)
  *
@@ -148,8 +150,7 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
             log.trace("Found portalUser " + portalUser + " corresponding to oauthPrincipal");
         }
 
-        new GenericAgent() {}.saveSSOCredentials(portalUser.getUserName(), httpRequest);
-
+        authenticationRegistry.setAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER_FOR_JAAS, portalUser);
         socialNetworkService.updateOAuthAccessToken(principal.getOauthProviderType(), portalUser.getUserName(), principal.getAccessToken());
 
         // Now Facebook/Google authentication handshake is finished and credentials are in session. We can redirect to JAAS authentication

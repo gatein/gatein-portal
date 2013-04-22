@@ -50,15 +50,17 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.web.security.security.SecureRandomService;
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.OAuthCodec;
+import org.gatein.security.oauth.spi.OAuthCodec;
 import org.gatein.security.oauth.common.OAuthConstants;
 
 /**
+ * {@inheritDoc}
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class GoogleProcessorImpl implements GoogleProcessor {
@@ -83,16 +85,6 @@ public class GoogleProcessorImpl implements GoogleProcessor {
      * Default JSON factory to use to deserialize JSON.
      */
     private final JacksonFactory JSON_FACTORY = new JacksonFactory();
-
-    // Only for unit test purpose
-    public GoogleProcessorImpl() {
-        this.redirectURL = null;
-        this.clientID = null;
-        this.clientSecret = null;
-        this.accessType = null;
-        this.applicationName = null;
-        this.secureRandomService = null;
-    }
 
     public GoogleProcessorImpl(ExoContainerContext context, InitParams params, SecureRandomService secureRandomService) {
         this.clientID = params.getValueParam("clientId").getValue();
@@ -159,7 +151,7 @@ public class GoogleProcessorImpl implements GoogleProcessor {
             return initialInteraction(request, response, scopes);
         } else if (state.equals(InteractionState.State.AUTH.name())) {
             GoogleTokenResponse tokenResponse = obtainAccessToken(request);
-            GoogleAccessTokenContext accessTokenContext = validateTokenAndUpdateScopes(tokenResponse);
+            GoogleAccessTokenContext accessTokenContext = validateTokenAndUpdateScopes(new GoogleAccessTokenContext(tokenResponse));
 
             // Clear session attributes
             session.removeAttribute(OAuthConstants.ATTRIBUTE_AUTH_STATE);
@@ -193,7 +185,7 @@ public class GoogleProcessorImpl implements GoogleProcessor {
         String stateFromSession = (String)session.getAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE);
         String stateFromRequest = request.getParameter(OAuthConstants.STATE_PARAMETER);
         if (stateFromSession == null || stateFromRequest == null || !stateFromSession.equals(stateFromRequest)) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_INVALID_STATE, "Validation of state parameter failed. stateFromSession="
+            throw new OAuthException(OAuthExceptionCode.INVALID_STATE, "Validation of state parameter failed. stateFromSession="
                     + stateFromSession + ", stateFromRequest=" + stateFromRequest);
         }
 
@@ -201,9 +193,9 @@ public class GoogleProcessorImpl implements GoogleProcessor {
         String error = request.getParameter(OAuthConstants.ERROR_PARAMETER);
         if (error != null) {
             if (OAuthConstants.ERROR_ACCESS_DENIED.equals(error)) {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_USER_DENIED_SCOPE, error);
+                throw new OAuthException(OAuthExceptionCode.USER_DENIED_SCOPE, error);
             } else {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_UNSPECIFIED, error);
+                throw new OAuthException(OAuthExceptionCode.UNKNOWN_ERROR, error);
             }
         } else {
             String code = request.getParameter(OAuthConstants.CODE_PARAMETER);
@@ -222,28 +214,37 @@ public class GoogleProcessorImpl implements GoogleProcessor {
 
     @Override
     public GoogleAccessTokenContext validateTokenAndUpdateScopes(GoogleAccessTokenContext accessTokenContext) {
-        return this.validateTokenAndUpdateScopes(accessTokenContext.getTokenData());
-    }
+        GoogleRequest<Tokeninfo> googleRequest = new GoogleRequest<Tokeninfo>() {
 
-    protected GoogleAccessTokenContext validateTokenAndUpdateScopes(GoogleTokenResponse tokenResponse) {
-        Oauth2 oauth2 = getOAuth2InstanceImpl(tokenResponse);
-        GoogleCredential credential = getGoogleCredential(tokenResponse);
+            @Override
+            protected Tokeninfo invokeRequest(GoogleAccessTokenContext accessTokenContext) throws IOException {
+                GoogleTokenResponse tokenData = accessTokenContext.getTokenData();
+                Oauth2 oauth2 = getOAuth2InstanceImpl(tokenData);
+                GoogleCredential credential = getGoogleCredential(tokenData);
+                return oauth2.tokeninfo().setAccessToken(credential.getAccessToken()).execute();
+            }
 
-        Tokeninfo tokenInfo;
-        try {
-            tokenInfo = oauth2.tokeninfo().setAccessToken(credential.getAccessToken()).execute();
-        } catch (IOException ioe) {
-            // TODO: handle separately the case with bad access token and with network error
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_GOOGLE_ERROR, "Error when obtaining tokenInfo");
-        }
+            @Override
+            protected OAuthException createException(IOException cause) {
+                if (cause instanceof HttpResponseException) {
+                    return new OAuthException(OAuthExceptionCode.ACCESS_TOKEN_ERROR,
+                            "Error when obtaining tokenInfo: " + cause.getMessage(), cause);
+                } else {
+                    return new OAuthException(OAuthExceptionCode.IO_ERROR,
+                            "IO Error when obtaining tokenInfo: " + cause.getMessage(), cause);
+                }
+            }
+
+        };
+        Tokeninfo tokenInfo = googleRequest.executeRequest(accessTokenContext, this);
 
         // If there was an error in the token info, abort.
         if (tokenInfo.containsKey("error")) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_GOOGLE_ERROR, "Error during token validation: " + tokenInfo.get("error").toString());
+            throw new OAuthException(OAuthExceptionCode.ACCESS_TOKEN_ERROR, "Error during token validation: " + tokenInfo.get("error").toString());
         }
 
         if (!tokenInfo.getIssuedTo().equals(clientID)) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_GOOGLE_ERROR, "Token's client ID does not match app's. clientID from tokenINFO: " + tokenInfo.getIssuedTo());
+            throw new OAuthException(OAuthExceptionCode.ACCESS_TOKEN_ERROR, "Token's client ID does not match app's. clientID from tokenINFO: " + tokenInfo.getIssuedTo());
         }
 
         if (log.isTraceEnabled()) {
@@ -251,19 +252,46 @@ public class GoogleProcessorImpl implements GoogleProcessor {
         }
 
         String[] scopes = tokenInfo.getScope().split(" ");
-        return new GoogleAccessTokenContext(tokenResponse, scopes);
+        return new GoogleAccessTokenContext(accessTokenContext.getTokenData(), scopes);
     }
 
 
     @Override
-    public Userinfo obtainUserInfo(GoogleAccessTokenContext accessTokenContext) {
-        Oauth2 oauth2 = getOAuth2Instance(accessTokenContext);
-        Userinfo uinfo;
-        try {
-            uinfo = oauth2.userinfo().v2().me().get().execute();
-        } catch (IOException ioe) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_GOOGLE_ERROR, "Error when obtaining User Info");
+    public <C> C getAuthorizedSocialApiObject(GoogleAccessTokenContext accessToken, Class<C> socialApiObjectType) {
+        if (Oauth2.class.equals(socialApiObjectType)) {
+            return (C)getOAuth2Instance(accessToken);
+        } else if (Plus.class.equals(socialApiObjectType)) {
+            return (C)getPlusService(accessToken);
+        } else {
+            log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+            return null;
         }
+    }
+
+    @Override
+    public Userinfo obtainUserInfo(GoogleAccessTokenContext accessTokenContext) {
+        final Oauth2 oauth2 = getOAuth2Instance(accessTokenContext);
+
+        GoogleRequest<Userinfo> googleRequest = new GoogleRequest<Userinfo>() {
+
+            @Override
+            protected Userinfo invokeRequest(GoogleAccessTokenContext accessTokenContext) throws IOException {
+                return oauth2.userinfo().v2().me().get().execute();
+            }
+
+            @Override
+            protected OAuthException createException(IOException cause) {
+                if (cause instanceof HttpResponseException) {
+                    return new OAuthException(OAuthExceptionCode.ACCESS_TOKEN_ERROR,
+                            "Error when obtaining userInfo: " + cause.getMessage(), cause);
+                } else {
+                    return new OAuthException(OAuthExceptionCode.IO_ERROR,
+                            "IO Error when obtaining userInfo: " + cause.getMessage(), cause);
+                }
+            }
+
+        };
+        Userinfo uinfo = googleRequest.executeRequest(accessTokenContext, this);
 
         if (log.isTraceEnabled()) {
             log.trace("Successfully obtained userInfo from google: " + uinfo);
@@ -348,31 +376,21 @@ public class GoogleProcessorImpl implements GoogleProcessor {
 
     @Override
     public void revokeToken(GoogleAccessTokenContext accessTokenContext) throws OAuthException {
-        GoogleTokenResponse tokenData = accessTokenContext.getTokenData();
+        GoogleRequest<Void> googleRequest = new GoogleRequest<Void>() {
 
-        try {
-            revokeTokenImpl(tokenData);
-        } catch (IOException ioe) {
-            if (ioe instanceof HttpResponseException) {
-                HttpResponseException googleException = (HttpResponseException)ioe;
-                if (googleException.getStatusCode() == 400 && googleException.getContent().contains("invalid_token") && tokenData.getRefreshToken() != null) {
-                    try {
-                        // Refresh token and retry revocation with refreshed token
-                        refreshToken(accessTokenContext);
-                        revokeTokenImpl(tokenData);
-                        return;
-                    } catch (OAuthException refreshException) {
-                        // Log this one with trace level. We will rethrow original exception
-                        if (log.isTraceEnabled()) {
-                            log.trace("Refreshing token failed", refreshException);
-                        }
-                    } catch (IOException ioe2) {
-                        ioe = ioe2;
-                    }
-                }
+            @Override
+            protected Void invokeRequest(GoogleAccessTokenContext accessTokenContext) throws IOException {
+                revokeTokenImpl(accessTokenContext.getTokenData());
+                return null;
             }
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED, "Error when revoking token", ioe);
-        }
+
+            @Override
+            protected OAuthException createException(IOException cause) {
+                return new OAuthException(OAuthExceptionCode.TOKEN_REVOCATION_FAILED, "Error when revoking token", cause);
+            }
+
+        };
+        googleRequest.executeRequest(accessTokenContext, this);
     }
 
     // Send request to google without any exception handling.
@@ -388,7 +406,7 @@ public class GoogleProcessorImpl implements GoogleProcessor {
     public void refreshToken(GoogleAccessTokenContext accessTokenContext) {
         GoogleTokenResponse tokenData = accessTokenContext.getTokenData();
         if (tokenData.getRefreshToken() == null) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_GOOGLE_ERROR, "Given GoogleTokenResponse does not contain refreshToken");
+            throw new OAuthException(OAuthExceptionCode.GOOGLE_ERROR, "Given GoogleTokenResponse does not contain refreshToken");
         }
 
         try {
@@ -403,7 +421,7 @@ public class GoogleProcessorImpl implements GoogleProcessor {
                 log.trace("AccessToken refreshed successfully with value " + refreshed.getAccessToken());
             }
         } catch (IOException ioe) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_GOOGLE_ERROR, ioe);
+            throw new OAuthException(OAuthExceptionCode.GOOGLE_ERROR, ioe);
         }
     }
 

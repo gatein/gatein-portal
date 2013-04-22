@@ -26,11 +26,11 @@ package org.gatein.security.oauth.web.facebook;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.gatein.security.oauth.common.AccessTokenContext;
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.AccessTokenContext;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
 import org.gatein.security.oauth.facebook.GateInFacebookProcessor;
 import org.gatein.security.oauth.social.FacebookPrincipal;
@@ -46,7 +46,7 @@ public class FacebookFilter extends OAuthProviderFilter<FacebookAccessTokenConte
 
     @Override
     protected OAuthProviderType<FacebookAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK);
+        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK, FacebookAccessTokenContext.class);
     }
 
     @Override
@@ -59,8 +59,7 @@ public class FacebookFilter extends OAuthProviderFilter<FacebookAccessTokenConte
     protected OAuthPrincipal<FacebookAccessTokenContext> getOAuthPrincipal(HttpServletRequest request, HttpServletResponse response,
                                                                            InteractionState<FacebookAccessTokenContext> interactionState) {
         FacebookAccessTokenContext accessTokenContext = interactionState.getAccessTokenContext();
-        String accessToken = accessTokenContext.getAccessToken();
-        FacebookPrincipal principal = ((GateInFacebookProcessor)getOauthProviderProcessor()).getPrincipal(accessToken);
+        FacebookPrincipal principal = ((GateInFacebookProcessor)getOauthProviderProcessor()).getPrincipal(accessTokenContext);
 
         if (principal == null) {
             log.error("Principal was null");

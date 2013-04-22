@@ -30,7 +30,7 @@ package org.gatein.security.oauth.common;
  */
 public class OAuthConstants {
 
-    // OAuth parameters used in http requests
+    // OAuth parameters used in http requests (most of these parameters are mentioned in OAuth2 specification)
 
     public static final String CODE_PARAMETER = "code";
 
@@ -66,8 +66,6 @@ public class OAuthConstants {
     public static final String PROPERTY_FACEBOOK_REDIRECT_URL = "gatein.oauth.facebook.redirectURL";
 
     public static final String PROPERTY_FACEBOOK_SCOPE = "gatein.oauth.facebook.scope";
-
-    public static final String PROPERTY_FACEBOOK_DISPLAY = "gatein.oauth.facebook.display";
 
     public static final String PROPERTY_GOOGLE_ENABLED = "gatein.oauth.google.enabled";
 
@@ -121,6 +119,8 @@ public class OAuthConstants {
     public static final String ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL = "_authenticatedOAuthPrincipal";
 
     public static final String ATTRIBUTE_AUTHENTICATED_PORTAL_USER = "_authenticatedPortalUser";
+
+    public static final String ATTRIBUTE_AUTHENTICATED_PORTAL_USER_FOR_JAAS = "_authenticatedPortalUserForJaas";
 
     public static final String ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT = "_urlToRedirectAfterLinkSocialAccount";
 

@@ -28,12 +28,12 @@
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.gatein.security.oauth.data.SocialNetworkService</key>
+    <key>org.gatein.security.oauth.spi.SocialNetworkService</key>
     <type>org.gatein.security.oauth.data.SocialNetworkServiceImpl</type>
   </component>
 
   <component>
-    <key>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</key>
+    <key>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</key>
     <type>org.gatein.security.oauth.registry.OAuthProviderTypeRegistryImpl</type>
   </component>
 
@@ -260,7 +260,7 @@
   </external-component-plugins>
 
   <external-component-plugins>
-    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
     <component-plugin>
       <name>FacebookOauthProvider</name>
       <set-method>addPlugin</set-method>
@@ -295,7 +295,7 @@
   </external-component-plugins>
 
   <external-component-plugins>
-    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
     <component-plugin>
       <name>TwitterOauthProvider</name>
       <set-method>addPlugin</set-method>
@@ -330,7 +330,7 @@
   </external-component-plugins>
 
   <external-component-plugins>
-    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
     <component-plugin>
       <name>GoogleOauthProvider</name>
       <set-method>addPlugin</set-method>

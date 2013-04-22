@@ -43,11 +43,11 @@
     <org.exoplatform.jcr.version>1.15.3-GA</org.exoplatform.jcr.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-3</nl.captcha.simplecaptcha.version>
-    <org.gatein.api.version>1.0.0.CR1</org.gatein.api.version>
+    <org.gatein.api.version>1.0.0.CR2</org.gatein.api.version>
     <org.gatein.common.version>2.1.0.Final</org.gatein.common.version>
     <org.gatein.wci.version>2.3.1.CR04</org.gatein.wci.version>
     <org.gatein.pc.version>2.4.1.CR03</org.gatein.pc.version>
-    <org.gatein.sso.version>1.3.3.Final-SNAPSHOT</org.gatein.sso.version>
+    <org.gatein.sso.version>1.3.3.CR01</org.gatein.sso.version>
     <org.picketlink.idm>1.4.1.Final</org.picketlink.idm>
     <org.gatein.wsrp.version>2.2.5.Final</org.gatein.wsrp.version>
     <org.gatein.mop.version>1.2.1.CR01</org.gatein.mop.version>
@@ -132,7 +132,7 @@
       <dependency>
         <groupId>org.gatein</groupId>
         <artifactId>gatein-dep</artifactId>
-        <version>1.2.1.CR01</version>
+        <version>1.2.1.CR02</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -507,6 +507,12 @@
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.oauth-common</artifactId>
         <version>3.6.0.Beta02-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>exo.portal.component.web.oauth-common</artifactId>
+        <version>3.6.0.Beta02-SNAPSHOT</version>
+        <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
@@ -1055,6 +1061,7 @@
         <version>${org.gatein.sso.version}</version>
       </dependency>
 
+      <!-- GateIn CDI -->
       <dependency>
         <groupId>org.gatein.cdi</groupId>
         <artifactId>gatein-cdi-injection</artifactId>
@@ -1065,8 +1072,6 @@
         <artifactId>gatein-cdi-contexts</artifactId>
         <version>${project.version}</version>
       </dependency>
-
-
     </dependencies>
 
   </dependencyManagement>
@@ -1516,11 +1521,6 @@ memory option properties. This should be removed when we can just set the compil
     <repository>
       <id>oauth</id>
       <url>http://oauth.googlecode.com/svn/code/maven</url>
-    </repository>
-    <!--  Needed for Google+ OAuth2 integration -->
-    <repository>
-      <id>google-api-services</id>
-      <url>http://google-api-client-libraries.appspot.com/mavenrepo</url>
     </repository>
 
     <!-- Redefine legacy jboss repository to go to JBoss Nexus instead to http://repository.jboss.org/maven2 -->

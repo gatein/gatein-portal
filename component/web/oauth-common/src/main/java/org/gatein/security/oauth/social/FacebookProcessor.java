@@ -19,7 +19,6 @@ package org.gatein.security.oauth.social;
 
 import java.io.IOException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -80,23 +78,20 @@ public class FacebookProcessor {
 
         String location = new StringBuilder(FacebookConstants.SERVICE_URL).append("?").append(OAuthUtils.createQueryString(params))
                 .toString();
-        try {
-            if (trace)
-                log.trace("Redirect:" + location);
-            response.sendRedirect(location);
-            return false;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        if (trace)
+            log.trace("Redirect:" + location);
+        response.sendRedirect(location);
+        return false;
     }
 
     public String getAccessToken(HttpServletRequest request, HttpServletResponse response) throws OAuthException {
         String error = request.getParameter(OAuthConstants.ERROR_PARAMETER);
         if (error != null) {
             if (OAuthConstants.ERROR_ACCESS_DENIED.equals(error)) {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_USER_DENIED_SCOPE, error);
+                throw new OAuthException(OAuthExceptionCode.USER_DENIED_SCOPE, error);
             } else {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_UNSPECIFIED, error);
+                throw new OAuthException(OAuthExceptionCode.UNKNOWN_ERROR, error);
             }
         } else {
             String authorizationCode = request.getParameter(OAuthConstants.CODE_PARAMETER);
@@ -108,7 +103,7 @@ public class FacebookProcessor {
             String stateFromSession = (String)request.getSession().getAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE);
             String stateFromRequest = request.getParameter(OAuthConstants.STATE_PARAMETER);
             if (stateFromSession == null || stateFromRequest == null || !stateFromSession.equals(stateFromRequest)) {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_INVALID_STATE, "Validation of state parameter failed. stateFromSession="
+                throw new OAuthException(OAuthExceptionCode.INVALID_STATE, "Validation of state parameter failed. stateFromSession="
                         + stateFromSession + ", stateFromRequest=" + stateFromRequest);
             }
 
@@ -242,7 +237,7 @@ public class FacebookProcessor {
             URL revokeUrl = new URL(urlString);
             HttpResponseContext revokeContent = OAuthUtils.readUrlContent(revokeUrl.openConnection());
             if (revokeContent.getResponseCode() != 200) {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED,
+                throw new OAuthException(OAuthExceptionCode.TOKEN_REVOCATION_FAILED,
                         "Error when revoking token. Http response code: " + revokeContent.getResponseCode() + ", Error details: " + revokeContent.getResponse());
             }
 
@@ -250,7 +245,7 @@ public class FacebookProcessor {
                 log.trace("Successfully revoked facebook accessToken " + accessToken + ", revokeContent=" + revokeContent);
             }
         } catch (IOException ioe) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED, "Error when revoking token", ioe);
+            throw new OAuthException(OAuthExceptionCode.TOKEN_REVOCATION_FAILED, "Error when revoking token", ioe);
         }
     }
 

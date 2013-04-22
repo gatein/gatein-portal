@@ -50,13 +50,13 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.AccessTokenContext;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.AccessTokenContext;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 
 /**
  * Social networks tab of user profile
@@ -140,7 +140,7 @@ public class UIAccountSocial extends UIForm {
                 UserProfile userProfile = (UserProfile)prContext.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
 
                 String unlinkProviderKey = prContext.getRequestParameter(PARAM_PROVIDER_FOR_UNLINK);
-                OAuthProviderType oauthProviderTypeToUnlink = uiForm.getApplicationComponent(OAuthProviderTypeRegistry.class).getOAuthProvider(unlinkProviderKey);
+                OAuthProviderType<AccessTokenContext> oauthProviderTypeToUnlink = uiForm.getApplicationComponent(OAuthProviderTypeRegistry.class).getOAuthProvider(unlinkProviderKey, AccessTokenContext.class);
 
                 // Obtain current accessToken
                 AccessTokenContext accessToken = uiForm.getApplicationComponent(SocialNetworkService.class).getOAuthAccessToken(oauthProviderTypeToUnlink, userName);
@@ -158,7 +158,7 @@ public class UIAccountSocial extends UIForm {
                     try {
                         oauthProviderTypeToUnlink.getOauthProviderProcessor().revokeToken(accessToken);
                     } catch (OAuthException oe) {
-                        if (OAuthExceptionCode.EXCEPTION_CODE_TOKEN_REVOKE_FAILED.equals(oe.getExceptionCode())) {
+                        if (OAuthExceptionCode.TOKEN_REVOCATION_FAILED.equals(oe.getExceptionCode())) {
                             Throwable t = oe.getCause() != null ? oe.getCause() : oe;
                             ApplicationMessage appMessage = new ApplicationMessage("UIAccountSocial.msg.failed-revoke", null, ApplicationMessage.WARNING);
                             appMessage.setArgsLocalized(false);

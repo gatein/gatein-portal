@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * OAuth exception
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthException extends RuntimeException {
@@ -42,7 +44,7 @@ public class OAuthException extends RuntimeException {
 
     public OAuthException() {
         super();
-        this.exceptionCode = OAuthExceptionCode.EXCEPTION_UNSPECIFIED;
+        this.exceptionCode = OAuthExceptionCode.UNKNOWN_ERROR;
         this.exceptionAttributes = new HashMap<String, Object>();
     }
 

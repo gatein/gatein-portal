@@ -26,9 +26,11 @@ package org.gatein.security.oauth.google;
 import java.io.Serializable;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
-import org.gatein.security.oauth.common.AccessTokenContext;
+import org.gatein.security.oauth.spi.AccessTokenContext;
 
 /**
+ * Encapsulate informations about Google+ access token
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class GoogleAccessTokenContext extends AccessTokenContext implements Serializable {
@@ -38,13 +40,28 @@ public class GoogleAccessTokenContext extends AccessTokenContext implements Seri
     private final GoogleTokenResponse tokenData;
 
     public GoogleAccessTokenContext(GoogleTokenResponse tokenData, String... scopes) {
-        // Obtain scopes from token response
         super(scopes);
+        if (tokenData == null) {
+            throw new IllegalArgumentException("tokenData can't be null");
+        }
+        this.tokenData = tokenData;
+    }
+
+    public GoogleAccessTokenContext(GoogleTokenResponse tokenData, String scopeAsString) {
+        super(scopeAsString);
+        if (tokenData == null) {
+            throw new IllegalArgumentException("tokenData can't be null");
+        }
         this.tokenData = tokenData;
     }
 
     public GoogleTokenResponse getTokenData() {
         return tokenData;
+    }
+
+    @Override
+    public String getAccessToken() {
+        return tokenData.getAccessToken();
     }
 
     @Override

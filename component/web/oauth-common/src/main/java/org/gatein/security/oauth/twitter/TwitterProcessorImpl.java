@@ -33,17 +33,16 @@ import javax.servlet.http.HttpSession;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.organization.UserProfile;
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.OAuthCodec;
+import org.gatein.security.oauth.spi.OAuthCodec;
 import org.gatein.security.oauth.common.OAuthConstants;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
@@ -121,7 +120,7 @@ public class TwitterProcessorImpl implements TwitterProcessor {
 
                 // User denied scope
                 if (request.getParameter(OAuthConstants.OAUTH_DENIED) != null) {
-                    throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_USER_DENIED_SCOPE, "User denied scope on Twitter authorization page");
+                    throw new OAuthException(OAuthExceptionCode.USER_DENIED_SCOPE, "User denied scope on Twitter authorization page");
                 }
 
                 // Obtain accessToken from twitter
@@ -138,13 +137,23 @@ public class TwitterProcessorImpl implements TwitterProcessor {
                 return new InteractionState<TwitterAccessTokenContext>(InteractionState.State.FINISH, accessTokenContext);
             }
         } catch (TwitterException twitterException) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, twitterException);
+            throw new OAuthException(OAuthExceptionCode.TWITTER_ERROR, twitterException);
         }
     }
 
     @Override
     public InteractionState<TwitterAccessTokenContext> processOAuthInteraction(HttpServletRequest httpRequest, HttpServletResponse httpResponse, String scope) throws IOException, OAuthException {
-        throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, "This is currently not supported for Twitter");
+        throw new OAuthException(OAuthExceptionCode.TWITTER_ERROR, "This is currently not supported for Twitter");
+    }
+
+    @Override
+    public <C> C getAuthorizedSocialApiObject(TwitterAccessTokenContext accessToken, Class<C> socialApiObjectType) {
+        if (Twitter.class.equals(socialApiObjectType)) {
+            return (C)getAuthorizedTwitterInstance(accessToken);
+        } else {
+            log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+            return null;
+        }
     }
 
     @Override
@@ -189,7 +198,13 @@ public class TwitterProcessorImpl implements TwitterProcessor {
             twitter.verifyCredentials();
             return accessToken;
         } catch (TwitterException tw) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, tw);
+            if (tw.getStatusCode() == 401) {
+                throw new OAuthException(OAuthExceptionCode.ACCESS_TOKEN_ERROR,
+                        "Error when verifying twitter access token: " + tw.getMessage(), tw);
+            } else {
+                throw new OAuthException(OAuthExceptionCode.IO_ERROR,
+                        "IO Error when obtaining tokenInfo: " + tw.getClass() + ": " + tw.getMessage(), tw);
+            }
         }
     }
 

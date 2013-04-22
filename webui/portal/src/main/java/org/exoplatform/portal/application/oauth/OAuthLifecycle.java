@@ -21,14 +21,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.application;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.exoplatform.portal.application.oauth;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.register.UIRegisterOAuth;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -40,7 +38,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.organization.UIUserProfileInputSet;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -117,7 +114,7 @@ public class OAuthLifecycle implements ApplicationLifecycle<PortalRequestContext
             httpSession.removeAttribute(OAuthConstants.ATTRIBUTE_EXCEPTION_OAUTH);
 
             String key;
-            if (gtnOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_USER_DENIED_SCOPE) {
+            if (gtnOAuthException.getExceptionCode() == OAuthExceptionCode.USER_DENIED_SCOPE) {
                 key = "UIAccountSocial.msg.access-denied";
             } else {
                 key = "UIAccountSocial.msg.oauth-error";

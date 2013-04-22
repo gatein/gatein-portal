@@ -21,21 +21,38 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.common;
+package org.gatein.security.oauth.spi;
+
+import org.gatein.security.oauth.common.OAuthConstants;
 
 /**
+ * Encapsulate data about single OAuth provider (social network), which are needed by portal (not data, which are needed to perform specific OAuth
+ * operations like consumerKey or consumerSecret as these are provided by concrete {@link org.gatein.security.oauth.spi.OAuthProviderProcessor})
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthProviderType<T extends AccessTokenContext> {
 
+    // Key of particular provider (for example 'FACEBOOK')
     private final String key;
+
+    // Whether this OAuth provider should be enabled or not
     private final boolean enabled;
+
+    // Name of UserProfile attribute, which will be used to save OAuth userName (userName of user in given social network)
     private final String userNameAttrName;
+
+    // Reference to OAuthProviderProcessor for this OAuth Provider. Processor can be used to call OAuth operations on given OAuth provider
     private final OAuthProviderProcessor<T> oauthProviderProcessor;
+
+    // URL suffix used to start OAuth authentication workflow with given OAuth provider
     private final String initOAuthURL;
+
+    // Friendly name of given OAuth provider (For example 'Facebook')
     private final String friendlyName;
 
-    public OAuthProviderType(String key, boolean enabled, String userNameAttrName, OAuthProviderProcessor<T> oauthProviderProcessor, String initOAuthURL, String friendlyName) {
+    public OAuthProviderType(String key, boolean enabled, String userNameAttrName, OAuthProviderProcessor<T> oauthProviderProcessor,
+                             String initOAuthURL, String friendlyName) {
         this.key = key;
         this.enabled = enabled;
         this.userNameAttrName = userNameAttrName;

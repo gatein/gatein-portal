@@ -36,18 +36,21 @@ import javax.servlet.http.HttpSession;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.AccessTokenContext;
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.AccessTokenContext;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
-import org.gatein.security.oauth.common.OAuthProviderProcessor;
-import org.gatein.security.oauth.common.OAuthProviderType;
-import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthProviderProcessor;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.security.oauth.exception.OAuthException;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.sso.agent.filter.api.AbstractSSOInterceptor;
 
 /**
+ * Filter to handle OAuth interaction. This filter contains only "generic" common functionality,
+ * which is same for all OAuth providers. For specific functionality, you need to override some methods (especially abstract methods)
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends AbstractSSOInterceptor {

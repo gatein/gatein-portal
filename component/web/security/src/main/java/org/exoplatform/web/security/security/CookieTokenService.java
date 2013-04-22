@@ -25,39 +25,22 @@ import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.RootContainer;
-import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
-import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.codec.AbstractCodec;
-import org.exoplatform.web.security.codec.AbstractCodecBuilder;
 import org.exoplatform.web.security.codec.CodecInitializer;
 import org.exoplatform.web.security.hash.JCASaltedHashService;
 import org.exoplatform.web.security.hash.SaltedHashException;
 import org.exoplatform.web.security.hash.SaltedHashService;
-import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+
 
 /**
  * <p>
@@ -146,7 +129,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         } else {
             saltedHashService = (SaltedHashService) hashServiceParam.getObject();
         }
-        this.codec = codecInitializer.initCodec();
+        this.codec = codecInitializer.getCodec();
     }
 
     /*

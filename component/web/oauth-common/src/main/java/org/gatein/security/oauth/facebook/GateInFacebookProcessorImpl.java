@@ -24,9 +24,6 @@
 package org.gatein.security.oauth.facebook;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.Arrays;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,21 +34,19 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.web.security.security.SecureRandomService;
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.OAuthCodec;
+import org.gatein.security.oauth.spi.OAuthCodec;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.social.FacebookConstants;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.social.FacebookProcessor;
-import org.gatein.security.oauth.utils.OAuthUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
+ * {@inheritDoc}
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
@@ -64,16 +59,6 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     private final String redirectURL;
     private final FacebookProcessor facebookProcessor;
     private final SecureRandomService secureRandomService;
-
-    // Only for unit test purpose
-    public GateInFacebookProcessorImpl() {
-        this.clientId = null;
-        this.clientSecret = null;
-        this.scope = null;
-        this.redirectURL = null;
-        this.facebookProcessor = null;
-        this.secureRandomService = null;
-    }
 
     public GateInFacebookProcessorImpl(ExoContainerContext context, InitParams params, SecureRandomService secureRandomService) {
         this.clientId = params.getValueParam("clientId").getValue();
@@ -144,7 +129,7 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
             String accessToken = facebookProcessor.getAccessToken(httpRequest, httpResponse);
 
             if (accessToken == null) {
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_FACEBOOK_ERROR, "AccessToken was null");
+                throw new OAuthException(OAuthExceptionCode.FACEBOOK_ERROR, "AccessToken was null");
             } else {
                 Set<String> scopes = facebookProcessor.getScopes(accessToken);
                 state = InteractionState.State.FINISH.name();
@@ -163,7 +148,8 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     }
 
     @Override
-    public FacebookPrincipal getPrincipal(String accessToken) {
+    public FacebookPrincipal getPrincipal(FacebookAccessTokenContext accessTokenContext) {
+        String accessToken = accessTokenContext.getAccessToken();
         return facebookProcessor.getPrincipal(accessToken);
     }
 
@@ -222,5 +208,11 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     public FacebookAccessTokenContext validateTokenAndUpdateScopes(FacebookAccessTokenContext accessToken) throws OAuthException {
         Set<String> scopes = facebookProcessor.getScopes(accessToken.getAccessToken());
         return new FacebookAccessTokenContext(accessToken.getAccessToken(), scopes);
+    }
+
+    @Override
+    public <C> C getAuthorizedSocialApiObject(FacebookAccessTokenContext accessToken, Class<C> socialApiObjectType) {
+        log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+        return null;
     }
 }

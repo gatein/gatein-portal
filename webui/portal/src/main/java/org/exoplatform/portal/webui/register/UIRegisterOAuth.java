@@ -45,13 +45,12 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.organization.UIUserProfileInputSet;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
 
 /**
  * Registration form for user, which has been successfully authenticated via OAuth2
@@ -160,7 +159,7 @@ public class UIRegisterOAuth extends UIContainer {
                 } catch (OAuthException gtnOAuthException) {
                     // Show warning message if user with this facebookUsername (or googleUsername) already exists
                     // NOTE: It could happen only in case of parallel registration of same oauth user from more browser windows
-                    if (gtnOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
+                    if (gtnOAuthException.getExceptionCode() == OAuthExceptionCode.DUPLICATE_OAUTH_PROVIDER_USERNAME) {
 
                         // Drop new user
                         orgService.getUserHandler().removeUser(newUser.getUserName(), true);

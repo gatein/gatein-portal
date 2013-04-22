@@ -27,23 +27,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.api.services.oauth2.model.Userinfo;
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.google.GoogleAccessTokenContext;
 import org.gatein.security.oauth.google.GoogleProcessor;
 import org.gatein.security.oauth.utils.OAuthUtils;
 import org.gatein.security.oauth.web.OAuthProviderFilter;
 
 /**
+ * Filter for integration with authentication handhsake via Google+ with usage of OAuth2
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class GoogleFilter extends OAuthProviderFilter<GoogleAccessTokenContext> {
 
     @Override
     protected OAuthProviderType<GoogleAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE);
+        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE, GoogleAccessTokenContext.class);
     }
 
     @Override

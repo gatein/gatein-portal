@@ -23,28 +23,50 @@
 
 package org.gatein.security.oauth.google;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.services.oauth2.Oauth2;
 import com.google.api.services.oauth2.model.Userinfo;
 import com.google.api.services.plus.Plus;
-import org.gatein.security.oauth.common.OAuthProviderProcessor;
+import org.gatein.security.oauth.spi.OAuthProviderProcessor;
 
 /**
+ * OAuth processor for calling Google+ operations
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public interface GoogleProcessor extends OAuthProviderProcessor<GoogleAccessTokenContext> {
 
+    /**
+     * Obtain informations about user from Google+ .
+     *
+     * @param accessTokenContext google access token
+     * @return userinfo object with filled info about this user
+     */
     Userinfo obtainUserInfo(GoogleAccessTokenContext accessTokenContext);
 
+    /**
+     * Obtain instance of Google {@link Oauth2} object, which can be used to call various operations in Google API (obtain user informations,
+     * obtain informations about your access token etc)
+     *
+     * @param accessTokenContext
+     * @return oauth2 object
+     */
     Oauth2 getOAuth2Instance(GoogleAccessTokenContext accessTokenContext);
 
+    /**
+     * Obtain instance of Google (@link Plus} object, which can be used to call various operations in Google+ API (Obtain list of your friends,
+     * obtain your statuses, comments, activities etc...)
+     *
+     * @param accessTokenContext
+     * @return plus object
+     */
     Plus getPlusService(GoogleAccessTokenContext accessTokenContext);
 
+    /**
+     * Refresh Google+ token. Note that argument needs to have "refreshToken" available. The "accessToken" will be refreshed and updated
+     * directly on this instance of accessTokenContext
+     *
+     * @param accessTokenContext
+     */
     void refreshToken(GoogleAccessTokenContext accessTokenContext);
 
 }

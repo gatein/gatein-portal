@@ -1,7 +1,7 @@
 <%	
 	import org.exoplatform.portal.webui.register.UIRegisterEditMode;
 	import javax.portlet.PortletMode ;
-	import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
+	import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 %>
 <%
 if(_ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW)

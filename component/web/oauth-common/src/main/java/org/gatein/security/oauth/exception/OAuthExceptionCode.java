@@ -24,6 +24,8 @@
 package org.gatein.security.oauth.exception;
 
 /**
+ * Enum with various exception codes
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public enum OAuthExceptionCode {
@@ -31,7 +33,7 @@ public enum OAuthExceptionCode {
     /**
      * Unspecified GateIn+OAuth error
      */
-    EXCEPTION_UNSPECIFIED,
+    UNKNOWN_ERROR,
 
     /**
      * This error could happen during saving of user into GateIn identity database.
@@ -40,48 +42,53 @@ public enum OAuthExceptionCode {
      *
      * For example: We want to save user 'john' with facebookUsername 'john.doyle' but we already have user 'johny2' with same facebookUsername 'john.doyle'
      */
-    EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME,
+    DUPLICATE_OAUTH_PROVIDER_USERNAME,
 
     /**
      * Some error during Twitter processing
      */
-    EXCEPTION_CODE_TWITTER_ERROR,
+    TWITTER_ERROR,
 
 
     /**
      * Some error during Facebook processing
      */
-    EXCEPTION_CODE_FACEBOOK_ERROR,
+    FACEBOOK_ERROR,
 
     /**
      * Some error during Google processing
      */
-    EXCEPTION_CODE_GOOGLE_ERROR,
+    GOOGLE_ERROR,
 
     /**
      * Error when we have invalid or revoked access token
      */
-    EXCEPTION_CODE_ACCESS_TOKEN_ERROR,
+    ACCESS_TOKEN_ERROR,
 
     /**
      * Generic IO error (for example network error)
      */
-    EXCEPTION_CODE_UNSPECIFIED_IO_ERROR,
+    IO_ERROR,
 
     /**
      * Error when state parameter from request parameter, which is sent from OAuth provider, is not equals to previously sent state
      */
-    EXCEPTION_CODE_INVALID_STATE,
+    INVALID_STATE,
 
     /**
      * Error when revoking of accessToken of any provider failed
      */
-    EXCEPTION_CODE_TOKEN_REVOKE_FAILED,
+    TOKEN_REVOCATION_FAILED,
 
     /**
      * Error when OAuth2 flow failed because user denied to permit privileges (scope) for OAuth provider
      */
-    EXCEPTION_CODE_USER_DENIED_SCOPE;
+    USER_DENIED_SCOPE,
+
+    /**
+     * Error during DB operation (For example get/set/remove access token from DB)
+     */
+    PERSISTENCE_ERROR
 
 
 }

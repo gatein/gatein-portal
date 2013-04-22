@@ -35,9 +35,11 @@ import org.gatein.security.oauth.utils.OAuthUtils;
 import org.json.JSONException;
 
 /**
+ * Wrap Facebook operation within block of code to handle errors
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public abstract class FacebookRequest<T> {
+abstract class FacebookRequest<T> {
 
     private static Logger log = LoggerFactory.getLogger(FacebookRequest.class);
 
@@ -54,16 +56,16 @@ public abstract class FacebookRequest<T> {
             } else if (httpResponse.getResponseCode() == 400) {
                 String errorMessage = "Error when obtaining content from Facebook. Error details: " + httpResponse.getResponse();
                 log.warn(errorMessage);
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_ACCESS_TOKEN_ERROR, errorMessage);
+                throw new OAuthException(OAuthExceptionCode.ACCESS_TOKEN_ERROR, errorMessage);
             } else {
                 String errorMessage = "Unspecified IO error. Http response code: " + httpResponse.getResponseCode() + ", details: " + httpResponse.getResponse();
                 log.warn(errorMessage);
-                throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_UNSPECIFIED_IO_ERROR, errorMessage);
+                throw new OAuthException(OAuthExceptionCode.IO_ERROR, errorMessage);
             }
         } catch (JSONException e) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_UNSPECIFIED_IO_ERROR, e);
+            throw new OAuthException(OAuthExceptionCode.IO_ERROR, e);
         } catch (IOException e) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_UNSPECIFIED_IO_ERROR, e);
+            throw new OAuthException(OAuthExceptionCode.IO_ERROR, e);
         }
     }
 }

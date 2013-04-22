@@ -51,6 +51,8 @@ import org.gatein.api.internal.Parameters;
 import org.gatein.api.internal.StringJoiner;
 import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.NavigationImpl;
+import org.gatein.api.oauth.OAuthProvider;
+import org.gatein.api.oauth.OAuthProviderAccessor;
 import org.gatein.api.page.Page;
 import org.gatein.api.page.PageId;
 import org.gatein.api.page.PageImpl;
@@ -97,10 +99,12 @@ public class PortalImpl implements Portal {
     private final Authenticator authenticator;
     private final IdentityRegistry identityRegistry;
     private final UserPortalConfigService userPortalConfigService;
+    private final OAuthProviderAccessor oauthProviderAccessor;
 
     public PortalImpl(DataStorage dataStorage, PageService pageService, NavigationService navigationService,
                       DescriptionService descriptionService, ResourceBundleManager bundleManager, Authenticator authenticator,
-                      IdentityRegistry identityRegistry, UserACL acl, UserPortalConfigService userPortalConfigService) {
+                      IdentityRegistry identityRegistry, UserACL acl, UserPortalConfigService userPortalConfigService,
+                      OAuthProviderAccessor oauthProviderAccessor) {
         this.dataStorage = dataStorage;
         this.pageService = pageService;
         this.navigationService = navigationService;
@@ -110,6 +114,7 @@ public class PortalImpl implements Portal {
         this.identityRegistry = identityRegistry;
         this.acl = acl;
         this.userPortalConfigService = userPortalConfigService;
+        this.oauthProviderAccessor = oauthProviderAccessor;
     }
 
     @Override
@@ -386,6 +391,11 @@ public class PortalImpl implements Portal {
         } catch (Throwable t) {
             throw new ApiException("Failed to check permissions", t);
         }
+    }
+
+    @Override
+    public OAuthProvider getOAuthProvider(String oauthProviderKey) {
+        return oauthProviderAccessor.getOAuthProvider(oauthProviderKey);
     }
 
     private static <T> void filter(List<T> list, Filter<T> filter) {

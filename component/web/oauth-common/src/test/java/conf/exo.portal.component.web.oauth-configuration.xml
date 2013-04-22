@@ -26,17 +26,23 @@
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.gatein.security.oauth.data.SocialNetworkService</key>
+    <key>org.gatein.security.oauth.spi.SocialNetworkService</key>
     <type>org.gatein.security.oauth.data.SocialNetworkServiceImpl</type>
   </component>
 
   <component>
-    <key>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</key>
+    <key>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</key>
     <type>org.gatein.security.oauth.registry.OAuthProviderTypeRegistryImpl</type>
   </component>
 
   <component>
     <type>org.exoplatform.web.security.codec.CodecInitializer</type>
+    <init-params>
+      <value-param>
+        <name>gatein.conf.dir</name>
+        <value>jar:/conf</value>
+      </value-param>
+    </init-params>
   </component>
 
   <component>
@@ -111,6 +117,11 @@
     </init-params>
   </component>
 
+  <component>
+    <key>org.exoplatform.web.security.security.SecureRandomService</key>
+    <type>org.exoplatform.web.security.security.SecureRandomService</type>
+  </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
     <component-plugin>
@@ -130,7 +141,7 @@
   </external-component-plugins>
 
   <external-component-plugins>
-    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
     <component-plugin>
       <name>FacebookOauthProvider</name>
       <set-method>addPlugin</set-method>
@@ -165,7 +176,7 @@
   </external-component-plugins>
 
   <external-component-plugins>
-    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
     <component-plugin>
       <name>TwitterOauthProvider</name>
       <set-method>addPlugin</set-method>
@@ -200,7 +211,7 @@
   </external-component-plugins>
 
   <external-component-plugins>
-    <target-component>org.gatein.security.oauth.registry.OAuthProviderTypeRegistry</target-component>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
     <component-plugin>
       <name>GoogleOauthProvider</name>
       <set-method>addPlugin</set-method>

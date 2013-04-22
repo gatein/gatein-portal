@@ -23,20 +23,22 @@
 
 package org.gatein.security.oauth.twitter;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.gatein.security.oauth.exception.OAuthException;
-import org.gatein.security.oauth.common.OAuthProviderProcessor;
+import org.gatein.security.oauth.spi.OAuthProviderProcessor;
 import twitter4j.Twitter;
 
 /**
+ * OAuth processor for calling Twitter operations
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public interface TwitterProcessor extends OAuthProviderProcessor<TwitterAccessTokenContext> {
 
+    /**
+     * Obtain instance of twitter object for given access token. This object can be used to call various operations with Twitter
+     *
+     * @param accessTokenContext twitter access token
+     * @return twitter instance
+     */
     Twitter getAuthorizedTwitterInstance(TwitterAccessTokenContext accessTokenContext);
 
 }

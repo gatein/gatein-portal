@@ -1,6 +1,6 @@
 <%
-   import org.gatein.security.oauth.common.OAuthProviderType;
-   import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
+   import org.gatein.security.oauth.spi.OAuthProviderType;
+   import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
    import org.exoplatform.portal.webui.util.Util;
    String contextPath = Util.getPortalRequestContext().getRequestContextPath();
 %>

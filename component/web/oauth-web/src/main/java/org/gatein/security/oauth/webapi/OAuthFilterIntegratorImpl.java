@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 import org.gatein.sso.agent.filter.api.SSOInterceptor;
 import org.gatein.sso.integration.SSOFilterIntegratorImpl;
 

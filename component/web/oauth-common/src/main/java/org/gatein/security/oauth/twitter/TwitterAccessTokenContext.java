@@ -25,9 +25,11 @@ package org.gatein.security.oauth.twitter;
 
 import java.io.Serializable;
 
-import org.gatein.security.oauth.common.AccessTokenContext;
+import org.gatein.security.oauth.spi.AccessTokenContext;
 
 /**
+ * Encapsulate informations about Twitter access token
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class TwitterAccessTokenContext extends AccessTokenContext implements Serializable {
@@ -46,6 +48,7 @@ public class TwitterAccessTokenContext extends AccessTokenContext implements Ser
         this.accessTokenSecret = accessTokenSecret;
     }
 
+    @Override
     public String getAccessToken() {
         return accessToken;
     }

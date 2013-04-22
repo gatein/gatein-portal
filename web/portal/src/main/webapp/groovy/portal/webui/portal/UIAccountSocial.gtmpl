@@ -1,5 +1,5 @@
 <%
-  import org.gatein.security.oauth.common.OAuthProviderType;
+  import org.gatein.security.oauth.spi.OAuthProviderType;
   import java.util.Collection;
   String fieldName;
 %>

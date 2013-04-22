@@ -21,14 +21,32 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.common;
+package org.exoplatform.portal.application.oauth;
+
+import org.gatein.api.oauth.BasicOAuthProviderAccessorImpl;
+import org.gatein.api.oauth.OAuthProvider;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.SocialNetworkService;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 /**
+ * OAuth provider accessor, which provides {@link OAuthProviderImpl} instances
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface OAuthCodec {
+public class OAuthProviderAccessorImpl extends BasicOAuthProviderAccessorImpl {
 
-    String encodeString(String input);
+    public OAuthProviderAccessorImpl(OAuthProviderTypeRegistry oauthProviderTypeRegistry, SocialNetworkService socialNetworkService) {
+        super(oauthProviderTypeRegistry, socialNetworkService);
+    }
 
-    String decodeString(String input);
+    @Override
+    public OAuthProvider getOAuthProvider(String oauthProviderKey) {
+        OAuthProviderType<?> internalOAuthProvider = getInternalOAuthProvider(oauthProviderKey);
+        if (internalOAuthProvider == null) {
+            return null;
+        } else {
+            return new OAuthProviderImpl(internalOAuthProvider, getSocialNetworkService());
+        }
+    }
 }

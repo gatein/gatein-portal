@@ -33,15 +33,19 @@ import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.web.security.codec.AbstractCodec;
 import org.exoplatform.web.security.codec.CodecInitializer;
 import org.exoplatform.web.security.security.TokenServiceInitializationException;
-import org.gatein.security.oauth.common.AccessTokenContext;
+import org.gatein.security.oauth.spi.AccessTokenContext;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.OAuthCodec;
-import org.gatein.security.oauth.common.OAuthProviderProcessor;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthCodec;
+import org.gatein.security.oauth.spi.OAuthProviderProcessor;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.exception.OAuthExceptionCode;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 
 /**
+ * {@inheritDoc}
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCodec {
@@ -53,7 +57,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
 
     public SocialNetworkServiceImpl(OrganizationService orgService, CodecInitializer codecInitializer) throws TokenServiceInitializationException {
         this.orgService = orgService;
-        this.codec = codecInitializer.initCodec();
+        this.codec = codecInitializer.getCodec();
     }
 
     @Override
@@ -68,9 +72,9 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
             String error = "Method findUserByUniqueAttribute(String, String) is not available on userHandler object " + userHandler +
                     "of class " + userHandler.getClass();
             log.error(error);
-            throw new RuntimeException(error, e);
+            throw new OAuthException(OAuthExceptionCode.PERSISTENCE_ERROR, error, e);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OAuthException(OAuthExceptionCode.PERSISTENCE_ERROR, e);
         }
     }
 
@@ -84,10 +88,10 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
             oauthProviderProcessor.saveAccessTokenAttributesToUserProfile(userProfile, this, accessToken);
 
             userProfileHandler.saveUserProfile(userProfile, true);
-        } catch (OAuthException gtnEx) {
-            throw gtnEx;
+        } catch (OAuthException oauthEx) {
+            throw oauthEx;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OAuthException(OAuthExceptionCode.PERSISTENCE_ERROR, e);
         }
     }
 
@@ -100,7 +104,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
             OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
             return oauthProviderProcessor.getAccessTokenFromUserProfile(userProfile, this);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OAuthException(OAuthExceptionCode.PERSISTENCE_ERROR, e);
         }
     }
 
@@ -115,7 +119,7 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
 
             userProfileHandler.saveUserProfile(userProfile, true);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OAuthException(OAuthExceptionCode.PERSISTENCE_ERROR, e);
         }
     }
 
@@ -130,10 +134,10 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
             OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
             oauthProviderProcessor.saveAccessTokenAttributesToUserProfile(userProfile, this, accessToken);
             userProfileHandler.saveUserProfile(userProfile, true);
-        } catch (OAuthException gtnEx) {
-            throw gtnEx;
+        } catch (OAuthException oauthEx) {
+            throw oauthEx;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new OAuthException(OAuthExceptionCode.PERSISTENCE_ERROR, e);
         }
     }
 

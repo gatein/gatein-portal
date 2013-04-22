@@ -21,7 +21,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.common;
+package org.gatein.security.oauth.spi;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -32,6 +32,9 @@ import java.util.Set;
 import org.exoplatform.commons.utils.Safe;
 
 /**
+ * General class, which encapsulates all important information about OAuth access token. Various implementation of OAuth providers
+ * should override this class and add their own data related to their access tokens
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public abstract class AccessTokenContext implements Serializable {
@@ -42,7 +45,7 @@ public abstract class AccessTokenContext implements Serializable {
     private final Set<String> scopes = new HashSet<String>();
 
     public AccessTokenContext(String... scopes) {
-        if (scopes != null) {
+        if (scopes != null && scopes.length > 0) {
             for (String scope : scopes) {
                 this.scopes.add(scope);
             }
@@ -50,6 +53,9 @@ public abstract class AccessTokenContext implements Serializable {
     }
 
     public AccessTokenContext(String scopesAsString) {
+        if (scopesAsString == null) {
+            throw new IllegalArgumentException("scopesAsString is null");
+        }
         String[] scopes = scopesAsString.split(DELIMITER);
         for (String scope : scopes) {
             this.scopes.add(scope);
@@ -58,9 +64,7 @@ public abstract class AccessTokenContext implements Serializable {
 
     public AccessTokenContext(Collection<String> scopes) {
         if (scopes != null) {
-            for (String scope : scopes) {
-                this.scopes.add(scope);
-            }
+            this.scopes.addAll(scopes);
         }
     }
 
@@ -88,9 +92,15 @@ public abstract class AccessTokenContext implements Serializable {
         return scopes.add(scope);
     }
 
+    /**
+     * @return String representation of access token
+     */
+    public abstract String getAccessToken();
+
+
     @Override
     public String toString() {
-        return new StringBuilder("scope=" + getScopesAsString()).append("]").toString();
+        return new StringBuilder(" scope=" + getScopesAsString()).append("]").toString();
     }
 
     @Override

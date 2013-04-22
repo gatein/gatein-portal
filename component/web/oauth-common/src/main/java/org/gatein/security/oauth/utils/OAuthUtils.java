@@ -34,25 +34,27 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.services.oauth2.model.Userinfo;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.UserImpl;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
-import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
 import org.gatein.security.oauth.facebook.FacebookAccessTokenContext;
 import org.gatein.security.oauth.google.GoogleAccessTokenContext;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
 
 /**
+ * Various util methods
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthUtils {
+
+    // Private constructor for utils class
+    private OAuthUtils() {}
 
     // Converting objects
 
@@ -126,7 +128,7 @@ public class OAuthUtils {
                     throw new RuntimeException("paramValue is null for paramName=" + paramName);
                 encodedParamValue = URLEncoder.encode(paramValue, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+                throw new OAuthException(OAuthExceptionCode.UNKNOWN_ERROR, e);
             }
             queryString.append(encodedParamValue);
         }
@@ -137,7 +139,7 @@ public class OAuthUtils {
         try {
             return URLEncoder.encode(param, "UTF-8");
         } catch (UnsupportedEncodingException uee) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_UNSPECIFIED, uee);
+            throw new OAuthException(OAuthExceptionCode.UNKNOWN_ERROR, uee);
         }
     }
 
@@ -153,21 +155,27 @@ public class OAuthUtils {
         HttpURLConnection httpURLConnection = (HttpURLConnection)connection;
         int statusCode = httpURLConnection.getResponseCode();
 
-        Reader reader;
+        Reader reader = null;
         try {
-            reader = new InputStreamReader(connection.getInputStream());
-        } catch (IOException ioe) {
-            reader = new InputStreamReader(httpURLConnection.getErrorStream());
-        }
+            try {
+                reader = new InputStreamReader(connection.getInputStream());
+            } catch (IOException ioe) {
+                reader = new InputStreamReader(httpURLConnection.getErrorStream());
+            }
 
-        char[] buffer = new char[50];
-        int nrOfChars;
-        while ((nrOfChars = reader.read(buffer)) != -1) {
-            result.append(buffer, 0, nrOfChars);
-        }
+            char[] buffer = new char[50];
+            int nrOfChars;
+            while ((nrOfChars = reader.read(buffer)) != -1) {
+                result.append(buffer, 0, nrOfChars);
+            }
 
-        String response = result.toString();
-        return new HttpResponseContext(statusCode, response, null);
+            String response = result.toString();
+            return new HttpResponseContext(statusCode, response);
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }
     }
 
     /**

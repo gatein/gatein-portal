@@ -37,10 +37,12 @@
 
   <component>
     <type>org.exoplatform.web.security.codec.CodecInitializer</type>
-    <value-param>
-      <name>gatein.conf.dir</name>
-      <value>jar:/conf</value>
-    </value-param>
+    <init-params>
+      <value-param>
+        <name>gatein.conf.dir</name>
+        <value>jar:/conf</value>
+      </value-param>
+    </init-params>
   </component>
 
   <!-- Default CookieTokenService with salted hashing -->

@@ -33,7 +33,6 @@ import javax.servlet.ServletResponse;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.OAuthProviderType;
 import org.gatein.sso.agent.filter.api.SSOInterceptor;
 import org.gatein.sso.integration.SSODelegateFilter;
 

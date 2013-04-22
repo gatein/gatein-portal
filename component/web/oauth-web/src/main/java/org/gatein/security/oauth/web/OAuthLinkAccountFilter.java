@@ -38,11 +38,18 @@ import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
-import org.gatein.security.oauth.data.SocialNetworkService;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.sso.agent.filter.api.AbstractSSOInterceptor;
 
 /**
+ * This filter has already access to authenticated OAuth principal, so it's work starts after successful OAuth authentication.
+ *
+ * Filter is useful only for logged user
+ *
+ * Responsibility of this filter is to finish "link social network" functionality (Usecase where logged user wants to link his
+ * GateIn account with social network)
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthLinkAccountFilter extends AbstractSSOInterceptor {
@@ -87,7 +94,7 @@ public class OAuthLinkAccountFilter extends AbstractSSOInterceptor {
             session.setAttribute(OAuthConstants.ATTRIBUTE_LINKED_OAUTH_PROVIDER, oauthPrincipal.getOauthProviderType().getFriendlyName());
         } catch (OAuthException gtnOauthOAuthException) {
             // Show warning message if user with this facebookUsername (or googleUsername) already exists
-            if (gtnOauthOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
+            if (gtnOauthOAuthException.getExceptionCode() == OAuthExceptionCode.DUPLICATE_OAUTH_PROVIDER_USERNAME) {
                 // Add some attribute to session, which will be read by OAuthLifecycle
                 session.setAttribute(OAuthConstants.ATTRIBUTE_EXCEPTION_AFTER_FAILED_LINK, gtnOauthOAuthException);
             } else {

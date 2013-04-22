@@ -26,10 +26,10 @@ package org.gatein.security.oauth.web.twitter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.gatein.security.oauth.common.InteractionState;
+import org.gatein.security.oauth.spi.InteractionState;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthPrincipal;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.twitter.TwitterAccessTokenContext;
@@ -41,13 +41,15 @@ import twitter4j.TwitterException;
 import twitter4j.User;
 
 /**
+ * Filter for  integration with authentication handhsake via Twitter with usage of OAuth1
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class TwitterFilter extends OAuthProviderFilter<TwitterAccessTokenContext> {
 
     @Override
     protected OAuthProviderType<TwitterAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER);
+        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER, TwitterAccessTokenContext.class);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class TwitterFilter extends OAuthProviderFilter<TwitterAccessTokenContext
         try {
             twitterUser = twitter.verifyCredentials();
         } catch (TwitterException te) {
-            throw new OAuthException(OAuthExceptionCode.EXCEPTION_CODE_TWITTER_ERROR, "Error when obtaining user");
+            throw new OAuthException(OAuthExceptionCode.TWITTER_ERROR, "Error when obtaining user");
         }
 
         OAuthPrincipal<TwitterAccessTokenContext> oauthPrincipal = OAuthUtils.convertTwitterUserToOAuthPrincipal(twitterUser,

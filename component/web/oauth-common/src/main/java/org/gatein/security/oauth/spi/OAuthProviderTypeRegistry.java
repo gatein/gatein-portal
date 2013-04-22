@@ -21,21 +21,30 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.registry;
+package org.gatein.security.oauth.spi;
 
 import java.util.Collection;
 
-import org.gatein.security.oauth.common.AccessTokenContext;
-import org.gatein.security.oauth.common.OAuthProviderType;
-
 /**
+ * Registry of all registered instances of {@link OAuthProviderType}, which is used by portal to know about all registered
+ * OAuth Providers (social networks)
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public interface OAuthProviderTypeRegistry {
 
-    // TODO: more type-safety by passing type?
-    <T extends AccessTokenContext> OAuthProviderType<T> getOAuthProvider(String key);
+    /**
+     * Obtain registered OAuth provider
+     *
+     * @param key of Oauth provider (for example 'FACEBOOK')
+     * @param accessTokenContextClass just for adding more type safety, so caller knows the type of returned {@link OAuthProviderType}
+     * @return oauth provider for given key
+     */
+    <T extends AccessTokenContext> OAuthProviderType<T> getOAuthProvider(String key, Class<T> accessTokenContextClass);
 
+    /**
+     * @return collection of all registered OAuth providers
+     */
     Collection<OAuthProviderType> getEnabledOAuthProviders();
 
     /**

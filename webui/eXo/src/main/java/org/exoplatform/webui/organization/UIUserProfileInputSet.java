@@ -53,8 +53,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
-import org.gatein.security.oauth.common.OAuthProviderType;
-import org.gatein.security.oauth.registry.OAuthProviderTypeRegistry;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 28, 2006
@@ -253,7 +253,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
             hanlder.saveUserProfile(userProfile, true);
         } catch (OAuthException gtnOauthOAuthException) {
             // Show warning message if user with this facebookUsername (or googleUsername) already exists
-            if (gtnOauthOAuthException.getExceptionCode() == OAuthExceptionCode.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
+            if (gtnOauthOAuthException.getExceptionCode() == OAuthExceptionCode.DUPLICATE_OAUTH_PROVIDER_USERNAME) {
                 addOAuthExceptionMessage(context, gtnOauthOAuthException, uiApp);
                 return false;
             } else {

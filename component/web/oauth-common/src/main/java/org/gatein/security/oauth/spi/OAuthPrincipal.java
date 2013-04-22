@@ -21,12 +21,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.common;
+package org.gatein.security.oauth.spi;
 
 import java.security.Principal;
 
 
 /**
+ * Principal, which contains info about user, who was authenticated through OAuth
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthPrincipal<T extends AccessTokenContext> implements Principal {

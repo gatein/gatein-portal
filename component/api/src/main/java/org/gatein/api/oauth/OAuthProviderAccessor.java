@@ -21,26 +21,22 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.facebook;
-
-
-import org.gatein.security.oauth.spi.OAuthProviderProcessor;
-import org.gatein.security.oauth.exception.OAuthException;
-import org.gatein.security.oauth.social.FacebookPrincipal;
+package org.gatein.api.oauth;
 
 /**
- * OAuth processor for calling Facebook operations
+ * Component for accessing registered {@link OAuthProvider} instances
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface GateInFacebookProcessor extends OAuthProviderProcessor<FacebookAccessTokenContext> {
+public interface OAuthProviderAccessor {
 
     /**
-     * Obtain informations about user from Facebook and wrap them into FacebookPrincipal object
+     * Return {@link org.gatein.api.oauth.OAuthProvider} for given key. Key could be {@link OAuthProvider#FACEBOOK},
+     * {@link OAuthProvider#GOOGLE}, {@link OAuthProvider#TWITTER} or other OAuth provider registered in Portal via OAuth SPI
      *
-     * @param accessTokenContext Facebook access token
-     * @return FacebookPrincipal
+     * @param oauthProviderKey Key of OAuth provider
+     * @return OAuth provider or null if OAuth provider with given key was not found
      */
-    FacebookPrincipal getPrincipal(FacebookAccessTokenContext accessTokenContext) throws OAuthException;
+    OAuthProvider getOAuthProvider(String oauthProviderKey);
 
 }

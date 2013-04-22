@@ -26,25 +26,28 @@ package org.gatein.security.oauth.registry;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.container.component.ComponentPlugin;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.security.oauth.common.AccessTokenContext;
-import org.gatein.security.oauth.common.OAuthProviderType;
+import org.gatein.security.oauth.spi.AccessTokenContext;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 /**
+ * {@inheritDoc}
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class OAuthProviderTypeRegistryImpl implements OAuthProviderTypeRegistry {
 
-    // Key is String identifier of OauthProviderType. Value is OAuthProviderType
+    // Key is String identifier of OauthProviderType (Key of this OAuthProviderType). Value is OAuthProviderType
     private final Map<String, OAuthProviderType> oauthProviderTypes = new LinkedHashMap<String, OAuthProviderType>();
 
     private static final Logger log = LoggerFactory.getLogger(OAuthProviderTypeRegistryImpl.class);
 
+    // Register OAuthProviderType into our list. It's called by kernel
     public void addPlugin(ComponentPlugin plugin) {
         if (plugin instanceof OauthProviderTypeRegistryPlugin) {
             OauthProviderTypeRegistryPlugin oauthPlugin = (OauthProviderTypeRegistryPlugin)plugin;
@@ -57,11 +60,13 @@ public class OAuthProviderTypeRegistryImpl implements OAuthProviderTypeRegistry 
             } else {
                 log.debug("Skip OAuthProviderType " + oauthPrType + " because it's disabled");
             }
+        } else {
+            throw new RuntimeException("Invalid plugin type: " + plugin.getClass() + ", plugin: " + plugin);
         }
     }
 
     @Override
-    public <T extends AccessTokenContext> OAuthProviderType<T> getOAuthProvider(String key) {
+    public <T extends AccessTokenContext> OAuthProviderType<T> getOAuthProvider(String key, Class<T> accessTokenContextClass) {
         return (OAuthProviderType<T>)oauthProviderTypes.get(key);
     }
 

@@ -24,18 +24,18 @@
 package org.gatein.security.oauth.utils;
 
 /**
+ * Wrap info about obtained HTTP response
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class HttpResponseContext {
 
     private final int responseCode;
     private final String response;
-    private final String errorResponse;
 
-    public HttpResponseContext(int responseCode, String response, String errorResponse) {
+    public HttpResponseContext(int responseCode, String response) {
         this.responseCode = responseCode;
         this.response = response;
-        this.errorResponse = errorResponse;
     }
 
     public int getResponseCode() {
@@ -44,9 +44,5 @@ public class HttpResponseContext {
 
     public String getResponse() {
         return response;
-    }
-
-    public String getErrorResponse() {
-        return errorResponse;
     }
 }
