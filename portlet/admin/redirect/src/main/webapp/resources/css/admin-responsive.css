@@ -1,12 +1,12 @@
 @media (max-width: 73.1428571428571em) {
     
-    .nav-list .more,
-    .nav-list > li li > span, 
-    td.actions > a,
-    td.actions > button,
-    td.actions > div, 
-    #condition-string div div {visibility: visible}
+    .RedirectAdmin .nav-list .more,
+    .RedirectAdmin .nav-list > li li > span, 
+    .RedirectAdmin td.actions > a,
+    .RedirectAdmin td.actions > button,
+    .RedirectAdmin td.actions > div, 
+    .RedirectAdmin #condition-string div div {visibility: visible;}
     
-    .nav-list li div span.toggle {background-position: left -22px;} /* Arrow appear */
+    .RedirectAdmin .nav-list li div span.toggle {background-position: left -22px;} /* Arrow appear */
 
 }
