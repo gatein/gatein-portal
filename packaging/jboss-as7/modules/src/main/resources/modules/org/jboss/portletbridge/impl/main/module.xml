@@ -30,4 +30,8 @@
   <resources>
     <!-- Insert resources here -->
   </resources>
+
+  <dependencies>
+    <module name="javax.servlet.api"/>
+  </dependencies>
 </module>

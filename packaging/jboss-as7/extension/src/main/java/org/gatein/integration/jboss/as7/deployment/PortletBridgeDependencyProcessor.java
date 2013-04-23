@@ -26,6 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Locale;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -42,12 +43,15 @@ import org.jboss.as.web.deployment.WarMetaData;
 import org.jboss.as.weld.WeldDeploymentMarker;
 import org.jboss.logging.Logger;
 import org.jboss.metadata.javaee.spec.ParamValueMetaData;
+import org.jboss.metadata.web.jboss.JBossWebMetaData;
+import org.jboss.metadata.web.spec.ListenerMetaData;
 import org.jboss.metadata.web.spec.WebFragmentMetaData;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoader;
 import org.jboss.modules.ResourceLoaderSpec;
 import org.jboss.modules.ResourceLoaders;
+import org.jboss.portletbridge.listener.PortletBridgeListener;
 
 /**
  * @author <a href="mailto:stian@redhat.com">Stian Thorgersen</a>
@@ -68,7 +72,16 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
 
     private static final String portletBridgeVersion = getPortletBridgeVersion();
 
+    private static final String PBR_LISTENER = PortletBridgeListener.class.getName();
+
     public static final String WAR_BUNDLES_PORTLETBRIDGE_PARAM = "org.gatein.portletbridge.WAR_BUNDLES_PORTLETBRIDGE";
+
+    private final ListenerMetaData cdiListener;
+
+    public PortletBridgeDependencyProcessor() {
+        cdiListener = new ListenerMetaData();
+        cdiListener.setListenerClass(PBR_LISTENER);
+    }
 
     private static String getCdiPortletIntegrationVersion() {
         try {
@@ -145,6 +158,7 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
             addPortletBridgeApi(deploymentUnit, moduleSpecification, moduleLoader);
             addPortletBridgeImpl(deploymentUnit, moduleSpecification, moduleLoader);
             addPortletBridgeDependencies(deploymentUnit, moduleSpecification, moduleLoader);
+            addPortletBridgeListener(deploymentUnit);
 
             if (isCdiDeployment(deploymentUnit)) {
                 log.infof("Adding CDI Portlet Integration %s to \"%s\"", cdiPortletIntegrationVersion, deploymentUnit.getName());
@@ -152,6 +166,38 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
                 addCdiPortletIntegration(deploymentUnit, moduleSpecification, moduleLoader);
             }
         }
+    }
+
+    private void addPortletBridgeListener(DeploymentUnit deploymentUnit) {
+        WarMetaData warMetaData = deploymentUnit.getAttachment(WarMetaData.ATTACHMENT_KEY);
+        if (warMetaData == null) {
+            log.debug("Not installing Portlet Bridge web tier integration as no war metadata found");
+            return;
+        }
+        JBossWebMetaData webMetaData = warMetaData.getMergedJBossWebMetaData();
+        if (webMetaData == null) {
+            log.debug("Not installing Portlet Bridge web tier integration as no merged web metadata found");
+            return;
+        }
+
+        List<ListenerMetaData> listeners = webMetaData.getListeners();
+        if (listeners == null) {
+            listeners = new ArrayList<ListenerMetaData>();
+            webMetaData.setListeners(listeners);
+        } else {
+            //if the portlet bridge listener is present remove it
+            //this should allow wars to be portable between AS7 and servlet containers
+            final ListIterator<ListenerMetaData> iterator = listeners.listIterator();
+            while (iterator.hasNext()) {
+                final ListenerMetaData listener = iterator.next();
+                if (listener.getListenerClass().trim().equals(PBR_LISTENER)) {
+                    log.debugf("Removing portlet bridge listener %s from web config, as it is not needed in EE6 environments", PBR_LISTENER);
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+        listeners.add(0, cdiListener);
     }
 
     private boolean isCdiDeployment(DeploymentUnit deploymentUnit) {

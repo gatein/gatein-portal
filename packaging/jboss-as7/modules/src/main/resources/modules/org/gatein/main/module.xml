@@ -42,6 +42,7 @@
     <module name="org.gatein.wsrp.integration"/>
     <module name="org.gatein.lib"/>
     <module name="org.picocontainer"/>
+    <module name="org.jboss.portletbridge.impl"/>
     <module name="org.gatein.cdi-contexts"/>
     <module name="org.jboss.weld.spi"/>
     <module name="org.jboss.weld.core"/>
