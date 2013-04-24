@@ -284,7 +284,7 @@
             </goals>
             <configuration>
               <target>
-                <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
+                <ant antfile="${project.basedir}/${package.filename}" inheritRefs="true">
                   <target name="package" />
                   <!-- without the next line the wrong version.jboss.ass is passed to antrun -->
                   <property name="version.jboss.as" value="${version.jboss.as}" />
@@ -384,7 +384,7 @@
                 </goals>
                 <configuration>
                   <target>
-                    <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
+                    <ant antfile="${project.basedir}/${package.filename}" inheritRefs="true">
                       <target name="prepare" />
                       <!-- without the next line a wrong servers.dir value is passed to antrun -->
                       <property name="servers.dir" value="${servers.dir}" />
