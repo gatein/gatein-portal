@@ -1467,7 +1467,7 @@ memory option properties. This should be removed when we can just set the compil
     </profile>
 
     <profile>
-      <id>portal</id>
+      <id>4.0.0</id>
       <modules>
         <module>build-config</module>
         <module>component</module>
