@@ -15,7 +15,7 @@
   <description />
 
   <build>
-    <finalName>responsive-login-page</finalName>
+    <finalName>gatein-mobile-login</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
