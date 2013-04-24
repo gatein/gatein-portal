@@ -27,10 +27,22 @@ import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletDescriptor;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class HelloPortlet extends GenericPortlet {
+
+    public static PortletDescriptor appendTo(PortletDescriptor application) {
+        return application.
+                createPortlet().
+                portletName("HelloPortlet").
+                portletClass(HelloPortlet.class.getName()).
+                createSupports().mimeType("text/html").up().
+                getOrCreatePortletInfo().title("Hello").up().
+                up();
+    }
 
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {

@@ -19,7 +19,6 @@
 
 package org.gatein.portal;
 
-import java.io.InputStream;
 import java.net.URL;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -29,11 +28,15 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.descriptor.api.Descriptors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+
+import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletDescriptor;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -43,13 +46,14 @@ public class PortalTestCase {
 
     @Deployment(testable = false)
     public static WebArchive createPortal() {
+        PortletDescriptor desc = HelloPortlet.appendTo(Descriptors.create(PortletDescriptor.class));
         WebArchive portal = ShrinkWrap.create(WebArchive.class, "portal.war");
         portal.merge(ShrinkWrap.
                 create(GenericArchive.class).
                 as(ExplodedImporter.class).
                 importDirectory("src/main/webapp").
                 as(GenericArchive.class),"/", Filters.includeAll());
-        portal.addAsWebInfResource("org/gatein/portal/portlet.xml", "portlet.xml");
+        portal.addAsWebInfResource(new StringAsset(desc.exportAsString()), "portlet.xml");
         return portal;
     }
 
