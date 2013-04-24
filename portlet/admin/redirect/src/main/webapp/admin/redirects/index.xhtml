@@ -200,8 +200,8 @@
 															<td>#{m.originNode}</td>
 															<td>#{m.redirectNode}</td>
 															<td class="actions">
-																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" onclick="editMappingEntry(this)"><i class="icon-pencil">Edit Node Mapping</i></a>
-																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="Delete Node Mapping" render="mappingsWrapper" onclick="$(this).tooltip('hide'); return false;"><i class="icon-trash">Delete Node Mapping</i></a4j:commandLink>
+																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" onclick="editMappingEntry(this); return false;"><i class="icon-pencil">Edit Node Mapping</i></a>
+																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="Delete Node Mapping" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Node Mapping</i></a4j:commandLink>
 															</td>
 														</tr>
 														<!-- Just so that we keep the odd/even colors -->
@@ -224,7 +224,7 @@
 																</b:input>
 															</td>
 															<td class="actions">
-																<a href="#" class="delete-node-mapping tooltipTrigger" title="Delete Node Mapping" onclick="deleteMappingEntry(this); return false;"><i class="icon-trash">Delete Node Mapping</i></a>
+																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="Delete Node Mapping" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Node Mapping</i></a4j:commandLink>
 															</td>
 														</tr>
 														</ui:repeat>
