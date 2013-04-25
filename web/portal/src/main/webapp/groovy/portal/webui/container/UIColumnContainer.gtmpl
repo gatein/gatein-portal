@@ -82,6 +82,7 @@
 										   		  .addScripts("popup.init('" + uicomponent.id + "');");
 										%>
 											<div class="ContainerControlIcon ContainerArrowDownIcon" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
+											   <button class="PopupCategoryMask"></button>
 												<% /*Begin Popup Menu*/ %>
 												<div style="position: relative; width: 100%">
 													<div class="UIPopupCategory" style="display: none;">
