@@ -17,38 +17,37 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.portlet;
+package org.gatein.portal.page;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.util.Collections;
+import java.util.List;
 
-import org.gatein.common.net.media.MediaType;
-import org.gatein.pc.api.ContainerURL;
-import org.gatein.pc.api.URLFormat;
-import org.gatein.pc.api.spi.PortletInvocationContext;
+import javax.servlet.http.Cookie;
+
+import org.gatein.common.util.MultiValuedPropertyMap;
+import org.gatein.common.util.SimpleMultiValuedPropertyMap;
+import org.gatein.pc.api.spi.ClientContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class GateInPortletInvocationContext implements PortletInvocationContext {
+class GateInClientContext implements ClientContext {
+
+    /** . */
+    private final SimpleMultiValuedPropertyMap<String> properties = new SimpleMultiValuedPropertyMap<String>();
 
     @Override
-    public MediaType getResponseContentType() {
-        return MediaType.TEXT_HTML;
+    public String getMethod() {
+        return "GET";
     }
 
     @Override
-    public String encodeResourceURL(String url) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("todo");
+    public MultiValuedPropertyMap<String> getProperties() {
+        return properties;
     }
 
     @Override
-    public String renderURL(ContainerURL containerURL, URLFormat format) {
-        throw new UnsupportedOperationException("todo");
-    }
-
-    @Override
-    public void renderURL(Writer writer, ContainerURL containerURL, URLFormat format) throws IOException {
-        throw new UnsupportedOperationException("todo");
+    public List<Cookie> getCookies() {
+        return Collections.emptyList();
     }
 }

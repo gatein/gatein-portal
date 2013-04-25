@@ -16,38 +16,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.gatein.portal.page;
 
-package org.gatein.portal.portlet;
-
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-
-import org.gatein.common.util.MultiValuedPropertyMap;
-import org.gatein.common.util.SimpleMultiValuedPropertyMap;
-import org.gatein.pc.api.spi.ClientContext;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.layout.ElementState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class GateInClientContext implements ClientContext {
+public class NodeState {
 
     /** . */
-    private final SimpleMultiValuedPropertyMap<String> properties = new SimpleMultiValuedPropertyMap<String>();
+    final NodeContext<NodeState, ElementState> context;
 
-    @Override
-    public String getMethod() {
-        return "GET";
-    }
-
-    @Override
-    public MultiValuedPropertyMap<String> getProperties() {
-        return properties;
-    }
-
-    @Override
-    public List<Cookie> getCookies() {
-        return Collections.emptyList();
+    public NodeState(NodeContext<NodeState, ElementState> context) {
+        this.context = context;
     }
 }

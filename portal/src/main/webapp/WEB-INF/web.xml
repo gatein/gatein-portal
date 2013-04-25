@@ -3,12 +3,17 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
-  <display-name>portal</display-name>
 
   <context-param>
     <param-name>juzu.inject</param-name>
     <param-value>guice</param-value>
   </context-param>
+  <context-param>
+    <param-name>juzu.run_mode</param-name>
+    <param-value>dev</param-value>
+  </context-param>
+
+  <display-name>portal</display-name>
 
   <filter>
     <filter-name>KernelLifeCycle</filter-name>
@@ -21,7 +26,7 @@
 
   <filter>
     <filter-name>ClientRequestFilter</filter-name>
-    <filter-class>org.gatein.portal.portlet.ClientRequestFilter</filter-class>
+    <filter-class>org.gatein.portal.page.ClientRequestFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>ClientRequestFilter</filter-name>

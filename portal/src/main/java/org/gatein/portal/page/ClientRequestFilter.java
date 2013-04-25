@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.portlet;
+package org.gatein.portal.page;
 
 import java.io.IOException;
 

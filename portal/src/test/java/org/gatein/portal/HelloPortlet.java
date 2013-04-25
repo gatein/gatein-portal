@@ -34,14 +34,8 @@ import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletDescriptor;
  */
 public class HelloPortlet extends GenericPortlet {
 
-    public static PortletDescriptor appendTo(PortletDescriptor application) {
-        return application.
-                createPortlet().
-                portletName("HelloPortlet").
-                portletClass(HelloPortlet.class.getName()).
-                createSupports().mimeType("text/html").up().
-                getOrCreatePortletInfo().title("Hello").up().
-                up();
+    public static PortletDescriptor descriptor() {
+        return AbstractPortalTestCase.descriptor(HelloPortlet.class);
     }
 
     @Override
