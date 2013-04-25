@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.management.annotations.Impact;
 import org.exoplatform.management.annotations.ImpactType;
 import org.exoplatform.management.annotations.Managed;
@@ -61,7 +62,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
     protected static final String SERVICE_CONFIG = "service.configuration";
 
-    protected static final int DELAY_TIME = 600;
+    protected static final String CLEANUP_PERIOD_TIME = "cleanup.period.time";
 
     /**
      * See {@link #tokenByteLength}. 8 bytes (64 bits) would be enough, but we want to get padding-less Byte64 representation,
@@ -80,6 +81,8 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
     protected long validityMillis;
 
+    protected int delay_time = 600;
+
     private ScheduledExecutorService executor;
 
     @SuppressWarnings("unchecked")
@@ -89,26 +92,32 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
         long configValue = new Long(params.get(1));
         this.validityMillis = TimeoutEnum.valueOf(params.get(2)).toMilisecond(configValue);
         this.tokenByteLength = DEFAULT_TOKEN_BYTE_LENGTH;
+        ValueParam delayParam = initParams.getValueParam(CLEANUP_PERIOD_TIME);
+        if(delayParam != null) {
+            delay_time = Integer.parseInt(delayParam.getValue());
+        }
     }
 
     public void start() {
-
-        // start a thread, garbage expired cookie token every [DELAY_TIME]
-        executor = Executors.newSingleThreadScheduledExecutor();
-        executor.scheduleWithFixedDelay(new Runnable() {
-            public void run() {
-                try {
-                    AbstractTokenService.this.cleanExpiredTokens();
-                } catch (Throwable t) {
-                    log.warn("Failed to clean expired tokens", t);
+        if(delay_time > 0) {
+         // start a thread, garbage expired cookie token every [DELAY_TIME]
+            executor = Executors.newSingleThreadScheduledExecutor();
+            executor.scheduleWithFixedDelay(new Runnable() {
+                public void run() {
+                    try {
+                        AbstractTokenService.this.cleanExpiredTokens();
+                    } catch (Throwable t) {
+                        log.warn("Failed to clean expired tokens", t);
+                    }
                 }
-            }
-        }, 0, DELAY_TIME, TimeUnit.SECONDS);
-
+            }, 0, delay_time, TimeUnit.SECONDS);
+        }
     }
 
     public void stop() {
-        executor.shutdown();
+        if(executor != null) {
+            executor.shutdown();
+        }
     }
 
     public static <T extends AbstractTokenService<?, ?>> T getInstance(Class<T> classType) {
@@ -160,7 +169,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
     @Managed
     @ManagedDescription("The expiration daemon period time in seconds")
     public long getPeriodTime() {
-        return DELAY_TIME;
+        return delay_time;
     }
 
     @Managed

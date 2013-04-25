@@ -33,6 +33,10 @@
   <component>
     <type>org.exoplatform.portal.gadget.core.GadgetTokenInfoService</type>
     <init-params>
+      <value-param>
+        <name>cleanup.period.time</name>
+        <value>0</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>gadget-token</value>

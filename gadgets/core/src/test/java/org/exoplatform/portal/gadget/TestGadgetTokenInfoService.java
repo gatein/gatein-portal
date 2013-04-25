@@ -137,14 +137,14 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
         tokenIndex.setUserId("root" + i);
         service.createToken(tokenIndex, tokenInfo);
 
-        assertEquals(service.size(), 2);
+        assertEquals(2, service.size());
         Thread.sleep(1500);
         service.cleanExpiredTokens();
         /*
          * one of the two tokens should have been cleaned at this point, i.e. cca 2.5 seconds after the creation of the first
          * one
          */
-        assertEquals(service.size(), 1);
+        assertEquals(1, service.size());
 
         clearAllTokens();
     }

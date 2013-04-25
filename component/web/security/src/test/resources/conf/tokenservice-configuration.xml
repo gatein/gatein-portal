@@ -44,6 +44,10 @@
         <name>gatein.conf.dir</name>
         <value>jar:/conf</value>
       </value-param>
+      <value-param>
+        <name>cleanup.period.time</name>
+        <value>0</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>
@@ -62,6 +66,10 @@
       <value-param>
         <name>gatein.conf.dir</name>
         <value>jar:/conf</value>
+      </value-param>
+      <value-param>
+        <name>cleanup.period.time</name>
+        <value>0</value>
       </value-param>
       <values-param>
         <name>service.configuration</name>
@@ -86,6 +94,10 @@
         <name>gatein.conf.dir</name>
         <value>jar:/conf</value>
       </value-param>
+      <value-param>
+        <name>cleanup.period.time</name>
+        <value>0</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>
@@ -101,6 +113,10 @@
     <key>org.exoplatform.web.security.security.TransientTokenService</key>
     <type>org.exoplatform.web.security.security.TransientTokenService</type>
     <init-params>
+      <value-param>
+        <name>cleanup.period.time</name>
+        <value>0</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>memory-token</value>
