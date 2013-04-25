@@ -551,8 +551,25 @@
               tab.click(function()
               {
                 portalNav.clickTab($(this), highlightClass, actualClass);
+                // Add back the mouseenter here which was removed on a touchstart. To support devices which support both
+                // touch and mouse events.
+                $(this).on("mouseenter", function() 
+                {
+                  portalNav.mouseEnterTab($(this), highlightCLass);
+                });
               }); 
-         
+        
+              tab.on("touchstart", function(event)
+              {
+                /* Need to remove mouseenter event listener here. On some touch based devices, the first
+                 * click will cause a virtual mouse to enter at that location, firing off a mouseenter event 
+                 * to occur before a click event.
+                 * What happens in this case is that the mouse enter enter causes the menu to open, but then the
+                 * click toggles it closed again.
+                 */
+                $(this).off("mouseenter"); 
+              });
+            
 	      tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
 	    });
 	
