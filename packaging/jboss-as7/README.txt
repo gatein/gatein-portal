@@ -29,12 +29,12 @@ Provides packaging for the build, with automated JBoss AS7 download support.
 Known Issues
 ============
 
-- JBoss AS 7 versions 7.1.1.Final, and 7.1.3.Final are supported at the moment
+- JBoss AS 7 versions 7.1.1.Final, 7.1.3.Final, and JBoss EAP 6.1.0.Beta are supported at the moment.
 
 
 
-Building
-========
+Building with JBoss AS 7
+========================
 
 By default JBoss AS 7.1.1.Final is the version used.
 
@@ -53,6 +53,36 @@ The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.
 To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
 
 Access the portal at: http://localhost:8080/portal
+
+
+
+Building with JBoss EAP 6.1.0.Beta
+==================================
+
+Open: http://www.jboss.org/jbossas/downloads/
+
+Download 6.1.0 Beta - EAP beta build from AS7, and EAP Maven Repository.
+
+
+Create a directory jboss-eap-6.1.0.Beta under your $SERVERS_DIR:
+
+mkdir $SERVERS_DIR/jboss-eap-6.1.0.Beta
+
+Unzip the contents of jboss-eap-6.1.0.Beta.zip into this new directory, so that you get a subdirectory called jboss-eap-6.1
+
+Unzip the contents of jboss-eap-6.1.0.Beta-maven-repository.zip into your $HOME/.m2/repository overwriting existing directories.
+
+You’re set to build and package GateIn:
+
+mvn clean
+mvn install -pl build-config
+cd component
+mvn install -DskipTests
+cd ..
+mvn install -Dservers.dir=$SERVERS_DIR/jboss-eap-6.1.0.Beta -Dversion.jboss.as=7.2.0.Final-redhat-4 -Dgatein.dev=eap -Dmaven.test.skip
+
+
+Once you have successfully built GateIn it’s enough to only use the last command in order to rebuild.
 
 
 
