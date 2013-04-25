@@ -82,6 +82,7 @@
                               	<%=title%>
                               </div>
                               <div class="EditIcon">
+                                 <button class="PopupCategoryMask"></button>
                                  <div style="position: relative; width: 100%">
                                     <div class="UIPopupCategory" style="display: none;">
                                        <div class="PopupCategoryDecorator">
