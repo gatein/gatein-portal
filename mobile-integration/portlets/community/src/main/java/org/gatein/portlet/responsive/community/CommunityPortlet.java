@@ -30,6 +30,7 @@ import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletRequestDispatcher;
+import com.sun.syndication.io.FeedException;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -70,6 +71,7 @@ public class CommunityPortlet extends GenericPortlet {
 
     private RssReaderBean makeReaderBean(String urlRss, String urlContent, int head, String pfxBlogAuthor) {
         RssReaderBean rssReaderBean = new RssReaderBean();
+        rssReaderBean.setSourceIO(urlRss);
 
         try {
             URL rssSourceUrl = new URL(urlRss);
@@ -78,10 +80,13 @@ public class CommunityPortlet extends GenericPortlet {
             rssReaderBean.setAuthorUrlPrefix(pfxBlogAuthor);
         } catch (IOException e) {
             rssReaderBean.setValid(false);
-            rssReaderBean.setSourceIO(urlRss);
-            log.error("Unable to open RSS feed url: " + e);
+            log.debug("Unable to open RSS feed url: " + e);
+        }   catch (FeedException e) {
+            rssReaderBean.setValid(false);
+            log.debug("Problem with RSS feed: " + e);
         }
 
         return rssReaderBean;
     }
+
 }

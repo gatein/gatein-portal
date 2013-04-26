@@ -44,7 +44,7 @@ public class RomeRssControllerBean {
 
     private static final Logger log = LoggerFactory.getLogger(RomeRssControllerBean.class);
 
-    public static List<RssTitleBean> getFeedTitles(URL source, int headsize) throws IOException {
+    public static List<RssTitleBean> getFeedTitles(URL source, int headsize) throws IOException, FeedException {
         List<RssTitleBean> rssTitleBeanList = new ArrayList<RssTitleBean>();
         XmlReader reader = null;
 
@@ -74,9 +74,6 @@ public class RomeRssControllerBean {
 
                 rssTitleBeanList.add(rssTitleBean);
             }
-        } catch (FeedException e) {
-            log.error("RSS Feed related exception: " + e);
-
         } finally {
             if (reader != null) {
                 reader.close();
