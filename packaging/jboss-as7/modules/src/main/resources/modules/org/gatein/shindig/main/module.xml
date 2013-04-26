@@ -33,6 +33,7 @@
      <module name="javax.api"/>
      <module name="javax.transaction.api"/>
      <module name="javax.el.api"/>
+     <module name="org.jdom"/>
      <module name="org.json"/>
      <module name="org.joda.time"/>
      <module name="org.slf4j"/>
