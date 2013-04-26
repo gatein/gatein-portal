@@ -60,12 +60,14 @@
     <module name="org.apache.httpcomponents"/>
     <module name="org.gatein.naming" export="true"/>
     <module name="org.gatein.pc"/>
+    <module name="org.gatein.shindig"/>
     <module name="org.gatein.wci" export="true"/>
     <module name="org.hibernate"/>
     <module name="org.infinispan"/>
     <module name="org.javassist"/>
     <module name="org.joda.time"/>
     <module name="org.jdom"/>
+    <module name="org.json" export="true"/>
     <module name="org.slf4j"/>
     <module name="org.staxnav"/>
     <module name="com.google.guava" slot="gatein" export="true"/>
@@ -76,7 +78,6 @@
     <module name="com.h2database.h2"/>
     <module name="org.jboss.common-core"/>
 
-    <module name="javax.inject.api"/>
     <module name="javax.enterprise.api"/>
     <module name="javax.mail.api"/>
 

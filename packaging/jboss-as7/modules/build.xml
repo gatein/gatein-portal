@@ -62,6 +62,42 @@
     ~ +++++++   KEEP THIS LIST ALPHABETICAL BY MODULE NAME!   +++++++
     ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     -->
+    <module-def name="com.google.guava" slot="gatein">
+      <maven-resource group="com.google.guava" artifact="guava"/>
+    </module-def>
+
+    <module-def name="org.gatein.shindig">
+       <maven-resource group="net.sf.ehcache" artifact="ehcache-core"/>
+       <maven-resource group="com.google.inject" artifact="guice"/>
+       <maven-resource group="com.google.inject.extensions" artifact="guice-jmx"/>
+       <maven-resource group="com.google.inject.extensions" artifact="guice-multibindings"/>
+       <maven-resource group="aopalliance" artifact="aopalliance"/>
+       <maven-resource group="org.gatein.shindig" artifact="shindig-common"/>
+       <maven-resource group="org.gatein.shindig" artifact="shindig-features"/>
+       <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets"/>
+       <maven-resource group="org.gatein.shindig" artifact="shindig-social-api"/>
+       <maven-resource group="caja" artifact="caja"/>
+       <maven-resource group="caja" artifact="json_simple"/>
+       <maven-resource group="rome" artifact="rome"/>
+       <maven-resource group="rome" artifact="modules"/>
+       <maven-resource group="com.ibm.icu" artifact="icu4j"/>
+       <maven-resource group="net.sourceforge.nekohtml" artifact="nekohtml"/>
+       <maven-resource group="commons-digester" artifact="commons-digester"/>
+
+       <!-- this dependency present in gadget-server pom hasn't showed up in testing, nor was it included in gatein.lib so not sure what to do with it -->
+       <!--
+       <dependency>
+          <groupId>nu.validator.htmlparser</groupId>
+          <artifactId>htmlparser</artifactId>
+          <scope>provided</scope>
+       </dependency>
+       -->
+    </module-def>
+
+     <module-def name="org.json">
+        <maven-resource group="org.json" artifact="json"/>
+     </module-def>
+
     <module-def name="org.gatein">
       <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension"/>
     </module-def>
@@ -76,18 +112,14 @@
 
     <module-def name="org.gatein.lib">
       <!-- maven-resource group="javax.activation" artifact="activation" / -->
-      <maven-resource group="aopalliance" artifact="aopalliance"/>
       <maven-resource group="bouncycastle" artifact="bcmail-jdk14"/>
       <maven-resource group="bouncycastle" artifact="bcprov-jdk14"/>
-      <maven-resource group="caja" artifact="caja"/>
       <maven-resource group="com.google.javascript" artifact="closure-compiler"/>
       <maven-resource group="commons-chain" artifact="commons-chain"/>
       <!--<maven-resource group="commons-codec" artifact="commons-codec" />-->
       <maven-resource group="commons-dbcp" artifact="commons-dbcp"/>
-      <maven-resource group="commons-digester" artifact="commons-digester"/>
       <maven-resource group="commons-httpclient" artifact="commons-httpclient"/>
       <maven-resource group="oswego-concurrent" artifact="concurrent"/>
-      <maven-resource group="net.sf.ehcache" artifact="ehcache-core"/>
       <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup"/>
       <maven-resource group="org.exoplatform.core" artifact="exo.core.component.database"/>
       <maven-resource group="org.exoplatform.core" artifact="exo.core.component.document"/>
@@ -144,12 +176,8 @@
       <maven-resource group="org.gatein.management" artifact="gatein-management-rest"/>
       <maven-resource group="org.gatein.web" artifact="redirect"/>
       <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
-      <maven-resource group="com.google.inject" artifact="guice"/>
-      <maven-resource group="com.google.inject.extensions" artifact="guice-jmx"/>
-      <maven-resource group="com.google.inject.extensions" artifact="guice-multibindings"/>
       <maven-resource group="howl" artifact="howl-logger"/>
       <maven-resource group="org.htmlparser" artifact="htmlparser"/>
-      <maven-resource group="com.ibm.icu" artifact="icu4j"/>
       <maven-resource group="org.infinispan" artifact="infinispan-tree"/>
       <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
       <!--maven-resource group="org.jboss.jbossts" artifact="jbossjts" /-->
@@ -158,8 +186,6 @@
       <maven-resource group="org.jibx" artifact="jibx-run"/>
       <maven-resource group="rhino" artifact="js"/>
       <maven-resource group="org.jsecurity" artifact="jsecurity"/>
-      <maven-resource group="caja" artifact="json_simple"/>
-      <maven-resource group="org.json" artifact="json"/>
       <maven-resource group="de.odysseus.juel" artifact="juel-impl"/>
       <maven-resource group="org.apache.lucene" artifact="lucene-core"/>
       <maven-resource group="org.apache.lucene" artifact="lucene-memory"/>
@@ -168,7 +194,6 @@
       <maven-resource group="org.gatein.mop" artifact="mop-api"/>
       <maven-resource group="org.gatein.mop" artifact="mop-core"/>
       <maven-resource group="org.gatein.mop" artifact="mop-spi"/>
-      <maven-resource group="net.sourceforge.nekohtml" artifact="nekohtml"/>
       <maven-resource group="net.oauth.core" artifact="oauth"/>
       <maven-resource group="org.apache.pdfbox" artifact="pdfbox"/>
       <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-api"/>
@@ -181,13 +206,7 @@
       <maven-resource group="org.apache.poi" artifact="poi"/>
       <maven-resource group="org.apache.poi" artifact="poi-ooxml"/>
       <maven-resource group="org.apache.poi" artifact="poi-scratchpad"/>
-      <maven-resource group="rome" artifact="rome"/>
-      <maven-resource group="rome" artifact="modules"/>
       <maven-resource group="org.apache.sanselan" artifact="sanselan"/>
-      <maven-resource group="org.gatein.shindig" artifact="shindig-common"/>
-      <maven-resource group="org.gatein.shindig" artifact="shindig-features"/>
-      <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets"/>
-      <maven-resource group="org.gatein.shindig" artifact="shindig-social-api"/>
       <maven-resource group="org.gatein.captcha" artifact="simplecaptcha"/>
       <maven-resource group="org.apache.tika" artifact="tika-core"/>
       <maven-resource group="org.apache.tika" artifact="tika-parsers"/>
@@ -197,6 +216,27 @@
       <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans"/>
       <maven-resource group="com.thoughtworks.xstream" artifact="xstream"/>
       <maven-resource group="org.gatein.cdi" artifact="gatein-cdi-injection"/>
+
+      <!-- modules that were used by shindig, commented out for reference -->
+      <!--
+      <maven-resource group="aopalliance" artifact="aopalliance"/>
+      <maven-resource group="caja" artifact="caja"/>
+      <maven-resource group="commons-digester" artifact="commons-digester"/>
+      <maven-resource group="net.sf.ehcache" artifact="ehcache-core"/>
+      <maven-resource group="com.google.inject" artifact="guice"/>
+      <maven-resource group="com.google.inject.extensions" artifact="guice-jmx"/>
+      <maven-resource group="com.google.inject.extensions" artifact="guice-multibindings"/>
+      <maven-resource group="com.ibm.icu" artifact="icu4j"/>
+      <maven-resource group="caja" artifact="json_simple"/>
+      <maven-resource group="org.json" artifact="json"/>
+      <maven-resource group="net.sourceforge.nekohtml" artifact="nekohtml"/>
+      <maven-resource group="rome" artifact="rome"/>
+      <maven-resource group="rome" artifact="modules"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-common"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-features"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-social-api"/>
+      -->
     </module-def>
 
     <module-def name="org.gatein.wci">
@@ -314,10 +354,6 @@
 
     <module-def name="org.xmlpull" slot="main">
       <maven-resource group="xpp3" artifact="xpp3"/>
-    </module-def>
-
-    <module-def name="com.google.guava" slot="gatein">
-      <maven-resource group="com.google.guava" artifact="guava"/>
     </module-def>
   </target>
 

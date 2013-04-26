@@ -34,6 +34,19 @@
 
   <build>
     <finalName>eXoGadgetServer</finalName>
+    <plugins>
+      <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-war-plugin</artifactId>
+         <configuration>
+            <archive>
+               <manifestEntries>
+                  <Dependencies>org.gatein.shindig</Dependencies>
+               </manifestEntries>
+            </archive>
+         </configuration>
+      </plugin>
+     </plugins>
   </build>
 
   <dependencies>
