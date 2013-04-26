@@ -40,6 +40,10 @@
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
     <init-params>
+      <value-param>
+        <name>gatein.conf.dir</name>
+        <value>jar:/conf</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>
@@ -55,6 +59,10 @@
     <key>org.exoplatform.web.security.security.PlainCookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
     <init-params>
+      <value-param>
+        <name>gatein.conf.dir</name>
+        <value>jar:/conf</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>
@@ -74,6 +82,10 @@
     <key>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</key>
     <type>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</type>
     <init-params>
+      <value-param>
+        <name>gatein.conf.dir</name>
+        <value>jar:/conf</value>
+      </value-param>
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>

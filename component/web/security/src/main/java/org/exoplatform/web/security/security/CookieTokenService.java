@@ -19,6 +19,32 @@
 
 package org.exoplatform.web.security.security;
 
+import org.chromattic.api.ChromatticSession;
+import org.chromattic.api.query.QueryResult;
+import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
+import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.commons.chromattic.ContextualTask;
+import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.configuration.ConfigurationManager;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ObjectParameter;
+import org.exoplatform.container.xml.ValueParam;
+import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.web.security.GateInToken;
+import org.exoplatform.web.security.codec.AbstractCodec;
+import org.exoplatform.web.security.codec.AbstractCodecBuilder;
+import org.exoplatform.web.security.hash.JCASaltedHashService;
+import org.exoplatform.web.security.hash.SaltedHashException;
+import org.exoplatform.web.security.hash.SaltedHashService;
+import org.gatein.common.io.IOTools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.security.Credentials;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -31,30 +57,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-
-import org.chromattic.api.ChromatticSession;
-import org.chromattic.api.query.QueryResult;
-import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
-import org.exoplatform.commons.chromattic.ChromatticManager;
-import org.exoplatform.commons.chromattic.ContextualTask;
-import org.exoplatform.commons.chromattic.SessionContext;
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.ObjectParameter;
-import org.exoplatform.portal.pom.config.Utils;
-import org.exoplatform.web.security.GateInToken;
-import org.exoplatform.web.security.codec.AbstractCodec;
-import org.exoplatform.web.security.codec.AbstractCodecBuilder;
-import org.exoplatform.web.security.hash.JCASaltedHashService;
-import org.exoplatform.web.security.hash.SaltedHashException;
-import org.exoplatform.web.security.hash.SaltedHashService;
-import org.gatein.common.io.IOTools;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-import org.gatein.wci.security.Credentials;
 
 /**
  * <p>
@@ -143,10 +145,17 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         } else {
             saltedHashService = (SaltedHashService) hashServiceParam.getObject();
         }
-        initCodec();
+
+        ValueParam gateinConfParam = initParams.getValueParam("gatein.conf.dir");
+        String gateinConfDir = null;
+        if (gateinConfParam != null) {
+            gateinConfDir = gateinConfParam.getValue();
+        }
+
+        initCodec(gateinConfDir);
     }
 
-    private void initCodec() throws TokenServiceInitializationException {
+    private void initCodec(String confDir) throws TokenServiceInitializationException {
         String builderType = PropertyManager.getProperty("gatein.codec.builderclass");
         Map<String, String> config = new HashMap<String, String>();
 
@@ -174,9 +183,21 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
             // If there is no config for codec in configuration.properties, we generate key if it does not exist and setup the
             // default config
             builderType = "org.exoplatform.web.security.codec.JCASymmetricCodecBuilder";
-            String gtnConfDir = PropertyManager.getProperty("gatein.conf.dir");
-            if (gtnConfDir == null || gtnConfDir.length() == 0) {
-                throw new TokenServiceInitializationException("'gatein.conf.dir' property must be set.");
+            String gtnConfDir = null;
+            if (confDir != null) {
+                ConfigurationManager confManager = (ConfigurationManager) RootContainer.getInstance().getComponentInstanceOfType(ConfigurationManager.class);
+                try {
+                    gtnConfDir = confManager.getResource(confDir).getPath();
+                } catch (Exception ex) {
+                    log.error("Failed to process the path to gateinConfDir", ex);
+                }
+            }
+
+            if (gtnConfDir == null) {
+                gtnConfDir = PropertyManager.getProperty("gatein.conf.dir");
+                if (gtnConfDir == null || gtnConfDir.length() == 0) {
+                    throw new TokenServiceInitializationException("'gatein.conf.dir' property must be set.");
+                }
             }
             File f = new File(gtnConfDir + "/codec/codeckey.txt");
             if (!f.exists()) {

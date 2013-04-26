@@ -23,10 +23,6 @@
 
 package org.exoplatform.web.security;
 
-import java.io.File;
-import java.net.URL;
-
-import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
@@ -42,17 +38,6 @@ import org.gatein.wci.security.Credentials;
       @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr-configuration.xml") })
 public class TestSimpleGeneratorService extends AbstractKernelTest {
     private SimpleGeneratorCookieTokenService service;
-
-    protected void beforeRunBare() {
-        String foundGateInConfDir = PropertyManager.getProperty("gatein.conf.dir");
-        if (foundGateInConfDir == null || foundGateInConfDir.length() == 0) {
-            /* A way to get the conf directory path */
-            URL tokenserviceConfUrl = Thread.currentThread().getContextClassLoader().getResource("conf/tokenservice-configuration.xml");
-            File confDir = new File(tokenserviceConfUrl.getPath()).getParentFile();
-            PropertyManager.setProperty("gatein.conf.dir", confDir.getAbsolutePath());
-        }
-        super.beforeRunBare();
-    }
 
     protected void setUp() throws Exception {
         PortalContainer container = getContainer();

@@ -27,8 +27,8 @@ import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.web.security.hash.NoSaltedHashService;
-import org.exoplatform.web.security.security.TokenServiceInitializationException;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.exoplatform.web.security.security.TokenServiceInitializationException;
 
 /**
  * CookieTokenService with changed mechanism for token generation (testing purposes)
