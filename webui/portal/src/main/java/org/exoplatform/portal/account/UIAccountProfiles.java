@@ -39,12 +39,12 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /**
  * Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com
@@ -76,7 +76,7 @@ public class UIAccountProfiles extends UIForm {
         addUIFormInput(new UIFormStringInput("displayName", "displayName", useraccount.getDisplayName()).addValidator(
                 StringLengthValidator.class, 0, 90));
         addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(MandatoryValidator.class)
-                .addValidator(EmailAddressValidator.class));
+                .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.EMAIL));
     }
 
     public static class ResetActionListener extends EventListener<UIAccountProfiles> {

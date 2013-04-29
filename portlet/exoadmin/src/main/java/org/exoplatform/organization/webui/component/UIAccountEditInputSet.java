@@ -32,7 +32,6 @@ import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
@@ -69,7 +68,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         // API
         addUIFormInput(new UIFormStringInput("displayName", "fullName", null).addValidator(StringLengthValidator.class, 0, 90));
         addUIFormInput(new UIFormStringInput("email", "email", null).addValidator(MandatoryValidator.class).addValidator(
-                EmailAddressValidator.class));
+                UserConfigurableValidator.class, UserConfigurableValidator.EMAIL));
         UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(CHANGEPASS, null, false);
         uiCheckbox.setOnChange("ToggleChangePassword", "UIUserInfo");
         addUIFormInput(uiCheckbox);

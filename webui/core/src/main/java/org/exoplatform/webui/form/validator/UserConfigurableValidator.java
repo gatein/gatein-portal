@@ -64,6 +64,7 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
 
     public static final String USERNAME = "username";
     public static final String GROUPMEMBERSHIP = "groupmembership";
+    public static final String EMAIL = "email";
     public static final String DEFAULT_LOCALIZATION_KEY = "ExpressionValidator.msg.value-invalid";
     /**
      * Note that this regular expression should actually validate comma-separated usernames. This is not the case as some
@@ -71,6 +72,8 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
      */
     public static final String GROUP_MEMBERSHIP_VALIDATION_REGEX = "^(\\p{Lower}[\\p{Lower}\\d\\._]+)(\\s*,\\s*(\\p{Lower}[\\p{Lower}\\d\\._]+))*$";
     public static final String GROUP_MEMBERSHIP_LOCALIZATION_KEY = "UIGroupMembershipForm.msg.Invalid-char";
+
+    public static final String EMAIL_VALIDATION_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
     private static Map<String, ValidatorConfiguration> configurations = new HashMap<String, ValidatorConfiguration>(3);
 
@@ -132,6 +135,9 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
                 // behavior
                 UsernameValidator.validate(value, label, messages, UsernameValidator.DEFAULT_MIN_LENGTH,
                         UsernameValidator.DEFAULT_MAX_LENGTH);
+            } else if (EMAIL.equals(validatorName)) {
+                // if the validator name is the EMAIL constant, we use the default e-mail validator
+                EmailAddressValidator.validate(value, label, messages);
             } else {
                 // else, we assume that we need to validate a group membership, replicating original behavior
                 if (!Pattern.matches(GROUP_MEMBERSHIP_VALIDATION_REGEX, value)) {
@@ -161,6 +167,8 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
         private ValidatorConfiguration(String propertyKey, Properties properties) {
             // used to assign backward compatible default values
             boolean isUser = USERNAME.equals(propertyKey);
+            boolean isEmail = EMAIL.equals(propertyKey);
+
             String prefixedKey = KEY_PREFIX + propertyKey;
 
             String property = properties.getProperty(prefixedKey + ".length.min");
@@ -170,7 +178,8 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
             maxLength = property != null ? Integer.valueOf(property) : (isUser ? UsernameValidator.DEFAULT_MAX_LENGTH
                     : Integer.MAX_VALUE);
 
-            pattern = properties.getProperty(prefixedKey + ".regexp", Utils.USER_NAME_VALIDATOR_REGEX);
+            pattern = properties.getProperty(prefixedKey + ".regexp", (isEmail ? EMAIL_VALIDATION_REGEX
+                    : Utils.USER_NAME_VALIDATOR_REGEX));
             formatMessage = properties.getProperty(prefixedKey + ".format.message", pattern);
         }
 

@@ -43,8 +43,8 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -64,7 +64,7 @@ public class UIForgetPassword extends UIForm {
     public UIForgetPassword() throws Exception {
         addUIFormInput(new UIFormStringInput(Username, null).addValidator(MandatoryValidator.class)).addUIFormInput(
                 new UIFormStringInput(Email, null).addValidator(MandatoryValidator.class).addValidator(
-                        EmailAddressValidator.class));
+                        UserConfigurableValidator.class, UserConfigurableValidator.EMAIL));
     }
 
     public static class SendActionListener extends EventListener<UIForgetPassword> {

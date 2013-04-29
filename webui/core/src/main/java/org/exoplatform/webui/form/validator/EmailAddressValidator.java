@@ -35,8 +35,7 @@ import org.exoplatform.webui.form.UIFormInput;
 @Serialized
 public class EmailAddressValidator extends MultipleConditionsValidator {
 
-    @Override
-    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
+    static void validate(String value, String label, CompoundApplicationMessage messages) {
         Object[] args = { label };
         int atIndex = value.indexOf('@');
         if (atIndex == -1) {
@@ -49,10 +48,14 @@ public class EmailAddressValidator extends MultipleConditionsValidator {
                 messages.addMessage("EmailAddressValidator.msg.Invalid-input", args);
             }
         }
-
     }
 
-    private boolean validateLocalPart(char[] localPart) {
+    @Override
+    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
+        validate(value, label, messages);
+    }
+
+    private static boolean validateLocalPart(char[] localPart) {
         if (localPart.length == 0 || !Character.isLetter(localPart[0])
                 || !Character.isLetterOrDigit(localPart[localPart.length - 1])) {
             return false;
@@ -71,7 +74,7 @@ public class EmailAddressValidator extends MultipleConditionsValidator {
         return true;
     }
 
-    private boolean validateDomainName(char[] domainName) {
+    private static boolean validateDomainName(char[] domainName) {
         if (domainName.length == 0 || !Character.isLetter(domainName[0])
                 || !Character.isLetterOrDigit(domainName[domainName.length - 1])) {
             return false;
@@ -98,11 +101,11 @@ public class EmailAddressValidator extends MultipleConditionsValidator {
         return foundValidLastDot;
     }
 
-    private boolean isLocalPartSymbol(char c) {
+    private static boolean isLocalPartSymbol(char c) {
         return c == '-' || c == '_' || c == '.';
     }
 
-    private boolean isDomainNameSymbol(char c) {
+    private static boolean isDomainNameSymbol(char c) {
         return c == '-' || c == '.';
     }
 }
