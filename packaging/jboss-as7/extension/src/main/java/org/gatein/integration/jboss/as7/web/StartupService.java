@@ -40,19 +40,10 @@ public class StartupService implements Service<StartupService> {
 
     @Override
     public void start(StartContext context) throws StartException {
-        ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
         try {
-            // set TCCL to this module's CL
-            Thread.currentThread().setContextClassLoader(module.getClassLoader());
-
             // Trigger startup
-            RootContainer rootContainer = RootContainer.getInstance();
-            rootContainer.createPortalContainers();
+            RootContainer.getInstance().createPortalContainers();
         } finally {
-            if (Thread.currentThread().getContextClassLoader() != oldCl) {
-                Thread.currentThread().setContextClassLoader(oldCl);
-            }
-
             // Startup message
             log.info(Version.prettyVersion + " started.");
         }

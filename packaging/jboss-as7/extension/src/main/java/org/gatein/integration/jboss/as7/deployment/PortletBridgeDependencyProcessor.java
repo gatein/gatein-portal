@@ -62,7 +62,7 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
 
     private static final ModuleIdentifier CDI_PORTLET_INTEGRATION = ModuleIdentifier
             .create("org.gatein.cdi-portlet-integration");
-    private static final ModuleIdentifier COMMONS_FILEUPLOAD = ModuleIdentifier.create("org.apache.commons-fileupload");
+    private static final ModuleIdentifier COMMONS_FILEUPLOAD = ModuleIdentifier.create("org.apache.commons.fileupload");
     private static final ModuleIdentifier JSF_API = ModuleIdentifier.create("javax.faces.api");
     private static final ModuleIdentifier JSF_IMPL = ModuleIdentifier.create("com.sun.jsf-impl");
     private static final ModuleIdentifier PORTLETBRIDGE_API = ModuleIdentifier.create("org.jboss.portletbridge.api");

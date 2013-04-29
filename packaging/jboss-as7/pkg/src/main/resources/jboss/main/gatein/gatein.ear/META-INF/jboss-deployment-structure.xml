@@ -1,0 +1,37 @@
+<jboss-deployment-structure>
+  <!--
+       Make gatein.ear sub-deployments non-isolated
+  -->
+  <ear-subdeployments-isolated>false</ear-subdeployments-isolated>
+
+  <sub-deployment name="portal.war" >
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies" services="import"/>
+    </dependencies>
+  </sub-deployment>
+
+  <sub-deployment name="gwtGadgets.war" >
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies-basic"/>
+    </dependencies>
+  </sub-deployment>
+
+  <sub-deployment name="exoadmin.war" >
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies-basic"/>
+    </dependencies>
+  </sub-deployment>
+
+  <sub-deployment name="web.war" >
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies-basic"/>
+    </dependencies>
+  </sub-deployment>
+
+  <sub-deployment name="dashboard.war">
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies-basic"/>
+    </dependencies>
+  </sub-deployment>
+
+</jboss-deployment-structure>

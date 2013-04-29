@@ -26,81 +26,88 @@
   <resources>
     <!-- Insert resources here -->
   </resources>
-  <dependencies>
 
+  <dependencies>
+    <module name="javax.annotation.api"/>
     <module name="javax.api"/>
+    <module name="javax.enterprise.api"/>
+    <module name="javax.jcr.api"/>
+    <module name="javax.mail.api"/>
+    <module name="javax.portlet.api"/>
+    <module name="javax.resource.api"/>
+    <module name="javax.servlet.api"/>
+    <module name="javax.servlet.jsp.api"/>
+    <module name="javax.transaction.api"/>
+    <module name="javax.ws.rs.api"/>
+    <module name="javax.xml.bind.api"/>
+
+    <module name="com.google.guava" slot="gatein"/>
+    <module name="com.google.javascript"/>
+    <module name="com.h2database.h2"/>
+    <module name="com.jhlabs.filters"/>
+    <module name="com.thoughtworks.xstream"/>
+    <module name="de.odysseus.juel"/>
+    <module name="edu.oswego.concurrent"/>
+    <module name="eu.medsea.mimeutil"/>
+    <module name="net.oauth.core"/>
+
+    <module name="org.apache.commons.beanutils">
+      <imports>
+        <exclude-set>
+          <path name="org/apache/commons/collections"/>
+        </exclude-set>
+      </imports>
+    </module>
+    <module name="org.apache.commons.chain"/>
+    <module name="org.apache.commons.codec"/>
+    <module name="org.apache.commons.collections"/>
+    <module name="org.apache.commons.dbcp"/>
+    <module name="org.apache.commons.fileupload"/>
+    <module name="org.apache.commons.io"/>
+    <module name="org.apache.commons.lang"/>
+    <module name="org.apache.commons.logging"/>
+    <module name="org.apache.commons.pool"/>
+    <module name="org.apache.httpcomponents"/>
+    <module name="org.apache.lucene"/>
+    <module name="org.apache.pdfbox"/>
+    <module name="org.apache.poi"/>
+    <module name="org.apache.sanselan"/>
+    <module name="org.apache.tika"/>
+    <module name="org.apache.ws.commons"/>
+    <module name="org.apache.xmlbeans"/>
+    <module name="org.bouncycastle"/>
+    <module name="org.chromattic"/>
+    <module name="org.codehaus.groovy"/>
+    <module name="org.enhydra.xapool"/>
+    <module name="org.gatein.common"/>
+    <module name="org.gatein.pc"/>
+    <module name="org.gatein.shindig"/>
+    <module name="org.gatein.wci"/>
+    <module name="org.gatein.wsrp.integration"/>
+    <module name="org.hibernate"/>
+    <module name="org.htmlparser"/>
+    <module name="org.infinispan"/>
+    <module name="org.jibx"/>
+    <module name="org.jboss.as.web"/>
+    <module name="org.jboss.common-core"/>
+    <module name="org.jboss.logging"/>
+    <module name="org.jboss.jts"/>
+    <module name="org.jboss.cache"/>
+    <module name="org.jgroups" slot="gatein"/>
+    <module name="org.mozilla.javascript"/>
+    <module name="org.mozilla.universalchardet"/>
+    <module name="org.objectweb.howl"/>
+    <module name="org.picketlink.idm"/>
+    <module name="org.picocontainer"/>
+    <module name="org.slf4j"/>
+    <module name="org.staxnav"/>
 
     <system export="true">
       <paths>
+        <!-- exo.portal.gadgets-core has dependency on sun.misc.BASE64Encoder -->
         <path name="sun/misc"/>
-        <path name="com/sun/xml/internal/stream"/>
       </paths>
     </system>
 
-    <module name="asm.asm"/>
-    <module name="org.apache.xerces" services="export" export="true"/>
-    <module name="com.sun.xml.bind" services="export" export="true"/>
-    <module name="javax.xml.bind.api"/>
-    <module name="org.dom4j"/>
-
-    <module name="javax.jcr.api"/>
-    <module name="javax.portlet.api" export="true"/>
-    <module name="javax.servlet.api"/>
-    <module name="javax.servlet.jsp.api"/>
-    <module name="javax.ws.rs.api"/>
-    <module name="org.chromattic" services="export" export="true"/>
-    <module name="org.gatein.common"/>
-    <module name="org.apache.commons.logging" export="true"/>
-    <module name="org.apache.commons.collections"/>
-    <module name="org.apache.commons.beanutils"/>
-    <module name="org.apache.commons.codec"/>
-    <module name="org.apache.commons.io"/>
-    <module name="org.apache.commons.lang"/>
-    <module name="org.apache.commons.pool"/>
-    <module name="org.apache.httpcomponents"/>
-    <module name="org.gatein.naming" export="true"/>
-    <module name="org.gatein.pc"/>
-    <module name="org.gatein.shindig"/>
-    <module name="org.gatein.wci" export="true"/>
-    <module name="org.hibernate"/>
-    <module name="org.infinispan"/>
-    <module name="org.javassist"/>
-    <module name="org.joda.time"/>
-    <module name="org.jdom"/>
-    <module name="org.json" export="true"/>
-    <module name="org.slf4j"/>
-    <module name="org.staxnav"/>
-    <module name="com.google.guava" slot="gatein" export="true"/>
-
-    <module name="org.jboss.threads"/>
-    <module name="org.jboss.logging"/>
-
-    <module name="com.h2database.h2"/>
-    <module name="org.jboss.common-core"/>
-
-    <module name="javax.enterprise.api"/>
-    <module name="javax.mail.api"/>
-
-    <module name="javax.resource.api"/>
-    <module name="javax.transaction.api"/>
-    <module name="org.jboss.jts"/>
-
-    <module name="javax.annotation.api"/>
-    <module name="org.jboss.msc"/>
-
-    <module name="org.picocontainer"/>
-    <module name="org.apache.commons-fileupload"/>
-
-    <module name="org.gatein.wsrp.integration" export="true" optional="true"/>
-    <module name="org.xmlpull" export="false" services="export">
-      <exports>
-        <include-set>
-          <path name="org/xmlpull"/>
-        </include-set>
-      </exports>
-    </module>
-
-    <module name="org.jboss.as.web"/>
-    <module name="org.jboss.dmr"/>
   </dependencies>
 </module>

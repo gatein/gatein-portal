@@ -29,6 +29,7 @@ import org.exoplatform.commons.utils.SecurityHelper;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.database.impl.HibernateServiceImpl;
+import org.gatein.common.classloader.DelegatingClassLoader;
 import org.hibernate.SessionFactory;
 import org.hibernate.SessionFactoryObserver;
 import org.hibernate.cfg.Configuration;
@@ -82,7 +83,33 @@ public class CustomHibernateServiceImpl extends HibernateServiceImpl {
                 ((StandardServiceRegistryImpl) serviceRegistry).destroy();
             }
         });
-        return conf.buildSessionFactory(serviceRegistry);
+
+        final ClassLoader old = SecurityHelper.doPrivilegedAction(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                return Thread.currentThread().getContextClassLoader();
+            }
+        });
+
+        try {
+            SecurityHelper.doPrivilegedAction(new PrivilegedAction<Void>() {
+                public Void run() {
+                    DelegatingClassLoader cl = new DelegatingClassLoader(old,
+                            org.picketlink.idm.api.IdentitySessionFactory.class.getClassLoader());
+                    Thread.currentThread().setContextClassLoader(cl);
+                    return null;
+                }
+            });
+            return conf.buildSessionFactory(serviceRegistry);
+        } finally {
+            if (old != null) {
+                SecurityHelper.doPrivilegedAction(new PrivilegedAction<Void>() {
+                    public Void run() {
+                        Thread.currentThread().setContextClassLoader(old);
+                        return null;
+                    }
+                });
+            }
+        }
     }
 
     /**

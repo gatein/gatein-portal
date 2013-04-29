@@ -94,13 +94,115 @@
        -->
     </module-def>
 
-     <module-def name="org.json">
-        <maven-resource group="org.json" artifact="json"/>
-     </module-def>
+    <module-def name="com.thoughtworks.xstream">
+      <maven-resource group="com.thoughtworks.xstream" artifact="xstream"/>
+    </module-def>
+
+    <module-def name="org.apache.xmlbeans">
+      <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans"/>
+    </module-def>
+
+    <module-def name="org.enhydra.xapool">
+      <maven-resource group="com.experlog" artifact="xapool"/>
+    </module-def>
+
+    <module-def name="org.mozilla.universalchardet">
+      <maven-resource group="com.googlecode.juniversalchardet" artifact="juniversalchardet"/>
+    </module-def>
+
+    <module-def name="org.objectweb.howl">
+      <maven-resource group="howl" artifact="howl-logger"/>
+    </module-def>
+
+    <module-def name="de.odysseus.juel">
+      <maven-resource group="de.odysseus.juel" artifact="juel-impl"/>
+    </module-def>
+
+    <module-def name="eu.medsea.mimeutil">
+      <maven-resource group="eu.medsea.mimeutil" artifact="mime-util"/>
+    </module-def>
+
+    <module-def name="net.oauth.core">
+      <maven-resource group="net.oauth.core" artifact="oauth"/>
+    </module-def>
+
+    <module-def name="com.jhlabs.filters">
+      <maven-resource group="com.jhlabs" artifact="filters"/>
+    </module-def>
+
+    <module-def name="com.google.javascript">
+      <maven-resource group="com.google.javascript" artifact="closure-compiler"/>
+    </module-def>
+
+    <module-def name="org.codehaus.groovy">
+      <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
+    </module-def>
+
+    <module-def name="org.jboss.cache">
+      <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
+    </module-def>
+
+    <module-def name="org.jgroups" slot="gatein">
+      <maven-resource group="org.jgroups" artifact="jgroups"/>
+    </module-def>
+
+    <module-def name="org.json">
+      <maven-resource group="org.json" artifact="json"/>
+    </module-def>
+
+    <module-def name="org.bouncycastle">
+      <maven-resource group="bouncycastle" artifact="bcmail-jdk14"/>
+      <maven-resource group="bouncycastle" artifact="bcprov-jdk14"/>
+    </module-def>
+
+    <module-def name="org.jibx">
+      <maven-resource group="org.jibx" artifact="jibx-bind"/>
+      <maven-resource group="org.jibx" artifact="jibx-run"/>
+    </module-def>
+
+    <module-def name="org.apache.poi">
+      <maven-resource group="org.apache.poi" artifact="poi"/>
+      <maven-resource group="org.apache.poi" artifact="poi-ooxml"/>
+      <maven-resource group="org.apache.poi" artifact="poi-scratchpad"/>
+    </module-def>
+
+    <module-def name="edu.oswego.concurrent">
+      <maven-resource group="oswego-concurrent" artifact="concurrent"/>
+    </module-def>
+
+    <module-def name="org.mozilla.javascript">
+      <maven-resource group="rhino" artifact="js"/>
+    </module-def>
+
+    <module-def name="org.apache.pdfbox">
+      <maven-resource group="org.apache.pdfbox" artifact="pdfbox"/>
+    </module-def>
+
+    <module-def name="org.apache.sanselan">
+      <maven-resource group="org.apache.sanselan" artifact="sanselan"/>
+    </module-def>
+
+    <module-def name="org.apache.tika">
+      <maven-resource group="org.apache.tika" artifact="tika-core"/>
+      <maven-resource group="org.apache.tika" artifact="tika-parsers"/>
+      <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup"/>
+    </module-def>
+
+    <module-def name="org.htmlparser">
+      <maven-resource group="org.htmlparser" artifact="htmlparser"/>
+    </module-def>
+
+    <module-def name="org.apache.ws.commons">
+      <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util"/>
+    </module-def>
 
     <module-def name="org.gatein">
       <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension"/>
     </module-def>
+
+    <module-def name="org.gatein.portal.container-dependencies"/>
+
+    <module-def name="org.gatein.portal.container-dependencies-basic"/>
 
     <module-def name="org.gatein.cdi-portlet-integration">
       <maven-resource group="org.gatein" artifact="cdi-portlet-integration"/>
@@ -111,16 +213,6 @@
     </module-def>
 
     <module-def name="org.gatein.lib">
-      <!-- maven-resource group="javax.activation" artifact="activation" / -->
-      <maven-resource group="bouncycastle" artifact="bcmail-jdk14"/>
-      <maven-resource group="bouncycastle" artifact="bcprov-jdk14"/>
-      <maven-resource group="com.google.javascript" artifact="closure-compiler"/>
-      <maven-resource group="commons-chain" artifact="commons-chain"/>
-      <!--<maven-resource group="commons-codec" artifact="commons-codec" />-->
-      <maven-resource group="commons-dbcp" artifact="commons-dbcp"/>
-      <maven-resource group="commons-httpclient" artifact="commons-httpclient"/>
-      <maven-resource group="oswego-concurrent" artifact="concurrent"/>
-      <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup"/>
       <maven-resource group="org.exoplatform.core" artifact="exo.core.component.database"/>
       <maven-resource group="org.exoplatform.core" artifact="exo.core.component.document"/>
       <maven-resource group="org.exoplatform.core" artifact="exo.core.component.ldap"/>
@@ -168,54 +260,19 @@
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.servlet"/>
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.core"/>
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.ext"/>
-      <maven-resource group="com.jhlabs" artifact="filters"/>
       <maven-resource group="org.gatein.api" artifact="gatein-api" />
       <maven-resource group="org.gatein.management" artifact="gatein-management-api"/>
       <maven-resource group="org.gatein.management" artifact="gatein-management-spi"/>
       <maven-resource group="org.gatein.management" artifact="gatein-management-core"/>
       <maven-resource group="org.gatein.management" artifact="gatein-management-rest"/>
       <maven-resource group="org.gatein.web" artifact="redirect"/>
-      <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
-      <maven-resource group="howl" artifact="howl-logger"/>
-      <maven-resource group="org.htmlparser" artifact="htmlparser"/>
-      <maven-resource group="org.infinispan" artifact="infinispan-tree"/>
-      <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
-      <!--maven-resource group="org.jboss.jbossts" artifact="jbossjts" /-->
-      <maven-resource group="org.jgroups" artifact="jgroups"/>
-      <maven-resource group="org.jibx" artifact="jibx-bind"/>
-      <maven-resource group="org.jibx" artifact="jibx-run"/>
-      <maven-resource group="rhino" artifact="js"/>
-      <maven-resource group="org.jsecurity" artifact="jsecurity"/>
-      <maven-resource group="de.odysseus.juel" artifact="juel-impl"/>
-      <maven-resource group="org.apache.lucene" artifact="lucene-core"/>
-      <maven-resource group="org.apache.lucene" artifact="lucene-memory"/>
-      <maven-resource group="org.apache.lucene" artifact="lucene-spellchecker"/>
-      <maven-resource group="eu.medsea.mimeutil" artifact="mime-util"/>
       <maven-resource group="org.gatein.mop" artifact="mop-api"/>
       <maven-resource group="org.gatein.mop" artifact="mop-core"/>
       <maven-resource group="org.gatein.mop" artifact="mop-spi"/>
-      <maven-resource group="net.oauth.core" artifact="oauth"/>
-      <maven-resource group="org.apache.pdfbox" artifact="pdfbox"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-api"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-cache"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-common"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-core"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-hibernate"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-ldap"/>
-      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-spi"/>
-      <maven-resource group="org.apache.poi" artifact="poi"/>
-      <maven-resource group="org.apache.poi" artifact="poi-ooxml"/>
-      <maven-resource group="org.apache.poi" artifact="poi-scratchpad"/>
-      <maven-resource group="org.apache.sanselan" artifact="sanselan"/>
       <maven-resource group="org.gatein.captcha" artifact="simplecaptcha"/>
-      <maven-resource group="org.apache.tika" artifact="tika-core"/>
-      <maven-resource group="org.apache.tika" artifact="tika-parsers"/>
-      <maven-resource group="com.googlecode.juniversalchardet" artifact="juniversalchardet"/>
-      <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util"/>
-      <maven-resource group="com.experlog" artifact="xapool"/>
-      <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans"/>
-      <maven-resource group="com.thoughtworks.xstream" artifact="xstream"/>
       <maven-resource group="org.gatein.cdi" artifact="gatein-cdi-injection"/>
+
+
 
       <!-- modules that were used by shindig, commented out for reference -->
       <!--
@@ -270,6 +327,20 @@
       <maven-resource group="org.jasig.cas.client" artifact="cas-client-core"/>
     </module-def>
 
+    <module-def name="org.picketlink.idm">
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-api"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-cache"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-common"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-core"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-hibernate"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-ldap"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-spi"/>
+    </module-def>
+
+    <module-def name="org.infinispan.tree">
+      <maven-resource group="org.infinispan" artifact="infinispan-tree"/>
+    </module-def>
+
     <!-- We need to override old version on AS 7.1.1 with newer version. TODO: remove once support for AS 7.1.1 will be dropped -->
     <module-def name="org.picketlink" slot="gatein">
       <maven-resource group="org.picketlink" artifact="picketlink-core" />
@@ -322,7 +393,21 @@
       <maven-resource group="javax.jcr" artifact="jcr"/>
     </module-def>
 
-    <module-def name="org.apache.commons-fileupload">
+    <module-def name="org.apache.lucene">
+      <maven-resource group="org.apache.lucene" artifact="lucene-core"/>
+      <maven-resource group="org.apache.lucene" artifact="lucene-memory"/>
+      <maven-resource group="org.apache.lucene" artifact="lucene-spellchecker"/>
+    </module-def>
+
+    <module-def name="org.apache.commons.chain">
+      <maven-resource group="commons-chain" artifact="commons-chain"/>
+    </module-def>
+
+    <module-def name="org.apache.commons.dbcp">
+      <maven-resource group="commons-dbcp" artifact="commons-dbcp"/>
+    </module-def>
+
+    <module-def name="org.apache.commons.fileupload">
       <maven-resource group="commons-fileupload" artifact="commons-fileupload"/>
     </module-def>
 

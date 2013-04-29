@@ -1,0 +1,29 @@
+<jboss-deployment-structure>
+  <!-- Make sub deployments isolated by default, so they cannot see each others classes without a Class-Path entry -->
+  <ear-subdeployments-isolated>true</ear-subdeployments-isolated>
+
+  <sub-deployment name="wsrp-admin-gui.war" >
+    <dependencies>
+      <module name="org.gatein.wsrp"/>
+      <module name="org.gatein.common"/>
+      <module name="com.google.guava" slot="gatein"/>
+
+      <!-- Are these required? Seems to work fine without them -->
+      <module name="org.gatein.wsrp.integration"/>
+      <module name="org.gatein.sso"/>
+    </dependencies>
+  </sub-deployment>
+
+  <sub-deployment name="wsrp-producer.war" >
+    <dependencies>
+      <module name="org.gatein.wsrp"/>
+      <module name="org.gatein.common"/>
+      <module name="com.google.guava" slot="gatein" />
+
+      <!-- Are these required? Seems to work fine without them -->
+      <module name="org.gatein.wsrp.integration"/>
+      <module name="org.gatein.sso"/>
+    </dependencies>
+  </sub-deployment>
+
+</jboss-deployment-structure>

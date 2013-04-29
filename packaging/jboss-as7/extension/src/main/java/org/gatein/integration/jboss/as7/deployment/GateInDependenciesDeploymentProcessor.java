@@ -21,8 +21,6 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import java.util.List;
-
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -30,28 +28,35 @@ import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.module.ModuleDependency;
+import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.server.moduleservice.ServiceModuleLoader;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
+import org.jboss.modules.ModuleLoader;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProcessor {
 
-    final ModuleIdentifier gateInLibId = ModuleIdentifier.fromString("org.gatein.lib");
+    private static final ModuleDependency GATEIN_LIB;
+    private static final ModuleDependency GATEIN_WCI;
+
+    static {
+        ModuleLoader loader = Module.getBootModuleLoader();
+
+        GATEIN_LIB = new ModuleDependency(loader, ModuleIdentifier.fromString("org.gatein.lib"), false, false, true, false);
+        GATEIN_WCI = new ModuleDependency(loader, ModuleIdentifier.fromString("org.gatein.wci"), false, false, true, false);
+    }
 
     public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
         final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-        if (GateInConfiguration.isGateInOrPortletArchive(du)) {
+        if (GateInConfiguration.isGateInArchiveOrSubDeployment(du) || GateInConfiguration.isPortletArchive(du)) {
             // add dependency on org.gatein.lib
-            List<ModuleDependency> dependencies = du.getAttachmentList(Attachments.MANIFEST_DEPENDENCIES);
-
-            if (!containsDependency(dependencies, gateInLibId)) {
-                du.addToAttachmentList(Attachments.MANIFEST_DEPENDENCIES, new ModuleDependency(Module.getBootModuleLoader(),
-                        gateInLibId, false, false, true, false));
-            }
+            ModuleSpecification moduleSpec = du.getAttachment(Attachments.MODULE_SPECIFICATION);
+            moduleSpec.addSystemDependency(GATEIN_LIB);
+            moduleSpec.addSystemDependency(GATEIN_WCI);
 
             // add gatein deployment modules cross-dependencies
             ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
@@ -61,33 +66,18 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
                 final ServiceModuleLoader deploymentModuleLoader = du.getAttachment(Attachments.SERVICE_MODULE_LOADER);
 
                 if (!moduleId.equals(config.getGateInEarModule())) {
-                    if (!containsDependency(dependencies, config.getGateInEarModule())) {
-                        du.addToAttachmentList(Attachments.MANIFEST_DEPENDENCIES, new ModuleDependency(deploymentModuleLoader,
-                                config.getGateInEarModule(), false, false, false, false));
-                    }
+                    moduleSpec.addSystemDependency(new ModuleDependency(deploymentModuleLoader,
+                        config.getGateInEarModule(), false, false, false, false));
                 }
 
                 for (ModuleIdentifier id : config.getGateInExtModules()) {
                     if (!moduleId.equals(id)) {
-                        if (!containsDependency(dependencies, id)) {
-                            du.addToAttachmentList(Attachments.MANIFEST_DEPENDENCIES, new ModuleDependency(
-                                    deploymentModuleLoader, id, false, false, false, false));
-                        }
+                        moduleSpec.addSystemDependency(new ModuleDependency(deploymentModuleLoader,
+                            id, false, false, false, false));
                     }
                 }
             }
         }
-    }
-
-    private boolean containsDependency(List<ModuleDependency> dependencies, ModuleIdentifier moduleId) {
-        boolean exists = false;
-        for (ModuleDependency dep : dependencies) {
-            if (dep.getIdentifier().equals(moduleId)) {
-                exists = true;
-                break;
-            }
-        }
-        return exists;
     }
 
     public void undeploy(DeploymentUnit context) {

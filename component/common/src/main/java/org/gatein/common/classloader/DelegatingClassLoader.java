@@ -56,7 +56,7 @@ public class DelegatingClassLoader extends ClassLoader {
     }
 
     @Override
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
+    protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         Class cl;
 
         for (ClassLoader delegate : delegates) {

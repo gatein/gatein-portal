@@ -20,10 +20,13 @@
 package org.exoplatform.webui.config;
 
 import java.io.InputStream;
+import java.security.PrivilegedAction;
 
+import org.exoplatform.commons.utils.SecurityHelper;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.xml.object.XMLObject;
+import org.gatein.common.classloader.DelegatingClassLoader;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -79,7 +82,7 @@ public class Param {
                     ResourceResolver resolver = context.getResourceResolver(value);
                     InputStream is = resolver.getInputStream(value);
                     Binding binding = new Binding();
-                    GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), binding);
+                    GroovyShell shell = new GroovyShell(prepareClassLoader(), binding);
                     object = shell.evaluate(is);
                     is.close();
                 }
@@ -93,7 +96,7 @@ public class Param {
             ResourceResolver resolver = context.getResourceResolver(value);
             InputStream is = resolver.getInputStream(value);
             Binding binding = new Binding();
-            GroovyShell shell = new GroovyShell(Thread.currentThread().getContextClassLoader(), binding);
+            GroovyShell shell = new GroovyShell(prepareClassLoader(), binding);
             object = shell.evaluate(is);
             is.close();
             return object;
@@ -101,5 +104,15 @@ public class Param {
             log.error("A  problem in the groovy script : " + value, e);
             throw e;
         }
+    }
+
+    private ClassLoader prepareClassLoader() {
+        final ClassLoader tccl = SecurityHelper.doPrivilegedAction(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                return Thread.currentThread().getContextClassLoader();
+            }
+        });
+
+        return new DelegatingClassLoader(tccl, GroovyShell.class.getClassLoader());
     }
 }

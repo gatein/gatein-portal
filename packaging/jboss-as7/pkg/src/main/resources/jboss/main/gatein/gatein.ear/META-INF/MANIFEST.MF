@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Dependencies: org.gatein.common,org.gatein.pc,org.hibernate,org.gatein
- .wsrp,org.gatein.sso

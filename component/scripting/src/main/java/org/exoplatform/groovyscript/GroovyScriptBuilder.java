@@ -21,6 +21,7 @@ package org.exoplatform.groovyscript;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,6 +33,8 @@ import org.codehaus.groovy.control.CompilerConfiguration;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyCodeSource;
+import org.exoplatform.commons.utils.SecurityHelper;
+import org.gatein.common.classloader.DelegatingClassLoader;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -178,7 +181,7 @@ public class GroovyScriptBuilder {
         //
         InputStream in = new ByteArrayInputStream(bytes);
         GroovyCodeSource gcs = new GroovyCodeSource(in, templateName, "/groovy/shell");
-        GroovyClassLoader loader = new GroovyClassLoader(Thread.currentThread().getContextClassLoader(), config);
+        GroovyClassLoader loader = new GroovyClassLoader(prepareClassLoader(), config);
         Class<?> scriptClass;
         try {
             scriptClass = loader.parseClass(gcs, false);
@@ -190,6 +193,18 @@ public class GroovyScriptBuilder {
 
         return new GroovyScript(templateId, script.toString(), scriptClass,
                 Collections.unmodifiableMap(new HashMap<Integer, TextItem>(script.positionTable)));
+    }
+
+    private ClassLoader prepareClassLoader() {
+        final ClassLoader tccl = SecurityHelper.doPrivilegedAction(new PrivilegedAction<ClassLoader>() {
+            public ClassLoader run() {
+                return Thread.currentThread().getContextClassLoader();
+            }
+        });
+
+        return new DelegatingClassLoader(tccl,
+            GroovyClassLoader.class.getClassLoader(),
+            javax.portlet.PortletConfig.class.getClassLoader());
     }
 
     /**

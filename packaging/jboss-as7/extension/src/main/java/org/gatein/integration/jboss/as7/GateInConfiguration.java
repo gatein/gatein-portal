@@ -150,6 +150,17 @@ public class GateInConfiguration {
         return du.hasAttachment(GateInEarKey.KEY) || du.hasAttachment(GateInExtKey.KEY);
     }
 
+    public static boolean isGateInArchiveOrSubDeployment(DeploymentUnit du) {
+        boolean ret = du.hasAttachment(GateInEarKey.KEY) || du.hasAttachment(GateInExtKey.KEY);
+        if (ret) {
+            return true;
+        }
+        if (du.getParent() != null) {
+            return isGateInArchive(du.getParent());
+        }
+        return false;
+    }
+
     public static boolean isPortletArchive(DeploymentUnit du) {
         return du.hasAttachment(PortletWarKey.INSTANCE);
     }
