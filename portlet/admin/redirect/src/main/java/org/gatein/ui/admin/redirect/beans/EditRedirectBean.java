@@ -626,6 +626,7 @@ public class EditRedirectBean implements Serializable {
 
     private int sortFrom = -1;
     private int sortTo = -1;
+    private String sortSite = null;
 
     public int getSortFrom() {
         return sortFrom;
@@ -643,6 +644,14 @@ public class EditRedirectBean implements Serializable {
         this.sortTo = sortTo;
     }
 
+    public String getSortSite() {
+        return sortSite;
+    }
+
+    public void setSortSite(String sortSite) {
+        this.sortSite = sortSite;
+    }
+
     public void doSortCondition() {
         ArrayList<RedirectCondition> conds = pr.getConditions();
         conds.add(sortTo, conds.remove(sortFrom));
@@ -652,7 +661,7 @@ public class EditRedirectBean implements Serializable {
         fetchDataStorage();
 
         try {
-            cfg = ds.getPortalConfig(siteName);
+            cfg = ds.getPortalConfig(sortSite);
             ArrayList<PortalRedirect> redirects = cfg.getPortalRedirects();
             redirects.add(sortTo, redirects.remove(sortFrom));
             ds.save(cfg);

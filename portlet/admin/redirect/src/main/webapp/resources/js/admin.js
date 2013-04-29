@@ -307,6 +307,7 @@ sortable = function() {
 		start: function(event, ui) { $("[id$='sortFrom']").val(ui.item.index()); },
 		update: function(event, ui) {
 			$("[id$='sortTo']").val(ui.item.index());
+			$("[id$='sortSite']").val($("[id$='sitename_text']").text());
 			$("[id$='doSortRdrBtn']").click();
 		}
 	}).disableSelection();

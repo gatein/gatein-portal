@@ -9,7 +9,7 @@
 
 <ui:define name="content">
 	<h:form id="add_form" styleClass="form-horizontal">
-		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects</h1>
+		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText id="sitename_text" styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects</h1>
 		<div id="main-alert" class="alert" style="opacity: 0;">
 			<!-- <button data-dismiss="alert" class="modal-close">Close</button> -->
 			<strong id="main-alert-title"></strong> <span id="main-alert-message"></span>
@@ -260,6 +260,7 @@
 		<h:form id="sortForm" style="display: none;">
 			<h:inputHidden id="sortFrom" value="#{rdrEdit.sortFrom}" />
 			<h:inputHidden id="sortTo" value="#{rdrEdit.sortTo}" />
+			<h:inputHidden id="sortSite" value="#{rdrEdit.sortSite}" />
 			<a4j:commandLink action="#{rdrEdit.doSortCondition}" id="doSortCndBtn" value="" render="@form" execute="@form" />
 			<a4j:commandLink action="#{rdrEdit.doSortRedirect}"  id="doSortRdrBtn" value="" render="@form" execute="@form" />
 		</h:form>
