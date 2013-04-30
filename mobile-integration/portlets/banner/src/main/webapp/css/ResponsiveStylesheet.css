@@ -5,7 +5,7 @@
     background-position: left center;
     border-radius: 0.625em 0.625em 0 0;
     text-align: center;
-    margin: -0.3125em -0.3125em 0 -0.3125em; /* To cover up the white area*/
+    margin: -0.25em -0.25em 0 -0.25em; /* To cover up the white area*/
 }
 
 .gtnResponsiveBannerPortlet h1 {
@@ -17,7 +17,7 @@
     margin: 0 0 0.51020408163265em 0;
     text-shadow: 0 0.04081632653061em 0.08163265306122em rgba(0, 0, 0, 0.5);    
     background-image: url(../images/banner-masthead-border.png);
-    background-position: center 2px;
+    background-position: center 1px;
     background-repeat: no-repeat;
     background-size: 100% 1px;
 }

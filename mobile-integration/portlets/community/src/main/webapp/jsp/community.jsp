@@ -59,4 +59,5 @@
         <h4>${resourceBundle.getString("documentation.label")}</h4>
         <p>${resourceBundle.getString("documentation.content")} <a href="${urlDocumentation}"> ${resourceBundle.getString("documentation.link")}</a></p>
     </div>
+    <div class="ClearFix"></div>
 </div>

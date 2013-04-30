@@ -19,7 +19,7 @@
         <c:if test="${not empty featureList}">
             <c:forEach var="featureName" items="${featureList.split(',')}">
                 <c:set var="feature" value="${featureName.trim()}" />
-                <div class="feature ${feature}Feature">
+                <div class="feature ${feature}Feature clearfix">
                     <img alt="${resourceBundle.getString(feature.concat('.alttext'))}"
                         src="${renderRequest.contextPath}/images/feature-${feature}.svg">
                     <div class="text">
@@ -27,7 +27,6 @@
                         <p>${resourceBundle.getString(feature.concat(".text"))}</p>
                     </div>
                 </div>
-                <div class="separator"></div>
             </c:forEach>
         </c:if>
     </div>

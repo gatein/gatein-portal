@@ -1,125 +1,160 @@
 .gtnResponsiveFeaturesPortlet {
     text-align: right; /* orientation=rt */
     text-align: left; /* orientation=lt */
-    padding: 1em;
+    margin-bottom: 2.1875em;
+    padding: 1.5625em 2.5641% 0;
+    position: relative;
 }
 
 .gtnResponsiveFeaturesPortlet h1 {
     color: #333;
     font-weight: normal;
-    font-size: 1.75em;
-}
-
-.gtnResponsiveFeaturesPortlet h2 {
-    font-size: 1.25em;
-    font-weight: normal;
-}
-
-.gtnResponsiveFeaturesPortlet a {
-    color: #1C5182;
-}
-
-.gtnResponsiveFeaturesPortlet a:hover {
-    text-decoration: underline;
-    color: #666;
-}
-
-/*Creates a new row after 3 features are displayed on a page*/
-.gtnResponsiveFeaturesPortlet .features div:nth-of-type(6) {
-    clear: both;
+    font-size: 2em;
+    margin: 0 0 0.3125em 0;
 }
 
 .gtnResponsiveFeaturesPortlet .feature {
-    width: 31%;
+    width: 28.8288%;
     float: right; /* orientation=rt */
     float: left; /* orientation=lt */
-    padding-left: 1%;
-    padding-right: 1%;
+    text-align: center;
+    margin: 0 1.8018% 0;
 }
 
-.gtnResponsiveFeaturesPortlet .feature img {
-    max-width: 100%;
-    max-height: 100%;
-    padding: 2%;
+.gtnResponsiveFeaturesPortlet .feature:nth-child(2) {
+    margin-left: 3.15315%;
+    margin-right: 3.15315%;
+}
+
+/*Creates a new row after 3 features are displayed on a page*/
+.gtnResponsiveFeaturesPortlet .features div:nth-of-type(6) {clear: both;}
+
+.gtnResponsiveFeaturesPortlet .feature img {max-width: 100%;}
+
+.gtnResponsiveFeaturesPortlet h2 {
+    font-size: 1.375em;
+    font-weight: normal;
+    margin-bottom: 0.68181818181818em;
+    margin-top: 0.63636363636364em;
+    text-align: left;
+}
+
+.gtnResponsiveFeaturesPortlet p {
+    color: #666666;
+    font-size: 1em;
+    line-height: 1.4em;
+    margin-bottom: 0;
+    text-align: left;
 }
 
 .gtnResponsiveFeaturesPortlet .footer {
+    padding-top: 1.875em;
     text-align: left; /* orientation=rt */
     text-align: right; /* orientation=lt */
     clear: both;
-    padding-top: 1em;
+    background-image: url(../images/feature-separator.png);
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: 100% 8px;
 }
 
-@media only screen and (max-width: 50em) {
+.gtnResponsiveFeaturesPortlet .footer a {
+    font-size: 0.875em;
+    color: #1C5182;
+}
+
+.gtnResponsiveFeaturesPortlet .footer a:hover {text-decoration: underline;}
+
+
+/* RWD */
+
+@media only screen and (max-width: 64em) {
+
+    .gtnResponsiveFeaturesPortlet h2 {
+        font-size: 1.25em;
+    }
+    
+    .gtnResponsiveFeaturesPortlet p {
+        font-size: 0.90625em;
+        margin-top: 0;
+    }
+
+}
+
+@media only screen and (max-width: 48em) {
+
+    .gtnResponsiveFeaturesPortlet {padding-top: 1.25em;}
+
+    .gtnResponsiveFeaturesPortlet h1 {
+        font-size: 1.875em;
+        margin-bottom: 0;
+    }
+    
     .gtnResponsiveFeaturesPortlet div.feature {
         float: none;
-        width: 100%;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 1em 0;
-        clear: both;
+        width: 96.3964%;
+        clear: left;
+        margin-top: 1.5625em;
     }
-    .gtnResponsiveFeaturesPortlet .separator {
-        background: url("../images/feature-separator.png");
-        background-size: 100% 150%;
-        background-repeat: no-repeat;
-        width: 100%;
-        height: 0.5em;
-        clear: both;
+    
+    .gtnResponsiveFeaturesPortlet div.feature:nth-child(1) {margin-top: 0.9375em;}
+    
+    .gtnResponsiveFeaturesPortlet div.feature:nth-child(2) {
+        margin-left: 1.8018%;
+        margin-right: 1.8018%;
     }
+    
     .gtnResponsiveFeaturesPortlet .feature img {
         float: right; /* orientation=rt */
         float: left; /* orientation=lt */
-        width: 40%;
+        margin-right: 1.25em;
+        width: 12.5em;
     }
-    .gtnResponsiveFeaturesPortlet .feature .text {
-        float: left; /* orientation=rt */
-        float: right; /* orientation=lt */
-        width: 56%;
-    }
-}
-
-@media only screen and (max-width: 30em) {
-    .gtnResponsiveFeaturesPortlet div.feature {
-        padding: 0;
-        margin: 2em 0;
-    }
-}
-
-@media only screen and (max-width: 30em) {
-    .gtnResponsiveFeaturesPortlet {
-        padding: 0.75em
-    }
-    .gtnResponsiveFeaturesPortlet h1 {
-        font-size: 1.5em;
-    }
+    
+    .gtnResponsiveFeaturesPortlet div.feature:nth-child(1) img, 
+    .gtnResponsiveFeaturesPortlet div.feature:nth-child(3) img {margin-top: -0.5em;}
+    
     .gtnResponsiveFeaturesPortlet h2 {
-        font-size: 1em;
-        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: 0.5em;
     }
+    
+    .gtnResponsiveFeaturesPortlet .footer {padding-top: 0.9375em;}
+
 }
 
-@media only screen and (max-width: 25em) {
-    .gtnResponsiveFeaturesPortlet {
-        padding: 0.5em
-    }
+@media only screen and (max-width: 37.5em) {
+
     .gtnResponsiveFeaturesPortlet .feature img {
-        width: 60%;
-        margin-left: 20%;
-        margin-right: 20%;
-        float: none;
-        padding: 0;
+        width: 11.25em;
+        margin-bottom: 0.3125em;
     }
-    .gtnResponsiveFeaturesPortlet .feature .text {
-        width: 100%;
-        float: none;
+
+}
+
+@media only screen and (max-width: 30em) {
+
+    .gtnResponsiveFeaturesPortlet div.feature {margin-top: 1.5625em;}
+    
+    .gtnResponsiveFeaturesPortlet div.feature:nth-child(1) {margin-top: 0.9375em;}
+    
+    .gtnResponsiveFeaturesPortlet .feature img {
+        width: 18.125em;
+        margin-bottom: 0.625em;
     }
-    .gtnResponsiveFeaturesPortlet h1 {
-        font-size: 1.2em;
-        font-weight: bold;
-    }
-    .gtnResponsiveFeaturesPortlet h2 {
-        font-size: 1em;
-        font-weight: bold;
-    }
+    
+    .gtnResponsiveFeaturesPortlet .feature:nth-child(2) img {margin-bottom: 1.25em;}
+
+    .gtnResponsiveFeaturesPortlet .feature .text {clear: both;}
+    
+    .gtnResponsiveFeaturesPortlet .footer {background: none;}
+
+}
+
+@media only screen and (max-width: 20em) {
+
+    .gtnResponsiveFeaturesPortlet h1 {font-size: 1.625em;}
+    
+    .gtnResponsiveFeaturesPortlet h2  {font-size: 1.125em;}
+
 }
