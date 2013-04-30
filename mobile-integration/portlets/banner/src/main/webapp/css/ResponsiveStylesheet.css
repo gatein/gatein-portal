@@ -1,29 +1,43 @@
 .gtnResponsiveBannerPortlet {
+    background-color: #003971;
+    background-image: url(../images/banner-masthead-bg.jpg);
+    background-repeat: repeat-x;
+    background-position: left center;
+    border-radius: 0.625em 0.625em 0 0;
     text-align: center;
-    background: #003971 url(../images/banner-masthead-bg.jpg) repeat-x left top;
-    padding: 1em;
-    background-size: auto 100%;
-    border-radius: 0.5em 0.5em 0 0;
-    margin: -0.25em -0.25em 0 -0.25em; /* To cover up the border when placed on a page.*/
+    margin: -0.3125em -0.3125em 0 -0.3125em; /* To cover up the white area*/
 }
 
 .gtnResponsiveBannerPortlet h1 {
-    color: white;
-    text-shadow: 0px 0.0625em 0.125em rgba(0, 0, 0, 0.5);
+    color: #fff;
+    font-size: 3.0625em;
     font-weight: normal;
-    font-size: 2.5em;
+    line-height: 1.1em;
+    padding: 1.22448979591837em 0.61224489795918em 0 0.61224489795918em;
+    margin: 0 0 0.51020408163265em 0;
+    text-shadow: 0 0.04081632653061em 0.08163265306122em rgba(0, 0, 0, 0.5);    
+    background-image: url(../images/banner-masthead-border.png);
+    background-position: center 2px;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
 }
 
 .gtnResponsiveBannerPortlet h2 {
     color: #B2C6DB;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1.5em;
-    font-weight: normal;
+    font-weight: 100;
+    letter-spacing: 0.0625em;
+    padding: 0 1.25em 2.625em 1.25em;
+    margin-bottom: 0;
+    background-image: url(../images/banner-masthead-border.png);
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-size: 100% 1px;
 }
 
-.gtnResponsiveBannerPortlet h2 a,.gtnResponsiveBannerPortlet h2 a:hover {
-    color: #F6AD3C;
-}
+.gtnResponsiveBannerPortlet h2 a,
+.gtnResponsiveBannerPortlet h2 a:hover {color: #F6AD3C;}
 
 .gtnResponsiveBannerPortlet h2 a:hover {
     background-color: rgba(178, 198, 219, 0.075);
@@ -31,40 +45,50 @@
     text-decoration: none;
 }
 
+.gtnResponsiveBannerPortletShadow {
+    background-image: url(../images/banner-shadow.png);
+    background-repeat: no-repeat;
+    background-position: center top;
+    height: 0.5625em;
+    margin-left: -0.25em;
+    margin-right: -0.25em;
+}
+
+
 /* Media Queries for Smaller Screened Devices*/
-@media only screen and (max-width: 62em) {
-    .gtnResponsiveBannerPortlet {
-        border-radius: 0 0 0 0;
-    }
+
+@media only screen and (max-width: 40em) {
+
+    .gtnResponsiveBannerPortlet h1 {font-size: 2.5em;}
+    
+    .gtnResponsiveBannerPortlet h2 {font-size: 1.25em;}
+
 }
 
 @media only screen and (max-width: 30em) {
+
     .gtnResponsiveBannerPortlet {
-        padding: 0.75em;
+        border-radius: 0;
     }
+    
     .gtnResponsiveBannerPortlet h1 {
-        font-size: 2em;
+        font-size: 2.25em;
     }
     .gtnResponsiveBannerPortlet h2 {
-        font-size: 1.2em;
+        font-size: 1.1875em;
     }
 }
 
 @media only screen and (max-width: 20em) {
-    .gtnResponsiveBannerPortlet {
-        padding: 0.5em
-    }
+    
     .gtnResponsiveBannerPortlet h1 {
-        font-size: 1.4em;
+        font-size: 1.875em;
+        padding-top: 1em;
     }
+    
     .gtnResponsiveBannerPortlet h2 {
-        font-size: 1em;
+        font-size: 1.125em;
+        padding-bottom: 1.88888888888889em;
     }
-}
-
-.gtnResponsiveBannerPortletShadow {
-    background: transparent url(../images/banner-shadow.png) no-repeat center top;
-    height: 0.5em;
-    margin-left: -0.25em;
-    margin-right: -0.25em;
+    
 }

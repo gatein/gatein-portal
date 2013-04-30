@@ -1,90 +1,71 @@
 .gtnResponsiveHeaderPortlet {
     margin: 0;
     padding: 0;
+    line-height: 0;
+    margin-bottom: 0.9375em;
 }
+
+.gtnResponsiveHeaderPortlet .collapsibleRow {width: 100%;}
+
+
+/* Logo */
 
 .gtnResponsiveHeaderPortlet .logo {
     background-image: url("../images/gatein_logo_ltr.svg"); /* orientation=rt */
     background-image: url("../images/gatein_logo.svg"); /* orientation=lt */
     line-height: 1em;
     background-repeat: no-repeat;
-    background-size: auto 2.5em;
-    height: 2.5em;
-    width: 10em;
-    background-position: 1em 0.8em;
-    padding: 0.8em 0 0.8em 1em;
+    background-size: cover;
+    width: 10.375em;
+    height: 2.8125em;
+    background-position: 0 0;
+    padding: 0;
+    margin: 1.25em 3.4188% 0 1.7094%;
     float: right; /* orientation=rt */
     float: left; /* orientation=lt */
     cursor: pointer;
 }
 
-/* The default CSS for the button. */
-.gtnResponsiveHeaderPortlet .userpreferencebutton {
-    background-image: url("../images/preference.svg");
-    background-repeat: no-repeat;
-    background-size: auto 2em;
-    height: 2.5em;
-    width: 2.5em;
-    background-position: center;
-    padding: 0.8em 1em 0.8em 1em;
-    float: left; /* orientation=rt */
-    float: right; /* orientation=lt */
-    display: inline;
-}
 
-.gtnResponsiveHeaderPortlet .topmenu>li {
-    background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=rt */
-    background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=lt */
-    padding: 1em;
-    white-space: nowrap;
-}
-
-.gtnResponsiveHeaderPortlet .topmenu>li:first-child {
-    background: none;
-}
-
-.gtnResponsiveHeaderPortlet .submenu>li {
-    margin: 1em;
-}
-
-.gtnResponsiveHeaderPortlet .icon {
-    display: inline;
-    float: right; /* orientation=rt */
-    float: left; /* orientation=lt */
-}
+/* Right menu */
 
 .gtnResponsiveHeaderPortlet .options {
-    font-size: 95%;
-    display: inline;
     float: left; /* orientation=rt */
     float: right; /* orientation=lt */
     text-align: left; /* orientation=rt */
     text-align: right; /* orientation=lt */
+    margin-top: 2.3125em;
+    margin-right: 1.7094%;
 }
 
-.gtnResponsiveHeaderPortlet .options>ol>li {
-    display: inline;
-    /*padding: 0 1em;*/
+.gtnResponsiveHeaderPortlet ol.topmenu {
+    margin: 0;
+    padding-left: 0;
 }
 
-.gtnResponsiveHeaderPortlet .options a {
-    color: #1C5182;
-    text-decoration: none;
+.gtnResponsiveHeaderPortlet .topmenu > li {
+    background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=rt */
+    background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=lt */
+    padding-right: 0.625em;
+    margin-right: 0.2em;
+    display: inline-block;
+    line-height: 1em;
 }
 
-.gtnResponsiveHeaderPortlet .options a:hover {
-    color: #002559;
-    text-decoration: underline;
+.gtnResponsiveHeaderPortlet .topmenu > li:last-child {
+    background: none;
+    margin-right: 0;
+    padding-right: 0;
 }
 
-.gtnResponsiveHeaderPortlet .options .topmenu.collapsed {
-    width: 100%;
-}
+.gtnResponsiveHeaderPortlet .options a {font-size: 0.9375em;}
 
-.gtnResponsiveHeaderPortlet .options .topmenu.collapsed ol li {
-    display: block;
-    padding: 0;
-}
+.gtnResponsiveHeaderPortlet .options a:hover {text-decoration: underline;}
+
+
+/* Right menu expanded */
+
+.gtnResponsiveHeaderPortlet .collapsibleRow.expanded {width: 100%;}
 
 .gtnResponsiveHeaderPortlet .collapseButton {
     display: none;
@@ -92,52 +73,137 @@
     float: right; /* orientation=lt */
 }
 
-.gtnResponsiveHeaderPortlet .collapseButton:after {
-    content: "";
-    border: 0.3em transparent solid;
-    border-top-color: #666;
-    position: absolute;
-    right: 0.3em;
-    top: 2em;
+
+/* Right menu collapsed */
+
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed {
+    width: 100%;
+    position: relative;
 }
 
-.gtnResponsiveHeaderPortlet .collapseButton.enabled:after {
-    content: "";
-    border: 0.3em transparent solid;
-    border-bottom-color: #666;
-    position: absolute;
-    right: 0.3em;
-    top: 1.6em;
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed > .collapseButton {display: block;}
+
+.gtnResponsiveHeaderPortlet .userpreferencebutton {
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
+    margin-top: 1.4375em;
+    margin-right: 1.7094%;
+    width: 2.5em;
+    height: 1.875em;
+    background-color: #F5F5F5;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e6e6e6)); /* Chrome, Safari 4+ */
+    background-image: -webkit-linear-gradient(top, #fff, #e6e6e6); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+    background-image:    -moz-linear-gradient(top, #fff, #e6e6e6); /* Firefox 3.6-15 */
+    background-image:     -ms-linear-gradient(top, #fff, #e6e6e6); /* IE 10+ */
+    background-image:      -o-linear-gradient(top, #fff, #e6e6e6); /* Opera 11.10-12.00 */
+    background-image:         linear-gradient(to bottom, #fff, #e6e6e6); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+    background-position: center top;
+    background-repeat: repeat-x;
+    border-radius: 0.25em;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #A2A2A2;
+    border-style: solid;
+    border-width: 0.07142em;
+    box-shadow: 0 0.07142em 0 rgba(255, 255, 255, 0.2) inset, 0 0.07142em 0.14284em rgba(0, 0, 0, 0.05);
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow {
-    white-space: nowrap;
+.gtnResponsiveHeaderPortlet .userpreferencebutton:hover {
+    background-color: #E6E6E6;
+    background-image: none;
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed,.gtnResponsiveHeaderPortlet .collapsibleRow.expanded {
-    white-space: inherit;
+.gtnResponsiveHeaderPortlet .enabled {
+    background-color: #eaeaea;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#e7e7e7)); /* Chrome, Safari 4+ */
+    background-image: -webkit-linear-gradient(top, #eee, #e7e7e7); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+    background-image:    -moz-linear-gradient(top, #eee, #e7e7e7); /* Firefox 3.6-15 */
+    background-image:     -ms-linear-gradient(top, #eee, #e7e7e7); /* IE 10+ */
+    background-image:      -o-linear-gradient(top, #eee, #e7e7e7); /* Opera 11.10-12.00 */
+    background-image:         linear-gradient(to bottom, #eee, #e7e7e7); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+    box-shadow: inset 1px 0px 5px rgba(0,0,0,0.3);
+    border-color: #c3c3c3;
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapseButton {
-    display: inline;
+.gtnResponsiveHeaderPortlet .btn {
+    background-image: url(../images/icon-user.svg);
+    background-color: transparent;
+    background-position: center 0.5em;
+    background-repeat: no-repeat;
+    display: block;
+    text-indent: -999999em;
+    width: 2.5em;
+    height: 1.875em;
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapsibleContent:not(.display){
-    display:none;
-}
+.gtnResponsiveHeaderPortlet .userpreferencebutton:hover .btn,
+.gtnResponsiveHeaderPortlet .enabled .btn {background-position: center -1.6875em;}
 
-.gtnResponsiveHeaderPortlet .collapsed>.collapsibleContent.display {
-    background-color: rgba(0, 0, 0, 0.07);
-}
+.gtnResponsiveHeaderPortlet .enabled .btn {border-color: #c3c3c3;}
 
-.gtnResponsiveHeaderPortlet .collapseButton.enabled {
-    background-color: rgba(0, 0, 0, 0.07);
-}
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed > .collapsibleContent {display:none;}
 
-.gtnResponsiveHeaderPortlet .clear {
+.gtnResponsiveHeaderPortlet .collapsed > .collapsibleContent.display {display: block;}
+
+.gtnResponsiveHeaderPortlet .collapsed .options.display {
     clear: both;
-    width: 0;
+    margin-right: 0.69em;
+    margin-top: 0.75em;
 }
+
+
+/* Clearfix */ /* This could be moved to a common area */
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+
+
+/* RWD */
+
+@media screen and (max-width: 47.5em) { /* 760px */
+
+    .gtnResponsiveHeaderPortlet .logo {   
+        width: 8.5625em;
+        height: 2.25em;
+    }
+    
+    .gtnResponsiveHeaderPortlet .options {
+        margin-top: 1.9375em;
+    }
+    
+}
+
+@media screen and (max-width: 30em) { /* 480px */
+    
+    .gtnResponsiveHeaderPortlet .logo {  
+        margin-top: 0.625em; 
+        margin-left: 0.625em;
+        width: 8em;
+        height: 2.0625em;
+    }
+    
+    .gtnResponsiveHeaderPortlet .options {
+        margin-top: 1.1875em;
+        margin-right: 0.625em;
+    }
+    
+    .gtnResponsiveHeaderPortlet .userpreferencebutton {
+        margin-top: 0.6875em;
+        margin-right: 0.625em;
+    }
+
+}
+
+
+/* ------------------------------------------ Submenu support ------------------------------------------ */
 
 .gtnResponsiveHeaderPortlet .submenu {
     background-color: #EEE;
@@ -168,10 +234,15 @@
     display: block;
 }
 
+.gtnResponsiveHeaderPortlet .submenu > li {
+    margin: 1em;
+}
+
 /* On browser which support :not this works very nicely when using a mouse. Unfortunately, iOS does not support it */
 /* .gtnResponsiveHeaderPortlet .menuelement.close:not(:hover)>.submenu { */
 /* 	display:none; */
 /* } */
+
 .gtnResponsiveHeaderPortlet .menuelement.close>.submenu {
     display: none;
 }
@@ -197,9 +268,6 @@
 }
 
 /* TODO: figure out if there is a better way to handle this, its a pain that it doesn't inherit padding 0 from the parent */
-.gtnResponsiveHeaderPortlet ol.topmenu {
-    padding: 0;
-}
 
 .gtnResponsiveHeaderPortlet .topmenu .menuelement.close .menuarrow {
     border-color: black transparent transparent;

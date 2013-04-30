@@ -35,11 +35,11 @@
 </c:if>
 
 <div id="<portlet:namespace/>_gtnResponsiveHeaderPortlet" class="gtnResponsiveHeaderPortlet">
-    <div class="collapsibleRow">
+    <div class="collapsibleRow clearfix">
         <div id="<portlet:namespace/>_logo" class="logo" onclick="window.location = '${homePageLink}';"></div>
         <div id="<portlet:namespace/>_icon" class="userpreferencebutton collapseButton"
             data-target="#<portlet:namespace/>_options" data-action="toggleCSS" data-target-class="display"
-            data-self-class="enabled"></div>
+            data-self-class="enabled"><a href="#" onclick="return false" class="btn">Show user actions</a></div>
         <div id="<portlet:namespace/>_options" class="options collapsibleContent">
             <ol class="topmenu collapsibleRow">
                 <c:choose>
@@ -89,5 +89,4 @@
             </ol>
         </div>
     </div>
-    <div class="clear"></div>
 </div>
