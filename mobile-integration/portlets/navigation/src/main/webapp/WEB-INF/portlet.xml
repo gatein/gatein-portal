@@ -19,5 +19,13 @@
             <short-title>Navigation Portlet</short-title>
             <keywords>System</keywords>
         </portlet-info>
+
+        <portlet-preferences>
+          <preference>
+            <name>ShowEmptyCategories</name>
+            <value>true</value>
+          </preference>
+        </portlet-preferences>
+
     </portlet>
 </portlet-app>

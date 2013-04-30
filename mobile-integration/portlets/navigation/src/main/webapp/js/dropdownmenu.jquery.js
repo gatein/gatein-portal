@@ -62,49 +62,72 @@
             }
         }
 
+        function openSubmenu(menuItem) {
+            // Close sibling submenus so that only the submenu opened above is present
+            menuItem.siblings().each(function() {
+                $(this).children().remove(settings.submenuElement);
+
+                if (!$(this).hasClass(settings.collapsedClass)) {
+                    $(this).addClass(settings.collapsedClass);
+                }
+            });
+
+            // Find the newly opened submenu
+            var submenuElement = menuItem.children(settings.submenuElement);
+
+            // Check whether the newly opened submenu fits into the window
+            checkMenuFit(submenuElement);
+        }
+
         // Check wether the submenu fits into the resized window
         $(window).resize(function(){            
             // Traverse from topmenu through opened submenus and inverse them if needed
             findAndCheckOpenedSubmenu(topmenu);
         });
 
-        // Apply the onClick event function for each menu handler (arrow)
-        $(this).find(settings.arrowElement).each(function(){
-            $(this).click(function(){
-                var menuItem = $(this).parent(settings.menuElement);
+        function submenuOpenAction(actionItem) {
+            var menuItem = actionItem.parent(settings.menuElement);
+            menuItem.toggleClass(settings.collapsedClass);
 
-                // Close sibling submenus so that only the submenu opened above is present
-                menuItem.siblings().each(function(){                 
-                    $(this).toggleClass(settings.collapsedClass, true);                    
+            if (menuItem.children(settings.submenuElement).length === 0) {
+                $.ajax({
+                    type: "POST",
+                    url: actionItem.attr('href').substring(1),
+                    cache: false,
+                    dataType: "text",
+                    success: function(data) {
+                        menuItem.append(data);
+                        openSubmenu(menuItem);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        console && console.log("Ajax error");
+                    }
                 });
-                
-                // Close all submenus and reset the current class if present in them
-                menuItem.find(settings.menuElement).each(function(){
-                    if (!$(this).hasClass(settings.collapsedClass))
-                        $(this).addClass(settings.collapsedClass);
-                    
-                    $(this).removeClass(settings.lastOpenedClass);
-                });
-                
-                // Open the submenu under the menu handler
-                $(this).parent(settings.menuElement).toggleClass(settings.collapsedClass);
-                
-                // Mark current menuitem and unmark its parent
-                if (!menuItem.hasClass(settings.collapsedClass)){
-                    menuItem.addClass(settings.lastOpenedClass);
-                    menuItem.parent().parent().removeClass(settings.lastOpenedClass);
-                } else {
-                    menuItem.removeClass(settings.lastOpenedClass);
-                    menuItem.parent().parent().addClass(settings.lastOpenedClass);
-                }
-                
-                // Find the newly opened submenu
-                var submenuElement = $(this).parent(settings.menuElement).children(settings.submenuElement);
+            } else {
+                menuItem.children().remove(settings.submenuElement);
+            }
+        }
 
-                // Check whether the newly opened submenu fits into the window
-                checkMenuFit(submenuElement);
+        /* Apply the onClick event function for each menu handler (arrow)
+         * Thanks to the usage of the on function, this is applied even to
+         * the content loaded by ajax and inserted to the dom in the future.
+         */
+        topmenu.children(settings.menuElement).each(function(){
+
+            $(this).on("click", settings.arrowElement, function(e) {
+                submenuOpenAction($(this));
             });
+
+            $(this).on("hover", settings.submenuElement + " > " + settings.menuElement, function(e) {
+                var hasChildren = $(this).children(settings.arrowElement).length > 0;
+                var isExpanded = topmenu.css("z-index") == 1;
+                if (hasChildren && isExpanded){
+                    submenuOpenAction($(this).children(settings.arrowElement));
+                }
+            });
+
         });
+
     };
 
 })(jQuery);
