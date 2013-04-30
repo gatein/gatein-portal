@@ -64,7 +64,7 @@
 								<td>Redirect to #{r.redirectSite} <span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
 								<td class="actions" style="text-align: center;">
 									<h:commandLink styleClass="configure-redirect redirect-summary">
-										<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" />
+										<f:ajax event="action" render=":edit_form" listener="#{rdrEdit.load(rdrs.siteName, r.name)}" onevent="configureRedirect()"/>
 										<i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i>
 									</h:commandLink>
 									<h:commandLink styleClass="delete-redirect redirect-summary">

@@ -161,6 +161,17 @@ function hideAlert(aclass) {
 	});
 }
 
+function configureRedirect() {
+	$('.add-redirect').css("visibility", "hidden");
+
+	// fade summary out...
+	$('#redirectSummaryWrapper').fadeOut(300, function() {
+		// .. and when done, fade config in
+		$('.edit-group').fadeIn(300, function() {
+			sortable();
+		});
+	});
+}
 
 
 
@@ -460,17 +471,17 @@ editRedirect = function() {
 	});
 
 	// Fade out summary and fade in edit on "Configure" link click
-	$('.configure-redirect').live('click', function(){
-		$('.add-redirect').css("visibility", "hidden");
+	// $('.configure-redirect').live('click', function(){
+	// 	$('.add-redirect').css("visibility", "hidden");
 
-		// fade summary out...
-		$('#redirectSummaryWrapper').fadeOut(300, function() {
-			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300, function() {
-				sortable();
-			});
-		});
-	});
+	// 	// fade summary out...
+	// 	$('#redirectSummaryWrapper').fadeOut(300, function() {
+	// 		// .. and when done, fade config in
+	// 		$('.edit-group').fadeIn(300, function() {
+	// 			sortable();
+	// 		});
+	// 	});
+	// });
 
 	// Avoid showing summary and edit when edit is loaded. maybe show modal to confirm if there are changes made ?
 	$('.site-link').live('click', function(){
