@@ -165,9 +165,9 @@ function configureRedirect() {
 	$('.add-redirect').css("visibility", "hidden");
 
 	// fade summary out...
-	$('#redirectSummaryWrapper').fadeOut(300, function() {
+	$('#redirectSummaryWrapper').fadeOut(150, function() {
 		// .. and when done, fade config in
-		$('.edit-group').fadeIn(300, function() {
+		$('.edit-group').fadeIn(150, function() {
 			sortable();
 		});
 	});
