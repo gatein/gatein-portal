@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2012, Red Hat, Inc., and individual contributors
+ * Copyright 2013, Red Hat, Inc., and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  *
@@ -22,22 +22,13 @@
 
 package org.gatein.cdi.contexts;
 
-import javax.enterprise.context.spi.Contextual;
-import java.util.HashMap;
-import java.util.Map;
+import javax.enterprise.context.spi.Context;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-class BeanStore {
-    private Map<Contextual<?>, Object> map = new HashMap<Contextual<?>, Object>();
+public interface CDIPortletContext extends Context {
 
-    @SuppressWarnings("unchecked")
-    public <T> T getBean(Contextual<T> contexual) {
-        return (T) map.get(contexual);
-    }
-
-    public void addBean(Contextual<?> contextual, Object bean) {
-        map.put(contextual, bean);
-    }
+    void transition(HttpServletRequest request, String windowId, PortletRequestLifecycle.State state);
 }

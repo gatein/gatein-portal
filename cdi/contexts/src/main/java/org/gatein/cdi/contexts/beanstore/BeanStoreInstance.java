@@ -20,10 +20,19 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.cdi.contexts;
+package org.gatein.cdi.contexts.beanstore;
+
+import javax.enterprise.context.spi.Contextual;
+import javax.enterprise.context.spi.CreationalContext;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public interface PortletLifecycleContext extends CDIPortletContext {
+public interface BeanStoreInstance<T> {
+
+    T getInstance();
+
+    CreationalContext<T> getCreationalContext();
+
+    Contextual<T> getContextual();
 }

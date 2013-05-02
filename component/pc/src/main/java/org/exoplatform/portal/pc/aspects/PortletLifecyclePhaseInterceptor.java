@@ -9,34 +9,34 @@ import org.gatein.pc.api.invocation.PortletInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.ResourceInvocation;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.gatein.pc.api.spi.WindowContext;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
 
 /**
- * This interceptor just sets the portlet lifecycle phase so it can be retrieved else where during a request.
+ * This interceptor exposes the current phase (i.e. ACTION_PHASE, RENDER_PHASE, etc) and the current window id for the
+ * portlet request/invocation.
  *
  * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
 public class PortletLifecyclePhaseInterceptor extends PortletInvokerInterceptor {
 
-    private static final ThreadLocal<String> phase = new ThreadLocal<String>();
+    private static final ThreadLocal<PortletInvocation> INVOCATION_THREAD_LOCAL = new ThreadLocal<PortletInvocation>();
 
     @Override
     public PortletInvocationResponse invoke(PortletInvocation invocation) throws IllegalArgumentException, PortletInvokerException {
-        String portletPhase = getPhase(invocation);
         try {
-            phase.set(portletPhase);
+            INVOCATION_THREAD_LOCAL.set(invocation);
             return super.invoke(invocation);
         } finally {
-            phase.remove();
+            INVOCATION_THREAD_LOCAL.remove();
         }
     }
 
-    public static String getLifecyclePhase() {
-        return phase.get();
-    }
+    public static String currentPhase() {
+        PortletInvocation invocation = getCurrentInvocation();
+        if (invocation == null) return null;
 
-    private String getPhase(PortletInvocation invocation) {
         if (invocation instanceof ActionInvocation) {
             return PortletRequest.ACTION_PHASE;
         } else if (invocation instanceof EventInvocation) {
@@ -48,5 +48,19 @@ public class PortletLifecyclePhaseInterceptor extends PortletInvokerInterceptor 
         } else {
             return null;
         }
+    }
+
+    public static String currentWindowId() {
+        PortletInvocation invocation = getCurrentInvocation();
+        if (invocation == null) return null;
+
+        WindowContext wc = invocation.getWindowContext();
+        if (wc == null) return null;
+
+        return wc.getId();
+    }
+
+    private static PortletInvocation getCurrentInvocation() {
+        return INVOCATION_THREAD_LOCAL.get();
     }
 }

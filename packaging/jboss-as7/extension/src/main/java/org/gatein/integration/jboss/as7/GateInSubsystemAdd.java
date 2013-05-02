@@ -27,6 +27,7 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
 import java.util.List;
 
 import org.gatein.integration.jboss.as7.deployment.CdiContextDependencyProcessor;
+import org.gatein.integration.jboss.as7.deployment.CdiWebIntegrationProcessor;
 import org.gatein.integration.jboss.as7.deployment.CdiContextExtensionProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInWarStructureDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.DeploymentScannerService;
@@ -64,10 +65,11 @@ import org.jboss.msc.service.ServiceController;
  */
 public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
-    static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0B80;
+    static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0801;
     static final int DEPENDENCIES_PORTLET_MODULE = 0x1100;
     static final int DEPENDENCIES_PORTLET_BRIDGE_MODULE = 0x2300;
-    static final int DEPENDENCIES_CDI_CONTEXT_MODULE = 0x2400;
+    static final int PARSE_CDI_WEB_INTEGRATION = 0x2B11;
+    static final int STRUCTURE_CDI_CONTEXT_DEPENDENCY = 0x0802;
     static final int STRUCTURE_WSRP = 0x2001;
     static final int STRUCTURE_GATEIN = 0x2000;
     static final int POST_MODULE_GATEIN_INIT = 0x2000;
@@ -114,8 +116,13 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
                 processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN,
                         new GateInStructureDeploymentProcessor(config));
                 processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_WSRP, new WSRPStructureDeploymentProcessor());
-                processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT,
+                processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT,
                         new PortletWarDeploymentInitializingProcessor(config));
+                processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_CDI_CONTEXT_DEPENDENCY,
+                        new CdiContextDependencyProcessor());
+
+                processorTarget.addDeploymentProcessor(Phase.PARSE, PARSE_CDI_WEB_INTEGRATION,
+                        new CdiWebIntegrationProcessor());
                 processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN,
                         new GateInDependenciesDeploymentProcessor());
                 processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS,
@@ -127,8 +134,6 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
                         new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
                 processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_BRIDGE_MODULE,
                         new PortletBridgeDependencyProcessor());
-                processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_CDI_CONTEXT_MODULE,
-                        new CdiContextDependencyProcessor());
 
                 processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT,
                         new WSRPPostModuleDeploymentProcessor());

@@ -22,8 +22,12 @@
 
 package org.gatein.cdi.contexts;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public interface PortletLifecycleContext extends CDIPortletContext {
+public interface PortletRedisplayedContext extends CDIPortletContext {
+
+    void dissociate(HttpSession session);
 }

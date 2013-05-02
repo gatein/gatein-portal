@@ -20,10 +20,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.cdi.contexts;
+package org.gatein.cdi.contexts.beanstore;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public interface PortletLifecycleContext extends CDIPortletContext {
+public interface LockedBean {
+
+    void unlock();
 }

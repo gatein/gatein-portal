@@ -20,10 +20,20 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.cdi.contexts;
+package org.gatein.cdi.contexts.beanstore;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public interface PortletLifecycleContext extends CDIPortletContext {
+public interface BeanStore extends Iterable<String> {
+
+    <T> BeanStoreInstance<T> getBean(String id);
+
+    <T> void put(String id, BeanStoreInstance<T> instance);
+
+    LockedBean lock(String id);
+
+    void destroy();
+
+    void destroy(String windowId);
 }

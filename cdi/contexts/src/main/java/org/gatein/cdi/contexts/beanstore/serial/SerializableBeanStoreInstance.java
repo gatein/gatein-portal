@@ -20,10 +20,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.cdi.contexts;
+package org.gatein.cdi.contexts.beanstore.serial;
+
+import java.io.Serializable;
+
+import javax.enterprise.context.spi.Contextual;
+import javax.enterprise.context.spi.CreationalContext;
+
+import org.gatein.cdi.contexts.beanstore.BeanStoreInstance;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public interface PortletLifecycleContext extends CDIPortletContext {
+public class SerializableBeanStoreInstance<T> implements BeanStoreInstance<T>, Serializable {
+    private final Contextual<T> contextual;
+    private final T instance;
+    private final CreationalContext<T> creationalContext;
+
+    public SerializableBeanStoreInstance(Contextual<T> contextual, T instance, CreationalContext<T> creationalContext) {
+        this.contextual = new SerializableContextual<T>(contextual);
+        this.instance = instance;
+        this.creationalContext = creationalContext;
+    }
+
+    @Override
+    public T getInstance() {
+        return instance;
+    }
+
+    @Override
+    public CreationalContext<T> getCreationalContext() {
+        return creationalContext;
+    }
+
+    @Override
+    public Contextual<T> getContextual() {
+        return contextual;
+    }
 }

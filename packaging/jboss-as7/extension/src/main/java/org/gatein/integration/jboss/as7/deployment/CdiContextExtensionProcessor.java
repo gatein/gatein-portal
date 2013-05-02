@@ -1,6 +1,6 @@
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.cdi.CDIPortletExtension;
+import org.gatein.cdi.contexts.CDIPortletContextExtension;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -19,6 +19,9 @@ import javax.enterprise.inject.spi.Extension;
 import java.lang.reflect.Constructor;
 
 /**
+ * Need to forcibly add our CDI extension into the list created by Weld subsystem as
+ * any dependencies don't have their services files read by container.
+ *
  * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
 public class CdiContextExtensionProcessor implements DeploymentUnitProcessor {
@@ -40,7 +43,7 @@ public class CdiContextExtensionProcessor implements DeploymentUnitProcessor {
 
         final Module module = deploymentUnit.getAttachment(Attachments.MODULE);
         final DeploymentReflectionIndex index = deploymentUnit.getAttachment(Attachments.REFLECTION_INDEX);
-        final Extension extension = loadExtension(CDIPortletExtension.class.getName(), index,  module.getClassLoader());
+        final Extension extension = loadExtension(CDIPortletContextExtension.class.getName(), index,  module.getClassLoader());
 
         Metadata<Extension> metadata = new MetadataImpl<Extension>(extension, deploymentUnit.getName());
         log.debug("Loaded portable extension " + extension);
