@@ -53,9 +53,9 @@ public class PortalController extends AbstractHttpServlet {
     /**
      * The onInit() method is used to prepare the portal to receive requests.
      *
-     * 1) Get the WebAppController component from the container 2) Create a new PortalApplication, init it with the
-     * ServletConfig object (which contains init params) 3) Register that PortalApplication inside WebAppController 4) Create a
-     * new PortalRequestHandler object and register it in the WebAppController
+     * 1) Get the WebAppController component from the container and delegate the init task to this component
+     * 2) WebAppController will then delegate to coressponsding handlers depends on the URL. For example:
+     * PortalRequestHandler is in charged of creating and registering PortalApplication and handle the requests for portal
      */
     private void onInit(ServletConfig sConfig, PortalContainer portalContainer) {
         // Keep the old ClassLoader
@@ -82,6 +82,8 @@ public class PortalController extends AbstractHttpServlet {
     }
 
     /**
+     * Register onInit callback to PortalContainerPostCreateTask and register the servlet context with RootContainer.
+     * So that portal.war don't need PortalContainerConfigOwner listener. (extension project will need this listener)
      * @see org.exoplatform.container.web.AbstractHttpServlet#afterInit(javax.servlet.ServletConfig)
      */
     public void afterInit(final ServletConfig config) throws ServletException {

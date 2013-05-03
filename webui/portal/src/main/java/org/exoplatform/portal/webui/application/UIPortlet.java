@@ -108,7 +108,22 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-/** May 19, 2006 */
+/**
+ * This UI component represent a portlet window on a page. <br/>
+ * Each user request to a portlet will be passed through this class then delegate call to the portlet container<br/>
+ * UIPortletLifecycle do the main request router: delegate the job to portlet action listeners according to the url parameters<br/>
+ *
+ * ProcessAction, ServeResource, Render action listeners will receive event if request url contain parameter
+ * point to them, those event will delegate call to portlet container to call JSR 286 portlet lifecycle method<br/>
+ *
+ * ProcessEvents, ChangePortletMode, ChangeWindowState listener will receive event after the portlet action invocation response.
+ * (dispatched during the process of ProcessActionListener)<br/>
+ *
+ * DeleteComponent, EditPortlet action listener is portal specific listener, come from the UI of portal
+ *
+ * @see UIPortletLifecycle
+ * @see UIPortletActionListener
+ */
 @ComponentConfig(lifecycle = UIPortletLifecycle.class, template = "system:/groovy/portal/webui/application/UIPortlet.gtmpl", events = {
         @EventConfig(listeners = RenderActionListener.class), @EventConfig(listeners = ChangePortletModeActionListener.class),
         @EventConfig(listeners = ChangeWindowStateActionListener.class),
@@ -229,6 +244,11 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         return applicationId;
     }
 
+    /**
+     * portletStyle is 'Window' when it's in WebOS project - an GateIn extension,
+     * portletStyle is null if is not in WebOS
+     * @return a string represent current portlet style
+     */
     public String getPortletStyle() {
         return portletStyle;
     }
@@ -237,22 +257,45 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         portletStyle = s;
     }
 
+    /**
+     * @return true if portlet is configured to show control icon that allow to change portlet mode
+     */
     public boolean getShowPortletMode() {
         return showPortletMode;
     }
 
+    /**
+     * Used by portal to show the icon that allow to change portlet mode
+     * @param b if show icon
+     */
     public void setShowPortletMode(Boolean b) {
         showPortletMode = b;
     }
 
+    /**
+     *  Used internally by portal to change current state
+     *  if portlet is in portal or in page
+     */
     public void setPortletInPortal(boolean b) {
         portletInPortal_ = b;
     }
 
+    /**
+     * Check if portlet is in portal
+     * @return true if portlet is in portal
+     */
     public boolean isPortletInPortal() {
         return portletInPortal_;
     }
 
+    /**
+     * Theme is composed of map between theme name and skin name.
+     * Theme format: {skinName}:{themeName}::{anotherSkin}:{anotherTheme}.
+     * For example: the default them is 'Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme'.
+     * Default theme means if portal skin is 'Default', this portlet's theme is 'DefaultTheme. If portal change skin to 'Vista',
+     * portlet theme will be change to 'VistaTheme'.
+     * @return current theme setting
+     */
     public String getTheme() {
         if (theme_ == null || theme_.trim().length() < 1) {
             return DEFAULT_THEME;
@@ -260,10 +303,21 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         return theme_;
     }
 
+    /**
+     * Used internally by Portal to change current portlet theme.
+     * Theme format: {skinName}:{themeName}::{anotherSkin}:{anotherTheme}.
+     * For example: 'Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme'
+     */
     public void setTheme(String theme) {
         theme_ = theme;
     }
 
+    /**
+     * Get theme name according to portal skin.
+     * If there is no coressponding theme. return 'DefaultTheme'
+     * @param skin - portal skin
+     * @return theme name
+     */
     public String getSuitedTheme(String skin) {
         if (skin == null) {
             skin = Util.getUIPortalApplication().getSkin();
@@ -275,6 +329,11 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         return DEFAULT_THEME.split(":")[1];
     }
 
+    /**
+     * Add map between portlet theme and portal skin
+     * @param skin - portal skin name
+     * @param theme - portlet theme name
+     */
     public void putSuitedTheme(String skin, String theme) {
         if (skin == null) {
             skin = Util.getUIPortalApplication().getSkin();
@@ -339,6 +398,13 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         supportedPublicParams_ = supportedPublicRenderParameters;
     }
 
+    /**
+     * Get localized displayName metadata configured in portlet.xml.<br/>
+     * If can't find localized displayName, return portlet name.<br/>
+     * If portlet doesn't exists anymore, return empty string.<br/>
+     * This value is cached in session, that means it only query to portlet container one time
+     * @return display name
+     */
     public String getDisplayName() {
         if (displayName == null) {
             org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
@@ -875,10 +941,21 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         setState(state);
     }
 
+    /**
+     * Return modifed portlet stated (after portlet action invovation)
+     * @param modifiedContext
+     * @throws Exception
+     */
     public C getModifiedState(PortletContext modifiedContext) throws Exception {
         return adapter.getStateFromModifiedContext(this.getPortletContext(), modifiedContext);
     }
 
+    /**
+     * Return cloned portlet state (updated after portlet action invocation).
+     * This method is used in case WSRP
+     * @param clonedContext
+     * @throws Exception
+     */
     public C getClonedState(PortletContext clonedContext) throws Exception {
         return adapter.getstateFromClonedContext(this.getPortletContext(), clonedContext);
     }
@@ -907,10 +984,20 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         }
     }
 
+    /**
+     * navigationalState - internal portlet container parameter (go with portlet url).
+     * called when navigation state updated
+     * @param navigationalState
+     */
     void setNavigationalState(StateString navigationalState) {
         this.navigationalState = navigationalState;
     }
 
+    /**
+     * configuredTitle - the localized title configured in portlet.xml.
+     * This value returned ans set after portlet container invocation.
+     * @param _configuredTitle - portlet title responsed from portlet container
+     */
     protected void setConfiguredTitle(String _configuredTitle) {
         this.configuredTitle = _configuredTitle;
     }
@@ -940,6 +1027,20 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         return getDisplayName();
     }
 
+    /**
+     * Parsing response from portlet container. The response contains:<br/>
+     * html markup, portlet title, response properties:<br/>
+     * - JS resource dependency (defined in gatein-resources.xml)<br/>
+     * - html header<br/>
+     * - cookie<br/>
+     * - extra markup header<br/>
+     * If errors occur during portlet lifecycle processing. PortletExceptionHandleService is called.
+     * Add plugins to this service to customize portlet error handler
+     * @param pir - response object from portlet container
+     * @param context - request context
+     * @return markup to render on browser
+     * @see PortletExceptionHandleService
+     */
     public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestContext context) {
         PortalRequestContext prcontext = (PortalRequestContext) context;
 

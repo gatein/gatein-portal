@@ -24,7 +24,8 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIPortletApplication;
 
 /**
- * Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 1, 2006
+ * WebUI portlet should use this class or the derived of this class as its lifecycle.<br/>
+ * This class help to delegate lifcycle method to the correct target of the request (base on component id)
  */
 public class UIApplicationLifecycle extends Lifecycle<UIPortletApplication> {
 

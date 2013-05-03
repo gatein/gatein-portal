@@ -30,7 +30,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.exception.MessageException;
 
 /**
- * Created by The eXo Platform SAS May 8, 2006
+ * This is abstract class for Root WebUI component of applications in GateIn. <br/>
+ * Act as container of WebUI components, it also provide method to show a Popup message
  */
 @Serialized
 public abstract class UIApplication extends UIContainer {
@@ -113,6 +114,10 @@ public abstract class UIApplication extends UIContainer {
         getUIPopupMessages().processRender(context);
     }
 
+    /**
+     * Wrap the action processing by a try catch, if there is exceptions, show a popup message
+     * if no exception the processAction will be delegate to the target of the action request
+     */
     public void processAction(WebuiRequestContext context) throws Exception {
         try {
             super.processAction(context);
@@ -125,6 +130,10 @@ public abstract class UIApplication extends UIContainer {
         }
     }
 
+    /**
+     * Triggered when there is Ajax request. <br/>
+     * This method add xml structure that help PortalHttpRequest.js parse the response
+     */
     public void renderBlockToUpdate(UIComponent uicomponent, WebuiRequestContext context, Writer w) throws Exception {
         w.write("<div class=\"BlockToUpdate\">");
         w.append("<div class=\"BlockToUpdateId\">").append(uicomponent.getId()).append("</div>");

@@ -92,9 +92,11 @@ public class WebAppController {
     private final AtomicReference<String> configurationPathRef;
 
     /**
-     * The WebAppControler along with the PortalRequestHandler defined in the init() method of the PortalController servlet
-     * (controller.register(new PortalRequestHandler())) also add the CommandHandler object that will listen for the incoming
-     * /command path in the URL.
+     * Must have 'controller.config' as init parameter configuration (in xml)
+     * that point to the controller.xml used to initialize navigation controller
+     *
+     * This service component is a container for applications: PortalApplication, PortletApplication, StandaloneApplication....
+     * It use the navigation controller to route the request to corresponding handlers (config as service plugin)
      *
      * @param params the init params
      * @throws Exception any exception
@@ -256,6 +258,12 @@ public class WebAppController {
             handlers.remove(path);
     }
 
+    /**
+     * Delegate init action to handler, for example: PortalRequestHandler have
+     * a change to create and register PortalApplication with WebAppController
+     * @param config
+     * @throws Exception
+     */
     public void onHandlersInit(ServletConfig config) throws Exception {
         Collection<WebRequestHandler> hls = handlers.values();
         for (WebRequestHandler handler : hls) {

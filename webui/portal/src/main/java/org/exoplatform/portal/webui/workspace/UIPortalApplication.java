@@ -311,6 +311,17 @@ public class UIPortalApplication extends UIApplication {
         return (modeState != NORMAL_MODE);
     }
 
+    /**
+     * Return a map of JS resource ids (required to be load for current page) and boolean:
+     * true if that script should be push on the header before html.
+     * false if that script should be load lazily after html has been loaded <br/>
+     *
+     * JS resources always contains SHARED/bootstrap required to be loaded eagerly
+     * and optionally (by configuration) contains: portal js, portlet js, and resouces registered to be load
+     * through JavascriptManager
+     *
+     * @return
+     */
     public Map<String, Boolean> getScripts() {
         PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
         JavascriptManager jsMan = prc.getJavascriptManager();
@@ -345,12 +356,28 @@ public class UIPortalApplication extends UIApplication {
         return ret;
     }
 
+    /**
+     * Return a map of GMD resource ids and their URLs that point to ResourceRequestHandler.
+     * this map will be used by GateIn JS module loader (currently, it is requirejs)
+     * @throws Exception
+     */
     public JSONObject getJSConfig() throws Exception {
         JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
         PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
         return service.getJSConfig(prc.getControllerContext(), prc.getLocale());
     }
 
+    /**
+     * Return corresponding collection of Skin objects depends on current skin name,
+     * this object help to build URL that point to SkinResourceRequestHandler. this handler is responsible to serves for css files <br/>
+     *
+     * The collection contains:
+     * - portal skin modules <br/>
+     * - skin for specific site<br/>
+     * - skin for portlets that belongs to portal (not in the page).
+     * Those portlet skins will be merged into one css resource called CompositeSkin <br/>
+     * we are using ajax to change navigation, if only page is change, only the skin of portlet in page is changed (not the portlet belongs to portal)
+     */
     public Collection<Skin> getPortalSkins() {
         SkinService skinService = getApplicationComponent(SkinService.class);
 
@@ -408,10 +435,8 @@ public class UIPortalApplication extends UIApplication {
     }
 
     /**
-     * Returns a list of portlets skin that have to be added in the HTML head tag. The skin can directly point to a real css
-     * file (this is the case of all the porlet included in a page) or point to a servlet that agregates different portlet CSS
-     * files into one to lower the number of HTTP calls (this is the case in production as all the portlets included in a
-     * portal, and hence there on everypage are merged into a single CSS file)
+     * Returns a set of portlets skin that have to be added in the HTML head tag.
+     *Those portlets doesn't belongs to portal
      *
      * @return the portlet skins
      */
@@ -504,6 +529,9 @@ public class UIPortalApplication extends UIApplication {
         addChild(UIMaskWorkspace.class, UIPortalApplication.UI_MASK_WS_ID, null);
     }
 
+    /**
+     * Check current portal name, if it's changing, reload portal properties (for now, skin setting)
+     */
     @Override
     public void processDecode(WebuiRequestContext context) throws Exception {
         PortalRequestContext prc = (PortalRequestContext) context;
@@ -588,7 +616,9 @@ public class UIPortalApplication extends UIApplication {
      * complex: a) The list of components that should be updated is extracted using the context.getUIComponentToUpdateByAjax()
      * method. That list was setup during the process action phase b) Portlets and other UI components to update are split in 2
      * different lists c) Portlets full content are returned and set with the tag <div class="PortalResponse"> d) Block to
-     * updates (which are UI components) are set within the <div class="PortalResponseData"> tag e) Then the scripts and the
+     * updates (which are UI components) are set within the <div class="PortalResponseData"> tag e) Extra markup headers are in the
+     * <div class="MarkupHeadElements"> tag f) additional scripts are in <div class="ImmediateScripts">, JS GMD modules will be loaded by
+     * generated JS command on AMD js loader, and is put into PortalResponseScript block g) Then the scripts and the
      * skins to reload are set in the <div class="PortalResponseScript">
      */
     public void processRender(WebuiRequestContext context) throws Exception {
@@ -743,7 +773,9 @@ public class UIPortalApplication extends UIApplication {
     }
 
     /**
-     * Reload portal properties. This is needed to be called when it is changing Portal site
+     * Reload portal properties. This is needed to be called when it is changing Portal site<br/>
+     * If user has been authenticated, get the skin name setting from user profile.<br/>
+     * anonymous user or no skin setting in user profile, use the skin setting in portal config
      *
      * @throws Exception
      */
