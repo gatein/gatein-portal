@@ -686,6 +686,10 @@ public class UIPortletActionListener {
 
     }
 
+    /**
+     * This listener is called when the portlet portlet window state has to be changed.
+     * It can be changed by building specific URL, or by programatically in the portlet, then triggered after action or event response
+     */
     public static class ChangeWindowStateActionListener extends EventListener<UIPortlet> {
         public void execute(Event<UIPortlet> event) throws Exception {
             UIPortlet uiPortlet = event.getSource();
