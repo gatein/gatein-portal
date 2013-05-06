@@ -1,15 +1,15 @@
-<%	
+<%
 	import org.exoplatform.services.organization.User;
   import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
-	
+
 	def rcontext = _ctx.getRequestContext();
-	
+
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 %>
 <ul class="UIUserInfoPortlet" id="$uicomponent.id">
 	<li class="Name">
-	<% if(rcontext.getRemoteUser() != null) { 
+	<% if(rcontext.getRemoteUser() != null) {
 	   	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
       	fullName = encoder.encode(uicomponent.getUser().getFullName());
 	%>
@@ -18,4 +18,5 @@
 		<span></span>
 	<%}%>
 	</li>
-</li>
+<!-- GTNPORTAL-2229 -->
+</ul>

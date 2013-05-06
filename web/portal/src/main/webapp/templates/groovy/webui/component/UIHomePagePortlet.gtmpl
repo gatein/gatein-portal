@@ -2,31 +2,33 @@
   import org.exoplatform.portal.webui.util.Util;
   import org.exoplatform.portal.application.PortalRequestContext;
 
-	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+	PortalRequestContext pcontext = Util.getPortalRequestContext();
 	String initialURI = pcontext.getInitialURI();
 %>
 
 <div class="UIHomePagePortlet ClearFix" id="$uicomponent.id">
 	<div class="TRContainer">
-		<div class="PortletDecoration">					
+		<div class="PortletDecoration">
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%></div>
-			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank"></a>
+			<!--GTNPORTAL-2929 -->
+			<a class="VersionIcon" href="http://www.jboss.org/gatein/" onclick="window.open('http://www.jboss.org/gatein/','new','');return false"></a>
 			<div class="DotLine"><span></span></div>
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>
-			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank"></a>
-			
+			<!--GTNPORTAL-2929 -->
+			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" onclick="window.open('http://community.jboss.org/en/gatein?view=discussions','new','');return false"></a>
+
 		</div>
 	</div>
 	<div class="TLContainer">
 		<div class="PortletDecoration">
-		
+
 			<div class="HomePortletAdBackround">
 				<div class="AdImageLeft">
 					<div class="AdImageRight">
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="HomePortletContent">
 				<div class="LeftAccountsContainer">
 					<div class="RightAccountsContainer">
@@ -43,7 +45,7 @@
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Password")%></div><span>gtn</span>
 										</div>
 									</div>
-								</div>	
+								</div>
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock ManagerUser">
 									<div class="AccountInfos">
@@ -85,8 +87,8 @@
 					</div>
 				</div>
 			</div>
-			
-		</div>	
-	</div>	
+
+		</div>
+	</div>
 </div>
 

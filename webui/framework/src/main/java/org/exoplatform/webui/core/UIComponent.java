@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -67,6 +68,10 @@ public abstract class UIComponent {
             this.id = Integer.toString(hashCode());
         } else {
             this.id = id;
+        }
+        // TODO GTNPORTAL-2929
+        if (Character.isDigit(this.id.charAt(0))) {
+            this.id = "gtn" + this.id;
         }
         return this;
     }
@@ -274,10 +279,18 @@ public abstract class UIComponent {
 
         //
         if (ajax) {
-            return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
+            // TODO GTNPORTAL-2929
+            String temp = urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
+            temp = temp.replaceAll("&", "&amp;");
+            return temp;
+            // return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
         } else {
             try {
-                return urlBuilder.createURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
+                // TODO GTNPORTAL-2929
+                String temp = urlBuilder.createURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
+                temp = temp.replaceAll("&", "&amp;");
+                return temp;
+                // return urlBuilder.createURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
             } catch (Exception e) {
                 log.error("Could not render component even URL for id=" + beanId + ", name=" + name, e);
                 return "";

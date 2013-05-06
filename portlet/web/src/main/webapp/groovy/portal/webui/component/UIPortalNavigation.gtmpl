@@ -1,4 +1,4 @@
-<% 
+<%
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;
@@ -8,14 +8,14 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
-	
+
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.require("SHARED/navigation", "nav")
 				.addScripts("nav.UIPortalNavigation.onLoad('" + uicomponent.id + "');")
 				.addScripts("nav.UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
 
-	PortalRequestContext pcontext = Util.getPortalRequestContext();     
+	PortalRequestContext pcontext = Util.getPortalRequestContext();
 	PortalURL nodeURL = nodeurl();
 
 	public void renderChildrenContainer(UserNode node, PortalURL nodeURL) {
@@ -25,18 +25,18 @@
                                     for(child in node.getChildren()) {
 										renderChildNode(child, nodeURL);
 									}
-       print """				
+       print """
 			</ul>
-		""";	  
-	}  
-	
+		""";
+	}
+
 	public void renderChildNode(UserNode node, PortalURL nodeURL) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "NormalItem"; // OverItem
-		if(selectedNode != null && node.getId() == selectedNode.getId()) {			 
+		if(selectedNode != null && node.getId() == selectedNode.getId()) {
 				tabStyleNavigation = "SelectedItem";
-		}				
-		
+		}
+
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		String arrowIcon = "";
@@ -46,7 +46,10 @@
 		   MimeResponse res = _ctx.getRequestContext().getResponse();
 		   javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 		   resourceURL.setResourceID(node.getURI());
-		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+			// GTNPORTAL-2229
+			String temp = resourceURL.toString().replaceAll("&","&amp;");
+			getNodeURL = "exo:getNodeURL='" + temp + "'";
+			// getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
 
 		String label = node.getEncodedResolvedLabel();
@@ -55,7 +58,7 @@
 			title = label;
 			label = HTMLEntityEncoder.getInstance().encode(node.getResolvedLabel().substring(0,37) + "...");
 		}
-					
+
 		print """
 		<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
 		""";
@@ -71,36 +74,39 @@
 				<a  class="ItemIcon $icon" href="#$label">$label</a>
 			""";
 		}
-		
+
 		if (node.getChildren().size() > 0) {
 			renderChildrenContainer(node, nodeURL);
-		}		
-		print "</li>";					
+		}
+		print "</li>";
 	}
 %>
-<ul id="$uicomponent.id" class="UINavigationBar UIHorizontalTabs <%=uicomponent.getCssClassName()%>" >	
+<ul id="$uicomponent.id" class="UINavigationBar UIHorizontalTabs <%=uicomponent.getCssClassName()%>" >
 	<%
 		MimeResponse res = _ctx.getRequestContext().getResponse();
-		
+
 		def rootNodes = uicomponent.getNavigations();
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		if(rootNodes != null) {
-			for(nav in rootNodes) {					
-				def childs = nav.getChildren();              
+			for(nav in rootNodes) {
+				def childs = nav.getChildren();
 				for(UserNode node in childs) {
 					String tabStyleNavigation = "NormalNavigationTab";
 					if(selectedNode != null && node.getId() == selectedNode.getId()) {
 							tabStyleNavigation = "SelectedNavigationTab";
 					}
-					
+
 					if (node.getChildrenCount() > 0) {
 					    javax.portlet.ResourceURL resourceURL = res.createResourceURL();
-						resourceURL.setResourceID(node.getURI());										
-	%>			
-					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=resourceURL.toString() %>">
+						resourceURL.setResourceID(node.getURI());
+						// GTNPORTAL-2229
+						String temp = resourceURL.toString().replaceAll("&","&amp;");
+
+	%>
+					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=temp %>">
 				<%	} else { %>
 					<li class="UITab $tabStyleNavigation">
-				<%  } 					
+				<%  }
 								String arrowIcon = "";
 								if (node.getChildrenCount() > 0) {
 									arrowIcon = "DropDownArrowIcon";
@@ -108,7 +114,7 @@
 								String iconType = node.getIcon();
 								if(iconType == null) iconType = "DefaultPageIcon";
 							%>
-							<span class="$arrowIcon">																
+							<span class="$arrowIcon">
 							<%
 					 			String label = node.getEncodedResolvedLabel();
 					 			if(node.getResolvedLabel().length() > 30) label = HTMLEntityEncoder.getInstance().encode(node.getResolvedLabel().substring(0,27) + "...");
@@ -120,7 +126,7 @@
 					 				""";
 								} else {%>
 									    <a class="TabIcon ${iconType}" href="#$label">$label</a>
-							<%}%>								
+							<%}%>
 							</span>
 						<%
                              /*Render Popup Menu*/
@@ -128,7 +134,7 @@
                                      renderChildrenContainer(node, nodeURL);
                              }
                            %>
-					</li>									
+					</li>
 	<%
 				}
 			}
@@ -136,6 +142,6 @@
 	%>
 	<li class="ScrollButtons">
 		<a title="<%= _ctx.appRes("UIPortalNavigation.Label.Previous") %>" class="ScrollLeftButton"></a>
-		<a title="<%= _ctx.appRes("UIPortalNavigation.Label.Next") %>" class="ScrollRightButton"></a>	
+		<a title="<%= _ctx.appRes("UIPortalNavigation.Label.Next") %>" class="ScrollRightButton"></a>
 	</li>
 </ul>

@@ -1,7 +1,7 @@
-<% 
+<%
 	import org.exoplatform.webui.form.UIFormInputBase;
 	import org.exoplatform.web.application.JavascriptManager;
-	
+
 	def rcontext = _ctx.getRequestContext();
   	JavascriptManager jsManager = rcontext.getJavascriptManager();
   	jsManager.require("SHARED/uiForm");
@@ -12,15 +12,15 @@
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
 			<table class="UIFormGrid">
-				<% 
-					for(field in uiform.getChildren()) { 
+				<%
+					for(field in uiform.getChildren()) {
 						if(field.isRendered()) {
 				%>
 							<tr>
 								<%fieldName = uicomponent.getLabel(field.getName());%>
-								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>												
+								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>
 									<td class="FieldLabel portlet-form-label">
-										<%if(fieldName != null && fieldName.length() > 0) {%> 
+										<%if(fieldName != null && fieldName.length() > 0) {%>
 											<%=uicomponent.getLabel(field.getName()) %>
 										<%}%>
 									</td>
@@ -28,7 +28,7 @@
 										<td class="FieldComponent portlet-input-field"><% uiform.renderField(field) %></td>
 									<% }else { %>
 										<td class="NonEditableField portlet-input-field"><% uiform.renderField(field) %></td>
-									<% } %>	
+									<% } %>
 								<%} else {%>
 									<td class="FieldComponent" colspan="2"><% uiform.renderField(field) %></td>
 								<%}%>
@@ -40,10 +40,10 @@
 			</table>
 			<%//Rerender this	component with the new structure%>
 			<%// start render action%>
-			<div class="UIAction"> 
-				<% for(action in uicomponent.getActions()) { 
-						 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action) 
-						 String link = uicomponent.event(action); 
+			<div class="UIAction">
+				<% for(action in uicomponent.getActions()) {
+						 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action)
+						 String link = uicomponent.event(action);
 				%>
 							<a href="javascript:window.scroll(0,0);" onclick="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
 				<%}%>
@@ -53,14 +53,15 @@
 	</div>
 	<%uiform.end()%>
 </div>
-<script language="javascript">
+<!-- GTNPORTAL-2229 -->
+<script type="text/javascript">
 	function SubmitAction(event) {
 		var event = window.event || event;
 		var code;
 		if(event.keyCode) code = event.keyCode;
 		else if (event.which) code = event.which;
 		if(code ==13) {
-			this.onsubmit = function(){ return false; }				
+			this.onsubmit = function(){ return false; }
 		}
-	}	
+	}
 </script>
