@@ -141,10 +141,10 @@
          <authentication>
             <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
                <module-option name="enabled">
-                  <xsl:attribute name="value">${gatein.sso.login.module.enabled:false}</xsl:attribute>
+                  <xsl:attribute name="value">#{gatein.sso.login.module.enabled}</xsl:attribute>
                </module-option>
                <module-option name="delegateClassName">
-                  <xsl:attribute name="value">${gatein.sso.login.module.class:}</xsl:attribute>
+                  <xsl:attribute name="value">#{gatein.sso.login.module.class}</xsl:attribute>
                </module-option>
                <module-option name="portalContainerName" value="portal"/>
                <module-option name="realmName" value="gatein-domain"/>
@@ -164,8 +164,8 @@
                 <![CDATA[<security-domain name="gatein-domain-sample-portal" cache-type="default">
                     <authentication>
                         <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
-                            <module-option name="enabled" value="${gatein.sso.login.module.enabled:false}" />
-                            <module-option name="delegateClassName" value="${gatein.sso.login.module.class:}" />
+                            <module-option name="enabled" value="#{gatein.sso.login.module.enabled}" />
+                            <module-option name="delegateClassName" value="#{gatein.sso.login.module.class}" />
                             <module-option name="portalContainerName" value="sample-portal" />
                             <module-option name="realmName" value="gatein-domain-sample-portal" />
                             <module-option name="password-stacking" value="useFirstPass" />

@@ -126,6 +126,10 @@
       <maven-resource group="net.oauth.core" artifact="oauth"/>
     </module-def>
 
+    <module-def name="org.jasig.cas.client">
+      <maven-resource group="org.jasig.cas.client" artifact="cas-client-core"/>
+    </module-def>
+
     <module-def name="com.jhlabs.filters">
       <maven-resource group="com.jhlabs" artifact="filters"/>
     </module-def>
@@ -324,7 +328,6 @@
       <maven-resource group="org.gatein.sso" artifact="spnego"/>
       <maven-resource group="org.gatein.sso" artifact="sso-saml-plugin"/>
       <maven-resource group="org.gatein.sso" artifact="sso-integration"/>
-      <maven-resource group="org.jasig.cas.client" artifact="cas-client-core"/>
     </module-def>
 
     <module-def name="org.picketlink.idm">
