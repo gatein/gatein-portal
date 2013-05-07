@@ -38,11 +38,6 @@
 			<role-name>admin</role-name>
 			<role-link>admin</role-link>
 		</security-role-ref>
-
-		<container-runtime-option>
-			<name>org.gatein.pc.remotable</name>
-			<value>true</value>
-		</container-runtime-option>
 	</portlet>
 
 </portlet-app>
