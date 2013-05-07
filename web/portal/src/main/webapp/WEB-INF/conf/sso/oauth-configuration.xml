@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+  ~ JBoss, a division of Red Hat
+  ~ Copyright 2013, Red Hat Middleware, LLC, and individual
+  ~ contributors as indicated by the @authors tag. See the
+  ~ copyright.txt in the distribution for a full listing of
+  ~ individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+<configuration
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
+  <component>
+    <key>org.gatein.security.oauth.spi.SocialNetworkService</key>
+    <type>org.gatein.security.oauth.data.SocialNetworkServiceImpl</type>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</key>
+    <type>org.gatein.security.oauth.registry.OAuthProviderTypeRegistryImpl</type>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.facebook.GateInFacebookProcessor</key>
+    <type>org.gatein.security.oauth.facebook.GateInFacebookProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>clientId</name>
+        <value>${gatein.oauth.facebook.clientId}</value>
+      </value-param>
+      <value-param>
+        <name>clientSecret</name>
+        <value>${gatein.oauth.facebook.clientSecret}</value>
+      </value-param>
+      <!-- URL to redirect from Facebook during Facebook OAuth authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.facebook.redirectURL}</value>
+      </value-param>
+      <value-param>
+        <name>scope</name>
+        <value>${gatein.oauth.facebook.scope}</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.twitter.TwitterProcessor</key>
+    <type>org.gatein.security.oauth.twitter.TwitterProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>clientId</name>
+        <value>${gatein.oauth.twitter.clientId}</value>
+      </value-param>
+      <value-param>
+        <name>clientSecret</name>
+        <value>${gatein.oauth.twitter.clientSecret}</value>
+      </value-param>
+      <!-- URL to redirect from Twitter during Twitter OAuth authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.twitter.redirectURL}</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.google.GoogleProcessor</key>
+    <type>org.gatein.security.oauth.google.GoogleProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>clientId</name>
+        <value>${gatein.oauth.google.clientId}</value>
+      </value-param>
+      <value-param>
+        <name>clientSecret</name>
+        <value>${gatein.oauth.google.clientSecret}</value>
+      </value-param>
+      <!-- URL to redirect from Google during Google OAuth2 authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.google.redirectURL}</value>
+      </value-param>
+      <value-param>
+        <name>scope</name>
+        <value>${gatein.oauth.google.scope}</value>
+      </value-param>
+      <value-param>
+        <name>accessType</name>
+        <value>${gatein.oauth.google.accessType}</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</key>
+    <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorImpl</type>
+  </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    <component-plugin>
+      <name>UniqueOAuthProviderUsernameListener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.gatein.security.oauth.data.UniqueOAuthProviderUsernameListener</type>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
+    <component-plugin>
+      <name>AccessTokenInvalidationListener</name>
+      <set-method>addListenerPlugin</set-method>
+      <type>org.gatein.security.oauth.data.AccessTokenInvalidationListener</type>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</target-component>
+    <component-plugin>
+      <name>FacebookFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
+      <init-params>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.web.facebook.FacebookFilter</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.facebook.enabled:false}</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/facebookAuth</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</target-component>
+    <component-plugin>
+      <name>TwitterFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
+      <init-params>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.web.twitter.TwitterFilter</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.twitter.enabled:false}</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/twitterAuth</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</target-component>
+    <component-plugin>
+      <name>GoogleFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
+      <init-params>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.web.google.GoogleFilter</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.google.enabled:false}</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/googleAuth</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</target-component>
+    <component-plugin>
+      <name>OAuthIntegrationFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
+      <init-params>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.web.OAuthAuthenticationFilter</value>
+        </value-param>
+        <!-- It's always enable here but not used if all OAuthProviders (social networks) are disabled. See OAuthFilterIntegratorImpl -->
+        <value-param>
+          <name>enabled</name>
+          <value>true</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/*</value>
+        </value-param>
+        <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is needed -->
+        <value-param>
+          <name>registrationUrl</name>
+          <value>/@@portal.container.name@@/</value>
+        </value-param>
+        <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is not needed because user is already registered -->
+        <value-param>
+          <name>loginUrl</name>
+          <value>/@@portal.container.name@@/dologin</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</target-component>
+    <component-plugin>
+      <name>OAuthLinkAccountFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
+      <init-params>
+        <!-- It's always enable here but not used if all OAuthProviders (social networks) are disabled. See OAuthFilterIntegratorImpl -->
+        <value-param>
+          <name>enabled</name>
+          <value>true</value>
+        </value-param>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.web.OAuthLinkAccountFilter</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/*</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>FacebookOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>FACEBOOK</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.facebook.enabled}</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.facebook.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.facebook.GateInFacebookProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/facebookAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>Facebook</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>TwitterOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>TWITTER</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.twitter.enabled}</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.twitter.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.twitter.TwitterProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/twitterAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>Twitter</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>GoogleOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>GOOGLE</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.google.enabled}</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.google.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.google.GoogleProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/googleAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>Google+</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+</configuration>

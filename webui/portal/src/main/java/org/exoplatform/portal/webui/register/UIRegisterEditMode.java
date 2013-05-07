@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.account.webui.component;
+package org.exoplatform.portal.webui.register;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
@@ -29,6 +29,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
@@ -67,7 +68,7 @@ public class UIRegisterEditMode extends UIForm {
             pref.store();
 
             // Show/hide the captcha input in UIRegisterInputSet
-            UIRegisterPortlet registerPortlet = uiForm.getParent();
+            UIComponent registerPortlet = uiForm.getParent();
             UIRegisterInputSet registerInputSet = registerPortlet.findFirstComponentOfType(UIRegisterInputSet.class);
 
             if (useCaptcha) {

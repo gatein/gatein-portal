@@ -42,5 +42,6 @@ public class UIAccountSetting extends UIContainer {
     public UIAccountSetting() throws Exception {
         addChild(UIAccountProfiles.class, null, null);
         addChild(UIAccountChangePass.class, null, null).setRendered(false);
+        addChild(UIAccountSocial.class, null, null).setRendered(false);
     }
 }

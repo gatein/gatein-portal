@@ -185,3 +185,87 @@
 .UILoginForm .UIAction .SimpleStyle:hover {
 	color: #058EE6;
 }
+
+.UILoginForm div.SocialLoginButtons {
+    text-align: center;
+}
+
+.UILoginForm a.login-button {
+    border-radius: 3px;
+    border: 1px solid;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+
+    background-color: #d54529;
+    background-image: linear-gradient(to bottom, #dd4b39, #ac2b1c);
+    border-color:#8f301f #8f301f #8f301f #8f301f;
+
+    margin: 10px 5px 5px 5px;
+
+}
+
+.UILoginForm a.login-button > div {
+    border: 1px solid;
+    color: white;
+    font-size: 11px;
+    padding: 3px 6px 3px 22px;
+    background: url("background/generic.png") left no-repeat;
+    border-color: #ec9b8c #ec9b8c #dd4d29 #ec9b8c;
+}
+
+.UILoginForm #login-GOOGLE {
+    background-color: #ac2b1c;
+    background: linear-gradient(to bottom, #dd4b39, #ac2b1c);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4b39), to(#ac2b1c));
+    border-color:#8f301f #8f301f #8f301f #8f301f;
+}
+
+.UILoginForm #login-GOOGLE:hover {
+    background-color: #bc3b2c;
+    background: linear-gradient(to bottom, #ed5b49, #bc3b2c);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ed5b49), to(#bc3b2c));
+    border-color:#9f402f;
+}
+
+.UILoginForm #login-GOOGLE > div {
+    background: url("background/google.png") left no-repeat;
+    border-color: #ec9b8c #ec9b8c #dd4d29 #ec9b8c;
+}
+
+.UILoginForm #login-FACEBOOK {
+    background-color: #4164a3;
+    background: linear-gradient(to bottom, #5a7aaf, #4164a3);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5a7aaf), to(#4164a3));
+    border-color:#1b386b;
+}
+
+.UILoginForm #login-FACEBOOK:hover {
+    background-color: #5174b3;
+    background: linear-gradient(to bottom, #6a8abf, #5174b3);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a8abf), to(#5174b3));
+    border-color:#2b487b;
+}
+
+.UILoginForm #login-FACEBOOK > div {
+    background: url("background/facebook.png") left no-repeat;
+    border-color: #728cbc #728cbc #728cbc #728cbc;
+}
+
+.UILoginForm #login-TWITTER {
+    background-color: #429dd5;
+    background: linear-gradient(to bottom, #52ade5, #429dd5);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52ade5), to(#429dd5));
+    border-color:#328dc5;
+}
+
+.UILoginForm #login-TWITTER:hover {
+    background: #52ade5;
+    background: linear-gradient(to bottom, #62bdf5, #52ade5);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#62bdf5), to(#52ade5));
+    border-color:#429dd5;
+}
+
+.UILoginForm #login-TWITTER > div {
+    background: url("background/twitter.png") left no-repeat;
+    border-color: #62bdf5 #62bdf5 #62bdf5 #62bdf5;
+}

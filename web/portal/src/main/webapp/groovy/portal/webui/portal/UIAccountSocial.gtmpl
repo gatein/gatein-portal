@@ -1,0 +1,58 @@
+<%
+  import org.gatein.security.oauth.spi.OAuthProviderType;
+  import java.util.Collection;
+  String fieldName;
+%>
+<div class="UIForm $uicomponent.id">
+	<%uiform.begin()%>
+	<div class="HorizontalLayout">
+		<div class="FormContainer">
+			<table class="UIFormGrid">
+				<%
+				   Collection<OAuthProviderType> oauthProviders = uicomponent.getOAuthProviderTypes();
+				   if (oauthProviders.size() == 0) {
+				%>
+				       <tr><td><%=_ctx.appRes("UIAccountSocial.msg.disabled")%></td></tr>
+				<%
+				   } else {
+				      for(OAuthProviderType oauthPrType : oauthProviders) {
+					     field = uicomponent.getUIStringInput(oauthPrType.getUserNameAttrName());
+						 if (field.isRendered()) {
+				%>
+							<tr>
+								<%  fieldName = uicomponent.getLabel(field.getName());%>
+								<%
+									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId()) && !fieldName.equals(field.getName())) {
+								%>
+									    <td class="FieldLabel portlet-form-label">
+										   <%=uicomponent.getLabel(field.getName()) %>
+									    </td>
+									    <td class="FieldComponent portlet-input-field"><% uiform.renderField(field) %></td>
+								<%  } else { %>
+									    <td class="FieldComponent portlet-input-field" colspan="2"><% uiform.renderField(field) %>
+								<%  } %>
+
+								    <td class="FieldComponent UIAction portlet-input-field">
+								<%
+								      if (field.getValue() == null || field.getValue().length() == 0) {
+								          uicomponent.saveURLAfterLinkSocialAccount();
+								          String linkSocialAccountURL = uicomponent.getLinkSocialAccountURL(oauthPrType);
+								%>
+							              <a href="$linkSocialAccountURL" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIAccountSocial.action.link")%></a>
+								<%    } else {
+								          String link = uicomponent.getUnlinkSocialAccountURL(oauthPrType);
+								%>
+								          <a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIAccountSocial.action.unlink")%></a>
+								<%    } %>
+								    </td>
+							</tr>
+				<%
+						        }
+					     }
+				   }
+				%>
+			</table>
+		</div>
+	</div>
+	<%uiform.end()%>
+</div>

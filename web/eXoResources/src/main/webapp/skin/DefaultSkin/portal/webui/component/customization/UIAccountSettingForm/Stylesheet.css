@@ -16,11 +16,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
+ 
 .UIAccountSettingForm {	
 	padding: 5px;
-}
-	
+} 
+ 
 .UIAccountSettingForm .ContentContainer {
 	border: 1px solid #d4d4d4;
 	border-top: none;
@@ -71,6 +71,11 @@
 .UIAccountSettingForm .UIHorizontalTabs .UITab .ChangePass {
 	background: url('background/HorizontalTabs.gif') no-repeat left -177px; /* orientation=lt */
 	background: url('background/HorizontalTabs.gif') no-repeat right -177px; /* orientation=rt */
+}
+
+.UIAccountSettingForm .UIHorizontalTabs .UITab .Social {
+        background: url('background/Social.gif') no-repeat left center; /* orientation=lt */
+	background: url('background/Social.gif') no-repeat left center; /* orientation=rt */        
 }
 
 .UIAccountSettingForm .UIHorizontalTabs .UITab .NormalTab a {

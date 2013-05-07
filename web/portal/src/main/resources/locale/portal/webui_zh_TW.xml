@@ -1520,6 +1520,18 @@
     </msg>
   </UIResetPassword>
 
+  <UIRegisterForm>
+    <registerWithSuccess>
+      <message>You have successfully registered a new account!</message>
+    </registerWithSuccess>
+    <title>Register New Account</title>
+    <label>
+      <action>
+        <CheckUsernameAvailability>Search User</CheckUsernameAvailability>
+      </action>
+    </label>
+  </UIRegisterForm>
+
   <UIPopupMessages>
     <title>
       <exoMessages>消息</exoMessages>

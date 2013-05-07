@@ -41,6 +41,7 @@
     <module name="javax.ws.rs.api"/>
     <module name="javax.xml.bind.api"/>
 
+    <module name="com.google.apis" />
     <module name="com.google.guava" slot="gatein"/>
     <module name="com.google.javascript"/>
     <module name="com.h2database.h2"/>
@@ -101,6 +102,7 @@
     <module name="org.picocontainer"/>
     <module name="org.slf4j"/>
     <module name="org.staxnav"/>
+    <module name="org.twitter4j" />
 
     <system export="true">
       <paths>

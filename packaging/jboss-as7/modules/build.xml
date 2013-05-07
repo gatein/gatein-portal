@@ -200,6 +200,15 @@
       <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util"/>
     </module-def>
 
+    <module-def name="com.google.apis">
+      <maven-resource group="com.google.oauth-client" artifact="google-oauth-client"/>
+      <maven-resource group="com.google.api-client" artifact="google-api-client"/>
+      <maven-resource group="com.google.http-client" artifact="google-http-client"/>
+      <maven-resource group="com.google.http-client" artifact="google-http-client-jackson"/>
+      <maven-resource group="com.google.apis" artifact="google-api-services-plus"/>
+      <maven-resource group="com.google.apis" artifact="google-api-services-oauth2"/>
+    </module-def>
+
     <module-def name="org.gatein">
       <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension"/>
     </module-def>
@@ -248,6 +257,7 @@
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.scripting"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.api"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.controller"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.oauth-common"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.resources"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security-jboss"/>
@@ -297,7 +307,7 @@
       <maven-resource group="org.gatein.shindig" artifact="shindig-features"/>
       <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets"/>
       <maven-resource group="org.gatein.shindig" artifact="shindig-social-api"/>
-      -->
+        -->
     </module-def>
 
     <module-def name="org.gatein.wci">
@@ -320,6 +330,10 @@
 
     <module-def name="org.gatein.naming">
       <maven-resource group="org.gatein.naming" artifact="gatein-naming"/>
+    </module-def>
+
+    <module-def name="org.gatein.oauth">
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.oauth-web"/>
     </module-def>
 
     <module-def name="org.gatein.sso">
@@ -382,6 +396,10 @@
 
     <module-def name="org.staxnav">
       <maven-resource group="org.staxnav" artifact="staxnav.core"/>
+    </module-def>
+
+    <module-def name="org.twitter4j">
+      <maven-resource group="org.twitter4j" artifact="twitter4j-core"/>
     </module-def>
 
     <module-def name="javax.portlet.api">

@@ -39,6 +39,7 @@
       <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>
       <listener>org.exoplatform.portal.application.UserProfileLifecycle</listener>
       <listener>org.exoplatform.portal.application.localization.LocalizationLifecycle</listener>
+      <listener>org.exoplatform.portal.application.oauth.OAuthLifecycle</listener>
     </application-lifecycle-listeners>
 
     <events>

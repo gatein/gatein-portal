@@ -24,6 +24,7 @@ package org.exoplatform.portal.application;
 
 import java.util.Locale;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
@@ -53,7 +54,9 @@ public class PortalRequestImpl extends PortalRequest {
         this.user = (userId == null) ? User.anonymous() : new User(userId);
         this.siteId = Util.from(context.getSiteKey());
         this.nodePath = NodePath.fromString(context.getNodePath());
-        this.portal = getPortalApi(context);
+
+        ExoContainer exoContainer = context.getApplication().getApplicationServiceContainer();
+        this.portal = (Portal)exoContainer.getComponentInstanceOfType(Portal.class);
 
         uriResolver = new RequestContextURIResolver();
     }
@@ -86,10 +89,6 @@ public class PortalRequestImpl extends PortalRequest {
     @Override
     public URIResolver getURIResolver() {
         return uriResolver;
-    }
-
-    private static Portal getPortalApi(PortalRequestContext context) {
-        return (Portal) context.getApplication().getApplicationServiceContainer().getComponentInstanceOfType(Portal.class);
     }
 
     static void createInstance(PortalRequestContext context) {

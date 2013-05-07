@@ -108,7 +108,12 @@ public class UIUserInfo extends UIFormTabPane {
             if (!save) {
                 return;
             }
-            uiUserInfo.getChild(UIUserProfileInputSet.class).save(service, uiUserInfo.getUserName(), false);
+
+            // TODO: UserProfile save can be unsuccessful, but user info from accountEditInputSet has been already edited. So it's not atomic edit...
+            save = uiUserInfo.getChild(UIUserProfileInputSet.class).save(service, uiUserInfo.getUserName(), false);
+            if (!save) {
+                return;
+            }
 
             if (uiUserInfo.getUserName().equals(event.getRequestContext().getRemoteUser())) {
                 UserProfileHandler hanlder = service.getUserProfileHandler();

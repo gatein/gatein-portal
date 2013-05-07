@@ -23,6 +23,8 @@
 <%@ page import="javax.servlet.http.Cookie"%>
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
+<%@ page import="org.gatein.security.oauth.spi.OAuthProviderType"%>
+<%@ page import="org.gatein.security.oauth.spi.OAuthProviderTypeRegistry"%>
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
 <%@ page language="java"%>
@@ -37,9 +39,11 @@
     username = encoder.encode(username);
   }
 
-  ResourceBundleService service = (ResourceBundleService) PortalContainer.getCurrentInstance(session.getServletContext())
-                                                        .getComponentInstanceOfType(ResourceBundleService.class);
+  PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());
+  ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
+
+  OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) portalContainer.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
   
   Cookie cookie = new Cookie(org.exoplatform.web.login.LoginServlet.COOKIE_NAME, "");
     cookie.setPath(request.getContextPath());
@@ -65,7 +69,14 @@
     <link rel="stylesheet" type="text/css" href="<%=contextPath%>/login/skin/Stylesheet.css"/>
   </head>
   <body style="text-align: center; background: #b5b6b6; font-family: arial, tahoma, verdana">
-    <div class="UILogin">
+      <div id="social-login">
+          <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
+          <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
+              <div><%= res.getString("UILoginForm.label.SignInWith") %> <%= oauthProvType.getFriendlyName() %></div>
+          </a>
+          <% } %>
+      </div>
+  <div class="UILogin">                
       <div class="LoginHeader"></div>
       <div class="LoginContent">
         <div class="CenterLoginContent">

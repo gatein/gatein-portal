@@ -24,6 +24,7 @@ package org.exoplatform.web.security.security;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.web.security.codec.CodecInitializer;
 
 /**
  * @author <a href="mailto:theute@redhat.com">Thomas Heute</a>
@@ -31,9 +32,9 @@ import org.exoplatform.container.xml.InitParams;
  */
 public class RemindPasswordTokenService extends CookieTokenService {
 
-    public RemindPasswordTokenService(InitParams initParams, ChromatticManager chromatticManager)
+    public RemindPasswordTokenService(InitParams initParams, ChromatticManager chromatticManager, CodecInitializer codecInitializer)
             throws TokenServiceInitializationException {
-        super(initParams, chromatticManager);
+        super(initParams, chromatticManager, codecInitializer);
     }
 
     @Override
