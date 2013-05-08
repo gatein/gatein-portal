@@ -2,7 +2,7 @@
 $(document).ready(function()
 		{
 
-	$(".menuelement").each(function(){
+	$(".menucategory").each(function(){
 		
 		var menuelement = $(this);
 		
@@ -20,13 +20,14 @@ $(document).ready(function()
 		if (initialstate == "open")
 		{
 			$(this).children(".menuarrow").toggle(function(){closeMenu(menuelement);}, function(){openMenu(menuelement);});
-			$(this).children(".menucategory").toggle(function(){closeMenu(menuelement);}, function(){openMenu(menuelement);});
+			$(this).children(".menu").toggle(function(){closeMenu(menuelement);}, function(){openMenu(menuelement);});
 		}
 		else
 		{
 			$(this).children(".menuarrow").toggle(function(){openMenu(menuelement);}, function(){closeMenu(menuelement);});
-			$(this).children(".menucategory").toggle(function(){closeMenu(menuelement);}, function(){openMenu(menuelement);});
+			$(this).children(".menu").toggle(function(){closeMenu(menuelement);}, function(){openMenu(menuelement);});
 		}
+
 		
 	});
 	

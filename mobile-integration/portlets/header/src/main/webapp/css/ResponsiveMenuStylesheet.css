@@ -1,0 +1,309 @@
+.gtnResponsiveMenu {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1em;
+}
+
+/* generic menu configurations */
+
+.gtnResponsiveMenu .menucategory > .menu,
+.gtnResponsiveMenu .menucategory.close > .menu,
+.gtnResponsiveMenu .menucategory.close:hover > .menu {
+    display: none;
+}
+
+.gtnResponsiveMenu .menucategory.open > .menu,
+.gtnResponsiveMenu .menucategory:hover > .menu {
+    display: block;
+}
+
+.gtnResponsiveMenu .menu {
+    list-style-type: none;
+}
+
+.gtnResponsiveMenu .menucategory {
+    position: relative;
+}
+
+.gtnResponsiveMenu .menutoggle .caret {
+    border-width: 0.25em;
+    border-color: transparent;
+    border-style: solid;
+    display: inline-block;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    margin-bottom: 0.25em;
+    margin-right: 0.62em;
+}
+
+.gtnResponsiveMenu .menucategory:hover > .menutoggle > .caret,
+.gtnResponsiveMenu .menucategory.open > .menutoggle > .caret {
+    border-color: transparent #777 transparent transparent;
+    right: 0.25em;
+}
+
+.gtnResponsiveMenu .menucategory.close:hover > .menutoggle > .caret,
+.gtnResponsiveMenu .menucategory > .menutoggle > .caret,
+.gtnResponsiveMenu .menucategory.close > .menutoggle > .caret {
+    border-color: transparent transparent transparent #777;
+    margin-top: 0.25em;
+    top: 0.25em;
+    right: 0;
+}
+
+.gtnResponsiveMenu .menucategory.close:hover > .menutoggle > .caret {
+    bottom: 0.25em;
+}
+
+.gtnResponsiveMenu .menucatorgy.menulink {
+    background-image: url('../images/menu-separator.png');
+    background-position: right 0.375em;
+    background-repeat: no-repeat;
+}
+
+/* top level specific configurations */
+.gtnResponsiveMenu > .menu {
+    margin: 0;
+    padding-left: 0;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory > a,
+.gtnResponsiveMenu > .menu > .menulink > a {
+    padding: 0.125em 0 0.3125em 0;
+}
+.gtnResponsiveMenu > .menu > .menucategory.open > a {
+    border-radius: 0.3125em;
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.gtnResponsiveMenu > .menu > li {
+    background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=rt */
+    background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=lt */
+    padding-right: 0.625em;
+    margin-right: 0.2em;
+    display: inline;
+    line-height: 1em;
+}
+
+.gtnResponsiveMenu > .menu > li:first-child {
+    margin-left: 0.69em;
+}
+
+.gtnResponsiveMenu > .menu > li:last-child {
+    background: none;
+    margin-right: 0.69em;
+    padding-right: 0;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory.close:hover > .menutoggle > .caret,
+.gtnResponsiveMenu > .menu > .menucategory > .menutoggle > .caret,
+.gtnResponsiveMenu > .menu > .menucategory.close > .menutoggle > .caret {
+    border-color: #777 transparent transparent;
+    right: 0.1875em; 
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory:hover > .menutoggle > .caret,
+.gtnResponsiveMenu > .menu > .menucategory.open > .menutoggle > .caret {
+    border-color: transparent transparent #777;
+    margin-bottom: 0.25em;
+    margin-right: 0;
+}
+
+
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu:after,
+.gtnResponsiveMenu > .menu > .menucategory > .menu:before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu:after {
+    border-bottom: 0.375em solid #FFF;
+    border-left: 0.375em solid transparent;
+    border-right: 0.375em solid transparent;
+    left: 0.3625em;
+    top: -0.375em;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu:before {
+    border-bottom: 0.4375em solid rgba(0, 0, 0, 0.2);
+    border-left: 0.4375em solid transparent;
+    border-right: 0.4375em solid transparent;
+    left: 0.3em;
+    top: -0.4375em;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu.inverse:after {
+    border-bottom: 0.375em solid #FFF;
+    border-left: 0.375em solid transparent;
+    border-right: 0.375em solid transparent;
+    right: 0.5625em;
+    right: auto;
+    top: -0.375em;
+}
+
+/* sub level specific configurations */
+.gtnResponsiveMenu .menu .menu {
+    background-clip: padding-box;
+    background-color: #FFF;
+    border: 0.0625em solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.375em 0.375em 0.375em 0.375em;
+    box-shadow: 0 0.3em 0.62em rgba(0, 0, 0, 0.4);
+    left: 0;
+    min-width: 11.25em;
+    position: absolute;
+    z-index: 1000;
+    margin: 0.12em 0 0;
+    padding: 0.3125em 0 0 0;
+    text-align: left;
+    padding: 0.48em 0;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu > li {
+    white-space: nowrap;
+}
+
+.gtnResponsiveMenu .menu .menu li {
+    margin-bottom: 0.3125em;
+    margin-top: 0;
+    white-space: normal;
+}
+
+.gtnResponsiveMenu .menu .menu a {
+    padding: 0.25em 1.5em 0.25em 0.9375em;
+    display: block;
+}
+
+.gtnResponsiveMenu .menu .menu .menucategory.open,
+.gtnResponsiveMenu .menu .menu a:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+    color: #222;
+}
+
+.gtnResponsiveMenu .menu .menu .menutoggle .caret {
+    position: absolute;
+}
+
+.gtnResponsiveMenu .menu .menu .menucategory.menulink {
+    background-image: url('/responsive-navigation-portlet/css/../images/navbar-separator.png');
+    background-position: right 0.375em;
+    background-repeat: no-repeat;
+}
+
+/* sub sub level specific configurations */
+.gtnResponsiveMenu .menu .menu .menu {
+    left: 100%;
+    top: -0.5em;
+    position: absolute;
+}
+
+.gtnResponsiveMenu .menu .menu.inverse {
+    right: 100%;
+    left: auto;
+}
+
+
+/* button configuration */
+.gtnResponsiveMenuCollapseButton {
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
+    margin-top: 1.4375em;
+    margin-right: 1em;
+    width: 2.5em;
+    height: 1.875em;
+    background-color: #F5F5F5;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e6e6e6)); /* Chrome, Safari 4+ */
+    background-image: -webkit-linear-gradient(top, #fff, #e6e6e6); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+    background-image: -moz-linear-gradient(top, #fff, #e6e6e6); /* Firefox 3.6-15 */
+    background-image: -ms-linear-gradient(top, #fff, #e6e6e6); /* IE 10+ */
+    background-image: -o-linear-gradient(top, #fff, #e6e6e6); /* Opera 11.10-12.00 */
+    background-image: linear-gradient(to bottom, #fff, #e6e6e6); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+    background-position: center top;
+    background-repeat: repeat-x;
+    border-radius: 0.25em;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) #A2A2A2;
+    border-style: solid;
+    border-width: 0.07142em;
+    box-shadow: 0 0.07142em 0 rgba(255, 255, 255, 0.2) inset, 0 0.07142em 0.14284em rgba(0, 0, 0, 0.05);
+}
+
+.gtnResponsiveMenuCollapseButton:hover,
+.gtnResponsiveMenuCollapseButton.enabled {
+    background-position: center top;
+    background-color: #E6E6E6;
+    background-image: none;
+    border-color: #c3c3c3;
+}
+
+.gtnResponsiveMenuCollapseButton.enabled {
+    background-color: #eaeaea;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#e7e7e7)); /* Chrome, Safari 4+ */
+    background-image: -webkit-linear-gradient(top, #eee, #e7e7e7); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+    background-image: -moz-linear-gradient(top, #eee, #e7e7e7); /* Firefox 3.6-15 */
+    background-image: -ms-linear-gradient(top, #eee, #e7e7e7); /* IE 10+ */
+    background-image: -o-linear-gradient(top, #eee, #e7e7e7); /* Opera 11.10-12.00 */
+    background-image: linear-gradient(to bottom, #eee, #e7e7e7); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+    box-shadow: inset 1px 0px 5px rgba(0,0,0,0.3);
+    border-color: #c3c3c3;
+}
+
+.gtnResponsiveMenuCollapseButton .collapseButtonIcon {
+    background-image: url(../images/menu-icon.svg);
+    background-color: transparent;
+    background-position: center 0.5em;
+    background-repeat: no-repeat;
+    display: block;
+    text-indent: -999999em;
+    width: 2.5em;
+    height: 1.875em;
+}
+
+
+@media only screen and (max-width: 30em) {
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu.inverse,
+.gtnResponsiveMenu > .menu > .menucategory > .menu
+{
+    width: 95%;
+    min-width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0; right: 0;
+    position: relative;
+    float: right;
+}
+
+.gtnResponsiveMenu .menu .menu .menu {
+    position: static;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.gtnResponsiveMenu > .menu > .menucategory > .menu:after,
+.gtnResponsiveMenu > .menu > .menucategory > .menu:before
+{
+    display: none;
+}
+
+/* generic menu configurations */
+
+.gtnResponsiveMenu .menucategory.open:hover > .menu {
+    display: block;
+}
+
+.gtnResponsiveMenu .menucategory:hover > .menu,
+.gtnResponsiveMenu .menucategory.close:hover > .menu {
+    display: none;
+}
+
+.gtnResponsiveMenu .menu .menu .menu {
+    padding-left: 1em;
+}
+
+}

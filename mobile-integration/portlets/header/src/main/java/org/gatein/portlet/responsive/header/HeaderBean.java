@@ -22,25 +22,25 @@
  ******************************************************************************/
 package org.gatein.portlet.responsive.header;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.UserNavigation;
-import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
-import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.security.sso.SSOHelper;
-import org.exoplatform.web.url.navigation.NavigationResource;
-import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.organization.OrganizationUtils;
+import org.exoplatform.portal.webui.util.Util;
+import org.gatein.api.PortalRequest;
+import org.gatein.api.navigation.Navigation;
+import org.gatein.api.navigation.Node;
+import org.gatein.api.navigation.Nodes;
+import org.gatein.api.site.Site;
+import org.gatein.api.site.SiteId;
+import org.gatein.api.site.SiteQuery;
+import org.gatein.api.site.SiteType;
+
+import com.google.javascript.jscomp.FindExportableNodes.GenerateNodeContext;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -49,6 +49,7 @@ import org.exoplatform.webui.organization.OrganizationUtils;
 public class HeaderBean {
 
     private static final String GROUP_NAVIGATION_NODE = "groupnavigation";
+    private static final String REGISTER_NODE = "register";
 
     private final SSOHelper ssoHelper;
 
@@ -59,6 +60,7 @@ public class HeaderBean {
     public String generateLoginLink(String defaultAction) {
         if (ssoHelper != null) {
             PortalRequestContext pContext = Util.getPortalRequestContext();
+
             String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
             return ssoRedirectURL;
         } else {
@@ -67,94 +69,58 @@ public class HeaderBean {
     }
 
     public String generateRegisterLink() {
-        PortalRequestContext pContext = Util.getPortalRequestContext();
-        NavigationResource resource = new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), "register");
-        return resource.getNodeURI();
+        PortalRequest portalRequest = PortalRequest.getInstance();
+        String portalURL = portalRequest.getURIResolver().resolveURI(portalRequest.getSiteId());
+        return portalURL + "/" + REGISTER_NODE;
     }
 
     public String generateHomePageLink() throws Exception {
-        PortalRequestContext pContext = Util.getPortalRequestContext();
-        NodeURL nodeURL = pContext.createURL(NodeURL.TYPE).setResource(
-                new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), null));
-        return nodeURL.toString();
+        PortalRequest portalRequest = PortalRequest.getInstance();
+        String portalURL = portalRequest.getURIResolver().resolveURI(portalRequest.getSiteId());
+        return portalURL;
     }
 
     public String generateDashboardLink() throws Exception {
-        PortalRequestContext pContext = Util.getPortalRequestContext();
-        NodeURL nodeURL = pContext.createURL(NodeURL.TYPE);
-        nodeURL.setResource(new NavigationResource(SiteType.USER, pContext.getRemoteUser(), null));
-        return nodeURL.toString();
+        PortalRequest portalRequest = PortalRequest.getInstance();
+        return portalRequest.getURIResolver().resolveURI(new SiteId(portalRequest.getUser()));
     }
 
     public String generateGroupPagesLink() {
-        PortalRequestContext pContext = Util.getPortalRequestContext();
-        NodeURL nodeURL = pContext.createURL(NodeURL.TYPE);
-        nodeURL.setResource(new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), GROUP_NAVIGATION_NODE));
-        return nodeURL.toString();
-    }
+        Navigation navigation = PortalRequest.getInstance().getNavigation();
+        Node navigationNode = navigation.getNode(GROUP_NAVIGATION_NODE);
 
-    public Map<String, List<Node>> getGroupNodes() throws Exception {
-        Map<String, List<Node>> navNodes = new HashMap<String, List<Node>>();
-
-        PortalRequestContext pContext = Util.getPortalRequestContext();
-        UserPortal userPortal = pContext.getUserPortal();
-
-        List<UserNavigation> groupNavigations = getGroupNavigations(userPortal);
-
-        for (UserNavigation groupNavigation : groupNavigations) {
-            String groupName = OrganizationUtils.getGroupLabel(groupNavigation.getKey().getName());
-            String groupTitle = groupName;
-
-            UserNode userNode = userPortal.getNode(groupNavigation, Scope.ALL, getFilter(), null);
-            List<Node> nodes = new ArrayList<Node>();
-            for (UserNode childnode : userNode.getChildren()) {
-                Node node = getNode(childnode);
-                nodes.add(node);
-            }
-
-            navNodes.put(groupTitle, nodes);
-        }
-        return navNodes;
-    }
-
-    public Node getNode(UserNode userNode) {
-        Node node;
-        if (userNode.getPageRef() != null) {
-            NodeURL nodeURL = Util.getPortalRequestContext().createURL(NodeURL.TYPE);
-            nodeURL.setResource(new NavigationResource(userNode));
-
-            node = new Node(userNode.getEncodedResolvedLabel(), nodeURL.toString());
+        if (navigationNode != null) {
+            return navigationNode.getURI().toString();
         } else {
-            node = new Node(userNode.getEncodedResolvedLabel(), null);
+            return null;
         }
-
-        List<Node> children = new ArrayList<Node>();
-        for (UserNode childNode : userNode.getChildren()) {
-            children.add(getNode(childNode));
-        }
-        node.setChildren(children);
-
-        return node;
     }
 
-    protected List<UserNavigation> getGroupNavigations(UserPortal userPortal) {
-        List<UserNavigation> userNavigations = userPortal.getNavigations();
+    public Map<String, NodeBean> getGroupNodes() throws Exception {
 
-        // TODO: Can we not just access the Group Navigations directly?
-        List<UserNavigation> groupNavigations = new ArrayList<UserNavigation>();
-        for (UserNavigation userNavigation : userNavigations) {
-            if (userNavigation.getKey().getType().equals(SiteType.GROUP)) {
-                groupNavigations.add(userNavigation);
+        Map<String, NodeBean> navNodes = new HashMap<String, NodeBean>();
+
+        PortalRequest portalRequest = PortalRequest.getInstance();
+
+        SiteQuery.Builder siteQueryBulder = new SiteQuery.Builder();
+        SiteQuery siteQuery = siteQueryBulder.withSiteTypes(SiteType.SPACE).includeEmptySites(false).build();
+        List<Site> groupSites = PortalRequest.getInstance().getPortal().findSites(siteQuery);
+
+        for (Site site : groupSites) {
+            // check permissions and handle the special 'guest' site
+            if (portalRequest.getPortal().hasPermission(portalRequest.getUser(), site.getAccessPermission())
+                    && !site.getName().equals("/platform/guests")) {
+                Navigation siteNavigation = portalRequest.getPortal().getNavigation(site.getId());
+                Node node = siteNavigation.getRootNode(Nodes.visitNodes(2));
+                if (node.isVisible()) {
+                    String groupLabel = OrganizationUtils.getGroupLabel(siteNavigation.getSiteId().getName().toString());
+                    NodeBean nodeBean = new NodeBean(node, site.getId());
+                    NodeBean nb2 = nodeBean.generateNodeBean(node, site.getId(), true);
+                    navNodes.put(groupLabel, nb2);
+                }
             }
         }
 
-        return groupNavigations;
-    }
-
-    protected UserNodeFilterConfig getFilter() {
-        UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
-        builder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
-        builder.withTemporalCheck();
-        return builder.build();
+        return navNodes;
     }
 }

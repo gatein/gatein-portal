@@ -40,7 +40,6 @@ import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.Node;
 import org.gatein.api.navigation.NodePath;
 import org.gatein.api.navigation.Nodes;
-import sun.nio.cs.Surrogate;
 
 /**
  * Responsive version of the navigation portlet implemented using the GateIn navigation API.

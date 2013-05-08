@@ -26,7 +26,7 @@
             </preference>
             <preference>
                 <name>enable.grouppages.link</name>
-                <value>false</value>
+                <value>true</value>
             </preference>
         </portlet-preferences>
     </portlet>

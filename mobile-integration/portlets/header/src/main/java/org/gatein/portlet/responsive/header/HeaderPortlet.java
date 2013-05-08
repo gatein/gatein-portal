@@ -24,23 +24,18 @@ package org.gatein.portlet.responsive.header;
 
 import java.io.IOException;
 
-import javax.portlet.GenericPortlet;
-import javax.portlet.MimeResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.w3c.dom.Element;
-
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class HeaderPortlet extends GenericPortlet {
+public class HeaderPortlet extends NodePortlet {
 
     HeaderBean headerBean;
-
 
     public HeaderPortlet() {
         headerBean = new HeaderBean();
@@ -52,4 +47,10 @@ public class HeaderPortlet extends GenericPortlet {
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/header.jsp");
         prd.include(request, response);
     }
+
+    @Override
+    public void serveResource(javax.portlet.ResourceRequest request, javax.portlet.ResourceResponse response)
+            throws PortletException, IOException {
+        super.serveResource(request, response);
+    };
 }
