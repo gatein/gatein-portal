@@ -52,9 +52,6 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
             HttpServletRequest request = prContext.getRequest();
             HttpServletResponse response = prContext.getResponse();
 
-            // TODO Remove once https://issues.jboss.org/browse/AS7-5728 has been resolved
-            request.getSession().invalidate();
-
             ServletContainerFactory.getServletContainer().logout(request, response);
         }
     }
