@@ -132,7 +132,7 @@
       <dependency>
         <groupId>org.gatein</groupId>
         <artifactId>gatein-dep</artifactId>
-        <version>1.2.1.CR02</version>
+        <version>1.2.1.CR03</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

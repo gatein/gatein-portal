@@ -726,6 +726,10 @@
       <artifactId>jboss-marshalling-river</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>staxmapper</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-core</artifactId>
     </dependency>
