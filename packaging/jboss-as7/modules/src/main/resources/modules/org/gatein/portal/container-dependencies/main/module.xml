@@ -64,6 +64,12 @@
     -->
     <module name="org.json" export="true"/>
 
+    <!--
+         OAuth integration requires OAuthDelegateFilter at .war CL.
+         Kernel can also load a service via TCCL - no need to add it to org.gatein.lib
+    -->
+    <module name="org.gatein.oauth" export="true"/>
+
     <system export="true">
       <paths>
         <!--
