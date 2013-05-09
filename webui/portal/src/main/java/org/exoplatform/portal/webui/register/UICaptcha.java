@@ -44,19 +44,14 @@ public class UICaptcha extends UIFormStringInput {
 
         RenderResponse resp = context.getResponse();
 
+        //
         ResourceURL url = resp.createResourceURL();
 
         // context.getPortalContextPath() + "/captcha?v=" + Calendar.getInstance().getTimeInMillis()
 
         String random = "&v=" + Calendar.getInstance().getTimeInMillis();
 
-        // TODO GTNPORTAL-2929
-        String temp = url.toString() + random;
-        temp = temp.replaceAll("&", "&amp;");
-        context.getWriter().write("<div id='img_" + getId() + "'><img src=\"" + temp + "\" alt=\"captcha\" /><br/>");
-
-        // context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString() + random + "\" /><br/>");
-
+        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString() + random + "\" /><br/>");
         super.processRender(context);
         context.getWriter().write("</div>");
     }

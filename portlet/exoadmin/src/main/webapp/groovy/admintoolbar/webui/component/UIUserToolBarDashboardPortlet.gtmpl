@@ -11,12 +11,12 @@
 	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
 	import org.exoplatform.portal.mop.SiteType;
-
+	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.require("SHARED/navigation", "nav").addScripts("nav.UIPortalNavigation.onLoad('" + uicomponent.id + "');");
 
-	PortalRequestContext pcontext = Util.getPortalRequestContext();
+	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
 	PortalURL nodeURL = nodeurl();
 	void renderDashboards(PortalURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
 		print """
@@ -29,14 +29,14 @@
 			</ul>
 		""" ;
 	}
-
+	
 	void renderPageNode(PortalURL nodeURL, PortalRequestContext pcontext, UserNode node) {
 		UserNode selectedNode = uicomponent.getSelectedNode();
 		String tabStyleNavigation = "";
 		if(selectedNode != null && node.getId().equals(selectedNode.getId())) {
 				tabStyleNavigation = "SelectedItem";
 		}
-
+		
 		boolean hasChild = (node.getChildrenCount() > 0);
 		String clazz = "";
 		if(hasChild) clazz = "ArrowIcon";
@@ -48,24 +48,21 @@
 		{
 				resolvedLabel = _ctx.appRes("UIUserToolBarDashboard.page." + resolvedLabel);
 		}
-
+	
 		boolean toolong = (node.getResolvedLabel().length() > 60);
 		String label = ( toolong ? HTMLEntityEncoder.getInstance().encode(node.getResolvedLabel().substring(0, 57) + "...") : resolvedLabel);
 		String title = "";
 		if(toolong) title = "title='$resolvedLabel'";
 		else title = "";
-
+		
 		def getNodeURL = "";
 		if (hasChild) {
 			MimeResponse res = _ctx.getRequestContext().getResponse();
 			ResourceURL resourceURL = res.createResourceURL();
-			resourceURL.setResourceID(node.getURI());
-			// GTNPORTAL-2229
-			String temp = resourceURL.toString().replaceAll("&","&amp;");
-			getNodeURL = "exo:getNodeURL='" + temp + "'";
-			// getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+			resourceURL.setResourceID(node.getURI());	
+			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
-
+		
 		print """
 			<li class="MenuItem $clazz $tabStyleNavigation" $getNodeURL>
 		""";
@@ -76,7 +73,7 @@
 						}
 		if(hasChild) {
 			print """
-				<ul class="MenuItemContainer">
+				<ul class="MenuItemContainer">			
 			""" ;
 					for(UserNode child : node.getChildren()) {
 						renderPageNode(nodeURL, pcontext, child);
@@ -84,12 +81,12 @@
 			print """
 				</ul>
 			""" ;
-
+			
 		}
 		print """
 			</li>
-		""" ;
-	}
+		""" ;			
+	}	
 %>
 
 <%
@@ -101,12 +98,12 @@
 		<li class="UITab NormalToolbarTab">
 			<a class="DashboardIcon TBIcon" href="<%= createDashboardLink%>">Dashboard</a>
 		</li>
-	</ul>
-<%
+	</ul>	
+<% 
 	}else{
 		String link = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
-	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
 		<li class="UITab NormalToolbarTab">
 			<span class="DashboardIcon TBIcon">Dashboard</span>
 				<% renderDashboards(nodeURL, pcontext, userNodes); %>

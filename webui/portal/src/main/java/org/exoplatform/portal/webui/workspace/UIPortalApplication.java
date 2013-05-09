@@ -776,11 +776,7 @@ public class UIPortalApplication extends UIApplication {
         urlTemplate.setResource(EMPTY_COMPONENT);
         urlTemplate.setAction("{portal:action}");
 
-        // TODO GTNPORTAL-2929
-        String temp = URLDecoder.decode(urlTemplate.toString(), "UTF-8");
-        temp = temp.replaceAll("&", "&amp;");
-        return temp;
-        // return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
+        return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
     }
 
     public String getBaseURL() {

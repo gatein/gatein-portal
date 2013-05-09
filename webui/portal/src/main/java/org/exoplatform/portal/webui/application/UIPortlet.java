@@ -183,10 +183,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
     public UIPortlet() {
         // That value will be overriden when it is mapped onto a data storage
         storageName = UUID.randomUUID().toString();
-        // TODO GTNPORTAL-2929
-        if (Character.isDigit(this.storageName.charAt(0))) {
-            this.storageName = "gtn" + this.storageName;
-        }
     }
 
     public String getStorageId() {
@@ -203,10 +199,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
 
     public void setStorageName(String storageName) {
         this.storageName = storageName;
-        // TODO GTNPORTAL-2929
-        if (Character.isDigit(this.storageName.charAt(0))) {
-            this.storageName = "gtn" + this.storageName;
-        }
     }
 
     public String getWindowId() {

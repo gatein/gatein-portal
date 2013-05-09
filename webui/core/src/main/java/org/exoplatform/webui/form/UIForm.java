@@ -152,11 +152,8 @@ public class UIForm extends UIContainer {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         String b = context.getURLBuilder().createURL(this, null, null);
 
-        // TODO GTNPORTAL-2929
-        String temp = b.replaceAll("&", "&amp;");
-
         Writer writer = context.getWriter();
-        writer.append("<form class=\"UIForm\" id=\"").append(getId()).append("\" action=\"").append(temp).append('\"');
+        writer.append("<form class=\"UIForm\" id=\"").append(getId()).append("\" action=\"").append(b).append('\"');
         if (submitAction_ != null) {
             writer.append(" onsubmit=\"").append(submitAction_).append("\"");
         }
