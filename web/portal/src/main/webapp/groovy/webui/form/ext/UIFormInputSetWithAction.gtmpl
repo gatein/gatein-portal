@@ -23,11 +23,13 @@
 					if(inputEntry.isRendered()) {
 			%>
 					<div class="FormContainer">
-						<table class="UIFormGrid">
+						<%
+						    String label = _ctx.appRes(formName + ".label." + inputEntry.getId());
+						%>
+						<table class="UIFormGrid" summary="<%= label %> form">
 							<tbody>
 								<tr>
 									<%
-										String label = _ctx.appRes(formName + ".label." + inputEntry.getId());
 										if(!label.equals(inputEntry.getId())) {
 									%>
 										<td class="FieldLabel portlet-form-label"><%=label%></td>

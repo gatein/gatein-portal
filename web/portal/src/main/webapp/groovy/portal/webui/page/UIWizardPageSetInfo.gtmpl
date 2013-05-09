@@ -37,7 +37,7 @@
 					<div class="TitleBar"><%=_ctx.appRes(uicomponent.getId() + ".title")%></div>				
 					<div class="HorizontalLayout">
 						<div class="FormContainer">
-							<table class="UIFormGrid">
+							<table class="UIFormGrid" summary="Wizard page form">
 								<%	
 									List children = uiform.getChildren();		
 									int bound = children.size() - 1;

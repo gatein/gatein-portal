@@ -1,6 +1,6 @@
 <%
 import org.gatein.common.text.EntityEncoder;
-import org.exoplatform.commons.utils.HTMLEntityEncoder;	
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 def application = uicomponent.getApplication();
 def category = uicomponent.getApplicationCategory();
 String name = application.getApplicationName();
@@ -17,9 +17,9 @@ String applicationDescription = encoder.encode(application.getDescription());
 	<div class="UIBreadcumb">
 		<div class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><span></span></div>
 		<div class="BreadcumbInfo">
-			<div class="FL" title="<%= category.getDisplayName(true) %>"><%= categoryDisplayName %></div> 																
-			<div class="RightBlackGridArrow16x16Icon"><span></span></div>									
-			<div class="Selected" title="<%= application.getDisplayName() %> "><%= applicationDisplayName %></div> 
+			<div class="FL" title="<%= category.getDisplayName(true) %>"><%= categoryDisplayName %></div>
+			<div class="RightBlackGridArrow16x16Icon"><span></span></div>
+			<div class="Selected" title="<%= application.getDisplayName() %> "><%= applicationDisplayName %></div>
 		</div>
 	</div>
 	<div class="Application">
@@ -30,7 +30,7 @@ String applicationDescription = encoder.encode(application.getDescription());
 			<div class="ApplicationContent">
 				<div class="TitleBarApplication">
 					<span class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></span>
-					<span class="RightLabel"><%= applicationDisplayName %></span>				
+					<span class="RightLabel"><%= applicationDisplayName %></span>
 				</div>
 				<div class="ApplicationContentLabel">
 					<div class="ContentLabel">
@@ -45,26 +45,26 @@ String applicationDescription = encoder.encode(application.getDescription());
 			</div>
 			-->
 			<div class="ApplicationContent">
-				<table class="TitleBarApplication">
+				<table class="TitleBarApplication" summary="Application Display Name">
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></td>
 						<td class="RightLabel" title=" <%= application.getDisplayName() %> "><%= applicationDisplayName %></td>
 					</tr>
 				</table>
-				<table>
+				<table summary="Application Name">
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.name")%></td>
 						<td class="RightLabel" title=" <%= name %> "><%= name %></td>
 					</tr>
 				</table>
-				<table>
+				<table summary="Application Description">
 					<tr>
 						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.description")%></td>
 						<td class="RightLabel" title=" <%= application.getDescription() %> "><%= applicationDescription %></td>
 					</tr>
 				</table>
 			</div>
-			
+
 	</div>
 	<div class="UIAcessPermissions UIFormWithTitle">
 		<div class="TitleBar"><%=_ctx.appRes("UIApplicationInfo.label.accessPermissions")%></div>

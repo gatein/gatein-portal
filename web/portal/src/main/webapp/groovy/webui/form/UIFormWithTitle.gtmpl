@@ -11,7 +11,7 @@
 	<% uiform.begin() %>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
-			<table class="UIFormGrid">
+			<table class="UIFormGrid" summary="Component $uicomponent.id">
 				<% 
 					for(field in uiform.getChildren()) { 
 						if(field.isRendered()) {

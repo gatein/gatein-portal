@@ -26,7 +26,7 @@
             <form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
               <input type="hidden" name="initialURI" value="<%=requestPath %>"/>
               <div class="VerticalLayout">
-                <table class="UIFormGrid">
+                <table class="UIFormGrid" summary="Login form">
                   <tr class="UserNameField">
                     <td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.UserName")%></td>
                     <td><input class="UserName" name="username"/></td>

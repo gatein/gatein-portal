@@ -11,7 +11,7 @@
 	%>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
-			<table class="UIFormGrid">
+			<table class="UIFormGrid" summary="Group membership form">
 				<% 
 						UIFormStringInput name = uicomponent.getChild(UIFormStringInput.class);
 						UIFormSelectBox membership = uicomponent.getChild(UIFormSelectBox.class);

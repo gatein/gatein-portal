@@ -7,7 +7,7 @@
 	<%uiform.begin()%>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
-			<table class="UIFormGrid">
+			<table class="UIFormGrid" summary="$uicomponent.id form">
 				<%
 				   Collection<OAuthProviderType> oauthProviders = uicomponent.getOAuthProviderTypes();
 				   if (oauthProviders.size() == 0) {

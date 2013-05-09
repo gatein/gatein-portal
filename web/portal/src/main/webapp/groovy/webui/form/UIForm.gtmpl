@@ -3,16 +3,16 @@
 	<%uiform.begin()%>
 	<div class="HorizontalLayout">
 		<div class="FormContainer">
-			<table class="UIFormGrid">
-				<% 
-					for(field in uiform.getChildren()) { 
+			<table class="UIFormGrid" summary="Component $uicomponent.id">
+				<%
+					for(field in uiform.getChildren()) {
 						if(field.isRendered()) {
 				%>
 							<tr>
 								<%fieldName = uicomponent.getLabel(field.getName());%>
 								<%
 									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId()) && !fieldName.equals(field.getName())) {
-								%>												
+								%>
 									<td class="FieldLabel portlet-form-label">
 										<%=uicomponent.getLabel(field.getName()) %>
 									</td>
@@ -26,13 +26,13 @@
 					}
 				%>
 			</table>
-			<div class="UIAction"> 
-				<% for(action in uicomponent.getActions()) { 
+			<div class="UIAction">
+				<% for(action in uicomponent.getActions()) {
 						 String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 						 String link = uicomponent.event(action);
 				%>
 							<a href="javascript:void(0);" onclick="$link" class="ActionButton LightBlueStyle">$actionLabel</a>
-				<%}%>	
+				<%}%>
 			</div>
 		</div>
 	</div>
