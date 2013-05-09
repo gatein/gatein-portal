@@ -24,12 +24,17 @@ package org.gatein.portlet.responsive.community;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletPreferences;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
+
 import com.sun.syndication.io.FeedException;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -50,21 +55,6 @@ public class CommunityPortlet extends GenericPortlet {
 
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-
-        PortletPreferences portletPreferences = request.getPreferences();
-
-        String urlRssBlog = portletPreferences.getValue(URL_RSS_BLOG, DEFAULT_URL);
-        String urlRssTwitter = portletPreferences.getValue(URL_RSS_TWITTER, DEFAULT_URL);
-        String urlContentBlog = portletPreferences.getValue(URL_CONTENT_BLOG, DEFAULT_URL);
-        String urlContentTwitter = portletPreferences.getValue(URL_CONTENT_TWITTER, DEFAULT_URL);
-        String pfxBlogAuthor = portletPreferences.getValue(PFX_BLOG_AUTHOR, "");
-
-        RssReaderBean gateInBlogRssReader = makeReaderBean(urlRssBlog, urlContentBlog, 2, pfxBlogAuthor);
-        RssReaderBean gateInTwitterRssReader = makeReaderBean(urlRssTwitter, urlContentTwitter, 2, null);
-
-        request.setAttribute("blogRSSBean", gateInBlogRssReader);
-        request.setAttribute("twitterRSSBean", gateInTwitterRssReader);
-
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/community.jsp");
         prd.include(request, response);
     }
@@ -89,4 +79,32 @@ public class CommunityPortlet extends GenericPortlet {
         return rssReaderBean;
     }
 
+    @Override
+    public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
+
+        PortletPreferences portletPreferences = request.getPreferences();
+
+        String contentType = request.getParameter("type");
+
+        if ("blog".equals(contentType)){
+            String urlRssBlog = portletPreferences.getValue(URL_RSS_BLOG, DEFAULT_URL);
+            String urlContentBlog = portletPreferences.getValue(URL_CONTENT_BLOG, DEFAULT_URL);
+            String pfxBlogAuthor = portletPreferences.getValue(PFX_BLOG_AUTHOR, "");
+
+            RssReaderBean gateInBlogRssReader = makeReaderBean(urlRssBlog, urlContentBlog, 2, pfxBlogAuthor);
+            request.setAttribute("blogRSSBean", gateInBlogRssReader);
+
+            PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/feedBlog.jsp");
+            prd.include(request, response);
+        } else if ("twitter".equals(contentType)) {
+            String urlRssTwitter = portletPreferences.getValue(URL_RSS_TWITTER, DEFAULT_URL);
+            String urlContentTwitter = portletPreferences.getValue(URL_CONTENT_TWITTER, DEFAULT_URL);
+
+            RssReaderBean gateInTwitterRssReader = makeReaderBean(urlRssTwitter, urlContentTwitter, 2, null);
+            request.setAttribute("twitterRSSBean", gateInTwitterRssReader);
+
+            PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/feedTwitter.jsp");
+            prd.include(request, response);
+        }
+    }
 }

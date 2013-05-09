@@ -287,3 +287,13 @@
         float: left;
     }
 }
+
+.gtnResponsiveCommunityPortlet #conversation .accordion-body > a.ajaxLoader {
+    background-image: url("/eXoResources/skin/DefaultSkin/background/Loading.gif");
+    width: 32px;
+    height: 32px;
+    margin: 10px auto;
+    text-indent: -9999px;
+    display: block;
+    float: none;
+}
