@@ -2,31 +2,30 @@
   import org.exoplatform.portal.webui.util.Util;
   import org.exoplatform.portal.application.PortalRequestContext;
 
-	PortalRequestContext pcontext = Util.getPortalRequestContext();	
+	PortalRequestContext pcontext = Util.getPortalRequestContext();
 	String initialURI = pcontext.getInitialURI();
 %>
 
 <div class="UIHomePagePortlet ClearFix" id="$uicomponent.id">
 	<div class="TRContainer">
-		<div class="PortletDecoration">					
+		<div class="PortletDecoration">
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%></div>
-			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank"></a>
+			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank" title="Goto GateIn" ></a>
 			<div class="DotLine"><span></span></div>
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>
-			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank"></a>
-			
+			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank" title="Goto Discussions"></a>
 		</div>
 	</div>
 	<div class="TLContainer">
 		<div class="PortletDecoration">
-		
+
 			<div class="HomePortletAdBackround">
 				<div class="AdImageLeft">
 					<div class="AdImageRight">
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="HomePortletContent">
 				<div class="LeftAccountsContainer">
 					<div class="RightAccountsContainer">
@@ -35,7 +34,7 @@
 							<div class="AccountsContainerDeco ClearFix">
 								<div class="AccountBlock AdministratorUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn&amp;initialURI=<%=initialURI%>" title="Access as root"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
 										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>root</span>
 										</div>
@@ -43,11 +42,11 @@
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Password")%></div><span>gtn</span>
 										</div>
 									</div>
-								</div>	
+								</div>
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock ManagerUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn&amp;initialURI=<%=initialURI%>" title="Access as john"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
 										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>john</span>
 										</div>
@@ -59,7 +58,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock NormalUser">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn&amp;initialURI=<%=initialURI%>" title="Access as mary"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
 										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>mary</span>
 										</div>
@@ -71,7 +70,7 @@
 								<div class="SeparatorLine"><span></span></div>
 								<div class="AccountBlock DemoUser" style="margin-right: 0px;">
 									<div class="AccountInfos">
-										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
+										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn&amp;initialURI=<%=initialURI%>" title="Access as demo"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
 										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>demo</span>
 										</div>
@@ -85,8 +84,8 @@
 					</div>
 				</div>
 			</div>
-			
-		</div>	
-	</div>	
+
+		</div>
+	</div>
 </div>
 

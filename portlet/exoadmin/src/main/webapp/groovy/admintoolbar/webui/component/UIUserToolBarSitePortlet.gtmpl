@@ -46,7 +46,8 @@
                 label = entityEncoder.encode(label);
 				print """
 					<li class="MenuItem $clazz portlet-menu-cascade-item">
-						<a href="$href" class="ItemIcon SiteIcon">$label</a>					
+						<a href="$href" class="ItemIcon SiteIcon" title="$label">$label</a>					
+
 				""";
 						if(isCurrent) {
 							renderCurrentPortal(nodeURL);
@@ -61,7 +62,7 @@
 				
                         <li class="HorizontalSeparator"></li>
                         <li class="MenuItem portlet-menu-cascade-item">
-                          <a class="EditorIcon TBIcon" href="$editSitesLink">$label</a>
+                          <a class="EditorIcon TBIcon" href="$editSitesLink" title="$label">$label</a>
                         </li>
 
 				</ul>
@@ -98,14 +99,14 @@
 		String label = ( toolong ? HTMLEntityEncoder.getInstance().encode(node.getResolvedLabel().substring(0, 57) + "...") : node.getEncodedResolvedLabel());
 		String title = "";
 		if(toolong) title = "title='" + node.getEncodedResolvedLabel()  + "'";
-		else title = "";
-		
+		else title = "title='" + label + "'";
 		def getNodeURL = "";
 		if (hasChild) {
 			MimeResponse res = _ctx.getRequestContext().getResponse();
 			ResourceURL resourceURL = res.createResourceURL();
 			resourceURL.setResourceID(node.getURI());	
 			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+
 		}
 		
 		print """
@@ -143,7 +144,7 @@
 
 <ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
-                <span class="SitesIcon TBIcon">
+                <span class="SitesIcon TBIcon" title="Sites">
 			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
 		</span>		
 		<% renderPortalNavigations(nodeURL) %>

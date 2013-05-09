@@ -6,13 +6,13 @@
   import java.text.SimpleDateFormat;
   import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
-  String[] beanFields =  uicomponent.getBeanFields() ;  
-  String[] beanActions =  uicomponent.getBeanActions() ;  
+  String[] beanFields =  uicomponent.getBeanFields() ;
+  String[] beanActions =  uicomponent.getBeanActions() ;
   def uiParent = uicomponent.getParent();
 
   String name = uicomponent.getLabel() ;
-  UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class); 
-  
+  UIForm uiForm = uicomponent.getAncestorOfType(UIForm.class);
+
   DateFormat dateFormat = null;
 %>
 <div id="$uicomponent.id">
@@ -38,16 +38,16 @@
             </tr>
         </thead>
         <tbody class="FeedBox">
-			<% 
+			<%
 			boolean even = true;
-			for (bean in uicomponent.getBeans())  { 
-				if(even) rowClass = "EvenRow";	
-				else rowClass =	"OddRow"; 
+			for (bean in uicomponent.getBeans())  {
+				if(even) rowClass = "EvenRow";
+				else rowClass =	"OddRow";
 				even = !even;
-			%>   
+			%>
 	        <tr class="$rowClass">
 			      <%
-		        for(field in beanFields) { 
+		        for(field in beanFields) {
 		          def fieldValue = uicomponent.getFieldValue(bean, field) ;
 		          def cssClass = "" ;
 		          if(fieldValue != null) {
@@ -57,8 +57,8 @@
 		              if(dateFormat == null) dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
 		              cssClass = "Datetime" ;
 		              fieldValue = dateFormat.format(fieldValue);
-		            } 
-		            else { 
+		            }
+		            else {
 		        	  cssClass = "Text" ;
 		        	  fieldValue = HTMLEntityEncoder.getInstance().encode(fieldValue.toString());
 		    	    }
@@ -67,26 +67,26 @@
 		          }
 		          String value = fieldValue.toString();
 		          println "<td><div class=\""+cssClass+"\" title='$fieldValue'>"+fieldValue+"</div></td>";
-		        }  
-			      if(beanActions != null && beanActions.length > 0) { 
+		        }
+			      if(beanActions != null && beanActions.length > 0) {
 			      %>
 	           <td>
 	                <div class="ActionContainer">
 	                  <%
-	                    def beanIdField = uicomponent.getBeanIdField() ;           
-	                    for(action in beanActions) { 
+	                    def beanIdField = uicomponent.getBeanIdField() ;
+	                    for(action in beanActions) {
 	                      def beanId = uicomponent.getFieldValue(bean, beanIdField)  ;
 	                        if(action == null) continue;
 	                      String title = _ctx.appRes(uiParent.getParent().getName() + ".action.title." + action);
 	                      String actionLink = uiParent.event(action, beanId);
-	                    %>             
-	                        <img onclick="$actionLink" alt="" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" />
-	                  <%}%>                 
+	                    %>
+	                        <img onclick="$actionLink" alt="$title" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" />
+	                  <%}%>
 	                </div>
 	            </td>
 	      <%
 	            }
-	      %>  
+	      %>
             </tr>
         <%
             }

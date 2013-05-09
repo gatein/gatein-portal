@@ -13,9 +13,10 @@
 	   	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
       	fullName = encoder.encode(uicomponent.getUser().getFullName());
 	%>
-		<a href="$accountSetting"><%=fullName%></a>
+		<a href="$accountSetting" title="<%=fullName%>"><%=fullName%></a>
 	<%} else {%>
 		<span></span>
 	<%}%>
 	</li>
 </li>
+

@@ -6,11 +6,11 @@
 	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.mop.SiteType;
 
-	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
+	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
 	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
-	String portletId = uicomponent.getId() ;	
-	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"	
+	String portletId = uicomponent.getId() ;
+	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 	String navTitle = uicomponent.getNavigationTitle();
 %>
 
@@ -22,26 +22,26 @@
             String imgURL = uicomponent.getURL();
             if (imgURL != "")
             {
-               print """<img src="$imgURL" />""";
+               print """<img src="$imgURL" alt="$navTitle" title="$navTitle" />""";
             }
         %>
         </a>
-		<div class="BannerTitle">$navTitle</div>	
-		<!-- ACTIONs -->	
-		<% 
-		if(prContext.getRemoteUser() == null) { 
-		    PortalRequestContext pcontext = Util.getPortalRequestContext(); 
+		<div class="BannerTitle">$navTitle</div>
+		<!-- ACTIONs -->
+		<%
+		if(prContext.getRemoteUser() == null) {
+		    PortalRequestContext pcontext = Util.getPortalRequestContext();
 			PortalURL nodeURL = nodeurl();
 			NavigationResource resource = new NavigationResource(SiteType.PORTAL, pcontext.getPortalOwner(), "register");
 			String registerURI = nodeURL.setResource(resource).toString();
 		%>
 		<div class="Signin ClearFix">
 			<a onclick="$changeLanguageAction"><%=_ctx.appRes("UILogoPortlet.action.changeLanguage")%></a>
-			<a href="$registerURI"><%=_ctx.appRes("UILogoPortlet.action.Register")%></a>	
+			<a href="$registerURI"><%=_ctx.appRes("UILogoPortlet.action.Register")%></a>
 			<%= uicomponent.renderLoginLink(signInAction, _ctx.appRes("UILogoPortlet.action.signin")) %>
 		</div>
 		<% } %>
-	
+
 	<%} else {
 			uicomponent.renderChildren();
 		}

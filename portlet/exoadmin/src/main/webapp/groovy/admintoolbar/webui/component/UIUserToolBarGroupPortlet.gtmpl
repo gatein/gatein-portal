@@ -53,12 +53,13 @@
 		String label = ( toolong ? HTMLEntityEncoder.getInstance().encode(node.getResolvedLabel().substring(0, 57) + "...") : node.getEncodedResolvedLabel());
 		String title = "";
 		if(toolong) title = "title='" + node.getEncodedResolvedLabel()  + "'";
-		else title = "";
-		
+		else title = "title='" + label + "'";
+
 		def getNodeURL = "";
 		if (hasChild) {
 		    def groupId = node.getNavigation().getKey().getName();
 			MimeResponse res = _ctx.getRequestContext().getResponse();
+			
 			ResourceURL resourceURL = res.createResourceURL();			
 			resourceURL.setResourceID(groupId + "::" + node.getURI());	
 			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
@@ -89,10 +90,11 @@
 	    """ ;
 	}	
 	def currentPortal = pcontext.getPortalOwner();
-%> 	
+
+%>
 <ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
-		<span class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></span>
+		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>" title="Group"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer portlet-menu-cascade">
 		<% for(nav in groupNavigations) {
@@ -100,8 +102,9 @@
 		} %>
                   <li class="HorizontalSeparator"></li>
                     <li class="MenuItem portlet-menu-cascade-item">
-                    <a class="EditorIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.editGroup")%></a>
+                    <a class="EditorIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>" title="<%=_ctx.appRes("UIUserToolBarGroupPortlet.editGroup")%>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.editGroup")%></a>
                   <li>
+
 		</ul>
 		<% } %>
 	</li>
