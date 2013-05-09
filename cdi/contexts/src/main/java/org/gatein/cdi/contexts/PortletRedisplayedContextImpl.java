@@ -19,7 +19,6 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.gatein.cdi.contexts;
 
 import java.lang.annotation.Annotation;
@@ -29,12 +28,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.gatein.api.cdi.context.PortletRedisplayScoped;
+import org.gatein.cdi.contexts.beanstore.ResourceTempBeanStore;
 import org.gatein.cdi.contexts.beanstore.SessionBeanStore;
 
 import static javax.portlet.PortletRequest.*;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+ * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
 public class PortletRedisplayedContextImpl extends AbstractCDIPortletContext implements PortletRedisplayedContext {
 
@@ -53,25 +54,34 @@ public class PortletRedisplayedContextImpl extends AbstractCDIPortletContext imp
     @Override
     public void transition(final HttpServletRequest request, final String windowId, final PortletRequestLifecycle.State state) {
         if (getBeanStore() == null) {
-            setBeanStore(new SessionBeanStore(request));
+            if (state.isPhase(RESOURCE_PHASE)) {
+                setBeanStore(new ResourceTempBeanStore(request));
+            } else {
+                setBeanStore(new SessionBeanStore(request));
+            }
+        }
+
+        String attributeName = prefix(windowId);
+        if (state.isPhase(RESOURCE_PHASE)) {
+            attributeName = Thread.currentThread().getId() + attributeName;
         }
 
         SessionBeanStore store = (SessionBeanStore) getBeanStore();
-        String attributeName = prefix(windowId);
         HttpSession session = store.getSession(true);
 
         PortletRequestLifecycle lifecycle = getLifecycle(windowId);
         if (lifecycle == null) {
             lifecycle = (PortletRequestLifecycle) session.getAttribute(attributeName);
+
             if (lifecycle == null) {
                 lifecycle = new PortletRequestLifecycle();
+            } else {
+                // This check ensures we don't keep adding transitions and get into some strange state.
+                if (lifecycle.size() > 6) { // Most we can have is an action->event->render (with a start and end for each phase, that's 6)
+                    destroy(windowId);
+                    lifecycle = new PortletRequestLifecycle();
+                }
             }
-        }
-
-        // This check ensures we don't keep adding transitions and get into some strange state.
-        if (lifecycle.size() > 6) { // Most we can have is an action->event->render (with a start and end for each phase, that's 6)
-            destroy(windowId);
-            lifecycle = new PortletRequestLifecycle();
         }
 
         // Logic on the lifecycle
@@ -86,6 +96,10 @@ public class PortletRedisplayedContextImpl extends AbstractCDIPortletContext imp
         } else if (state.ended()) {
             if (state.isPhase(RENDER_PHASE, RESOURCE_PHASE)) {
                 lifecycle = null;
+                if (state.isPhase(RESOURCE_PHASE)) {
+                    destroy(windowId);
+                }
+                setBeanStore(null);
             }
         }
 

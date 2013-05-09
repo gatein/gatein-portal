@@ -19,8 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
-package org.gatein.cdi.contexts.beanstore.serial;
+package org.gatein.cdi.contexts;
 
 import java.io.Serializable;
 

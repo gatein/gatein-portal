@@ -19,17 +19,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.gatein.cdi.contexts.beanstore;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+ * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
-public abstract class AbstractBeanStore implements BeanStore {
+public abstract class AbstractBeanStore implements BeanStore, Iterable<String> {
 
     @SuppressWarnings("unchecked")
     protected <T> void destroyBean(BeanStoreInstance<?> instance) {
-        BeanStoreInstance<T> beanInstance = (BeanStoreInstance<T>) instance;
-        beanInstance.getContextual().destroy(beanInstance.getInstance(), beanInstance.getCreationalContext());
+        if (null != instance) {
+            BeanStoreInstance<T> beanInstance = (BeanStoreInstance<T>) instance;
+            beanInstance.getCreationalContext().release();
+            beanInstance.getContextual().destroy(beanInstance.getInstance(), beanInstance.getCreationalContext());
+        }
     }
 }

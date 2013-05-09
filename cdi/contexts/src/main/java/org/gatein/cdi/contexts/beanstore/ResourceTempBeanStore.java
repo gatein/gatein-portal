@@ -21,17 +21,23 @@
  */
 package org.gatein.cdi.contexts.beanstore;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Bean store that is backed only by a HashMap.
+ * Bean store that is backed only by a HashMap for {@link javax.portlet.ResourceRequest} calls
+ * and then merged into {@link SessionBeanStore}.
  *
- * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+ * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
-public class LocalBeanStore extends AbstractBeanStore {
+public class ResourceTempBeanStore extends SessionBeanStore implements BeanStore {
     private final Map<String, Object> map = new HashMap<String, Object>();
+
+    public ResourceTempBeanStore(HttpServletRequest request) {
+        super(request);
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -52,7 +58,7 @@ public class LocalBeanStore extends AbstractBeanStore {
     @Override
     public void destroy() {
         for (String id : this) {
-            destroyBean(getBean(id));
+            super.put(id, getBean(id));
         }
         map.clear();
     }
@@ -64,7 +70,7 @@ public class LocalBeanStore extends AbstractBeanStore {
             String key = entry.getKey();
             BeanStoreInstance<?> beanInstance = (BeanStoreInstance<?>) entry.getValue();
             if (key.startsWith(windowId)) {
-                destroyBean(beanInstance);
+                super.put(key, beanInstance);
                 iter.remove();
             }
         }
@@ -73,5 +79,9 @@ public class LocalBeanStore extends AbstractBeanStore {
     @Override
     public Iterator<String> iterator() {
         return map.keySet().iterator();
+    }
+
+    private <T> void merge(BeanStoreInstance<T> instance) {
+
     }
 }

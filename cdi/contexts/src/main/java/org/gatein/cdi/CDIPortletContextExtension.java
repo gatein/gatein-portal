@@ -19,8 +19,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.gatein.cdi;
 
-package org.gatein.cdi.contexts;
+import org.gatein.cdi.contexts.CDIPortletContext;
+import org.gatein.cdi.contexts.PortletLifecycleContextImpl;
+import org.gatein.cdi.contexts.PortletRedisplayedContextImpl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +36,7 @@ import javax.enterprise.inject.spi.Extension;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+ * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
 public class CDIPortletContextExtension implements Extension {
 

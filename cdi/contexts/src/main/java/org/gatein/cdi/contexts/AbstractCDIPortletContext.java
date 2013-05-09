@@ -19,13 +19,13 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.gatein.cdi.contexts;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.enterprise.context.ContextNotActiveException;
+import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.PassivationCapable;
@@ -34,12 +34,12 @@ import org.exoplatform.portal.pc.aspects.PortletLifecyclePhaseInterceptor;
 import org.gatein.cdi.contexts.beanstore.BeanStore;
 import org.gatein.cdi.contexts.beanstore.BeanStoreInstance;
 import org.gatein.cdi.contexts.beanstore.LockedBean;
-import org.gatein.cdi.contexts.beanstore.serial.SerializableBeanStoreInstance;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+ * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
-public abstract class AbstractCDIPortletContext implements CDIPortletContext {
+public abstract class AbstractCDIPortletContext implements Context {
 
     private final ThreadLocal<BeanStore> beanStore;
     private final ThreadLocal<Map<String, PortletRequestLifecycle>> lifecycles;
@@ -108,6 +108,10 @@ public abstract class AbstractCDIPortletContext implements CDIPortletContext {
     protected void setCurrentLifecycle(String windowId, PortletRequestLifecycle lifecycle) {
         if (lifecycle == null) {
             currentLifecycle.remove();
+            Map<String, PortletRequestLifecycle> map = lifecycles.get();
+            if (null != map) {
+                map.remove(windowId);
+            }
         } else {
             currentLifecycle.set(lifecycle);
             Map<String, PortletRequestLifecycle> map = lifecycles.get();

@@ -19,8 +19,9 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.gatein.cdi.contexts;
+
+import org.gatein.cdi.CDIPortletContextExtension;
 
 import javax.inject.Inject;
 import javax.servlet.ServletRequestEvent;
@@ -33,6 +34,7 @@ import static org.exoplatform.portal.pc.aspects.PortletLifecyclePhaseInterceptor
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
+ * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
 public class CDIServletListener implements ServletRequestListener, HttpSessionListener {
 

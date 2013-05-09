@@ -19,7 +19,6 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.gatein.cdi.contexts.beanstore;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ import javax.servlet.http.HttpSession;
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class SessionBeanStore implements BeanStore {
+public class SessionBeanStore extends AbstractBeanStore {
 
     private static final String PREFIX = SessionBeanStore.class.getName();
     private static final String DELIM = "#";
@@ -86,6 +85,7 @@ public class SessionBeanStore implements BeanStore {
     public void destroy(String windowId) {
         for (String id : this) {
             if (id.startsWith(windowId)) {
+                destroyBean(getBean(id));
                 removeAttribute(id);
             }
         }
@@ -94,6 +94,7 @@ public class SessionBeanStore implements BeanStore {
     @Override
     public void destroy() {
         for (String id : this) {
+            destroyBean(getBean(id));
             removeAttribute(id);
         }
     }

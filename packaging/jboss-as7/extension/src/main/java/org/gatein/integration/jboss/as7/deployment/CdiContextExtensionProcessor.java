@@ -1,6 +1,6 @@
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.cdi.contexts.CDIPortletContextExtension;
+import org.gatein.cdi.CDIPortletContextExtension;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
