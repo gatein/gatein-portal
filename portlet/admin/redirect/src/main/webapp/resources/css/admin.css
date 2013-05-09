@@ -339,7 +339,7 @@
 }
 
 .RedirectAdmin h2.initial {
-	margin-top: 80px;
+	margin-top: 15px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 22px;
 	margin-bottom: 15px;
@@ -996,6 +996,7 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
     padding: 3px 10px;
     display: inline-block;
     border-radius: 3px;
+    line-height: 25px;
 }
 
 .RedirectAdmin .modal .attachment span {font-weight: bold;}

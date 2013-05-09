@@ -9,7 +9,7 @@
 
 <ui:define name="content">
 	<h:form id="add_form" styleClass="form-horizontal">
-		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText id="sitename_text" styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects</h1>
+		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText id="sitename_text" styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects &amp; Export/Import</h1>
 		<div id="main-alert" class="alert" style="opacity: 0;">
 			<!-- <button data-dismiss="alert" class="modal-close">Close</button> -->
 			<strong id="main-alert-title"></strong> <span id="main-alert-message"></span>
@@ -21,8 +21,14 @@
 			<!-- No site selected -->
 			<h:panelGroup rendered="#{empty rdrs.siteName}">
 				<h2 class="initial">Select a site to set up redirects.</h2>
-				<p class="initial">Redirect to an alternative site based on the device, browser or user preferences.</p>
+				<p class="initial">
+					Redirect to an alternative site based on the device, browser or user preferences.<br />
+					<small style="opacity: 0.5;">Not available for Spaces</small>
+				</p>
 				<h:graphicImage class="initial" library="img" name="site-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
+				<p class="initial"> </p>
+				<h2 class="initial">Select a site or space to be exported.</h2>
+				<p class="initial">Export existing sites and spaces or import previously exported sites or spaces into the portal.</p>
 			</h:panelGroup>
 
 			<!-- Site selected, with no redirects -->

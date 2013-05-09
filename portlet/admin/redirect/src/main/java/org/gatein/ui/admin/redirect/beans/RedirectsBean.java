@@ -33,6 +33,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.OrganizationService;
 import org.gatein.api.PortalRequest;
 import org.gatein.api.site.Site;
 import org.gatein.api.site.SiteQuery;
@@ -53,6 +55,38 @@ public class RedirectsBean implements Serializable {
         SiteQuery sq = new SiteQuery.Builder().withSiteTypes(SiteType.SITE).build();
         List<Site> s = PortalRequest.getInstance().getPortal().findSites(sq);
         return s;
+    }
+
+    /**
+     * Fetches the full list of spaces using GateIn API.
+     *
+     * @return
+     */
+    public List<Site> getSpaces() {
+        SiteQuery sq = new SiteQuery.Builder().withSiteTypes(SiteType.SPACE).build();
+        List<Site> s = PortalRequest.getInstance().getPortal().findSites(sq);
+        return s;
+    }
+
+    /**
+     * Gets the label for a space, given it's id.
+     *
+     * @param id the space id (eg: /platform/administrators)
+     * @return the space label, usable for interfaces (eg: Administrators) if available, if not the id is returned back.
+     */
+    public String getSpaceLabel(String id) {
+        OrganizationService orgService = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+        try {
+            Group group = orgService.getGroupHandler().findGroupById(id);
+            if (group == null) {
+                return id;
+            }
+            String label = group.getLabel();
+            String groupLabel = (label != null && label.trim().length() > 0) ? label : group.getGroupName();
+            return groupLabel;
+        } catch (Exception e) {
+            return id;
+        }
     }
 
     // the selected site on the menu. we will show redirects for it

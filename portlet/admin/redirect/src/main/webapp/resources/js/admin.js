@@ -237,30 +237,7 @@ bootstrapModal = function() {
 		$(this).parent().parent().removeClass("open");
 		$('#modal-delete-site').modal();
 	});
-	$('#import-site').click(function() {
-		$('#file').bind("change", function (e) {
-			//get the file path
-			var file = $('#file').val();
-			//pull out the filename
-			file = file.replace(/^.*\\/i, "");
-			//show to user
-			$('#fileName').text(file);
-			$('#file').fadeOut(300, function() {
-				$('#file-attachment').fadeIn(300);
-			});
-		});
 
-		$('#file-remove-btn').click(function() {
-			$('#file').val("");
-			$('#file-attachment').fadeOut(300, function() {
-				$('#file').fadeIn(300);
-			});
-		});
-
-		$('#modal-import-site').modal();
-		// don't be a link
-		return false;
-	});
 	$('#create-group').click(function() {
 		$('#modal-create-group').modal();
 	});

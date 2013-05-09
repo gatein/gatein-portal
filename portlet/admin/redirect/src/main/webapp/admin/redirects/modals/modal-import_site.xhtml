@@ -6,6 +6,63 @@
 			 xmlns:a4j="http://richfaces.org/a4j"
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
+	<style type="text/css">
+		.rf-fu {
+			border: 0;
+			width: 100%;
+		}
+		.rf-fu-hdr {
+			background: none;
+			border: 0;
+		}
+		.rf-fu-btn-add {
+			background: none;
+			border: 0;
+		}
+		.rf-fu-btn-cnt-add {
+			background: none;
+			font-size: 14px;
+		}
+		.rf-fu-btn-clr {
+			background: none;
+			border: 0;
+		}
+		.rf-fu-btn-cnt-clr {
+			background: none;
+			font-size: 14px;
+		}
+		.rf-fu-btn-upl {
+			visibility: hidden;
+		}
+
+		.rf-fu-itm {
+			border: 1px solid #ccc;
+			background-color: #eee;
+			padding: 3px 10px;
+			display: inline-block;
+			border-radius: 3px;
+			line-height: 25px;
+			width: 94%;
+			margin-top: 7px;
+			margin-left: 5px;
+		}
+		.rf-fu-itm-lbl {
+			font-size: 14px;
+		}
+		.rf-fu-itm-lnk {
+			color: #AAAAAA;
+			font-size: 14px;
+			text-decoration: none;
+		}
+		.rf-fu-inp {
+			cursor: pointer;
+		}
+		.rf-fu-itm-st {
+			height: 0;
+			margin: 0;
+		}
+	</style>
+
 	<h:form id="form-import-site">
 	<div class="modal hide" id="modal-import-site">
 		<div class="modal-header">
@@ -14,28 +71,51 @@
 		</div>
 		<div class="modal-body">
 			<div id="file-input-holder" class="control-group">
-				<label class="control-label" for="file">File to import </label>
-				<input type="file" class="input-xlarge" id="file" />
-				<div id="file-attachment" class="attachment" style="display: none;">
-					<span id="fileName" class="text-side-label">UNDEFINED</span>
-					<button id="file-remove-btn"><i class="icon-remove"> Delete File</i></button>
-				</div>
+				<rich:fileUpload fileUploadListener="#{importer.importSite}" id="upload" acceptedTypes="zip" ontyperejected="alert('Only ZIP files are accepted');" maxFilesQuantity="5" noDuplicate="true" deleteLabel="Remove" addLabel=" Select Site" uploadLabel="Import" clearLabel="Clear" clearAllLabel=" Clear All" onfileselect="$('#no-sites-div').hide();" >
+					<a4j:ajax event="uploadcomplete" execute="@none" render="info" />
+					<f:facet name="progress">
+						<rich:progressBar style="display: none;" onfinish="onFileUploaded($(this));" />
+					</f:facet>
+				</rich:fileUpload>
 			</div><!-- End .control-group -->
+			<br />
 			<div class="control-group">
-				<label class="control-label" for="mode">Import Mode </label>
-				<select id="mode">
-					<option>Conserve</option>
-					<option>Insert</option>
-					<option selected="selected">Merge</option>
-					<option>Overwrite</option>
-				</select>
+				<h:outputLabel for="mode" value="Import Mode" styleClass="control-label" />
+				<h:selectOneMenu id="mode" value="#{importer.importMode}" style="height: 30px;" >
+					<f:selectItems value="#{importer.importModes}" />
+					<f:ajax />
+				</h:selectOneMenu>
 			</div><!-- End .control-group -->
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
 			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
-			<a href="#" id="button-import-site" class="btn btn-primary">Import</a>
+			<a href="#" id="button-import-site" class="btn btn-primary" onclick="$('.rf-fu-btn-cnt-upl').click();">Import</a>
 		</div>
 	</div><!-- end .modal -->
 	</h:form>
+
+	<script type="text/javascript">
+		function onFileUploaded(el) {
+			el.parent().parent().parent().css('background-color','#dff0d8');
+		}
+		$(document).ready(function () {
+			$(".rf-fu-btn-cnt-add").addClass("icon-download-alt").css("width", "auto");
+			$(".rf-fu-btn-add").addClass("btn");
+			$(".rf-fu-btn-add").css("padding", "2px 21px 2px 0px");
+
+			$(".rf-fu-btn-cnt-clr").addClass("icon-remove").css("width", "auto");
+			$(".rf-fu-btn-clr").addClass("btn");
+			$(".rf-fu-btn-clr").css({
+				"padding": "2px 21px 2px 0px",
+				"display": "none"
+			});
+
+			noSitesDiv = $(document.createElement("div")).attr("id", "no-sites-div");
+			noSitesDiv.css({"font-size": "40px", "color": "#CCC", "margin-top": "25px", "text-align": "center", "border": "2px dashed #CCC", "padding": "60px 20px", "border-radius": "20px"});
+			noSitesDiv.text("No Sites Selected")
+			$(".rf-fu-lst").append(noSitesDiv);
+			$(".rf-fu-itm").addClass("attachment");
+		});
+	</script>
 
 </ui:fragment>
