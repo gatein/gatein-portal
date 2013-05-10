@@ -51,7 +51,7 @@
 
       <node>
         <name>siteRedirects</name>
-        <label>Site Redirects</label>
+        <label>Site Redirects and Import/Export</label>
         <page-reference>group::/platform/administrators::siteRedirects</page-reference>
       </node>
     </node>

@@ -6,9 +6,9 @@
 	http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 
 	<portlet>
-		<description xml:lang="EN">Site Redirects Portlet</description>
-		<portlet-name>RedirectsAdminPortlet</portlet-name>
-		<display-name xml:lang="EN">Site Redirects</display-name>
+		<description xml:lang="EN">Site Redirects and Import/Export Portlet</description>
+		<portlet-name>RedirectsAndImportExportAdminPortlet</portlet-name>
+		<display-name xml:lang="EN">Site Redirects and Import/Export</display-name>
 
 		<portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
 
@@ -29,8 +29,8 @@
 		</supports>
 
 		<portlet-info>
-			<title>GateIn Site Redirects Admin Portlet</title>
-			<short-title>Site Redirects Admin Portlet</short-title>
+			<title>GateIn Site Redirects and Import/Export Admin Portlet</title>
+			<short-title>Site Redirects and Import/Export Admin Portlet</short-title>
 			<keywords>Administration</keywords>
 		</portlet-info>
 
