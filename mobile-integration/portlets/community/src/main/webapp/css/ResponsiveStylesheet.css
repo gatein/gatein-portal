@@ -6,7 +6,7 @@
 .gtnResponsiveCommunityPortlet #documentation {
     float: left;
     margin-left: 2.5641%;
-    width: 46.1538%;    
+    width: 46.1538%;
 }
 
 .gtnResponsiveCommunityPortlet h4 {
@@ -86,7 +86,7 @@
     margin-bottom: 0.5em;
     text-shadow: 0 0.125em 0 #fff;
     margin-left: 4.4em;
-} 
+}
 
 .gtnResponsiveCommunityPortlet #documentation p {
     color: #7A7A7A;
@@ -105,7 +105,7 @@
     float: right;
     margin-left: 2.5641%;
     margin-right: 2.5641%;
-    width: 46.1538%;  
+    width: 46.1538%;
 }
 
 .gtnResponsiveCommunityPortlet #conversation > div {border-bottom: 0.0625em solid #ccc;}
@@ -146,7 +146,7 @@
     display: inline-block;
 }
 
-.gtnResponsiveCommunityPortlet #blog-content-mobile, 
+.gtnResponsiveCommunityPortlet #blog-content-mobile,
 .gtnResponsiveCommunityPortlet #tweets-content-mobile {
     overflow: hidden;
     padding: 0 3.57143%;
@@ -225,22 +225,22 @@
 @media only screen and (max-width: 64em) {
 
     .gtnResponsiveCommunityPortlet #willing {width: 61.1111%;}
-    
+
     .gtnResponsiveCommunityPortlet #willing p {font-size: 0.9375em;}
-    
+
     .gtnResponsiveCommunityPortlet #documentation {width: 57.6923%;}
-    
+
     .gtnResponsiveCommunityPortlet #conversation {
         margin-left: 4.70085%;
         width: 29.0598%;
     }
-    
-    .gtnResponsiveCommunityPortlet #conversation ul li + li {display: none;} 
-    
+
+    .gtnResponsiveCommunityPortlet #conversation ul li + li {display: none;}
+
 }
 
 @media only screen and (max-width: 37.5em) {
-    
+
     .gtnResponsiveCommunityPortlet #willing,
     .gtnResponsiveCommunityPortlet #documentation,
     .gtnResponsiveCommunityPortlet #conversation {
@@ -249,29 +249,28 @@
         margin-right: 2.5641%;
         width: auto;
     }
-    
+
     .gtnResponsiveCommunityPortlet #conversation {margin-top: 1.875em;}
-    
+
     .gtnResponsiveCommunityPortlet #documentation {padding: 0.9375em;}
-    
+
     .gtnResponsiveCommunityPortlet #documentation p {font-size: 0.875em;}
 }
 
 @media only screen and (max-width: 20em) {
 
     .gtnResponsiveCommunityPortlet h4 {font-size: 1.125em;}
-    
+
     .gtnResponsiveFeaturesPortlet h2  {font-size: 1.125em;}
 
-    .gtnResponsiveCommunityPortlet #documentation {
-        float: left;
-    }
 }
+
 .gtnResponsiveCommunityPortlet #conversation .accordion-body > a.ajaxLoader {
     background-image: url("/eXoResources/skin/DefaultSkin/background/Loading.gif");
-    width: 32px;
-    height: 32px;
-    margin: 10px auto;
+    background-repeat: no-repeat;
+    width: 2.5em;
+    height: 2.5em;
+    margin: 1em auto;
     text-indent: -9999px;
     display: block;
     float: none;

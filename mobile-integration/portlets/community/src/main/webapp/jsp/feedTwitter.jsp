@@ -12,7 +12,7 @@
     <ul>
       <c:forEach var="twitterTweet" items="${twitterRSSBean.feedTitles}">
         <li>
-          <a href="${twitterTweet.link}">${twitterTweet.title}</a>
+          <h6><a href="${twitterTweet.link}">${twitterTweet.title}</a></h6>
 
           <div class="info">
             <span>

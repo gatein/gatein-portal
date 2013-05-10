@@ -11,11 +11,12 @@
   <c:when test="${blogRSSBean.valid}">
     <ul>
       <c:forEach var="blogArticle" items="${blogRSSBean.feedTitles}">
-        <h6>
-          <a href="${blogArticle.link}">${blogArticle.title}</a>
-        </h6>
+        <li>
+          <h6>
+            <a href="${blogArticle.link}">${blogArticle.title}</a>
+          </h6>
 
-        <div class="info">
+          <div class="info">
           <span>
             <c:forEach var="author" items="${blogArticle.authors}">
               <a href="${blogRSSBean.authorUrlPrefix}${author.uri}">${author.name}</a>
@@ -25,7 +26,8 @@
           <span>
             <fmt:formatDate value="${blogArticle.publishedDate}" pattern="dd MMM"/>
           </span>
-        </div>
+          </div>
+        </li>
       </c:forEach>
     </ul>
     <a href="${blogRSSBean.contentSource}">${resourceBundle.getString("conversation.blog.link")}</a>
