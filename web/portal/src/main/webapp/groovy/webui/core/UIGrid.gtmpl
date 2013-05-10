@@ -25,22 +25,22 @@
          <% if (name != null)
          		{ for (field in beanFields)
          			{ %>
-         				<th class="portlet-table-header"><%=_ctx.appRes(name + ".header." + field)%></th>
+         				<th class="portlet-table-header" id="<%= field%>" scope="col"><%=_ctx.appRes(name + ".header." + field)%></th>
          		<% }
          			if (beanActions != null)
          			{ %>
-         				<th class="portlet-table-header"><%=_ctx.appRes(name + ".header.action")%></th>
+         				<th class="portlet-table-header" id="actions" scope="col"><%=_ctx.appRes(name + ".header.action")%></th>
          		<% }
          		}
          		if (name == null)
          		{
          			for (field in beanFields)
          			{ %>
-         				<th class="portlet-table-header"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
+         				<th class="portlet-table-header" id="<%= field%>" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
          	 <% }
          			if (beanActions != null && beanActions.length > 0)
          			{ %>
-         				<th class="portlet-table-header"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
+         				<th class="portlet-table-header" id="actions" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
          	 <% }
          		} %>
       </tr>
@@ -84,12 +84,12 @@
                      fieldValue = "";
                   }
                   String value = encoder.encode(fieldValue.toString());
-                  println "<td><div class=\""+cssClass+"\" title='$value'>"+value+"</div></td>";
+                  println "<td headers=\"$field\"><div class=\""+cssClass+"\" title='$value'>"+value+"</div></td>";
                }
                if (beanActions != null && beanActions.length > 0)
                {
          %>
-         <td>
+         <td headers="actions">
             <div class="ActionContainer">
                <%
                      def beanIdField = uicomponent.getBeanIdField();
