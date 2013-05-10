@@ -16,23 +16,23 @@
   DateFormat dateFormat = null;
 %>
 <div id="$uicomponent.id">
-    <table class="UIGrid" cellspacing="0">
+    <table class="UIGrid" cellspacing="0" summary="Page list">
         <thead>
             <tr>
                 <%if(name != null) {%>
                     <%for(field in beanFields) { %>
-                            <th><%=_ctx.appRes(name+".header."+field)%></th>
+                            <th id="<%=field%>" scope="col"><%=_ctx.appRes(name+".header."+field)%></th>
                     <%}%>
                     <%if(beanActions != null) { %>
-                            <th><%=_ctx.appRes(name+".header.action")%></th>
+                            <th id="actions" scope="col"><%=_ctx.appRes(name+".header.action")%></th>
                     <%}%>
                 <%}%>
                 <%if(name == null) {%>
                     <%for(field in beanFields) { %>
-                            <th><%=_ctx.appRes(uiParent.getName()+".header."+field)%></th>
+                            <th id="<%=field%>" scope="col"><%=_ctx.appRes(uiParent.getName()+".header."+field)%></th>
                     <%}%>
                     <%if(beanActions != null && beanActions.length > 0) { %>
-                            <th><%=_ctx.appRes(uiParent.getName()+".header.action")%></th>
+                            <th id="actions" scope="col"><%=_ctx.appRes(uiParent.getName()+".header.action")%></th>
                     <%}%>
                 <%}%>
             </tr>
@@ -66,11 +66,11 @@
 		            fieldValue = "";
 		          }
 		          String value = fieldValue.toString();
-		          println "<td><div class=\""+cssClass+"\" title='$fieldValue'>"+fieldValue+"</div></td>";
+		          println "<td headers=\"$field\"><div class=\""+cssClass+"\" title='$fieldValue'>"+fieldValue+"</div></td>";
 		        }
 			      if(beanActions != null && beanActions.length > 0) {
 			      %>
-	           <td>
+	           <td headers="actions">
 	                <div class="ActionContainer">
 	                  <%
 	                    def beanIdField = uicomponent.getBeanIdField() ;
