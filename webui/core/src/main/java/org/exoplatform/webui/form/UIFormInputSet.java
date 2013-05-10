@@ -139,7 +139,7 @@ public class UIFormInputSet extends UIContainer {
         }
         Writer w = context.getWriter();
         w.write("<div class=\"UIFormInputSet\">");
-        w.write("<table class=\"UIFormGrid\">");
+        w.write("<table class=\"UIFormGrid\" summary=\"" + getId() + "\">");
         ResourceBundle res = context.getApplicationResourceBundle();
         UIForm uiForm = getAncestorOfType(UIForm.class);
         for (UIComponent inputEntry : getChildren()) {

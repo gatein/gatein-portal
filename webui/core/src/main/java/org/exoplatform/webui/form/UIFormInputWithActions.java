@@ -63,7 +63,7 @@ public class UIFormInputWithActions extends UIFormInputSet {
         UIForm uiForm = getAncestorOfType(UIForm.class);
         Writer w = context.getWriter();
         w.write("<div id=\"" + getId() + "\" class=\"UIFormInputSet " + getId() + "\">");
-        w.write("<table class=\"UIFormGrid\">");
+        w.write("<table class=\"UIFormGrid\" summary=\"" + getId() + "\">");
         ResourceBundle res = context.getApplicationResourceBundle();
 
         for (UIComponent inputEntry : getChildren()) {
