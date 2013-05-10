@@ -52,7 +52,9 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
             HttpServletRequest request = prContext.getRequest();
             HttpServletResponse response = prContext.getResponse();
 
-            ServletContainerFactory.getServletContainer().logout(request, response);
+            if (request.getRemoteUser() != null) {
+                ServletContainerFactory.getServletContainer().logout(request, response);
+            }
         }
     }
 
