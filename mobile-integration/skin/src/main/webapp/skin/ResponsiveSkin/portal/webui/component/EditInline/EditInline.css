@@ -7,10 +7,6 @@
    overflow: visible; /*drag-n-drop object: android and chrome */
 }
 
-.UIEditInlineWS .UIPagePreview {
-   width: 75%;
-}
-
 .UIEditInlineWS .UIPortalComposer .UIHorizontalTabs .TabsContainer {
    height: auto;
 }
@@ -66,7 +62,8 @@
    height: auto;
 }
 
-.WizardDecorator .LAYOUT-PORTLET {
+.WizardDecorator .LAYOUT-PORTLET,
+.WizardDecorator .VIEW-PORTLET {
    width: 75%;
 }
 

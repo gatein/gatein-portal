@@ -17,7 +17,7 @@
    width: auto;
 }
 
-@media screen and (max-width: 30em) {
+@media screen and (max-width: 40em) {
 .UIGroupMembershipSelector .MembershipSelector,
 .UIGroupMembershipSelector .GroupSelector {
     float: none;
@@ -29,8 +29,8 @@
     height: auto;
 }
 
-.UISiteManagement .Content>div,
-.UISiteManagement .Image {
+.UIManagement .Content>div,
+.UIManagement .Image {
     display: none;
 }
 
@@ -38,13 +38,17 @@
     width: 35%;
 }
 
-.UISiteManagement .Content .Label {
+.UIManagement .Content .Label {
     display: block;
 }
 
 .UIManagement .ManagementBlock .ActionBlock a {
     margin: 0.5em;
     height: auto;
+}
+
+.UIManagement .FeedBox .ManagementBlock .ActionBlock {
+    width: 45%;
 }
 
 .UIGroupMembershipSelector .MembershipTitle {

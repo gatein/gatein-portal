@@ -74,5 +74,5 @@
             </ol>
         </div>
     </div>
-    <div class="clearfix"/>
+    <div class="clearfix"></div>
 </div>

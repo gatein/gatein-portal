@@ -20,10 +20,14 @@
 }
 
 .UIPopupWindow {
-    overflow: auto;
+    overflow: visible; /*for things like drag and drop gadget on dashboard*/
     -webkit-overflow-scrolling: touch;
     max-height: 100%;
     max-width: 100%;
+}
+
+.UIPopupWindow .PopupContent {
+    overflow: visible;
 }
 
 @media screen and (max-width: 30em) {
