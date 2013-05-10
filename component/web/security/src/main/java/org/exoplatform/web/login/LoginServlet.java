@@ -184,7 +184,10 @@ public class LoginServlet extends AbstractHttpServlet {
 
         // Redirect to initialURI
         if (status == AUTHENTICATED) {
-            resp.sendRedirect(resp.encodeRedirectURL(uri));
+            // Response may be already committed in case of SAML or other SSO providers
+            if (!resp.isCommitted()) {
+                resp.sendRedirect(resp.encodeRedirectURL(uri));
+            }
         } else {
             if (status == FAILED) {
                 req.setAttribute("org.gatein.portal.login.error", "whatever");
