@@ -162,7 +162,7 @@ public class UIFormInputSet extends UIContainer {
 
                 // if missing resource and the label hasn't been set before, don't print out the label.
                 if (hasLabel) {
-                    w.write(label);
+                    w.write("<label for=\"" + inputEntry.getId() + "\">" + label + "</label>");
                 }
                 w.write("</td>");
                 w.write("<td class=\"FieldComponent\">");

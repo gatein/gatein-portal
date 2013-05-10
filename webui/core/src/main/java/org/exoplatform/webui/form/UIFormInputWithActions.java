@@ -79,7 +79,7 @@ public class UIFormInputWithActions extends UIFormInputSet {
                 }
                 w.write("<tr>");
                 w.write("<td class=\"FieldLabel\">");
-                w.write(label);
+                w.write("<label for=\"" + inputEntry.getId() + "\">" + label + "</label>");
                 w.write("</td>");
                 w.write("<td class=\"FieldComponent\">");
                 renderUIComponent(inputEntry);
