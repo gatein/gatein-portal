@@ -49,8 +49,8 @@
     <org.gatein.pc.version>2.4.1.CR04</org.gatein.pc.version>
     <org.gatein.sso.version>1.3.3.CR02</org.gatein.sso.version>
     <org.picketlink.idm>1.4.1.Final</org.picketlink.idm>
-    <org.gatein.wsrp.version>2.2.7.Final</org.gatein.wsrp.version>
-    <org.gatein.mop.version>1.2.1.CR02</org.gatein.mop.version>
+    <org.gatein.wsrp.version>2.2.8.CR01</org.gatein.wsrp.version>
+    <org.gatein.mop.version>1.2.1.CR03</org.gatein.mop.version>
     <org.gatein.mgmt.version>2.0.0.CR01</org.gatein.mgmt.version>
     <org.slf4j.version>1.6.1</org.slf4j.version>
     <version.chromattic>1.2.2</version.chromattic>
