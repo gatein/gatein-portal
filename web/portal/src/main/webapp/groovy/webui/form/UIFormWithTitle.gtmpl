@@ -21,7 +21,7 @@
 								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>												
 									<td class="FieldLabel portlet-form-label">
 										<%if(fieldName != null && fieldName.length() > 0) {%> 
-											<%=uicomponent.getLabel(field.getName()) %>
+											<label for="<%= field.getName() %>"><%=uicomponent.getLabel(field.getName()) %></label>
 										<%}%>
 									</td>
 									<% if(field instanceof UIFormInputBase && field.isEditable()) { %>
