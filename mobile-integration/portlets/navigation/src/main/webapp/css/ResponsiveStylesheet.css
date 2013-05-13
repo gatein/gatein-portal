@@ -5,6 +5,7 @@
 
 .gtnResponsiveNavigationPortlet .topmenu li {
     white-space: nowrap;
+    word-break: break-all;
 }
 
 .gtnResponsiveNavigationPortlet .topmenu {
@@ -404,7 +405,7 @@
         border-radius: 0.375em 0.375em 0.375em 0.375em;
         box-shadow: 0 0.3em 0.62em rgba(0, 0, 0, 0.4);
         left: auto;
-        min-width: 11.25em;
+        width: 11.25em;
         position: absolute;
         z-index: 1000;
         margin: 0.12em 0 0;
