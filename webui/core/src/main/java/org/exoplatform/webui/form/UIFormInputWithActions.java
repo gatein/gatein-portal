@@ -78,7 +78,7 @@ public class UIFormInputWithActions extends UIFormInputSet {
                     log.error("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
                 }
                 w.write("<tr>");
-                w.write("<td class=\"FieldLabel\">");
+                w.write("<td class=\"FieldLabel\" scope=\"row\">");
                 w.write("<label for=\"" + inputEntry.getId() + "\">" + label + "</label>");
                 w.write("</td>");
                 w.write("<td class=\"FieldComponent\">");

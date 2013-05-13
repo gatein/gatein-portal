@@ -158,7 +158,7 @@ public class UIFormInputSet extends UIContainer {
                     }
                 }
                 w.write("<tr>");
-                w.write("<td class=\"FieldLabel\">");
+                w.write("<td class=\"FieldLabel\" scope=\"row\">");
 
                 // if missing resource and the label hasn't been set before, don't print out the label.
                 if (hasLabel) {
