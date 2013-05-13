@@ -240,9 +240,13 @@ ServicesManagement.prototype.renderMethodsForCanvas = function(methodData) {
 				+ "<td><form style='margin-bottom: 0px;'>";
 		for ( var j = 0; j < method.parameters.length; j++) {
 			methodForCanvas += "<div class='SkinID'>"
+					+ "<label for='" 
+					+ util.escapeString(method.parameters[j].name) + "' >"
 					+ util.escapeString(method.parameters[j].name) + " "
+					+ "</label>"
 					+ "<input type='text' name='"
-					+ util.escapeString(method.parameters[j].name) + "'>" + "</div>";
+					+ util.escapeString(method.parameters[j].name) + "' id='"
+					+ util.escapeString(method.parameters[j].name) + "' >" + "</div>";
 		}
 		methodForCanvas += "</form></td>" + "<td>"
 				+ "<div class='MethodActionButton GadgetStyle FL'>"
