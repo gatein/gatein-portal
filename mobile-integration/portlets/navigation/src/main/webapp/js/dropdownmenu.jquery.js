@@ -37,7 +37,7 @@
 
             // Check whether the submenu fits into the window
             checkMenuFit(openedSubmenu);
-            
+
             findAndCheckOpenedSubmenu(openedSubmenu);
         }
 
@@ -80,16 +80,20 @@
         }
 
         // Check wether the submenu fits into the resized window
-        $(window).resize(function(){            
+        $(window).resize(function(){
             // Traverse from topmenu through opened submenus and inverse them if needed
             findAndCheckOpenedSubmenu(topmenu);
         });
 
-        function submenuOpenAction(actionItem) {
+        function submenuOpenAction(actionItem, hoverLeave) {
             var menuItem = actionItem.parent(settings.menuElement);
-            menuItem.toggleClass(settings.collapsedClass);
+            //menuItem.toggleClass(settings.collapsedClass);
 
-            if (menuItem.children(settings.submenuElement).length === 0) {
+            if (!hoverLeave && menuItem.children(settings.submenuElement).length === 0) {
+                if (menuItem.hasClass(settings.collapsedClass)){
+                    menuItem.removeClass(settings.collapsedClass);
+                }
+
                 $.ajax({
                     type: "POST",
                     url: actionItem.attr('href').substring(1),
@@ -100,10 +104,13 @@
                         openSubmenu(menuItem);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
-                        console && console.log("Ajax error");
                     }
                 });
             } else {
+                if (!menuItem.hasClass(settings.collapsedClass)){
+                    menuItem.addClass(settings.collapsedClass);
+                }
+
                 menuItem.children().remove(settings.submenuElement);
             }
         }
@@ -115,14 +122,27 @@
         topmenu.children(settings.menuElement).each(function(){
 
             $(this).on("click", settings.arrowElement, function(e) {
-                submenuOpenAction($(this));
+                submenuOpenAction($(this), false);
             });
 
-            $(this).on("hover", settings.submenuElement + " > " + settings.menuElement, function(e) {
+            $(this).on("mouseenter", settings.submenuElement + " > " + settings.menuElement, function(e) {
+
                 var hasChildren = $(this).children(settings.arrowElement).length > 0;
                 var isExpanded = topmenu.css("z-index") == 1;
+                var isClosed = $(this).hasClass(settings.collapsedClass);
+
+                if (hasChildren && isExpanded && isClosed){
+                    submenuOpenAction($(this).children(settings.arrowElement), false);
+                }
+            });
+
+            $(this).on("mouseleave", settings.submenuElement + " > " + settings.menuElement, function(e) {
+
+                var hasChildren = $(this).children(settings.arrowElement).length > 0;
+                var isExpanded = topmenu.css("z-index") == 1;
+
                 if (hasChildren && isExpanded){
-                    submenuOpenAction($(this).children(settings.arrowElement));
+                    submenuOpenAction($(this).children(settings.arrowElement), true);
                 }
             });
 

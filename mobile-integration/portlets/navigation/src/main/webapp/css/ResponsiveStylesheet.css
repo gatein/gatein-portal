@@ -10,7 +10,8 @@
 .gtnResponsiveNavigationPortlet .topmenu {
     display: none;
     /* kind of hack: z-index property is used just to indicate the collapsed/uncollapsed state of the menu */
-    z-index: 0; 
+    z-index: 0;
+    position:relative;
 }
 
 .gtnResponsiveNavigationPortlet .topmenu.visible-element {
@@ -153,7 +154,7 @@
 }
 
 .gtnResponsiveNavigationPortlet .submenu .menuitem > span {
-    padding-left: 0.5em;
+    padding: 0.25em 0.9375em;
 }
  
 
@@ -174,8 +175,8 @@
 }
 
 .gtnResponsiveNavigationPortlet .submenu,
-.gtnResponsiveNavigationPortlet .submenu .submenu,
-.gtnResponsiveNavigationPortlet .submenu .submenu .submenu {margin-left: 0.9375em;}
+.gtnResponsiveNavigationPortlet .submenu .submenu
+{margin-left: 0.9375em;}
 
 .gtnResponsiveNavigationPortlet .topmenu {
     margin: 0 0.3em 0.62em 0.62em;
@@ -262,7 +263,8 @@
         margin-left: 0;
     }
 
-    .gtnResponsiveNavigationPortlet .topmenu>.multilevel>.submenu:not(.inverse) {
+    .gtnResponsiveNavigationPortlet .topmenu>.multilevel>.submenu:not(.inverse),
+    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu.inverse{
     right: 0;
     left: auto;
     }
@@ -327,7 +329,11 @@
         border-bottom: 0.25em solid transparent;
         position: static;
     }
-    
+
+    .gtnResponsiveNavigationPortlet .submenu a.caret {
+        border-radius: 0.3125em 0 0 0.3125em;
+    }
+
     /* up arrow */
     .gtnResponsiveNavigationPortlet .submenu a.caret>i {
         border-left: 0.25em solid transparent;
@@ -378,7 +384,8 @@
         margin-top: 0;
     }
     
-    .gtnResponsiveNavigationPortlet .submenu a {
+    .gtnResponsiveNavigationPortlet .submenu a:not(.caret) {
+        /*border-radius: 0.375em 0 0 0.375em;*/
         border-radius: 0;
         display: block;
         text-shadow: none;
@@ -415,7 +422,8 @@
         position: absolute;
     }
     
-    .gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu:after {
+    .gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu:not(.inverse):after,
+    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu.inverse:after {
         border-bottom: 0.375em solid #FFF;
         border-left: 0.375em solid transparent;
         border-right: 0.375em solid transparent;
@@ -423,7 +431,8 @@
         top: -0.375em;
     }
     
-    .gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu:before {
+    .gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu:not(.inverse):before,
+    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu.inverse:before {
         border-bottom: 0.4375em solid rgba(0, 0, 0, 0.2);
         border-left: 0.4375em solid transparent;
         border-right: 0.4375em solid transparent;
@@ -431,7 +440,8 @@
         top: -0.4375em;
     }
     
-    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu:after,.gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:after
+    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu:not(.inverse):after,
+    .gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:after
         {
         border-bottom: 0.375em solid #FFF;
         border-left: 0.375em solid transparent;
@@ -441,7 +451,8 @@
         top: -0.375em;
     }
     
-    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu:before,.gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:before
+    .gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu:not(.inverse):before,
+    .gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:before
         {
         border-bottom: 0.4375em solid rgba(0, 0, 0, 0.2);
         border-left: 0.4375em solid transparent;
