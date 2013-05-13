@@ -59,6 +59,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.ControllerContext;
@@ -593,7 +594,7 @@ public class PortalRequestContext extends WebuiRequestContext {
             ResourceBundleManager rbMgr = (ResourceBundleManager) container
                     .getComponentInstanceOfType(ResourceBundleManager.class);
             Locale locale = Util.getPortalRequestContext().getLocale();
-            return rbMgr.getNavigationResourceBundle(locale.getLanguage(), navigation.getKey().getTypeName(), navigation
+            return rbMgr.getNavigationResourceBundle(LocaleContextInfo.getLocaleAsString(locale), navigation.getKey().getTypeName(), navigation
                     .getKey().getName());
         }
 
