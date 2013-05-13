@@ -47,19 +47,19 @@ String applicationDescription = encoder.encode(application.getDescription());
 			<div class="ApplicationContent">
 				<table class="TitleBarApplication" summary="Application Display Name">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></td>
 						<td class="RightLabel" title=" <%= application.getDisplayName() %> "><%= applicationDisplayName %></td>
 					</tr>
 				</table>
 				<table summary="Application Name">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.name")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIApplicationInfo.label.name")%></td>
 						<td class="RightLabel" title=" <%= name %> "><%= name %></td>
 					</tr>
 				</table>
 				<table summary="Application Description">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.description")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIApplicationInfo.label.description")%></td>
 						<td class="RightLabel" title=" <%= application.getDescription() %> "><%= applicationDescription %></td>
 					</tr>
 				</table>
