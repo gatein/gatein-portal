@@ -117,6 +117,9 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T> {
         w.write("<input type='checkbox' name='");
         w.write(name);
         w.write("'");
+        w.write(" id='");
+        w.write(name);
+        w.write("'");
         if (onchange_ != null) {
             UIForm uiForm = getAncestorOfType(UIForm.class);
             w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");

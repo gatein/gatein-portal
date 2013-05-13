@@ -29,14 +29,25 @@
 				else rowClass =	"OddRow";
 				even = !even;
 				int size = child.getChildren().size();
-				if (size == 0) continue;
+				if (size == 0) continue;		
 		%>
 				<tr class="$rowClass">
-					<%for(i in 0..size-1){%>
+					<% String labelName = "";
+					   for(i in 0..size-1){					    
+					    if (i==0) labelName = child.getChild(i).getId();	
+					%>
 						<% if(UIFormCheckBoxInput.class.isInstance(child.getChild(i))) { %>
 						<td><div style="text-align: center"><%child.renderChild(i);%></div></td>
-						<% } else { %>
-						<td class="text" style="<%=(i==0) ? "text-align: center;" : "";%>"><%child.renderChild(i);%></td>
+						<% } else { %>						
+						<td class="text" style="<%=(i==0) ? "text-align: center;" : "";%>">
+						<% if (i==1) { %>						
+						<label for="<%= labelName %>" />
+						<% } %>
+						<%child.renderChild(i);%>
+						<% if (i==1) { %>
+						</label>
+						<% } %>						
+						</td>
 						<% } %>
 					<%}%>
 				</tr>

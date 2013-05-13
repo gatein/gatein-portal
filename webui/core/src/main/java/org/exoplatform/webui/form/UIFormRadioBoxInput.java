@@ -126,6 +126,9 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String> {
             w.write(" name='");
             w.write(getName());
             w.write("'");
+            w.write(" id='");
+            w.write(getName());
+            w.write("'");
             w.write(" value='");
             w.write(si.getValue());
             w.write("'/>");

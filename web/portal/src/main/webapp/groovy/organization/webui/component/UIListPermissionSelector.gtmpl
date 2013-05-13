@@ -15,7 +15,7 @@
 	<div class="PublicCheck">
 		<table class="UIFormGrid" summary="Access permission settings">
 			<tr>
-				<td class="FieldLabel"><%=uicomponent.getLabel(uiPublicMode.getId())%></td>
+				<td class="FieldLabel"><label for="publicMode"><%=uicomponent.getLabel(uiPublicMode.getId())%></label></td>
 				<td class="FieldComponent"><%uicomponent.renderChild(UICheckBoxInput.class)%></td>
 			</tr>
 		</table>
