@@ -1552,6 +1552,20 @@ memory option properties. This should be removed when we can just set the compil
         <updatePolicy>never</updatePolicy>
       </snapshots>
     </repository>
+    <repository>
+      <id>exo-public-repository-group</id>
+      <name>eXo Public Maven Repository Group</name>
+      <url>http://repository.exoplatform.org/content/groups/public</url>
+      <layout>default</layout>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </repository>
     <!--<repository>-->
     <!--<releases>-->
     <!--<enabled>false</enabled>-->
