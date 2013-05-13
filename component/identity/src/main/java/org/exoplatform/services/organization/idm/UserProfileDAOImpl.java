@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.poi.hslf.model.Placeholder;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileEventListener;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -81,15 +82,22 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
     // }
 
     public void saveUserProfile(UserProfile profile, boolean broadcast) throws Exception {
+        // We need to check if userProfile exists, because organization API is limited and it doesn't have separate methods for
+        // "creation" and for "update" of user profile :/
+        boolean isNew = true;
+        if (broadcast) {
+            UserProfile found = getProfile(profile.getUserName());
+            isNew = found == null;
+        }
 
         if (broadcast) {
-            preSave(profile, true);
+            preSave(profile, isNew);
         }
 
         setProfile(profile.getUserName(), profile);
 
         if (broadcast) {
-            postSave(profile, true);
+            postSave(profile, isNew);
         }
 
     }
@@ -110,6 +118,7 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
                 }
                 return profile;
             } catch (Exception exp) {
+                handleException("Exception occured when removing user profile", exp);
                 return null;
             }
         }

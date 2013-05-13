@@ -537,20 +537,45 @@ public class AbstractTestOrganizationService {
         groupHandler_.removeGroup(group3, true);
     }
 
-    // public void testUserProfileListener() throws Exception
-    // {
-    // UserProfileListener l = new UserProfileListener();
-    // profileHandler_.addUserProfileEventListener(l);
-    // User user = createUser(USER);
-    // assertNotNull(user);
-    // UserProfile profile = profileHandler_.createUserProfileInstance(user.getUserName());
-    // profile.setAttribute("blah", "blah");
-    // profileHandler_.saveUserProfile(profile, true);
-    // assertTrue(l.preSave && l.postSave);
-    // profileHandler_.removeUserProfile(user.getUserName(), true);
-    // assertFalse(l.preDelete && l.postDelete);
-    // userHandler_.removeUser(user.getUserName(), false);
-    // }
+    @Test
+    public void testUserProfileListener() throws Exception {
+        System.out.println("Trigger testUserProfileListener");
+        UserProfileListener l = new UserProfileListener();
+        profileHandler_.addUserProfileEventListener(l);
+        User user = createUser(USER);
+        assertNotNull(user);
+        UserProfile profile = profileHandler_.createUserProfileInstance(user.getUserName());
+        profile.setAttribute("blah", "blah");
+        System.out.println("Going to save userProfiel");
+        profileHandler_.saveUserProfile(profile, true);
+        assertTrue(l.preSave && l.postSave);
+        assertEquals(l.preSaveCreations, 1);
+        assertEquals(l.postSaveCreations, 1);
+        assertEquals(l.preSaveUpdates, 0);
+        assertEquals(l.postSaveUpdates, 0);
+
+        // Upgrade userProfile
+        profile.setAttribute("blah", "blah2");
+        profileHandler_.saveUserProfile(profile, true);
+        assertEquals(l.preSaveCreations, 1);
+        assertEquals(l.postSaveCreations, 1);
+        assertEquals(l.preSaveUpdates, 1);
+        assertEquals(l.postSaveUpdates, 1);
+
+        // Another upgrade of userProfile
+        profile.setAttribute("blah", "blah3");
+        profileHandler_.saveUserProfile(profile, true);
+        assertEquals(l.preSaveCreations, 1);
+        assertEquals(l.postSaveCreations, 1);
+        assertEquals(l.preSaveUpdates, 2);
+        assertEquals(l.postSaveUpdates, 2);
+
+        // Delete profile
+        assertFalse(l.preDelete || l.postDelete);
+        profileHandler_.removeUserProfile(user.getUserName(), true);
+        assertTrue(l.preDelete && l.postDelete);
+        userHandler_.removeUser(user.getUserName(), false);
+    }
 
     @Test
     public void testLinkMembership() throws Exception {
@@ -597,6 +622,11 @@ public class AbstractTestOrganizationService {
 
         boolean postDelete;
 
+        int preSaveCreations = 0;
+        int preSaveUpdates = 0;
+        int postSaveCreations = 0;
+        int postSaveUpdates = 0;
+
         @Override
         public void postDelete(UserProfile profile) throws Exception {
             assertEquals(USER, profile.getUserName());
@@ -607,6 +637,12 @@ public class AbstractTestOrganizationService {
         public void postSave(UserProfile profile, boolean isNew) throws Exception {
             assertEquals(USER, profile.getUserName());
             postSave = true;
+
+            if (isNew) {
+                postSaveCreations++;
+            } else {
+                postSaveUpdates++;
+            }
         }
 
         @Override
@@ -619,6 +655,12 @@ public class AbstractTestOrganizationService {
         public void preSave(UserProfile profile, boolean isNew) throws Exception {
             assertEquals(USER, profile.getUserName());
             preSave = true;
+
+            if (isNew) {
+                preSaveCreations++;
+            } else {
+                preSaveUpdates++;
+            }
         }
 
     }
