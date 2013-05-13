@@ -19,7 +19,7 @@
 							<tr>
 								<%fieldName = uicomponent.getLabel(field.getName());%>
 								<%if(field instanceof UIFormInputBase && !fieldName.equals(uicomponent.getId())) { %>												
-									<td class="FieldLabel portlet-form-label">
+									<td class="FieldLabel portlet-form-label" scope="row">
 										<%if(fieldName != null && fieldName.length() > 0) {%> 
 											<label for="<%= field.getName() %>"><%=uicomponent.getLabel(field.getName()) %></label>
 										<%}%>
