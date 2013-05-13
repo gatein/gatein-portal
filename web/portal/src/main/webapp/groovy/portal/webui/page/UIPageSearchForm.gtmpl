@@ -22,7 +22,7 @@
 									QuickSearchInputSet = uiform.getQuickSearchInputSet();
 									for(field in QuickSearchInputSet.getChildren()) {
 								%>
-										<div class="SearchLabel"><%=uiform.getLabel(field.getId())%> </div>
+										<div class="SearchLabel"><label for="<%= field.getId() %>"><%=uiform.getLabel(field.getId())%> </label></div>
 								<%
 										uiform.renderField(field)
 									}
