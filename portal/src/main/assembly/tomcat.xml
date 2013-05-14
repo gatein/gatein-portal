@@ -1,0 +1,47 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>tomcat</id>
+  <formats>
+    <format>war</format>
+  </formats>
+
+  <includeBaseDirectory>false</includeBaseDirectory>
+
+  <fileSets>
+    <fileSet>
+      <directory>${project.build.outputDirectory}</directory>
+      <outputDirectory>/WEB-INF/classes</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.sourceDirectory}</directory>
+      <outputDirectory>/WEB-INF/src</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.basedir}/src/main/webapp</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+
+<!--
+  <dependencySets>
+
+    <dependencySet>
+      <includes>
+        <include>org.juzu:juzu-bom-core</include>
+      </includes>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <includes>
+          <include>jboss-deployment-structure.xml</include>
+        </includes>
+      </unpackOptions>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>/WEB-INF</outputDirectory>
+    </dependencySet>
+
+  </dependencySets>
+-->
+
+</assembly>

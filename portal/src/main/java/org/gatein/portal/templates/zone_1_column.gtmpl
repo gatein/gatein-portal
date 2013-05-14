@@ -1,0 +1,5 @@
+<div class="container">
+    <% l1.each { window -> %>
+    <div class="row">${window}</div>
+    <% } %>
+</div>

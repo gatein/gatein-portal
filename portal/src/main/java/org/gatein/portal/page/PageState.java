@@ -19,6 +19,7 @@
 package org.gatein.portal.page;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import juzu.request.Phase;
@@ -33,7 +34,7 @@ import org.gatein.portal.portlet.PortletAppManager;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class PageState implements NodeModel<NodeState, ElementState> {
+public class PageState implements NodeModel<NodeState, ElementState>, Iterable<Map.Entry<String, WindowState>> {
 
     /** . */
     final PortletAppManager portletManager;
@@ -77,6 +78,11 @@ public class PageState implements NodeModel<NodeState, ElementState> {
 
     public WindowState get(String name) {
         return windowMap.get(name);
+    }
+
+    @Override
+    public Iterator<Map.Entry<String, WindowState>> iterator() {
+        return windowMap.entrySet().iterator();
     }
 
     //

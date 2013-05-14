@@ -37,11 +37,12 @@ import juzu.request.RequestParameter;
 import org.exoplatform.container.PortalContainer;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
+import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
 import org.gatein.portal.layout.Layout;
-import org.gatein.portal.layout.LayoutBuilder;
-import org.gatein.portal.layout.SimpleLayout;
+import org.gatein.portal.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -80,6 +81,9 @@ public class Controller {
 
     @Inject
     CustomizationService customizationService;
+
+    @Inject
+    ZoneLayoutFactory layoutFactory;
 
     @View()
     @Route("/{javax.portlet.path}")
@@ -227,11 +231,29 @@ public class Controller {
                         }
                     }
 
+                    // Render all windows in a map
+                    HashMap<String, String> fragments = new HashMap<String, String>();
+                    for (Map.Entry<String, WindowState> entry : pageState) {
+                        try {
+                            WindowState window = entry.getValue();
+                            PortletInvocationResponse response = window.render();
+                            if (response instanceof FragmentResponse) {
+                                FragmentResponse fragment = (FragmentResponse) response;
+                                fragments.put(window.name, fragment.getContent());
+                            } else {
+                                throw new UnsupportedOperationException("Not yet handled " + response);
+                            }
+                        } catch (PortletInvokerException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     //
                     StringBuilder buffer = new StringBuilder();
-                    SimpleLayout.Builder builder = new SimpleLayout.Builder();
-                    Layout layout = Layout.build(pageLayout, builder);
-                    layout.render(pageState, buffer);
+                    Layout layout = layoutFactory.build(pageLayout);
+                    layout.render(fragments, pageState, buffer);
                     return Response.ok(buffer);
                 }
             }

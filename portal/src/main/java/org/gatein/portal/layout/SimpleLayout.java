@@ -20,13 +20,10 @@ package org.gatein.portal.layout;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
-import org.gatein.pc.api.PortletInvokerException;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
-import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageState;
-import org.gatein.portal.page.WindowState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -41,7 +38,7 @@ public class SimpleLayout extends Layout {
     }
 
     private abstract static class Node {
-        abstract void render(PageState state, Appendable to) throws IOException;
+        abstract void render(Map<String, String> windows, PageState state, Appendable to) throws IOException;
     }
 
     private static class Container extends Node {
@@ -57,10 +54,10 @@ public class SimpleLayout extends Layout {
         }
 
         @Override
-        void render(PageState state, Appendable to) throws IOException {
+        void render(Map<String, String> windows, PageState state, Appendable to) throws IOException {
             to.append("<div>");
             for (Node child : children) {
-                child.render(state, to);
+                child.render(windows, state, to);
             }
             to.append("</div>");
         }
@@ -80,30 +77,18 @@ public class SimpleLayout extends Layout {
         }
 
         @Override
-        void render(PageState state, Appendable to) throws IOException {
-            try {
-                WindowState window = state.get(name);
-                PortletInvocationResponse response = window.render();
-                if (response instanceof FragmentResponse) {
-                    FragmentResponse fragment = (FragmentResponse) response;
-                    to.append("<div>");
-                    to.append("<div>").append(this.state.properties.get(ElementState.Window.TITLE)).append("</div>");
-                    to.append("<div>").append(fragment.getContent()).append("</div>");
-                    to.append("</div>");
-                } else {
-                    throw new UnsupportedOperationException("Not yet handled " + response);
-                }
-            } catch (PortletInvokerException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        void render(Map<String, String> fragments, PageState state, Appendable to) throws IOException {
+            String fragment = fragments.get(name);
+            to.append("<div>");
+            to.append("<div>").append(this.state.properties.get(ElementState.Window.TITLE)).append("</div>");
+            to.append("<div>").append(fragment).append("</div>");
+            to.append("</div>");
         }
     }
 
     @Override
-    public void render(PageState state, Appendable to) throws IOException {
-        root.render(state, to);
+    public void render(Map<String, String> fragments, PageState state, Appendable to) throws IOException {
+        root.render(fragments, state, to);
     }
 
     public static class Builder implements LayoutBuilder {

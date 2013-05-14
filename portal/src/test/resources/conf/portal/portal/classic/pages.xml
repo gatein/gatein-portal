@@ -8,41 +8,47 @@
     <name>page1</name>
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>portal</application-ref>
-        <portlet-ref>Portlet1</portlet-ref>
-      </portlet>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </portlet-application>
+    <container>
+      <name>1</name>
+      <portlet-application>
+        <portlet>
+          <application-ref>portal</application-ref>
+          <portlet-ref>Portlet1</portlet-ref>
+        </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+    </container>
   </page>
   <page>
     <name>page2</name>
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>portal</application-ref>
-        <portlet-ref>Portlet1</portlet-ref>
-      </portlet>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </portlet-application>
-    <portlet-application>
-      <portlet>
-        <application-ref>portal</application-ref>
-        <portlet-ref>Portlet2</portlet-ref>
-      </portlet>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>false</show-application-state>
-      <show-application-mode>false</show-application-mode>
-    </portlet-application>
+    <container>
+      <name>1</name>
+      <portlet-application>
+        <portlet>
+          <application-ref>portal</application-ref>
+          <portlet-ref>Portlet1</portlet-ref>
+        </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+      <portlet-application>
+        <portlet>
+          <application-ref>portal</application-ref>
+          <portlet-ref>Portlet2</portlet-ref>
+        </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+    </container>
   </page>
 
 </page-set>
