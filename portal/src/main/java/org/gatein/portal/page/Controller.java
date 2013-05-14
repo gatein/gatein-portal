@@ -37,10 +37,11 @@ import juzu.request.RequestParameter;
 import org.exoplatform.container.PortalContainer;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
-import org.gatein.pc.api.PortletInvokerException;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
+import org.gatein.portal.layout.Layout;
+import org.gatein.portal.layout.LayoutBuilder;
+import org.gatein.portal.layout.SimpleLayout;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -228,43 +229,14 @@ public class Controller {
 
                     //
                     StringBuilder buffer = new StringBuilder();
-                    render(pageState, context, pageLayout, buffer);
+                    SimpleLayout.Builder builder = new SimpleLayout.Builder();
+                    Layout layout = Layout.build(pageLayout, builder);
+                    layout.render(pageState, buffer);
                     return Response.ok(buffer);
                 }
             }
         } else {
             return Response.notFound("Page for navigation " + path + " could not be located");
-        }
-    }
-
-    private <N> void render(PageState page, RenderContext context, NodeContext<N, ElementState> node, StringBuilder to) {
-        ElementState state = node.getState();
-        if (state instanceof ElementState.Container) {
-            ElementState.Container containerState = (ElementState.Container) state;
-            to.append("<div>");
-            for (NodeContext<N, ElementState> child : node) {
-                render(page, context, child, to);
-            }
-            to.append("</div>");
-        } else if (state instanceof ElementState.Window) {
-            ElementState.Window windowState = (ElementState.Window) state;
-            try {
-                WindowState window = page.get(node.getName());
-                PortletInvocationResponse response = window.render();
-                if (response instanceof FragmentResponse) {
-                    FragmentResponse fragment = (FragmentResponse) response;
-                    to.append("<div>");
-                    to.append("<div>").append(windowState.properties.get(ElementState.Window.TITLE)).append("</div>");
-                    to.append("<div>").append(fragment.getContent()).append("</div>");
-                    to.append("</div>");
-                } else {
-                    throw new UnsupportedOperationException("Not yet handled " + response);
-                }
-            } catch (PortletInvokerException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 }
