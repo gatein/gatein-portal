@@ -94,6 +94,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         }
     }
 
+
     private void addInput(UIFormInputSet set, String[] keys) throws Exception {
 
         for (String key : keys) {
@@ -114,7 +115,6 @@ public class UIUserProfileInputSet extends UIFormInputSet {
                 initLanguageCombo(langSelectBox);
                 continue;
             }
-
             set.addUIFormInput(new UIFormStringInput(key, null, null));
         }
     }

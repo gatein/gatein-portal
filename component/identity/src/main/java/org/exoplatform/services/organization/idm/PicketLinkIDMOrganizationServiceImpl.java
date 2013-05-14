@@ -30,6 +30,7 @@ import org.exoplatform.services.organization.BaseOrganizationService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
+import org.picketlink.idm.api.Transaction;
 import org.picocontainer.Startable;
 
 /*
@@ -165,8 +166,13 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                     idmService_.getIdentitySession().save();
                 }
             } else {
-                if (idmService_.getIdentitySession().getTransaction().isActive()) {
-                    idmService_.getIdentitySession().save();
+                try {
+                    if (idmService_.getIdentitySession().getTransaction().isActive()) {
+                        idmService_.getIdentitySession().save();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                    recoverFromIDMError();
                 }
             }
 
@@ -185,12 +191,32 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                 }
                 jtaTransactionLifecycleService.finishJTATransaction();
             } else {
-                if (idmService_.getIdentitySession().getTransaction().isActive()) {
-                    idmService_.getIdentitySession().getTransaction().commit();
+                try {
+                    if (idmService_.getIdentitySession().getTransaction().isActive()) {
+                        idmService_.getIdentitySession().getTransaction().commit();
+                    }
+                } catch (Exception e) {
+                    log.error(e.getMessage(), e);
+                    recoverFromIDMError();
                 }
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+        }
+    }
+
+    // Should be used only for non-JTA environment
+    public void recoverFromIDMError() {
+        try {
+            // We need to restart Hibernate transaction if it's available. First rollback old one and then start new one
+            Transaction idmTransaction = idmService_.getIdentitySession().getTransaction();
+            if (idmTransaction.isActive()) {
+                idmTransaction.rollback();
+                idmTransaction.start();
+                log.info("IDM error recovery finished. Old transaction has been rolled-back and new transaction has been started");
+            }
+        } catch (Exception e1) {
+            log.warn("Error during recovery of old error", e1);
         }
     }
 
