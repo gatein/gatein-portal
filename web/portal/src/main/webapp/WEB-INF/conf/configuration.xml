@@ -29,6 +29,7 @@
   <import>war:/conf/common/portlet-container-configuration.xml</import>
   <import>war:/conf/common/autologin-configuration.xml</import>
   <import>war:/conf/common/remindpwd-configuration.xml</import>
+  <import>war:/conf/common/encoder-configuration.xml</import>
   <import>war:/conf/jcr/jcr-configuration.xml</import>
   <import>war:/conf/jcr/jcr-datasource-configuration.xml</import>
 
