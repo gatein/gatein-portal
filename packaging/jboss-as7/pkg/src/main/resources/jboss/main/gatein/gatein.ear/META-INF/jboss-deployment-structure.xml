@@ -10,6 +10,12 @@
     </dependencies>
   </sub-deployment>
 
+  <sub-deployment name="rest.war" >
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies" services="import"/>
+    </dependencies>
+  </sub-deployment>
+
   <sub-deployment name="gwtGadgets.war" >
     <dependencies>
       <module name="org.gatein.portal.container-dependencies-basic"/>
