@@ -50,6 +50,7 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
@@ -68,6 +69,9 @@ public class UIUserProfileInputSet extends UIFormInputSet {
     public static final String MALE = "male";
 
     public static final String FEMALE = "female";
+
+    public static final int DEFAULT_MAX_LENGTH = 255;
+    private int maxLength = -1;
 
     public UIUserProfileInputSet() {
     }
@@ -108,6 +112,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
     }
 
     private void addInput(UIFormInputSet set, String[] keys) {
+        int maxLength = getMaxLengthOfTextField();
 
         for (String key : keys) {
             if (key.equalsIgnoreCase("user.gender")) {
@@ -124,7 +129,11 @@ public class UIUserProfileInputSet extends UIFormInputSet {
                 continue;
             }
 
-            set.addUIFormInput(new UIFormStringInput(key, null, null));
+            try {
+                set.addUIFormInput(new UIFormStringInput(key, null, null).addValidator(StringLengthValidator.class, 0, maxLength));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -316,5 +325,13 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         Object oauthProviderUsername = exceptionAttribs.get(OAuthConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME);
 
         return new Object[] { localizedOAuthProviderUsernameAttrName, oauthProviderUsername };
+    }
+
+    private int getMaxLengthOfTextField() {
+        if (maxLength == -1) {
+            String property = System.getProperty("gatein.validators.profile.maxlength");
+            maxLength = property!=null ? Integer.parseInt(property) : DEFAULT_MAX_LENGTH;
+        }
+        return maxLength;
     }
 }
