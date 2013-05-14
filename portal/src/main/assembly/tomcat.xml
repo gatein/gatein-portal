@@ -23,6 +23,39 @@
     </fileSet>
   </fileSets>
 
+  <dependencySets>
+    <dependencySet>
+      <includes>
+        <include>org.jibx:jibx-bind</include>
+        <include>org.jibx:jibx-run</include>
+        <include>org.staxnav:staxnav.core</include>
+        <include>commons-logging:commons-logging</include>
+        <include>org.slf4j:slf4j-api</include>
+        <include>org.slf4j:slf4j-jdk14</include>
+        <include>org.exoplatform.kernel:exo.kernel.commons</include>
+        <include>org.exoplatform.kernel:exo.kernel.container</include>
+        <include>picocontainer:picocontainer</include>
+        <include>org.gatein.common:common-logging</include>
+        <include>org.gatein.common:common-common</include>
+        <include>org.gatein.wci:wci-wci</include>
+        <include>org.gatein.wci:wci-tomcat7</include>
+        <include>org.juzu:juzu-core</include>
+        <include>org.codehaus.groovy:groovy-all</include>
+        <include>com.google.inject:guice</include>
+        <include>aopalliance:aopalliance</include>
+        <include>javax.inject:javax.inject</include>
+        <include>org.gatein.pc:pc-api</include>
+        <include>org.gatein.pc:pc-portlet</include>
+        <include>org.gatein.mop:mop-api</include>
+        <include>org.gatein.portal:exo.portal.component.common</include>
+        <include>org.gatein.portal:exo.portal.component.portal</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>/WEB-INF/lib</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+
 <!--
   <dependencySets>
 

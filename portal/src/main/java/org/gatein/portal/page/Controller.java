@@ -253,8 +253,9 @@ public class Controller {
                     //
                     StringBuilder buffer = new StringBuilder();
                     Layout layout = layoutFactory.build(pageLayout);
-                    layout.render(fragments, pageState, buffer);
-                    return Response.ok(buffer);
+                    Response.Render ok = Response.ok(buffer);
+                    layout.render(fragments, pageState, ok.getProperties(), buffer);
+                    return ok;
                 }
             }
         } else {

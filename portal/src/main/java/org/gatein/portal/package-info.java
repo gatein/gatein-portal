@@ -10,9 +10,12 @@
     @Binding(PageService.class),
     @Binding(NavigationService.class),
     @Binding(SimpleLayoutFactory.class)})
+@Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"))
 package org.gatein.portal;
 
 import juzu.Application;
+import juzu.plugin.asset.Assets;
+import juzu.plugin.asset.Stylesheet;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
 import org.exoplatform.container.PortalContainer;

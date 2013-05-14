@@ -21,6 +21,7 @@ package org.gatein.portal.layout;
 import java.io.IOException;
 import java.util.Map;
 
+import juzu.PropertyMap;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageState;
@@ -31,7 +32,11 @@ import org.gatein.portal.page.PageState;
 public abstract class Layout {
 
 
-    public abstract void render(Map<String, String> fragments, PageState state, Appendable to) throws IOException;
+    public abstract void render(
+            Map<String, String> fragments,
+            PageState state,
+            PropertyMap properties,
+            Appendable to) throws IOException;
 
     public static <N> Layout build(NodeContext<N, ElementState> node, LayoutBuilder builder) {
         build_(node, builder);

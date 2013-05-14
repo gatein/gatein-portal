@@ -49,6 +49,10 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>picocontainer</groupId>
+      <artifactId>picocontainer</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.component.common</artifactId>
     </dependency>
@@ -58,10 +62,6 @@
       <groupId>javax.inject</groupId>
       <artifactId>javax.inject</artifactId>
       <version>1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -75,11 +75,16 @@
       <version>2.0</version>
       <scope>provided</scope>
     </dependency>
+
+    <!-- -->
+    <dependency>
+      <groupId>com.google.inject</groupId>
+      <artifactId>guice</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.juzu</groupId>
       <artifactId>juzu-core</artifactId>
       <version>${juzu.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <!-- -->
@@ -89,10 +94,77 @@
     </dependency>
 
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>${org.slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jibx</groupId>
+      <artifactId>jibx-bind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jibx</groupId>
+      <artifactId>jibx-run</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.staxnav</groupId>
+      <artifactId>staxnav.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>aopalliance</groupId>
+      <artifactId>aopalliance</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.wci</groupId>
+      <artifactId>wci-wci</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-tomcat7</artifactId>
-      <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.gatein.pc</groupId>
+      <artifactId>pc-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.pc</groupId>
+      <artifactId>pc-portlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.mop</groupId>
+      <artifactId>mop-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+    </dependency>
+
 
     <!-- Needed for now because it contains log4j configuration -->
     <dependency>
@@ -147,16 +219,6 @@
       <scope>test</scope>
     </dependency>
 
-<!--
-    <dependency>
-      <groupId>org.gatein.pc</groupId>
-      <artifactId>pc-samples</artifactId>
-      <classifier>basic-portlet</classifier>
-      <version>2.3.2-GA</version>
-      <type>war</type>
-    </dependency>
--->
-
   </dependencies>
 
   <build>
@@ -205,8 +267,53 @@
             </configuration>
           </execution>
         </executions>
-
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+        <version>2.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec-war-only</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <warRunDependencies>
+                <warRunDependency>
+                  <dependency>
+                    <groupId>org.gatein.portal</groupId>
+                    <artifactId>portal</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>tomcat</classifier>
+                    <type>war</type>
+                  </dependency>
+                  <contextPath>/</contextPath>
+                </warRunDependency>
+                <warRunDependency>
+                  <dependency>
+                    <groupId>org.gatein.pc</groupId>
+                    <artifactId>pc-samples</artifactId>
+                    <classifier>basic-portlet</classifier>
+                    <version>2.3.2-GA</version>
+                    <type>war</type>
+                  </dependency>
+                  <contextPath>/samples</contextPath>
+                </warRunDependency>
+              </warRunDependencies>
+              <extraDependencies>
+                <extraDependency>
+                  <groupId>javax.portlet</groupId>
+                  <artifactId>portlet-api</artifactId>
+                  <version>2.0</version>
+                </extraDependency>
+              </extraDependencies>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
   </build>
 

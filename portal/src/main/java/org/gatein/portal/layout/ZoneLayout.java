@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
+import juzu.PropertyMap;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageState;
 
@@ -62,7 +62,7 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, String> fragments, PageState state, Appendable to) {
+    public void render(Map<String, String> fragments, PageState state, PropertyMap properties, Appendable to) {
         // For now we implements "1 column" and "2 columns 70/30" according to the page structure
         ArrayList<String> l1 = getFragments(1, fragments);
         if (l1 != null) {

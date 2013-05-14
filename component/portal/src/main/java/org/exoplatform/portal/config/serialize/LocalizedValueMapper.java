@@ -74,7 +74,8 @@ public class LocalizedValueMapper implements IUnmarshaller, IAliasable, IMarshal
         Locale lang = null;
         for (int i = 0; i < count; i++) {
             String attrName = ctx.getAttributeName(i);
-            if (attrName.equals("xml:lang")) {
+            String attrNS = ctx.getAttributeNamespace(i);
+            if ("http://www.w3.org/XML/1998/namespace".equals(attrNS) && "lang".equals(attrName)) {
                 String attrValue = ctx.getAttributeValue(i).trim();
                 Matcher matcher = RFC1766_PATTERN.matcher(attrValue);
                 if (matcher.matches()) {
