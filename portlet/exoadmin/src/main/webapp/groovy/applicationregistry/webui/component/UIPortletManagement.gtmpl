@@ -12,7 +12,7 @@
 				<div class="CategoryContent">
 				<% for(type in portletTypes) {%>
 					<div class="BoxContent">
-						<div class="TitleCategory" onclick="<%= uicomponent.event("SelectPortletType", type) %>"><%=_ctx.appRes("UIPortletManagement.title." + type)%></div>
+						<div class="TitleCategory"><a href="javascript:;" onclick="<%= uicomponent.event("SelectPortletType", type) %>"><%=_ctx.appRes("UIPortletManagement.title." + type)%></a></div>
 						<% if(type.equals(selectedType)) {%>	
 			 			<div class="ListContent">	
 			 				
@@ -34,7 +34,7 @@
 													isSelected = true;
 												} else cssClass = "Item";
 											%>
-												<a class="$cssClass" onclick="<%= uicomponent.event("SelectPortlet", portlet.getId()) %>"><%= portlet.getDisplayName() %></a>
+												<a class="$cssClass" href="javascript:;" onclick="<%= uicomponent.event("SelectPortlet", portlet.getId()) %>"><%= portlet.getDisplayName() %></a>
 											<% } %>
 											</div>
 											

@@ -31,31 +31,31 @@
 		<div class="ApplicationContent">
 				<table class="TitleBarApplication" summary="Gadget Display Name">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.name")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIGadgetInfo.label.name")%></td>
 						<td class="RightLabel" title=" <%= gadget.getName() %> "><%= gadget.getName() %></td>
 					</tr>
 				</table>
 				<table summary="Gadget Description">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.description")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIGadgetInfo.label.description")%></td>
 						<td class="RightLabel" title=" <%= gadget.getDescription() %> "><%= gadget.getDescription() %></td>
 					</tr>
 				</table>
 				<table summary="Gadget URLs">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.viewUrl")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIGadgetInfo.label.viewUrl")%></td>
 						<td class="RightLabel" title=" <%=viewURL %> "><a href="<%=viewURL %>" target="_blank">$viewURL</a></td>
 					</tr>
 					<% if(gadget.isLocal()) {%>
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.editUrl")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIGadgetInfo.label.editUrl")%></td>
 						<td class="RightLabel"><a href="<%=editURL %>" target="_blank">$editURL</a></td>
 					</tr>
 					<% } %>
 				</table>
 				<table summary="Gadget Reference">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.reference")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIGadgetInfo.label.reference")%></td>
 						<td class="RightLabel">
 							<a href="<%=refURL %>" target="_blank">$refURL</a>
 						</td>
@@ -63,7 +63,7 @@
 				</table>
 				<table summary="Gadget Categories">
 					<tr>
-						<td class="LeftLabel"><%=_ctx.appRes("UIGadgetInfo.label.categories")%></td>
+						<td class="LeftLabel" scope="row"><%=_ctx.appRes("UIGadgetInfo.label.categories")%></td>
 						<td class="RightLabel"><%= encoder.encode(categoryNames) %>
 								<% if (categoryNames.equals("")) { %>
 										<%=_ctx.appRes("UIGadgetInfo.label.categories.guide")%><br/>

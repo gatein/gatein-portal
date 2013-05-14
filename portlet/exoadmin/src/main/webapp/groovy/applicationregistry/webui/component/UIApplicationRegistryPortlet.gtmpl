@@ -21,14 +21,14 @@
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(0).isRendered()) cssClass = "SelectItemButton";
 										%>
-										<a onclick="<%=uicomponent.event("ViewChild", "UIApplicationOrganizer")%>" class="$cssClass ItemButton OrganizeIcon">
+										<a href="javascript:;" onclick="<%=uicomponent.event("ViewChild", "UIApplicationOrganizer")%>" class="$cssClass ItemButton OrganizeIcon">
 											<%=_ctx.appRes("UIToolbar.label.organize")%>
 										</a>
 										<%
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(2).isRendered()) cssClass = "ItemButton SelectItemButton";
 										%>																		
-										<a onclick="<%=uicomponent.event("ViewChild", "UIGadgetManagement")%>" class="$cssClass ItemButton GadgetIcon" style="float: <%= isLT? "right" : "left" %>">
+										<a href="javascript:;" onclick="<%=uicomponent.event("ViewChild", "UIGadgetManagement")%>" class="$cssClass ItemButton GadgetIcon" style="float: <%= isLT? "right" : "left" %>">
 											<%=_ctx.appRes("UIToolbar.label.gadget")%>
 										</a>
 										<div class="HorizontalSeparator" style="float: <%= isLT? "right" : "left" %>"><span></span></div>
@@ -36,7 +36,7 @@
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(1).isRendered()) cssClass = "ItemButton SelectItemButton";
 										%>									
-										<a onclick="<%=uicomponent.event("ViewChild", "UIPortletManagement")%>" class="$cssClass ItemButton PorletIcon" style="float: <%= isLT? "right" : "left" %>">
+										<a href="javascript:;" onclick="<%=uicomponent.event("ViewChild", "UIPortletManagement")%>" class="$cssClass ItemButton PorletIcon" style="float: <%= isLT? "right" : "left" %>">
 											<%=_ctx.appRes("UIToolbar.label.portlet")%>
 										</a>
 									</div>

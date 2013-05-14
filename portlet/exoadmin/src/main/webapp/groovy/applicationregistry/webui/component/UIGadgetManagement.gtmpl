@@ -5,8 +5,8 @@
 %>
 <div class="UIGadgetManagement" id="$uicomponent.id">
 	<div class="UIControlbar ClearFix">
-		<div class="IconControl AddNewIcon" onclick="<%= uicomponent.event("AddRemoteGadget") %>"><%=_ctx.appRes("UIGadgetManagement.label.addRemote")%></div>
-		<div class="IconControl CreateNewIcon" onclick="<%= uicomponent.event("AddLocalGadget") %>"><%=_ctx.appRes("UIGadgetManagement.label.createNew")%></div>
+		<a href="javascript:;" onclick="<%= uicomponent.event("AddRemoteGadget") %>"><div class="IconControl AddNewIcon" ><%=_ctx.appRes("UIGadgetManagement.label.addRemote")%></div></a>
+		<a href="javascript:;" onclick="<%= uicomponent.event("AddLocalGadget") %>"><div class="IconControl CreateNewIcon" ><%=_ctx.appRes("UIGadgetManagement.label.createNew")%></div></a>
 	</div>
 	
 	<div class="AppRegistryContainer ClearFix">
@@ -24,8 +24,8 @@
 		 			%>
 						<div class="$cssItem ItemContent ClearFix">
 						<% def gadgetLabel = gadget.getTitle() %>
-							<a onclick="<%= uicomponent.event("SelectGadget", gadget.getName()) %>" class="TabLabel $gadgetType" title="<%= gadget.getTitle() %>"><%= (gadgetLabel.length() <= 31) ? gadgetLabel : gadgetLabel.substring(0, 28)+"..." %></a>
-							<a title="<%=_ctx.appRes("UIGadgetManagement.title.deleteGadget")%>" class="ControlIcon DeletePortalIcon" onclick="<%= uicomponent.event("RemoveGadget", gadget.getName()) %>"><span></span></a>
+							<a href="javascript:;" onclick="<%= uicomponent.event("SelectGadget", gadget.getName()) %>" class="TabLabel $gadgetType" title="<%= gadget.getTitle() %>"><%= (gadgetLabel.length() <= 31) ? gadgetLabel : gadgetLabel.substring(0, 28)+"..." %></a>
+							<a title="<%=_ctx.appRes("UIGadgetManagement.title.deleteGadget")%>" class="ControlIcon DeletePortalIcon" href="javascript:;" onclick="<%= uicomponent.event("RemoveGadget", gadget.getName()) %>"><span></span></a>
 						</div>
 					<% } %>
 					</div>
