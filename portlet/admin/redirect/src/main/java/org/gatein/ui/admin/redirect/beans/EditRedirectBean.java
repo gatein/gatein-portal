@@ -95,6 +95,8 @@ public class EditRedirectBean implements Serializable {
     public void addRedirect(String site) {
         this.siteName = site;
         this.pr = new PortalRedirect();
+        this.pr.setName(site + "_" + Long.toHexString(System.currentTimeMillis()));
+        this.originalName = pr.getName();
         this.pr.setConditions(new ArrayList<RedirectCondition>());
         RedirectMappings rm = new RedirectMappings();
         rm.setMappings(new ArrayList<NodeMap>());
@@ -112,6 +114,15 @@ public class EditRedirectBean implements Serializable {
      */
     public String getName() {
         return this.pr != null ? this.pr.getName() : redirectName;
+    }
+
+    /**
+     * Returns the original name of the redirect being edited.
+     *
+     * @return
+     */
+    public String getOriginalName() {
+        return originalName;
     }
 
     /**

@@ -162,6 +162,11 @@ function hideAlert(aclass) {
 }
 
 function configureRedirect() {
+	// FIXME: this is because the validation is not performed and last message still shows, we remove it manually
+	$('.rdr-name-error').hide();
+	$('.rdr-name-group').removeClass('error');
+	$('.rdr-edit-name').blur();
+
 	$('.add-redirect').css("visibility", "hidden");
 
 	// fade summary out...
@@ -429,49 +434,9 @@ feedback = function() {
 
 // Redirect
 editRedirect = function() {
-
-	// Fade out summary or initial and fade in edit on "Add Redirect" button click
-	$('.add-redirect').live('click', function(){
-		$('.add-redirect').css("visibility", "hidden");
-
-		// fade summary out (if present)...
-		$('#redirectSummaryWrapper').fadeOut(300, function() {
-			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300);
-		});
-		// fade initial out (if present)...
-		$('.initial').fadeOut(300, function() {
-			// .. and when done, fade config in
-			$('.edit-group').fadeIn(300);
-		});
-
-		// clear the form
-	});
-
-	// Fade out summary and fade in edit on "Configure" link click
-	// $('.configure-redirect').live('click', function(){
-	// 	$('.add-redirect').css("visibility", "hidden");
-
-	// 	// fade summary out...
-	// 	$('#redirectSummaryWrapper').fadeOut(300, function() {
-	// 		// .. and when done, fade config in
-	// 		$('.edit-group').fadeIn(300, function() {
-	// 			sortable();
-	// 		});
-	// 	});
-	// });
-
 	// Avoid showing summary and edit when edit is loaded. maybe show modal to confirm if there are changes made ?
 	$('.site-link').live('click', function(){
 		$(".edit-group").hide();
-	});
-
-	// On "Cancel" hide the edit form and show the summary
-	$('#edit_cancel').click(function(){
-		$('.edit-group').fadeOut(300, function() {
-			$('#redirectSummaryWrapper').fadeIn(300);
-		});
-		$('.add-redirect').css("visibility", "visible");
 	});
 
 	$('#modal-delete-redirect .btn-primary').click(function(){

@@ -15,7 +15,7 @@
 			<strong id="main-alert-title"></strong> <span id="main-alert-message"></span>
 		</div><!-- End .alert -->
 
-		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}">Add Redirect</a4j:commandLink>
+		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}" oncomplete="configureRedirect();">Add Redirect</a4j:commandLink>
 	</h:form>
 		<h:form id="sum_form" styleClass="form-horizontal">
 			<!-- No site selected -->
@@ -106,10 +106,15 @@
 											<span class="onoffswitch-switch"></span>
 										</h:outputLabel>
 									</div>
-									<div class="control-group">
+									<h:panelGroup id="rdr-name-group" layout="block" styleClass="control-group rdr-name-group #{name.valid ? '' : 'error'}">
 										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
-										<b:input scale="medium" id="name" placeholder="Redirect Name" value="#{rdrEdit.name}" />
-									</div>
+											<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="rdr-edit-name">
+												<f:ajax event="blur" render="name-error edit_save rdr-name-group" />
+												<f:attribute name="vOriginalRedirectName" value="#{rdrEdit.getOriginalName()}" />
+												<f:attribute name="vSiteName" value="#{rdrs.siteName}" />
+											</h:inputText>
+										<h:outputText id="name-error" styleClass="text-error rdr-name-error" value="#{name.valid ? '' : name.validatorMessage}" rendered="#{not name.valid}" />
+									</h:panelGroup>
 									<div class="control-group">
 										<h:outputLabel for="redirect" styleClass="control-label">Redirect to</h:outputLabel>
 										<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
@@ -251,7 +256,7 @@
 								</fieldset>
 								<div class="form-actions">
 									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >Cancel</button>
-									<b:commandButton value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary" oncomplete="closeRedirectEdit(true);"/>
+									<b:commandButton id="edit_save" value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid}" />
 								</div><!-- End .form-actions -->
 						</td>
 					</tr>
