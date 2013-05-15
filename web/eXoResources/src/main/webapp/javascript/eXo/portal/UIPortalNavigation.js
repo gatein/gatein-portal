@@ -541,13 +541,24 @@
 	      {
 	        portalNav.mouseEnterTab($(this), highlightClass);
 	      });
-	
+	      // For keyboard compatibility - menu accessible via TAB key
+	      tab.focusin(function()
+	      {
+	        portalNav.mouseEnterTab($(this), highlightClass);
+	      });
+	      
+	      
 	      var actualClass = tab.attr("class");
 	      tab.mouseleave(function()
 	      {
 	        portalNav.mouseLeaveTab($(this), actualClass);
 	      });
-	
+	      // For keyboard compatibility - menu accessible via TAB key
+	      tab.focusout(function()
+	      {
+	        portalNav.mouseLeaveTab($(this), actualClass);
+	      });
+	      
               tab.click(function()
               {
                 portalNav.clickTab($(this), highlightClass, actualClass);
@@ -591,6 +602,8 @@
 	      else
 	      {
 	        jObj.on({"mouseenter" : portalNav.onMenuItemOver, "mouseleave" : portalNav.onMenuItemOut,
+                         // For keyboard compatibility - menu accessible via TAB key
+                         "focusin" : portalNav.onMenuItemOver, "focusout" : portalNav.onMenuItemOut,
 	            "click" : function(event) {
 	              var a = $(event.target);
 	              var href = a.attr("href");

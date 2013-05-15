@@ -144,9 +144,9 @@
 
 <ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
-                <span class="SitesIcon TBIcon" title="Sites">
+                <a href="javascript:;" class="SitesIcon TBIcon" title="Sites">
 			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
-		</span>		
+		</a>		
 		<% renderPortalNavigations(nodeURL) %>
 	</li>
 </ul>	
