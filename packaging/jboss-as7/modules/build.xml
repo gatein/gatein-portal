@@ -275,10 +275,6 @@
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.core"/>
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.ext"/>
       <maven-resource group="org.gatein.api" artifact="gatein-api" />
-      <maven-resource group="org.gatein.management" artifact="gatein-management-api"/>
-      <maven-resource group="org.gatein.management" artifact="gatein-management-spi"/>
-      <maven-resource group="org.gatein.management" artifact="gatein-management-core"/>
-      <maven-resource group="org.gatein.management" artifact="gatein-management-rest"/>
       <maven-resource group="org.gatein.web" artifact="redirect"/>
       <maven-resource group="org.gatein.mop" artifact="mop-api"/>
       <maven-resource group="org.gatein.mop" artifact="mop-core"/>
@@ -326,6 +322,13 @@
       <maven-resource group="org.gatein.pc" artifact="pc-bridge"/>
       <maven-resource group="org.gatein.pc" artifact="pc-controller"/>
       <maven-resource group="org.gatein.pc" artifact="pc-federation"/>
+    </module-def>
+
+    <module-def name="org.gatein.management">
+      <maven-resource group="org.gatein.management" artifact="gatein-management-api"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-spi"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-core"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-rest"/>
     </module-def>
 
     <module-def name="org.gatein.naming">

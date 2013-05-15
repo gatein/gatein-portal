@@ -81,6 +81,7 @@
     <module name="org.codehaus.groovy"/>
     <module name="org.enhydra.xapool"/>
     <module name="org.gatein.common"/>
+    <module name="org.gatein.management" export="true"/>
     <module name="org.gatein.pc"/>
     <module name="org.gatein.shindig"/>
     <module name="org.gatein.wci"/>
