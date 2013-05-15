@@ -241,7 +241,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         }
         for (WindowState other : page.windows) {
             if (other != this) {
-                other.set(view);
+                other.encode(view);
             }
         }
         return view.toString();
@@ -252,7 +252,12 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         throw new UnsupportedOperationException("todo");
     }
 
-    public void set(Phase.View.Dispatch dispatch) {
+    /**
+     * Encode the navigational state of the window in the dispatch object.
+     *
+     * @param dispatch the dispatch
+     */
+    void encode(Phase.View.Dispatch dispatch) {
         if (parameters.size() > 0) {
             Encoder encoder = new Encoder(this);
             String encoded = encoder.encode();

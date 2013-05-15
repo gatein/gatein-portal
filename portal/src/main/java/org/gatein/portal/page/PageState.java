@@ -90,7 +90,7 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
     public Phase.View.Dispatch getDispatch() {
         Phase.View.Dispatch view = Controller_.index(path, null, null, null, null);
         for (WindowState w : windows) {
-            w.set(view);
+            w.encode(view);
         }
         return view;
     }
