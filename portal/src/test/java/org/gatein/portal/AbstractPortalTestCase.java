@@ -29,6 +29,7 @@ import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
 import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletDescriptor;
+import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -50,21 +51,20 @@ public class AbstractPortalTestCase {
         return Descriptors.create(PortletDescriptor.class);
     }
 
-    public static PortletDescriptor descriptor(PortletDescriptor descriptor, Class<? extends Portlet> portlet) {
+    public static PortletType<PortletDescriptor> descriptor(PortletDescriptor descriptor, Class<? extends Portlet> portlet) {
         return descriptor.
                 createPortlet().
                 portletName(portlet.getSimpleName()).
                 portletClass(portlet.getName()).
                 createSupports().mimeType("text/html").portletMode("edit", "help").up().
-                getOrCreatePortletInfo().title("Hello").up().
-                up();
+                getOrCreatePortletInfo().title("Hello").up();
     }
 
     public static PortletDescriptor descriptor(Class<? extends Portlet> portlet) {
-        return descriptor(portletXML(), portlet);
+        return descriptor(portletXML(), portlet).up();
     }
 
     public static PortletDescriptor descriptor(Class<? extends Portlet> portlet1, Class<? extends Portlet> portlet2) {
-        return descriptor(descriptor(portlet1), portlet2);
+        return descriptor(descriptor(portletXML(), portlet1).up(), portlet2).up();
     }
 }

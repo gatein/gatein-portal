@@ -20,11 +20,13 @@
 package org.gatein.portal.page;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.xml.namespace.QName;
 
 import juzu.Param;
 import juzu.PropertyType;
@@ -63,6 +65,9 @@ import org.gatein.portal.portlet.PortletAppManager;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class Controller {
+
+    /** . */
+    private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
     @Inject
     PortalContainer current;
@@ -136,7 +141,7 @@ public class Controller {
                 NodeContext<org.gatein.portal.page.NodeState, ElementState> pageLayout = layoutService.loadLayout(pageState, page.getLayoutId(), null);
 
                 // Decode from request
-                Map<String, String[]> targetParameters = null;
+                Map<String, String[]> parameters = NO_PARAMETERS;
                 for (RequestParameter parameter : requestParameters.values()) {
                     String name = parameter.getName();
                     if (name.startsWith("javax.portlet.")) {
@@ -163,10 +168,10 @@ public class Controller {
                             }
                         }
                     } else {
-                        if (targetParameters == null) {
-                            targetParameters = new HashMap<String, String[]>();
+                        if (parameters == NO_PARAMETERS) {
+                            parameters = new HashMap<String, String[]>();
                         }
-                        targetParameters.put(name, parameter.toArray());
+                        parameters.put(name, parameter.toArray());
                     }
                 }
 
@@ -189,7 +194,7 @@ public class Controller {
                             }
 
                             //
-                            PortletInvocationResponse response = window.processAction(windowState, mode, targetParameters);
+                            PortletInvocationResponse response = window.processAction(windowState, mode, parameters);
                             if (response instanceof UpdateNavigationalStateResponse) {
                                 UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse) response;
                                 pageState = new PageState(pageState);
@@ -217,17 +222,10 @@ public class Controller {
                     }
                 } else {
 
-                    // Find if we need to update the window parameters
-                    if (target != null) {
-                        WindowState windowState = pageState.get(target);
-                        if (targetParameters != null) {
-                            windowState.parameters = targetParameters;
-                        }
-                        if (targetWindowState != null) {
-                            windowState.windowState = org.gatein.pc.api.WindowState.create(targetWindowState);
-                        }
-                        if (targetMode != null) {
-                            windowState.mode = org.gatein.pc.api.Mode.create(targetMode);
+                    // Set page parameters
+                    if (parameters.size() > 0) {
+                        for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                            pageState.setParameter(new QName(parameter.getKey()), parameter.getValue());
                         }
                     }
 

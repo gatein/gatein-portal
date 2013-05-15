@@ -18,9 +18,12 @@
  */
 package org.gatein.portal.page;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 import juzu.request.Phase;
 import org.gatein.portal.mop.customization.CustomizationService;
@@ -37,6 +40,9 @@ import org.gatein.portal.portlet.PortletAppManager;
 public class PageState implements NodeModel<NodeState, ElementState>, Iterable<Map.Entry<String, WindowState>> {
 
     /** . */
+    private static final Map<QName, String[]> NO_PARAMETERS = Collections.emptyMap();
+
+    /** . */
     final PortletAppManager portletManager;
 
     /** . */
@@ -48,6 +54,9 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
     /** A map of name -> window. */
     private final HashMap<String, WindowState> windowMap;
 
+    /** The page render parameters. */
+    private Map<QName, String[]> parameters;
+
     /** Windows iteration. */
     public final Iterable<WindowState> windows;
 
@@ -57,6 +66,7 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
         this.path = path;
         this.windowMap = new HashMap<String, WindowState>();
         this.windows = windowMap.values();
+        this.parameters = NO_PARAMETERS;
     }
 
     public PageState(PageState that) {
@@ -68,12 +78,21 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
             entry.setValue(new WindowState(window, this));
         }
 
+        // Clone the parameters
+        Map<QName, String[]> parameters;
+        if (that.parameters.size() > 0) {
+            parameters = new HashMap<QName, String[]>(that.parameters);
+        } else {
+            parameters = NO_PARAMETERS;
+        }
+
         //
         this.customizationService = that.customizationService;
         this.portletManager = that.portletManager;
         this.path = that.path;
         this.windowMap = windowMap;
         this.windows = windowMap.values();
+        this.parameters = parameters;
     }
 
     public WindowState get(String name) {
@@ -85,12 +104,49 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
         return windowMap.entrySet().iterator();
     }
 
+    public Iterable<Map.Entry<QName, String[]>> getParameters() {
+        return parameters.entrySet();
+    }
+
+    public String[] getParameter(QName name) {
+        return parameters.get(name);
+    }
+
+    public void setParameter(QName name, String[] value) {
+        if (value.length == 0) {
+            if (parameters != NO_PARAMETERS) {
+                parameters.remove(name);
+            }
+        } else {
+            if (parameters == NO_PARAMETERS) {
+                parameters = new HashMap<QName, String[]>();
+            }
+            parameters.put(name, value);
+        }
+    }
+
+    public void setParameters(Map<QName, String[]> next) {
+        if (next.size() == 0) {
+            if (parameters != NO_PARAMETERS) {
+                parameters.clear();
+            }
+        } else {
+            if (parameters == NO_PARAMETERS) {
+                parameters = new HashMap<QName, String[]>();
+            }
+            parameters.putAll(next);
+        }
+    }
+
     //
 
     public Phase.View.Dispatch getDispatch() {
         Phase.View.Dispatch view = Controller_.index(path, null, null, null, null);
         for (WindowState w : windows) {
             w.encode(view);
+        }
+        for (Map.Entry<QName, String[]> parameter : parameters.entrySet()) {
+            view.setParameter(parameter.getKey().getLocalPart(), parameter.getValue());
         }
         return view;
     }

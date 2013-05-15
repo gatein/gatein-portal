@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.namespace.QName;
+
 import juzu.impl.common.PercentCodec;
 import juzu.io.Encoding;
 import juzu.request.Phase;
@@ -41,6 +43,9 @@ import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.api.RenderURL;
 import org.gatein.pc.api.URLFormat;
+import org.gatein.pc.api.info.NavigationInfo;
+import org.gatein.pc.api.info.ParameterInfo;
+import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.ActionInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
@@ -153,10 +158,16 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     }
 
     public void setParameter(String name, String[] value) {
-        if (parameters == NO_PARAMETERS) {
-            parameters = new HashMap<String, String[]>();
+        if (value.length == 0) {
+            if (parameters != NO_PARAMETERS) {
+                parameters.remove(name);
+            }
+        } else {
+            if (parameters == NO_PARAMETERS) {
+                parameters = new HashMap<String, String[]>();
+            }
+            parameters.put(name, value);
         }
-        parameters.put(name, value);
     }
 
     public PortletInvocationResponse processAction(
@@ -172,10 +183,26 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     }
 
     public PortletInvocationResponse render() throws PortletInvokerException {
+
+        // Compute window public parameters
+        Map<String, String[]> publicParameters = NO_PARAMETERS;
+        NavigationInfo info = getPortlet().getInfo().getNavigation();
+        for (Map.Entry<QName, String[]> parameter : page.getParameters()) {
+            ParameterInfo parameterInfo = info.getPublicParameter(parameter.getKey());
+            if (parameterInfo != null) {
+                if (publicParameters == NO_PARAMETERS) {
+                    publicParameters = new HashMap<String, String[]>();
+                }
+                publicParameters.put(parameterInfo.getId(), parameter.getValue());
+            }
+        }
+
+        //
         RenderInvocation render = createRender();
         render.setMode(mode);
         render.setWindowState(windowState);
         render.setNavigationalState(ParametersStateString.create(parameters));
+        render.setPublicNavigationalState(publicParameters);
         return page.portletManager.getInvoker().invoke(render);
     }
 
@@ -254,6 +281,16 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
             }
             if (mode != null) {
                 copy.mode = mode;
+            }
+            Map<String, String[]> changes = renderURL.getPublicNavigationalStateChanges();
+            if (changes.size() > 0) {
+                NavigationInfo info = getPortlet().getInfo().getNavigation();
+                for (Map.Entry<String, String[]> change : changes.entrySet()) {
+                    ParameterInfo parameterInfo = info.getPublicParameter(change.getKey());
+                    if (parameterInfo != null) {
+                        copy.page.setParameter(parameterInfo.getName(), change.getValue());
+                    }
+                }
             }
             view = copy.page.getDispatch();
         } else if (containerURL instanceof ActionURL) {
