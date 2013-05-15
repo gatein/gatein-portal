@@ -27,7 +27,7 @@
 }
 
 /*Creates a new row after 3 features are displayed on a page*/
-.gtnResponsiveFeaturesPortlet .features div:nth-of-type(6) {clear: both;}
+.gtnResponsiveFeaturesPortlet .features div:nth-of-type(4) {clear: both;}
 
 .gtnResponsiveFeaturesPortlet .feature img {max-width: 100%;}
 
