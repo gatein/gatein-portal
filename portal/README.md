@@ -13,10 +13,10 @@ The page controller provides default support for stateless navigation, it means 
 * Bookmarkability of the page: the engine provides links that will restore the state of the page.
 * Browser back button support
 * Harmless multitab navigation: an user can open several tab on the same page without creating conflicts between applications based
-on render parameters
+  on render parameters
 
 However there is a slight drawback, when user navigates to another page, the parameters are lost as they are only maintained
-on the same page. We will introduce *window session scoped state" to declare that a window will have its state stored in the
+on the same page. We will introduce *window session scoped state* to declare that a window will have its state stored in the
 portal session, this should be configured in the deployment descriptor of the application.
 
 ## URL encoding
@@ -29,8 +29,9 @@ To achieve the stateless design the page controller encodes the state of the pag
 ## Todo list
 
 * Try to change the `javax.portlet.` prefix to a reserved char among the *RFC3986_PCHAR*:
-** Need to distinguish the origin of the parameter and only consider parameters from the request and not HTTP post. To achieve this, Juzu needs to be modified to add the request parameter origin in the `juzu.request.RequestParameter` object.
-** The reserved char must be part of *RFC3986_PCHAR* chars for the *path segment* and *query string parameter name*
+    * Need to distinguish the origin of the parameter and only consider parameters from the request and not HTTP post. To achieve this,
+      Juzu needs to be modified to add the request parameter origin in the `juzu.request.RequestParameter` object.
+    * The reserved char must be part of *RFC3986_PCHAR* chars for the *path segment* and *query string parameter name*
 * Public render parameters
 * Portlet eventing
 * Resource serving
