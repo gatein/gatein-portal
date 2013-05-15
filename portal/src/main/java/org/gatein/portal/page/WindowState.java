@@ -285,7 +285,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         return action;
     }
 
-    public RenderInvocation createRender() {
+    private RenderInvocation createRender() {
         RenderInvocation render = new RenderInvocation(this);
         render.setClientContext(new GateInClientContext());
         render.setPortalContext(new AbstractPortalContext());
