@@ -122,11 +122,16 @@
         topmenu.children(settings.menuElement).each(function(){
 
             $(this).on("click", settings.arrowElement, function(e) {
-                submenuOpenAction($(this), false);
+                if (! ($(this).parent(settings.menuElement).attr("gtnTouch") && $(this).parent(settings.menuElement).attr("gtnMouseEnter")))
+                {
+                  submenuOpenAction($(this), false);
+                }
+                $(this).parent(settings.menuElement).attr("gtnTouch", null);
+                $(this).parent(settings.menuElement).attr("gtnMouseEnter", null);
             });
 
             $(this).on("mouseenter", settings.submenuElement + " > " + settings.menuElement, function(e) {
-
+                $(this).attr("gtnMouseEnter", true);
                 var hasChildren = $(this).children(settings.arrowElement).length > 0;
                 var isExpanded = topmenu.css("z-index") == 1;
                 var isClosed = $(this).hasClass(settings.collapsedClass);
@@ -137,7 +142,6 @@
             });
 
             $(this).on("mouseleave", settings.submenuElement + " > " + settings.menuElement, function(e) {
-
                 var hasChildren = $(this).children(settings.arrowElement).length > 0;
                 var isExpanded = topmenu.css("z-index") == 1;
 
@@ -145,7 +149,12 @@
                     submenuOpenAction($(this).children(settings.arrowElement), true);
                 }
             });
-
+             
+            $(this).on("touchstart", settings.menuElement, function(e) {
+                //specify that a touch event has occured along the chain to the click event.
+                $(this).attr("gtnTouch", true);
+            });
+ 
         });
 
     };
