@@ -540,6 +540,8 @@
 	      tab.mouseenter(function()
 	      {
 	        portalNav.mouseEnterTab($(this), highlightClass);
+                event.target.gtnMouseEntered = true; //we need to have this hack here due to the event ordering on some touch based devices
+                                                     //This will prevent menu's from being opened twice the older android browsers.
 	      });
 	      // For keyboard compatibility - menu accessible via TAB key
 	      tab.focusin(function()
@@ -559,14 +561,15 @@
 	        portalNav.mouseLeaveTab($(this), actualClass);
 	      });
 	      
-              tab.click(function()
+              tab.click(function(event)
               {
-                portalNav.clickTab($(this), highlightClass, actualClass);
+                portalNav.clickTab(event, $(this), highlightClass, actualClass);
                 // Add back the mouseenter here which was removed on a touchstart. To support devices which support both
                 // touch and mouse events.
                 $(this).on("mouseenter", function() 
                 {
-                  portalNav.mouseEnterTab($(this), highlightCLass);
+                  portalNav.mouseEnterTab($(this), highlightClass);
+                  event.target.gtnMouseEntered = true;
                 });
               }); 
         
@@ -578,11 +581,33 @@
                  * What happens in this case is that the mouse enter enter causes the menu to open, but then the
                  * click toggles it closed again.
                  */
-                $(this).off("mouseenter"); 
+                 $(this).off("mouseenter");
               });
             
 	      tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
 	    });
+
+            // If a menu item has a submenu, then the first click should open the submenu and not
+            // follow the link. The next click should follow the link. To support touch based devices.
+            $(".UITab .MenuItem .MenuItemContainer").each(function()
+            {
+                $(this).parent(".MenuItem").on("touchstart", function(event)
+                {
+                  //Note: due to mobile safari not propagating events if a content change occurs in the dom
+                  //we cannot use the one method here and we need to manually check if the menu is open or not.
+                  if ($(this).children(".MenuItemContainer").css("display") == "none")
+                  {
+                    $(this).on("click", function(event)
+                    {
+                      return false;
+                    });
+                  }
+                  else
+                  {
+                    $(this).off("click"); //TODO: figure out if we can specify exactly the event listener to remove...
+                  }
+                });
+            });
 	
 	    var itemConts = topContainer.find("." + this.containerStyleClass);
 	    itemConts.each(function()
@@ -673,19 +698,25 @@
 	    }
 	  },
 
-          clickTab : function (tab, newClass, oldClass)
+          clickTab : function (event, tab, newClass, oldClass)
           {
             var portalNav = portalNavigation;
 
             
             if (tab.attr("class") == newClass) //the menu is open
             {
-              portalNav.mouseLeaveTab(tab, oldClass);
+              // If we detect that the (virtual) mouse is already over the tab, then don't close it.
+              // This is to support some touch based devices where the mouse enter event occurs before touch events
+              // (eg the older android 'browser').
+              if (! event.target.gtnMouseEntered){
+                portalNav.mouseLeaveTab(tab, oldClass);
+              }
             }
             else //we don't have a submenu, create it
             {
               portalNav.mouseEnterTab(tab, newClass);
             }
+            event.target.gtnMouseEntered = null;
 	  },
 	
 	  /**

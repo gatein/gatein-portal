@@ -115,7 +115,6 @@
                 var menuCategory = actionItem.parent(settings.menuItem);
                 if (menuCategory.children(settings.menuElement).length === 0 && actionItem.attr('href'))
                 {
-                 console.log("URL: " + actionItem.attr('href').substring(1));
                  $.ajax({
                     type: "POST",
                     url: actionItem.attr('href').substring(1),
@@ -139,19 +138,29 @@
         topmenu.children(settings.menuItem).each(function(){
             $(this).on("touchstart", settings.arrowElement, function(e){
                 menuToggleAction($(this));
-               // e.preventDefault();
+                //hack to specify that this element has been touched or not
+                //Needed since some older mobile browser call will continue the
+                //events chain even with a return false.
+                e.target.gtnResponsiveTouch = true;
                 return false;
             });
 
             // if a click is done, we explicitly set open/close the menu
             $(this).on("click", settings.arrowElement, function(e) {
-                menuToggleAction($(this));
+                if(! e.target.gtnResponsiveTouch)
+                {
+                    menuToggleAction($(this));
+                }
+                e.target.gtnResponsiveTouch = null;
             });
 
             //if using a mouse, handle hover support
             //Note: this will only fetch the node data via ajax, it will not change the state of the node
-            $(this).on("mouseenter", settings.arrowElement, function(e){
-                updateMenu($(this));
+            $(this).on("mouseover", settings.arrowElement, function(e){
+                if(! e.target.gtnResponsiveTouch)
+                {
+                    updateMenu($(this));
+                }
             });
         });
 
