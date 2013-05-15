@@ -104,7 +104,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     /** The related portlet lazy loaded. */
     private Portlet portlet;
 
-    public WindowState(NodeState node, PageState page) {
+    WindowState(NodeState node, PageState page) {
 
         //
         this.page = page;
@@ -116,13 +116,24 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         this.portlet = null;
     }
 
-    public WindowState(WindowState that, PageState page) {
+    WindowState(WindowState that, PageState page) {
+
+        //
+        Map<String, String[]> parameters;
+        if (that.parameters.isEmpty()) {
+            parameters = NO_PARAMETERS;
+        } else {
+            parameters = new HashMap<String, String[]>(that.parameters);
+            for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                parameter.setValue(parameter.getValue().clone());
+            }
+        }
 
         //
         this.page = page;
         this.name = that.name;
         this.id = that.id;
-        this.parameters = NO_PARAMETERS;
+        this.parameters = parameters;
         this.windowState = org.gatein.pc.api.WindowState.NORMAL;
         this.mode = Mode.VIEW;
         this.portlet = null;
@@ -195,6 +206,19 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         return portlet;
     }
 
+    private Phase.View.Dispatch getDispatch(String action, String windowState, String mode, Map<String, String[]> parameters) {
+        Phase.View.Dispatch view = Controller_.index(page.path, action, name, windowState, mode);
+        for (WindowState w : page.windows) {
+            w.encode(view);
+        }
+        if (parameters != null) {
+            for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                view.setParameter(parameter.getKey(), parameter.getValue());
+            }
+        }
+        return view;
+    }
+
     @Override
     public MediaType getResponseContentType() {
         return MediaType.TEXT_HTML;
@@ -220,29 +244,25 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         }
         if (containerURL instanceof RenderURL) {
             RenderURL renderURL = (RenderURL) containerURL;
-            view = Controller_.index(page.path, null, name, targetWindowState, targetMode);
+            WindowState copy = new PageState(page).get(name);
             ParametersStateString ns = (ParametersStateString) renderURL.getNavigationalState();
             if (ns != null) {
-                for (Map.Entry<String, String[]> parameter : ns.getParameters().entrySet()) {
-                    view.setParameter(parameter.getKey(), parameter.getValue());
-                }
+                copy.parameters = ns.getParameters();
             }
+            if (windowState != null) {
+                copy.windowState = windowState;
+            }
+            if (mode != null) {
+                copy.mode = mode;
+            }
+            view = copy.page.getDispatch();
         } else if (containerURL instanceof ActionURL) {
             ActionURL actionURL = (ActionURL) containerURL;
-            view = Controller_.index(page.path, "action", name, targetWindowState, targetMode);
             ParametersStateString is = (ParametersStateString) actionURL.getInteractionState();
-            if (is != null) {
-                for (Map.Entry<String, String[]> parameter : is.getParameters().entrySet()) {
-                    view.setParameter(parameter.getKey(), parameter.getValue());
-                }
-            }
+            Map<String, String[]> parameters = is != null ? is.getParameters() : null;
+            view = getDispatch("action", targetWindowState, targetMode, parameters);
         } else {
             throw new UnsupportedOperationException("Todo");
-        }
-        for (WindowState other : page.windows) {
-            if (other != this) {
-                other.encode(view);
-            }
         }
         return view.toString();
     }

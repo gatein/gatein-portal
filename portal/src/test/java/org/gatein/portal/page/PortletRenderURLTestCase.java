@@ -75,6 +75,7 @@ public class PortletRenderURLTestCase extends AbstractPortalTestCase {
     public void testHello() {
         String url = deploymentURL.toString() + "page1";
         driver.get(url);
+        System.out.println("driver.getPageSource() = " + driver.getPageSource());
         WebElement click = driver.findElement(By.id("click"));
         foo = null;
         bar = null;

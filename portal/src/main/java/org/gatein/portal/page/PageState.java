@@ -95,6 +95,14 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
         return view;
     }
 
+    Phase.View.Dispatch getDispatch(String action, String target) {
+        Phase.View.Dispatch view = Controller_.index(path, action, null, null, null);
+        for (WindowState w : windows) {
+            w.encode(view);
+        }
+        return view;
+    }
+
     @Override
     public NodeContext<NodeState, ElementState> getContext(NodeState node) {
         return node.context;
