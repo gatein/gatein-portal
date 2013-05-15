@@ -13,5 +13,9 @@
       <name>page2</name>
       <page-reference>portal::classic::page2</page-reference>
     </node>
+    <node>
+      <name>page3</name>
+      <page-reference>portal::classic::page3</page-reference>
+    </node>
   </page-nodes>
 </node-navigation>

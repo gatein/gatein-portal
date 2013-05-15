@@ -104,8 +104,12 @@ public class PageState implements NodeModel<NodeState, ElementState>, Iterable<M
         return windowMap.entrySet().iterator();
     }
 
-    public Iterable<Map.Entry<QName, String[]>> getParameters() {
+    public Iterable<Map.Entry<QName, String[]>> parameters() {
         return parameters.entrySet();
+    }
+
+    public Map<QName, String[]> getParameters() {
+        return parameters;
     }
 
     public String[] getParameter(QName name) {

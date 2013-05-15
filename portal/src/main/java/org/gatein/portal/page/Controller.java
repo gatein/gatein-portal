@@ -145,22 +145,25 @@ public class Controller {
                 for (RequestParameter parameter : requestParameters.values()) {
                     String name = parameter.getName();
                     if (name.startsWith("javax.portlet.")) {
-                        if (name.startsWith("javax.portlet.p.")) {
+                        if (name.equals("javax.portlet.p")) {
+                            Decoder decoder = new Decoder(parameter.getRaw(0));
+                            for (Map.Entry<String, String[]> p : decoder.decode().getParameters().entrySet()) {
+                                pageState.setParameter(new QName(p.getKey()), p.getValue());
+                            }
+                        } else if (name.startsWith("javax.portlet.p.")) {
                             String id = name.substring("javax.portlet.p.".length());
                             Decoder decoder = new Decoder(parameter.getRaw(0));
                             WindowState window = pageState.get(id);
                             if (window != null) {
                                 window.parameters = decoder.decode().getParameters();
                             }
-                        }
-                        if (name.startsWith("javax.portlet.w.")) {
+                        } else if (name.startsWith("javax.portlet.w.")) {
                             String id = name.substring("javax.portlet.w.".length());
                             WindowState window = pageState.get(id);
                             if (window != null) {
                                 window.windowState = org.gatein.pc.api.WindowState.create(parameter.getValue());
                             }
-                        }
-                        if (name.startsWith("javax.portlet.m.")) {
+                        } else if (name.startsWith("javax.portlet.m.")) {
                             String id = name.substring("javax.portlet.m.".length());
                             WindowState window = pageState.get(id);
                             if (window != null) {
@@ -208,6 +211,10 @@ public class Controller {
                                 }
                                 if (update.getMode() != null) {
                                     window.mode = update.getMode();
+                                }
+                                Map<String, String[]> changes = update.getPublicNavigationalStateUpdates();
+                                if (changes != null && changes.size() > 0) {
+                                    window.setPublicParameters(changes);
                                 }
                                 return pageState.getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
                             } else {

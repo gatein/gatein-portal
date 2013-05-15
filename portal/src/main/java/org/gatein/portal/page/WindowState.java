@@ -45,7 +45,6 @@ import org.gatein.pc.api.RenderURL;
 import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.info.NavigationInfo;
 import org.gatein.pc.api.info.ParameterInfo;
-import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.ActionInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
@@ -170,24 +169,42 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         }
     }
 
+    public void setPublicParameters(Map<String, String[]> changes) {
+        NavigationInfo info = getPortlet().getInfo().getNavigation();
+        for (Map.Entry<String, String[]> change : changes.entrySet()) {
+            ParameterInfo parameterInfo = info.getPublicParameter(change.getKey());
+            if (parameterInfo != null) {
+                page.setParameter(parameterInfo.getName(), change.getValue());
+            }
+        }
+    }
+
     public PortletInvocationResponse processAction(
             org.gatein.pc.api.WindowState windowState,
             Mode mode,
             Map<String, String[]> interactionState) throws PortletInvokerException {
-        ActionInvocation invocation = createAction();
-        invocation.setMode(mode);
-        invocation.setWindowState(windowState);
-        invocation.setNavigationalState(ParametersStateString.create());
-        invocation.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
-        return page.portletManager.getInvoker().invoke(invocation);
+        ActionInvocation action = createAction();
+        action.setMode(mode);
+        action.setWindowState(windowState);
+        action.setNavigationalState(ParametersStateString.create());
+        action.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
+        action.setPublicNavigationalState(computePublicParameters());
+        return page.portletManager.getInvoker().invoke(action);
     }
 
     public PortletInvocationResponse render() throws PortletInvokerException {
+        RenderInvocation render = createRender();
+        render.setMode(mode);
+        render.setWindowState(windowState);
+        render.setNavigationalState(ParametersStateString.create(parameters));
+        render.setPublicNavigationalState(computePublicParameters());
+        return page.portletManager.getInvoker().invoke(render);
+    }
 
-        // Compute window public parameters
+    private Map<String, String[]> computePublicParameters() {
         Map<String, String[]> publicParameters = NO_PARAMETERS;
         NavigationInfo info = getPortlet().getInfo().getNavigation();
-        for (Map.Entry<QName, String[]> parameter : page.getParameters()) {
+        for (Map.Entry<QName, String[]> parameter : page.parameters()) {
             ParameterInfo parameterInfo = info.getPublicParameter(parameter.getKey());
             if (parameterInfo != null) {
                 if (publicParameters == NO_PARAMETERS) {
@@ -196,14 +213,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
                 publicParameters.put(parameterInfo.getId(), parameter.getValue());
             }
         }
-
-        //
-        RenderInvocation render = createRender();
-        render.setMode(mode);
-        render.setWindowState(windowState);
-        render.setNavigationalState(ParametersStateString.create(parameters));
-        render.setPublicNavigationalState(publicParameters);
-        return page.portletManager.getInvoker().invoke(render);
+        return publicParameters;
     }
 
     public Portlet getPortlet() {
@@ -284,13 +294,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
             }
             Map<String, String[]> changes = renderURL.getPublicNavigationalStateChanges();
             if (changes.size() > 0) {
-                NavigationInfo info = getPortlet().getInfo().getNavigation();
-                for (Map.Entry<String, String[]> change : changes.entrySet()) {
-                    ParameterInfo parameterInfo = info.getPublicParameter(change.getKey());
-                    if (parameterInfo != null) {
-                        copy.page.setParameter(parameterInfo.getName(), change.getValue());
-                    }
-                }
+                copy.setPublicParameters(changes);
             }
             view = copy.page.getDispatch();
         } else if (containerURL instanceof ActionURL) {
@@ -298,6 +302,14 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
             ParametersStateString is = (ParametersStateString) actionURL.getInteractionState();
             Map<String, String[]> parameters = is != null ? is.getParameters() : null;
             view = getDispatch("action", targetWindowState, targetMode, parameters);
+            if (page.getParameters().size() > 0) {
+                HashMap<String, String[]> a = new HashMap<String, String[]>(page.getParameters().size());
+                for (Map.Entry<QName, String[]> b : page.parameters()) {
+                    a.put(b.getKey().getLocalPart(), b.getValue());
+                }
+                Encoder encoder = new Encoder(a);
+                view.setParameter(ENCODING, "javax.portlet.p", encoder.encode());
+            }
         } else {
             throw new UnsupportedOperationException("Todo");
         }
