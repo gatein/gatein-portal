@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
 import org.exoplatform.upload.UploadService.UploadLimit;
@@ -40,8 +42,21 @@ import org.gatein.common.text.EntityEncoder;
  */
 public class UploadHandler extends WebRequestHandler {
 
+    private final String RESTRICT_PUBLIC_PARAM = "public-access-restriction";
+
+    private boolean is_restrict_public = false;
+
     static enum UploadServiceAction {
         PROGRESS, UPLOAD, DELETE, ABORT
+    }
+
+    public UploadHandler(InitParams params) {
+        if (params != null) {
+            ValueParam value = params.getValueParam(RESTRICT_PUBLIC_PARAM);
+            if (value != null) {
+                is_restrict_public = Boolean.parseBoolean(value.getValue().trim());
+            }
+        }
     }
 
     public String getHandlerName() {
@@ -55,6 +70,11 @@ public class UploadHandler extends WebRequestHandler {
     }
 
     public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception {
+        if (is_restrict_public && req.getRemoteUser() == null) {
+            res.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
         String action = req.getParameter("action");
         String[] uploadIds = req.getParameterValues("uploadId");
 
