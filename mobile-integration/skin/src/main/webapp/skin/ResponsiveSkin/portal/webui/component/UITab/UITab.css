@@ -30,7 +30,7 @@
     padding: 0.5em 1em 0.25em;
     border: solid thin #aeaeae;
     position: relative;
-    top: 1px;
+    top: 2px;
     background-color: white;
 }
 
@@ -61,6 +61,8 @@
 .UITab .NormalTab {
     background-color: #DDD;
     border-bottom: solid thick #DDD;
+    display: inline-block;
+    height: 100%;
 }
 
 .UITab .NormalTab a {
@@ -73,11 +75,13 @@
 
 .UIHorizontalTabs .TabsContainer {
     height: auto;
+    display: table;
 }
 
 .UIHorizontalTabs .TabsContainer .UITab .LeftTab,.UIHorizontalTabs .TabsContainer .UITab .RightTab,.UIHorizontalTabs .TabsContainer .UITab .MiddleTab
     {
     background: none;
+    padding: 0;
 }
 
 .UIPopupMessages .UIHorizontalTabs,.UIPopupMessages .UIHorizontalTabs .TabsContainer {
@@ -99,11 +103,16 @@
 
 .UIHorizontalTabs .NormalTabStyle .SelectedTab {
     color: #000;
+    display: inline-block;
+    height: 100%;
 }
 
 .UIHorizontalTabs .UITab {
     margin-left: 0.1em;
     margin-right: 0.1em;
+    float: none;
+    display: table-cell;
+    vertical-align: bottom;
 }
 
 .UITabSelector .UIHorizontalTabs,
