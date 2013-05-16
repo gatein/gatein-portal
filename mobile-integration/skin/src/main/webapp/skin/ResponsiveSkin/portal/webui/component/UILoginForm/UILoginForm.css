@@ -149,6 +149,10 @@
     border-color: #62bdf5 #62bdf5 #62bdf5 #62bdf5;
 }
 
+.UILoginForm .LoginDelimiter {
+    text-align: center;
+}
+
 @media screen and (max-width: 25em) {
     .UILogin .UIFormGrid .UserNameField,.UILogin .UIFormGrid .PasswordField {
         display: block;

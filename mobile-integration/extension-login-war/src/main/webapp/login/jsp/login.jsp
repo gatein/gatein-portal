@@ -85,19 +85,6 @@
         <form id="login-form" name="login-form" action="<%= contextPath + "/login"%>" method="post">
             <fieldset>
                 <legend>Sign in</legend>
-                <% if(registry.isOAuthEnabled()) { %>
-                <div id="social-login">
-                    <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
-                    <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
-                        <div><%= res.getString("UILoginForm.label.SignInWith") %> <%= oauthProvType.getFriendlyName() %></div>
-                    </a>
-                    <% } %>
-                </div>
-
-                <div class="SignInDelimiter">
-                    <span>or</span>
-                </div>   
-                <% } %>
                 <label for="username"><%=res.getString("UILoginForm.label.UserName")%></label>
                 <input type="text" id="username" name="username" value=""/>
 
@@ -117,6 +104,20 @@
                   }
                 %>
             </fieldset>
+          <% if(registry.isOAuthEnabled()) { %>
+          <div id="social-pane">
+          <div class="SignInDelimiter">
+            <span>or sign in with</span>
+          </div>
+          <div id="social-login">
+            <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
+            <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
+              <div><%= oauthProvType.getFriendlyName() %></div>
+            </a>
+            <% } %>
+          </div>
+          </div>
+          <% } %>
         </form>
         <div id="footer">
             <p>

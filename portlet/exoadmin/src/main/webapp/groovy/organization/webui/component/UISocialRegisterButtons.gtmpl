@@ -15,7 +15,7 @@
    for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) {
 %>
                     <a href="<%= oauthProvType.getInitOAuthURL(contextPath); %>"" class="register-button register-<%= oauthProvType.getKey(); %>">
-                        <div><%=_ctx.appRes("UIRegisterForm.label.RegisterWith")%> <%= oauthProvType.getFriendlyName(); %></div>
+                        <div><%= oauthProvType.getFriendlyName(); %></div>
                     </a>
 <% 
    }

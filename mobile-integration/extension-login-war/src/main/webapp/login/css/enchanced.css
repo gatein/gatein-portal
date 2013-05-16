@@ -106,6 +106,10 @@
     #error-pane {
         padding: 0.18em;
     }
+
+    #social-pane {
+        margin-top: 0em;
+    }
 }
 
 /* Big size devices ( >500px ) */
@@ -247,10 +251,24 @@
     label[for=rememberme], #forgot {
         font-size: 0.84em;
     }
-    
+
+    #social-pane {
+        margin-left: 22%;
+        margin-top: -1.5em;
+    }
+
     #social-login a.login-button {
         display: inline-block;
         margin: 10px 5px 5px 5px;
+    }
+
+    .SignInDelimiter span:before, .SignInDelimiter span:after {
+        background: none repeat scroll 0 0 red;
+        border-bottom: 0.0625em solid #E9E9E9;
+        display: inline-block;
+        content: "";
+        margin: .25em .87em;
+        width: 20%;
     }
 }
 
@@ -266,6 +284,10 @@
         float: none;
         display: inline;
         margin-left: 0em;
+    }
+
+    .SignInDelimiter span:before, .SignInDelimiter span:after {
+        width: 30%;
     }
 }
 

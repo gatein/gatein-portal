@@ -39,8 +39,8 @@
 }
 
 .UILoginForm .LoginDecorator .LoginDetailBox {
-	background: url('background/ImageMiddle.gif') no-repeat left bottom; /* orientation=lt */
-	background: url('background/ImageMiddle-rt.gif') no-repeat right bottom; /* orientation=rt */
+	background: url('background/ImageMiddleOAuth.gif') no-repeat left 15px; /* orientation=lt */
+	background: url('background/ImageMiddleOAuth-rt.gif') no-repeat right 15px; /* orientation=rt */
 	padding: 20px 0px 20px 115px; /* orientation=lt */
 	padding: 20px 115px 20px 0px; /* orientation=rt */
 }
@@ -103,6 +103,24 @@
 	background: url('background/Login-rt.gif') no-repeat left -78px; /* orientation=rt */
 	padding: 0px 10px 0px 0px; /* orientation=lt */
 	padding: 0px 0px 0px 10px; /* orientation=rt */
+}
+
+.UILoginForm .LoginDelimiter {
+    margin: 5px 0;
+    text-align: center;
+}
+.UILoginForm .LoginDelimiter span {
+    font-size: 11px;
+    color: #888;
+}
+
+.UILoginForm .LoginDelimiter span:before, .UILoginForm .LoginDelimiter span:after {
+    background: none repeat scroll 0 0 red;
+    border-bottom: 1px solid #E9E9E9;
+    content: "";
+    display: inline-block;
+    margin: 4px 14px;
+    width: 120px;
 }
 
 /* ============================End LoginDecorator============================== */

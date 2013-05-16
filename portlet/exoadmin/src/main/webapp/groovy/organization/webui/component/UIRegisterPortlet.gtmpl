@@ -6,17 +6,16 @@
 <%
 if(_ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW)
 {
-   OAuthProviderTypeRegistry registry = uicomponent.getApplicationComponent(OAuthProviderTypeRegistry.class);
-   if (registry.isOAuthEnabled()) {
-      uicomponent.renderChild("UISocialRegisterButtons");
-   
-%>
-   <div class="RegisterDelimiter">
-      <span><%=_ctx.appRes("UIRegisterForm.label.Or")%></span>
-   </div>
-<%
-   }
    uicomponent.renderChild("UIRegisterForm");
+   OAuthProviderTypeRegistry registry = uicomponent.getApplicationComponent(OAuthProviderTypeRegistry.class);
+      if (registry.isOAuthEnabled()) {
+        %>
+        <div class="RegisterDelimiter">
+            <span><%=_ctx.appRes("UIRegisterForm.label.Or")%></span>
+        </div>
+        <%
+        uicomponent.renderChild("UISocialRegisterButtons");
+      }
 }
 else
 {

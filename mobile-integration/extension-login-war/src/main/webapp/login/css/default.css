@@ -168,6 +168,10 @@ input[type=checkbox]
     text-align:center;
 }
 
+#social-pane {
+    margin-top: 1.7em;
+}
+
 #social-login {
     text-align: center;
     margin-bottom: 1em;
@@ -269,11 +273,6 @@ input[type=checkbox]
     text-align: center;
 }
 
-.SignInDelimiter span:before, .SignInDelimiter span:after {
-    background: none repeat scroll 0 0 red;
-    border-bottom: 0.0625em solid #E9E9E9;
-    display: inline-block;
-    content: "";
-    margin: .25em .87em;
-    width: 30%;
+.SignInDelimiter span {
+    font-size: 0.88em;
 }
