@@ -55,11 +55,6 @@
     <module name="org.chromattic" services="export" export="true"/>
 
     <!--
-         JBossCache configuration loads schemas via TCCL
-    -->
-    <module name="org.jboss.cache" export="true"/>
-
-    <!--
          Groovy loads types referenced in .gtmpl files via TCCL
     -->
     <module name="org.json" export="true"/>
