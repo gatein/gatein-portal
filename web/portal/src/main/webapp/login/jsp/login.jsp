@@ -44,80 +44,116 @@
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
 
   OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) portalContainer.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
-  
-  Cookie cookie = new Cookie(org.exoplatform.web.login.LoginServlet.COOKIE_NAME, "");
-    cookie.setPath(request.getContextPath());
-    cookie.setMaxAge(0);
-    response.addCookie(cookie);
 
-  //
+  Cookie cookie = new Cookie(org.exoplatform.web.login.LoginServlet.COOKIE_NAME, "");
+  cookie.setPath(request.getContextPath());
+  cookie.setMaxAge(0);
+  response.addCookie(cookie);
+
   String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
   boolean error = request.getAttribute("org.gatein.portal.login.error") != null;
 
-  response.setCharacterEncoding("UTF-8"); 
+  response.setCharacterEncoding("UTF-8");
   response.setContentType("text/html; charset=UTF-8");
 %>
-<!DOCTYPE html 
-    PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title><%=res.getString("UILoginForm.label.Signin")%></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>   
-    <link rel="shortcut icon" type="image/x-icon"  href="<%=contextPath%>/favicon.ico" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" type="image/x-icon" href="<%=contextPath%>/favicon.ico"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%=contextPath%>/../eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/Stylesheet.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%=contextPath%>/../eXoResources/skin/DefaultSkin/portal/webui/component/UIPortalApplicationSkin.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%=contextPath%>/../eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/UIAction/Stylesheet.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="<%=contextPath%>/../eXoResources/skin/DefaultSkin/webui/component/UIForms/UIForm/Stylesheet.css"/>
     <link rel="stylesheet" type="text/css" href="<%=contextPath%>/login/skin/Stylesheet.css"/>
   </head>
-  <body style="text-align: center; background: #b5b6b6; font-family: arial, tahoma, verdana">
-      <div id="social-login">
-          <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
-          <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
-              <div><%= res.getString("UILoginForm.label.SignInWith") %> <%= oauthProvType.getFriendlyName() %></div>
-          </a>
-          <% } %>
-      </div>
-  <div class="UILogin">                
-      <div class="LoginHeader"></div>
-      <div class="LoginContent">
-        <div class="CenterLoginContent">
-          <%/*Begin form*/%>
-          <% if(error) { %>
-          <span style="color: #ff0000"><%=res.getString("UILoginForm.label.SigninFail")%></span>
-          <% } %>
-          <form class="ClearFix" id="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
-                <table> 
-                  <tr class="FieldContainer">
-                      <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%></td>
-                      <td><input class="UserName" name="username" value="<%=username%>"/></td>
+  <body>
+
+    <div class="UILoginForm">
+      <% if (error) { %>
+      <span id="login-error"><%=res.getString("UILoginForm.label.SigninFail")%></span>
+      <% } %>
+      <div class="LoginDecorator">
+        <div class="TopLeftLoginDecorator">
+          <div class="TopRightLoginDecorator">
+            <div class="TopCenterLoginDecorator">
+              <div class="SigninTitle">Sign In</div>
+            </div>
+          </div>
+        </div>
+        <div class="MiddleLeftLoginDecorator">
+          <div class="MiddleRightLoginDecorator">
+            <div class="LoginDecoratorBackground">
+              <div class="LoginDetailBox">
+
+                <form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= contextPath + "/login"%>" method="post">
+                  <input type="hidden" name="initialURI" value=""/>
+
+                  <div class="VerticalLayout">
+                    <table class="UIFormGrid" summary="Login form">
+                      <tr class="UserNameField">
+                        <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%>
+                        </td>
+                        <td><input class="UserName" name="username" value="<%=username%>"/></td>
                       </tr>
-                    <tr class="FieldContainer" id="UIPortalLoginFormControl">
-                      <td class="FieldLabel"><%=res.getString("UILoginForm.label.password")%></td>
+                      <tr class="PasswordField" id="UIPortalLoginFormControl"
+                      ">
+                      <td class="FieldLabel"><%=res.getString("UILoginForm.label.password")%>
+                      </td>
                       <td><input class="Password" type="password" name="password" value=""/></td>
-                    </tr>
-                    <tr class="FieldContainer">
-                      <td class="FieldLabel"><input type="checkbox" name="rememberme" value="true"/></td>
-                      <td><%=res.getString("UILoginForm.label.RememberOnComputer")%></td>
-                    </tr>
-                  </table>
-                  <div class="LoginButton">
-                    <table class="LoginButtonContainer">
-                        <tr>
-                          <td class="Button">
-                            <input type="submit" name="signIn" value="<%=res.getString("UILoginForm.label.Signin")%>"/>
-                            <% if (uri != null) { 
-                               uri = EntityEncoder.FULL.encode(uri);
-                            %>
-                            <input type="hidden" name="initialURI" value="<%=uri%>"/>
-                            <% } %>
-                          </td>
-                         </tr>
+                      </tr>
+                      <tr class="RememberField">
+                        <td class="FieldLabel"><input type="checkbox" class="checkbox" value="true" name="rememberme"/></td>
+                        <td><%=res.getString("UILoginForm.label.RememberOnComputer")%>
+                        </td>
+                      </tr>
                     </table>
+                    <div class="UIAction">
+                      <input type="submit" name="signIn" class="ActionButton SimpleStyle"
+                             value="<%=res.getString("UILoginForm.label.Signin")%>"/>
+                      <% if (uri != null) {
+                        uri = EntityEncoder.FULL.encode(uri);
+                      %>
+                      <input type="hidden" name="initialURI" value="<%=uri%>"/>
+                      <% } %>
+                    </div>
                   </div>
                 </form>
-                <%/*End form*/%>
+              </div>
+              <%
+                if (registry.isOAuthEnabled()) {
+              %>
+              <div class="LoginDelimiter">
+                <span><%= res.getString("UILoginForm.label.Delimiter")%></span>
+              </div>
+              <div class='SocialLoginButtons'>
+                <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
+                <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>"
+                   class="login-button">
+                  <div><%= oauthProvType.getFriendlyName() %>
+                  </div>
+                </a>
+                <% } %>
+              </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <div class="BottomLeftLoginDecorator">
+          <div class="BottomRightLoginDecorator">
+            <div class="BottomCenterLoginDecorator"><span></span></div>
+          </div>
         </div>
       </div>
     </div>
-    <p style="font-size: 11px; color: #3f3f3f; text-align: center"><%=res.getString("UILoginForm.label.Copyright")%></p>
+    <p id="login-footer"><%=res.getString("UILoginForm.label.Copyright")%></p>
   </body>
 </html>

@@ -18,329 +18,86 @@
  */
 
 body {
+    background: #EBEBEB;
     padding-top: 110px;
 }
 
-.UILogin {
- 	height: 236px;
-	font-family: tahoma; 
-	font-size: 11px;
-	margin: 0px auto 7px auto;
-	padding:0 5px 0 120px;
-	width: 275px;
-	background: url('../skin/images/LoginBackground.gif') no-repeat top;
-	color: #3f3f3f;
-}
-  
-.UILogin .LoginHeader {
-	height: 33px;
-	line-height: 33px;
-	color: #a1c0e9;
-	font-size: 13px;
-	font-family: arial;
-	text-align: right;
-	padding: 10px 15px 0px 0px
-}
-
-.UILogin  .LoginContent {
-	padding-top: 12px;
-}
-
-.UILogin .LoginContent .CenterLoginContent {
-  height: 120px;
-  padding: 25px 0px;
-}
-
-.UILogin .WelcomeText {
-  line-height: 20px;
-  color: #058ee6;
-  font-size: 17px;
-  text-align: left;
-  padding-left: 20px;
-}
-
-.UILogin .LoginContent table {
-	margin: auto;
-}
-
-.UILogin .LoginContent table .FieldLabel {
-	text-align: right;
-	padding-right: 5px;
-}
-
-.UILogin .LoginContent table .FieldLabel input {
-	margin: 5px 0px;
-}
-
-.UILogin .LoginContent .FieldContainer {
-  overflow: hidden ;
-  padding-top: 9px ;
-  margin: auto ;
-  text-align: left;
-}
-
-.UILogin .LoginContent .FieldContainer label {
-  float: left;
-  width: 80px ; height: 20px; 
-  line-height: 20px; 
-	text-align: right;
-	font-weight: bold ;
-	margin-right: 5px;
-	color: #3f3f3f;
-}
-
-.UILogin .LoginContent .FieldContainer input.UserName {
-  float: left;
-  width: 160px ;  
-  height: 18px;
-  border: solid 1px #b7b7b7 ;
-  padding-left: 18px;
-  background: #f7f7f7 url('../skin/images/LoginBackground.gif') no-repeat left -266px;
-}
-
-.UILogin .LoginContent .FieldContainer input.Password {
-  float: left;
-  width: 160px ;  
-  height: 18px;
-  border: solid 1px #b7b7b7 ;
-  padding-left: 18px;
-  background: #f7f7f7 url('../skin/images/LoginBackground.gif') no-repeat left -290px;
-}
-
-.UILogin a.TextHelp {
-  color: #3c78b5;
-  margin-top: 7px; 
-  padding-left: 50px;
-  display: block;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.UILogin a.TextHelp:hover {
-  color: orange;
-  margin-top: 7px; 
-  padding-left: 50px;
-  display: block;
-  text-decoration: underline;
-}
-
-.UILogin .LoginContent .OverflowContainer {
-  width: 250px;
-  overflow: hidden;
-  margin: auto; 
-  padding-top: 7px;
-}
-
-.UILogin .LoginContent .OverflowContainer input {
-  float: left;
-  margin-left: 10px;
-}
-
-
-.UILogin .LoginContent .LoginButton {
-  height: 22px ;
-  padding: 8px 40px 5px 0px;
-}
-
-.UILogin .LoginContent .LoginButtonContainer {
-	padding-left: 32px; /* orientation=rt */
-	width: auto;
-	margin: auto;
-}
-
-.UILogin .LoginContent .Button {
-  height: 22px;
-  margin: auto; 
-}
-
-.UILogin .LoginContent .Button a {
-  text-decoration: none;
-  color: #3f3f3f;
-}
-
-.UILogin .LoginContent .Button a:hover {
-  color: #058ee6; text-decoration: none;
-}
-
-.UILogin .LoginContent .LoginButton .Button .LeftButton {
-  line-height: 22px;
-  padding-left: 11px;
-  background: url('../skin/images/LoginBackground.gif') no-repeat left -311px;
-}
-
-.UILogin .LoginContent .LoginButton .Button .RightButton {
-  line-height: 22px;
-  padding-right: 11px;
-  background: url('../skin/images/LoginBackground.gif') no-repeat right -311px;
-}
-
-.UILogin .LoginContent .LoginButton .Button .MiddleButton {
-  height: 22px; 
-  line-height: 21px; 
-  background: url('../skin/images/LoginBackground.gif') center -311px;
-}
-
-.UILogin .LoginContent .LoginButton input[type="submit"] {
-	background: url("../skin/images/LoginBackground.gif")
-		no-repeat scroll center -312px transparent;
-	filter:chroma(color=#000000);
-	border: 1px solid #858585;
-	border-radius: 5px 5px 5px 5px;
-	color: #3F3F3F;
-	font-size: 11px;
-	padding: 2px 11px 3px;
-	cursor:pointer;
-}
-
-.UILogin .LoginContent .LoginButton input[type="submit"]:hover {
- color: #058ee6;
-}
-
-#social-login {
-    text-align: center;
-    margin-bottom: 5px;
-}
-
-#social-login a.login-button {
-    border-radius: .3em;
-    border: 1px solid;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-    display: inline-block;
-
-    background-color: #a0a0a0;
-    background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c0c0c0), to(#a0a0a0));
-    border-color:#A0A0A0;
-
-    text-decoration: none;
+#login-footer {
     font-size: 11px;
-    margin: 10px 5px 5px;
-
+    color: #3f3f3f;
+    text-align: center;
 }
 
-#social-login a.login-button:hover {
-    background-color: #b0b0b0;
-    background: linear-gradient(to bottom, #d0d0d0, #b0b0b0);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d0d0d0), to(#b0b0b0));
-    border-color:#b0b0b0;
+#login-error{
+    color: red;
+    display: block;
+    text-align: center;
 }
 
-#social-login a.login-button > div {
-    border: 1px solid;
-    border-radius: .3em;
-    color: white;    
-    padding: 3px 6px 3px 22px;
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/generic.png") left no-repeat;
-    border-color: #D0D0D0 #D0D0D0 #B0B0B0;
+/* Fixes for the -rt extension */
+
+.UILoginForm {
+    padding: 30px 17px 10px 10px; /* orientation=lt */
 }
 
-#social-login #login-GOOGLE {
-    background-color: #ac2b1c;
-    background: linear-gradient(to bottom, #dd4b39, #ac2b1c);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4b39), to(#ac2b1c));
-    border-color:#8f301f #8f301f #8f301f #8f301f;
+.UILoginForm .LoginDecorator .LoginDetailBox {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/ImageMiddleOAuth.gif') no-repeat left 15px; /* orientation=lt */
+    padding: 20px 0px 20px 115px; /* orientation=lt */
 }
 
-#social-login #login-GOOGLE:hover {
-    background-color: #bc3b2c;
-    background: linear-gradient(to bottom, #ed5b49, #bc3b2c);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ed5b49), to(#bc3b2c));
-    border-color:#9f402f;
+.UILoginForm .LoginDecorator .TopLeftLoginDecorator {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/Login.gif') no-repeat left top; /* orientation=lt */
+    padding: 0px 0px 0px 9px; /* orientation=lt */
 }
 
-#social-login #login-GOOGLE > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/google.png") left no-repeat;
-    border-color: #ec9b8c #ec9b8c #dd4d29 #ec9b8c;
+.UILoginForm .LoginDecorator .TopCenterLoginDecorator .SigninTitle {
+    padding: 11px 0px 0px 15px; /* orientation=lt */
 }
 
-#social-login #login-FACEBOOK {
-    background-color: #4164a3;
-    background: linear-gradient(to bottom, #5a7aaf, #4164a3);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5a7aaf), to(#4164a3));
-    border-color:#1b386b;
+.UILoginForm .LoginDecorator .TopRightLoginDecorator {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/Login.gif') no-repeat right top; /* orientation=lt */
+    padding: 0px 134px 0px 0px; /* orientation=lt */
 }
 
-#social-login #login-FACEBOOK:hover {
-    background-color: #5174b3;
-    background: linear-gradient(to bottom, #6a8abf, #5174b3);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a8abf), to(#5174b3));
-    border-color:#2b487b;
+.UILoginForm .LoginDecorator .MiddleLeftLoginDecorator {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/MiddleLogin.gif') repeat-y left center; /* orientation=lt */
+    padding: 0px 0px 0px 4px; /* orientation=lt */
 }
 
-#social-login #login-FACEBOOK > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/facebook.png") left no-repeat;
-    border-color: #728cbc #728cbc #728cbc #728cbc;
+.UILoginForm .LoginDecorator .MiddleRightLoginDecorator {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/MiddleLogin.gif') repeat-y right; /* orientation=lt */
+    padding: 0px 4px 0px 0px; /* orientation=lt */
 }
 
-#social-login #login-TWITTER {
-    background-color: #429dd5;
-    background: linear-gradient(to bottom, #52ade5, #429dd5);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52ade5), to(#429dd5));
-    border-color:#328dc5;
+.UILoginForm .LoginDecorator .BottomLeftLoginDecorator {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/Login.gif') no-repeat left -78px; /* orientation=lt */
+    padding: 0px 0px 0px 10px; /* orientation=lt */
 }
 
-#social-login #login-TWITTER:hover {
-    background: #52ade5;
-    background: linear-gradient(to bottom, #62bdf5, #52ade5);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#62bdf5), to(#52ade5));
-    border-color:#429dd5;
+.UILoginForm .LoginDecorator .BottomRightLoginDecorator {
+    background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/Login.gif') no-repeat right -78px; /* orientation=lt */
+    padding: 0px 10px 0px 0px; /* orientation=lt */
 }
 
-#social-login #login-TWITTER > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/twitter.png") left no-repeat;
-    border-color: #62bdf5 #62bdf5 #62bdf5 #62bdf5;
+.UILoginForm .LoginDetailBox .ForgetPass {
+    padding-left: 59px; /* orientation=lt */
 }
 
-@media only screen and (max-width: 60em) {
-
-    .UILogin .LoginContent .FieldContainer, .UILogin .LoginContent .LoginButton input[type="submit"] {
-        font-size:1.3em;
-    }
-
-    .UILogin {
-        margin: 7px auto 7px auto;
-    }
-
-    html{
-        display: table;
-        height: 100%;
-        width: 100%;
-    }
-
-    body {
-        position: relative;
-        display: table-cell;
-        vertical-align: middle;
-    }
+.UILoginForm .LoginDetailBox .UserNameField input {
+    background: #f7f7f7 url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/Login.gif') no-repeat left -102px; /* orientation=lt */
+    padding: 0px 0px 0px 22px; /* orientation=lt */
 }
 
-@media only screen and (max-width: 415px) {
+.UILoginForm .LoginDetailBox .PasswordField input {
+    background: #f7f7f7 url('/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/Login.gif') no-repeat left -126px; /* orientation=lt */
+    padding: 0px 0px 0px 22px; /* orientation=lt */
+}
 
-    body {
-        margin:0px !important;
-        padding:0px !important;
-    }
+.UILoginForm .UIForm .VerticalLayout .UIAction {
+    padding: 15px 0px 0px 56px; /* orientation=lt */
+    text-align: left; /* orientation=lt */
+}
 
-    .UILogin .LoginContent .FieldContainer, .UILogin .LoginContent .LoginButton input[type="submit"] {
-        font-size:1.4em;
-    }
-
-    .UILogin {
-        height: auto;
-        font-family: tahoma;
-        font-size: 11px;
-        margin: 0px;
-        padding:0px;
-        width: 100%;
-        background: url('../skin/images/LoginBackgroundMobile.png') no-repeat left -10px top -4px;
-        color: #3f3f3f;
-        min-width: 280px;
-    }
-
-    .UILogin .LoginContent .OverflowContainer {
-        width: auto;
-        overflow: hidden;
-        margin: 0px;
-        padding-top: 0px;
-    }
+.UIForm .UIFormGrid td.FieldLabel {
+    text-align: right; /* orientation=lt */
 }
