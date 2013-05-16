@@ -589,16 +589,23 @@
 
             // If a menu item has a submenu, then the first click should open the submenu and not
             // follow the link. The next click should follow the link. To support touch based devices.
-            $(".UITab .MenuItem .MenuItemContainer").each(function()
+            topContainer.find(".UITab .MenuItem .MenuItemContainer").each(function()
             {
+
+                $(this).parent(".MenuItem").on("mouseover", function(event)
+                {
+                  event.target.gtnMouseOver = true;
+                });
+
                 $(this).parent(".MenuItem").on("touchstart", function(event)
                 {
                   //Note: due to mobile safari not propagating events if a content change occurs in the dom
                   //we cannot use the one method here and we need to manually check if the menu is open or not.
-                  if ($(this).children(".MenuItemContainer").css("display") == "none")
+                  if ($(this).children(".MenuItemContainer").css("display") == "none" || event.target.gtnMouseOver)
                   {
                     $(this).on("click", function(event)
                     {
+                      event.target.gtnMouseOver = null;
                       return false;
                     });
                   }
