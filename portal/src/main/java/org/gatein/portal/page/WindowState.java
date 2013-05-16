@@ -42,11 +42,14 @@ import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.api.RenderURL;
+import org.gatein.pc.api.ResourceURL;
 import org.gatein.pc.api.URLFormat;
+import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.api.info.NavigationInfo;
 import org.gatein.pc.api.info.ParameterInfo;
 import org.gatein.pc.api.invocation.ActionInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
+import org.gatein.pc.api.invocation.ResourceInvocation;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.spi.PortletInvocationContext;
 import org.gatein.pc.api.state.AccessMode;
@@ -60,7 +63,7 @@ import org.gatein.portal.mop.customization.CustomizationContext;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class WindowState implements Iterable<Map.Entry<String, String[]>>, PortletInvocationContext {
+public class WindowState implements PortletInvocationContext {
 
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
@@ -96,7 +99,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     /** The window name. */
     public final String name;
 
-    /** The window state (parameters). */
+    /** The portlet window parameters. */
     Map<String, String[]> parameters;
 
     /** The portlet window state. */
@@ -105,7 +108,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     /** The portlet window state. */
     org.gatein.pc.api.Mode mode;
 
-    /** The related portlet lazy loaded. */
+    /** The related lazy loaded portlet and cached. */
     private Portlet portlet;
 
     WindowState(NodeState node, PageState page) {
@@ -114,9 +117,9 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         this.page = page;
         this.name = node.context.getName();
         this.id = node.context.getId();
-        this.parameters = NO_PARAMETERS;
-        this.windowState = org.gatein.pc.api.WindowState.NORMAL;
-        this.mode = Mode.VIEW;
+        this.parameters = null;
+        this.windowState = null;
+        this.mode = null;
         this.portlet = null;
     }
 
@@ -124,7 +127,9 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
 
         //
         Map<String, String[]> parameters;
-        if (that.parameters.isEmpty()) {
+        if (that.parameters == null) {
+            parameters = null;
+        } else if (that.parameters.isEmpty()) {
             parameters = NO_PARAMETERS;
         } else {
             parameters = new HashMap<String, String[]>(that.parameters);
@@ -138,14 +143,9 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         this.name = that.name;
         this.id = that.id;
         this.parameters = parameters;
-        this.windowState = org.gatein.pc.api.WindowState.NORMAL;
-        this.mode = Mode.VIEW;
+        this.windowState = that.windowState;
+        this.mode = that.mode;
         this.portlet = null;
-    }
-
-    @Override
-    public Iterator<Map.Entry<String, String[]>> iterator() {
-        return parameters.entrySet().iterator();
     }
 
     public Map<String, String[]> getParameters() {
@@ -183,9 +183,18 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
             org.gatein.pc.api.WindowState windowState,
             Mode mode,
             Map<String, String[]> interactionState) throws PortletInvokerException {
-        ActionInvocation action = createAction();
-        action.setMode(mode);
-        action.setWindowState(windowState);
+        ActionInvocation action = new ActionInvocation(this);
+        action.setClientContext(new GateInClientContext());
+        action.setPortalContext(new AbstractPortalContext());
+        action.setInstanceContext(new AbstractInstanceContext(name, AccessMode.READ_ONLY));
+        action.setWindowContext(new AbstractWindowContext(name));
+        action.setUserContext(new AbstractUserContext());
+        action.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
+        action.setRequest(ClientRequestFilter.currentRequest.get());
+        action.setResponse(ClientRequestFilter.currentResponse.get());
+        action.setTarget(getPortlet().getContext());
+        action.setMode(mode != null ? mode : Mode.VIEW);
+        action.setWindowState(windowState != null ? windowState : org.gatein.pc.api.WindowState.NORMAL);
         action.setNavigationalState(ParametersStateString.create());
         action.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
         action.setPublicNavigationalState(computePublicParameters());
@@ -193,12 +202,40 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     }
 
     public PortletInvocationResponse render() throws PortletInvokerException {
-        RenderInvocation render = createRender();
-        render.setMode(mode);
-        render.setWindowState(windowState);
-        render.setNavigationalState(ParametersStateString.create(parameters));
+        RenderInvocation render = new RenderInvocation(this);
+        render.setClientContext(new GateInClientContext());
+        render.setPortalContext(new AbstractPortalContext());
+        render.setInstanceContext(new AbstractInstanceContext(name, AccessMode.READ_ONLY));
+        render.setWindowContext(new AbstractWindowContext(name));
+        render.setUserContext(new AbstractUserContext());
+        render.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
+        render.setRequest(ClientRequestFilter.currentRequest.get());
+        render.setResponse(ClientRequestFilter.currentResponse.get());
+        render.setTarget(getPortlet().getContext());
+        render.setMode(mode != null ? mode : Mode.VIEW);
+        render.setWindowState(windowState != null ? windowState : org.gatein.pc.api.WindowState.NORMAL);
+        render.setNavigationalState(parameters != null ? ParametersStateString.create(parameters) : null);
         render.setPublicNavigationalState(computePublicParameters());
         return page.portletManager.getInvoker().invoke(render);
+    }
+
+    public PortletInvocationResponse serveResource(Map<String, String[]> resourceState) throws PortletInvokerException {
+        ResourceInvocation resource = new ResourceInvocation(this);
+        resource.setClientContext(new GateInClientContext());
+        resource.setPortalContext(new AbstractPortalContext());
+        resource.setInstanceContext(new AbstractInstanceContext(name, AccessMode.READ_ONLY));
+        resource.setWindowContext(new AbstractWindowContext(name));
+        resource.setUserContext(new AbstractUserContext());
+        resource.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
+        resource.setRequest(ClientRequestFilter.currentRequest.get());
+        resource.setResponse(ClientRequestFilter.currentResponse.get());
+        resource.setTarget(getPortlet().getContext());
+        resource.setMode(mode != null ? mode : Mode.VIEW);
+        resource.setWindowState(windowState != null ? windowState : org.gatein.pc.api.WindowState.NORMAL);
+        resource.setNavigationalState(ParametersStateString.create(parameters));
+        resource.setResourceState(resourceState != null ? ParametersStateString.create(resourceState) : null);
+        resource.setPublicNavigationalState(computePublicParameters());
+        return page.portletManager.getInvoker().invoke(resource);
     }
 
     private Map<String, String[]> computePublicParameters() {
@@ -243,8 +280,14 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
         return portlet;
     }
 
-    private Phase.View.Dispatch getDispatch(String action, String windowState, String mode, Map<String, String[]> parameters) {
-        Phase.View.Dispatch view = Controller_.index(page.path, action, name, windowState, mode);
+    private Phase.View.Dispatch getDispatch(
+            String action,
+            org.gatein.pc.api.WindowState windowState,
+            Mode mode,
+            Map<String, String[]> parameters) {
+        String targetWindowState = windowState != null && !org.gatein.pc.api.WindowState.NORMAL.equals(windowState) ? windowState.toString() : null;
+        String targetMode = mode != null && !Mode.VIEW.equals(mode) ? mode.toString() : null;
+        Phase.View.Dispatch view = Controller_.index(page.path, action, name, targetWindowState, targetMode);
         for (WindowState w : page.windows) {
             w.encode(view);
         }
@@ -269,16 +312,6 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
     @Override
     public String renderURL(ContainerURL containerURL, URLFormat format) {
         Phase.View.Dispatch view;
-        String targetWindowState = null;
-        org.gatein.pc.api.WindowState windowState = containerURL.getWindowState();
-        if (windowState != null && !org.gatein.pc.api.WindowState.NORMAL.equals(windowState)) {
-            targetWindowState = windowState.toString();
-        }
-        String targetMode = null;
-        org.gatein.pc.api.Mode mode = containerURL.getMode();
-        if (mode != null && !Mode.VIEW.equals(mode)) {
-            targetMode = mode.toString();
-        }
         if (containerURL instanceof RenderURL) {
             RenderURL renderURL = (RenderURL) containerURL;
             WindowState copy = new PageState(page).get(name);
@@ -286,11 +319,11 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
             if (ns != null) {
                 copy.parameters = ns.getParameters();
             }
-            if (windowState != null) {
-                copy.windowState = windowState;
+            if (renderURL.getWindowState() != null) {
+                copy.windowState = renderURL.getWindowState();
             }
-            if (mode != null) {
-                copy.mode = mode;
+            if (renderURL.getMode() != null) {
+                copy.mode = renderURL.getMode();
             }
             Map<String, String[]> changes = renderURL.getPublicNavigationalStateChanges();
             if (changes.size() > 0) {
@@ -301,7 +334,7 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
             ActionURL actionURL = (ActionURL) containerURL;
             ParametersStateString is = (ParametersStateString) actionURL.getInteractionState();
             Map<String, String[]> parameters = is != null ? is.getParameters() : null;
-            view = getDispatch("action", targetWindowState, targetMode, parameters);
+            view = getDispatch("action", containerURL.getWindowState(), containerURL.getMode(), parameters);
             if (page.getParameters().size() > 0) {
                 HashMap<String, String[]> a = new HashMap<String, String[]>(page.getParameters().size());
                 for (Map.Entry<QName, String[]> b : page.parameters()) {
@@ -311,7 +344,22 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
                 view.setParameter(ENCODING, "javax.portlet.p", encoder.encode());
             }
         } else {
-            throw new UnsupportedOperationException("Todo");
+            ResourceURL resourceURL = (ResourceURL) containerURL;
+            CacheLevel level = resourceURL.getCacheability();
+
+            ParametersStateString rs = (ParametersStateString) resourceURL.getResourceState();
+            Map<String, String[]> parameters = rs != null ? rs.getParameters() : null;
+            view = getDispatch("resource", windowState, mode, parameters);
+
+            String id = resourceURL.getResourceId();
+
+            if (level == CacheLevel.PORTLET || level == CacheLevel.PAGE) {
+
+
+
+                if (level == CacheLevel.PAGE) {
+                }
+            }
         }
         return view.toString();
     }
@@ -327,45 +375,17 @@ public class WindowState implements Iterable<Map.Entry<String, String[]>>, Portl
      * @param dispatch the dispatch
      */
     void encode(Phase.View.Dispatch dispatch) {
-        if (parameters.size() > 0) {
-            Encoder encoder = new Encoder(this);
+        if (parameters != null && parameters.size() > 0) {
+            Encoder encoder = new Encoder(parameters);
             String encoded = encoder.encode();
             dispatch.setParameter(WindowState.ENCODING, "javax.portlet.p." + name, new String[]{encoded});
         }
-        if (!windowState.equals(org.gatein.pc.api.WindowState.NORMAL)) {
+        if (windowState != null && !windowState.equals(org.gatein.pc.api.WindowState.NORMAL)) {
             dispatch.setParameter("javax.portlet.w." + name, windowState.toString());
         }
-        if (!mode.equals(Mode.VIEW)) {
+        if (mode != null && !mode.equals(Mode.VIEW)) {
             dispatch.setParameter("javax.portlet.m." + name, mode.toString());
         }
-    }
-
-    private ActionInvocation createAction() {
-        ActionInvocation action = new ActionInvocation(this);
-        action.setClientContext(new GateInClientContext());
-        action.setPortalContext(new AbstractPortalContext());
-        action.setInstanceContext(new AbstractInstanceContext(name, AccessMode.READ_ONLY));
-        action.setWindowContext(new AbstractWindowContext(name));
-        action.setUserContext(new AbstractUserContext());
-        action.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
-        action.setRequest(ClientRequestFilter.currentRequest.get());
-        action.setResponse(ClientRequestFilter.currentResponse.get());
-        action.setTarget(getPortlet().getContext());
-        return action;
-    }
-
-    private RenderInvocation createRender() {
-        RenderInvocation render = new RenderInvocation(this);
-        render.setClientContext(new GateInClientContext());
-        render.setPortalContext(new AbstractPortalContext());
-        render.setInstanceContext(new AbstractInstanceContext(name, AccessMode.READ_ONLY));
-        render.setWindowContext(new AbstractWindowContext(name));
-        render.setUserContext(new AbstractUserContext());
-        render.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
-        render.setRequest(ClientRequestFilter.currentRequest.get());
-        render.setResponse(ClientRequestFilter.currentResponse.get());
-        render.setTarget(getPortlet().getContext());
-        return render;
     }
 
     @Override

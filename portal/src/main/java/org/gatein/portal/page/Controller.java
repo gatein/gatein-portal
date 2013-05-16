@@ -40,6 +40,7 @@ import org.exoplatform.container.PortalContainer;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
 import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
@@ -179,48 +180,85 @@ public class Controller {
                 }
 
                 //
-                if ("action".equals(action)) {
+                if (action != null) {
 
                     // Going to invoke process action
                     if (target != null) {
                         WindowState window = pageState.get(target);
                         if (window != null) {
 
-                            //
-                            org.gatein.pc.api.WindowState windowState = window.windowState;
-                            if (targetWindowState != null) {
-                                windowState = org.gatein.pc.api.WindowState.create(targetWindowState);
-                            }
-                            Mode mode = window.mode;
-                            if (targetMode != null) {
-                                mode = org.gatein.pc.api.Mode.create(targetMode);
-                            }
+                            if ("action".equals(action)) {
 
-                            //
-                            PortletInvocationResponse response = window.processAction(windowState, mode, parameters);
-                            if (response instanceof UpdateNavigationalStateResponse) {
-                                UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse) response;
-                                pageState = new PageState(pageState);
-                                window = pageState.get(window.name);
-                                ParametersStateString s = (ParametersStateString) update.getNavigationalState();
-                                if (s != null && s.getSize() > 0) {
-                                    window.parameters = s.getParameters();
+                                //
+                                org.gatein.pc.api.WindowState windowState = window.windowState;
+                                if (targetWindowState != null) {
+                                    windowState = org.gatein.pc.api.WindowState.create(targetWindowState);
                                 }
-                                if (update.getWindowState() != null) {
-                                    window.windowState = update.getWindowState();
+                                Mode mode = window.mode;
+                                if (targetMode != null) {
+                                    mode = org.gatein.pc.api.Mode.create(targetMode);
                                 }
-                                if (update.getMode() != null) {
-                                    window.mode = update.getMode();
+
+                                //
+                                PortletInvocationResponse response = window.processAction(windowState, mode, parameters);
+                                if (response instanceof UpdateNavigationalStateResponse) {
+                                    UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse) response;
+                                    pageState = new PageState(pageState);
+                                    window = pageState.get(window.name);
+                                    ParametersStateString s = (ParametersStateString) update.getNavigationalState();
+                                    if (s != null && s.getSize() > 0) {
+                                        window.parameters = s.getParameters();
+                                    }
+                                    if (update.getWindowState() != null) {
+                                        window.windowState = update.getWindowState();
+                                    }
+                                    if (update.getMode() != null) {
+                                        window.mode = update.getMode();
+                                    }
+                                    Map<String, String[]> changes = update.getPublicNavigationalStateUpdates();
+                                    if (changes != null && changes.size() > 0) {
+                                        window.setPublicParameters(changes);
+                                    }
+                                    return pageState.getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
+                                } else {
+                                    throw new UnsupportedOperationException("Not yet handled " + response);
                                 }
-                                Map<String, String[]> changes = update.getPublicNavigationalStateUpdates();
-                                if (changes != null && changes.size() > 0) {
-                                    window.setPublicParameters(changes);
+                            } else if ("resource".equals(action)) {
+
+                                //
+                                PortletInvocationResponse response = window.serveResource(parameters);
+
+                                //
+                                if (response instanceof ContentResponse) {
+                                    ContentResponse content = (ContentResponse) response;
+
+                                    Response.Render render;
+                                    if (content.getBytes() != null) {
+                                        throw new UnsupportedOperationException("todo");
+                                    } else if (content.getChars() != null) {
+                                        return Response.ok(content.getChars());
+                                    } else {
+                                        render = Response.ok("");
+                                    }
+
+                                    // Set content type
+                                    if (content.getContentType() != null) {
+                                        render.withMimeType(content.getContentType());
+                                    }
+
+                                    //
+                                    if (content.getEncoding() != null) {
+//                                        render.withHeader()
+                                    }
+
+                                    //
+                                    return render;
+                                } else {
+                                    throw new UnsupportedOperationException("No yet handled " + response);
                                 }
-                                return pageState.getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
                             } else {
-                                throw new UnsupportedOperationException("Not yet handled " + response);
+                                throw new AssertionError("should not be here");
                             }
-
                         } else {
                             return Response.error("Target " + target + " not found");
                         }
