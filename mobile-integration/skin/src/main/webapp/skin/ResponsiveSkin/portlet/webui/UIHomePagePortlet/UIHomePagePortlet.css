@@ -1,0 +1,133 @@
+@import url(/portal/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css);
+
+.UIHomePagePortlet {
+  overflow: auto;
+  width: 1055px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.UIHomePagePortlet .TRContainer {
+  height: 385px;
+  width: 325px;
+}
+
+@media screen and (min-width: 780px) {
+.UIHomePagePortlet .HomePortletContent .AdministratorUser,
+.UIHomePagePortlet .HomePortletContent .ManagerUser,
+.UIHomePagePortlet .HomePortletContent .NormalUser,
+.UIHomePagePortlet .HomePortletContent .DemoUser
+{
+  background: none;
+}
+}
+
+@media screen and (max-width: 1140px) {
+
+.UIHomePagePortlet {
+  width: auto;
+}
+
+.UIHomePagePortlet .TLContainer,
+.UIHomePagePortlet .TRContainer {
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+  width: 713px;
+}
+
+.UIHomePagePortlet .TRContainer {
+  float: none;
+  height: auto;
+}
+
+.UIHomePagePortlet .Information {
+  width: 46%;
+  float: right; /* orientation=lt */
+  float: left;  /* orientation=rt */
+  padding: 2%;
+}
+
+.UIHomePagePortlet .ContactUs {
+  width: 46%;
+  float: left;  /* orientation=lt */
+  float: right; /* orientation=rt */
+  padding: 2%;
+}
+
+.UIHomePagePortlet .TRContainer .PortletDecoration {
+  padding: 0;
+}
+
+.UIHomePagePortlet .DotLine {
+  display: none;
+}
+
+}
+
+@media screen and (max-width: 780px) {
+
+
+.UIHomePagePortlet .TLContainer,
+.UIHomePagePortlet .TRContainer {
+  width: auto;
+}
+
+.UIHomePagePortlet .HomePortletContent .AccountsContainerDeco {
+  overflow: visible;
+}
+
+.UIHomePagePortlet .HomePortletContent .AccountsContainerDeco .SeparatorLine:nth-of-type(4) {
+  clear:both;
+  display: none;
+  width: 0;
+}
+
+.UIHomePagePortlet .HomePortletContent .AccountsContainerDeco .SeparatorLine {
+  display: none;
+}
+
+.UIHomePagePortlet .HomePortletContent .AccountBlock {
+  width: 48%;
+}
+
+.UIHomePagePortlet .HomePortletContent .MiddleAccountsContainer {
+  height: auto;
+  background: none;
+}
+
+.UIHomePagePortlet .HomePortletContent .AccountsContainerDeco {
+  height: auto;
+}
+
+}
+
+@media screen and (max-width: 600px) {
+
+.UIHomePagePortlet .Information,
+.UIHomePagePortlet .ContactUs {
+  float: none;
+  width: 96%;
+}
+
+.UIHomePagePortlet .DotLine {
+  display: block;
+}
+
+}
+
+@media screen and (max-width: 450px) {
+
+.UIHomePagePortlet .HomePortletContent .AdministratorUser,
+.UIHomePagePortlet .HomePortletContent .ManagerUser,
+.UIHomePagePortlet .HomePortletContent .NormalUser,
+.UIHomePagePortlet .HomePortletContent .DemoUser
+{
+  background: none;
+}
+
+.UIHomePagePortlet .AdImageLeft {
+  background-position: 10%;
+}
+
+}

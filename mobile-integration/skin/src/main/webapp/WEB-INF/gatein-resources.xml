@@ -59,5 +59,12 @@
         <css-path>/skin/ResponsiveSkin/portlet/webui/UIAccountPortlet/UIAccountPortlet.css</css-path>
     </portlet-skin>
 
+    <!-- HomePagePortlet skin -->
+    <portlet-skin>
+        <application-name>web</application-name>
+        <portlet-name>HomePagePortlet</portlet-name>
+        <skin-name>ResponsiveSkin</skin-name>
+        <css-path>/skin/ResponsiveSkin/portlet/webui/UIHomePagePortlet/UIHomePagePortlet.css</css-path>
+    </portlet-skin>
 
 </gatein-resources>
