@@ -115,7 +115,10 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean> {
         Writer w = context.getWriter();
         w.write("<input type=\"checkbox\" class=\"checkbox\" name=\"");
         w.write(name);
-        w.write("\"");
+        w.write("\" id=\"");
+        w.write(name);
+        w.write("\" ");
+
         if (onchange_ != null) {
             UIForm uiForm = getAncestorOfType(UIForm.class);
             w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
