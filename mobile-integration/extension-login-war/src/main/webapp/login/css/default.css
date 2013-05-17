@@ -178,94 +178,93 @@ input[type=checkbox]
 }
 
 #social-login a.login-button {
-    border-radius: .5em;
-    border: .1em solid;
-    box-shadow: 0 .18em .31em rgba(0, 0, 0, 0.2);
+    border-radius: .3125em;
+    border: .0625em solid #8f301f;
     display: block;
-
-    background-color: #a0a0a0;
-    background: linear-gradient(to bottom, #c0c0c0, #a0a0a0);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#c0c0c0), to(#a0a0a0));
-    border-color:#A0A0A0;
-    
-    text-decoration: none;
-    
-    font-size: .75em;
-    
-    margin: .62em .93em .31em .93em;
+    line-height: 1.1875em;
+    background-color: #d54529;
+    margin: .625em .3125em .3125em .3125em;
 }
 
 #social-login a.login-button:hover {
-    background-color: #b0b0b0;
-    background: linear-gradient(to bottom, #d0d0d0, #b0b0b0);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#d0d0d0), to(#b0b0b0));
-    border-color:#b0b0b0;
+    background-color: #e55539;
+    text-decoration: none;
 }
 
 #social-login a.login-button > div {
-    border: .1em solid;
-    border-radius: .5em;
-    color: white;    
-    padding: .25em .5em .25em 1.84em;
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/generic.png") left no-repeat;
-    border-color: #D0D0D0 #D0D0D0 #B0B0B0;
+    color: white;
+    font-size: 0.85em;
+    padding: 0.146em 0.66em 0.146em 2.7em;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/generic.png") .5882em no-repeat;
+    border-radius: 0.3125em;
+    border-top: 0.075em solid;
+    position: relative;
+}
+
+#social-login a.login-button > div:before{
+    border-left:0.075em solid black;
+    border-right:0.075em solid white;
+    content: "separator";
+    position: absolute;
+    left: 2.1em;
+    text-indent: -9999px;
 }
 
 #social-login #login-GOOGLE {
-    background-color: #ac2b1c;
-    background: linear-gradient(to bottom, #dd4b39, #ac2b1c);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4b39), to(#ac2b1c));
-    border-color:#8f301f #8f301f #8f301f #8f301f;
+    background-color: #df4a32;
+    border-color:#d1412a;
 }
 
 #social-login #login-GOOGLE:hover {
-    background-color: #bc3b2c;
-    background: linear-gradient(to bottom, #ed5b49, #bc3b2c);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ed5b49), to(#bc3b2c));
-    border-color:#9f402f;
+    background-color: #e75240;
 }
 
 #social-login #login-GOOGLE > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/google.png") left no-repeat;
-    border-color: #ec9b8c #ec9b8c #dd4d29 #ec9b8c;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/google.png") 8px no-repeat;
+    border-color: #e56e5b;
+}
+
+#social-login #login-GOOGLE > div:before {
+    border-left-color:#c8422d;
+    border-right-color:#e46551;
 }
 
 #social-login #login-FACEBOOK {
-    background-color: #4164a3;
-    background: linear-gradient(to bottom, #5a7aaf, #4164a3);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5a7aaf), to(#4164a3));
-    border-color:#1b386b;
+    background-color: #355192;
+    border-color:#2d4887;
 }
 
 #social-login #login-FACEBOOK:hover {
-    background-color: #5174b3;
-    background: linear-gradient(to bottom, #6a8abf, #5174b3);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a8abf), to(#5174b3));
-    border-color:#2b487b;
+    background-color: #3d599a;
 }
 
 #social-login #login-FACEBOOK > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/facebook.png") left no-repeat;
-    border-color: #728cbc #728cbc #728cbc #728cbc;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/facebook.png") 8px no-repeat;
+    border-color: #536BA2;
+}
+
+#social-login #login-FACEBOOK > div:before {
+    border-left-color:#2a4175;
+    border-right-color:#4a639d;
 }
 
 #social-login #login-TWITTER {
-    background-color: #429dd5;
-    background: linear-gradient(to bottom, #52ade5, #429dd5);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52ade5), to(#429dd5));
-    border-color:#328dc5;
+    background-color: #3cbbeb;
+    border-color:#32afde;
 }
 
 #social-login #login-TWITTER:hover {
-    background: #52ade5;
-    background: linear-gradient(to bottom, #62bdf5, #52ade5);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#62bdf5), to(#52ade5));
-    border-color:#429dd5;
+    background: #44c3f3;
 }
 
 #social-login #login-TWITTER > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/twitter.png") left no-repeat;
-    border-color: #62bdf5 #62bdf5 #62bdf5 #62bdf5;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/twitter.png") 8px no-repeat;
+    border-color: #63c9ef;
+}
+
+#social-login #login-TWITTER > div:before {
+    border-left-color:#36a8d3;
+    border-right-color:#59c5ee;
 }
 
 .SignInDelimiter {

@@ -70,87 +70,105 @@
 }
 
 .UILoginForm a.login-button {
-    border-radius: 3px;
-    border: 1px solid;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    border-radius: .3125em;
+    border: .0625em solid #8f301f;
     display: inline-block;
-
+    line-height: 1.1875em;
     background-color: #d54529;
-    background-image: linear-gradient(to bottom, #dd4b39, #ac2b1c);
-    border-color:#8f301f #8f301f #8f301f #8f301f;
+    margin: .625em .3125em .3125em .3125em;
+    position: relative;
+}
 
-    margin: 10px 5px 5px 5px;
-
+.UILoginForm a.login-button:hover {
+    background-color: #e55539;
+    text-decoration: none;
 }
 
 .UILoginForm a.login-button > div {
-    border: .0714em solid;
     color: white;
-    font-size: .875em;
-    padding: .2142em .4285em .2142em 1.5714em;
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/generic.png") left no-repeat;
-    border-color: #ec9b8c #ec9b8c #dd4d29 #ec9b8c;
+    font-size: 0.85em;
+    padding: 0.146em 0.66em 0.146em 2.7em;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/generic.png") .5882em no-repeat;
+    border-radius: 0.3125em;
+    border-top: 0.075em solid;
+}
+
+.UILoginForm a.login-button > div:before{
+    border-left:0.075em solid black;
+    border-right:0.075em solid white;
+    content: "separator";
+    position: absolute;
+    left: 2.1em;
+    text-indent: -9999px;
 }
 
 .UILoginForm #login-GOOGLE {
-    background-color: #ac2b1c;
-    background: linear-gradient(to bottom, #dd4b39, #ac2b1c);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd4b39), to(#ac2b1c));
-    border-color:#8f301f #8f301f #8f301f #8f301f;
+    background-color: #df4a32;
+    border-color:#d1412a;
 }
 
 .UILoginForm #login-GOOGLE:hover {
-    background-color: #bc3b2c;
-    background: linear-gradient(to bottom, #ed5b49, #bc3b2c);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ed5b49), to(#bc3b2c));
-    border-color:#9f402f;
+    background-color: #e75240;
 }
 
 .UILoginForm #login-GOOGLE > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/google.png") left no-repeat;
-    border-color: #ec9b8c #ec9b8c #dd4d29 #ec9b8c;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/google.png") 8px no-repeat;
+    border-color: #e56e5b;
+}
+
+.UILoginForm #login-GOOGLE > div:before {
+    border-left-color:#c8422d;
+    border-right-color:#e46551;
 }
 
 .UILoginForm #login-FACEBOOK {
-    background-color: #4164a3;
-    background: linear-gradient(to bottom, #5a7aaf, #4164a3);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5a7aaf), to(#4164a3));
-    border-color:#1b386b;
+    background-color: #355192;
+    border-color:#2d4887;
 }
 
 .UILoginForm #login-FACEBOOK:hover {
-    background-color: #5174b3;
-    background: linear-gradient(to bottom, #6a8abf, #5174b3);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6a8abf), to(#5174b3));
-    border-color:#2b487b;
+    background-color: #3d599a;
 }
 
 .UILoginForm #login-FACEBOOK > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/facebook.png") left no-repeat;
-    border-color: #728cbc #728cbc #728cbc #728cbc;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/facebook.png") 8px no-repeat;
+    border-color: #536BA2;
+}
+
+.UILoginForm #login-FACEBOOK > div:before {
+    border-left-color:#2a4175;
+    border-right-color:#4a639d;
 }
 
 .UILoginForm #login-TWITTER {
-    background-color: #429dd5;
-    background: linear-gradient(to bottom, #52ade5, #429dd5);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#52ade5), to(#429dd5));
-    border-color:#328dc5;
+    background-color: #3cbbeb;
+    border-color:#32afde;
 }
 
 .UILoginForm #login-TWITTER:hover {
-    background: #52ade5;
-    background: linear-gradient(to bottom, #62bdf5, #52ade5);
-    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#62bdf5), to(#52ade5));
-    border-color:#429dd5;
+    background: #44c3f3;
 }
 
 .UILoginForm #login-TWITTER > div {
-    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/twitter.png") left no-repeat;
-    border-color: #62bdf5 #62bdf5 #62bdf5 #62bdf5;
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/twitter.png") 8px no-repeat;
+    border-color: #63c9ef;
+}
+
+.UILoginForm #login-TWITTER > div:before {
+    border-left-color:#36a8d3;
+    border-right-color:#59c5ee;
 }
 
 .UILoginForm .LoginDelimiter {
     text-align: center;
+}
+
+.UILoginForm .LoginDelimiter:before, .UILoginForm .LoginDelimiter:after {
+    border-bottom: .07142em solid #E9E9E9;
+    display: inline-block;
+    content: "";
+    margin: .25em .87em;
+    width: 20%;
 }
 
 @media screen and (max-width: 25em) {
@@ -216,6 +234,10 @@
     }
     .UILoginForm a.login-button {
         display: block;
+    }
+
+    .UILoginForm .LoginDelimiter:before, .UILoginForm .LoginDelimiter:after {
+        display: none;
     }
 }
 

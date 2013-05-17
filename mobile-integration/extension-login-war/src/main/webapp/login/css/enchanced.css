@@ -110,6 +110,10 @@
     #social-pane {
         margin-top: 0em;
     }
+
+    #social-login a.login-button {
+        display: inline-block;
+    }
 }
 
 /* Big size devices ( >500px ) */
@@ -259,12 +263,12 @@
 
     #social-login a.login-button {
         display: inline-block;
-        margin: 10px 5px 5px 5px;
+        margin: .625em .3125em .3125em .3125em;
     }
 
     .SignInDelimiter span:before, .SignInDelimiter span:after {
         background: none repeat scroll 0 0 red;
-        border-bottom: 0.0625em solid #E9E9E9;
+        border-bottom: .07142em solid #E9E9E9;
         display: inline-block;
         content: "";
         margin: .25em .87em;
