@@ -27,6 +27,10 @@ table {
     border-collapse: collapse;
 }
 
+img {
+    border:none;
+}
+
 .UIWorkingWorkspace {
     max-width: 73.125em;
     width: 95%;
