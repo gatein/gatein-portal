@@ -100,19 +100,19 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                   <div class="VerticalLayout">
                     <table class="UIFormGrid" summary="Login form">
                       <tr class="UserNameField">
-                        <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%>
+                        <td class="FieldLabel" scope="row"><label for="username"><%=res.getString("UILoginForm.label.UserName")%></label>
                         </td>
-                        <td><input class="UserName" name="username" value="<%=username%>"/></td>
+                        <td><input class="UserName" name="username" value="<%=username%>" id="username"/></td>
                       </tr>
                       <tr class="PasswordField" id="UIPortalLoginFormControl"
                       ">
-                      <td class="FieldLabel"><%=res.getString("UILoginForm.label.password")%>
+                      <td class="FieldLabel" scope="row"><label for="password"><%=res.getString("UILoginForm.label.password")%></label>
                       </td>
-                      <td><input class="Password" type="password" name="password" value=""/></td>
+                      <td><input class="Password" type="password" name="password" id="password" value=""/></td>
                       </tr>
                       <tr class="RememberField">
-                        <td class="FieldLabel"><input type="checkbox" class="checkbox" value="true" name="rememberme"/></td>
-                        <td><%=res.getString("UILoginForm.label.RememberOnComputer")%>
+                        <td class="FieldLabel"><input type="checkbox" class="checkbox" value="true" name="rememberme" id="rememberme"/></td>
+                        <td scope="row"><label for="rememberme"><%=res.getString("UILoginForm.label.RememberOnComputer")%></label>
                         </td>
                       </tr>
                     </table>

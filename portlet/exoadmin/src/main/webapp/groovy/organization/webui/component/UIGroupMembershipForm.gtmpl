@@ -18,14 +18,14 @@
 						UIPopupWindow popupWindow = uicomponent.getChild(UIPopupWindow.class);
 				 %>
 					<tr>
-						<td class="FieldLabel"><label for="username"><%=_ctx.appRes(uicomponent.getName() + ".label.username")%></label></td>
+						<td class="FieldLabel" scope="row"><label for="username"><%=_ctx.appRes(uicomponent.getName() + ".label.username")%></label></td>
 						<td class="FieldComponent ClearFix" >
 							<div class="FL"><% uiform.renderField(name) %></div>
  							<a class="Icon SearchIcon" href="<%=uicomponent.event("SearchUser")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.SearchUser")%>"></a>
  						</td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><label for="membership"><%=_ctx.appRes(uicomponent.getName() + ".label.membership")%></label></td>
+						<td class="FieldLabel" scope="row"><label for="membership"><%=_ctx.appRes(uicomponent.getName() + ".label.membership")%></label></td>
 						<td class="FieldComponent">
 							<% uiform.renderField(membership) %>
 							<a class="Icon Refresh16x16Icon" href="<%=uicomponent.event("Refresh")%>" title="<%=_ctx.appRes(uicomponent.getName() + ".label.Refresh")%>"></a>

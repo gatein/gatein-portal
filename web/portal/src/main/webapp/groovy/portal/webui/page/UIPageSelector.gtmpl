@@ -33,9 +33,9 @@
 	<div class="UIFormInfo">
 		<div class="FormInfoBG">
 			<div class="FormInfoIcon UIForm">
-				<table class="UIPropertyInfo UIFormGrid">
+				<table class="UIPropertyInfo UIFormGrid" summary="Page selector table">
 					<tr>
-						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</td>
+						<td class="FieldLabel" scope="row"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</td>
 						<td class="FieldComponent">
 							<% if(page != null) { %>
 							$pageId
@@ -43,7 +43,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</td>
+						<td class="FieldLabel" scope="row"><%=_ctx.appRes(uicomponent.getId()+".label.name")%>:</td>
 						<td class="FieldComponent">
 							<% if(page == null) { %>
 							<% uiform.renderChild("pageName");%>
@@ -53,7 +53,7 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="FieldLabel"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</td>
+						<td class="FieldLabel" scope="row"><%=_ctx.appRes(uicomponent.getId()+".label.title")%>:</td>
 						<td class="FieldComponent">
 							<% if(page == null) { %>
 							<% uiform.renderChild("pageTitle");%>

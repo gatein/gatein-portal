@@ -32,7 +32,7 @@
 									<%
 										if(!label.equals(inputEntry.getId())) {
 									%>
-										<td class="FieldLabel portlet-form-label"><%=label%></td>
+										<td class="FieldLabel portlet-form-label" scope="row"><%=label%></td>
 									<%}%>
 									<td class="FieldComponent portlet-input-field">
 									<% 
