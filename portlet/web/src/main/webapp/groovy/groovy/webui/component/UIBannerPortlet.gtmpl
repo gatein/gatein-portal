@@ -34,7 +34,7 @@
 									<a class="Register" href="$registerURI">
 										<%=_ctx.appRes("UIBannerPortlet.action.register")%>
 									</a>						
-									<a class="Language" onclick="$changeLanguageAction">
+									<a class="Language" href="javascript:;" onclick="$changeLanguageAction">
 										<%=_ctx.appRes("UIBannerPortlet.action.changeLanguage")%>
 									</a>		
 								</div>

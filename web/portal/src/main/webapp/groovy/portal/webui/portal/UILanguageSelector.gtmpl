@@ -63,7 +63,7 @@
                         %>
                           <div class="$itemSelected ClearFix">
                             <div class="Icon"><span></span></div>
-                            <a class="NodeLabel"><%=opt.getLabel()%></a>
+                            <a href="javascript:;" class="NodeLabel"><%=opt.getLabel()%></a>
                             <div class="PercentLabel"><%=opt.getDescription()%></div>
                           </div>
                         <%}%> 

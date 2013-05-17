@@ -94,7 +94,7 @@
 %>
 <ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
-		<span class="GroupIcon TBIcon" title="Group"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></span>
+		<a href="javascript:;" class="GroupIcon TBIcon" title="Group"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 		<% if (!groupNavigations.isEmpty()) { %>
 		<ul style="display:none" class="MenuItemContainer portlet-menu-cascade">
 		<% for(nav in groupNavigations) {

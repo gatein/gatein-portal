@@ -75,7 +75,7 @@ public class UILogoPortlet extends UIPortletApplication {
             String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
             return "<a href=\"" + ssoRedirectURL + "\">" + signInLocalizedText + "</a>";
         } else {
-            return "<a onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
+            return "<a href=\"javascript:;\" onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
         }
     }
 }

@@ -49,7 +49,7 @@ public class UIBannerPortlet extends UIGroovyPortlet {
             String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
             return "<a class=\"Login\" href=\"" + ssoRedirectURL + "\">" + signInLocalizedText + "</a>";
         } else {
-            return "<a class=\"Login\" onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
+            return "<a class=\"Login\" href=\"javascript:;\" onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
         }
     }
 }
