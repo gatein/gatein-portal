@@ -120,7 +120,7 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
         portletMode = null;
         cacheability = null;
         resource.click();
-//        Assert.assertEquals(expectedCacheability, cacheability);
+        Assert.assertEquals(expectedCacheability, cacheability);
         Assert.assertEquals(PortletMode.EDIT, portletMode);
         Assert.assertEquals(WindowState.MAXIMIZED, windowState);
         Assert.assertNotNull(foo);

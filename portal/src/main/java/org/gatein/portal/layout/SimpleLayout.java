@@ -24,7 +24,7 @@ import java.util.Map;
 
 import juzu.PropertyMap;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.page.PageState;
+import org.gatein.portal.page.PageContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -39,7 +39,7 @@ public class SimpleLayout extends Layout {
     }
 
     private abstract static class Node {
-        abstract void render(Map<String, String> windows, PageState state, Appendable to) throws IOException;
+        abstract void render(Map<String, String> windows, PageContext state, Appendable to) throws IOException;
     }
 
     private static class Container extends Node {
@@ -55,7 +55,7 @@ public class SimpleLayout extends Layout {
         }
 
         @Override
-        void render(Map<String, String> windows, PageState state, Appendable to) throws IOException {
+        void render(Map<String, String> windows, PageContext state, Appendable to) throws IOException {
             to.append("<div>");
             for (Node child : children) {
                 child.render(windows, state, to);
@@ -78,7 +78,7 @@ public class SimpleLayout extends Layout {
         }
 
         @Override
-        void render(Map<String, String> fragments, PageState state, Appendable to) throws IOException {
+        void render(Map<String, String> fragments, PageContext state, Appendable to) throws IOException {
             String fragment = fragments.get(name);
             to.append("<div>");
             to.append("<div>").append(this.state.properties.get(ElementState.Window.TITLE)).append("</div>");
@@ -88,7 +88,7 @@ public class SimpleLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, String> fragments, PageState state, PropertyMap properties, Appendable to) throws IOException {
+    public void render(Map<String, String> fragments, PageContext state, PropertyMap properties, Appendable to) throws IOException {
         root.render(fragments, state, to);
     }
 

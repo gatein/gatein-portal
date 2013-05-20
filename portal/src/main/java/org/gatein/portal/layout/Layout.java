@@ -24,7 +24,7 @@ import java.util.Map;
 import juzu.PropertyMap;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.page.PageState;
+import org.gatein.portal.page.PageContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -34,7 +34,7 @@ public abstract class Layout {
 
     public abstract void render(
             Map<String, String> fragments,
-            PageState state,
+            PageContext state,
             PropertyMap properties,
             Appendable to) throws IOException;
 

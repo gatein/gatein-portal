@@ -26,7 +26,7 @@ import java.util.Map;
 
 import juzu.PropertyMap;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.page.PageState;
+import org.gatein.portal.page.PageContext;
 
 /**
  * A layout implementing the spec <a href="https://community.jboss.org/wiki/InPlaceEditing">In Place Editing</a>.
@@ -62,7 +62,7 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, String> fragments, PageState state, PropertyMap properties, Appendable to) {
+    public void render(Map<String, String> fragments, PageContext state, PropertyMap properties, Appendable to) {
         // For now we implements "1 column" and "2 columns 70/30" according to the page structure
         ArrayList<String> l1 = getFragments(1, fragments);
         if (l1 != null) {
@@ -75,12 +75,12 @@ public class ZoneLayout extends Layout {
         }
     }
 
-    private void render1_column(ArrayList<String> l1, PageState state, Appendable to) {
+    private void render1_column(ArrayList<String> l1, PageContext state, Appendable to) {
         Map<String, Object> a = Collections.<String, Object>singletonMap("l1", l1);
         factory.zone_1_column.renderTo(to, a);
     }
 
-    private void render2_columns_30_70(ArrayList<String> l1, ArrayList<String> l2, PageState state, Appendable to) {
+    private void render2_columns_30_70(ArrayList<String> l1, ArrayList<String> l2, PageContext state, Appendable to) {
         factory.zone_1_column.renderTo(to);
     }
 

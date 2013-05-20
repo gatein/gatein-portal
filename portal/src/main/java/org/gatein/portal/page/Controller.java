@@ -54,7 +54,6 @@ import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.navigation.NodeState;
-import org.gatein.portal.mop.page.PageContext;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteKey;
@@ -135,11 +134,11 @@ public class Controller {
             } else {
 
                 //
-                PageState pageState = new PageState(customizationService, manager, path);
+                PageContext.Builder pageBuilder = new PageContext.Builder(path);
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
-                PageContext page = pageService.loadPage(pageKey);
-                NodeContext<org.gatein.portal.page.NodeState, ElementState> pageLayout = layoutService.loadLayout(pageState, page.getLayoutId(), null);
+                org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
+                NodeContext<org.gatein.portal.page.NodeState, ElementState> pageLayout = layoutService.loadLayout(pageBuilder, page.getLayoutId(), null);
 
                 // Decode from request
                 Map<String, String[]> parameters = NO_PARAMETERS;
@@ -148,25 +147,27 @@ public class Controller {
                     if (name.startsWith("javax.portlet.")) {
                         if (name.equals("javax.portlet.p")) {
                             Decoder decoder = new Decoder(parameter.getRaw(0));
+                            HashMap<QName, String[]> prp = new HashMap<QName, String[]>();
                             for (Map.Entry<String, String[]> p : decoder.decode().getParameters().entrySet()) {
-                                pageState.setParameter(new QName(p.getKey()), p.getValue());
+                                prp.put(new QName(p.getKey()), p.getValue());
                             }
+                            pageBuilder.setParameters(prp);
                         } else if (name.startsWith("javax.portlet.p.")) {
                             String id = name.substring("javax.portlet.p.".length());
                             Decoder decoder = new Decoder(parameter.getRaw(0));
-                            WindowState window = pageState.get(id);
+                            WindowState window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.parameters = decoder.decode().getParameters();
                             }
                         } else if (name.startsWith("javax.portlet.w.")) {
                             String id = name.substring("javax.portlet.w.".length());
-                            WindowState window = pageState.get(id);
+                            WindowState window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.windowState = org.gatein.pc.api.WindowState.create(parameter.getValue());
                             }
                         } else if (name.startsWith("javax.portlet.m.")) {
                             String id = name.substring("javax.portlet.m.".length());
-                            WindowState window = pageState.get(id);
+                            WindowState window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.mode = org.gatein.pc.api.Mode.create(parameter.getValue());
                             }
@@ -182,19 +183,22 @@ public class Controller {
                 //
                 if (action != null) {
 
+                    //
+                    PageContext pageContext = pageBuilder.build(customizationService, manager);
+
                     // Going to invoke process action
                     if (target != null) {
-                        WindowState window = pageState.get(target);
+                        WindowContext window = pageContext.get(target);
                         if (window != null) {
 
                             if ("action".equals(action)) {
 
                                 //
-                                org.gatein.pc.api.WindowState windowState = window.windowState;
+                                org.gatein.pc.api.WindowState windowState = window.state.windowState;
                                 if (targetWindowState != null) {
                                     windowState = org.gatein.pc.api.WindowState.create(targetWindowState);
                                 }
-                                Mode mode = window.mode;
+                                Mode mode = window.state.mode;
                                 if (targetMode != null) {
                                     mode = org.gatein.pc.api.Mode.create(targetMode);
                                 }
@@ -203,23 +207,23 @@ public class Controller {
                                 PortletInvocationResponse response = window.processAction(windowState, mode, parameters);
                                 if (response instanceof UpdateNavigationalStateResponse) {
                                     UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse) response;
-                                    pageState = new PageState(pageState);
-                                    window = pageState.get(window.name);
+                                    PageContext.Builder clone = pageContext.builder();
+                                    WindowState windowClone = clone.getWindow(window.state.name);
                                     ParametersStateString s = (ParametersStateString) update.getNavigationalState();
                                     if (s != null && s.getSize() > 0) {
-                                        window.parameters = s.getParameters();
+                                        windowClone.parameters = s.getParameters();
                                     }
                                     if (update.getWindowState() != null) {
-                                        window.windowState = update.getWindowState();
+                                        windowClone.windowState = update.getWindowState();
                                     }
                                     if (update.getMode() != null) {
-                                        window.mode = update.getMode();
+                                        windowClone.mode = update.getMode();
                                     }
                                     Map<String, String[]> changes = update.getPublicNavigationalStateUpdates();
                                     if (changes != null && changes.size() > 0) {
-                                        window.setPublicParameters(changes);
+                                        clone.apply(window.getPublicParametersChanges(changes));
                                     }
-                                    return pageState.getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
+                                    return clone.build(customizationService, manager).getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
                                 } else {
                                     throw new UnsupportedOperationException("Not yet handled " + response);
                                 }
@@ -268,21 +272,24 @@ public class Controller {
                 } else {
 
                     // Set page parameters
-                    if (parameters.size() > 0) {
-                        for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
-                            pageState.setParameter(new QName(parameter.getKey()), parameter.getValue());
-                        }
+                    HashMap<QName, String[]> prp = new HashMap<QName, String[]>(parameters.size());
+                    for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                        prp.put(new QName(parameter.getKey()), parameter.getValue());
                     }
+                    pageBuilder.setParameters(prp);
+
+                    //
+                    PageContext pageContext = pageBuilder.build(customizationService, manager);
 
                     // Render all windows in a map
                     HashMap<String, String> fragments = new HashMap<String, String>();
-                    for (Map.Entry<String, WindowState> entry : pageState) {
+                    for (Map.Entry<String, WindowContext> entry : pageContext) {
                         try {
-                            WindowState window = entry.getValue();
+                            WindowContext window = entry.getValue();
                             PortletInvocationResponse response = window.render();
                             if (response instanceof FragmentResponse) {
                                 FragmentResponse fragment = (FragmentResponse) response;
-                                fragments.put(window.name, fragment.getContent());
+                                fragments.put(window.state.name, fragment.getContent());
                             } else {
                                 throw new UnsupportedOperationException("Not yet handled " + response);
                             }
@@ -297,7 +304,7 @@ public class Controller {
                     StringBuilder buffer = new StringBuilder();
                     Layout layout = layoutFactory.build(pageLayout);
                     Response.Render ok = Response.ok(buffer);
-                    layout.render(fragments, pageState, ok.getProperties(), buffer);
+                    layout.render(fragments, pageContext, ok.getProperties(), buffer);
                     return ok;
                 }
             }
