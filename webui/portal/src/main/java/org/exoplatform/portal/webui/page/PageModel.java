@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.webui.page;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.exoplatform.portal.mop.page.PageContext;
@@ -27,7 +28,7 @@ import org.exoplatform.portal.mop.page.PageContext;
  * @version $Id$
  *
  */
-public class PageModel {
+public class PageModel implements Serializable {
     private final String pageId;
 
     private final String title;

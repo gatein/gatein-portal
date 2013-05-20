@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.webui.page;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ import org.exoplatform.portal.mop.page.PageService;
  * @version $Id$
  *
  */
-public class PageIterator implements Iterator<List<?>> {
+public class PageIterator implements Serializable, Iterator<List<?>> {
     private final String ownerType;
 
     private final String ownerId;
