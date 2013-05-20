@@ -47,6 +47,7 @@
             required="true"/>
   <Content type="html" view="home">
     <![CDATA[
+        <head><title>ServicesManagement</title></head>
         <link rel="stylesheet" type="text/css" href="style/home.css"></link>
         <script src="script/jquery-1.4.2.min.js" type="text/javascript"></script>		
 		<script src="script/script.js" type="text/javascript"></script>	
@@ -138,6 +139,7 @@
   </Content>
   <Content type="html" view="canvas">
     <![CDATA[
+        <head><title>ServicesManagement</title></head>
         <link rel="stylesheet" type="text/css" href="style/canvas.css"></link>
         <script src="script/jquery-1.4.2.min.js"></script>     
 		<script src="script/script.js"></script>

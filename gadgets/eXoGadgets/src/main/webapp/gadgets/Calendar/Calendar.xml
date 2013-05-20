@@ -40,6 +40,7 @@
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
+                <head><title>Calendar</title></head>
 		<style type="text/css">
 			body {
 				margin: 0;

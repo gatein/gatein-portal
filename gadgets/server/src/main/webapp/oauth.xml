@@ -49,7 +49,7 @@
   </ModulePrefs>
   <Content type="html">
     <![CDATA[
-
+    <head><title>Todo</title></head>
     <style>
     #main {
         margin: 0px;

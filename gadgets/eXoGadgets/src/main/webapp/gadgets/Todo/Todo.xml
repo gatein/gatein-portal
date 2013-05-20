@@ -45,6 +45,7 @@
   <UserPref name="todoList" datatype="list"/>
   <Content type="html">
     <![CDATA[
+                <head><title>Todo</title></head>
 		<style type="text/css">
 
 			body {
