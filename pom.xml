@@ -64,6 +64,10 @@
     <org.jboss.portletbridge.version>3.2.0.Final</org.jboss.portletbridge.version>
     <version.cdi.portlet.integration>1.0.0.Final</version.cdi.portlet.integration>
 
+    <!-- TODO: Remove JGroups and JBC once gatein-dep upgraded to 1.2.1.CR04 -->
+    <version.jboss.jgroups>2.6.22.Final</version.jboss.jgroups>
+    <version.jboss.cache>3.2.7.GA</version.jboss.cache>
+
     <!--
     Various log4j properties for unit tests, examples:
     -Dlog4j.debug=true : show log4j bootstrap (useful for debugging resolution to configuration property file)
@@ -142,6 +146,18 @@
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
         <version>${com.google.javascript.version}</version>
+      </dependency>
+
+      <!-- TODO: Remove JGroups and JBC once gatein-dep upgraded to 1.2.1.CR04 -->
+      <dependency>
+        <groupId>org.jgroups</groupId>
+        <artifactId>jgroups</artifactId>
+        <version>${version.jboss.jgroups}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.cache</groupId>
+        <artifactId>jbosscache-core</artifactId>
+        <version>${version.jboss.cache}</version>
       </dependency>
 
       <!-- eXo JCR stack -->

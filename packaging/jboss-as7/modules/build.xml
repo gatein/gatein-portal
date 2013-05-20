@@ -142,6 +142,14 @@
       <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
     </module-def>
 
+    <module-def name="org.jboss.cache">
+      <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
+    </module-def>
+
+    <module-def name="org.jgroups" slot="gatein">
+      <maven-resource group="org.jgroups" artifact="jgroups"/>
+    </module-def>
+
     <module-def name="org.json">
       <maven-resource group="org.json" artifact="json"/>
     </module-def>
@@ -273,10 +281,6 @@
       <maven-resource group="org.gatein.mop" artifact="mop-spi"/>
       <maven-resource group="org.gatein.captcha" artifact="simplecaptcha"/>
       <maven-resource group="org.gatein.cdi" artifact="gatein-cdi-injection"/>
-
-      <!-- JBoss cache and JGroups still need to be here to have clustering working. TODO: Investigate better solution... -->
-      <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
-      <maven-resource group="org.jgroups" artifact="jgroups"/>
 
       <!-- modules that were used by shindig, commented out for reference -->
       <!--

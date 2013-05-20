@@ -66,6 +66,11 @@
     <module name="org.gatein.oauth" export="true"/>
 
     <!--
+         JBossCache configuration loads schemas via TCCL
+    -->
+    <module name="org.jboss.cache" export="true"/>
+
+    <!--
          Needed for clustering. JBoss Cache CacheMarshaller200 loads classes via TCCL
     -->
     <module name="org.apache.lucene" export="true"/>
