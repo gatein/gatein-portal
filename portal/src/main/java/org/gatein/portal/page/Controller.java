@@ -97,7 +97,7 @@ public class Controller {
             @Param(name = "javax.portlet.path", pattern = ".*")
             String path,
             @Param(name = "javax.portlet.a")
-            String action,
+            String phase,
             @Param(name = "javax.portlet.t")
             String target,
             @Param(name = "javax.portlet.w")
@@ -155,19 +155,19 @@ public class Controller {
                         } else if (name.startsWith("javax.portlet.p.")) {
                             String id = name.substring("javax.portlet.p.".length());
                             Decoder decoder = new Decoder(parameter.getRaw(0));
-                            WindowState window = pageBuilder.getWindow(id);
+                            WindowData window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.parameters = decoder.decode().getParameters();
                             }
                         } else if (name.startsWith("javax.portlet.w.")) {
                             String id = name.substring("javax.portlet.w.".length());
-                            WindowState window = pageBuilder.getWindow(id);
+                            WindowData window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.windowState = org.gatein.pc.api.WindowState.create(parameter.getValue());
                             }
                         } else if (name.startsWith("javax.portlet.m.")) {
                             String id = name.substring("javax.portlet.m.".length());
-                            WindowState window = pageBuilder.getWindow(id);
+                            WindowData window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.mode = org.gatein.pc.api.Mode.create(parameter.getValue());
                             }
@@ -181,7 +181,7 @@ public class Controller {
                 }
 
                 //
-                if (action != null) {
+                if (phase != null) {
 
                     //
                     PageContext pageContext = pageBuilder.build(customizationService, manager);
@@ -191,7 +191,7 @@ public class Controller {
                         WindowContext window = pageContext.get(target);
                         if (window != null) {
 
-                            if ("action".equals(action)) {
+                            if ("action".equals(phase)) {
 
                                 //
                                 org.gatein.pc.api.WindowState windowState = window.state.windowState;
@@ -208,7 +208,7 @@ public class Controller {
                                 if (response instanceof UpdateNavigationalStateResponse) {
                                     UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse) response;
                                     PageContext.Builder clone = pageContext.builder();
-                                    WindowState windowClone = clone.getWindow(window.state.name);
+                                    WindowData windowClone = clone.getWindow(window.state.name);
                                     ParametersStateString s = (ParametersStateString) update.getNavigationalState();
                                     if (s != null && s.getSize() > 0) {
                                         windowClone.parameters = s.getParameters();
@@ -227,10 +227,19 @@ public class Controller {
                                 } else {
                                     throw new UnsupportedOperationException("Not yet handled " + response);
                                 }
-                            } else if ("resource".equals(action)) {
+                            } else if ("resource".equals(phase)) {
 
                                 //
-                                PortletInvocationResponse response = window.serveResource(parameters);
+                                String id;
+                                RequestParameter resourceId = requestParameters.get("javax.portlet.r");
+                                if (resourceId != null) {
+                                    id = resourceId.getValue();
+                                } else {
+                                    id = null;
+                                }
+
+                                //
+                                PortletInvocationResponse response = window.serveResource(id, parameters);
 
                                 //
                                 if (response instanceof ContentResponse) {

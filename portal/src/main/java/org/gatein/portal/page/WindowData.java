@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * @author Julien Viet
  */
-public class WindowState {
+public class WindowData {
 
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
@@ -45,7 +45,7 @@ public class WindowState {
     /** The portlet window state. */
     org.gatein.pc.api.Mode mode;
 
-    WindowState(NodeState node) {
+    WindowData(NodeState node) {
         this.name = node.context.getName();
         this.id = node.context.getId();
         this.parameters = null;
@@ -53,7 +53,7 @@ public class WindowState {
         this.mode = null;
     }
 
-    public WindowState(WindowState that) {
+    public WindowData(WindowData that) {
 
         Map<String, String[]> parameters;
         if (that.parameters == null) {

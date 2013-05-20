@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
 /**
  * @author Julien Viet
  */
-public class PageState {
+public class PageData {
 
     /** . */
     public final String path;
@@ -34,12 +34,12 @@ public class PageState {
     /** The page render parameters. */
     private Map<QName, String[]> parameters;
 
-    public PageState(String path) {
+    public PageData(String path) {
         this.path = path;
         this.parameters = null;
     }
 
-    public PageState(PageState state) {
+    public PageData(PageData state) {
         this.path = state.path;
         this.parameters = state.parameters != null ? new HashMap<QName, String[]>(state.parameters) : null;
     }

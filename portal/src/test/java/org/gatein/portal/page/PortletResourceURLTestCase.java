@@ -21,6 +21,7 @@ package org.gatein.portal.page;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
@@ -70,6 +71,9 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
     static String wantedCacheability;
 
     /** . */
+    static String id;
+
+    /** . */
     static String[] foo;
 
     /** . */
@@ -92,19 +96,28 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
 
     @Test
     public void testPageLevel() {
-        testPageLevel(ResourceURL.PAGE);
+        testPageLevel(ResourceURL.PAGE, Arrays.asList("foo_value"), Arrays.asList("bar_value1", "bar_value2"), PortletMode.EDIT, WindowState.MAXIMIZED);
+        testPageLevel(ResourceURL.PORTLET, Arrays.asList("foo_value"), Arrays.asList("bar_value1", "bar_value2"), PortletMode.EDIT, WindowState.MAXIMIZED);
+        testPageLevel(ResourceURL.FULL, null, null, PortletMode.VIEW, WindowState.NORMAL);
     }
 
-    private void testPageLevel(String expectedCacheability) {
+    private void testPageLevel(
+            String expectedCacheability,
+            List<String> expectedFoo,
+            List<String> expectedBar,
+            PortletMode expectedPortletMode,
+            WindowState expectedWindowState) {
         wantedCacheability = expectedCacheability;
         String url = deploymentURL.toString() + "page1";
         driver.get(url);
         WebElement render = driver.findElement(By.id("render"));
+        id = null;
         foo = bar = juu = daa = null;
         windowState = null;
         portletMode = null;
         cacheability = null;
         render.click();
+        Assert.assertNull(id);
         Assert.assertNull(cacheability);
         Assert.assertEquals(PortletMode.EDIT, portletMode);
         Assert.assertEquals(WindowState.MAXIMIZED, windowState);
@@ -115,18 +128,28 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
         Assert.assertNull(juu);
         Assert.assertNull(daa);
         WebElement resource = driver.findElement(By.id("resource"));
+        id = null;
         foo = bar = juu = daa = null;
         windowState = null;
         portletMode = null;
         cacheability = null;
         resource.click();
+        Assert.assertEquals("the_id", id);
         Assert.assertEquals(expectedCacheability, cacheability);
-        Assert.assertEquals(PortletMode.EDIT, portletMode);
-        Assert.assertEquals(WindowState.MAXIMIZED, windowState);
-        Assert.assertNotNull(foo);
-        Assert.assertEquals(Arrays.asList("foo_value"), Arrays.asList(foo));
-        Assert.assertNotNull(bar);
-        Assert.assertEquals(Arrays.asList("bar_value1", "bar_value2"), Arrays.asList(bar));
+        Assert.assertEquals(expectedPortletMode, portletMode);
+        Assert.assertEquals(expectedWindowState, windowState);
+        if (expectedFoo == null) {
+            Assert.assertNull(foo);
+        } else {
+            Assert.assertNotNull(foo);
+            Assert.assertEquals(expectedFoo, Arrays.asList(foo));
+        }
+        if (expectedBar == null) {
+            Assert.assertNull(bar);
+        } else {
+            Assert.assertNotNull(bar);
+            Assert.assertEquals(expectedBar, Arrays.asList(bar));
+        }
         Assert.assertNotNull(juu);
         Assert.assertEquals(Arrays.asList("juu_value"), Arrays.asList(juu));
         Assert.assertNotNull(daa);
@@ -138,6 +161,7 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
         @Override
         public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
             cacheability = request.getCacheability();
+            id = request.getResourceID();
             foo = request.getParameterMap().get("foo");
             bar = request.getParameterMap().get("bar");
             juu = request.getParameterMap().get("juu");
@@ -158,6 +182,7 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
             windowState = request.getWindowState();
             portletMode = request.getPortletMode();
             ResourceURL resourceURL = response.createResourceURL();
+            resourceURL.setResourceID("the_id");
             resourceURL.setCacheability(wantedCacheability);
             resourceURL.setParameter("juu", "juu_value");
             resourceURL.setParameter("daa", new String[]{"daa_value1","daa_value2"});

@@ -45,20 +45,20 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
     public static class Builder implements NodeModel<NodeState, ElementState> {
 
         public Builder(String path) {
-            this.state = new PageState(path);
+            this.state = new PageData(path);
         }
 
-        public Builder(PageState state) {
+        public Builder(PageData state) {
             this.state = state;
         }
 
         /** . */
-        private PageState state;
+        private PageData state;
 
         /** A map of name -> window. */
-        private final HashMap<String, WindowState> windows = new LinkedHashMap<String, WindowState>();
+        private final HashMap<String, WindowData> windows = new LinkedHashMap<String, WindowData>();
 
-        public WindowState getWindow(String name) {
+        public WindowData getWindow(String name) {
             return windows.get(name);
         }
 
@@ -79,7 +79,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         public NodeState create(NodeContext<NodeState, ElementState> context) {
             if (context.getState() instanceof ElementState.Window) {
                 NodeState window = new NodeState(context);
-                WindowState windowState = new WindowState(window);
+                WindowData windowState = new WindowData(window);
                 windows.put(windowState.name, windowState);
                 return window;
             } else {
@@ -99,7 +99,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
     final CustomizationService customizationService;
 
     /** The canonical navigation path. */
-    public final PageState state;
+    public final PageData state;
 
     /** A map of name -> window. */
     private final HashMap<String, WindowContext> windowMap;
@@ -114,7 +114,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
 
         //
         LinkedHashMap<String, WindowContext> a = new LinkedHashMap<String, WindowContext>(builder.windows.size());
-        for (WindowState state : builder.windows.values()) {
+        for (WindowData state : builder.windows.values()) {
             a.put(state.name, new WindowContext(state, this));
         }
 
@@ -128,7 +128,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
 
     public Builder builder() {
 
-        Builder builder = new Builder(new PageState(state));
+        Builder builder = new Builder(new PageData(state));
 
         // Clone the windows
         for (Map.Entry<String, WindowContext> entry : windowMap.entrySet()) {
