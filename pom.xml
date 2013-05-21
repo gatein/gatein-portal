@@ -123,15 +123,7 @@
   <modules>
     <module>build-config</module>
     <module>component</module>
-    <module>gadgets</module>
-    <module>webui</module>
-    <module>portlet</module>
-    <module>web</module>
-    <module>examples</module>
-    <module>starter</module>
-    <module>wsrp-integration</module>
-    <module>packaging</module>
-    <module>testsuite</module>
+    <module>portal</module>
   </modules>
 
   <dependencyManagement>
@@ -562,41 +554,6 @@
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.webui.framework</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.webui.portlet</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.webui.portal</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.webui.eXo</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.webui.core</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.webui.dashboard</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.gadgets-core</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.core</artifactId>
         <version>4.0.0-SNAPSHOT</version>
       </dependency>
@@ -627,77 +584,6 @@
         <artifactId>exo.portal.component.test.web</artifactId>
         <version>4.0.0-SNAPSHOT</version>
         <type>test-jar</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.packaging.common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.web.portal</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.gadgets-server</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.eXoGadgets</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.gwtGadgets</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.portlet.web</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.web.rest</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.portlet.exoadmin</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.web.eXoResources</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal.examples.skins</groupId>
-        <artifactId>gatein-sample-skin</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.portlet.dashboard</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.starter.war</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
-        <type>war</type>
       </dependency>
 
       <!-- GateIn Redirect -->
@@ -1464,15 +1350,6 @@ memory option properties. This should be removed when we can just set the compil
           </plugin>
         </plugins>
       </build>
-    </profile>
-
-    <profile>
-      <id>4.0.0</id>
-      <modules>
-        <module>build-config</module>
-        <module>component</module>
-        <module>portal</module>
-      </modules>
     </profile>
 
   </profiles>
