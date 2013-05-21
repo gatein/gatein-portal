@@ -216,9 +216,7 @@ public class Controller {
                                     PageContext.Builder clone = pageContext.builder();
                                     WindowData windowClone = clone.getWindow(window.state.name);
                                     ParametersStateString s = (ParametersStateString) update.getNavigationalState();
-                                    if (s != null && s.getSize() > 0) {
-                                        windowClone.parameters = s.getParameters();
-                                    }
+                                    windowClone.parameters = s.getParameters();
                                     if (update.getWindowState() != null) {
                                         windowClone.windowState = update.getWindowState();
                                     }
