@@ -73,7 +73,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
             resources.put("/js/module2.js", "ddd;");
             resources.put("/js/common.js", "kkk;");
             resources.put("/js/pluginTest.js", "iii;");
-            resources.put("/js/normalize_test.js", " \n /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
+            //trim all space character: tab, space, non-breaking space...
+            resources.put("/js/normalize_test.js", " \n \t /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
             mockServletContext = new MockJSServletContext("mockwebapp", resources);
             jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
