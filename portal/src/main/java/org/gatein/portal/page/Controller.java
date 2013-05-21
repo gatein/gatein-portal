@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.portlet.ResourceResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import juzu.Param;
@@ -37,12 +40,14 @@ import juzu.impl.common.Tools;
 import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
 import org.exoplatform.container.PortalContainer;
+import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
 import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
 import org.gatein.portal.layout.Layout;
 import org.gatein.portal.layout.ZoneLayoutFactory;
@@ -245,18 +250,41 @@ public class Controller {
                                 if (response instanceof ContentResponse) {
                                     ContentResponse content = (ContentResponse) response;
 
-                                    Response.Render render;
-                                    if (content.getBytes() != null) {
-                                        throw new UnsupportedOperationException("todo");
-                                    } else if (content.getChars() != null) {
-                                        return Response.ok(content.getChars());
-                                    } else {
-                                        render = Response.ok("");
+                                    //
+                                    int code = 200;
+                                    ResponseProperties properties = content.getProperties();
+                                    MultiValuedPropertyMap<String> headers = properties != null ? properties.getTransportHeaders() : null;
+                                    if (headers != null) {
+                                        String value = headers.getValue(ResourceResponse.HTTP_STATUS_CODE);
+                                        if (value != null) {
+                                            try {
+                                                code = Integer.parseInt(value);
+                                            } catch (NumberFormatException e) {
+//                                                throw new ServletException("Bad " + ResourceResponse.HTTP_STATUS_CODE + "=" + value +
+//                                                        " resource value", e);
+                                            }
+                                        }
                                     }
 
-                                    // Set content type
-                                    if (content.getContentType() != null) {
-                                        render.withMimeType(content.getContentType());
+                                    // Create response
+                                    Response.Status status = Response.status(code);
+
+                                    // Headers
+                                    sendHttpHeaders(headers, status);
+
+                                    //
+                                    if (content.getBytes() != null) {
+                                        Response.Body body = status.body(content.getBytes());
+                                        if (content.getContentType() != null) {
+                                            body.withMimeType(content.getContentType());
+                                        }
+                                        status = body;
+                                    } else if (content.getChars() != null) {
+                                        Response.Body body = status.body(content.getChars());
+                                        if (content.getContentType() != null) {
+                                            body.withMimeType(content.getContentType());
+                                        }
+                                        status = body;
                                     }
 
                                     //
@@ -265,7 +293,7 @@ public class Controller {
                                     }
 
                                     //
-                                    return render;
+                                    return status;
                                 } else {
                                     throw new UnsupportedOperationException("No yet handled " + response);
                                 }
@@ -312,13 +340,29 @@ public class Controller {
                     //
                     StringBuilder buffer = new StringBuilder();
                     Layout layout = layoutFactory.build(pageLayout);
-                    Response.Render ok = Response.ok(buffer);
+                    Response.Content ok = Response.ok(buffer);
                     layout.render(fragments, pageContext, ok.getProperties(), buffer);
                     return ok;
                 }
             }
         } else {
             return Response.notFound("Page for navigation " + path + " could not be located");
+        }
+    }
+
+    private static void sendHttpHeaders(ResponseProperties properties, Response.Status resp) {
+        if (properties != null) {
+            sendHttpHeaders(properties.getTransportHeaders(), resp);
+        }
+    }
+
+    private static void sendHttpHeaders(MultiValuedPropertyMap<String> httpHeaders, Response.Status resp) {
+        if (httpHeaders != null) {
+            for (String headerName : httpHeaders.keySet()) {
+                if (!headerName.equals(ResourceResponse.HTTP_STATUS_CODE)) {
+                    resp.withHeader(headerName, httpHeaders.getValue(headerName));
+                }
+            }
         }
     }
 }
