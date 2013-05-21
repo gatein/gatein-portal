@@ -40,29 +40,20 @@
                     <c:otherwise>
                         <c:set var="useDashboardLink" value="${renderRequest.getPreferences().getValue('enable.dashboard.link', false)}" />
                         <c:if test="${useDashboardLink.equals('true')}">
-                            <li class="menulink"><a class="link" href="${headerbean.generateDashboardLink()}">${resourceBundle.getString("label.Dashboard")}</a>
-                            </li>
+                            <li class="menulink"><a class="link" href="${headerbean.generateDashboardLink()}">${resourceBundle.getString("label.Dashboard")}</a></li>
                         </c:if>
                         <c:set var="useGroupPagesLink" value="${renderRequest.getPreferences().getValue('enable.grouppages.link', false)}" />
                         <c:if test="${useGroupPagesLink.equals('true')}">
-                            <li class="menucategory">
-                                <a href="#" class="menutoggle">
-                                   <span>${resourceBundle.getString("label.GroupPages")}</span>
-                                   <i class="caret">${resourceBundle.getString("label.ShowGroupPages")}</i>
-                                </a>
-                                <ol class="menu">
+                            <li class="menucategory"><a href="#" class="menutoggle"><span>${resourceBundle.getString("label.GroupPages")}</span><i class="caret">${resourceBundle.getString("label.ShowGroupPages")}</i></a><ol class="menu">
                                     <c:forEach var="groupNode" items="${headerbean.getGroupNodes()}">
                                         <li class="menucategory">
                                                     <%-- Having to specify the replace here may not be the best option. TODO: will defining this in the headerbean work out better? Bean does not current have access to the portlet's resource bundle...--%>
                                                     <c:set var="groupNodeTitle" value="${fn:replace(resourceBundle.getString('label.GroupPageTitleFormat'), '{groupName}', groupNode.key)}" />
-                                                        <a class="menutoggle" href="#">
-                                                           <span>${groupNodeTitle}</span>
-                                                           <i class="caret">${resourceBundle.getString("label.children")}</i>
-                                                        </a>
+                                                        <a class="menutoggle" href="#"><span>${groupNodeTitle}</span><i class="caret">${resourceBundle.getString("label.children")}</i></a>
                                                         <div class="menutoggle"></div>
                                                         <c:set var="parentNode" value="${groupNode.value}" scope="request" />
                                                         <c:set var="menuType" value="submenu" scope="request" />
-                                                        <jsp:include page="node.jsp" />
+                                                       <jsp:include page="node.jsp" />
                                         </li>
                                     </c:forEach>
                                 </ol></li>
