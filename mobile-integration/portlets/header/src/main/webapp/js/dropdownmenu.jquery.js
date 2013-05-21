@@ -162,6 +162,14 @@
                     updateMenu($(this));
                 }
             });
+            // For keyboard compatibily
+            // TODO: there is an issue with focusin/focusout, so mouseover event couldn't be simulated with keyboard
+            // This is a workaround to simulate click() event with mouse for header navigation
+            $(this).on("keypress", settings.arrowElement, function(e){
+                if (e.keyCode == 13) {
+                  $(this).click();
+                }
+            });
         });
 
     };
