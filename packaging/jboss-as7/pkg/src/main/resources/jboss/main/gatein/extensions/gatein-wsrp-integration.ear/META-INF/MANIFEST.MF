@@ -1,2 +1,0 @@
-Manifest-Version: 1.0
-Dependencies: org.gatein.wsrp,org.gatein.wsrp.integration,org.gatein.common,org.gatein.sso
