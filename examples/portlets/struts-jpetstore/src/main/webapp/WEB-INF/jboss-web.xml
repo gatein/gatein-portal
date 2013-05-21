@@ -1,7 +1,0 @@
-<jboss-web>
-  <resource-ref>
-    <res-ref-name>jdbc/jpetstore1</res-ref-name>
-    <jndi-name>java:DefaultDS</jndi-name>
-  </resource-ref>
-</jboss-web>
-						
