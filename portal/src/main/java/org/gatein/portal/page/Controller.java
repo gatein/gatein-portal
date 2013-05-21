@@ -19,6 +19,7 @@
 
 package org.gatein.portal.page;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -272,24 +273,25 @@ public class Controller {
                                     // Headers
                                     sendHttpHeaders(headers, status);
 
+                                    // Determine charset
+                                    Charset charset = null;
+                                    if (content.getEncoding() != null) {
+                                        charset = Charset.forName(content.getEncoding());
+                                    }
+
                                     //
                                     if (content.getBytes() != null) {
                                         Response.Body body = status.body(content.getBytes());
                                         if (content.getContentType() != null) {
-                                            body.withMimeType(content.getContentType());
+                                            body.withMimeType(content.getContentType()).withCharset(charset);
                                         }
                                         status = body;
                                     } else if (content.getChars() != null) {
                                         Response.Body body = status.body(content.getChars());
                                         if (content.getContentType() != null) {
-                                            body.withMimeType(content.getContentType());
+                                            body.withMimeType(content.getContentType()).withCharset(charset);
                                         }
                                         status = body;
-                                    }
-
-                                    //
-                                    if (content.getEncoding() != null) {
-//                                        render.withHeader()
                                     }
 
                                     //

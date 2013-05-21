@@ -145,6 +145,26 @@ public class PortletResourceServingTestCase extends AbstractPortalTestCase {
         Assert.assertEquals(4, bytes[2]);
     }
 
+    @Test
+    public void testContentType() throws Exception {
+        driver.get(deploymentURL.toString() + "page1");
+        delegate = new ResourceServingPortlet() {
+            @Override
+            public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
+                response.setContentType("application/octet-stream;");
+                response.setCharacterEncoding("UTF-16");
+                response.getWriter().close();
+            }
+        };
+        URL url = new URL(driver.findElement(By.id("resource")).getAttribute("href"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        Assert.assertEquals(200, conn.getResponseCode());
+        Map<String, String> headers = Tools.responseHeaders(conn);
+        String contentType = headers.get("Content-Type");
+        Assert.assertTrue("Was expecting application/octet-stream mime type " + contentType, contentType.startsWith("application/octet-stream"));
+        Assert.assertTrue("Was expecting UTF-16 charset " + contentType, contentType.endsWith(";charset=UTF-16"));
+    }
+
     public static class Portlet1 extends GenericPortlet {
 
         @Override
