@@ -123,6 +123,7 @@
   <modules>
     <module>build-config</module>
     <module>component</module>
+    <module>examples</module>
     <module>portal</module>
   </modules>
 
@@ -584,6 +585,12 @@
         <artifactId>exo.portal.component.test.web</artifactId>
         <version>4.0.0-SNAPSHOT</version>
         <type>test-jar</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>org.gatein.portal.examples.portlets</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
       </dependency>
 
       <!-- GateIn Redirect -->

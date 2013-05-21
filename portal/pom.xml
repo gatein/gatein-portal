@@ -293,10 +293,9 @@
                 </warRunDependency>
                 <warRunDependency>
                   <dependency>
-                    <groupId>org.gatein.pc</groupId>
-                    <artifactId>pc-samples</artifactId>
-                    <classifier>basic-portlet</classifier>
-                    <version>2.3.2-GA</version>
+                    <groupId>org.gatein.portal</groupId>
+                    <artifactId>org.gatein.portal.examples.portlets</artifactId>
+                    <version>${project.version}</version>
                     <type>war</type>
                   </dependency>
                   <contextPath>/samples</contextPath>

@@ -1,5 +1,5 @@
 <div class="container">
     <% l1.each { window -> %>
-    <div class="row">${window}</div>
+    <div class="row"><div class="span12">${window}</div></div>
     <% } %>
 </div>

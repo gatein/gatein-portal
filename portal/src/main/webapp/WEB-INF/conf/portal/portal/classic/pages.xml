@@ -35,9 +35,20 @@
       <portlet-application>
         <portlet>
           <application-ref>samples</application-ref>
-          <portlet-ref>SessionPortlet</portlet-ref>
+          <portlet-ref>ParametersPortlet</portlet-ref>
         </portlet>
-        <title>Home Page portlet</title>
+        <title>Parameters Portlet 1</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+      <portlet-application>
+        <portlet>
+          <application-ref>samples</application-ref>
+          <portlet-ref>ParametersPortlet</portlet-ref>
+        </portlet>
+        <title>Parameters Portlet 2</title>
         <access-permissions>Everyone</access-permissions>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
