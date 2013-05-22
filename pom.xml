@@ -65,7 +65,7 @@
     <version.cdi.portlet.integration>1.0.0.Final</version.cdi.portlet.integration>
 
     <!-- TODO: Remove JGroups and JBC once gatein-dep upgraded to 1.2.1.CR04 -->
-    <version.jboss.jgroups>2.6.22.Final</version.jboss.jgroups>
+    <version.jboss.jgroups>2.6.21.Final</version.jboss.jgroups>
     <version.jboss.cache>3.2.7.GA</version.jboss.cache>
 
     <!--
