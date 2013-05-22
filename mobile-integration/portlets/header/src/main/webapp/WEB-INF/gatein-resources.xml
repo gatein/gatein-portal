@@ -58,17 +58,6 @@
 
     <portlet>
         <name>ResponsiveHeaderPortlet</name>
-        <module>
-            <depends>
-                <module>org_gatein_responsive_collapsiblecontainer</module>
-            </depends>
-            <depends>
-                <module>org_gatein_responsive_dropdownmenu_jquery</module>
-            </depends>
-            <depends>
-                <module>org_gatein_responsive_menu</module>
-            </depends>
-        </module>
     </portlet>
 
 </gatein-resources>

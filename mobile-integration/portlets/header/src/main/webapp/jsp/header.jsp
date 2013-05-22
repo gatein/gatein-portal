@@ -2,8 +2,22 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page trimDirectiveWhitespaces="true"%>
+<%@ page import="org.exoplatform.webui.application.WebuiRequestContext" %>
+<%@ page import="org.exoplatform.web.application.JavascriptManager" %>
 
 <portlet:defineObjects />
+
+<%-- Hack because web ui can't properly handle javascript modules after a full ajax page reload --%>
+<%
+JavascriptManager jsMan = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getJavascriptManager();
+
+jsMan.require("SHARED/org_gatein_responsive_collapsiblecontainer", "collapsibleContainer")
+                 .addScripts("collapsibleContainer.init();");
+jsMan.require("SHARED/org_gatein_responsive_dropdownmenu_jquery", "dropdownmenu")
+                 .addScripts("dropdownmenu.init();");
+jsMan.require("SHARED/org_gatein_responsive_menu", "menu")
+                 .addScripts("menu.init();");
+%>
 
 <%-- The resourceBundle used to retrieve locale string values --%>
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}" />

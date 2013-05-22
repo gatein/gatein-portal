@@ -1,18 +1,14 @@
 (function($){
 
+         var collapsibleElements = new Array();
 
-    $(document).ready(function() {
+         init = function() {
+             calculateCollapse();
+             $(window).resize(checkCollapse);
+             $(window).on("orientationchange", calculateCollapse);
+         }
 
-        var collapsibleElements = [];
-        
-        //setup the collapse button
-        
-        calculateCollapse();
-        $(window).resize(checkCollapse);     
-        $(window).on("orientationchange", calculateCollapse);
-
-
-        function calculateCollapse(){
+         function calculateCollapse(){
             $(".collapsibleRow").each(function(){
                 $(this).toggleClass("collapsed", false);
                 $(this).toggleClass("expanded", false);
@@ -30,8 +26,7 @@
             });
             checkCollapse();
         }
-        
-        
+
         function checkCollapse()
         {
             for (var i = 0; i < collapsibleElements.length; i++)
@@ -43,13 +38,14 @@
                     $(collapsibleElement).toggleClass("collapsed", true);
                     $(collapsibleElement).toggleClass("expanded", false);
                 }
-                else 
+                else
                 {
                     $(collapsibleElement).toggleClass("collapsed", false);
                     $(collapsibleElement).toggleClass("expanded", true);
                 }
             }
         }
-    });
+
+        return {init: init};
 
 })(jQuery);

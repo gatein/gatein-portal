@@ -1,4 +1,7 @@
 (function($){
+
+    init = function() {
+
     $(".gtnResponsiveMenu>.menu").dropdownmenu();
 
     $(".gtnResponsiveMenuCollapseButton").each(function(){
@@ -16,6 +19,10 @@
             });
 
         });
+
+    }
+
+    return {init: init};
 
 })(jQuery);
 

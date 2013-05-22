@@ -6,6 +6,9 @@
  *  - Marking the currently opened node for better orientation.
  */
 (function($){
+
+    init = function() {
+  
     $.fn.dropdownmenu = function(options) {
 
         var settings = $.extend({}, {
@@ -173,5 +176,8 @@
         });
 
     };
+    }
+
+    return {init: init};
 
 })(jQuery);
