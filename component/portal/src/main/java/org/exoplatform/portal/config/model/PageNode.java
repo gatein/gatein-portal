@@ -69,26 +69,6 @@ public class PageNode extends PageNodeContainer {
         this.labels = labels;
     }
 
-    public String getLabel() {
-        if (labels != null) {
-            for (LocalizedString label : labels) {
-                if (label.getLang() == null) {
-                    return label.getValue();
-                }
-            }
-        }
-        return null;
-    }
-
-    public void setLabel(String s) {
-        if (labels == null) {
-            labels = new I18NString();
-        } else {
-            labels.clear();
-        }
-        labels.add(new LocalizedString(s));
-    }
-
     public String getIcon() {
         return icon;
     }
@@ -149,8 +129,32 @@ public class PageNode extends PageNodeContainer {
         return getNode(name);
     }
 
+    public String getLabel() {
+        I18NString labels = getLabels();
+        if (labels != null) {
+            for (LocalizedString label : labels) {
+                if (label.getLang() == null) {
+                    return label.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void setLabel(String s) {
+        I18NString labels = getLabels();
+        if (labels == null) {
+            setLabels(labels = new I18NString());
+        } else {
+            labels.clear();
+        }
+        labels.add(new LocalizedString(s));
+    }
+
+    @Override
     public NodeState getState() {
-        return new NodeState(labels.getSimple(), icon, startPublicationDate == null ? -1 : startPublicationDate.getTime(),
+        String label = labels != null ? labels.getSimple() : null;
+        return new NodeState(label, getIcon(), startPublicationDate == null ? -1 : startPublicationDate.getTime(),
                 endPublicationDate == null ? -1 : endPublicationDate.getTime(), visibility,
                 pageReference != null ? PageKey.parse(pageReference) : null);
     }

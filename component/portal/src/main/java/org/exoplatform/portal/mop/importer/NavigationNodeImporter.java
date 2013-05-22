@@ -28,6 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.portal.config.model.I18NString;
+import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
 import org.gatein.portal.mop.description.DescriptionState;
@@ -107,13 +108,13 @@ public class NavigationNodeImporter {
     private final DescriptionService descriptionService;
 
     /** . */
-    private final PageNodeContainer src;
+    private final NavigationFragment src;
 
     /** . */
     private final ImportConfig config;
 
     public NavigationNodeImporter(String[] path, NavigationService navigationService, SiteKey navigationKey,
-                                  Locale portalLocale, DescriptionService descriptionService, PageNodeContainer src, ImportConfig config) {
+                                  Locale portalLocale, DescriptionService descriptionService, NavigationFragment src, ImportConfig config) {
         this.path = path;
         this.navigationService = navigationService;
         this.navigationKey = navigationKey;
@@ -148,6 +149,9 @@ public class NavigationNodeImporter {
 
             // Collect labels
             Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap = new HashMap<NodeContext<?, NodeState>, Map<Locale, DescriptionState>>();
+
+            // Update the root node
+            update(src, from, labelMap);
 
             // Perform save
             perform(src, from, labelMap);
@@ -294,27 +298,33 @@ public class NavigationNodeImporter {
         return child;
     }
 
-    private void update(PageNode src, NodeContext<?, NodeState> target, Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap) {
-        target.setState(src.getState());
+    private void update(PageNodeContainer src, NodeContext<?, NodeState> target, Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap) {
+
+        //
+        if (src.getState() != null) {
+            target.setState(src.getState());
+        }
 
         // Update extended labels if necessary
         I18NString labels = src.getLabels();
-        Map<Locale, DescriptionState> description;
-        if (labels.isSimple()) {
-            description = null;
-        } else if (labels.isEmpty()) {
-            description = null;
-        } else {
-            description = new HashMap<Locale, DescriptionState>();
-            for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
-                description.put(entry.getKey(), new DescriptionState(entry.getValue(), null));
+        if (labels != null) {
+            Map<Locale, DescriptionState> description;
+            if (labels.isSimple()) {
+                description = null;
+            } else if (labels.isEmpty()) {
+                description = null;
+            } else {
+                description = new HashMap<Locale, DescriptionState>();
+                for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
+                    description.put(entry.getKey(), new DescriptionState(entry.getValue(), null));
+                }
             }
-        }
 
-        if (description != null) {
-            labelMap.put(target, description);
-        } else {
-            labelMap.put(target, Collections.<Locale, DescriptionState> emptyMap());
+            if (description != null) {
+                labelMap.put(target, description);
+            } else {
+                labelMap.put(target, Collections.<Locale, DescriptionState> emptyMap());
+            }
         }
     }
 }

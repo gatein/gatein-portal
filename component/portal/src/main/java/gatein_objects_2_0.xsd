@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (C) 2009 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<xs:schema
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_2_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
+  <!-- A localized string -->
+  <xs:complexType name="localizedString">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute ref="xml:lang"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- The visibility of an item-->
+  <xs:simpleType name="visibility">
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value="DISPLAYED"/>
+      <xs:enumeration value="HIDDEN"/>
+      <xs:enumeration value="TEMPORAL"/>
+      <xs:enumeration value="SYSTEM"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- A top node-navigation element -->
+  <xs:element name="navigation" type="navigationType"/>
+
+  <!-- The type of a top navigation node -->
+  <xs:complexType name="navigationType">
+    <xs:sequence>
+      <xs:element name="node" type="rootNodeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- The type of the root node -->
+  <xs:complexType name="rootNodeType">
+    <xs:sequence>
+      <xs:element name="parent-uri" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="nodeContentGroup"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- The type of a descendant node -->
+  <xs:complexType name="descendantNodeType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:group ref="nodeContentGroup"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- The group content of a node -->
+  <xs:group name="nodeContentGroup">
+    <xs:sequence>
+      <xs:element name="label" type="localizedString" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="icon" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="start-publication-date" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="end-publication-date" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="visibility" type="visibility" default="DISPLAYED" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="page-reference" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="node" type="descendantNodeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:group>
+
+</xs:schema>

@@ -21,6 +21,8 @@ package org.exoplatform.portal.config.model;
 
 import java.util.ArrayList;
 
+import org.gatein.portal.mop.navigation.NodeState;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -53,4 +55,8 @@ public abstract class PageNodeContainer {
         }
         return null;
     }
+
+    public abstract NodeState getState();
+
+    public abstract I18NString getLabels();
 }

@@ -39,6 +39,8 @@ import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.gatein.common.util.Tools;
+import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.page.PageKey;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
@@ -188,5 +190,67 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(1, fragment.getNodes().size());
         PageNode bar = fragment.getNode("bar");
         assertNotNull(bar);
+    }
+
+    public void test2_0() throws Exception {
+        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
+                "src/test/resources/xml/navigation.xml"));
+        PageNavigation nav = obj.getObject();
+        assertEquals(Version.V_2_0, obj.getVersion());
+
+        assertEquals(2, nav.getFragments().size());
+
+        NodeState state = nav.getFragments().get(0).getState();
+        assertNotNull(state);
+        assertEquals("root_label", state.getLabel());
+        assertEquals(PageKey.parse("portal::classic::root"), state.getPageRef());
+
+        PageNode bar = nav.getFragments().get(0).getNode("bar");
+        assertEquals("bar_label", bar.getLabel());
+        ArrayList<LocalizedString> barLabels = bar.getLabels();
+        assertNotNull(barLabels);
+        assertEquals(1, barLabels.size());
+        assertEquals("bar_label", barLabels.get(0).getValue());
+        assertEquals(null, barLabels.get(0).getLang());
+        assertEquals(null, bar.getLabels().getExtended(Locale.ENGLISH));
+
+        //
+        PageNode foo = nav.getFragments().get(1).getNode("foo");
+        assertEquals("foo_label", foo.getLabel());
+        ArrayList<LocalizedString> fooLabels = foo.getLabels();
+        assertNotNull(fooLabels);
+        assertEquals(3, fooLabels.size());
+        assertEquals("foo_label_en", fooLabels.get(0).getValue());
+        assertEquals(Locale.ENGLISH, fooLabels.get(0).getLang());
+        assertEquals("foo_label", fooLabels.get(1).getValue());
+        assertEquals(null, fooLabels.get(1).getLang());
+        assertEquals("foo_label_fr", fooLabels.get(2).getValue());
+        assertEquals(Locale.FRENCH, fooLabels.get(2).getLang());
+        assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), foo.getLabels().getExtended(Locale.ENGLISH).keySet());
+        assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH, Locale.GERMAN), foo.getLabels().getExtended(Locale.GERMAN)
+                .keySet());
+
+        //
+        bar = nav.getFragments().get(1).getNode("bar");
+        assertEquals("bar_label", bar.getLabel());
+        barLabels = bar.getLabels();
+        assertNotNull(barLabels);
+        assertEquals(1, barLabels.size());
+        assertEquals("bar_label", barLabels.get(0).getValue());
+        assertEquals(null, barLabels.get(0).getLang());
+        assertEquals(null, bar.getLabels().getExtended(Locale.ENGLISH));
+
+        //
+        PageNode juu = nav.getFragments().get(1).getNode("juu");
+        assertEquals(null, juu.getLabel());
+        ArrayList<LocalizedString> juuLabels = juu.getLabels();
+        assertNotNull(juuLabels);
+        assertEquals(3, juuLabels.size());
+        assertEquals("juu_label_en", juuLabels.get(0).getValue());
+        assertEquals(Locale.ENGLISH, juuLabels.get(0).getLang());
+        assertEquals("juu_label_fr", juuLabels.get(1).getValue());
+        assertEquals(Locale.FRENCH, juuLabels.get(1).getLang());
+        assertEquals("juu_label_fr_FR", juuLabels.get(2).getValue());
+        assertEquals(Locale.FRANCE, juuLabels.get(2).getLang());
     }
 }
