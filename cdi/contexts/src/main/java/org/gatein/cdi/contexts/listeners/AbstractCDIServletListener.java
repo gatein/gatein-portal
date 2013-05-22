@@ -19,27 +19,27 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.cdi.contexts;
+package org.gatein.cdi.contexts.listeners;
 
 import org.gatein.cdi.CDIPortletContextExtension;
+import org.gatein.cdi.contexts.CDIPortletContext;
+import org.gatein.cdi.contexts.PortletRedisplayedContext;
+import org.gatein.cdi.contexts.PortletRequestLifecycle;
 
-import javax.inject.Inject;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import static org.exoplatform.portal.pc.aspects.PortletLifecyclePhaseInterceptor.*;
+import static org.exoplatform.portal.pc.aspects.PortletLifecyclePhaseInterceptor.currentPhase;
+import static org.exoplatform.portal.pc.aspects.PortletLifecyclePhaseInterceptor.currentWindowId;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @author <a href="http://community.jboss.org/people/kenfinni">Ken Finnigan</a>
  */
-public class CDIServletListener implements ServletRequestListener, HttpSessionListener {
-
-    @Inject
-    private CDIPortletContextExtension extension;
+public abstract class AbstractCDIServletListener implements ServletRequestListener, HttpSessionListener {
 
     @Override
     public void requestInitialized(ServletRequestEvent event) {
@@ -49,7 +49,7 @@ public class CDIServletListener implements ServletRequestListener, HttpSessionLi
 
         // The phase is null when we access the application registry, so we don't need to do anything
         if (phase != null) {
-            for (CDIPortletContext context : extension.getContexts()) {
+            for (CDIPortletContext context : getExtension().getContexts()) {
                 context.transition(request, windowId, PortletRequestLifecycle.State.starting(phase));
             }
         }
@@ -63,7 +63,7 @@ public class CDIServletListener implements ServletRequestListener, HttpSessionLi
 
         // The phase is null when we access the application registry, so we don't need to do anything
         if (phase != null) {
-            for (CDIPortletContext context : extension.getContexts()) {
+            for (CDIPortletContext context : getExtension().getContexts()) {
                 context.transition(request, windowId, PortletRequestLifecycle.State.ending(phase));
             }
         }
@@ -75,9 +75,11 @@ public class CDIServletListener implements ServletRequestListener, HttpSessionLi
 
     @Override
     public void sessionDestroyed(HttpSessionEvent event) {
-        PortletRedisplayedContext context = extension.getContext(PortletRedisplayedContext.class);
+        PortletRedisplayedContext context = getExtension().getContext(PortletRedisplayedContext.class);
         if (context != null) {
             context.dissociate(event.getSession());
         }
     }
+
+    protected abstract CDIPortletContextExtension getExtension();
 }

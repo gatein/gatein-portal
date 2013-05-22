@@ -1,6 +1,6 @@
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.cdi.contexts.CDIServletListener;
+import org.gatein.cdi.contexts.listeners.CDIServletListener;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.ee.component.Attachments;
 import org.jboss.as.ee.component.EEApplicationClasses;
