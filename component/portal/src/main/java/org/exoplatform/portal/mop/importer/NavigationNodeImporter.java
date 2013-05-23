@@ -259,15 +259,19 @@ public class NavigationNodeImporter {
 
         //
         Map<Locale, DescriptionState> description;
-        if (labels.isSimple()) {
-            description = null;
-        } else if (labels.isEmpty()) {
-            description = null;
-        } else {
-            description = new HashMap<Locale, DescriptionState>();
-            for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
-                description.put(entry.getKey(), new DescriptionState(entry.getValue(), null));
+        if (labels != null) {
+            if (labels.isSimple()) {
+                description = null;
+            } else if (labels.isEmpty()) {
+                description = null;
+            } else {
+                description = new HashMap<Locale, DescriptionState>();
+                for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
+                    description.put(entry.getKey(), new DescriptionState(entry.getValue(), null));
+                }
             }
+        } else {
+            description = null;
         }
 
         //
