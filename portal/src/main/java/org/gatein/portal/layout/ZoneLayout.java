@@ -46,13 +46,13 @@ public class ZoneLayout extends Layout {
         this.windows = windows;
     }
 
-    private ArrayList<String> getFragments(int zone, Map<String, String> fragments) {
-        ArrayList<String> list = null;
+    private ArrayList<Fragment> getFragments(int zone, Map<String, Fragment> fragments) {
+        ArrayList<Fragment> list = null;
         ArrayList<WindowLayout> column = windows.get(zone);
         if (column != null) {
-            list = new ArrayList<String>();
+            list = new ArrayList<Fragment>();
             for (WindowLayout window : column) {
-                String fragment = fragments.get(window.name);
+                Fragment fragment = fragments.get(window.name);
                 if (fragment != null) {
                     list.add(fragment);
                 }
@@ -62,11 +62,11 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, String> fragments, PageContext state, PropertyMap properties, Appendable to) {
+    public void render(Map<String, Fragment> fragments, PageContext state, PropertyMap properties, Appendable to) {
         // For now we implements "1 column" and "2 columns 70/30" according to the page structure
-        ArrayList<String> l1 = getFragments(1, fragments);
+        ArrayList<Fragment> l1 = getFragments(1, fragments);
         if (l1 != null) {
-            ArrayList<String> l2 = getFragments(2, fragments);
+            ArrayList<Fragment> l2 = getFragments(2, fragments);
             if (l2 == null) {
                 render1_column(l1, state, to);
             } else {
@@ -75,12 +75,12 @@ public class ZoneLayout extends Layout {
         }
     }
 
-    private void render1_column(ArrayList<String> l1, PageContext state, Appendable to) {
+    private void render1_column(ArrayList<Fragment> l1, PageContext state, Appendable to) {
         Map<String, Object> a = Collections.<String, Object>singletonMap("l1", l1);
         factory.zone_1_column.renderTo(to, a);
     }
 
-    private void render2_columns_30_70(ArrayList<String> l1, ArrayList<String> l2, PageContext state, Appendable to) {
+    private void render2_columns_30_70(ArrayList<Fragment> l1, ArrayList<Fragment> l2, PageContext state, Appendable to) {
         factory.zone_1_column.renderTo(to);
     }
 

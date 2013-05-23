@@ -92,7 +92,6 @@ public class ParametersPortlet implements Portlet {
         PrintWriter out = response.getWriter();
 
         //
-        out.append("<h3>Parameters Portlet</h3>");
         out.append("<p>This portlet allows to interract with the render parameter of the portlet. The portlet" +
                 "has shares two public render parameters <span class='label label-info'>foo</span> and " +
                 "<span class='label label-info'>bar</span></p>");

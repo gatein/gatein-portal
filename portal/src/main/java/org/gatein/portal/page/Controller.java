@@ -43,15 +43,20 @@ import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
 import juzu.template.Template;
 import org.exoplatform.container.PortalContainer;
+import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
+import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.info.MetaInfo;
+import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
+import org.gatein.portal.layout.Fragment;
 import org.gatein.portal.layout.Layout;
 import org.gatein.portal.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
@@ -325,14 +330,18 @@ public class Controller {
                     PageContext pageContext = pageBuilder.build(customizationService, manager);
 
                     // Render all windows in a map
-                    HashMap<String, String> fragments = new HashMap<String, String>();
+                    HashMap<String, Fragment> fragments = new HashMap<String, Fragment>();
                     for (Map.Entry<String, WindowContext> entry : pageContext) {
                         try {
                             WindowContext window = entry.getValue();
                             PortletInvocationResponse response = window.render();
                             if (response instanceof FragmentResponse) {
                                 FragmentResponse fragment = (FragmentResponse) response;
-                                fragments.put(window.state.name, fragment.getContent());
+                                String title = fragment.getTitle();
+                                if (title == null) {
+                                    title = window.resolveTitle(context.getUserContext().getLocale());
+                                }
+                                fragments.put(window.state.name, new Fragment(title, fragment.getContent()));
                             } else {
                                 throw new UnsupportedOperationException("Not yet handled " + response);
                             }

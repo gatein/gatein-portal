@@ -33,7 +33,7 @@ public abstract class Layout {
 
 
     public abstract void render(
-            Map<String, String> fragments,
+            Map<String, Fragment> fragments,
             PageContext state,
             PropertyMap properties,
             Appendable to) throws IOException;

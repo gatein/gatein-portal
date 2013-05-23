@@ -23,6 +23,7 @@ import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,6 +33,7 @@ import javax.xml.namespace.QName;
 import juzu.impl.common.PercentCodec;
 import juzu.io.Encoding;
 import juzu.request.Phase;
+import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.pc.api.ActionURL;
 import org.gatein.pc.api.ContainerURL;
@@ -45,8 +47,10 @@ import org.gatein.pc.api.RenderURL;
 import org.gatein.pc.api.ResourceURL;
 import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.cache.CacheLevel;
+import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.NavigationInfo;
 import org.gatein.pc.api.info.ParameterInfo;
+import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.ActionInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.ResourceInvocation;
@@ -64,6 +68,9 @@ import org.gatein.portal.mop.customization.CustomizationContext;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class WindowContext implements PortletInvocationContext {
+
+    /** . */
+    private static final String[] TITLE_KEYS = { MetaInfo.TITLE, MetaInfo.SHORT_TITLE, MetaInfo.DISPLAY_NAME };
 
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
@@ -121,6 +128,33 @@ public class WindowContext implements PortletInvocationContext {
 
     public void setParameter(String name, String[] value) {
         state.setParameter(name, value);
+    }
+
+    public String resolveTitle(Locale locale) {
+        Portlet portlet = getPortlet();
+        PortletInfo info = portlet.getInfo();
+        String resolved = resolveMetaValue(info, locale, TITLE_KEYS, 0);
+        if (resolved == null) {
+            resolved = info.getName();
+        }
+        return resolved;
+    }
+
+    private String resolveMetaValue(PortletInfo info, Locale locale, String[] keys, int index) {
+        String resolved = null;
+        if (index < keys.length) {
+            LocalizedString display = info.getMeta().getMetaValue(keys[index]);
+            if (display != null) {
+                LocalizedString.Value value = display.getValue(locale, true);
+                if (value != null) {
+                    resolved = value.getString();
+                    if (resolved == null) {
+                        resolved = resolveMetaValue(info, locale, keys, index + 1);
+                    }
+                }
+            }
+        }
+        return resolved;
     }
 
     public Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes) {
