@@ -44,6 +44,8 @@ public class NodeBean {
 
     List<NodeBean> children;
 
+    protected boolean showEmptyCategories = false;
+
     public List<NodeBean> getChildren() {
         return children;
     }
@@ -85,13 +87,19 @@ public class NodeBean {
      * @param node A node to be encapsulated by this NavigationNodeBean.
      */
     public NodeBean(Node node, SiteId siteId) {
-        this.node = node;
-        this.siteId = siteId;
+        this(node, siteId, false);
     }
 
-    public NodeBean(Node node, SiteId siteId, Boolean showEmptyCategory) {
+    public NodeBean(Node node, SiteId siteId, Boolean showEmptyCategories) {
         this.node = node;
         this.siteId = siteId;
+        this.showEmptyCategories = showEmptyCategories;
+
+        List<NodeBean> nodeChildrenList = getChildren(node, siteId, false, showEmptyCategories);
+        if (!showEmptyCategories) {
+            setEmptyCategory(isEmptyCategory(node));
+        }
+        setChildren(nodeChildrenList);
     }
 
     /**
@@ -169,16 +177,6 @@ public class NodeBean {
      */
     public String getURI() {
         return node.getURI();
-    }
-
-    protected NodeBean generateNodeBean(Node node, SiteId siteId, boolean showEmptyCategory) {
-        NodeBean nodeBean = new NodeBean(node, siteId);
-        List<NodeBean> nodeChildrenList = getChildren(node, siteId, false, showEmptyCategory);
-        if (!showEmptyCategory) {
-            nodeBean.setEmptyCategory(isEmptyCategory(node));
-        }
-        nodeBean.setChildren(nodeChildrenList);
-        return nodeBean;
     }
 
     private boolean isEmptyCategory(Node n) {

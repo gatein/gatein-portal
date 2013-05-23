@@ -41,11 +41,15 @@ import org.gatein.api.navigation.Node;
 import org.gatein.api.navigation.NodePath;
 import org.gatein.api.navigation.Nodes;
 import org.gatein.api.site.SiteId;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
-public class NodePortlet extends GenericPortlet {
+public abstract class NodePortlet extends GenericPortlet {
+
+    private static final Logger log = LoggerFactory.getLogger(NodePortlet.class);
 
     private final String EMPTY_CATEGORY_PROPERTY_NAME = "ShowEmptyCategories";
-    public static final String NODE_RESOURCE_ID_PREFIX = "node:";
+    public static final String NODE_RESOURCE_ID = "node";
 
     /**
      * The serveResource method is used for handling AJAX requests. It's used for the rendering of sub-menus. Anytime users
@@ -63,14 +67,13 @@ public class NodePortlet extends GenericPortlet {
     public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
         String resourceID = request.getResourceID();
 
-        if (resourceID != null && resourceID.startsWith(NODE_RESOURCE_ID_PREFIX)) {
+        if (resourceID != null && resourceID.equals(NODE_RESOURCE_ID)) {
             String siteId = request.getParameter("siteId");
             Navigation navigation = PortalRequest.getInstance().getPortal().getNavigation(SiteId.fromString(siteId));
 
-            String chosenNodeURI = resourceID.substring(NODE_RESOURCE_ID_PREFIX.length());
-            // String siteId = request.getParameter("siteId");
+            String chosenNodeURI = request.getParameter("uri");
 
-            Node chosenNode = navigation.getNode(NodePath.fromString(chosenNodeURI), Nodes.visitNodes(2));
+            Node chosenNode = navigation.getNode(NodePath.fromString(chosenNodeURI), Nodes.visitNodes(getNodeLevel(request)));
 
             boolean showEmptyCategory = getShowEmptyCategory(request);
 
@@ -146,4 +149,5 @@ public class NodePortlet extends GenericPortlet {
         return Boolean.valueOf(showEmptyCategoryStringValue);
     }
 
+    protected abstract int getNodeLevel(PortletRequest request);
 }

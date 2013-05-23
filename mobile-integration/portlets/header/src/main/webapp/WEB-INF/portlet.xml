@@ -28,6 +28,10 @@
                 <name>enable.grouppages.link</name>
                 <value>true</value>
             </preference>
+            <preference>
+                <name>level</name>
+                <value>2</value>
+            </preference>
         </portlet-preferences>
     </portlet>
 </portlet-app>

@@ -40,8 +40,6 @@ import org.gatein.api.site.SiteId;
 import org.gatein.api.site.SiteQuery;
 import org.gatein.api.site.SiteType;
 
-import com.google.javascript.jscomp.FindExportableNodes.GenerateNodeContext;
-
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
@@ -52,9 +50,19 @@ public class HeaderBean {
     private static final String REGISTER_NODE = "register";
 
     private final SSOHelper ssoHelper;
+    protected int nodeLevel;
 
-    public HeaderBean() {
+    public HeaderBean(int nodeLevel) {
+        this.nodeLevel = nodeLevel;
         ssoHelper = (SSOHelper) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SSOHelper.class);
+    }
+
+    public void setNodeLevel(int nodeLevel) {
+        this.nodeLevel = nodeLevel;
+    }
+
+    public int getNodeLevel() {
+        return nodeLevel;
     }
 
     public String generateLoginLink(String defaultAction) {
@@ -111,16 +119,16 @@ public class HeaderBean {
             if (portalRequest.getPortal().hasPermission(portalRequest.getUser(), site.getAccessPermission())
                     && !site.getName().equals("/platform/guests")) {
                 Navigation siteNavigation = portalRequest.getPortal().getNavigation(site.getId());
-                Node node = siteNavigation.getRootNode(Nodes.visitNodes(2));
+                Node node = siteNavigation.getRootNode(Nodes.visitNodes(this.nodeLevel));
                 if (node.isVisible()) {
                     String groupLabel = OrganizationUtils.getGroupLabel(siteNavigation.getSiteId().getName().toString());
-                    NodeBean nodeBean = new NodeBean(node, site.getId());
-                    NodeBean nb2 = nodeBean.generateNodeBean(node, site.getId(), true);
-                    navNodes.put(groupLabel, nb2);
+                    NodeBean nodeBean = new NodeBean(node, site.getId(), true);
+                    navNodes.put(groupLabel, nodeBean);
                 }
             }
         }
 
         return navNodes;
     }
+
 }

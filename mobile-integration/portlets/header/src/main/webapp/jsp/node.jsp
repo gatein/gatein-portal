@@ -29,7 +29,7 @@ limitations under the License.
 <ol class="menu">
     <c:forEach var="node" items="${parentNode.children}">
 
-        <portlet:resourceURL var="ajaxResourceURL" id="node:${node.path}">
+        <portlet:resourceURL var="ajaxResourceURL" id="node">
            <portlet:param name="uri" value="${node.path}" />
            <portlet:param name="siteId" value="${node.siteId}"/>
         </portlet:resourceURL>        

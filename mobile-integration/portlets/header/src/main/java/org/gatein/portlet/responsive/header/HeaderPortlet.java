@@ -25,9 +25,13 @@ package org.gatein.portlet.responsive.header;
 import java.io.IOException;
 
 import javax.portlet.PortletException;
+import javax.portlet.PortletRequest;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -35,22 +39,42 @@ import javax.portlet.RenderResponse;
  */
 public class HeaderPortlet extends NodePortlet {
 
+    private static final Logger log = LoggerFactory.getLogger(HeaderPortlet.class);
+    private final int DEFAULT_NODE_LEVEL = 2;
+    public static final String NODE_LEVEL_PREFERENCE = "level";
+
     HeaderBean headerBean;
 
     public HeaderPortlet() {
-        headerBean = new HeaderBean();
+        headerBean = new HeaderBean(DEFAULT_NODE_LEVEL);
     }
 
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        headerBean.setNodeLevel(getNodeLevel(request));
         request.setAttribute("headerbean", headerBean);
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/header.jsp");
         prd.include(request, response);
     }
 
     @Override
-    public void serveResource(javax.portlet.ResourceRequest request, javax.portlet.ResourceResponse response)
-            throws PortletException, IOException {
-        super.serveResource(request, response);
-    };
+    protected int getNodeLevel(PortletRequest request) {
+        int nodeLevel = DEFAULT_NODE_LEVEL;
+        try {
+            nodeLevel = Integer.valueOf(request.getPreferences().getValue(NODE_LEVEL_PREFERENCE,
+                    String.valueOf(DEFAULT_NODE_LEVEL)));
+        } catch (NumberFormatException nfe) {
+            log.warn("Preference for Node level can only be an integer. Received invalid value of : "
+                    + request.getPreferences().getValue(NODE_LEVEL_PREFERENCE, null) + ". Using default value: "
+                    + DEFAULT_NODE_LEVEL);
+        }
+
+        if (nodeLevel < 2) {
+            nodeLevel = 2;
+            log.warn("Preference for Node level must be greater than 1. Current value of "
+                    + request.getPreferences().getValue(NODE_LEVEL_PREFERENCE, null) + " is invalid. Using default value of "
+                    + DEFAULT_NODE_LEVEL);
+        }
+        return nodeLevel;
+    }
 }

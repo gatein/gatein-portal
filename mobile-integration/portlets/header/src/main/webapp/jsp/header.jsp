@@ -10,13 +10,9 @@
 <%-- Hack because web ui can't properly handle javascript modules after a full ajax page reload --%>
 <%
 JavascriptManager jsMan = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getJavascriptManager();
-
-jsMan.require("SHARED/org_gatein_responsive_collapsiblecontainer", "collapsibleContainer")
-                 .addScripts("collapsibleContainer.init();");
-jsMan.require("SHARED/org_gatein_responsive_dropdownmenu_jquery", "dropdownmenu")
-                 .addScripts("dropdownmenu.init();");
-jsMan.require("SHARED/org_gatein_responsive_menu", "menu")
-                 .addScripts("menu.init();");
+jsMan.require("SHARED/org_gatein_responsive_collapsiblecontainer", "collapsibleContainer").addScripts("collapsibleContainer.init();");
+jsMan.require("SHARED/org_gatein_responsive_dropdownmenu_jquery", "dropdownmenu").addScripts("dropdownmenu.init();");
+jsMan.require("SHARED/org_gatein_responsive_menu", "menu").addScripts("menu.init();");
 %>
 
 <%-- The resourceBundle used to retrieve locale string values --%>
