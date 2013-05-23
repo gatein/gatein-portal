@@ -21,7 +21,7 @@
     <name>foo</name>
   </public-render-parameter>
   <public-render-parameter>
-    <identifier>foo</identifier>
-    <name>foo</name>
+    <identifier>bar</identifier>
+    <name>bar</name>
   </public-render-parameter>
 </portlet-app>
