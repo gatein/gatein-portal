@@ -14,4 +14,28 @@
       <short-title>Navigation</short-title>
     </portlet-info>
   </portlet>
+  <portlet>
+    <portlet-name>SiteMapPortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.sitemap.SiteMapPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Site Map Portlet</title>
+      <short-title>Site Map</short-title>
+    </portlet-info>
+  </portlet>
+  <portlet>
+    <portlet-name>RegisterPortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.register.RegisterPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Register Portlet</title>
+      <short-title>Register</short-title>
+    </portlet-info>
+  </portlet>
 </portlet-app>

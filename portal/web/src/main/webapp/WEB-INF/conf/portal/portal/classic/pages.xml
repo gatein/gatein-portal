@@ -72,72 +72,44 @@
   </page>
 
   <page>
-    <name>groupnavigation</name>
-    <title>Group Navigation</title>
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>exoadmin</application-ref>
-        <portlet-ref>GroupNavigationPortlet</portlet-ref>
-      </portlet>
-      <title>Group Navigation</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
-  </page>
-
-  <page>
-    <name>portalnavigation</name>
-    <title>Portal Navigation</title>
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>exoadmin</application-ref>
-        <portlet-ref>PortalNavigationPortlet</portlet-ref>
-      </portlet>
-      <title>Portal Navigation</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
-  </page>
-
-  <page>
     <name>register</name>
     <title>Register</title>
-    <access-permissions>*:/platform/guests</access-permissions>
+    <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>exoadmin</application-ref>
-        <portlet-ref>RegisterPortlet</portlet-ref>
-      </portlet>
-      <title>Register Account</title>
-      <access-permissions>*:/platform/guests</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
+    <container>
+      <name>1</name>
+      <portlet-application>
+        <portlet>
+          <application-ref>portal</application-ref>
+          <portlet-ref>RegisterPortlet</portlet-ref>
+        </portlet>
+        <title>Register Portlet</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+    </container>
   </page>
+
   <page>
     <name>sitemap</name>
     <title>Site Map</title>
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>SiteMapPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>useAJAX</name>
-            <value>false</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
-      </portlet>
-      <title>SiteMap</title>
-      <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>
-    </portlet-application>
+    <container>
+      <name>1</name>
+      <portlet-application>
+        <portlet>
+          <application-ref>portal</application-ref>
+          <portlet-ref>SiteMapPortlet</portlet-ref>
+        </portlet>
+        <title>Site Map Portlet</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+    </container>
   </page>
 </page-set>
