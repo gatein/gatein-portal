@@ -1,0 +1,13 @@
+<ul class="breadcrumb">
+    <li><a href="#">Home</a> <span class="divider">/</span></li>
+    <li><a href="#">Library</a> <span class="divider">/</span></li>
+    <li class="active">Data</li>
+</ul>
+
+<div class="container">
+    <div class="row">
+        <div class="span2">zefzef</div>
+        <div class="span10">#{insert/}</div>
+    </div>
+</div>
+

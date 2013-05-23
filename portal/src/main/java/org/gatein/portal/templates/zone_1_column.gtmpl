@@ -1,10 +1,7 @@
-<div class="container">
-    <% l1.each { fragment -> %>
-    <div class="row">
-        <div class="span12">
-        <h3>${fragment.title}</h3>
-        <div>${fragment.content}</div>
-        </div>
-    </div>
-    <% } %>
+#{decorate path=site_layout.gtmpl/}
+<% l1.each { fragment -> %>
+<div>
+    <h3>${fragment.title}</h3>
+    <div>${fragment.content}</div>
 </div>
+<% } %>
