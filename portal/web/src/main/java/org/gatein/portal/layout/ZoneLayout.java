@@ -76,12 +76,11 @@ public class ZoneLayout extends Layout {
     }
 
     private void render1_column(ArrayList<Fragment> l1, PageContext state, Appendable to) {
-        Map<String, Object> a = Collections.<String, Object>singletonMap("l1", l1);
-        factory.zone_1_column.renderTo(to, a);
+        factory.zone_1_column.renderTo(to, Collections.<String, Object>singletonMap("l1", l1));
     }
 
     private void render2_columns_30_70(ArrayList<Fragment> l1, ArrayList<Fragment> l2, PageContext state, Appendable to) {
-        factory.zone_1_column.renderTo(to);
+        factory.zone_2_columns_70_30.renderTo(to, juzu.impl.common.Builder.map("l1", l1).map("l2", l2).build());
     }
 
     private static class WindowLayout {

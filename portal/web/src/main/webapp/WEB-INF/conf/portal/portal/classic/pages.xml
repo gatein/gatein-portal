@@ -43,6 +43,9 @@
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
       </portlet-application>
+    </container>
+    <container>
+      <name>2</name>
       <portlet-application>
         <portlet>
           <application-ref>samples</application-ref>
