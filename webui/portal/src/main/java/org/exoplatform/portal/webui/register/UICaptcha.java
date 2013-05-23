@@ -51,7 +51,7 @@ public class UICaptcha extends UIFormStringInput {
 
         String random = "&v=" + Calendar.getInstance().getTimeInMillis();
 
-        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString() + random + "\" /><br/>");
+        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString() + random + "\" alt=\"Captcha image for visual validation\" /><br/>");
         super.processRender(context);
         context.getWriter().write("</div>");
     }
