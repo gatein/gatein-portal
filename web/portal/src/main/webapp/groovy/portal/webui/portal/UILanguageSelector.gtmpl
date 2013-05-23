@@ -63,7 +63,7 @@
                         %>
                           <div class="$itemSelected ClearFix">
                             <div class="Icon"><span></span></div>
-                            <a href="javascript:;" class="NodeLabel"><%=opt.getLabel()%></a>
+                            <a href="javascript:;" class="NodeLabel" tabindex="1"><%=opt.getLabel()%></a>
                             <div class="PercentLabel"><%=opt.getDescription()%></div>
                           </div>
                         <%}%> 
@@ -83,8 +83,8 @@
               %>
             </div>
             <div class="UIAction"> 
-              <a href="<%=uicomponent.url("Save");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
-              <a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
+              <a href="<%=uicomponent.url("Save");%>" class="ActionButton LightBlueStyle" tabindex="1"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
+              <a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle" tabindex="1"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
             </div>
   
           </div>
