@@ -39,6 +39,7 @@
     <dependency>
       <groupId>org.gatein.pc</groupId>
       <artifactId>pc-portlet</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
