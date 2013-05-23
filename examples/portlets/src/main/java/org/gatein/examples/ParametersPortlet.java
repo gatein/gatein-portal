@@ -120,7 +120,7 @@ public class ParametersPortlet implements Portlet {
 
         //
         PortletURL addURL = response.createActionURL();
-        addURL.setParameters(request.getParameterMap());
+        addURL.setParameters(request.getPrivateParameterMap());
         addURL.setParameter("_op", "add");
         out.append("<form action='").append(addURL.toString()).append("' method='POST' class='well form-inline'>\n");
         out.append("<input type='text' name='_name' class='input-small' placeholder='Name'>\n");
