@@ -17,7 +17,7 @@
 
   <filter>
     <filter-name>KernelLifeCycle</filter-name>
-    <filter-class>org.gatein.portal.kernel.KernelLifeCycle</filter-class>
+    <filter-class>org.gatein.portal.common.kernel.KernelLifeCycle</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>KernelLifeCycle</filter-name>

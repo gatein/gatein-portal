@@ -49,6 +49,7 @@
         <include>org.gatein.mop:mop-api</include>
         <include>org.gatein.portal:exo.portal.component.common</include>
         <include>org.gatein.portal:exo.portal.component.portal</include>
+        <include>org.gatein.portal:portal.common</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>

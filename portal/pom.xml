@@ -36,6 +36,7 @@
   </properties>
 
   <modules>
+    <module>common</module>
     <module>web</module>
   </modules>
 

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.kernel;
+package org.gatein.portal.common.kernel;
 
 import javax.inject.Provider;
 
