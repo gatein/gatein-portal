@@ -70,83 +70,114 @@ public class PortletPublicRenderParametersTestCase extends AbstractPortalTestCas
     WebDriver driver;
 
     /** . */
-    static String[] foo1;
-
-    /** . */
-    static String[] foo2;
-
-    /** . */
-    static String[] foo3;
-
-    /** . */
-    static String[] foo4;
+    static GenericPortlet portlet1, portlet2, portlet3;
 
     @Test
     public void testHello() {
+
+        class ThePortlet1 extends GenericPortlet {
+            String[] foo;
+            @Override
+            public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+                response.setContentType("text/html");
+                foo = request.getParameterMap().get("foo");
+                PortletURL url = response.createRenderURL();
+                url.setParameter("foo", new String[]{"foo:value1,","foo:value2,"});
+                response.getWriter().append("<a id='foo1' href='").append(url.toString()).append("'>click</a>").close();
+            }
+        }
+        class ThePortlet2 extends GenericPortlet {
+            String[] foo;
+            @Override
+            public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+                response.setContentType("text/html");
+                foo = request.getParameterMap().get("foo");
+                PortletURL url = response.createRenderURL();
+                url.setParameter("foo", new String[]{"foo:value3,", "foo:value4,"});
+                response.getWriter().append("<a id='foo2' href='").append(url.toString()).append("'>click</a>").close();
+            }
+        }
+        class ThePortlet3 extends GenericPortlet {
+            String[] foo1, foo2;
+            @Override
+            public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+                foo2 = request.getPublicParameterMap().get("foo");
+                response.setRenderParameter("foo", new String[]{"foo:value5,", "foo:value6,"});
+            }
+
+            @Override
+            public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+                response.setContentType("text/html");
+                foo1 = request.getParameterMap().get("foo");
+                PortletURL url = response.createActionURL();
+                response.getWriter().append("<a id='foo3' href='").append(url.toString()).append("'>click</a>").close();
+            }
+        }
+
+        //
+        ThePortlet1 p1 = new ThePortlet1();
+        ThePortlet2 p2 = new ThePortlet2();
+        ThePortlet3 p3 = new ThePortlet3();
+        portlet1 = p1;
+        portlet2 = p2;
+        portlet3 = p3;
+
         String url = deploymentURL.toString() + "page3";
         driver.get(url);
-        Assert.assertEquals(null, foo1);
-        Assert.assertEquals(null, foo2);
-        Assert.assertEquals(null, foo3);
-        Assert.assertEquals(null, foo4);
+        Assert.assertEquals(null, p1.foo);
+        Assert.assertEquals(null, p2.foo);
+        Assert.assertEquals(null, p3.foo1);
+        Assert.assertEquals(null, p3.foo2);
         WebElement link = driver.findElement(By.id("foo1"));
         link.click();
-        Assert.assertEquals(Arrays.asList("foo:value1,", "foo:value2,"), Arrays.asList(foo1));
-        Assert.assertEquals(Arrays.asList("foo:value1,", "foo:value2,"), Arrays.asList(foo2));
-        Assert.assertEquals(Arrays.asList("foo:value1,", "foo:value2,"), Arrays.asList(foo3));
-        Assert.assertEquals(null, foo4);
+        Assert.assertEquals(Arrays.asList("foo:value1,", "foo:value2,"), Arrays.asList(p1.foo));
+        Assert.assertEquals(Arrays.asList("foo:value1,", "foo:value2,"), Arrays.asList(p2.foo));
+        Assert.assertEquals(Arrays.asList("foo:value1,", "foo:value2,"), Arrays.asList(p3.foo1));
+        Assert.assertEquals(null, p3.foo2);
         link = driver.findElement(By.id("foo2"));
         link.click();
-        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(foo1));
-        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(foo2));
-        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(foo3));
-        Assert.assertEquals(null, foo4);
+        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(p1.foo));
+        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(p2.foo));
+        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(p3.foo1));
+        Assert.assertEquals(null, p3.foo2);
         link = driver.findElement(By.id("foo3"));
         link.click();
-        Assert.assertEquals(Arrays.asList("foo:value5,", "foo:value6,"), Arrays.asList(foo1));
-        Assert.assertEquals(Arrays.asList("foo:value5,", "foo:value6,"), Arrays.asList(foo2));
-        Assert.assertEquals(Arrays.asList("foo:value5,", "foo:value6,"), Arrays.asList(foo3));
-        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(foo4));
+        Assert.assertEquals(Arrays.asList("foo:value5,", "foo:value6,"), Arrays.asList(p1.foo));
+        Assert.assertEquals(Arrays.asList("foo:value5,", "foo:value6,"), Arrays.asList(p2.foo));
+        Assert.assertEquals(Arrays.asList("foo:value5,", "foo:value6,"), Arrays.asList(p3.foo1));
+        Assert.assertEquals(Arrays.asList("foo:value3,", "foo:value4,"), Arrays.asList(p3.foo2));
     }
 
     public static class Portlet1 extends GenericPortlet {
-
         @Override
-        protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-            response.setContentType("text/html");
-            foo1 = request.getParameterMap().get("foo");
-            PortletURL url = response.createRenderURL();
-            url.setParameter("foo", new String[]{"foo:value1,","foo:value2,"});
-            response.getWriter().append("<a id='foo1' href='").append(url.toString()).append("'>click</a>").close();
+        public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+            if (portlet1 != null) {
+                portlet1.render(request, response);
+            }
         }
     }
 
     public static class Portlet2 extends GenericPortlet {
-
         @Override
-        protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-            response.setContentType("text/html");
-            foo2 = request.getParameterMap().get("foo");
-            PortletURL url = response.createRenderURL();
-            url.setParameter("foo", new String[]{"foo:value3,", "foo:value4,"});
-            response.getWriter().append("<a id='foo2' href='").append(url.toString()).append("'>click</a>").close();
+        public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+            if (portlet2 != null) {
+                portlet2.render(request, response);
+            }
         }
     }
 
     public static class Portlet3 extends GenericPortlet {
-
         @Override
         public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
-            foo4 = request.getPublicParameterMap().get("foo");
-            response.setRenderParameter("foo", new String[]{"foo:value5,", "foo:value6,"});
+            if (portlet3 != null) {
+                portlet3.processAction(request, response);
+            }
         }
-
         @Override
-        protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-            response.setContentType("text/html");
-            foo3 = request.getParameterMap().get("foo");
-            PortletURL url = response.createActionURL();
-            response.getWriter().append("<a id='foo3' href='").append(url.toString()).append("'>click</a>").close();
+        public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+            if (portlet3 != null) {
+                portlet3.render(request, response);
+            }
         }
     }
 }
