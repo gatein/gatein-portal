@@ -41,12 +41,12 @@
 			<span id="redirectSummaryWrapper">
 				<h:panelGroup id="pgRedirectSummary" rendered="#{rdrs.redirects.size() > 0}">
 					<table id="redirect-table" class="table table-striped">
-						<thead id="redirect-summary-header" class="redirect-summary">
+						<thead id="redirect-summary-header" class="redirect-summary" summary="Redirect configuration">
 							<tr>
-								<th>Status</th>
-								<th>Redirect name</th>
-								<th>Configurations</th>
-								<th class="actions hidden-element">Actions</th>
+								<th scope="col">Status</th>
+								<th scope="col">Redirect name</th>
+								<th scope="col">Configurations</th>
+								<th scope="col" class="actions hidden-element">Actions</th>
 							</tr>
 						</thead>
 						<tbody class="sortable sortable-rdr">
@@ -69,8 +69,8 @@
 								<td>#{r.name}</td>
 								<td>Redirect to #{r.redirectSite} <span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
 								<td class="actions" style="text-align: center;">
-									<a4j:commandLink styleClass="configure-redirect redirect-summary" action="#{rdrEdit.load(rdrs.siteName, r.name)}" render=":edit_form" oncomplete="configureRedirect();"><i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i></a4j:commandLink>
-									<h:commandLink styleClass="delete-redirect redirect-summary">
+									<a4j:commandLink styleClass="configure-redirect redirect-summary" action="#{rdrEdit.load(rdrs.siteName, r.name)}" render=":edit_form" oncomplete="configureRedirect();" title="Configure"><i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i></a4j:commandLink>
+									<h:commandLink styleClass="delete-redirect redirect-summary" title="Delete">
 										<f:ajax event="action" listener="#{rdrEdit.setDeleteRedirect(rdrs.siteName, r.name)}" onevent="deleteRedirect('#{rdrs.siteName}','#{r.name}')" />
 										<i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i>
 									</h:commandLink>
@@ -87,7 +87,7 @@
 		<!-- Edit Redirect Table -->
 		<h:form id="edit_form" styleClass="form-horizontal">
 		<h:panelGroup id="edit_group" styleClass="edit-group" style="display: none;">
-			<table id="edit_redirect-table" class="table table-striped">
+			<table id="edit_redirect-table" class="table table-striped" summary="Redirect configuration edit">
 				<tbody>
 					<tr style="display: none;"><td></td></tr>
 					<tr id="redirect_cfg" class="form-site-redirect">
@@ -131,12 +131,12 @@
 										<h:panelGroup id="conditions-group" styleClass="control-group">
 											<div class="alert" style="#{empty rdrEdit.conditions ? '' : 'display: none;'}">You haven't set conditions yet.</div>
 											<b:commandButton styleClass="btn btn-small inside-table add-condition" value="Add Condition" action="#{rdrEdit.addCondition}" oncomplete="$('#conditionOp').text('Add'); $('#modal-condition').modal('show'); $('input[id$=&quot;condition_name&quot;]').focus();" execute="@this" render=":condition_form" />
-											<table class="table table-striped button-small" id="conditions-table">
+											<table class="table table-striped button-small" id="conditions-table" summary="Redirect conditions">
 												<thead style="#{empty rdrEdit.conditions ? 'display: none;' : ''}">
 													<tr>
-														<th>Condition Name</th>
-														<th>Settings</th>
-														<th class="hidden-element actions">Actions</th>
+														<th scope="col">Condition Name</th>
+														<th scope="col">Settings</th>
+														<th scope="col" class="hidden-element actions">Actions</th>
 													</tr>
 												</thead>
 												<tbody class="sortable sortable-cnd">
@@ -164,8 +164,8 @@
 															</ui:repeat>
 														</td>
 														<td class="actions">
-															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('Edit'); $('#modal-condition').modal()"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit">Edit</i></a4j:commandLink>
-															<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" title="Delete" render="conditions-group" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete</i></a4j:commandLink>
+															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('Edit'); $('#modal-condition').modal()" title="Edit"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit">Edit</i></a4j:commandLink>
+															<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" render="conditions-group" onclick="$(this).tooltip('hide');" title="Delete"><i class="icon-trash">Delete</i></a4j:commandLink>
 														</td>
 													</tr>
 													</ui:repeat>
@@ -194,12 +194,12 @@
 											<div class="controls">
 												<div class="alert" style="#{empty rdrEdit.mappings.mappings ? '' : 'display: none;'}">You haven't set node mappings yet.</div>
 												<a4j:commandLink action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').last().focus();">Add Mapping</a4j:commandLink>
-												<table class="table table-striped action-button" id="mappings">
+												<table class="table table-striped action-button" id="mappings" summary="Redirect mappings">
 													<thead style="#{empty rdrEdit.mappings.mappings ? 'display: none;' : ''}">
 														<tr>
-															<th>Origin Node Name</th>
-															<th>Redirect Node Name</th>
-															<th class="hidden-element actions">Actions</th>
+															<th scope="col">Origin Node Name</th>
+															<th scope="col">Redirect Node Name</th>
+															<th scope="col" class="hidden-element actions">Actions</th>
 														</tr>
 													</thead>
 													<tbody id="mappings-tbody">

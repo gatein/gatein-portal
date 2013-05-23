@@ -10,7 +10,7 @@
 	<div class="modal confirmation hide" id="modal-condition">
 		<h:panelGroup layout="block" id="modal-condition-wrapper">
 		<div class="modal-header">
-			<button class="modal-close" data-dismiss="modal">Close</button>
+			<button class="modal-close" data-dismiss="modal" title="Close">Close</button>
 			<h3><span id="conditionOp">Add</span> Condition</h3>
 		</div>
 		<div class="modal-body">
@@ -23,10 +23,10 @@
 			</div><!-- End .control-group -->
 			<div class="control-group">
 				<h:panelGroup id="uasHolder">
-				<table class="table table-striped" id="condition-string">
+				<table class="table table-striped" id="condition-string" summary="Redirect condition">
 					<thead>
 						<tr>
-							<th>User Agent String <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Accepts valid Java Regular Expressions">Accepts valid Java Regular Expressions</i></th>
+							<th scope="col">User Agent String <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Accepts valid Java Regular Expressions">Accepts valid Java Regular Expressions</i></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -36,7 +36,7 @@
 								<ui:param name="isContainsEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.contains == null or rdrEdit.editedCondition.userAgentConditions.contains.size() == 0}" />
 								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.contains}" var="rcUACcont" varStatus="counter">
 									<div class="#{counter.index > 0 ? 'more-condition' : 'condition'}">
-										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}"><label for="rcuaccont">OR</label></h:panelGroup>
 										<b:input id="rcuaccont" styleClass="contains-input" value="#{rdrEdit.editedCondition.userAgentConditions.contains[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
 											<a4j:commandLink action="#{rdrEdit.removeContains(counter.index)}" styleClass="tooltipTrigger" title="Delete" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete</i></a4j:commandLink>
@@ -60,7 +60,7 @@
 								<ui:param name="isDoesNotContainEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain.size() == 0}" />
 								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain}" var="rcUACdncont" varStatus="counter">
 									<div class="#{counter.index == 0 ? 'condition' : 'more-condition'}">
-										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}"><label for="rcuacdncont">OR</label></h:panelGroup>
 										<b:input id="rcuacdncont" styleClass="doesnotcontain-input" value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
 											<a4j:commandLink action="#{rdrEdit.removeDoesNotContain(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
@@ -87,11 +87,11 @@
 				<h:panelGroup style="#{rdrEdit.editedCondition.deviceProperties == null or rdrEdit.editedCondition.deviceProperties.size() == 0 ? '' : 'display:none;'}">
 					<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="btn btn-mini pull-right" render="condition_properties" oncomplete="afterAddProperty();">Add Properties</a4j:commandLink>
 				</h:panelGroup>
-				<table class="table table-striped button-mini" id="condition-properties" style="#{rdrEdit.editedCondition.deviceProperties == null ? 'display: none;' : ''}">
+				<table class="table table-striped button-mini" id="condition-properties" style="#{rdrEdit.editedCondition.deviceProperties == null ? 'display: none;' : ''}" summary="Redirect properties">
 					<thead>
 						<tr>
-							<th>Property <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Property names specified in detection.jsp">Property names specified in detection.jsp</i></th>
-							<th class="hidden-element actions">Actions</th>
+							<th scope="col">Property <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Property names specified in detection.jsp">Property names specified in detection.jsp</i></th>
+							<th scope="col" class="hidden-element actions">Actions</th>
 						</tr>
 					</thead>
 					<tbody>
