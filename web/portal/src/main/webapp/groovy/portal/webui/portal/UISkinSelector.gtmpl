@@ -30,8 +30,8 @@
 				</div>
 			</div>	
 			<div class="UIAction">
-				<a href="<%=uicomponent.url("Save");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
-				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.close");%></a>
+				<a href="<%=uicomponent.url("Save");%>" class="ActionButton LightBlueStyle" tabindex="1"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
+				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle" tabindex="1"><%=_ctx.appRes("UIChangeSkin.action.close");%></a>
 			</div>						
 		</div>	
 	</div>

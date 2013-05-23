@@ -41,7 +41,7 @@
 								       label = category.getName();
 								    }
 								%>
-									<div class="ItemTitle"><%=label%></div>
+									<div class="ItemTitle"><a href="javascript:;" tabindex="1"><%=label%></a></div>
 								</div>
 							</div>
 						</div>
