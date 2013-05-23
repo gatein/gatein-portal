@@ -48,6 +48,27 @@
       <name>2</name>
       <portlet-application>
         <portlet>
+          <application-ref>portal</application-ref>
+          <portlet-ref>HomePortlet</portlet-ref>
+        </portlet>
+        <title>Home</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+    </container>
+  </page>
+
+  <page>
+    <name>demo</name>
+    <title>Demo</title>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <container>
+      <name>1</name>
+      <portlet-application>
+        <portlet>
           <application-ref>samples</application-ref>
           <portlet-ref>ParametersPortlet</portlet-ref>
         </portlet>

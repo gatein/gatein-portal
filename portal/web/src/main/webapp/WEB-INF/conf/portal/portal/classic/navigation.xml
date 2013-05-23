@@ -44,6 +44,12 @@
     <label xml:lang="zh-TW">首頁</label>
     <page-reference>portal::classic::homepage</page-reference>
     <node>
+      <name>demo</name>
+      <label>Demo</label>
+      <visibility>DISPLAYED</visibility>
+      <page-reference>portal::classic::demo</page-reference>
+    </node>
+    <node>
       <name>sitemap</name>
       <label xml:lang="en">SiteMap</label>
       <label xml:lang="cs">Mapa stránek</label>
