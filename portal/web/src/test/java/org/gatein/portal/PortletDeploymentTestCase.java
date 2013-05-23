@@ -87,6 +87,6 @@ public class PortletDeploymentTestCase {
         PortletAppManager manager = (PortletAppManager) portal.getComponentInstanceOfType(PortletAppManager.class);
         PortletInvoker invoker = manager.getInvoker();
         Set<Portlet> portlets = invoker.getPortlets();
-        assertEquals(8, portlets.size());
+        assertEquals(9, portlets.size());
     }
 }

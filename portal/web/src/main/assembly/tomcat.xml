@@ -40,6 +40,7 @@
         <include>org.gatein.wci:wci-wci</include>
         <include>org.gatein.wci:wci-tomcat7</include>
         <include>org.juzu:juzu-core</include>
+        <include>org.juzu:juzu-plugins-portlet</include>
         <include>org.codehaus.groovy:groovy-all</include>
         <include>com.google.inject:guice</include>
         <include>aopalliance:aopalliance</include>
@@ -50,6 +51,7 @@
         <include>org.gatein.portal:exo.portal.component.common</include>
         <include>org.gatein.portal:exo.portal.component.portal</include>
         <include>org.gatein.portal:portal.common</include>
+        <include>org.gatein.portal:portal.ui</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>

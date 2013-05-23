@@ -82,6 +82,11 @@
       <artifactId>juzu-core</artifactId>
       <version>${juzu.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.juzu</groupId>
+      <artifactId>juzu-plugins-portlet</artifactId>
+      <version>${juzu.version}</version>
+    </dependency>
 
     <!-- -->
     <dependency>
@@ -91,6 +96,10 @@
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>portal.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portal.ui</artifactId>
     </dependency>
 
     <dependency>
@@ -289,7 +298,7 @@
                     <classifier>tomcat</classifier>
                     <type>war</type>
                   </dependency>
-                  <contextPath>/</contextPath>
+                  <contextPath>/portal</contextPath>
                 </warRunDependency>
                 <warRunDependency>
                   <dependency>

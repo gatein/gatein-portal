@@ -1,0 +1,6 @@
+<ul class="nav nav-list">
+    <li class="nav-header">home</li>
+    <% root.children.each { node -> %>
+    <li><a href="${node.link}">${node.label}</a></li>
+    <% } %>
+</ul>
