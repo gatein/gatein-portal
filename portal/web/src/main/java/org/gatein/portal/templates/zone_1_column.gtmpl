@@ -1,14 +1,12 @@
 #{decorate path=site_layout.gtmpl/}
 
-<div class="container">
-    <div class="row">
-        <% l1.each { fragment -> %>
-        <div>
-            <h3>${fragment.title}</h3>
-            <div>${fragment.content}</div>
-        </div>
-        <% } %>
+<div class="row">
+    <% l1.each { fragment -> %>
+    <div>
+        <h3>${fragment.title}</h3>
+        <div>${fragment.content}</div>
     </div>
+    <% } %>
 </div>
 
 
