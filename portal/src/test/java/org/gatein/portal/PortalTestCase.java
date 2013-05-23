@@ -19,7 +19,15 @@
 
 package org.gatein.portal;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.portlet.GenericPortlet;
+import javax.portlet.PortletException;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
@@ -27,23 +35,23 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-
-import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletDescriptor;
+import org.openqa.selenium.WebElement;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 @RunWith(Arquillian.class)
-public class PortalTestCase {
+public class PortalTestCase extends AbstractPortalTestCase {
 
     @Deployment(testable = false)
     public static WebArchive createPortal() {
-        PortletDescriptor desc = HelloPortlet.descriptor();
         WebArchive portal = AbstractPortalTestCase.createPortal();
-        portal.addAsWebInfResource(new StringAsset(desc.exportAsString()), "portlet.xml");
+        portal.addAsWebInfResource(new StringAsset(descriptor(Portlet1.class).exportAsString()), "portlet.xml");
         return portal;
     }
 
@@ -54,10 +62,26 @@ public class PortalTestCase {
     WebDriver driver;
 
     @Test
-    public void testHello() {
-        driver.get(deploymentURL.toString() + "/home");
-        System.out.println("driver.getPageSource() = " + driver.getPageSource());
-//        WebElement element = driver.findElement(By.className("gatein"));
-//        Assert.assertEquals("Hello GateIn to /foo/bar", element.getText());
+    public void testResolvePage() {
+        driver.get(deploymentURL.toString() + "/page1");
+        WebElement element = driver.findElement(By.id("hello"));
+        Assert.assertTrue(element.getText().contains("world"));
+    }
+
+    @Test
+    public void testNotFound() throws Exception {
+        URL url = new URL(deploymentURL + "/whatever");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        Assert.assertEquals(404, conn.getResponseCode());
+    }
+
+    public static class Portlet1 extends GenericPortlet {
+        @Override
+        protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+            response.setContentType("text/html");
+            PrintWriter writer = response.getWriter();
+            writer.append("<span id='hello'>world</span>");
+            writer.close();
+        }
     }
 }

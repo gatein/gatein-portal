@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import juzu.Param;
+import juzu.Path;
 import juzu.PropertyType;
 import juzu.Response;
 import juzu.Route;
@@ -40,6 +41,7 @@ import juzu.View;
 import juzu.impl.common.Tools;
 import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
+import juzu.template.Template;
 import org.exoplatform.container.PortalContainer;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
@@ -96,6 +98,10 @@ public class Controller {
     @Inject
     ZoneLayoutFactory layoutFactory;
 
+    @Inject
+    @Path("not_found.gtmpl")
+    Template notFound;
+
     @View()
     @Route("/{javax.portlet.path}")
     public Response index(
@@ -136,7 +142,7 @@ public class Controller {
                 }
             }
             if (current == null) {
-                return Response.notFound("Page for navigation " + path + " could not be located");
+                return notFound.with().set("path", path).notFound();
             } else {
 
                 //

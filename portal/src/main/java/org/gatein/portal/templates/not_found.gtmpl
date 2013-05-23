@@ -1,0 +1,6 @@
+<div class="container">
+    <div class="row">
+        <h1>Oups...</h1>
+        <p class="lead text-error text-center">we could not find that page ${path}</p>
+    </div>
+</div>
