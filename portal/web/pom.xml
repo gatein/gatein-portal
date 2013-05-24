@@ -302,6 +302,15 @@
                 <warRunDependency>
                   <dependency>
                     <groupId>org.gatein.portal</groupId>
+                    <artifactId>portal.root</artifactId>
+                    <version>${project.version}</version>
+                    <type>war</type>
+                  </dependency>
+                  <contextPath>/</contextPath>
+                </warRunDependency>
+                <warRunDependency>
+                  <dependency>
+                    <groupId>org.gatein.portal</groupId>
                     <artifactId>portal.web</artifactId>
                     <version>${project.version}</version>
                     <classifier>tomcat</classifier>
