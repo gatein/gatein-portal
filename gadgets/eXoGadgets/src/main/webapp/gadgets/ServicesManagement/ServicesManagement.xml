@@ -73,7 +73,7 @@
               </div>
 			
 			  <div class="GadgetGrid">
-				<table cellspacing="0" class="UIGrid">
+				<table cellspacing="0" class="UIGrid" summary="Services Management configuration">
 					<thead>
 						<tr>
 							<th class="TableHeader FieldComponent Text">__MSG_name__</th>
@@ -112,11 +112,11 @@
                 </div>
               </div>
               <div class="GadgetGrid">
-                <table cellspacing="0" class="UIGrid">
+                <table cellspacing="0" class="UIGrid" summary="Services Management configuration">
                     <thead>
                         <tr>
-                            <th class="FieldComponent">__MSG_name__</th>
-                            <th>__MSG_value__</th>
+                            <th class="FieldComponent" scope="col">__MSG_name__</th>
+                            <th scope="col">__MSG_value__</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -151,7 +151,7 @@
                   <div class="ServicesManagement">	
 		  <div class="UIGadget">
 			<div class="TopGadget">
-				<table cellspacing="0" style="margin: 0px auto;">
+				<table cellspacing="0" style="margin: 0px auto;" summary="Services Management configuration">
 					<tbody>
 						<tr>
 							<td><div class="Text">__MSG_services__</div></td>
@@ -171,14 +171,14 @@
 				<div id="PropertiesTab" class="Tab">Properties</div>
 			</div>
 			<div id="ServiceMethods" class="GadgetGrid GadgetGmCanvasMessage ContentSelected">
-				<table cellspacing="0" class="UIGrid">
+				<table cellspacing="0" class="UIGrid" summary="Services Management configuration">
 					<thead>
 						<tr>
-							<th class="FieldComponent">__MSG_name__</th>
-							<th class="FieldComponent">__MSG_description__</th>
-							<th class="FieldComponent FixWidth">__MSG_method__</th>
-							<th class="FieldComponent">__MSG_parameters__</th>
-							<th class="FixWidth">__MSG_action__</th>
+							<th class="FieldComponent" scope="col">__MSG_name__</th>
+							<th class="FieldComponent" scope="col">__MSG_description__</th>
+							<th class="FieldComponent FixWidth" scope="col">__MSG_method__</th>
+							<th class="FieldComponent" scope="col">__MSG_parameters__</th>
+							<th class="FixWidth" scope="col">__MSG_action__</th>
 						</tr>
 					</thead>
 					<tbody id="methodsForCanvas"></tbody>
@@ -187,12 +187,12 @@
 			</div>
 			
 		    <div id="ServiceProperties" class="GadgetGrid GadgetGmCanvasMessage">
-		         <table cellspacing="0" class="UIGrid">
+		         <table cellspacing="0" class="UIGrid" summary="Services Management configuration">
 		            <thead>
 		               <tr>
-		                  <th class="FieldComponent">__MSG_name__</th>
-		                  <th class="FieldComponent">__MSG_description__</th>
-		                  <th>__MSG_action__</th>
+		                  <th class="FieldComponent" scope="col">__MSG_name__</th>
+		                  <th class="FieldComponent" scope="col">__MSG_description__</th>
+		                  <th scope="col">__MSG_action__</th>
 		               </tr>
 		            </thead>
 		            <tbody id="propertiesForCanvas"></tbody>
