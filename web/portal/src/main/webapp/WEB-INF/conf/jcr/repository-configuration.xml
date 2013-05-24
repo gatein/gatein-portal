@@ -142,7 +142,7 @@
               <property name="jbosscache-configuration" value="${gatein.jcr.cache.config.workspace.portal-system}"/>
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
               <property name="jgroups-multiplexer-stack" value="false"/>
-              <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}"/>
+              <property name="jbosscache-cluster-name" value="jcr_portal_system${container.name.suffix}"/>
               <property name="jbosscache-shareable" value="true"/>
             </properties>
           </cache>
