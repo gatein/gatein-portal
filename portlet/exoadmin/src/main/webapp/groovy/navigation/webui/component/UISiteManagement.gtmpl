@@ -22,7 +22,12 @@
       <%
             for (portalConfig in uicomponent.getPortalConfigs())  {           
       %>
-                <table class="ManagementBlock" style="table-layout: fixed">
+                <table class="ManagementBlock" style="table-layout: fixed" summary="Sites edit">
+                    <tr style="display: none;">
+                      <th scope="col">Image</th>
+                      <th scope="col">Site</th>
+                      <th scope="col">Actions</th>                      
+                    </tr>
                     <tr>
                         <td class="Image"><img src="/exoadmin/skin/navigation/webui/component/background/PlImg.gif" alt=""/></td>
                         <td class="Content">

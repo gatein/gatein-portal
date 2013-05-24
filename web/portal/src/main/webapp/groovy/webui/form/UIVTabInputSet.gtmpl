@@ -23,7 +23,7 @@
 								<div class="$type">
 									<div class="User${child.id}Icon">
 										<div class="ItemName">
-											<div class="ItemTitle"><%= _ctx.appRes(uicomponent.getId() + ".label." + child.id)%></div>
+											<div class="ItemTitle"><a href="javascript:;"><%= _ctx.appRes(uicomponent.getId() + ".label." + child.id)%></a></div>
 										</div>
 									</div>	
 								</div>
