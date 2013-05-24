@@ -70,6 +70,13 @@
 	height: 222px;
 }
 
+.UIItemSelector .ItemDetailList .TemplateContainer .mobileImage {
+        height: 222px;
+        margin-top: 9px;
+        background: url('background/ResponsiveTemplate.png') no-repeat center;
+        background-size: contain;
+}
+
 .UIItemSelector .ItemDetailList .LayoutHolder .DesktopImage {
 	background: url('background/TemplateContainer.jpg') no-repeat top left;
 	height: 170px;

@@ -26,34 +26,29 @@
 
     <page-nodes>
         <node>
-            <uri>home</uri>
             <name>home</name>
             <label>Home</label>
             <page-reference>portal::@owner@::homepage</page-reference>
         </node>
         <node>
-            <uri>features</uri>
             <name>features</name>
             <label>Features</label>
             <visibility>DISPLAYED</visibility>
             <page-reference>portal::@owner@::features</page-reference>
         </node>
         <node>
-            <uri>groupnavigation</uri>
             <name>groupnavigation</name>
             <label>Group Navigation</label>
             <visibility>SYSTEM</visibility>
             <page-reference>portal::@owner@::groupnavigation</page-reference>
         </node>
         <node>
-            <uri>portalnavigation</uri>
             <name>portalnavigation</name>
             <label>Portal Navigation</label>
             <visibility>SYSTEM</visibility>
             <page-reference>portal::@owner@::portalnavigation</page-reference>
         </node>
         <node>
-            <uri>register</uri>
             <name>register</name>
             <label>Register</label>
             <visibility>SYSTEM</visibility>

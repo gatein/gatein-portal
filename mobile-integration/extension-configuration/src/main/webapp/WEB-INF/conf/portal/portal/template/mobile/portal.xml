@@ -28,25 +28,19 @@
     <locale>en</locale>
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <skin>Default</skin>
+<!--    <skin>ResponsiveSkin</skin> -->
     <properties>
         <entry key="sessionAlive">onDemand</entry>
         <entry key="showPortletInfo">0</entry>
         <entry key="viewport">initial-scale=1.0</entry>
+        <entry key="sharedLayout">adminsOnly</entry>
     </properties>
 
     <portal-layout>
         <portlet-application>
             <portlet>
-                <application-ref>web</application-ref>
-                <portlet-ref>BannerPortlet</portlet-ref>
-                <preferences>
-                    <preference>
-                        <name>template</name>
-                        <value>par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</value>
-                        <read-only>false</read-only>
-                    </preference>
-                </preferences>
+                <application-ref>responsive-header-portlet</application-ref>
+                <portlet-ref>ResponsiveHeaderPortlet</portlet-ref>
             </portlet>
             <access-permissions>Everyone</access-permissions>
             <show-info-bar>false</show-info-bar>
@@ -54,47 +48,14 @@
 
         <portlet-application>
             <portlet>
-                <application-ref>web</application-ref>
-                <portlet-ref>NavigationPortlet</portlet-ref>
-                <preferences>
-                    <preference>
-                        <name>useAJAX</name>
-                        <value>false</value>
-                        <read-only>false</read-only>
-                    </preference>
-                </preferences>
+                <application-ref>responsive-navigation-portlet</application-ref>
+                <portlet-ref>ResponsiveNavigationPortlet</portlet-ref>
             </portlet>
             <access-permissions>Everyone</access-permissions>
             <show-info-bar>false</show-info-bar>
         </portlet-application>
 
-        <portlet-application>
-            <portlet>
-                <application-ref>web</application-ref>
-                <portlet-ref>BreadcumbsPortlet</portlet-ref>
-                <preferences>
-                    <preference>
-                        <name>useAJAX</name>
-                        <value>false</value>
-                        <read-only>false</read-only>
-                    </preference>
-                </preferences>
-            </portlet>
-            <access-permissions>Everyone</access-permissions>
-            <show-info-bar>false</show-info-bar>
-        </portlet-application>
-
-        <page-body></page-body>
-
-        <portlet-application>
-            <portlet>
-                <application-ref>redirect-portlet</application-ref>
-                <portlet-ref>SiteRedirectPortlet</portlet-ref>
-            </portlet>
-            <access-permissions>Everyone</access-permissions>
-            <show-info-bar>false</show-info-bar>
-        </portlet-application>
-
+        <page-body> </page-body>
 
         <portlet-application>
             <portlet>
