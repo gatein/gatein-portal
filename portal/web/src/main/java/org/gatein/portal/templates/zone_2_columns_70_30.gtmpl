@@ -1,5 +1,3 @@
-#{decorate path=site_layout.gtmpl/}
-
 <div class="row">
     <div class="span3">
         <% l1.each { fragment -> %>

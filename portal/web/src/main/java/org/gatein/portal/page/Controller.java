@@ -23,13 +23,12 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.portlet.ResourceResponse;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import juzu.Param;
@@ -43,14 +42,10 @@ import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
 import juzu.template.Template;
 import org.exoplatform.container.PortalContainer;
-import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
-import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletInvokerException;
-import org.gatein.pc.api.info.MetaInfo;
-import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
@@ -69,7 +64,9 @@ import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.portlet.PortletAppManager;
 
 /**
@@ -87,6 +84,9 @@ public class Controller {
 
     @Inject
     PortletAppManager manager;
+
+    @Inject
+    SiteService siteService;
 
     @Inject
     NavigationService navigationService;
@@ -150,8 +150,14 @@ public class Controller {
                 return notFound.with().set("path", path).notFound();
             } else {
 
-                //
+                // Page builder
                 PageContext.Builder pageBuilder = new PageContext.Builder(path);
+
+                // Load site windows
+                SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
+                NodeContext<org.gatein.portal.page.NodeState, ElementState> siteLayout = layoutService.loadLayout(pageBuilder, site.getLayoutId(), null);
+
+                // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
                 org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
@@ -327,36 +333,30 @@ public class Controller {
                     pageBuilder.setParameters(prp);
 
                     //
-                    PageContext pageContext = pageBuilder.build(customizationService, manager);
+                    StringBuilder buffer = new StringBuilder();
+                    Response.Content ok = Response.ok(buffer);
 
-                    // Render all windows in a map
-                    HashMap<String, Fragment> fragments = new HashMap<String, Fragment>();
-                    for (Map.Entry<String, WindowContext> entry : pageContext) {
-                        try {
-                            WindowContext window = entry.getValue();
-                            PortletInvocationResponse response = window.render();
-                            if (response instanceof FragmentResponse) {
-                                FragmentResponse fragment = (FragmentResponse) response;
-                                String title = fragment.getTitle();
-                                if (title == null) {
-                                    title = window.resolveTitle(context.getUserContext().getLocale());
-                                }
-                                fragments.put(window.state.name, new Fragment(title, fragment.getContent()));
-                            } else {
-                                throw new UnsupportedOperationException("Not yet handled " + response);
-                            }
-                        } catch (PortletInvokerException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    // Render all fragments
+                    PageContext layoutContext = pageBuilder.build(customizationService, manager);
+                    Map<String, Fragment> layoutFragments = layoutContext.render(context.getUserContext().getLocale());
+
+                    // Render page
+                    String layoutId = page.getState().getFactoryId();
+                    if (layoutId == null) {
+                        layoutId = "1";
                     }
+                    Layout layout = layoutFactory.build(layoutId, pageLayout);
+                    layout.render(layoutFragments, null, layoutContext, ok.getProperties(), buffer);
 
                     //
-                    StringBuilder buffer = new StringBuilder();
-                    Layout layout = layoutFactory.build(pageLayout);
-                    Response.Content ok = Response.ok(buffer);
-                    layout.render(fragments, pageContext, ok.getProperties(), buffer);
+                    String body = buffer.toString();
+
+                    // Get site layout
+                    buffer.setLength(0);
+                    Layout siteUI = layoutFactory.build("site", siteLayout);
+                    siteUI.render(layoutFragments, body, layoutContext, ok.getProperties(), buffer);
+
+                    //
                     return ok;
                 }
             }

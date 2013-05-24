@@ -1,5 +1,3 @@
-#{decorate path=site_layout.gtmpl/}
-
 <div class="row">
     <% l1.each { fragment -> %>
     <div>
@@ -8,6 +6,3 @@
     </div>
     <% } %>
 </div>
-
-
-

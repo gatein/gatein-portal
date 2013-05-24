@@ -35,20 +35,6 @@
       <portlet-application>
         <portlet>
           <application-ref>portal</application-ref>
-          <portlet-ref>NavigationPortlet</portlet-ref>
-        </portlet>
-        <title>Navigation Portlet</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
-    <container>
-      <name>2</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
           <portlet-ref>HomePortlet</portlet-ref>
         </portlet>
         <title>Home</title>

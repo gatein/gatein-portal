@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import juzu.PropertyMap;
+import juzu.template.Template;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageContext;
 
@@ -39,14 +40,18 @@ public class ZoneLayout extends Layout {
     private final ZoneLayoutFactory factory;
 
     /** . */
-    private final Map<Integer, ArrayList<WindowLayout>> windows;
+    private final String id;
 
-    public ZoneLayout(ZoneLayoutFactory factory, Map<Integer, ArrayList<WindowLayout>> windows) {
+    /** . */
+    private final Map<String, ArrayList<WindowLayout>> windows;
+
+    public ZoneLayout(ZoneLayoutFactory factory, String id, Map<String, ArrayList<WindowLayout>> windows) {
+        this.id = id;
         this.factory = factory;
         this.windows = windows;
     }
 
-    private ArrayList<Fragment> getFragments(int zone, Map<String, Fragment> fragments) {
+    private ArrayList<Fragment> getFragments(String zone, Map<String, Fragment> fragments) {
         ArrayList<Fragment> list = null;
         ArrayList<WindowLayout> column = windows.get(zone);
         if (column != null) {
@@ -62,25 +67,35 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Fragment> fragments, PageContext state, PropertyMap properties, Appendable to) {
-        // For now we implements "1 column" and "2 columns 70/30" according to the page structure
-        ArrayList<Fragment> l1 = getFragments(1, fragments);
-        if (l1 != null) {
-            ArrayList<Fragment> l2 = getFragments(2, fragments);
-            if (l2 == null) {
-                render1_column(l1, state, to);
-            } else {
-                render2_columns_30_70(l1, l2, state, to);
+    public void render(Map<String, Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) {
+        Template template = null;
+        Map<String, Object> parameters = null;
+        if ("1".equals(id)) {
+            template = factory.zone_1_column;
+            parameters = Collections.<String, Object>singletonMap("l1", getFragments("1", fragments));
+        } else if ("site".equals(id)) {
+            template = factory.site;
+            juzu.impl.common.Builder.Map<String, Object> builder = juzu.impl.common.Builder.
+                    <String, Object>map("header", getFragments("header", fragments)).
+                    map("footer", getFragments("footer", fragments));
+            if (body != null) {
+                builder = builder.map("body", body);
             }
+            parameters = builder.build();
+        }
+        if (template != null) {
+            template.renderTo(to, parameters);
+        } else {
+            throw new UnsupportedOperationException("Layout not found");
         }
     }
 
-    private void render1_column(ArrayList<Fragment> l1, PageContext state, Appendable to) {
-        factory.zone_1_column.renderTo(to, Collections.<String, Object>singletonMap("l1", l1));
+    private Template.Builder render1_column(ArrayList<Fragment> l1) {
+        return factory.zone_1_column.with(Collections.<String, Object>singletonMap("l1", l1));
     }
 
-    private void render2_columns_30_70(ArrayList<Fragment> l1, ArrayList<Fragment> l2, PageContext state, Appendable to) {
-        factory.zone_2_columns_70_30.renderTo(to, juzu.impl.common.Builder.map("l1", l1).map("l2", l2).build());
+    private Template.Builder render2_columns_30_70(ArrayList<Fragment> l1, ArrayList<Fragment> l2) {
+        return factory.zone_2_columns_70_30.with(juzu.impl.common.Builder.map("l1", l1).map("l2", l2).build());
     }
 
     private static class WindowLayout {
@@ -100,22 +115,26 @@ public class ZoneLayout extends Layout {
     public static class Builder implements LayoutBuilder {
 
         /** . */
+        private final String id;
+
+        /** . */
         private final ZoneLayoutFactory factory;
 
         /** . */
         private LinkedList<ArrayList<WindowLayout>> currentWindows;
 
         /** . */
-        private Map<Integer, ArrayList<WindowLayout>> windows = Collections.emptyMap();
+        private Map<String, ArrayList<WindowLayout>> windows = Collections.emptyMap();
 
-        public Builder(ZoneLayoutFactory factory) {
+        public Builder(ZoneLayoutFactory factory, String id) {
+            this.id = id;
             this.factory = factory;
             this.currentWindows = new LinkedList<ArrayList<WindowLayout>>();
         }
 
         @Override
         public void beginContainer(String name, ElementState.Container state) {
-            Integer zone = parseZone(state);
+            String zone = parseZone(state);
             if (zone != null) {
                 currentWindows.push(new ArrayList<WindowLayout>());
             }
@@ -130,12 +149,12 @@ public class ZoneLayout extends Layout {
 
         @Override
         public void endContainer(String name, ElementState.Container state) {
-            Integer zone = parseZone(state);
+            String zone = parseZone(state);
             if (zone != null) {
                 ArrayList<WindowLayout> zoneWindows = currentWindows.pop();
                 if (zoneWindows.size() > 0) {
                     if (windows.isEmpty()) {
-                        windows = new HashMap<Integer, ArrayList<WindowLayout>>();
+                        windows = new HashMap<String, ArrayList<WindowLayout>>();
                     }
                     windows.put(zone, zoneWindows);
                 }
@@ -144,20 +163,12 @@ public class ZoneLayout extends Layout {
 
         @Override
         public Layout build() {
-            return new ZoneLayout(factory, windows);
+            return new ZoneLayout(factory, id, windows);
         }
 
-        private Integer parseZone(ElementState.Container state) {
-            String name = state.properties.get(ElementState.Container.NAME);
-            if (name != null) {
-                try {
-                    int zone = Integer.parseInt(name);
-                    return zone >= 0 ? zone : null;
-                } catch (NumberFormatException e) {
-                    // Ignore
-                }
-            }
-            return null;
+        private String parseZone(ElementState.Container state) {
+            String zone = state.properties.get(ElementState.Container.NAME);
+            return zone != null ? zone.trim() : null;
         }
     }
 

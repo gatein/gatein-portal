@@ -31,10 +31,20 @@ import org.gatein.portal.page.PageContext;
  */
 public abstract class Layout {
 
-
+    /**
+     * Renders the layout.
+     *
+     *
+     * @param fragments the fragments
+     * @param body the optional body
+     * @param state the page state
+     * @param properties various proeprties
+     * @param to the target stream
+     * @throws IOException
+     */
     public abstract void render(
             Map<String, Fragment> fragments,
-            PageContext state,
+            String body, PageContext state,
             PropertyMap properties,
             Appendable to) throws IOException;
 

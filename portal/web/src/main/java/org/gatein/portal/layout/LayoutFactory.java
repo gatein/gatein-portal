@@ -26,27 +26,27 @@ import org.gatein.portal.mop.layout.ElementState;
  */
 public abstract class LayoutFactory {
 
-    public final <N> Layout build(NodeContext<N, ElementState> node) {
-        LayoutBuilder builder = builder();
+    public final <N> Layout build(String id, NodeContext<N, ElementState> node) {
+        LayoutBuilder builder = builder(id);
         build_(node, builder);
         return builder.build();
     }
 
-    private static <N> void build_(NodeContext<N, ElementState> node, LayoutBuilder builder) {
-        ElementState state = node.getState();
+    private static <N> void build_(NodeContext<N, ElementState> head, LayoutBuilder builder) {
+        ElementState state = head.getState();
         if (state instanceof ElementState.Container) {
             ElementState.Container containerState = (ElementState.Container) state;
-            builder.beginContainer(node.getName(), containerState);
-            for (NodeContext<N, ElementState> child : node) {
+            builder.beginContainer(head.getName(), containerState);
+            for (NodeContext<N, ElementState> child : head) {
                 build_(child, builder);
             }
-            builder.endContainer(node.getName(), containerState);
+            builder.endContainer(head.getName(), containerState);
         } else if (state instanceof ElementState.Window) {
             ElementState.Window windowState = (ElementState.Window) state;
-            builder.window(node.getName(), windowState);
+            builder.window(head.getName(), windowState);
         }
     }
 
-    public abstract LayoutBuilder builder();
+    public abstract LayoutBuilder builder(String id);
 
 }

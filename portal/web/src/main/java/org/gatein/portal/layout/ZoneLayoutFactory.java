@@ -38,8 +38,12 @@ public class ZoneLayoutFactory extends LayoutFactory {
     @Path("zone_2_columns_70_30.gtmpl")
     Template zone_2_columns_70_30;
 
+    @Inject
+    @Path("site.gtmpl")
+    Template site;
+
     @Override
-    public LayoutBuilder builder() {
-        return new ZoneLayout.Builder(this);
+    public LayoutBuilder builder(String id) {
+        return new ZoneLayout.Builder(this, id);
     }
 }

@@ -6,5 +6,6 @@
   <portal-name>test</portal-name>
   <locale>en</locale>
   <portal-layout>
+    <page-body></page-body>
   </portal-layout>
 </portal-config>

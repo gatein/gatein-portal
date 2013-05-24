@@ -27,7 +27,7 @@ import javax.inject.Singleton;
 public class SimpleLayoutFactory extends LayoutFactory {
 
     @Override
-    public LayoutBuilder builder() {
+    public LayoutBuilder builder(String id) {
         return new SimpleLayout.Builder();
     }
 }
