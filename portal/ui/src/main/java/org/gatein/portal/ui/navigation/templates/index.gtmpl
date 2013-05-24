@@ -1,6 +1,12 @@
-<ul class="nav nav-list">
-    <li class="nav-header">home</li>
-    <% root.children.each { node -> %>
-    <li><a href="${node.link}">${node.label}</a></li>
-    <% } %>
-</ul>
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li><a href="/portal/">Home</a></li>
+                <% root.children.each { node -> %>
+                <li><a href="${node.link}">${node.label}</a></li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</div>

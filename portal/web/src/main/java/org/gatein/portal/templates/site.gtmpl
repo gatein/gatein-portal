@@ -1,17 +1,15 @@
 #{decorate path=shared.gtmpl/}
 
-<div class="row">
-    <% header.each { fragment -> %>
-    <div>
-        <div>${fragment.content}</div>
-    </div>
-    <% } %>
+<% header.each { fragment -> %>
+<div>
+    <div>${fragment.content}</div>
 </div>
+<% } %>
+
 ${body}
-<div class="row">
-    <% footer.each { fragment -> %>
-    <div>
-        <div>${fragment.content}</div>
-    </div>
-    <% } %>
+
+<% footer.each { fragment -> %>
+<div>
+    <div>${fragment.content}</div>
 </div>
+<% } %>

@@ -1,14 +1,8 @@
 <div class="container">
-    <ul class="breadcrumb">
-        <li><a href="#">Home</a> <span class="divider">/</span></li>
-        <li><a href="#">Library</a> <span class="divider">/</span></li>
-        <li class="active">Data</li>
-    </ul>
 
     #{insert/}
 
     <div class="footer">
         <p>Copyright © 2009-2013. All rights reserved, Red Hat, Inc and eXo Platform SAS</p>
     </div>
-
 </div>
