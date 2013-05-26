@@ -45,7 +45,7 @@
 										if(children.get(i).isRendered()) {								 
 								%>
 											<tr>
-												<td class="FieldLabel"><%=uicomponent.getLabel(children.get(i).getName())+": " %></td>
+												<td class="FieldLabel" scope="row"><label for="<%=children.get(i).getName()%>"><%=uicomponent.getLabel(children.get(i).getName())+": " %></label></td>
 												<td class="FieldComponent"><% uiform.renderField(children.get(i)) %></td>
 											</tr>
 								<%
