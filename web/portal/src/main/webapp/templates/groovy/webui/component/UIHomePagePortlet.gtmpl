@@ -12,6 +12,7 @@
 
 			<div class="HomePortletAdBackround">
 				<div class="AdImageLeft">
+                    <p class="slogan"><%=_ctx.appRes("UIHomePagePortlet.Label.BackgroundSlogan")%></p>
 					<div class="AdImageRight">
 					</div>
 				</div>

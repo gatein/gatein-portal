@@ -92,11 +92,12 @@
 }
 
 .UIHomePagePortlet .AdImageLeft {
-	background: url('DefaultSkin/background/RightHome.jpg') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/background/RightHome-rt.jpg') no-repeat right top; /* orientation=rt */
+        background: url('DefaultSkin/background/background-rtl.jpg') no-repeat right top; /* orientation=rt */
+        background: url('DefaultSkin/background/background-ltr.jpg') no-repeat left top; /* orientation=lt */
 }
 
-*html .UIHomePagePortlet .AdImageLeft {
+.UIHomePagePortlet .AdImageLeft {
+        position: relative;
 }
 
 .UIHomePagePortlet .AdImageRight {
@@ -105,6 +106,23 @@
 	height: 255px; 
 	padding: 0px 10px 0px 200px; /* orientation=lt */
 	padding: 0px 200px 0px 10px; /* orientation=rt */
+}
+
+.UIHomePagePortlet .slogan {
+position: absolute;
+font-size: 25px;
+line-height: 29px;
+font-weight: 100;
+right: 50px; /* orientation=rt */
+left: 58px; /* orientation=lt */
+top: 134px;
+letter-spacing: -0.4px;
+width: 280px;
+font-family: "Frutiger LT Std", Frutiger, Helvetica, Arial, Sans-serif;
+color: #7b7b7b;
+background: -webkit-linear-gradient(#b9b9b9, #535353); /* gradient effect only works on webkit */
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
 }
 
 .UIHomePagePortlet .AdImageLeft .EmptyBlock {
