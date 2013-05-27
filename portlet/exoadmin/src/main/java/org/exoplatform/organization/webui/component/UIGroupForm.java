@@ -39,6 +39,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /** Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 27, 2006 8:48:47 AM */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
@@ -56,7 +57,8 @@ public class UIGroupForm extends UIForm {
     public UIGroupForm() throws Exception {
         addUIFormInput(new UIFormStringInput(GROUP_NAME, GROUP_NAME, null).addValidator(MandatoryValidator.class)
                 .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
-        addUIFormInput(new UIFormStringInput(GROUP_LABEL, GROUP_LABEL, null).addValidator(StringLengthValidator.class, 3, 50));
+        addUIFormInput(new UIFormStringInput(GROUP_LABEL, GROUP_LABEL, null).addValidator(StringLengthValidator.class, 3, 50)
+                .addValidator(UserConfigurableValidator.class, "grouplabel", UserConfigurableValidator.KEY_PREFIX + "grouplabel"));
         addUIFormInput(new UIFormTextAreaInput(GROUP_DESCRIPSION, GROUP_DESCRIPSION, null).addValidator(
                 StringLengthValidator.class, 0, 255));
     }

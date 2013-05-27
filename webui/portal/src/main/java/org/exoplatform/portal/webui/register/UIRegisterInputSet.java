@@ -82,7 +82,8 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 1, 45)
                 .addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));
 
-        addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(StringLengthValidator.class, 0, 90));
+        addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(StringLengthValidator.class, 0, 90)
+                .addValidator(UserConfigurableValidator.class, "displayname", UserConfigurableValidator.KEY_PREFIX + "displayname"));
 
         addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class)
                 .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.EMAIL));

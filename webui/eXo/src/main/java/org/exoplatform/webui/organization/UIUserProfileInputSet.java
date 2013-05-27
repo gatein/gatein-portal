@@ -56,6 +56,7 @@ import org.gatein.security.oauth.exception.OAuthExceptionCode;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 28, 2006
@@ -73,10 +74,12 @@ public class UIUserProfileInputSet extends UIFormInputSet {
     public static final int DEFAULT_MAX_LENGTH = 255;
     private int maxLength = -1;
 
+    public static final String JOB_TITLE = "jobtitle";
+
     public UIUserProfileInputSet() {
     }
 
-    public UIUserProfileInputSet(String name) {
+    public UIUserProfileInputSet(String name) throws Exception {
         super(name);
         setComponentConfig(UIUserProfileInputSet.class, null);
 
@@ -111,7 +114,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         }
     }
 
-    private void addInput(UIFormInputSet set, String[] keys) {
+    private void addInput(UIFormInputSet set, String[] keys) throws Exception {
         int maxLength = getMaxLengthOfTextField();
 
         for (String key : keys) {
@@ -121,6 +124,10 @@ public class UIUserProfileInputSet extends UIFormInputSet {
                 ls.add(new SelectItemOption<String>(FEMALE, FEMALE));
                 UIFormSelectBox genderSelectBox = new UIFormSelectBox(key, key, ls);
                 set.addUIFormInput(genderSelectBox);
+                continue;
+            } else if (key.equalsIgnoreCase("user.jobtitle")) {
+                set.addUIFormInput(new UIFormStringInput(key, null, null).addValidator(UserConfigurableValidator.class,
+                        JOB_TITLE, UserConfigurableValidator.KEY_PREFIX + JOB_TITLE));
                 continue;
             } else if (key.equalsIgnoreCase(Constants.USER_LANGUAGE)) {
                 UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);
