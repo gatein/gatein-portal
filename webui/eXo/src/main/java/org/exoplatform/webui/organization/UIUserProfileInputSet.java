@@ -49,6 +49,7 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 28, 2006
@@ -63,10 +64,12 @@ public class UIUserProfileInputSet extends UIFormInputSet {
 
     public static final String FEMALE = "female";
 
+    public static final String JOB_TITLE = "jobtitle";
+
     public UIUserProfileInputSet() {
     }
 
-    public UIUserProfileInputSet(String name) {
+    public UIUserProfileInputSet(String name) throws Exception {
         super(name);
         setComponentConfig(UIUserProfileInputSet.class, null);
 
@@ -93,7 +96,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         }
     }
 
-    private void addInput(UIFormInputSet set, String[] keys) {
+    private void addInput(UIFormInputSet set, String[] keys) throws Exception {
 
         for (String key : keys) {
             if (key.equalsIgnoreCase("user.gender")) {
@@ -102,6 +105,10 @@ public class UIUserProfileInputSet extends UIFormInputSet {
                 ls.add(new SelectItemOption<String>(FEMALE, FEMALE));
                 UIFormSelectBox genderSelectBox = new UIFormSelectBox(key, key, ls);
                 set.addUIFormInput(genderSelectBox);
+                continue;
+            } else if (key.equalsIgnoreCase("user.jobtitle")) {
+                set.addUIFormInput(new UIFormStringInput(key, null, null).addValidator(UserConfigurableValidator.class,
+                        JOB_TITLE, UserConfigurableValidator.KEY_PREFIX + JOB_TITLE));
                 continue;
             } else if (key.equalsIgnoreCase(Constants.USER_LANGUAGE)) {
                 UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);

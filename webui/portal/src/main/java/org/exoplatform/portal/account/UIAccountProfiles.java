@@ -45,6 +45,7 @@ import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /**
  * Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com
@@ -74,7 +75,7 @@ public class UIAccountProfiles extends UIForm {
                 .addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class)
                 .addValidator(PersonalNameValidator.class));
         addUIFormInput(new UIFormStringInput("displayName", "displayName", useraccount.getDisplayName()).addValidator(
-                StringLengthValidator.class, 0, 90));
+                StringLengthValidator.class, 0, 90).addValidator(UserConfigurableValidator.class, "displayname", UserConfigurableValidator.KEY_PREFIX + "displayname"));
         addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(MandatoryValidator.class)
                 .addValidator(EmailAddressValidator.class));
     }
