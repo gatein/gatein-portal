@@ -142,6 +142,15 @@ public class UIFormInputSet extends UIContainer {
         w.write("<table class=\"UIFormGrid\" summary=\"" + getId() + "\">");
         ResourceBundle res = context.getApplicationResourceBundle();
         UIForm uiForm = getAncestorOfType(UIForm.class);
+        boolean required = false;
+        // Loop to print the (*) required flag in the top
+        for (UIComponent inputEntry : getChildren()) {
+          if (!required && inputEntry instanceof UIFormInputBase) {
+            required = ((UIFormInputBase) inputEntry).isMandatory();
+          }
+        }
+        if (required)
+          w.write("<tr><td colspan=\"2\" style=\"text-align: right;\">Required field (*)</td></tr>");
         for (UIComponent inputEntry : getChildren()) {
             if (inputEntry.isRendered()) {
                 String label = "";

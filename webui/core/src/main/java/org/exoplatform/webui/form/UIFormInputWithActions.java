@@ -66,13 +66,23 @@ public class UIFormInputWithActions extends UIFormInputSet {
         w.write("<table class=\"UIFormGrid\" summary=\"" + getId() + "\">");
         ResourceBundle res = context.getApplicationResourceBundle();
 
+        boolean required = false;
+        // Loop to print the (*) required flag in the top
+        for (UIComponent inputEntry : getChildren()) {
+          if (!required && inputEntry instanceof UIFormInputBase) {
+            required = ((UIFormInputBase) inputEntry).isMandatory();
+          }
+        }
+        if (required)
+          w.write("<tr><td colspan=\"2\" style=\"text-align: right;\">Required field (*)</td></tr>");
         for (UIComponent inputEntry : getChildren()) {
             if (inputEntry.isRendered()) {
                 String label;
                 try {
                     label = uiForm.getLabel(res, inputEntry.getId());
-                    if (inputEntry instanceof UIFormInputBase)
+                    if (inputEntry instanceof UIFormInputBase) {
                         ((UIFormInputBase) inputEntry).setLabel(label);
+                    }
                 } catch (MissingResourceException ex) {
                     label = inputEntry.getId();
                     log.error("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
