@@ -109,20 +109,21 @@
 }
 
 .UIHomePagePortlet .slogan {
-position: absolute;
-font-size: 25px;
-line-height: 29px;
-font-weight: 100;
-right: 50px; /* orientation=rt */
-left: 58px; /* orientation=lt */
-top: 134px;
-letter-spacing: -0.4px;
-width: 280px;
-font-family: "Frutiger LT Std", Frutiger, Helvetica, Arial, Sans-serif;
-color: #7b7b7b;
-background: -webkit-linear-gradient(#b9b9b9, #535353); /* gradient effect only works on webkit */
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
+	position: absolute;
+	font-size: 25px;
+	line-height: 29px;
+	font-weight: 100;
+	right: 50px; /* orientation=rt */
+	left: 58px; /* orientation=lt */
+	top: 134px;
+	letter-spacing: -0.4px;
+	width: 280px;
+	font-family: "Frutiger LT Std", Frutiger, Helvetica, Arial, Sans-serif;
+	color: #7b7b7b;
+        /*Disable for now since it does not gracefully degrade and does not have enough browser support (especially on mobile browsers */
+	/*background: -webkit-linear-gradient(#b9b9b9, #535353); */ /* gradient effect only works on webkit */
+	/*-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent; */
 }
 
 .UIHomePagePortlet .AdImageLeft .EmptyBlock {
