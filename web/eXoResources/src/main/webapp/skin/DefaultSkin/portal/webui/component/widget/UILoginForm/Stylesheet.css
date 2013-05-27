@@ -141,7 +141,8 @@
 }
 
 .UILoginForm .LoginDetailBox .ForgetPass a {
-	color: orange;
+	/* ORIGINAL color: orange; */
+        color: #1273df; /* For Section 508 compliant */
 }
 
 .UILoginForm .LoginDetailBox .UIFormGrid td {

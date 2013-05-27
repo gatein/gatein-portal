@@ -34,14 +34,16 @@
 }
 
 .UIPopupMessages .WarningMessage .MessageContainer	{
-	color: orange;
+	/* ORIGINAL color: orange; */
+        color: #1273df; /* For Section 508 compliant */
 	padding: 4px 0px 4px 10px; /* orientation=lt */
 	padding: 4px 10px 4px 0px; /* orientation=rt */
 	border-bottom: 1px dotted #c3c3c3;
 }
 
 .UIPopupMessages .ErrorMessage .MessageContainer	{
-	color: red;
+	/* ORIGINAL color: red; */       
+        color: #cc0000; /* For Section 508 compliant */
 	padding: 4px 0px 4px 10px; /* orientation=lt */
 	padding: 4px 10px 4px 0px; /* orientation=rt */
 	border-bottom: 1px dotted #c3c3c3;
