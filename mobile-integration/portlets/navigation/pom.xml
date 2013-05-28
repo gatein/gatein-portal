@@ -54,6 +54,19 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- ExoKernel Integration to retrieve Service -->
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.component.common</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
   <repositories>

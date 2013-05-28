@@ -1,4 +1,7 @@
 (function($){
+
+    init = function() {
+
     $(".gtnResponsiveNavigationPortlet .topmenu").dropdownmenu();
 
     $(".gtnResponsiveNavigationPortlet .collapsibleToggle").click( function(){
@@ -6,5 +9,9 @@
         $(this).toggleClass(visibleClass);
         $(".gtnResponsiveNavigationPortlet .topmenu").toggleClass(visibleClass);
     });
-    
+
+    };
+
+    return {init: init};
+
 })(jQuery);

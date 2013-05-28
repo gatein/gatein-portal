@@ -20,6 +20,15 @@ limitations under the License.
 <%@ page import="java.util.Locale"%>
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page trimDirectiveWhitespaces="true"%>
+<%@ page import="org.exoplatform.webui.application.WebuiRequestContext" %>
+<%@ page import="org.exoplatform.web.application.JavascriptManager" %>
+
+<%-- Hack because web ui can't properly handle javascript modules after a full ajax page reload --%>
+<%
+  JavascriptManager jsMan = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getJavascriptManager();
+  jsMan.require("SHARED/dropdownmenu_jquery", "dropdownmenu_nav").addScripts("dropdownmenu_nav.init();");
+  jsMan.require("SHARED/org_gatein_navigation", "navigation").addScripts("navigation.init();");
+%>
 
 <portlet:defineObjects />
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}" />
