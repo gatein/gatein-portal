@@ -138,7 +138,7 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
             } else if (EMAIL.equals(validatorName)) {
                 // if the validator name is the EMAIL constant, we use the default e-mail validator
                 EmailAddressValidator.validate(value, label, messages);
-            } else {
+            } else if (GROUPMEMBERSHIP.equals(validatorName)) {
                 // else, we assume that we need to validate a group membership, replicating original behavior
                 if (!Pattern.matches(GROUP_MEMBERSHIP_VALIDATION_REGEX, value)) {
                     messages.addMessage(localizationKey, new Object[] { label });
