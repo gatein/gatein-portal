@@ -56,6 +56,7 @@ function removeUAString(element) {
 }
 
 function afterAddProperty() {
+	$('.property-operator').change();
 	$('.property-name-input').last().focus();
 	// disable all which are hidden
 	$('span[class^="pp-"]').filter(function() { return $(this).css("display") == "none"; }).children("div").children("input").prop('disabled', true);
@@ -72,7 +73,7 @@ function changePropertyFields(element) {
 	// Change input box(es) according to selected option
 	$(element).next().children().each(function() {
 		otherInput = $(this).children().children();
-		otherInput.val("");
+		//otherInput.val("");
 		otherInput.prop('disabled', true);
 		$(this).hide();
 	});

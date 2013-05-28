@@ -14,7 +14,7 @@
 			<h3><span id="conditionOp">Add</span> Condition</h3>
 		</div>
 		<div class="modal-body">
-			<p class="subtitle">All fields are required</p>
+			<p style="visibility: hidden;" class="subtitle">All fields are required</p>
 			<div class="control-group">
 				<label class="control-label" for="condition_name">Condition Name </label>
 				<b:input mode="client" styleClass="input-large" required="true" requiredMessage="Value required" id="condition_name" value="#{rdrEdit.editedCondition.name}" onkeyup="validateCondition()">
@@ -160,7 +160,7 @@
 		</div><!-- End .modal-body -->
 		<h:panelGroup layout="block" id="condition_footer" styleClass="modal-footer">
 			<b:commandButton value="Cancel" action="#{rdrEdit.rollbackCondition}" oncomplete="$('#modal-condition').modal('hide');" execute="@form" />
-			<b:commandButton id="save-condition-button" value="Save Changes" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group" />
+			<b:commandButton id="save-condition-button" value="Save Changes" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group" onclick="$('.property-operator').change();"/>
 		</h:panelGroup>
 	</h:panelGroup><!-- end .modal -->
 	</div><!-- end .modal -->

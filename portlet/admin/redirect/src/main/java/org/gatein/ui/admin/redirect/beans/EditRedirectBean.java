@@ -454,7 +454,13 @@ public class EditRedirectBean implements Serializable {
             editedCondition.setDeviceProperties(new ArrayList<DevicePropertyCondition>());
         }
 
-        editedCondition.getDeviceProperties().add(new DevicePropertyCondition());
+        DevicePropertyCondition dpc = new DevicePropertyCondition();
+        // FIXME: Workaround for GTNPORTAL-3073, remove when not needed
+        dpc.setEquals(null);
+        dpc.setGreaterThan(null);
+        dpc.setLessThan(null);
+        dpc.setMatches(null);
+        editedCondition.getDeviceProperties().add(dpc);
     }
 
     /**
@@ -478,12 +484,11 @@ public class EditRedirectBean implements Serializable {
         DevicePropertyCondition dp = editedCondition.getDeviceProperties().get(index);
         if (dp.getMatches() != null && !dp.getMatches().trim().isEmpty()) {
             return "mt";
-        } else if (dp.getGreaterThan() != null && dp.getLessThan() != null && dp.getGreaterThan() != 0.0
-                && dp.getLessThan() != 0.0) {
+        } else if (dp.getGreaterThan() != null && dp.getLessThan() != null) {
             return "bt";
-        } else if (dp.getGreaterThan() != null || dp.getGreaterThan() != 0.0) {
+        } else if (dp.getGreaterThan() != null) {
             return "gt";
-        } else if (dp.getLessThan() != null || dp.getLessThan() != 0.0) {
+        } else if (dp.getLessThan() != null) {
             return "lt";
         } else {
             return "eq";

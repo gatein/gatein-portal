@@ -274,6 +274,9 @@
 		</h:form>
 
 		<script type="text/javascript">
+			$('#modal-condition').on('shown', function () {
+				$('.property-operator').change();
+			});
 			$(document).ready(function(){
 				var nodeInput = null;
 			});
