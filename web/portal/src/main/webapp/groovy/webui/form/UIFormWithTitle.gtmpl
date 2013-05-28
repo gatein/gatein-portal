@@ -13,6 +13,17 @@
 		<div class="FormContainer">
 			<table class="UIFormGrid" summary="Component $uicomponent.id">
 				<% 
+                                        boolean required = false;
+                                        for (field in uiform.getChildren()) {
+                                          if (!required && field instanceof UIFormInputBase) {
+                                            required = ((UIFormInputBase) field).isMandatory();
+                                          }                                          
+                                        }
+                                        if (required) {
+                                %>
+                                        <tr><td colspan=\"2\" style=\"text-align: right;\">Required field (*)</td></tr>
+                                <%
+                                        }
 					for(field in uiform.getChildren()) { 
 						if(field.isRendered()) {
 				%>
