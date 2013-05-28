@@ -32,11 +32,11 @@ import org.exoplatform.portal.pom.data.RedirectDevicePropertyConditionData;
  */
 public class DevicePropertyCondition extends ModelObject {
 
-    protected String propertyName;
-    protected Float greaterThan;
-    protected Float lessThan;
-    protected String equals;
-    protected String matches;
+    protected String propertyName = null;
+    protected Float greaterThan = null;
+    protected Float lessThan = null;
+    protected String equals = null;
+    protected String matches = null;
 
     public String getPropertyName() {
         return propertyName;
