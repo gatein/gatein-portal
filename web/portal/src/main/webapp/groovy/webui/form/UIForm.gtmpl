@@ -14,7 +14,7 @@
 									if(fieldName != null && fieldName.length() > 0 && !fieldName.equals(uicomponent.getId()) && !fieldName.equals(field.getName())) {
 								%>
 									<td class="FieldLabel portlet-form-label" scope="row">                                                                          
-										<%=uicomponent.getLabel(field.getName()) %>
+										<label for="<%= field.getName() %>"><%=uicomponent.getLabel(field.getName()) %></label>
 									</td>
 									<td class="FieldComponent portlet-input-field"><% uiform.renderField(field) %></td>
 								<%} else {%>
