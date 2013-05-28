@@ -178,7 +178,17 @@ function configureRedirect() {
 	});
 }
 
-
+/**
+ * Enable usage of keys to toggle ON/OFF switches.
+ */
+$('.onoffswitch').live('keydown', function (e) {
+	// make it work with space (32) and enter (13)
+	if (e.keyCode === 32 || e.keyCode === 13) {
+		e.stopImmediatePropagation();
+		e.preventDefault();
+		$(e.target).find("label").click();
+	}
+});
 
 
 

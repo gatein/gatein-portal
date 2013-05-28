@@ -54,7 +54,7 @@
 							<!-- Redirect Summary Row -->
 							<tr id="rdr_sum_#{status.index}" class="redirect-summary">
 								<td>
-									<div class="onoffswitch">
+									<div class="onoffswitch" tabindex="0">
 										<h:selectBooleanCheckbox id="rdr_toggle" styleClass="onoffswitch-checkbox" value="#{r.enabled}" />
 										<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
 											<f:ajax event="click" render="@this" listener="#{rdrEdit.toggleEnabled(rdrs.siteName, r.name)}" />
