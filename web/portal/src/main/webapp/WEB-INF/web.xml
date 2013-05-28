@@ -321,8 +321,6 @@
     <web-resource-collection>
       <web-resource-name>user authentication</web-resource-name>
       <url-pattern>/dologin</url-pattern>
-      <http-method>POST</http-method>
-      <http-method>GET</http-method>
     </web-resource-collection>
     <auth-constraint>
       <role-name>users</role-name>
