@@ -21,11 +21,6 @@
     margin: 0 1.8018% 0;
 }
 
-.gtnResponsiveFeaturesPortlet .feature:nth-child(2) {
-    margin-left: 3.15315%;
-    margin-right: 3.15315%;
-}
-
 /*Creates a new row after 3 features are displayed on a page*/
 .gtnResponsiveFeaturesPortlet .features div:nth-of-type(4) {clear: both;}
 
@@ -36,7 +31,8 @@
     font-weight: normal;
     margin-bottom: 0.68181818181818em;
     margin-top: 0.63636363636364em;
-    text-align: left;
+    text-align: right; /* orientation=rt */
+    text-align: left;  /* orientation=lt */
 }
 
 .gtnResponsiveFeaturesPortlet p {
@@ -44,7 +40,8 @@
     font-size: 1em;
     line-height: 1.4em;
     margin-bottom: 0;
-    text-align: left;
+    text-align: right; /* orientation=rt */
+    text-align: left;  /* orientation=lt */
 }
 
 .gtnResponsiveFeaturesPortlet .footer {
@@ -93,7 +90,8 @@
     .gtnResponsiveFeaturesPortlet div.feature {
         float: none;
         width: 96.3964%;
-        clear: left;
+        clear: right; /* orientation=rt */
+        clear: left;  /* orientation=lt */
         margin-top: 1.5625em;
     }
     
@@ -107,7 +105,8 @@
     .gtnResponsiveFeaturesPortlet .feature img {
         float: right; /* orientation=rt */
         float: left; /* orientation=lt */
-        margin-right: 1.25em;
+        margin-left: 1.25em;  /* orientation=rt */
+        margin-right: 1.25em; /* orientation=lt */
         width: 12.5em;
     }
     

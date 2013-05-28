@@ -25,3 +25,8 @@
 .gtnResponsiveFooterPortlet {
     background-color: #DEDFDF;
 }
+
+.gtnResponsiveFooterPortlet .copyright p,
+.gtnResponsiveFooterPortlet ul li{
+    font-size: 12px;
+}

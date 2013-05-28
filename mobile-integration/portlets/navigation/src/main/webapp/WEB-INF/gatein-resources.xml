@@ -40,7 +40,7 @@
         <application-name>responsive-navigation-portlet</application-name>
         <portlet-name>ResponsiveNavigationPortlet</portlet-name>
         <skin-name>Default</skin-name>
-        <css-path>/css/ResponsiveStylesheet.css</css-path>
+        <css-path>/css/DefaultStylesheet.css</css-path>
     </portlet-skin>
 
     <portlet>

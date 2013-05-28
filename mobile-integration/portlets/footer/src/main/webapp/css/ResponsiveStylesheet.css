@@ -8,7 +8,8 @@
 .gtnResponsiveFooterPortlet .options {
     float: left; /* orientation=rt */
     float: right; /* orientation=lt */
-    padding-right: 2.5641%;
+    padding-left: 2.5641%;   /* orientation=rt */
+    padding-right: 2.5641%; /* orientation=lt */
 }
 
 .gtnResponsiveFooterPortlet .copyright {
@@ -16,8 +17,10 @@
     float: left; /* orientation=lt */
     text-align: center;
     max-width: 100%;
-    padding: 0.75em 1em 0.75em 2.5641%;
-    margin-left: 0.3125em;
+    padding: 0.75em 2.5641% 0.75em 1em; /* orientation=rt */
+    padding: 0.75em 1em 0.75em 2.5641%; /* orientation=lt */
+    margin-right: 0.3125em; /* orientation=rt */
+    margin-left: 0.3125em;  /* orientation=lt */
 }
 
 .gtnResponsiveFooterPortlet .collapsibleRow {
@@ -48,7 +51,8 @@
 
 .gtnResponsiveFooterPortlet ul li {
     display: inline;
-    padding: 1.33333333333333em 0.5em 1.33333333333333em 0.91666666666667em;
+    padding: 1.33333333333333em 0.91666666666667em 1.33333333333333em 0.5em; /* orientation=rt */
+    padding: 1.33333333333333em 0.5em 1.33333333333333em 0.91666666666667em; /* orientation=lt */
     background: url(../images/bullet-separator.png) no-repeat right center; /* orientation=rt */
     background: url(../images/bullet-separator.png) no-repeat left center; /* orientation=lt */
     font-size: 0.75em;

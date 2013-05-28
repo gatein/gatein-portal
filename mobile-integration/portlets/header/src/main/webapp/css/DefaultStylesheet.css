@@ -1,0 +1,5 @@
+@import url(ResponsiveStylesheet.css);
+
+.gtnResponsiveHeaderPortlet .options a {
+  font-size: 12px;
+}

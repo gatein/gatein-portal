@@ -34,13 +34,15 @@
     width: 0;
     overflow: hidden;
     margin-bottom: 0.25em;
-    margin-right: 0.62em;
+    margin-left: 0.62em; /* orientation=rt */
+    margin-right: 0.62em; /* orientation=lt */
 }
 
 .gtnResponsiveMenu .menucategory:hover > .menutoggle > .caret,
 .gtnResponsiveMenu .menucategory.open > .menutoggle > .caret {
     border-color: transparent #777 transparent transparent;
-    right: 0.25em;
+    left: 0.25em; /* orientation=rt */
+    right: 0.25em; /* orientation=lt */
 }
 
 .gtnResponsiveMenu .menucategory.close:hover > .menutoggle > .caret,
@@ -49,7 +51,8 @@
     border-color: transparent transparent transparent #777;
     margin-top: 0.25em;
     top: 0.25em;
-    right: 0;
+    left: 0; /* orientation=rt */
+    right: 0; /* orientation=lt */
 }
 
 .gtnResponsiveMenu .menucategory.close:hover > .menutoggle > .caret {
@@ -58,14 +61,16 @@
 
 .gtnResponsiveMenu .menucategory.menulink {
     background-image: url('../images/menu-separator.png');
-    background-position: right 0.375em;
+    background-position: left 0.375em; /* orientation=rt */
+    background-position: right 0.375em; /* orientation=lt */
     background-repeat: no-repeat;
 }
 
 .gtnResponsiveMenu .menucategory.menulink .menutoggle {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0; /* orientation=rt */
+    right: 0; /* orientation=lt */
     padding: 0.75em 0.9em;
 }
 
@@ -79,13 +84,15 @@
 
 .gtnResponsiveMenu .menu .menu .menucategory.menulink .link {
     padding: 0.25em 0 0.25em 0.9375em;
-    margin-right: 2em;
+    margin-left: 2em; /* orientation=rt */
+    margin-right: 2em; /* orientation=lt */
 }
 
 /* top level specific configurations */
 .gtnResponsiveMenu > .menu {
     margin: 0;
-    padding-left: 0;
+    padding-right: 0; /* orientation=rt */
+    padding-left: 0; /* orientation=lt */
 }
 
 .gtnResponsiveMenu > .menu > .menucategory > a,
@@ -100,38 +107,47 @@
 .gtnResponsiveMenu > .menu > li {
     background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=rt */
     background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=lt */
-    padding-right: 0.625em;
-    margin-right: 0.2em;
+    padding-left: 0.625em; /* orientation=rt */
+    padding-right: 0.625em; /* orientation=lt */
+    margin-left: 0.2em; /* orientation=rt */
+    margin-right: 0.2em; /* orientation=lt */
     display: inline;
     line-height: 1em;
 }
 
 .gtnResponsiveMenu > .menu > li:first-child {
-    margin-left: 0.69em;
+    margin-right: 0.69em; /* orientation=rt */
+    margin-left: 0.69em; /* orientation=lt */
 }
 
 .gtnResponsiveMenu > .menu > li:last-child {
     background: none;
-    margin-right: 0.69em;
-    padding-right: 0;
+    margin-left: 0.69em; /* orientation=rt */
+    margin-right: 0.69em; /* orientation=lt */
+    padding-left: 0; /* orientation=rt */
+    padding-right: 0; /* orientation=lt */
 }
 
 .gtnResponsiveMenu > .menu > .menucategory.close:hover > .menutoggle > .caret,
 .gtnResponsiveMenu > .menu > .menucategory > .menutoggle > .caret,
 .gtnResponsiveMenu > .menu > .menucategory.close > .menutoggle > .caret {
     border-color: #777 transparent transparent;
-    right: 0.1875em; 
+    left: 0.1875em; /* orientation=rt */
+    right: 0.1875em; /* orientation=lt */
     margin-top: 0;
     margin-bottom: 0;
-    margin-right: 0;
-    margin-left: 0.5em;
+    margin-left: 0; /* orientation=rt */
+    margin-right: 0; /* orientation=lt */
+    margin-right: 0.5em; /* orientation=rt */
+    margin-left: 0.5em; /* orientation=lt */
 }
 
 .gtnResponsiveMenu > .menu > .menucategory:hover > .menutoggle > .caret,
 .gtnResponsiveMenu > .menu > .menucategory.open > .menutoggle > .caret {
     border-color: transparent transparent #777;
     margin-bottom: 0.25em;
-    margin-right: 0;
+    margin-left: 0; /* orientation=rt */
+    margin-right: 0; /* orientation=lt */
 }
 
 
@@ -147,7 +163,8 @@
     border-bottom: 0.375em solid #FFF;
     border-left: 0.375em solid transparent;
     border-right: 0.375em solid transparent;
-    left: 0.3625em;
+    right: 0.3625em; /* orientation=rt */
+    left: 0.3625em; /* orientation=lt */
     top: -0.375em;
 }
 
@@ -155,7 +172,8 @@
     border-bottom: 0.4375em solid rgba(0, 0, 0, 0.2);
     border-left: 0.4375em solid transparent;
     border-right: 0.4375em solid transparent;
-    left: 0.3em;
+    right: 0.3em; /* orientation=rt */
+    left: 0.3em; /* orientation=lt */
     top: -0.4375em;
 }
 
@@ -163,8 +181,8 @@
     border-bottom: 0.375em solid #FFF;
     border-left: 0.375em solid transparent;
     border-right: 0.375em solid transparent;
-    right: 0.5625em;
-    right: auto;
+    left: auto; /* orientation=rt */
+    right: auto; /* orientation=lt */
     top: -0.375em;
 }
 
@@ -175,13 +193,15 @@
     border: 0.0625em solid rgba(0, 0, 0, 0.2);
     border-radius: 0.375em 0.375em 0.375em 0.375em;
     box-shadow: 0 0.3em 0.62em rgba(0, 0, 0, 0.4);
-    left: 0;
+    right: 0; /* orientation=rt */
+    left: 0; /* orientation=lt */
     min-width: 11.25em;
     position: absolute;
     z-index: 1000;
     margin: 0.12em 0 0;
     padding: 0.3125em 0 0 0;
-    text-align: left;
+    text-align: right; /* orientation=rt */
+    text-align: left; /* orientation=lt */
     padding: 0.48em 0;
 }
 
@@ -196,7 +216,8 @@
 }
 
 .gtnResponsiveMenu .menu .menu a {
-    padding: 0.25em 2em 0.25em 0.9375em;
+    padding: 0.25em 0.9375em 0.25em 2em; /* orientation=rt */
+    padding: 0.25em 2em 0.25em 0.9375em; /* orientation=lt */
     display: block;
 }
 
@@ -212,20 +233,24 @@
 
 .gtnResponsiveMenu .menu .menu .menucategory.menulink {
     background-image: url('/responsive-navigation-portlet/css/../images/navbar-separator.png');
-    background-position: right 0.25em;
+    background-position: left 0.25em; /* orientation=rt */
+    background-position: right 0.25em; /* orientation=lt */
     background-repeat: no-repeat;
 }
 
 /* sub sub level specific configurations */
 .gtnResponsiveMenu .menu .menu .menu {
-    left: 100%;
+    right: 100%; /* orientation=rt */
+    left: 100%; /* orientation=lt */
     top: -0.5em;
     position: absolute;
 }
 
 .gtnResponsiveMenu .menu .menu.inverse {
-    right: 100%;
-    left: auto;
+    left: 100%; /* orientation=rt */
+    right: 100%; /* orientation=lt */
+    right: auto; /* orientation=rt */
+    left: auto; /* orientation=lt */
 }
 
 
@@ -234,7 +259,8 @@
     float: left; /* orientation=rt */
     float: right; /* orientation=lt */
     margin-top: 1.4375em;
-    margin-right: 1em;
+    margin-left: 1em; /* orientation=rt */
+    margin-right: 1em; /* orientation=lt */
     width: 2.5em;
     height: 1.875em;
     background-color: #F5F5F5;
@@ -296,7 +322,8 @@
     margin-right: auto;
     left: 0; right: 0;
     position: relative;
-    float: right;
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
 }
 
 .gtnResponsiveMenu .menu .menu .menu {
@@ -324,7 +351,8 @@
 }
 
 .gtnResponsiveMenu .menu .menu .menu {
-    padding-left: 1em;
+    padding-right: 1em; /* orientation=rt */
+    padding-left: 1em; /* orientation=lt */
 }
 
 }

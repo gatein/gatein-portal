@@ -52,7 +52,7 @@
         <application-name>responsive-header-portlet</application-name>
         <portlet-name>ResponsiveHeaderPortlet</portlet-name>
         <skin-name>Default</skin-name>
-        <css-path>/css/ResponsiveStylesheet.css</css-path>
+        <css-path>/css/DefaultStylesheet.css</css-path>
     </portlet-skin>
     
 

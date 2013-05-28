@@ -3,7 +3,6 @@
 .gtnResponsiveHeaderPortlet {
     margin: 0;
     padding: 0;
-/*    line-height: 0; */
     margin-bottom: 0.9375em;
 }
 
@@ -53,7 +52,8 @@
     text-align: left; /* orientation=rt */
     text-align: right; /* orientation=lt */
     margin-top: 2.3125em;
-    margin-left: 0;
+    margin-right: 0; /* orientation=rt */
+    margin-left: 0; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .options a {font-size: 0.9375em;}
@@ -97,8 +97,10 @@
 .gtnResponsiveHeaderPortlet .options.collapsed > .menu > li {
     display: block;
     background: none;
-    margin-right: 0.69em;
-    padding-right: 0;
+    margin-left: 0.69em; /* orientation=rt */
+    margin-right: 0.69em; /* orientation=lt */
+    padding-left: 0; /* orientation=rt */
+    padding-right: 0; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .collapsed .options > .menu > li {
@@ -116,5 +118,6 @@
 .gtnResponsiveHeaderPortlet .options.collapsed > .menu > .menucategory > .menutoggle > .caret,
 .gtnResponsiveHeaderPortlet .options.collapsed > .menu > .menucategory.close > .menutoggle > .caret {
     position: absolute;
-    right: -0.1875em;
+    left: -0.1875em; /* orientation=rt */
+    right: -0.1875em; /* orientation=lt */
 }
