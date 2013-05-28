@@ -21,7 +21,7 @@
                                         }
                                         if (required) {
                                 %>
-                                        <tr><td colspan=\"2\" style=\"text-align: right;\">Required field (*)</td></tr>
+                                        <tr><td colspan="2" style="text-align: right;">Required field (*)</td></tr>
                                 <%
                                         }
 					for(field in uiform.getChildren()) { 
