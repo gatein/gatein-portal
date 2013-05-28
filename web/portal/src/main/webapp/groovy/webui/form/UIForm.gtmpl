@@ -1,3 +1,6 @@
+<%
+  import org.exoplatform.webui.form.UIFormInputBase;
+%>
 <% String fieldName; %>
 <div class="UIForm $uicomponent.id">
 	<%uiform.begin()%>
@@ -5,6 +8,20 @@
 		<div class="FormContainer">
 			<table class="UIFormGrid" summary="Component $uicomponent.id">
 				<%
+                                        boolean required = false;
+                                        for (field in uiform.getChildren()) {
+                                          if (!required && field instanceof UIFormInputBase) {
+                                            required = ((UIFormInputBase) field).isMandatory();
+                                          }                                          
+                                        }
+                                        if (required) {
+                                %>
+                                        <tr>
+                                          <td class="FieldLabel portlet-form-label" scope="row"></td>
+                                          <td class="FieldComponent portlet-input-field"><span style="float: right;">Required field (*)</span></td>
+                                        </tr>
+                                <%
+                                        }
 					for(field in uiform.getChildren()) {
 						if(field.isRendered()) {
 				%>
