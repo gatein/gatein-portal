@@ -37,11 +37,15 @@
         </option>
         <option>
           <name>credentialEncoder.class</name>
-          <value>org.picketlink.idm.impl.credential.HashingEncoder</value>
+          <value>org.picketlink.idm.impl.credential.DatabaseReadingSaltEncoder</value>
         </option>
         <option>
           <name>credentialEncoder.hashAlgorithm</name>
-          <value>MD5</value>
+          <value>SHA-256</value>
+        </option>
+        <option>
+          <name>credentialEncoder.secureRandomAlgorithm</name>
+          <value>SHA1PRNG</value>
         </option>
       </options>
     </realm>
@@ -62,11 +66,15 @@
         </option>
         <option>
           <name>credentialEncoder.class</name>
-          <value>org.picketlink.idm.impl.credential.HashingEncoder</value>
+          <value>org.picketlink.idm.impl.credential.DatabaseReadingSaltEncoder</value>
         </option>
         <option>
           <name>credentialEncoder.hashAlgorithm</name>
-          <value>MD5</value>
+          <value>SHA-256</value>
+        </option>
+        <option>
+          <name>credentialEncoder.secureRandomAlgorithm</name>
+          <value>SHA1PRNG</value>
         </option>
       </options>
     </realm>
