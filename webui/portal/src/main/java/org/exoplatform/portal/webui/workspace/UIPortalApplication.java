@@ -314,29 +314,26 @@ public class UIPortalApplication extends UIApplication {
         PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
         JavascriptManager jsMan = prc.getJavascriptManager();
 
-        // Add current portal
-        String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-        jsMan.loadScriptResource(ResourceScope.PORTAL, portalOwner);
-
-        // Support for legacy resource declaration
-        jsMan.loadScriptResource(ResourceScope.SHARED, JavascriptConfigParser.LEGACY_JAVA_SCRIPT);
-
-        // Need to add bootstrap as immediate since it contains the loader
-        jsMan.loadScriptResource(ResourceScope.SHARED, "bootstrap");
-
         //
         FetchMap<ResourceId> requiredResources = jsMan.getScriptResources();
         log.debug("Resource ids to resolve: {}", requiredResources);
 
         //
         JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
-        LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
-        Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);
-        for (ScriptResource rs : tmp.keySet()) {
+        Map<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+        Map<String, Boolean> tmp = new LinkedHashMap<String, Boolean>();
+        Map<ScriptResource, FetchMode> resolved = service.resolveIds(requiredResources);
+        for (ScriptResource rs : resolved.keySet()) {
             ResourceId id = rs.getId();
-            boolean isRemote = !rs.isEmpty() && rs.getModules().get(0) instanceof Module.Remote;
-            ret.put(id.toString(), isRemote);
+            //SHARED/bootstrap should be loaded first
+            if (ResourceScope.SHARED.equals(id.getScope()) && "bootstrap".equals(id.getName())) {
+                ret.put(id.toString(), false);
+            } else {
+                boolean isRemote = !rs.isEmpty() && rs.getModules().get(0) instanceof Module.Remote;
+                tmp.put(id.toString(), isRemote);
+            }
         }
+        ret.putAll(tmp);
         for (String url : jsMan.getExtendedScriptURLs()) {
             ret.put(url, true);
         }
@@ -586,14 +583,23 @@ public class UIPortalApplication extends UIApplication {
      * skins to reload are set in the <div class="PortalResponseScript">
      */
     public void processRender(WebuiRequestContext context) throws Exception {
-        Writer w = context.getWriter();
+        PortalRequestContext pcontext = (PortalRequestContext) context;
+
+        JavascriptManager jsMan = context.getJavascriptManager();
+        // Add JS resource of current portal
+        String portalOwner = pcontext.getPortalOwner();
+        jsMan.loadScriptResource(ResourceScope.PORTAL, portalOwner);
 
         //
+        Writer w = context.getWriter();
         if (!context.useAjax()) {
+            // Support for legacy resource declaration
+            jsMan.loadScriptResource(ResourceScope.SHARED, JavascriptConfigParser.LEGACY_JAVA_SCRIPT);
+            // Need to add bootstrap as immediate since it contains the loader
+            jsMan.loadScriptResource(ResourceScope.SHARED, "bootstrap");
+
             super.processRender(context);
         } else {
-            PortalRequestContext pcontext = (PortalRequestContext) context;
-
             UIMaskWorkspace uiMaskWS = getChildById(UIPortalApplication.UI_MASK_WS_ID);
             if (uiMaskWS.isUpdated())
                 pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
