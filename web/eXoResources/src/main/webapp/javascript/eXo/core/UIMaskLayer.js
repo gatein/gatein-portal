@@ -32,7 +32,7 @@
 	    var ajaxLoading = $("#AjaxLoadingMask");
 	    var maskLayer = $(eXo.core.UIMaskLayer.createMask("UIPortalApplication",
 	        ajaxLoading[0], 0, position));
-	    browser.addOnScrollCallback("5439383", eXo.core.UIMaskLayer.setPosition);
+	    browser.addOnScrollCallback("5439383", eXo.core.UIMaskLayer.scrollCallback);
 	    ajaxLoading.hide();
 	    maskLayer.fadeTo(0, 0);
 	    maskLayer.css("backgroundColor", "white");
@@ -302,10 +302,65 @@
 	    if ((top + object.offsetHeight) > topPos + $(window).height()) {
 	      top = topPos + browserHeight - object.offsetHeight;
 	    }
-	
-	    object.style.left = left + "px";
-	    object.style.top = top + "px";
+
+            if (left >= 0) {
+              object.style.left = left + "px"; 
+            }
+            else {
+              object.style.left = "0"; 
+            }
+ 
+            if (top >= 0) {
+              object.style.top = top + "px";
+            }
+            else {
+              object.style.top = "0"; 
+            }
 	  },
+
+          scrollCallback: function() {
+            var UIMaskLayer = eXo.core.UIMaskLayer;
+            var object = UIMaskLayer.object;
+            var blockContainer = UIMaskLayer.blockContainer;
+            var position = UIMaskLayer.position;
+            object.style.position = "absolute";
+
+            var left;
+
+            var browserHeight = $(window).height();
+            switch (position) {
+            case "TOP-LEFT":
+              left = 0;
+              break;
+            case "TOP-RIGHT":
+              left = blockContainer.offsetWidth - object.offsetWidth;
+              break;
+            case "TOP-CENTER":
+              left = (blockContainer.offsetWidth - object.offsetWidth) / 2;
+              break;
+            case "BOTTOM-LEFT":
+              left = 0;
+              break;
+            case "BOTTOM-CENTER":
+              left = (blockContainer.offsetWidth - object.offsetWidth) / 2;
+              break;
+            case "BOTTOM-RIGHT":
+              left = blockContainer.offsetWidth - object.offsetWidth;
+              break;
+            default:
+              // By default, the mask layer always displays at the center
+              left = (blockContainer.offsetWidth - object.offsetWidth) / 2;
+            }
+
+        if (left >= 0) {
+              object.style.left = left + "px";
+        }
+        else {
+           object.style.left = "0";
+        }
+
+       },
+
 	  /**
 	   * Removes the mask layer from the DOM
 	   */
