@@ -12,3 +12,21 @@
 .UIBannerPortlet.UIApplication .LeftBanner {
     border-top: none;
 }
+
+.UIBannerPortlet.UIApplication .MiddleLoginContainer a {
+    color: #1C5181;
+    font-weight: normal;
+}
+
+.UIBannerPortlet.UIApplication .MiddleLoginContainer a:hover {
+    color: #1C5181;
+    text-decoration: underline;
+}
+
+.UIBannerPortlet .BannerTitle {
+    float: right;  /* orientation=rt */
+    float: left; /* orientation=lt */
+    height: 100%;
+    width: 125px;
+
+}

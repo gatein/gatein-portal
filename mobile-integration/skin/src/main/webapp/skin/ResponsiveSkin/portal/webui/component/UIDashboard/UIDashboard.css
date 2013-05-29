@@ -34,6 +34,25 @@
 
 .UITabPaneDashboard .UITab {
     margin: 0.5em 0 0.5em 0.5em;
+    display: block;
+    float: right;  /* orientation=rt */
+    float: left; /* orientation=lt */
+}
+
+.UITabPaneDashboard .UITab .NormalTab {
+    display: block;
+    height: 100%;
+    float: right;  /* orientation=rt */
+    float: left; /* orientation=lt */
+    display: block;
+}
+
+.UITabPaneDashboard .UITab .TabsContainer {
+    display: block;
+}
+
+.UITabPaneDashboard .UIHorizontalTabs .NormalTabStyle .SelectedTab {
+    display: block
 }
 
 .UIDashboardPortlet {
@@ -53,6 +72,7 @@
     }
 
    .UITabPaneDashboard .UITab {
-    margin: 0.5em;
+        margin: 0.5em;
+        float: none;
     }
 }
