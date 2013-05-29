@@ -172,7 +172,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    recoverFromIDMError();
+                    recoverFromIDMError(e);
                 }
             }
 
@@ -197,7 +197,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                     }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
-                    recoverFromIDMError();
+                    recoverFromIDMError(e);
                 }
             }
         } catch (Exception e) {
@@ -206,7 +206,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
     }
 
     // Should be used only for non-JTA environment
-    public void recoverFromIDMError() {
+    public void recoverFromIDMError(Exception e) {
         try {
             // We need to restart Hibernate transaction if it's available. First rollback old one and then start new one
             Transaction idmTransaction = idmService_.getIdentitySession().getTransaction();

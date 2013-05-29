@@ -66,7 +66,7 @@ public class AbstractDAOImpl {
                 log.warn("Unable to set Transaction status to be rollback only", tre);
             }
         } else {
-            orgService.recoverFromIDMError();
+            orgService.recoverFromIDMError(e);
         }
     }
 
