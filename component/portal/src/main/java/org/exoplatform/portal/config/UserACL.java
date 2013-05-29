@@ -37,6 +37,7 @@ import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityConstants;
@@ -64,6 +65,8 @@ public class UserACL {
     private String guestGroup_;
 
     private List<String> portalCreatorGroups_;
+
+    private List<String> userImpersonateGroups_;
 
     private String navigationCreatorMembershipType_;
 
@@ -142,6 +145,14 @@ public class UserACL {
             allGroups = md.getPortalCreateGroups();
         }
         portalCreatorGroups_ = defragmentPermission(allGroups);
+
+        if (md.getUserImpersonateGroups() != null) {
+            allGroups = md.getUserImpersonateGroups();
+        } else {
+            allGroups = "";
+        }
+        userImpersonateGroups_ = defragmentPermission(allGroups);
+
     }
 
     // TODO: unnecessary to keep potalACLPlugin
@@ -165,6 +176,10 @@ public class UserACL {
 
     public List<String> getPortalCreatorGroups() {
         return portalCreatorGroups_;
+    }
+
+    public List<String> getUserImpersonateGroups() {
+        return userImpersonateGroups_;
     }
 
     public String getSuperUser() {
@@ -250,6 +265,28 @@ public class UserACL {
             return false;
         }
         for (String ele : portalCreatorGroups_) {
+            if (hasPermission(identity, ele)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Decide if current user has permission to impersonate as another user
+     *
+     * @param userToImpersonate user, which we want to impersonate (Actually not used for this impl)
+     * @return true if current user has permission to impersonate as userToImpersonate
+     */
+    public boolean hasImpersonateUserPermission(User userToImpersonate) {
+        Identity identity = getIdentity();
+        if (superUser_.equals(identity.getUserId())) {
+            return true;
+        }
+        if (userImpersonateGroups_ == null || userImpersonateGroups_.size() < 1) {
+            return false;
+        }
+        for (String ele : userImpersonateGroups_) {
             if (hasPermission(identity, ele)) {
                 return true;
             }

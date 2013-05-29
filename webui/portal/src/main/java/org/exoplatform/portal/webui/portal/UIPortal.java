@@ -43,6 +43,8 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.login.LogoutControl;
@@ -56,6 +58,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.web.security.impersonation.ImpersonatedIdentity;
+import org.gatein.web.security.impersonation.ImpersonationServlet;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -329,6 +333,24 @@ public class UIPortal extends UIContainer {
         public void execute(Event<UIComponent> event) throws Exception {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             HttpServletRequest req = prContext.getRequest();
+
+            // Check if we are in the middle of impersonation and want to cancel it
+            Identity identity = ConversationState.getCurrent().getIdentity();
+            if (identity instanceof ImpersonatedIdentity) {
+
+                // Redirect to ImpersonationServlet and trigger stop of Impersonation session
+                String redirectURI = req.getContextPath() + ImpersonationServlet.IMPERSONATE_URL_SUFIX;
+
+                redirectURI = new StringBuilder(redirectURI)
+                        .append("?")
+                        .append(ImpersonationServlet.PARAM_ACTION)
+                        .append("=")
+                        .append(ImpersonationServlet.PARAM_ACTION_STOP_IMPERSONATION)
+                        .toString();
+
+                prContext.sendRedirect(redirectURI);
+                return;
+            }
 
             // Delete the token from JCR
             String token = getTokenCookie(req);

@@ -19,6 +19,7 @@
 
 package org.exoplatform.organization.webui.component;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,7 +27,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
@@ -35,6 +38,8 @@ import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.login.LogoutControl;
+import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -51,6 +56,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.gatein.web.security.impersonation.ImpersonationServlet;
 
 /**
  * Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM
@@ -61,7 +67,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
         @EventConfig(listeners = UIListUsers.AbortCloseActionListener.class),
         @EventConfig(listeners = UIListUsers.ViewUserInfoActionListener.class),
         @EventConfig(listeners = UIListUsers.SelectUserActionListener.class),
-        @EventConfig(listeners = UIListUsers.DeleteUserActionListener.class, confirm = "UIListUsers.deleteUser") })
+        @EventConfig(listeners = UIListUsers.DeleteUserActionListener.class, confirm = "UIListUsers.deleteUser"),
+        @EventConfig(listeners = UIListUsers.ImpersonateUserActionListener.class) })
 @Serialized
 public class UIListUsers extends UISearch {
 
@@ -77,7 +84,7 @@ public class UIListUsers extends UISearch {
 
     private static final String[] USER_BEAN_FIELD = { USER_NAME, LAST_NAME, FIRST_NAME, EMAIL };
 
-    private static final String[] USER_ACTION = { "ViewUserInfo", "DeleteUser" };
+    private static final String[] USER_ACTION = { "ViewUserInfo", "DeleteUser", "ImpersonateUser" };
 
     private static final List<SelectItemOption<String>> OPTIONS_ = Collections.unmodifiableList(Arrays.asList(
             new SelectItemOption<String>(USER_NAME, USER_NAME), new SelectItemOption<String>(LAST_NAME, LAST_NAME),
@@ -294,6 +301,58 @@ public class UIListUsers extends UISearch {
             pageIterator.setCurrentPage(currentPage);
             UIComponent uiToUpdateAjax = uiListUser.getAncestorOfType(UIUserManagement.class);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiToUpdateAjax);
+        }
+    }
+
+    public static class ImpersonateUserActionListener extends EventListener<UIListUsers> {
+        public void execute(Event<UIListUsers> event) throws Exception {
+            UIListUsers uiListUsers = event.getSource();
+            String userName = event.getRequestContext().getRequestParameter(OBJECTID);
+
+            OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
+            User userToImpersonate = service.getUserHandler().findUserByName(userName);
+            if (userToImpersonate == null) {
+                UIApplication uiApplication = event.getRequestContext().getUIApplication();
+                uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,
+                        ApplicationMessage.WARNING));
+                return;
+            }
+
+            UserACL userACL = uiListUsers.getApplicationComponent(UserACL.class);
+            if (!userACL.hasImpersonateUserPermission(userToImpersonate)) {
+                UIApplication uiApplication = event.getRequestContext().getUIApplication();
+                String[] args = new String[] { userName };
+                uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.insufficient-permission-to-impersonate-user", args,
+                        ApplicationMessage.WARNING));
+                return;
+            }
+
+            // Redirect to finish login with new user
+            PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
+            SiteKey siteKey = portalRequestContext.getSiteKey();
+            NodeURL currentNodeURL = portalRequestContext.createURL(NodeURL.TYPE);
+            currentNodeURL.setResource(new NavigationResource(siteKey, portalRequestContext.getNodePath()));
+
+            String redirectURL = portalRequestContext.getRequestContextPath() + ImpersonationServlet.IMPERSONATE_URL_SUFIX;
+
+            // Attach params
+            redirectURL = new StringBuilder(redirectURL)
+                    .append("?")
+                    .append(ImpersonationServlet.PARAM_ACTION)
+                    .append("=")
+                    .append(ImpersonationServlet.PARAM_ACTION_START_IMPERSONATION)
+                    .append("&")
+                    .append(ImpersonationServlet.PARAM_USERNAME)
+                    .append("=")
+                    .append(URLEncoder.encode(userName, "UTF-8"))
+                    .append("&")
+                    .append(ImpersonationServlet.PARAM_RETURN_IMPERSONATION_URI)
+                    .append("=")
+                    .append(URLEncoder.encode(currentNodeURL.toString(), "UTF-8"))
+                    .toString();
+
+            // Redirect to impersonation servlet
+            portalRequestContext.getJavascriptManager().addJavascript("window.location = '" + redirectURL + "';");
         }
     }
 

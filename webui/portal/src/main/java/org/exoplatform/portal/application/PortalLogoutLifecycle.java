@@ -35,6 +35,8 @@ import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.ServletContainerFactory;
 
 /**
@@ -42,6 +44,8 @@ import org.gatein.wci.ServletContainerFactory;
  * @version $Revision$
  */
 public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestContext> {
+
+    private static final Logger log = LoggerFactory.getLogger(PortalLogoutLifecycle.class);
 
     public void onInit(Application app) throws Exception {
     }

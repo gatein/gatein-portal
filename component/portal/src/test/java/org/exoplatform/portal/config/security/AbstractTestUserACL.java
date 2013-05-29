@@ -52,6 +52,7 @@ public abstract class AbstractTestUserACL extends AbstractGateInTest {
         md.setGuestsGroups("/platform/guests");
         md.setPortalCreateGroups("*:/platform/administrators,*:/organization/management/executive-board");
         md.setNavigationCreatorMembershipType("manager");
+        md.setUserImpersonateGroups("manager:/platform/administrators,*:/manageable");
         UserACL ua = new UserACL(md);
         User root = new User("root");
         User administrator = new User("administrator");
@@ -169,6 +170,15 @@ public abstract class AbstractTestUserACL extends AbstractGateInTest {
             ConversationState.setCurrent(new ConversationState(identity));
             try {
                 return ua.hasCreatePortalPermission();
+            } finally {
+                ConversationState.setCurrent(null);
+            }
+        }
+
+        public boolean hasImpersonateUserPermission(org.exoplatform.services.organization.User user1) {
+            ConversationState.setCurrent(new ConversationState(identity));
+            try {
+                return ua.hasImpersonateUserPermission(user1);
             } finally {
                 ConversationState.setCurrent(null);
             }

@@ -19,9 +19,12 @@
 
 package org.exoplatform.toolbar.webui.component;
 
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.gatein.web.security.impersonation.ImpersonatedIdentity;
 
 /**
  * Created by The eXo Platform SAS Author : Tan Pham Dinh tan.pham@exoplatform.com May 27, 2009
@@ -32,4 +35,12 @@ public class UIStarToolbarPortlet extends UIPortletApplication {
     public UIStarToolbarPortlet() throws Exception {
     }
 
+    public String getLogoutMessageKey() {
+        Identity identity = ConversationState.getCurrent().getIdentity();
+        if (identity instanceof ImpersonatedIdentity) {
+            return "UIStarToolbarPortlet.item.FinishImpersonation";
+        } else {
+            return "UIStarToolbarPortlet.item.Logout";
+        }
+    }
 }

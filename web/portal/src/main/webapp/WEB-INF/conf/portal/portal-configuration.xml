@@ -69,6 +69,12 @@
       </value-param>
 
       <value-param>
+        <name>user.impersonate.groups</name>
+        <description>groups with membership type have permission to impersonate as other users</description>
+        <value>manager:/platform/administrators</value>
+      </value-param>
+
+      <value-param>
         <name>navigation.creator.membership.type</name>
         <description>specific membership type have full permission with group navigation</description>
         <value>manager</value>
