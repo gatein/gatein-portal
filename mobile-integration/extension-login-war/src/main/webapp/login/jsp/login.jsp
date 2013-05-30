@@ -77,14 +77,14 @@
         <script type="text/javascript" src="/gatein-mobile-login/login/js/login.js"></script>
     </head>
     <body>
-        <h1><a href="#login-form" title="Gate In">Gate In</a></h1>
+        <h1><a href="#login-form" title="Gate In"><%=res.getString("UILoginForm.label.mobile.GateIn")%></a></h1>
         <%/*Begin form*/%>
         <% if(error) { %>
-        <div id="error-pane"><p><span><%=res.getString("UILoginForm.label.SigninFail")%></span></p><button id="button-close-alert" type="button">close</button></div>
+        <div id="error-pane"><p><span><%=res.getString("UILoginForm.label.SigninFail")%></span></p><button id="button-close-alert" type="button"><%=res.getString("UILoginForm.label.mobile.login.Close")%></button></div>
         <% } %>
         <form id="login-form" name="login-form" action="<%= contextPath + "/login"%>" method="post">
             <fieldset>
-                <legend>Sign in</legend>
+                <legend><%=res.getString("UILoginForm.label.Signin")%></legend>
                 <label for="username"><%=res.getString("UILoginForm.label.UserName")%></label>
                 <input type="text" id="username" name="username" value=""/>
 
@@ -107,7 +107,7 @@
           <% if(registry.isOAuthEnabled()) { %>
           <div id="social-pane">
           <div class="SignInDelimiter">
-            <span>or sign in with</span>
+            <span><%=res.getString("UILoginForm.label.mobile.login.oauth.Delimiter")%></span>
           </div>
           <div id="social-login">
             <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
@@ -121,10 +121,10 @@
         </form>
         <div id="footer">
             <p>
-                Copyright � 2012. All rights reserved,
-                <a href="http://www.redhat.com/">Red Hat, Inc</a>
-                and
-                <a href="http://www.exoplatform.com">eXo Platform SAS</a>
+                <%=res.getString("UILoginForm.label.mobile.copyright.Intro")%>
+                <a href="http://www.redhat.com/"><%=res.getString("UILoginForm.label.mobile.copyright.RH")%></a>
+                <%=res.getString("UILoginForm.label.mobile.copyright.And")%>
+                <a href="http://www.exoplatform.com"><%=res.getString("UILoginForm.label.mobile.copyright.Exo")%></a>
             </p>
         </div>
     </body>     
