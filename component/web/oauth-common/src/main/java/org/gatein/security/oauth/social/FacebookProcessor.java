@@ -212,7 +212,7 @@ public class FacebookProcessor {
 
                 FacebookPrincipal facebookPrincipal = new FacebookPrincipal();
                 facebookPrincipal.setAccessToken(accessToken);
-                facebookPrincipal.setId(jsonObject.optString("id"));
+                facebookPrincipal.setId(jsonObject.getString("id"));
                 facebookPrincipal.setName(jsonObject.optString("name"));
                 facebookPrincipal.setUsername(jsonObject.optString("username"));
                 facebookPrincipal.setFirstName(jsonObject.optString("first_name"));
@@ -222,6 +222,12 @@ public class FacebookProcessor {
                 facebookPrincipal.setLocale(jsonObject.optString("locale"));
                 facebookPrincipal.setEmail(jsonObject.optString("email"));
                 facebookPrincipal.setJsonObject(jsonObject);
+
+                // This could happen with Facebook testing users
+                if (facebookPrincipal.getUsername() == null || facebookPrincipal.getUsername().length() == 0) {
+                    facebookPrincipal.setUsername(facebookPrincipal.getId());
+                }
+
                 return facebookPrincipal;
             }
 
