@@ -2,6 +2,9 @@
  * jQuery accordion pane plugin for responsive community portlet.
  */
 (function($){
+
+    init = function() {
+
     $.fn.accordion = function(options) {
 
         var settings = $.extend({}, {
@@ -20,5 +23,9 @@
             });
         });
     };
+
+    };
+
+    return {init: init};
 
 })(jQuery);

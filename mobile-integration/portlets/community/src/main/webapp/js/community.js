@@ -1,5 +1,5 @@
 (function ($) {
-
+    init = function() {
     var loadWithAjax = function(feed){
 
         var loader = feed.children(".ajaxLoader").first();
@@ -25,5 +25,8 @@
     loadWithAjax(feedTwitter);
 
     $(".gtnResponsiveCommunityPortlet #conversation-accordion").accordion();
+
+    };
+    return {init: init};
 
 })(jQuery);

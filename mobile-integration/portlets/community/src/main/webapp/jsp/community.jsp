@@ -5,6 +5,8 @@
 <%@ page import="java.util.Locale"%>
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page trimDirectiveWhitespaces="true" %>
+<%@ page import="org.exoplatform.webui.application.WebuiRequestContext" %>
+<%@ page import="org.exoplatform.web.application.JavascriptManager" %>
 <portlet:defineObjects />
 
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}"/>
@@ -12,6 +14,13 @@
 <c:set var="urlContribute" value="${renderRequest.getPreferences().getValue('url.contribute', '/#')}" />
 <c:set var="urlDocumentation" value="${renderRequest.getPreferences().getValue('url.docs', '/#')}" />
 <c:set var="urlJira" value="${renderRequest.getPreferences().getValue('url.jira', '/#')}" />
+
+<%-- Hack because web ui can't properly handle javascript modules after a full ajax page reload --%>
+<%
+  JavascriptManager jsMan = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getJavascriptManager();
+  jsMan.require("SHARED/accordion_jquery", "accordion_jquery").addScripts("accordion_jquery.init();");
+  jsMan.require("SHARED/org_gatein_community", "community").addScripts("community.init();");
+%>
 
 <div id="id<portlet:namespace/>_gtnResponsiveCommunityPortlet" class="gtnResponsiveCommunityPortlet ">
 
