@@ -25,7 +25,7 @@
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
 <%@ page import="org.gatein.security.oauth.spi.OAuthProviderType"%>
-<%@ page import="org.gatein.security.oauth.spi.OAuthProviderTypeRegistry"%>;
+<%@ page import="org.gatein.security.oauth.spi.OAuthProviderTypeRegistry"%>
 <%@ page import="java.util.ResourceBundle"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
 <%@ page language="java"%>
