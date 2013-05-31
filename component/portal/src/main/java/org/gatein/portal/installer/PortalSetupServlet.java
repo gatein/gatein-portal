@@ -97,11 +97,11 @@ public class PortalSetupServlet extends HttpServlet {
                     }
                     // Flag
                     PortalSetupService.setJcrFlag();
-                    request.setAttribute(SETUP_ERROR, false);
+                    request.setAttribute(SETUP_ERROR, null);
                     response.sendRedirect(PORTAL);
                 } catch (Exception e) {
                     log.error("Root user cannot be configured", e);
-                    request.setAttribute(SETUP_ERROR, true);
+                    request.setAttribute(SETUP_ERROR, "Root user cannot be configured. See log for details.");
                     request.getRequestDispatcher(SETUP_JSP).forward(request, response);
                 }
             }
