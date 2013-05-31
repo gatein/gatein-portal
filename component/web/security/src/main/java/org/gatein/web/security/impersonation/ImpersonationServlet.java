@@ -27,6 +27,7 @@ import org.exoplatform.container.web.AbstractHttpServlet;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
@@ -36,13 +37,21 @@ import org.exoplatform.services.security.StateKey;
 import org.exoplatform.services.security.web.HttpSessionStateKey;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.ServletContainerFactory;
+import org.gatein.wci.session.SessionTask;
+import org.gatein.wci.session.SessionTaskVisitor;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Servlet, which handles impersonation and impersonalization (de-impersonation) of users
@@ -71,13 +80,20 @@ public class ImpersonationServlet extends AbstractHttpServlet {
     /** Impersonation suffix (Actually path of this servlet) */
     public static final String IMPERSONATE_URL_SUFIX = "/impersonate";
 
-    /** Prefix of session attributes, which will be used to backup existing session of root user */
-    private static final String BACKUP_ATTR_PREFIX = "_bck.";
+    /** Session attribute, which will be used to backup existing session of root user */
+    private static final String BACKUP_ATTR = "_impersonation.bck";
 
     private static final Logger log = LoggerFactory.getLogger(ImpersonationServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            // We set the character encoding now to UTF-8 before obtaining parameters
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("Encoding not supported", e);
+        }
+
         String action = req.getParameter(PARAM_ACTION);
         if (action == null) {
             log.error("Parameter '" + PARAM_ACTION + "' not provided");
@@ -106,7 +122,7 @@ public class ImpersonationServlet extends AbstractHttpServlet {
         OrganizationService orgService = (OrganizationService)getContainer().getComponentInstanceOfType(OrganizationService.class);
         User userToImpersonate;
         try {
-            userToImpersonate = orgService.getUserHandler().findUserByName(usernameToImpersonate);
+            userToImpersonate = orgService.getUserHandler().findUserByName(usernameToImpersonate, UserStatus.BOTH);
         } catch (Exception e) {
             throw new ServletException(e);
         }
@@ -178,20 +194,37 @@ public class ImpersonationServlet extends AbstractHttpServlet {
     protected void backupAndClearCurrentSession(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         if (session != null) {
-            Enumeration attrNames = session.getAttributeNames();
-            while (attrNames.hasMoreElements()) {
-                String attrName = (String)attrNames.nextElement();
-                Object attrValue = session.getAttribute(attrName);
+            String sessionId = session.getId();
 
-                // Backup attribute and clear old
-                String backupAttrName =  BACKUP_ATTR_PREFIX + attrName;
-                session.setAttribute(backupAttrName, attrValue);
-                session.removeAttribute(attrName);
+            // Backup attributes in sessions of portal and all portlet applications
+            ServletContainerFactory.getServletContainer().visit(new SessionTaskVisitor(sessionId, new SessionTask(){
 
-                if (log.isTraceEnabled()) {
-                    log.trace("Finished backup of attribute: " + attrName);
+                @Override
+                public boolean executeTask(HttpSession session) {
+                    if (log.isTraceEnabled()) {
+                        log.trace("Starting with backup attributes for context: " + session.getServletContext().getContextPath());
+                    }
+
+                    // Create a copy just to make sure that attrNames is transient
+                    List<String> attrNames = offlineCopy(session.getAttributeNames());
+                    Map<String, Object> backup = new HashMap<String, Object>();
+
+                    for (String attrName : attrNames) {
+                        Object attrValue = session.getAttribute(attrName);
+
+                        session.removeAttribute(attrName);
+                        backup.put(attrName, attrValue);
+
+                        if (log.isTraceEnabled()) {
+                            log.trace("Finished backup of attribute: " + attrName);
+                        }
+                    }
+
+                    session.setAttribute(BACKUP_ATTR, backup);
+                    return true;
                 }
-            }
+
+            }));
         }
     }
 
@@ -276,42 +309,56 @@ public class ImpersonationServlet extends AbstractHttpServlet {
     protected void restoreOldSessionAttributes(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         if (session != null) {
-            int prefixLength = BACKUP_ATTR_PREFIX.length();
+            String sessionId = session.getId();
 
-            // Remove all session attributes of current (impersonated) user. Restore attributes of admin user
-            Enumeration attrNames = session.getAttributeNames();
-            while (attrNames.hasMoreElements()) {
-                String attrName = (String)attrNames.nextElement();
+            // Restore attributes in sessions of portal and all portlet applications
+            ServletContainerFactory.getServletContainer().visit(new SessionTaskVisitor(sessionId, new SessionTask(){
 
-                // Remove attribute of impersonated user
-                if (!attrName.startsWith(BACKUP_ATTR_PREFIX)) {
-                    session.removeAttribute(attrName);
+                @Override
+                public boolean executeTask(HttpSession session) {
                     if (log.isTraceEnabled()) {
-                        log.trace("Removed attribute: " + attrName);
+                        log.trace("Starting with restoring attributes for context: " + session.getServletContext().getContextPath());
                     }
-                } else {
-                    // Restore attribute as it's one of the attributes of admin user, which was backup-ed
-                    Object attrValue = session.getAttribute(attrName);
 
-                    String restoredAttributeName = attrName.substring(prefixLength);
-                    session.setAttribute(restoredAttributeName, attrValue);
-                    session.removeAttribute(attrName);
+                    // Retrieve backup of previous attributes
+                    Map<String, Object> backup = (Map<String, Object>)session.getAttribute(BACKUP_ATTR);
 
-                    if (log.isTraceEnabled()) {
-                        log.trace("Finished restore of attribute: " + attrName);
+                    // Iteration 1 -- Remove all session attributes of current (impersonated) user.
+                    List<String> attrNames = offlineCopy(session.getAttributeNames());
+                    for (String attrName : attrNames) {
+                        session.removeAttribute(attrName);
+                        if (log.isTraceEnabled()) {
+                            log.trace("Removed attribute: " + attrName);
+                        }
                     }
+
+                    // Iteration 2 -- Restore all session attributes of admin user
+                    if (backup == null) {
+                        if (log.isTraceEnabled()) {
+                            log.trace("No session attributes found in previous impersonated session. Ignoring");
+                        }
+                    } else {
+                        for (Map.Entry<String, Object> attr : backup.entrySet()) {
+                            session.setAttribute(attr.getKey(), attr.getValue());
+
+                            if (log.isTraceEnabled()) {
+                                log.trace("Finished restore of attribute: " + attr.getKey());
+                            }
+                        }
+                    }
+
+                    return true;
                 }
-            }
+
+            }));
         }
     }
 
     // Register given conversationState into ConversationRegistry. Key will be current Http session
     private void registerConversationState(HttpServletRequest req, ConversationState conversationState) {
-        // Obtain stateKey of current HttpSession
         HttpSession httpSession = req.getSession();
         StateKey stateKey = new HttpSessionStateKey(httpSession);
 
-        // Update conversationRegistry
         ConversationRegistry conversationRegistry = (ConversationRegistry)getContainer().getComponentInstanceOfType(ConversationRegistry.class);
         conversationRegistry.register(stateKey, conversationState);
     }
@@ -338,5 +385,13 @@ public class ImpersonationServlet extends AbstractHttpServlet {
         }
 
         return returnURI;
+    }
+
+    private List<String> offlineCopy(Enumeration<String> e) {
+        List<String> list = new LinkedList<String>();
+        while (e.hasMoreElements()) {
+            list.add(e.nextElement());
+        }
+        return list;
     }
 }

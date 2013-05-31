@@ -39,7 +39,6 @@ import org.gatein.pc.portlet.aspects.PortletCustomizationInterceptor;
 import org.gatein.pc.portlet.aspects.ProducerCacheInterceptor;
 import org.gatein.pc.portlet.aspects.RequestAttributeConversationInterceptor;
 import org.gatein.pc.portlet.aspects.SecureTransportInterceptor;
-import org.gatein.pc.portlet.aspects.SessionInvalidatorInterceptor;
 import org.gatein.pc.portlet.aspects.ValveInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
@@ -121,10 +120,12 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
         bridgepInterceptor.setNext(ccppInterceptor);
         ProducerCacheInterceptor producerCacheInterceptor = new ProducerCacheInterceptor();
         producerCacheInterceptor.setNext(bridgepInterceptor);
-        SessionInvalidatorInterceptor sessionInvalidatorInterceptor = new SessionInvalidatorInterceptor();
-        sessionInvalidatorInterceptor.setNext(producerCacheInterceptor);
+
+        // SessionInvalidatorInterceptor is not needed as we have cross-context logout at WCI level
+        // SessionInvalidatorInterceptor sessionInvalidatorInterceptor = new SessionInvalidatorInterceptor();
+        // sessionInvalidatorInterceptor.setNext(producerCacheInterceptor);
         ContextDispatcherInterceptor contextDispatcherInterceptor = new ContextDispatcherInterceptor();
-        contextDispatcherInterceptor.setNext(sessionInvalidatorInterceptor);
+        contextDispatcherInterceptor.setNext(producerCacheInterceptor);
         PortletLifecyclePhaseInterceptor portletLifecyclePhaseInterceptor = new PortletLifecyclePhaseInterceptor();
         portletLifecyclePhaseInterceptor.setNext(contextDispatcherInterceptor);
         SecureTransportInterceptor secureTransportInterceptor = new SecureTransportInterceptor();

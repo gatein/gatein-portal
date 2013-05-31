@@ -19,7 +19,6 @@
 
 package org.exoplatform.organization.webui.component;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,7 +55,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.gatein.web.security.impersonation.ImpersonationServlet;
+import org.gatein.web.security.impersonation.ImpersonationUtils;
 
 /**
  * Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM
@@ -310,7 +309,7 @@ public class UIListUsers extends UISearch {
             String userName = event.getRequestContext().getRequestParameter(OBJECTID);
 
             OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
-            User userToImpersonate = service.getUserHandler().findUserByName(userName);
+            User userToImpersonate = service.getUserHandler().findUserByName(userName, UserStatus.BOTH);
             if (userToImpersonate == null) {
                 UIApplication uiApplication = event.getRequestContext().getUIApplication();
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,
@@ -327,32 +326,15 @@ public class UIListUsers extends UISearch {
                 return;
             }
 
-            // Redirect to finish login with new user
+            // Redirect to impersonation servlet
             PortalRequestContext portalRequestContext = Util.getPortalRequestContext();
             SiteKey siteKey = portalRequestContext.getSiteKey();
             NodeURL currentNodeURL = portalRequestContext.createURL(NodeURL.TYPE);
             currentNodeURL.setResource(new NavigationResource(siteKey, portalRequestContext.getNodePath()));
 
-            String redirectURL = portalRequestContext.getRequestContextPath() + ImpersonationServlet.IMPERSONATE_URL_SUFIX;
+            String impersonationRedirectURL = ImpersonationUtils.createStartImpersonationURL(portalRequestContext.getRequestContextPath(), userName, currentNodeURL.toString());
 
-            // Attach params
-            redirectURL = new StringBuilder(redirectURL)
-                    .append("?")
-                    .append(ImpersonationServlet.PARAM_ACTION)
-                    .append("=")
-                    .append(ImpersonationServlet.PARAM_ACTION_START_IMPERSONATION)
-                    .append("&")
-                    .append(ImpersonationServlet.PARAM_USERNAME)
-                    .append("=")
-                    .append(URLEncoder.encode(userName, "UTF-8"))
-                    .append("&")
-                    .append(ImpersonationServlet.PARAM_RETURN_IMPERSONATION_URI)
-                    .append("=")
-                    .append(URLEncoder.encode(currentNodeURL.toString(), "UTF-8"))
-                    .toString();
-
-            // Redirect to impersonation servlet
-            portalRequestContext.getJavascriptManager().addJavascript("window.location = '" + redirectURL + "';");
+            portalRequestContext.getJavascriptManager().addJavascript("window.location = '" + impersonationRedirectURL + "';");
         }
     }
 

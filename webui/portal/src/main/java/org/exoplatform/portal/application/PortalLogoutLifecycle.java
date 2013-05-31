@@ -28,6 +28,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserStatus;
+import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
@@ -35,17 +36,14 @@ import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.ServletContainerFactory;
+import org.gatein.web.security.impersonation.ImpersonatedIdentity;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
 public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestContext> {
-
-    private static final Logger log = LoggerFactory.getLogger(PortalLogoutLifecycle.class);
 
     public void onInit(Application app) throws Exception {
     }
@@ -65,7 +63,10 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
 
             // If user is not existed OR disabled
             if (user == null || !user.isEnabled()) {
-                logout(context);
+                // If we are in the middle of impersonation, we won't logout
+                if (!(ConversationState.getCurrent().getIdentity() instanceof ImpersonatedIdentity)) {
+                    logout(context);
+                }
             }
         }
     }

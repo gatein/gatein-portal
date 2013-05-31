@@ -41,9 +41,9 @@ public class UIUserInfoPortlet extends UIPortletApplication {
         Identity identity = state.getIdentity();
         if (identity instanceof ImpersonatedIdentity) {
             String adminUsername = ((ImpersonatedIdentity) identity).getParentConversationState().getIdentity().getUserId();
-            return user.getFullName() + " (" + adminUsername + ")";
+            return user.getDisplayName() + " (" + adminUsername + ")";
         } else {
-            return user.getFullName();
+            return user.getDisplayName();
         }
     }
 }

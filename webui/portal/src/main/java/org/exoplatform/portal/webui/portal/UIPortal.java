@@ -59,7 +59,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.web.security.impersonation.ImpersonatedIdentity;
-import org.gatein.web.security.impersonation.ImpersonationServlet;
+import org.gatein.web.security.impersonation.ImpersonationUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -339,16 +339,8 @@ public class UIPortal extends UIContainer {
             if (identity instanceof ImpersonatedIdentity) {
 
                 // Redirect to ImpersonationServlet and trigger stop of Impersonation session
-                String redirectURI = req.getContextPath() + ImpersonationServlet.IMPERSONATE_URL_SUFIX;
-
-                redirectURI = new StringBuilder(redirectURI)
-                        .append("?")
-                        .append(ImpersonationServlet.PARAM_ACTION)
-                        .append("=")
-                        .append(ImpersonationServlet.PARAM_ACTION_STOP_IMPERSONATION)
-                        .toString();
-
-                prContext.sendRedirect(redirectURI);
+                String impersonationRedirectURI = ImpersonationUtils.createFinishImpersonationURL(req.getContextPath());
+                prContext.sendRedirect(impersonationRedirectURI);
                 return;
             }
 
