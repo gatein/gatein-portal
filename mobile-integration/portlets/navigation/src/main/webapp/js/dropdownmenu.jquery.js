@@ -29,6 +29,16 @@
         // Remember the topmenu element to be able to check if submenu fits into resized window
         var topmenu = $(this);
 
+        // Field to distinguish between touch based and mouse based devices. If the mouse is used, the sub-menus are closed
+        // immediately after the user leaves the parent node. On touch devices you have to close them manually.
+        var isTouchDevice = false;
+
+        var touchHandler = function(){
+            isTouchDevice = true;
+        };
+
+        document.addEventListener("touchstart", touchHandler, false);
+
         // Traverse opened submenus from parent menu and inverse them if needed
         function findAndCheckOpenedSubmenu(parentMenu){
             var openedSubmenu = parentMenu.children(settings.menuElement+":not(."+settings.collapsedClass+")").children(settings.submenuElement).first();
@@ -148,7 +158,7 @@
                 var hasChildren = $(this).children(settings.arrowElement).length > 0;
                 var isExpanded = topmenu.css("z-index") == 1;
 
-                if (hasChildren && isExpanded){
+                if (hasChildren && isExpanded && !isTouchDevice){
                     submenuOpenAction($(this).children(settings.arrowElement), true);
                 }
             });
