@@ -90,7 +90,62 @@ Note that some parameters are omitted according to the resource URL cache level:
 2. PORTLET cache level : only the target window parameter is present
 3. FULL cache level : only type (1), target (2), resource parameters (3) and resource id (4)
 
-## Todo list
+# Page Layout
+
+The new page layout based on the In [Place Editing](https://community.jboss.org/wiki/InPlaceEditing) proposal has been a bit sketched. The existing container based UI structure is kept however it is used differently. Instead of having a container representing a page component, a container represents a visual zone as per defined in the spec.
+
+Therefore a page structure becomes like:
+
+    <page>
+      <name>homepage</name>
+      <title>Home Page</title>
+      <access-permissions>Everyone</access-permissions>
+      <edit-permission>*:/platform/administrators</edit-permission>
+      <container>
+        <name>1</name>
+        <portlet-application>
+          <portlet>
+            <application-ref>portal</application-ref>
+            <portlet-ref>HomePortlet</portlet-ref>
+          </portlet>
+          <title>Home</title>
+          <access-permissions>Everyone</access-permissions>
+          <show-info-bar>false</show-info-bar>
+          <show-application-state>false</show-application-state>
+          <show-application-mode>false</show-application-mode>
+        </portlet-application>
+      </container>
+    </page>
+
+It is likely not an optimal way to declare it but it works well enough at the moment.
+
+# Deployment descriptor
+
+## Navigation 2.0
+
+A simplified and improved navigation XML format has been introduced allowing to reduce the boiler plate and also to provide a *root* navigation page:
+
+    <navigation
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
+        xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
+      <node>
+        <label xml:lang="en">Home</label>
+        <label xml:lang="fr">Accueil</label>
+        ...
+        <page-reference>portal::classic::homepage</page-reference>
+        <node>
+          <name>demo</name>
+          <label>Demo</label>
+          <visibility>DISPLAYED</visibility>
+          <page-reference>portal::classic::demo</page-reference>
+        </node>
+        ...
+      </node>
+    </navigation>
+
+
+# Todo list (close scope)
 
 * Try to change the `javax.portlet.` prefix to a reserved char among the *RFC3986_PCHAR*:
     * Need to distinguish the origin of the parameter and only consider parameters from the request and not HTTP post. To achieve this,
