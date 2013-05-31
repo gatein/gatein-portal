@@ -36,6 +36,7 @@ import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.CompoundApplicationMessage;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIFormInput;
 
 /**
@@ -113,7 +114,12 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
     }
 
     public UserConfigurableValidator(String configurationName, String messageLocalizationKey) {
-        this.exceptionOnMissingMandatory = true;
+        this(configurationName, messageLocalizationKey, true);
+    }
+
+    public UserConfigurableValidator(String configurationName, String messageLocalizationKey,
+            Boolean exceptionOnMissingMandatory) {
+        this.exceptionOnMissingMandatory = exceptionOnMissingMandatory;
         this.trimValue = true;
         localizationKey = messageLocalizationKey != null ? messageLocalizationKey : DEFAULT_LOCALIZATION_KEY;
         this.validatorName = configurationName != null ? configurationName : USERNAME;
@@ -124,8 +130,30 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
     }
 
     @Override
+    public void validate(UIFormInput uiInput) throws Exception {
+        if (exceptionOnMissingMandatory) {
+            super.validate(uiInput);
+        } else {
+            String label = getLabelFor(uiInput);
+
+            CompoundApplicationMessage messages = new CompoundApplicationMessage();
+
+            validate((String) uiInput.getValue(), label, messages, uiInput);
+
+            if (!messages.isEmpty()) {
+                throw new MessageException(messages);
+            }
+
+        }
+    }
+
+    @Override
     protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
         ValidatorConfiguration configuration = configurations.get(validatorName);
+
+        if (value == null) {
+            value = "";
+        }
 
         if (configuration == null) {
             // we don't have a user-configured validator for this validator name
@@ -146,7 +174,6 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
             }
         } else {
             // otherwise, use the user-provided configuration
-
             if (value.length() < configuration.minLength || value.length() > configuration.maxLength) {
                 messages.addMessage("StringLengthValidator.msg.length-invalid",
                         new Object[] { label, configuration.minLength.toString(), configuration.maxLength.toString() });
