@@ -58,7 +58,7 @@ public class CodecInitializer {
 
     private final String confDir;
 
-    private AbstractCodec codec;
+    private volatile AbstractCodec codec;
 
     public CodecInitializer(InitParams initParams) {
         ValueParam gateinConfParam = initParams.getValueParam("gatein.conf.dir");
@@ -71,14 +71,16 @@ public class CodecInitializer {
      * @throws TokenServiceInitializationException if some error happen during codec initialization
      */
     public AbstractCodec getCodec() throws TokenServiceInitializationException {
-        if (codec == null) {
+        AbstractCodec helper = codec;
+        if (helper == null) {
             synchronized(this) {
-                if (codec == null) {
-                    codec = initCodec();
+                helper = codec;
+                if (helper == null) {
+                    this.codec = helper = initCodec();
                 }
             }
         }
-        return codec;
+        return helper;
     }
 
 
