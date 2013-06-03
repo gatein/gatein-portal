@@ -20,6 +20,7 @@ package org.gatein.security.oauth.social;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -86,49 +87,42 @@ public class FacebookProcessor {
     }
 
     public String getAccessToken(HttpServletRequest request, HttpServletResponse response) throws OAuthException {
-        String error = request.getParameter(OAuthConstants.ERROR_PARAMETER);
-        if (error != null) {
-            if (OAuthConstants.ERROR_ACCESS_DENIED.equals(error)) {
-                throw new OAuthException(OAuthExceptionCode.USER_DENIED_SCOPE, error);
-            } else {
-                throw new OAuthException(OAuthExceptionCode.UNKNOWN_ERROR, error);
-            }
-        } else {
-            String authorizationCode = request.getParameter(OAuthConstants.CODE_PARAMETER);
-            if (authorizationCode == null) {
-                log.error("Authorization code parameter not found");
-                return null;
-            }
-
-            String stateFromSession = (String)request.getSession().getAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE);
-            String stateFromRequest = request.getParameter(OAuthConstants.STATE_PARAMETER);
-            if (stateFromSession == null || stateFromRequest == null || !stateFromSession.equals(stateFromRequest)) {
-                throw new OAuthException(OAuthExceptionCode.INVALID_STATE, "Validation of state parameter failed. stateFromSession="
-                        + stateFromSession + ", stateFromRequest=" + stateFromRequest);
-            }
-
-            String accessToken = new FacebookRequest<String>() {
-
-                @Override
-                protected URL createURL(String authorizationCode) throws IOException {
-                    return sendAccessTokenRequest(authorizationCode);
-                }
-
-                @Override
-                protected String parseResponse(String httpResponse) throws JSONException {
-                    Map<String, String> params = OAuthUtils.formUrlDecode(httpResponse);
-                    String accessToken = params.get(OAuthConstants.ACCESS_TOKEN_PARAMETER);
-                    String expires = params.get(FacebookConstants.EXPIRES);
-                    if (trace)
-                        log.trace("Access Token=" + accessToken + " :: Expires=" + expires);
-
-                    return accessToken;
-                }
-
-            }.executeRequest(authorizationCode);
-
-            return accessToken;
+        String authorizationCode = request.getParameter(OAuthConstants.CODE_PARAMETER);
+        if (authorizationCode == null) {
+            log.error("Authorization code parameter not found");
+            handleCodeRequestError(request, response);
+            return null;
         }
+
+
+        String stateFromSession = (String)request.getSession().getAttribute(OAuthConstants.ATTRIBUTE_VERIFICATION_STATE);
+        String stateFromRequest = request.getParameter(OAuthConstants.STATE_PARAMETER);
+        if (stateFromSession == null || stateFromRequest == null || !stateFromSession.equals(stateFromRequest)) {
+            throw new OAuthException(OAuthExceptionCode.INVALID_STATE, "Validation of state parameter failed. stateFromSession="
+                    + stateFromSession + ", stateFromRequest=" + stateFromRequest);
+        }
+
+        String accessToken = new FacebookRequest<String>() {
+
+            @Override
+            protected URL createURL(String authorizationCode) throws IOException {
+                return sendAccessTokenRequest(authorizationCode);
+            }
+
+            @Override
+            protected String parseResponse(String httpResponse) throws JSONException {
+                Map<String, String> params = OAuthUtils.formUrlDecode(httpResponse);
+                String accessToken = params.get(OAuthConstants.ACCESS_TOKEN_PARAMETER);
+                String expires = params.get(FacebookConstants.EXPIRES);
+                if (trace)
+                    log.trace("Access Token=" + accessToken + " :: Expires=" + expires);
+
+                return accessToken;
+            }
+
+        }.executeRequest(authorizationCode);
+
+        return accessToken;
     }
 
     protected URL sendAccessTokenRequest(String authorizationCode) throws IOException {
@@ -253,6 +247,28 @@ public class FacebookProcessor {
         } catch (IOException ioe) {
             throw new OAuthException(OAuthExceptionCode.TOKEN_REVOCATION_FAILED, "Error when revoking token", ioe);
         }
+    }
+
+    private void handleCodeRequestError(HttpServletRequest request, HttpServletResponse response) {
+        // Log all possible error parameters
+        StringBuilder errorBuilder = new StringBuilder();
+        Enumeration<String> paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String paramName = paramNames.nextElement();
+            if (paramName.startsWith("error")) {
+                errorBuilder.append(paramName + ": " + request.getParameter(paramName) + System.getProperty("line.separator"));
+            }
+        }
+        String errorMessage = errorBuilder.toString();
+
+        String error = request.getParameter(OAuthConstants.ERROR_PARAMETER);
+        if (error != null) {
+            if (OAuthConstants.ERROR_ACCESS_DENIED.equals(error)) {
+                throw new OAuthException(OAuthExceptionCode.USER_DENIED_SCOPE, errorMessage);
+            }
+        }
+
+        throw new OAuthException(OAuthExceptionCode.FACEBOOK_ERROR, errorMessage);
     }
 
 }
