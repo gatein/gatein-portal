@@ -85,8 +85,11 @@ public class SkinService extends AbstractResourceService implements Startable {
             + ")([^'\";]+.css)(" + "['\"]?" + RIGHT_P + "\\s*;)");
 
     /** Immutable and therefore thread safe. */
-    private static final Pattern BACKGROUND_PATTERN = Pattern.compile("(background[^;]+url" + LEFT_P + "['\"]?"
-            + ")([^'\";]+)(" + "['\"]?" + RIGHT_P + "[^;]*;)");
+    private static final Pattern BACKGROUND_PATTERN = Pattern.compile("(background[^;])+([^;]*;)");
+
+    private static final Pattern FONT_FACE_PATTERN = Pattern.compile("(src[^;])+([^;]*;)");
+
+    private static final Pattern URL_PATTERN = Pattern.compile("(url" + LEFT_P + "['\"]?)([^'\";" + RIGHT_P + "]+)(['\"]?\\))");
 
     /** Immutable and therefore thread safe. */
     private static final Pattern LT = Pattern.compile("[^{;]*;\\s*/\\*\\s*orientation=lt\\s*\\*/");
@@ -748,7 +751,8 @@ public class SkinService extends AbstractResourceService implements Startable {
             String line = reader.readLine();
             while (line != null) {
                 line = proccessOrientation(line, orientation);
-                line = proccessBackgroundUrl(line, basePath);
+                line = processURL(BACKGROUND_PATTERN, line, basePath);
+                line = processURL(FONT_FACE_PATTERN, line, basePath);
 
                 Matcher matcher = IMPORT_PATTERN.matcher(line);
                 while (matcher.find()) {
@@ -794,27 +798,28 @@ public class SkinService extends AbstractResourceService implements Startable {
         }
     }
 
-    private String proccessBackgroundUrl(String line, String basePath) {
-        // Rewrite background url pattern
-        Matcher matcher = BACKGROUND_PATTERN.matcher(line);
-
+    private String processURL(Pattern pattern, String line, String basePath) {
+        Matcher patternMatcher = pattern.matcher(line);
         StringBuffer tmpBuilder = new StringBuffer();
-        while (matcher.find()) {
-            if (!matcher.group(2).startsWith("\"/")) {
-                if (!matcher.group(2).startsWith("'/")) {
-                    if (!matcher.group(2).startsWith("/")) {
-                        StringBuilder strReplace = new StringBuilder();
-                        strReplace.append(matcher.group(1));
-                        strReplace.append(basePath);
-                        strReplace.append(matcher.group(2));
-                        strReplace.append(matcher.group(3));
-
-                        matcher.appendReplacement(tmpBuilder, strReplace.toString());
-                    }
+        while (patternMatcher.find()) {
+            StringBuilder fontFaceReplace = new StringBuilder();
+            Matcher urlMatcher = URL_PATTERN.matcher(patternMatcher.group());
+            StringBuffer tmpURL = new StringBuffer();
+            while(urlMatcher.find()) {
+                if (!urlMatcher.group(2).startsWith("\"/") && !urlMatcher.group(2).startsWith("'/") && !urlMatcher.group(2).startsWith("/") ) {
+                    StringBuilder urlBuilder = new StringBuilder();
+                    urlBuilder.append(urlMatcher.group(1));
+                    urlBuilder.append(basePath);
+                    urlBuilder.append(urlMatcher.group(2));
+                    urlBuilder.append(urlMatcher.group(3));
+                    urlMatcher.appendReplacement(tmpURL, urlBuilder.toString());
                 }
             }
+            urlMatcher.appendTail(tmpURL);
+            patternMatcher.appendReplacement(tmpBuilder, tmpURL.toString());
         }
-        matcher.appendTail(tmpBuilder);
+
+        patternMatcher.appendTail(tmpBuilder);
         return tmpBuilder.toString();
     }
 

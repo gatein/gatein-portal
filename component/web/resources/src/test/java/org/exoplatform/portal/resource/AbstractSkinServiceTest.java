@@ -220,13 +220,30 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
     public void testBackgroundURL() throws Exception {
         String resource = "/background/url/file.css";
         String css = "background:url(images/foo.gif);\n" + "background:url('/images/foo.gif');\n"
-                + "aaa; background: #fff url('images/foo.gif') no-repeat center -614px; ccc;";
+                + "aaa; background: #fff url('images/foo.gif') no-repeat center -614px; ccc;\n"
+                + "background-image: url(images/foo.gif), url(images/bar.gif);";
 
         resResolver.addResource(resource, css);
 
         SkinURL skinURL = newSimpleSkin(resource).createURL(controllerCtx);
         assertEquals("background:url(/background/url/images/foo.gif);\n" + "background:url('/images/foo.gif');\n"
-                + "aaa; background: #fff url('/background/url/images/foo.gif') no-repeat center -614px; ccc;",
+                + "aaa; background: #fff url('/background/url/images/foo.gif') no-repeat center -614px; ccc;\n"
+                + "background-image: url(/background/url/images/foo.gif), url(/background/url/images/bar.gif);",
+                skinService.getCSS(newControllerContext(getRouter(), skinURL.toString()), false));
+    }
+
+    public void testFontFaceURL() throws Exception {
+        String resource = "/fonts/url/file.css";
+        String css = "src: local('foo'), url('fonts/foo.woff') format('woff'), format('truetype') url(fonts/bar.ttf);\n"
+                +"src: url('fonts/baz.eot');\n"
+                +"src:url('fonts/bat.svg#batFont');";
+
+        resResolver.addResource(resource, css);
+
+        SkinURL skinURL = newSimpleSkin(resource).createURL(controllerCtx);
+        assertEquals("src: local('foo'), url('/fonts/url/fonts/foo.woff') format('woff'), format('truetype') url(/fonts/url/fonts/bar.ttf);\n"
+                +"src: url('/fonts/url/fonts/baz.eot');\n"
+                +"src:url('/fonts/url/fonts/bat.svg#batFont');",
                 skinService.getCSS(newControllerContext(getRouter(), skinURL.toString()), false));
     }
 
