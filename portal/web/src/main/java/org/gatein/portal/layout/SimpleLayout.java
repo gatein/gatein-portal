@@ -25,6 +25,7 @@ import java.util.Map;
 import juzu.PropertyMap;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageContext;
+import org.gatein.portal.page.Result;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -39,7 +40,7 @@ public class SimpleLayout extends Layout {
     }
 
     private abstract static class Node {
-        abstract void render(Map<String, Fragment> windows, PageContext state, Appendable to) throws IOException;
+        abstract void render(Map<String, Result.Fragment> windows, PageContext state, Appendable to) throws IOException;
     }
 
     private static class Container extends Node {
@@ -55,7 +56,7 @@ public class SimpleLayout extends Layout {
         }
 
         @Override
-        void render(Map<String, Fragment> windows, PageContext state, Appendable to) throws IOException {
+        void render(Map<String, Result.Fragment> windows, PageContext state, Appendable to) throws IOException {
             to.append("<div>");
             for (Node child : children) {
                 child.render(windows, state, to);
@@ -78,8 +79,8 @@ public class SimpleLayout extends Layout {
         }
 
         @Override
-        void render(Map<String, Fragment> fragments, PageContext state, Appendable to) throws IOException {
-            Fragment fragment = fragments.get(name);
+        void render(Map<String, Result.Fragment> fragments, PageContext state, Appendable to) throws IOException {
+            Result.Fragment fragment = fragments.get(name);
             to.append("<div>");
             to.append("<div>").append(this.state.properties.get(ElementState.Window.TITLE)).append("</div>");
             to.append("<div>").append(fragment.content).append("</div>");
@@ -88,7 +89,7 @@ public class SimpleLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) throws IOException {
+    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) throws IOException {
         root.render(fragments, state, to);
     }
 

@@ -52,7 +52,6 @@ import org.gatein.pc.api.info.NavigationInfo;
 import org.gatein.pc.api.info.ParameterInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.ActionInvocation;
-import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.ResourceInvocation;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.spi.PortletInvocationContext;
@@ -63,6 +62,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.mop.customization.CustomizationContext;
+import org.gatein.portal.servlet.Context;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -179,9 +179,9 @@ public class WindowContext implements PortletInvocationContext {
         action.setInstanceContext(new AbstractInstanceContext(state.name, AccessMode.READ_ONLY));
         action.setWindowContext(new AbstractWindowContext(state.name));
         action.setUserContext(new AbstractUserContext());
-        action.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
-        action.setRequest(ClientRequestFilter.currentRequest.get());
-        action.setResponse(ClientRequestFilter.currentResponse.get());
+        action.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
+        action.setRequest(Context.getCurrentRequest());
+        action.setResponse(Context.getCurrentResponse());
         action.setTarget(getPortlet().getContext());
         action.setMode(mode != null ? mode : Mode.VIEW);
         action.setWindowState(windowState != null ? windowState : org.gatein.pc.api.WindowState.NORMAL);
@@ -191,22 +191,13 @@ public class WindowContext implements PortletInvocationContext {
         return page.portletManager.getInvoker().invoke(action);
     }
 
-    public PortletInvocationResponse render() throws PortletInvokerException {
-        RenderInvocation render = new RenderInvocation(this);
-        render.setClientContext(new GateInClientContext());
-        render.setPortalContext(new AbstractPortalContext());
-        render.setInstanceContext(new AbstractInstanceContext(state.name, AccessMode.READ_ONLY));
-        render.setWindowContext(new AbstractWindowContext(state.name));
-        render.setUserContext(new AbstractUserContext());
-        render.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
-        render.setRequest(ClientRequestFilter.currentRequest.get());
-        render.setResponse(ClientRequestFilter.currentResponse.get());
-        render.setTarget(getPortlet().getContext());
-        render.setMode(state.mode != null ? state.mode : Mode.VIEW);
-        render.setWindowState(state.windowState != null ? state.windowState : org.gatein.pc.api.WindowState.NORMAL);
-        render.setNavigationalState(state.parameters != null ? ParametersStateString.create(state.parameters) : null);
-        render.setPublicNavigationalState(computePublicParameters());
-        return page.portletManager.getInvoker().invoke(render);
+    /**
+     * Capture some context here.
+     *
+     * @return the callable for rendering a portlet
+     */
+    public RenderTask createRenderTask() {
+        return new RenderTask(this);
     }
 
     public PortletInvocationResponse serveResource(String id, Map<String, String[]> resourceState) throws PortletInvokerException {
@@ -246,9 +237,9 @@ public class WindowContext implements PortletInvocationContext {
         resource.setInstanceContext(new AbstractInstanceContext(state.name, AccessMode.READ_ONLY));
         resource.setWindowContext(new AbstractWindowContext(state.name));
         resource.setUserContext(new AbstractUserContext());
-        resource.setSecurityContext(new AbstractSecurityContext(ClientRequestFilter.currentRequest.get()));
-        resource.setRequest(ClientRequestFilter.currentRequest.get());
-        resource.setResponse(ClientRequestFilter.currentResponse.get());
+        resource.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
+        resource.setRequest(Context.getCurrentRequest());
+        resource.setResponse(Context.getCurrentResponse());
         resource.setTarget(getPortlet().getContext());
         resource.setMode(mode);
         resource.setWindowState(windowState);
@@ -258,7 +249,7 @@ public class WindowContext implements PortletInvocationContext {
         return page.portletManager.getInvoker().invoke(resource);
     }
 
-    private Map<String, String[]> computePublicParameters() {
+    Map<String, String[]> computePublicParameters() {
         Map<String, String[]> publicParameters = null;
         if (page.hasParameters()) {
             publicParameters = NO_PARAMETERS;

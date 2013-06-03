@@ -16,24 +16,15 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.gatein.portal.servlet;
 
-package org.gatein.portal.page;
-
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @author Julien Viet
  */
-public class ClientRequestFilter implements Filter {
+public class Context {
 
     /** . */
     static final ThreadLocal<HttpServletRequest> currentRequest = new ThreadLocal<HttpServletRequest>();
@@ -41,25 +32,11 @@ public class ClientRequestFilter implements Filter {
     /** . */
     static final ThreadLocal<HttpServletResponse> currentResponse = new ThreadLocal<HttpServletResponse>();
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
+    public static HttpServletRequest getCurrentRequest() {
+        return currentRequest.get();
     }
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        currentRequest.set((HttpServletRequest) request);
-        currentResponse.set((HttpServletResponse) response);
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            currentRequest.set(null);
-            currentResponse.set(null);
-        }
-    }
-
-    @Override
-    public void destroy() {
-
+    public static HttpServletResponse getCurrentResponse() {
+        return currentResponse.get();
     }
 }

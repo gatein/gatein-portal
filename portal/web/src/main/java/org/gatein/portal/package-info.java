@@ -10,7 +10,8 @@
     @Binding(PageService.class),
     @Binding(NavigationService.class),
     @Binding(SiteService.class),
-    @Binding(SimpleLayoutFactory.class)})
+    @Binding(SimpleLayoutFactory.class),
+    @Binding(KernelFilter.class)})
 @Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"))
 package org.gatein.portal;
 
@@ -20,6 +21,7 @@ import juzu.plugin.asset.Stylesheet;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
 import org.exoplatform.container.PortalContainer;
+import org.gatein.portal.kernel.KernelFilter;
 import org.gatein.portal.layout.SimpleLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.layout.LayoutService;

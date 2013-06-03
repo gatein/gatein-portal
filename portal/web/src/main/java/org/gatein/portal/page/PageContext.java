@@ -21,16 +21,11 @@ package org.gatein.portal.page;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
 
 import juzu.request.Phase;
-import org.gatein.pc.api.PortletInvokerException;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
-import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.gatein.portal.layout.Fragment;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
@@ -160,31 +155,6 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
 
     public Map<QName, String[]> getParameters() {
         return state.getParameters();
-    }
-
-    public Map<String, Fragment> render(Locale locale) {
-        HashMap<String, Fragment> fragments = new HashMap<String, Fragment>();
-        for (Map.Entry<String, WindowContext> entry : this) {
-            try {
-                WindowContext window = entry.getValue();
-                PortletInvocationResponse response = window.render();
-                if (response instanceof FragmentResponse) {
-                    FragmentResponse fragment = (FragmentResponse) response;
-                    String title = fragment.getTitle();
-                    if (title == null) {
-                        title = window.resolveTitle(locale);
-                    }
-                    fragments.put(window.state.name, new Fragment(title, fragment.getContent()));
-                } else {
-                    throw new UnsupportedOperationException("Not yet handled " + response);
-                }
-            } catch (PortletInvokerException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return fragments;
     }
 
     //

@@ -16,6 +16,18 @@
     <supported-public-render-parameter>foo</supported-public-render-parameter>
     <supported-public-render-parameter>bar</supported-public-render-parameter>
   </portlet>
+  <portlet>
+    <portlet-name>SleepPortlet</portlet-name>
+    <portlet-class>org.gatein.examples.SleepPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Sleep Portlet</title>
+      <short-title>Sleep Portlet</short-title>
+    </portlet-info>
+  </portlet>
   <public-render-parameter>
     <identifier>foo</identifier>
     <name>foo</name>

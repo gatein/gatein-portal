@@ -44,10 +44,16 @@
     <label xml:lang="zh-TW">首頁</label>
     <page-reference>portal::classic::homepage</page-reference>
     <node>
-      <name>demo</name>
-      <label>Demo</label>
+      <name>demo1</name>
+      <label>Parameter Demo</label>
       <visibility>DISPLAYED</visibility>
-      <page-reference>portal::classic::demo</page-reference>
+      <page-reference>portal::classic::demo1</page-reference>
+    </node>
+    <node>
+      <name>demo2</name>
+      <label>Parallel Demo</label>
+      <visibility>DISPLAYED</visibility>
+      <page-reference>portal::classic::demo2</page-reference>
     </node>
     <node>
       <name>sitemap</name>

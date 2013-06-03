@@ -18,6 +18,7 @@
   <filter>
     <filter-name>KernelLifeCycle</filter-name>
     <filter-class>org.gatein.portal.common.kernel.KernelLifeCycle</filter-class>
+    <async-supported>true</async-supported>
   </filter>
   <filter-mapping>
     <filter-name>KernelLifeCycle</filter-name>
@@ -26,7 +27,8 @@
 
   <filter>
     <filter-name>ClientRequestFilter</filter-name>
-    <filter-class>org.gatein.portal.page.ClientRequestFilter</filter-class>
+    <filter-class>org.gatein.portal.servlet.ClientRequestFilter</filter-class>
+    <async-supported>true</async-supported>
   </filter>
   <filter-mapping>
     <filter-name>ClientRequestFilter</filter-name>
@@ -48,6 +50,7 @@
       <param-name>juzu.app_name</param-name>
       <param-value>org.gatein.portal</param-value>
     </init-param>
+    <async-supported>true</async-supported>
   </servlet>
   <servlet-mapping>
     <servlet-name>PortalServlet</servlet-name>

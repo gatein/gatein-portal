@@ -76,22 +76,45 @@ public class KernelLifeCycle implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         PortalContainer c = container.get();
-        current.set(c);
         try {
-            RequestLifeCycle.begin(c);
+            before(c);
             chain.doFilter(req,  resp);
         } finally {
-            try {
-                RequestLifeCycle.end();
-            } finally {
-                // Do it anyway
-                current.set(null);
-            }
+            after();
+        }
+    }
+
+    private static void before(PortalContainer c) {
+        current.set(c);
+        RequestLifeCycle.begin(c);
+    }
+
+    private static void after() {
+        try {
+            RequestLifeCycle.end();
+        } finally {
+            // Do it anyway
+            current.set(null);
         }
     }
 
     @Override
     public void destroy() {
         container.get().dispose();
+    }
+
+    public static Runnable wrap(final Runnable runnable) {
+        final PortalContainer c = current.get();
+        return new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    before(c);
+                    runnable.run();
+                } finally {
+                    after();
+                }
+            }
+        };
     }
 }

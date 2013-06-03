@@ -23,7 +23,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -45,13 +44,10 @@ import org.exoplatform.container.PortalContainer;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
-import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.api.invocation.response.ContentResponse;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
-import org.gatein.portal.layout.Fragment;
 import org.gatein.portal.layout.Layout;
 import org.gatein.portal.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
@@ -155,13 +151,13 @@ public class Controller {
 
                 // Load site windows
                 SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
-                NodeContext<org.gatein.portal.page.NodeState, ElementState> siteLayout = layoutService.loadLayout(pageBuilder, site.getLayoutId(), null);
+                NodeContext<org.gatein.portal.page.NodeState, ElementState> siteStructure = layoutService.loadLayout(pageBuilder, site.getLayoutId(), null);
 
                 // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
                 org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
-                NodeContext<org.gatein.portal.page.NodeState, ElementState> pageLayout = layoutService.loadLayout(pageBuilder, page.getLayoutId(), null);
+                NodeContext<org.gatein.portal.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder, page.getLayoutId(), null);
 
                 // Decode from request
                 Map<String, String[]> parameters = NO_PARAMETERS;
@@ -332,32 +328,22 @@ public class Controller {
                     }
                     pageBuilder.setParameters(prp);
 
-                    //
-                    StringBuilder buffer = new StringBuilder();
-                    Response.Content ok = Response.ok(buffer);
-
-                    // Render all fragments
-                    PageContext layoutContext = pageBuilder.build(customizationService, manager);
-                    Map<String, Fragment> layoutFragments = layoutContext.render(context.getUserContext().getLocale());
+                    // Build page
+                    PageContext pageContext = pageBuilder.build(customizationService, manager);
 
                     // Render page
                     String layoutId = page.getState().getFactoryId();
                     if (layoutId == null) {
                         layoutId = "1";
                     }
-                    Layout layout = layoutFactory.build(layoutId, pageLayout);
-                    layout.render(layoutFragments, null, layoutContext, ok.getProperties(), buffer);
+                    Layout pageLayout = layoutFactory.build(layoutId, pageStructure);
+                    Layout siteLayout = layoutFactory.build("site", siteStructure);
 
                     //
-                    String body = buffer.toString();
-
-                    // Get site layout
-                    buffer.setLength(0);
-                    Layout siteUI = layoutFactory.build("site", siteLayout);
-                    siteUI.render(layoutFragments, body, layoutContext, ok.getProperties(), buffer);
+                    ReactivePage rp = new ReactivePage(pageContext, context.getUserContext().getLocale());
 
                     //
-                    return ok;
+                    return rp.execute(siteLayout, pageLayout, context.getExecutor(true, true));
                 }
             }
         } else {

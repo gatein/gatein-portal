@@ -16,21 +16,38 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.layout;
+package org.gatein.portal.page;
 
 /**
  * @author Julien Viet
  */
-public class Fragment {
+public class Result {
 
-    /** . */
-    public final String title;
+    public static class Error extends Result {
 
-    /** . */
-    public final String content;
+        /** . */
+        private final boolean internal;
 
-    public Fragment(String title, String content) {
-        this.title = title;
-        this.content = content;
+        /** . */
+        private final Throwable cause;
+
+        public Error(boolean internal, Throwable cause) {
+            this.internal = internal;
+            this.cause = cause;
+        }
+    }
+
+    public static class Fragment extends Result {
+
+        /** . */
+        public final String title;
+
+        /** . */
+        public final String content;
+
+        public Fragment(String title, String content) {
+            this.title = title;
+            this.content = content;
+        }
     }
 }

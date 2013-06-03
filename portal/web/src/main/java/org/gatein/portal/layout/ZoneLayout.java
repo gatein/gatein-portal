@@ -28,6 +28,7 @@ import juzu.PropertyMap;
 import juzu.template.Template;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageContext;
+import org.gatein.portal.page.Result;
 
 /**
  * A layout implementing the spec <a href="https://community.jboss.org/wiki/InPlaceEditing">In Place Editing</a>.
@@ -51,13 +52,13 @@ public class ZoneLayout extends Layout {
         this.windows = windows;
     }
 
-    private ArrayList<Fragment> getFragments(String zone, Map<String, Fragment> fragments) {
-        ArrayList<Fragment> list = null;
+    private ArrayList<Result.Fragment> getFragments(String zone, Map<String, Result.Fragment> fragments) {
+        ArrayList<Result.Fragment> list = null;
         ArrayList<WindowLayout> column = windows.get(zone);
         if (column != null) {
-            list = new ArrayList<Fragment>();
+            list = new ArrayList<Result.Fragment>();
             for (WindowLayout window : column) {
-                Fragment fragment = fragments.get(window.name);
+                Result.Fragment fragment = fragments.get(window.name);
                 if (fragment != null) {
                     list.add(fragment);
                 }
@@ -67,7 +68,7 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) {
+    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) {
         Template template = null;
         Map<String, Object> parameters = null;
         if ("1".equals(id)) {
@@ -90,11 +91,11 @@ public class ZoneLayout extends Layout {
         }
     }
 
-    private Template.Builder render1_column(ArrayList<Fragment> l1) {
+    private Template.Builder render1_column(ArrayList<Result.Fragment> l1) {
         return factory.zone_1_column.with(Collections.<String, Object>singletonMap("l1", l1));
     }
 
-    private Template.Builder render2_columns_30_70(ArrayList<Fragment> l1, ArrayList<Fragment> l2) {
+    private Template.Builder render2_columns_30_70(ArrayList<Result.Fragment> l1, ArrayList<Result.Fragment> l2) {
         return factory.zone_2_columns_70_30.with(juzu.impl.common.Builder.map("l1", l1).map("l2", l2).build());
     }
 

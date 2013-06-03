@@ -47,8 +47,8 @@
   </page>
 
   <page>
-    <name>demo</name>
-    <title>Demo</title>
+    <name>demo1</name>
+    <title>Parameter Demo</title>
     <access-permissions>Everyone</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <container>
@@ -70,6 +70,49 @@
           <portlet-ref>ParametersPortlet</portlet-ref>
         </portlet>
         <title>Parameters Portlet 2</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+    </container>
+  </page>
+
+  <page>
+    <name>demo2</name>
+    <title>Parallel Demo</title>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <container>
+      <name>1</name>
+      <portlet-application>
+        <portlet>
+          <application-ref>samples</application-ref>
+          <portlet-ref>SleepPortlet</portlet-ref>
+        </portlet>
+        <title>Sleep Portlet 1</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+      <portlet-application>
+        <portlet>
+          <application-ref>samples</application-ref>
+          <portlet-ref>SleepPortlet</portlet-ref>
+        </portlet>
+        <title>Sleep Portlet 2</title>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+      </portlet-application>
+      <portlet-application>
+        <portlet>
+          <application-ref>samples</application-ref>
+          <portlet-ref>SleepPortlet</portlet-ref>
+        </portlet>
+        <title>Sleep Portlet 3</title>
         <access-permissions>Everyone</access-permissions>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
