@@ -871,7 +871,7 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 
 .RedirectAdmin #condition-string input {width: 280px;}
 
-.RedirectAdmin #condition-string div div {
+.RedirectAdmin #condition-string div div.action {
 	visibility: hidden;
 	float: right;
 	margin-right: 10px;

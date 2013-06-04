@@ -5,7 +5,7 @@
     .RedirectAdmin td.actions > a,
     .RedirectAdmin td.actions > button,
     .RedirectAdmin td.actions > div, 
-    .RedirectAdmin #condition-string div div {visibility: visible;}
+    .RedirectAdmin #condition-string div div.action {visibility: visible;}
     
     .RedirectAdmin .nav-list li div span.toggle {background-position: left -22px;} /* Arrow appear */
 
