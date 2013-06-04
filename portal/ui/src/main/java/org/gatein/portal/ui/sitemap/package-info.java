@@ -2,7 +2,10 @@
  * The portal web application.
  */
 @Application
-@Bindings()
+@Bindings({
+   @Binding(NavigationService.class),
+   @Binding(DescriptionService.class)
+})
 @Portlet(name = "SiteMapPortlet")
 package org.gatein.portal.ui.sitemap;
 

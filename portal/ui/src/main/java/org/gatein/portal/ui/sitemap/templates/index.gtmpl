@@ -1,0 +1,37 @@
+<%
+  import org.gatein.portal.ui.navigation.UserNode;
+  
+  public void renderNodes(UserNode userNode) {
+    def expandItem = (userNode.children != null && userNode.children.size() > 0) ? "expandItem" : "nullItem";
+    %>
+      <div class="node">
+        <div class="${expandItem}">
+          <div>
+            <a href="${userNode.link}" class="label label-info">${userNode.label}</a>
+          </div>
+        </div>
+    <%
+    if(userNode.children != null) {
+      %>
+        <div class="childrenContainer" style="display: none;">
+          <% userNode.children.each { node -> renderNodes(node) } %>
+        </div>
+      <%
+    } 
+    %>
+      </div>
+    <%
+  } 
+%>
+<div class="sitemapUnit">
+  <div class="sitemapContent">
+    <div class="node">
+      <div class="nullItem">
+        <div>
+          <a href="/portal/" class="label label-info">Home</a>
+        </div>
+      </div>
+    </div>
+    <% root.children.each { node -> renderNodes(node) }%>
+  </div>
+</div>

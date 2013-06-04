@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.register-unit {
+	margin: auto;
+	width: 50%;
+}
+
+.register-unit > table > td:FIRST-CHILD {
+	text-align: right;
+}

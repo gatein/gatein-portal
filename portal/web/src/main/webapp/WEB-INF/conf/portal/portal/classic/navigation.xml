@@ -75,6 +75,60 @@
       <label xml:lang="zh-TW">網站導覽</label>
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::classic::sitemap</page-reference>
+      	<node>
+	      	<name>sitemap_1</name>
+	      	<label xml:lang="en">SiteMap1</label>
+	      	<visibility>DISPLAYED</visibility>
+	      	<page-reference>portal::classic::sitemap</page-reference>
+	      	<node>
+		      	<name>sitemap_1.1</name>
+		      	<label xml:lang="en">SiteMap1.1</label>
+		      	<visibility>DISPLAYED</visibility>
+		      	<page-reference>portal::classic::sitemap</page-reference>
+		      	<node>
+			      	<name>sitemap_1.1.1</name>
+			      	<label xml:lang="en">SiteMap1.1.1</label>
+			      	<visibility>DISPLAYED</visibility>
+			      	<page-reference>portal::classic::sitemap</page-reference>
+			      	<node>
+			      		<name>sitemap_1.1.1.1</name>
+			      		<label xml:lang="en">SiteMap1.1.1.1</label>
+			      		<visibility>DISPLAYED</visibility>
+			      		<page-reference>portal::classic::sitemap</page-reference>
+	      			</node>
+	      		</node>
+	      		<node>
+			      	<name>sitemap_1.1.2</name>
+			      	<label xml:lang="en">SiteMap1.1.2</label>
+			      	<visibility>DISPLAYED</visibility>
+			      	<page-reference>portal::classic::sitemap</page-reference>
+	      		</node>
+      		</node>
+      		<node>
+		      	<name>sitemap_1.2</name>
+		      	<label xml:lang="en">SiteMap1.2</label>
+		      	<visibility>DISPLAYED</visibility>
+		      	<page-reference>portal::classic::sitemap</page-reference>
+	      	</node>
+	      	<node>
+		      	<name>sitemap_1.3</name>
+		      	<label xml:lang="en">SiteMap1.3</label>
+		      	<visibility>DISPLAYED</visibility>
+		      	<page-reference>portal::classic::sitemap</page-reference>
+	      	</node>
+      	</node>
+      	<node>
+	      	<name>sitemap_2</name>
+	      	<label xml:lang="en">SiteMap2</label>
+	      	<visibility>DISPLAYED</visibility>
+	      	<page-reference>portal::classic::sitemap</page-reference>
+      	</node>
+      	<node>
+	      	<name>sitemap_3</name>
+	      	<label xml:lang="en">SiteMap3</label>
+	      	<visibility>DISPLAYED</visibility>
+	      	<page-reference>portal::classic::sitemap</page-reference>
+      	</node>
     </node>
     <node>
       <name>register</name>
@@ -93,6 +147,24 @@
       <label xml:lang="zh-TW">註冊</label>
       <visibility>SYSTEM</visibility>
       <page-reference>portal::classic::register</page-reference>
+      	<node>
+	      <name>register_1</name>
+	      <label xml:lang="en">Register1</label>
+	      <visibility>SYSTEM</visibility>
+	      <page-reference>portal::classic::register</page-reference>
+    	</node>
+    	<node>
+	      <name>register_2</name>
+	      <label xml:lang="en">Register2</label>
+	      <visibility>SYSTEM</visibility>
+	      <page-reference>portal::classic::register</page-reference>
+    	</node>
+    	<node>
+	      <name>register_3</name>
+	      <label xml:lang="en">Register3</label>
+	      <visibility>SYSTEM</visibility>
+	      <page-reference>portal::classic::register</page-reference>
+    	</node>
     </node>
   </node>
 </navigation>

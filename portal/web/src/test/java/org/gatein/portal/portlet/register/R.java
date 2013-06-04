@@ -16,7 +16,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.ui.register;
+package org.gatein.portal.portlet.register;
+
+import org.gatein.portal.ui.register.Controller_;
+import org.gatein.portal.ui.register.Flash;
+import org.gatein.portal.ui.register.User;
 
 import juzu.Action;
 import juzu.Path;
@@ -29,7 +33,7 @@ import javax.inject.Inject;
 /**
  * @author Julien Viet
  */
-public class Controller {
+public class R {
 
    @Inject
    @Path("index.gtmpl")
@@ -47,16 +51,16 @@ public class Controller {
    public Response register(User user, String confirmPassword) {
       if (!user.password.equals(confirmPassword)) {
          flash.setError("Password and Confirm Password must be the same.");
-         return Controller_.index();
+         return R_.index();
       }
       User isExisted = User.getUser(user.userName);
       if (isExisted != null) {
          flash.setError("This user is already existed. Please enter different userName.");
-         return Controller_.index();
+         return R_.index();
       }
       User.saveUser(user);
       flash.setSuccess("You have successfully registered a new account!");
       flash.setUserName(user.userName);
-      return Controller_.index();
+      return R_.index();
    }
 }
