@@ -269,8 +269,8 @@
 			<h:inputHidden id="sortFrom" value="#{rdrEdit.sortFrom}" />
 			<h:inputHidden id="sortTo" value="#{rdrEdit.sortTo}" />
 			<h:inputHidden id="sortSite" value="#{rdrEdit.sortSite}" />
-			<a4j:commandLink action="#{rdrEdit.doSortCondition}" id="doSortCndBtn" value="" render="@form" execute="@form" />
-			<a4j:commandLink action="#{rdrEdit.doSortRedirect}"  id="doSortRdrBtn" value="" render="@form" execute="@form" />
+			<a4j:commandLink action="#{rdrEdit.doSortCondition}" id="doSortCndBtn" value="" render="@form conditions-group" execute="@form" />
+			<a4j:commandLink action="#{rdrEdit.doSortRedirect}"  id="doSortRdrBtn" value="" render="@form sum_form" execute="@form" /
 		</h:form>
 
 		<script type="text/javascript">
