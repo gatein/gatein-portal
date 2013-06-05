@@ -345,7 +345,7 @@ public class GateInApiManagementResource {
             site.setAccessPermission(permission);
         }
         if (siteModel.has("edit-permissions")) {
-            Permission permission = getPermission(siteModel, true, "access-permissions");
+            Permission permission = getPermission(siteModel, true, "edit-permissions");
             site.setEditPermission(permission);
         }
         if (siteModel.hasDefined("attributes")) {

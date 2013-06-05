@@ -162,7 +162,7 @@ public class PageManagementResource {
 
         // Update edit-permissions
         if (pageModel.has("edit-permissions")) {
-            Permission permission = getPermission(pageModel, true, "access-permissions");
+            Permission permission = getPermission(pageModel, true, "edit-permissions");
             page.setEditPermission(permission);
             changed = true;
         }
