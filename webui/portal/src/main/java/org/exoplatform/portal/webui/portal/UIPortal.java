@@ -253,16 +253,13 @@ public class UIPortal extends UIContainer {
     public void setProperty(String name, String value) {
         if (name == null || properties == null)
             throw new NullPointerException();
-        if (value == null)
-            properties.remove(name);
-        else
             properties.setProperty(name, value);
     }
 
     public void removeProperty(String name) {
-        if (name == null || properties == null)
+        if (name == null)
             throw new NullPointerException();
-        properties.remove(name);
+        properties.setProperty(name, null);
     }
 
     public String getSessionAlive() {

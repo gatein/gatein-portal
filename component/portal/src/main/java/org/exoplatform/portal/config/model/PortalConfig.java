@@ -214,10 +214,7 @@ public class PortalConfig extends ModelObject {
     public void setProperty(String name, String value) {
         if (name == null || properties == null)
             throw new NullPointerException();
-        if (value == null)
-            properties.remove(name);
-        else
-            properties.setProperty(name, value);
+        properties.setProperty(name, value);
     }
 
     public void removeProperty(String name) {
