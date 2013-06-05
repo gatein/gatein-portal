@@ -20,6 +20,7 @@
 package org.exoplatform.web.login;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -117,6 +118,13 @@ public class LoginServlet extends AbstractHttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            // We set the character encoding now to UTF-8 before obtaining parameters
+            req.setCharacterEncoding("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("Encoding not supported", e);
+        }
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
 
