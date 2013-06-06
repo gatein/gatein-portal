@@ -17,9 +17,14 @@
   String editNavigationLabel = _ctx.appRes("UISiteManagement.label.editNav");
   String editPortalPropLabel = _ctx.appRes("UISiteManagement.label.editPortalProp");
   String deletePortalLabel = _ctx.appRes("UISiteManagement.label.deletePortal");
+  String noSitesLabel = _ctx.appRes("UISiteManagement.label.noSitesAvailable");
 %>
 <div class="UISiteManagement UIManagement" id="<%=uicomponent.getId();%>">
       <%
+            if (uicomponent.getPortalConfigs() == null || uicomponent.getPortalConfigs().size() == 0)
+            { %>
+                <div class="NothingEditable">$noSitesLabel</div>  
+      <%    } else {
             for (portalConfig in uicomponent.getPortalConfigs())  {           
       %>
                 <table class="ManagementBlock" style="table-layout: fixed" summary="Sites edit">
@@ -59,6 +64,7 @@
                     </table>    
         <%          
           }
+        }
         %> 
     <%
         if(uicomponent.getPortalConfigs() != null && uicomponent.getPortalConfigs().size() > 0){

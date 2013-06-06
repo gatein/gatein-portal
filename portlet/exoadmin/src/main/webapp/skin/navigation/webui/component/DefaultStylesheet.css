@@ -126,6 +126,11 @@
 	background: url('background/MiniIcon-rt.gif') no-repeat right 2px; /* orientation=rt */
 }
 
+.UIManagement .NothingEditable {
+        text-align: center;
+        font-weight: bold; 
+}
+
 /***********************UIAddGroupNavigation************************/
 
 .UIAddGroupNavigation {

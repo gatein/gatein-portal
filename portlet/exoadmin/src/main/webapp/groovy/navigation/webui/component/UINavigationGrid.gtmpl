@@ -19,6 +19,13 @@
     String editNavigationLabel = _ctx.appRes("UIGroupNavigationManagement.Label.EditNavigation");
     String editPropertiesLabel = _ctx.appRes("UIGroupNavigationManagement.Label.EditProperties");
     String deleteNavigationLabel = _ctx.appRes("UIGroupNavigationManagement.Label.DeleteNavigation");
+    String noNavigationsLabel = _ctx.appRes("UIGroupNavigationManagement.Label.NoNavigations");
+    if (navigations == null || navigations.size() == 0) { 
+      %>
+      <div class="NothingEditable">$noNavigationsLabel</div>
+      <%
+    } 
+    else {
     for(navigation in navigations) {
        siteKey = navigation.getKey();
        String groupDescription = OrganizationUtils.getGroupDescription(siteKey.getName());
@@ -53,5 +60,5 @@
         </td>   
     </tr>                               
   </table>  
-    <% isEvenRow = !isEvenRow;} %>    
+    <% isEvenRow = !isEvenRow;}} %>    
 </div>
