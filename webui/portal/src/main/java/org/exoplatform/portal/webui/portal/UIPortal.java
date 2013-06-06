@@ -299,7 +299,11 @@ public class UIPortal extends UIContainer {
     }
 
     public void setSharedLayout(String type) {
-        setProperty(PortalProperties.SHARED_LAYOUT, type);
+        if (type.equals(PortalProperties.SHARED_LAYOUT_ADMINS)) {
+            setProperty(PortalProperties.SHARED_LAYOUT, PortalProperties.SHARED_LAYOUT_ADMINS);
+        } else {
+            setProperty(PortalProperties.SHARED_LAYOUT, PortalProperties.SHARED_LAYOUT_ALL);
+        }
     }
 
     public String getLabel() {
