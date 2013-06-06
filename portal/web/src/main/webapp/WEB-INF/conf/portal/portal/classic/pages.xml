@@ -22,144 +22,104 @@
 
 <page-set
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
 
   <page>
     <name>homepage</name>
     <title>Home Page</title>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>HomePortlet</portlet-ref>
-        </portlet>
-        <title>Home</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>home</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>portal</application-ref>
+        <portlet-ref>HomePortlet</portlet-ref>
+      </portlet>
+    </zone>
   </page>
 
   <page>
     <name>demo1</name>
     <title>Parameter Demo</title>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>samples</application-ref>
-          <portlet-ref>ParametersPortlet</portlet-ref>
-        </portlet>
-        <title>Parameters Portlet 1</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-      <portlet-application>
-        <portlet>
-          <application-ref>samples</application-ref>
-          <portlet-ref>ParametersPortlet</portlet-ref>
-        </portlet>
-        <title>Parameters Portlet 2</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>p1</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>ParametersPortlet</portlet-ref>
+      </portlet>
+      <portlet>
+        <name>p2</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>ParametersPortlet</portlet-ref>
+      </portlet>
+    </zone>
   </page>
 
   <page>
     <name>demo2</name>
     <title>Parallel Demo</title>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>samples</application-ref>
-          <portlet-ref>SleepPortlet</portlet-ref>
-        </portlet>
-        <title>Sleep Portlet 1</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-      <portlet-application>
-        <portlet>
-          <application-ref>samples</application-ref>
-          <portlet-ref>SleepPortlet</portlet-ref>
-        </portlet>
-        <title>Sleep Portlet 2</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-      <portlet-application>
-        <portlet>
-          <application-ref>samples</application-ref>
-          <portlet-ref>SleepPortlet</portlet-ref>
-        </portlet>
-        <title>Sleep Portlet 3</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>s1</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>SleepPortlet</portlet-ref>
+      </portlet>
+      <portlet>
+        <name>s2</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>SleepPortlet</portlet-ref>
+      </portlet>
+      <portlet>
+        <name>s3</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>SleepPortlet</portlet-ref>
+      </portlet>
+    </zone>
   </page>
 
   <page>
     <name>register</name>
     <title>Register</title>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>RegisterPortlet</portlet-ref>
-        </portlet>
-        <title>Register Portlet</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>register</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>portal</application-ref>
+        <portlet-ref>RegisterPortlet</portlet-ref>
+      </portlet>
+    </zone>
   </page>
 
   <page>
     <name>sitemap</name>
     <title>Site Map</title>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>SiteMapPortlet</portlet-ref>
-        </portlet>
-        <title>Site Map Portlet</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>sm</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>portal</application-ref>
+        <portlet-ref>SiteMapPortlet</portlet-ref>
+      </portlet>
+    </zone>
   </page>
 </page-set>

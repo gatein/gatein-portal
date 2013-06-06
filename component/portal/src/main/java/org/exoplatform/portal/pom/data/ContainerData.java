@@ -60,10 +60,10 @@ public class ContainerData extends ComponentData {
     /** . */
     private final List<ComponentData> children;
 
-    public ContainerData(String storageId, String id, String name, String icon, String template, String factoryId,
+    public ContainerData(String storageId, String storageName, String id, String name, String icon, String template, String factoryId,
             String title, String description, String width, String height, List<String> accessPermissions,
             List<ComponentData> children) {
-        super(storageId, null);
+        super(storageId, storageName);
 
         //
         this.id = id;

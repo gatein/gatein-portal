@@ -45,6 +45,17 @@ public class ContainerAdapter implements NodeAdapter<List<ComponentData>, Compon
     }
 
     @Override
+    public String getName(ComponentData node) {
+        String name = node.getStorageName();
+        if (name == null) {
+            // For now we generate a name
+            // however the name should be fully provided by the node (possibly randomly generated)
+            name = UUID.randomUUID().toString();
+        }
+        return name;
+    }
+
+    @Override
     public String getHandle(ComponentData node) {
         String handle = node.getStorageId();
         if (handle == null) {

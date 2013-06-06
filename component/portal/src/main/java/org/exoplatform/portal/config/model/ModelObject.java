@@ -61,8 +61,9 @@ public abstract class ModelObject {
         return storageName;
     }
 
-    public void setStorageName(String storageName) {
+    public ModelObject setStorageName(String storageName) {
         this.storageName = storageName;
+        return this;
     }
 
     public abstract ModelData build();

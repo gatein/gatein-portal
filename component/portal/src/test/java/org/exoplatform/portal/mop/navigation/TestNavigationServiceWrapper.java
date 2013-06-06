@@ -28,6 +28,8 @@ import org.exoplatform.portal.mop.PersistenceContext;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.gatein.portal.mop.hierarchy.HierarchyError;
+import org.gatein.portal.mop.hierarchy.HierarchyException;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -36,7 +38,6 @@ import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.portal.mop.navigation.NavigationContext;
-import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.navigation.NavigationState;
@@ -179,8 +180,8 @@ public class TestNavigationServiceWrapper extends AbstractMopServiceTest {
         try {
             wrapper.rebaseNode(root, null, null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
         }
         end();
     }

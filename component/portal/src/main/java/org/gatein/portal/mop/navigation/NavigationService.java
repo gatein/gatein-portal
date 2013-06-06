@@ -21,6 +21,7 @@ package org.gatein.portal.mop.navigation;
 
 import java.util.List;
 
+import org.gatein.portal.mop.hierarchy.HierarchyException;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
@@ -104,7 +105,8 @@ public interface NavigationService {
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
     <N> NodeContext<N, NodeState> loadNode(NodeModel<N, NodeState> model, NavigationContext navigation, Scope<NodeState> scope,
-            NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener) throws NullPointerException, NavigationServiceException;
+            NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener) throws NullPointerException,
+            NavigationServiceException, HierarchyException;
 
     /**
      * <p>
@@ -119,7 +121,7 @@ public interface NavigationService {
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
     <N> void saveNode(NodeContext<N, NodeState> context, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener) throws NullPointerException,
-            NavigationServiceException;
+            NavigationServiceException, HierarchyException;
 
     /**
      * <p>
@@ -150,7 +152,7 @@ public interface NavigationService {
      * @throws IllegalArgumentException if the context argument has pending changes
      */
     <N> void updateNode(NodeContext<N, NodeState> context, Scope<NodeState> scope, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
-            throws NullPointerException, IllegalArgumentException, NavigationServiceException;
+            throws NullPointerException, IllegalArgumentException, NavigationServiceException, HierarchyException;
 
     /**
      * <p>
@@ -181,5 +183,5 @@ public interface NavigationService {
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
     <N> void rebaseNode(NodeContext<N, NodeState> context, Scope<NodeState> scope, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
-            throws NullPointerException, NavigationServiceException;
+            throws NullPointerException, NavigationServiceException, HierarchyException;
 }

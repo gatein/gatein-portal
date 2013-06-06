@@ -22,6 +22,8 @@ package org.exoplatform.portal.mop.navigation;
 import java.util.Iterator;
 
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
+import org.gatein.portal.mop.hierarchy.HierarchyError;
+import org.gatein.portal.mop.hierarchy.HierarchyException;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
@@ -29,8 +31,6 @@ import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeChange;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.navigation.NavigationContext;
-import org.gatein.portal.mop.navigation.NavigationError;
-import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.site.SiteType;
@@ -950,8 +950,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
         }
     }
 
@@ -1038,8 +1038,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE, e.getError());
         }
     }
 
@@ -1067,8 +1067,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.MOVE_CONCURRENTLY_REMOVED_DST_NODE, e.getError());
         }
     }
 
@@ -1096,8 +1096,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE, e.getError());
         }
     }
 
@@ -1124,8 +1124,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.ADD_CONCURRENTLY_ADDED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.ADD_CONCURRENTLY_ADDED_NODE, e.getError());
         }
     }
 
@@ -1153,8 +1153,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE, e.getError());
         }
     }
 
@@ -1182,8 +1182,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE, e.getError());
         }
     }
 
@@ -1211,8 +1211,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE, e.getError());
         }
     }
 
@@ -1240,8 +1240,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.RENAME_CONCURRENTLY_REMOVED_NODE, e.getError());
         }
     }
 
@@ -1269,8 +1269,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.RENAME_CONCURRENTLY_DUPLICATE_NAME, e.getError());
         }
     }
 
@@ -1308,8 +1308,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertEquals(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertEquals(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
         }
     }
 
@@ -1376,8 +1376,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertSame(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
         }
     }
 
@@ -1426,8 +1426,8 @@ public class TestNavigationServiceSave extends AbstractMopServiceTest {
         try {
             navigationService.saveNode(root1.getContext(), null);
             fail();
-        } catch (NavigationServiceException e) {
-            assertSame(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertSame(HierarchyError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
         }
 
         //

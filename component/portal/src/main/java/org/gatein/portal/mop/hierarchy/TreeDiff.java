@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.UUID;
 
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
@@ -73,17 +72,21 @@ class TreeDiff<L, N, S extends Serializable> {
             switch (type) {
                 case ADDED: {
                     S state = adapter.getState(i.getDestination());
+                    String name = adapter.getName(i.getDestination());
                     NodeContext<N, S> parent = parentStack.peekLast();
                     NodeContext<N, S> previous = previousStack.peekLast();
                     NodeContext<N, S> added;
-                    String name = UUID.randomUUID().toString();
-                    if (previous != null) {
-                        added = parent.add(previous.getIndex() + 1, name, state);
+                    if (parent.get(name) != null) {
+                        throw new HierarchyException(HierarchyError.ADD_CONCURRENTLY_ADDED_NODE);
                     } else {
-                        added = parent.add(0, name, state);
+                        if (previous != null) {
+                            added = parent.add(previous.getIndex() + 1, name, state);
+                        } else {
+                            added = parent.add(0, name, state);
+                        }
+                        adapter.setHandle(i.getDestination(), added.getHandle());
+                        previousStack.set(previousStack.size() - 1, added);
                     }
-                    adapter.setHandle(i.getDestination(), added.getHandle());
-                    previousStack.set(previousStack.size() - 1, added);
                     break;
                 }
                 case REMOVED:

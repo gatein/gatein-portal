@@ -25,8 +25,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.gatein.portal.mop.navigation.NavigationServiceException;
-
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
@@ -49,7 +47,7 @@ class NodePersister<N, S extends Serializable> extends NodeChangeListener.Base<N
 
     @Override
     public void onCreate(NodeContext<N, S> target, NodeContext<N, S> parent, NodeContext<N, S> previous, String name, S state)
-            throws NavigationServiceException {
+            throws HierarchyException {
 
         //
         NodeData<S>[] result = persistence.createNode(parent.data.id, previous != null ? previous.data.id : null, name, state);
@@ -91,7 +89,7 @@ class NodePersister<N, S extends Serializable> extends NodeChangeListener.Base<N
     }
 
     @Override
-    public void onUpdate(NodeContext<N, S> source, S state) throws NavigationServiceException {
+    public void onUpdate(NodeContext<N, S> source, S state) throws HierarchyException {
 
         //
         source.data = persistence.updateNode(source.data.id, state);
@@ -104,7 +102,7 @@ class NodePersister<N, S extends Serializable> extends NodeChangeListener.Base<N
 
     @Override
     public void onMove(NodeContext<N, S> target, NodeContext<N, S> from, NodeContext<N, S> to, NodeContext<N, S> previous)
-            throws NavigationServiceException {
+            throws HierarchyException {
 
         NodeData<S>[] result = persistence.moveNode(target.data.id, from.data.id, to.data.id, previous != null ? previous.data.id : null);
 
@@ -120,7 +118,7 @@ class NodePersister<N, S extends Serializable> extends NodeChangeListener.Base<N
         toUpdate.add(to.handle);
     }
 
-    public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) throws NavigationServiceException {
+    public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) throws HierarchyException {
 
         NodeData<S>[] result = persistence.renameNode(target.data.id, parent.data.id, name);
 

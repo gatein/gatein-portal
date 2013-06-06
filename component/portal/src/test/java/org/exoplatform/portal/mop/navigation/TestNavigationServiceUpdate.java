@@ -22,6 +22,8 @@ package org.exoplatform.portal.mop.navigation;
 import java.util.Iterator;
 
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
+import org.gatein.portal.mop.hierarchy.HierarchyError;
+import org.gatein.portal.mop.hierarchy.HierarchyException;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.navigation.Node;
@@ -30,7 +32,6 @@ import org.gatein.portal.mop.hierarchy.NodeChangeQueue;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.navigation.NavigationContext;
-import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.site.SiteType;
@@ -643,8 +644,8 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
         //
         try {
             navigationService.updateNode(root.getContext(), null, null);
-        } catch (NavigationServiceException e) {
-            assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
+        } catch (HierarchyException e) {
+            assertSame(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
         }
     }
 }

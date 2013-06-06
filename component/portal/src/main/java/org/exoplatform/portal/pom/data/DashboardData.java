@@ -32,7 +32,7 @@ public class DashboardData extends ContainerData {
     public DashboardData(String storageId, String id, String name, String icon, String template, String factoryId,
             String title, String description, String width, String height, List<String> accessPermissions,
             List<ComponentData> children) {
-        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
+        super(storageId, null, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
     }
 
     /** . */
@@ -41,7 +41,7 @@ public class DashboardData extends ContainerData {
     static {
         List<ComponentData> children = new ArrayList<ComponentData>();
         for (int i = 0; i < 3; i++) {
-            ContainerData row = new ContainerData(null, null, null, null,
+            ContainerData row = new ContainerData(null, null, null, null, null,
                     "classpath:groovy/dashboard/webui/component/UIContainer.gtmpl", null, null, null, null, null,
                     Collections.<String> emptyList(), Collections.<ComponentData> emptyList());
             children.add(row);

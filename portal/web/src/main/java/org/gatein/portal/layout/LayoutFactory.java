@@ -36,11 +36,20 @@ public abstract class LayoutFactory {
         ElementState state = head.getState();
         if (state instanceof ElementState.Container) {
             ElementState.Container containerState = (ElementState.Container) state;
-            builder.beginContainer(head.getName(), containerState);
+
+            // We use the property NAME as this one is used when parsing XML < 2.0
+            // otherwise we need to use the real node name
+            String name = containerState.getProperties().get(ElementState.Container.NAME);
+            if (name == null) {
+                name = head.getName();
+            }
+
+            //
+            builder.beginContainer(name, containerState);
             for (NodeContext<N, ElementState> child : head) {
                 build_(child, builder);
             }
-            builder.endContainer(head.getName(), containerState);
+            builder.endContainer(name, containerState);
         } else if (state instanceof ElementState.Window) {
             ElementState.Window windowState = (ElementState.Window) state;
             builder.window(head.getName(), windowState);

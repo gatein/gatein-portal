@@ -135,7 +135,7 @@ public class ZoneLayout extends Layout {
 
         @Override
         public void beginContainer(String name, ElementState.Container state) {
-            String zone = parseZone(state);
+            String zone = parseZone(name);
             if (zone != null) {
                 currentWindows.push(new ArrayList<WindowLayout>());
             }
@@ -150,7 +150,7 @@ public class ZoneLayout extends Layout {
 
         @Override
         public void endContainer(String name, ElementState.Container state) {
-            String zone = parseZone(state);
+            String zone = parseZone(name);
             if (zone != null) {
                 ArrayList<WindowLayout> zoneWindows = currentWindows.pop();
                 if (zoneWindows.size() > 0) {
@@ -167,9 +167,20 @@ public class ZoneLayout extends Layout {
             return new ZoneLayout(factory, id, windows);
         }
 
-        private String parseZone(ElementState.Container state) {
-            String zone = state.properties.get(ElementState.Container.NAME);
-            return zone != null ? zone.trim() : null;
+        private String parseZone(String zone) {
+            if (zone != null) {
+                zone = zone.trim();
+                if ("header".equals(zone) || "footer".equals(zone)) {
+                    return zone;
+                } else {
+                    try {
+                        Integer.parseInt(zone);
+                        return zone;
+                    } catch (NumberFormatException e) {
+                    }
+                }
+            }
+            return null;
         }
     }
 

@@ -103,6 +103,7 @@ public class PageImporter {
             //
             ContainerData container = new ContainerData(
                     page.getLayoutId(),
+                    data.getStorageName(),
                     data.getId(),
                     data.getName(),
                     data.getIcon(),

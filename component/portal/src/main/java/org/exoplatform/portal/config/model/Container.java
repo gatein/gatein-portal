@@ -193,7 +193,7 @@ public class Container extends ModelObject {
     @Override
     public ContainerData build() {
         List<ComponentData> children = buildChildren();
-        return new ContainerData(storageId, id, name, icon, template, factoryId, title, description, width, height,
+        return new ContainerData(storageId, storageName, id, name, icon, template, factoryId, title, description, width, height,
                 Utils.safeImmutableList(accessPermissions), children);
     }
 

@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.gatein.portal.mop.navigation.NavigationServiceException;
-
 
 /**
  * <p>
@@ -209,7 +207,7 @@ class TreeContext<N, S extends Serializable> implements Scope.Visitor<S>, NodeCh
     //
 
     public void onCreate(NodeContext<N, S> target, NodeContext<N, S> parent, NodeContext<N, S> previous, String name, S state)
-            throws NavigationServiceException {
+            throws HierarchyException {
         addChange(new NodeChange.Created<NodeContext<N, S>, S>(parent, previous, target, name, state));
     }
 
@@ -217,16 +215,16 @@ class TreeContext<N, S extends Serializable> implements Scope.Visitor<S>, NodeCh
         addChange(new NodeChange.Destroyed<NodeContext<N, S>, S>(parent, target));
     }
 
-    public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) throws NavigationServiceException {
+    public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) throws HierarchyException {
         addChange(new NodeChange.Renamed<NodeContext<N, S>, S>(parent, target, name));
     }
 
-    public void onUpdate(NodeContext<N, S> target, S state) throws NavigationServiceException {
+    public void onUpdate(NodeContext<N, S> target, S state) throws HierarchyException {
         addChange(new NodeChange.Updated<NodeContext<N, S>, S>(target, state));
     }
 
     public void onMove(NodeContext<N, S> target, NodeContext<N, S> from, NodeContext<N, S> to, NodeContext<N, S> previous)
-            throws NavigationServiceException {
+            throws HierarchyException {
         addChange(new NodeChange.Moved<NodeContext<N, S>, S>(from, to, previous, target));
     }
 

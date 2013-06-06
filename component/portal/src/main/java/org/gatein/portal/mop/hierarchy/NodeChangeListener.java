@@ -21,8 +21,6 @@ package org.gatein.portal.mop.hierarchy;
 
 import java.io.Serializable;
 
-import org.gatein.portal.mop.navigation.NavigationServiceException;
-
 /**
  * A listener for node changes.
  *
@@ -104,7 +102,7 @@ public interface NodeChangeListener<N, S extends Serializable> {
         public void onAdd(N target, N parent, N previous) {
         }
 
-        public void onCreate(N target, N parent, N previous, String name, S state) throws NavigationServiceException {
+        public void onCreate(N target, N parent, N previous, String name, S state) throws HierarchyException {
         }
 
         public void onRemove(N target, N parent) {
@@ -113,13 +111,13 @@ public interface NodeChangeListener<N, S extends Serializable> {
         public void onDestroy(N target, N parent) {
         }
 
-        public void onRename(N target, N parent, String name) throws NavigationServiceException {
+        public void onRename(N target, N parent, String name) throws HierarchyException {
         }
 
-        public void onUpdate(N target, S state) throws NavigationServiceException {
+        public void onUpdate(N target, S state) throws HierarchyException {
         }
 
-        public void onMove(N target, N from, N to, N previous) throws NavigationServiceException {
+        public void onMove(N target, N from, N to, N previous) throws HierarchyException {
         }
     }
 }

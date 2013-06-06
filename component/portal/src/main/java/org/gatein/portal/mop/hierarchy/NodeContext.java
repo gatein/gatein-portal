@@ -150,7 +150,7 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
     }
 
     /**
-     * Returns the context id or null if the context is not associated with a persistent navigation node.
+     * Returns the context id or null if the context is not associated with a persistent node.
      *
      * @return the id
      */

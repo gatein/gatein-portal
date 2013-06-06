@@ -39,7 +39,7 @@ public class PageData extends ContainerData {
     public PageData(String storageId, String id, String name, String icon, String template, String factoryId, String title,
             String description, String width, String height, List<String> accessPermissions, List<ComponentData> children,
             String ownerType, String ownerId, String editPermission, boolean showMaxWindow) {
-        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
+        super(storageId, null, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
 
         //
         this.key = new PageKey(ownerType, ownerId, name);

@@ -216,7 +216,7 @@ public class GenericScope {
         private final Visitor<S> visitor;
 
         /**
-         * Creates a new navigation scope. When the height is positive or zero, the tree will be pruned to the specified height,
+         * Creates a new tree scope. When the height is positive or zero, the tree will be pruned to the specified height,
          * when the height is negative no pruning will occur.
          *
          * @param height the max height of the pruned tree

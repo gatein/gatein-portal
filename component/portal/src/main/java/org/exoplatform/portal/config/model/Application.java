@@ -141,6 +141,10 @@ public class Application<S> extends ModelObject {
         this.accessPermissions = accessPermissions;
     }
 
+    public void setAccessPermission(String accessPermission) {
+        this.accessPermissions = accessPermission != null ? new String[]{accessPermission} : null;
+    }
+
     public boolean isModifiable() {
         return isModifiable;
     }

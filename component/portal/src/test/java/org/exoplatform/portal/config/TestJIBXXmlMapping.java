@@ -22,13 +22,17 @@ package org.exoplatform.portal.config;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Locale;
 
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.NavigationFragment;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
@@ -38,6 +42,7 @@ import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.gatein.common.util.Tools;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
@@ -192,7 +197,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertNotNull(bar);
     }
 
-    public void test2_0() throws Exception {
+    public void testNavigation2_0() throws Exception {
         UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
                 "src/test/resources/xml/navigation.xml"));
         PageNavigation nav = obj.getObject();
@@ -252,5 +257,44 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(Locale.FRENCH, juuLabels.get(1).getLang());
         assertEquals("juu_label_fr_FR", juuLabels.get(2).getValue());
         assertEquals(Locale.FRANCE, juuLabels.get(2).getLang());
+    }
+
+    public void testPage2_0() throws Exception {
+        UnmarshalledObject<PageSet> obj = ModelUnmarshaller.unmarshall(PageSet.class, new FileInputStream(
+                "src/test/resources/xml/pages.xml"));
+        PageSet set = obj.getObject();
+        assertEquals(Version.V_2_0, obj.getVersion());
+
+        //
+        assertEquals(2, set.getPages().size());
+
+        //
+        Page foo = set.getPages().get(0);
+        assertEquals("foo", foo.getName());
+        assertEquals(1, foo.getChildren().size());
+        assertEquals("1", foo.getFactoryId());
+        Container zone1 = (Container)foo.getChildren().get(0);
+        assertEquals("1", zone1.getStorageName());
+        assertEquals(1, zone1.getChildren().size());
+        Application<Portlet> foobar = (Application<Portlet>) zone1.getChildren().get(0);
+        assertEquals("foobar", foobar.getStorageName());
+        assertEquals("ezfzef", foobar.getTitle());
+        assertEquals(Arrays.asList("zef"), Arrays.asList(foobar.getAccessPermissions()));
+        assertFalse(foobar.getShowInfoBar());
+        assertFalse(foobar.getShowApplicationState());
+        assertTrue(foobar.getShowApplicationMode());
+        TransientApplicationState<Portlet> foobarState = (TransientApplicationState<Portlet>) foobar.getState();
+        assertEquals("ef/zeezf", foobarState.getContentId());
+        Iterator<Preference> i = foobarState.getContentState().iterator();
+        assertTrue(i.hasNext());
+        Preference pref = i.next();
+        assertEquals("abc", pref.getName());
+        assertEquals(Arrays.asList("d1", "d2"), pref.getValues());
+        assertFalse(pref.isReadOnly());
+        assertFalse(i.hasNext());
+
+        //
+        Page bar = set.getPages().get(1);
+        assertEquals("bar", bar.getName());
     }
 }

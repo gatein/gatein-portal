@@ -21,9 +21,6 @@ package org.gatein.portal.mop.hierarchy;
 
 import java.io.Serializable;
 
-import org.gatein.portal.mop.navigation.NavigationError;
-import org.gatein.portal.mop.navigation.NavigationServiceException;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -41,11 +38,11 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
     }
 
     public void onCreate(NodeContext<N, S> target, NodeContext<N, S> _parent, NodeContext<N, S> _previous, String name, S state)
-            throws NavigationServiceException {
+            throws HierarchyException {
         String parentHandle = _parent.handle;
         NodeContext<N, S> parent = merged.getNode(parentHandle);
         if (parent == null) {
-            throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
+            throw new HierarchyException(HierarchyError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE);
         }
 
         //
@@ -53,7 +50,7 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
         if (_previous != null) {
             previous = merged.getNode(_previous.handle);
             if (previous == null) {
-                throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+                throw new HierarchyException(HierarchyError.ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
             }
         } else {
             previous = null;
@@ -62,7 +59,7 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
         //
         NodeContext<N, S> added = parent.get(name);
         if (added != null) {
-            throw new NavigationServiceException(NavigationError.ADD_CONCURRENTLY_ADDED_NODE);
+            throw new HierarchyException(HierarchyError.ADD_CONCURRENTLY_ADDED_NODE);
         }
 
         //
@@ -82,29 +79,29 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
         }
     }
 
-    public void onRename(NodeContext<N, S> target, NodeContext<N, S> _parent, String _name) throws NavigationServiceException {
+    public void onRename(NodeContext<N, S> target, NodeContext<N, S> _parent, String _name) throws HierarchyException {
         //
         String renamedHandle = target.handle;
         NodeContext<N, S> renamed = merged.getNode(renamedHandle);
         if (renamed == null) {
-            throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_REMOVED_NODE);
+            throw new HierarchyException(HierarchyError.RENAME_CONCURRENTLY_REMOVED_NODE);
         }
 
         //
         NodeContext<N, S> parent = renamed.getParent();
         if (parent.get(_name) != null) {
-            throw new NavigationServiceException(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
+            throw new HierarchyException(HierarchyError.RENAME_CONCURRENTLY_DUPLICATE_NAME);
         }
 
         //
         next.onRename(renamed, parent, _name);
     }
 
-    public void onUpdate(NodeContext<N, S> target, S state) throws NavigationServiceException {
+    public void onUpdate(NodeContext<N, S> target, S state) throws HierarchyException {
         String updatedHandle = target.handle;
         NodeContext<N, S> navigation = merged.getNode(updatedHandle);
         if (navigation == null) {
-            throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+            throw new HierarchyException(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE);
         }
 
         //
@@ -112,25 +109,25 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
     }
 
     public void onMove(NodeContext<N, S> target, NodeContext<N, S> _from, NodeContext<N, S> _to, NodeContext<N, S> _previous)
-            throws NavigationServiceException {
+            throws HierarchyException {
         String srcHandle = _from.handle;
         NodeContext<N, S> src = merged.getNode(srcHandle);
         if (src == null) {
-            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
+            throw new HierarchyException(HierarchyError.MOVE_CONCURRENTLY_REMOVED_SRC_NODE);
         }
 
         //
         String dstHandle = _to.handle;
         NodeContext<N, S> dst = merged.getNode(dstHandle);
         if (dst == null) {
-            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
+            throw new HierarchyException(HierarchyError.MOVE_CONCURRENTLY_REMOVED_DST_NODE);
         }
 
         //
         String movedHandle = target.handle;
         NodeContext<N, S> moved = merged.getNode(movedHandle);
         if (moved == null) {
-            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
+            throw new HierarchyException(HierarchyError.MOVE_CONCURRENTLY_REMOVED_MOVED_NODE);
         }
 
         //
@@ -138,7 +135,7 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
         if (_previous != null) {
             previous = merged.getNode(_previous.handle);
             if (previous == null) {
-                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
+                throw new HierarchyException(HierarchyError.MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE);
             }
         } else {
             previous = null;
@@ -146,7 +143,7 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
 
         //
         if (src != moved.getParent()) {
-            throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
+            throw new HierarchyException(HierarchyError.MOVE_CONCURRENTLY_CHANGED_SRC_NODE);
         }
 
         //
@@ -154,7 +151,7 @@ class TreeMerge<N, S extends Serializable> extends NodeChangeListener.Base<NodeC
             String name = moved.getName();
             NodeContext<N, S> existing = dst.get(name);
             if (existing != null) {
-                throw new NavigationServiceException(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME);
+                throw new HierarchyException(HierarchyError.MOVE_CONCURRENTLY_DUPLICATE_NAME);
             }
         }
 

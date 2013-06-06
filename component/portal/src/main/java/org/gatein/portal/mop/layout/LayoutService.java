@@ -19,6 +19,7 @@
 
 package org.gatein.portal.mop.layout;
 
+import org.gatein.portal.mop.hierarchy.HierarchyException;
 import org.gatein.portal.mop.hierarchy.NodeAdapter;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -43,11 +44,17 @@ public interface LayoutService {
     <N> NodeContext<N, ElementState> loadLayout(
             NodeModel<N, ElementState> model,
             String layoutId,
-            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException, LayoutServiceException;
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException,
+            LayoutServiceException, HierarchyException;
 
     <N> void saveLayout(
             NodeContext<N, ElementState> context,
-            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException, LayoutServiceException;
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException,
+            LayoutServiceException, HierarchyException;
 
-    <L, N> void saveLayout(NodeAdapter<L, N, ElementState> adapter, N node, NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener);
+    <L, N> void saveLayout(
+            NodeAdapter<L, N, ElementState> adapter,
+            N node, NodeContext<N, ElementState> context,
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException,
+            LayoutServiceException, HierarchyException;
 }

@@ -46,6 +46,7 @@ public class LayoutModelImpl implements NodeModel<ComponentData, ElementState> {
             ElementState.Container container = (ElementState.Container) state;
             return new ContainerData(
                     context.getId(),
+                    context.getName(),
                     container.id,
                     container.properties.get(ElementState.Container.NAME),
                     container.properties.get(ElementState.Container.ICON),

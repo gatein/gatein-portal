@@ -29,6 +29,8 @@ import org.exoplatform.portal.tree.diff.ListAdapter;
  */
 public interface NodeAdapter<L, N, S extends Serializable> extends HierarchyAdapter<L, N, String>, ListAdapter<L, String> {
 
+    String getName(N node);
+
     S getState(N node);
 
     N getParent(N node);

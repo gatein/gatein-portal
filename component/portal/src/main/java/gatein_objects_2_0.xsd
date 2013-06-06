@@ -21,6 +21,7 @@
 <xs:schema
     targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_2_0"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0"
+    xmlns:gtn="http://www.gatein.org/xml/ns/gatein_objects_2_0"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
@@ -85,5 +86,82 @@
       <xs:element name="node" type="descendantNodeType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:group>
+
+  <xs:complexType name="pageType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="layout" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="access-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="zone" type="zoneType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="zoneType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="portlet" type="portletType"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="windowType" abstract="true">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="access-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="show-info-bar" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="show-application-state" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="show-application-mode" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="portletType">
+    <xs:complexContent>
+      <xs:extension base="windowType">
+        <xs:sequence>
+          <xs:element name="application-ref" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="portlet-ref" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="preferences" type="preferencesType" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="preferencesType">
+    <xs:sequence>
+      <xs:element name="preference" type="preferenceType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="preferenceType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="read-only" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- A set of pages -->
+  <xs:element name="page-set" type="pageSetType">
+    <xs:unique name="page-name-uniqueness">
+      <xs:selector xpath="gtn:page"/>
+      <xs:field xpath="gtn:name"/>
+    </xs:unique>
+    <xs:unique name="portlet-name-uniqueness">
+      <xs:selector xpath="gtn:page/gtn:zone/gtn:portlet"/>
+      <xs:field xpath="gtn:name"/>
+    </xs:unique>
+  </xs:element>
+
+  <xs:complexType name="pageSetType">
+    <xs:sequence>
+      <xs:element name="page" type="pageType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
 
 </xs:schema>

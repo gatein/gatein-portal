@@ -297,7 +297,7 @@ public class Mapper {
 
             // Workaround to have the real source container used as the model / UI layer lose this
             // ID which lead to bugs
-            ContainerData realSrcContainer = new ContainerData(dstContainer.getObjectId(), srcContainer.getId(),
+            ContainerData realSrcContainer = new ContainerData(dstContainer.getObjectId(), dstContainer.getName(), srcContainer.getId(),
                     srcContainer.getName(), srcContainer.getIcon(), srcContainer.getTemplate(), srcContainer.getFactoryId(),
                     srcContainer.getTitle(), srcContainer.getDescription(), srcContainer.getWidth(), srcContainer.getHeight(),
                     srcContainer.getAccessPermissions(), srcContainer.getChildren());
@@ -402,7 +402,7 @@ public class Mapper {
         Described described = src.adapt(Described.class);
 
         Attributes attrs = src.getAttributes();
-        return new ContainerData(src.getObjectId(), attrs.getValue(MappedAttributes.ID), attrs.getValue(MappedAttributes.NAME),
+        return new ContainerData(src.getObjectId(), src.getName(), attrs.getValue(MappedAttributes.ID), attrs.getValue(MappedAttributes.NAME),
                 attrs.getValue(MappedAttributes.ICON), attrs.getValue(MappedAttributes.TEMPLATE),
                 attrs.getValue(MappedAttributes.FACTORY_ID), described.getName(), described.getDescription(),
                 attrs.getValue(MappedAttributes.WIDTH), attrs.getValue(MappedAttributes.HEIGHT),

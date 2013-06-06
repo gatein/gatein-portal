@@ -200,6 +200,7 @@ public class POMDataStorage implements ModelDataStorage {
         ContainerData layout = config.getPortalLayout();
         layout = new ContainerData(
                 site.getLayoutId(),
+                layout.getStorageName(),
                 layout.getId(),
                 layout.getName(),
                 layout.getIcon(),
@@ -233,6 +234,7 @@ public class POMDataStorage implements ModelDataStorage {
         ContainerData layout = config.getPortalLayout();
         layout = new ContainerData(
                 site.getLayoutId(),
+                layout.getStorageName(),
                 layout.getId(),
                 layout.getName(),
                 layout.getIcon(),
@@ -305,6 +307,7 @@ public class POMDataStorage implements ModelDataStorage {
             }
             return new ContainerData(
                     context.getId(),
+                    context.getName(),
                     container.id,
                     container.properties.get(ElementState.Container.NAME),
                     container.properties.get(ElementState.Container.ICON),
@@ -383,6 +386,7 @@ public class POMDataStorage implements ModelDataStorage {
         // Need to use the context ID
         ContainerData container = new ContainerData(
                 context.getLayoutId(),
+                page.getStorageName(),
                 page.getId(),
                 page.getName(),
                 page.getIcon(),

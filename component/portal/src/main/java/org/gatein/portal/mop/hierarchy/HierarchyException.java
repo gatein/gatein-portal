@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 eXo Platform SAS.
+ * Copyright (C) 2010 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,13 +17,44 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.mop.navigation;
+package org.gatein.portal.mop.hierarchy;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
  */
-public enum NavigationError {
+public class HierarchyException extends RuntimeException {
 
-    NAVIGATION_NO_SITE,
+    /** . */
+    private final HierarchyError error;
 
+    public HierarchyException(HierarchyError error) {
+        super(error.toString());
+        this.error = error;
+    }
+
+    public HierarchyException(HierarchyError error, String message) {
+        super(message);
+
+        //
+        this.error = error;
+    }
+
+    public HierarchyException(HierarchyError error, String message, Throwable cause) {
+        super(message, cause);
+
+        //
+        this.error = error;
+    }
+
+    public HierarchyException(HierarchyError error, Throwable cause) {
+        super(cause);
+
+        //
+        this.error = error;
+    }
+
+    public HierarchyError getError() {
+        return error;
+    }
 }

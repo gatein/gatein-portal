@@ -48,7 +48,7 @@ public class TestSerialization extends AbstractGateInTest {
     private final BodyData body = new BodyData("foo", BodyType.PAGE);
 
     /** . */
-    private final ContainerData container = new ContainerData("foo01", "foo02", "foo03", "foo04", "foo05", "foo06", "foo07",
+    private final ContainerData container = new ContainerData("foo00", "foo01", "foo02", "foo03", "foo04", "foo05", "foo06", "foo07",
             "foo08", "foo09", "foo10", Arrays.asList("foo11"), Arrays.<ComponentData> asList(body));
 
     public void testNavigationKey() throws Exception {

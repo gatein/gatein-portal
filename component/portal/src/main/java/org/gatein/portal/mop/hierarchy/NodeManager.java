@@ -22,9 +22,6 @@ package org.gatein.portal.mop.hierarchy;
 import java.io.Serializable;
 import java.util.Map;
 
-import org.gatein.portal.mop.navigation.NavigationError;
-import org.gatein.portal.mop.navigation.NavigationServiceException;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -65,7 +62,7 @@ public class NodeManager<S extends Serializable> {
             NodeContext<N, S> root,
             Scope<S> scope,
             NodeChangeListener<NodeContext<N, S>, S> listener)
-            throws NullPointerException, IllegalArgumentException, NavigationServiceException {
+            throws NullPointerException, IllegalArgumentException, HierarchyException {
         Scope.Visitor<S> visitor;
         if (scope != null) {
             visitor = new FederatingVisitor<N, S>(root.tree, root, scope);
@@ -76,7 +73,7 @@ public class NodeManager<S extends Serializable> {
     }
 
     public <N> void saveNode(NodeContext<N, S> context, NodeChangeListener<NodeContext<N, S>, S> listener) throws NullPointerException,
-            NavigationServiceException {
+            HierarchyException {
         saveTree(context.tree, listener);
     }
 
@@ -84,7 +81,7 @@ public class NodeManager<S extends Serializable> {
             NodeContext<N, S> context,
             Scope<S> scope,
             NodeChangeListener<NodeContext<N, S>, S> listener)
-            throws NavigationServiceException {
+            throws HierarchyException {
         Scope.Visitor<S> visitor;
         if (scope != null) {
             visitor = new FederatingVisitor<N, S>(context.tree.origin(), context, scope);
@@ -98,14 +95,14 @@ public class NodeManager<S extends Serializable> {
             TreeContext<N, S> tree,
             Scope.Visitor<S> visitor,
             NodeChangeListener<NodeContext<N, S>, S> listener)
-            throws NullPointerException, IllegalArgumentException, NavigationServiceException {
+            throws NullPointerException, IllegalArgumentException, HierarchyException {
         if (tree.hasChanges()) {
             throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
         }
         try {
             NodeData<S> data = store.loadNode(tree.root.data.id);
             if (data == null) {
-                throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+                throw new HierarchyException(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
 
             // Switch to edit mode
@@ -129,7 +126,7 @@ public class NodeManager<S extends Serializable> {
             TreeContext<N, S> tree,
             Scope.Visitor<S> visitor,
             NodeChangeListener<NodeContext<N, S>, S> listener)
-            throws NavigationServiceException {
+            throws HierarchyException {
         if (!tree.hasChanges()) {
             updateTree(tree, visitor, listener);
         } else {
@@ -141,11 +138,11 @@ public class NodeManager<S extends Serializable> {
 
     private <N> TreeContext<N, S> rebase(
             TreeContext<N, S> tree,
-            Scope.Visitor<S> visitor) throws NavigationServiceException {
+            Scope.Visitor<S> visitor) throws HierarchyException {
         try {
             NodeData<S> data = store.loadNode(tree.root.getId());
             if (data == null) {
-                throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+                throw new HierarchyException(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
 
             //
@@ -174,12 +171,12 @@ public class NodeManager<S extends Serializable> {
     }
 
     private <N> void saveTree(TreeContext<N, S> tree, NodeChangeListener<NodeContext<N, S>, S> listener) throws NullPointerException,
-            NavigationServiceException {
+            HierarchyException {
 
         try {
             NodeData<S> data = store.loadNode(tree.root.data.id);
             if (data == null) {
-                throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
+                throw new HierarchyException(HierarchyError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
 
             // Attempt to rebase

@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2010 eXo Platform SAS.
+/*
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,13 +16,36 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.portal.xml;
+
+package org.gatein.portal.mop.hierarchy;
 
 /**
- * @author Julien Viet
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NavigationParser {
+public enum HierarchyError {
 
+    MOVE_CONCURRENTLY_REMOVED_SRC_NODE,
 
+    MOVE_CONCURRENTLY_REMOVED_DST_NODE,
+
+    MOVE_CONCURRENTLY_REMOVED_MOVED_NODE,
+
+    MOVE_CONCURRENTLY_CHANGED_SRC_NODE,
+
+    MOVE_CONCURRENTLY_REMOVED_PREVIOUS_NODE,
+
+    MOVE_CONCURRENTLY_DUPLICATE_NAME,
+
+    ADD_CONCURRENTLY_REMOVED_PARENT_NODE,
+
+    ADD_CONCURRENTLY_ADDED_NODE,
+
+    ADD_CONCURRENTLY_REMOVED_PREVIOUS_NODE,
+
+    UPDATE_CONCURRENTLY_REMOVED_NODE,
+
+    RENAME_CONCURRENTLY_REMOVED_NODE,
+
+    RENAME_CONCURRENTLY_DUPLICATE_NAME,
 
 }

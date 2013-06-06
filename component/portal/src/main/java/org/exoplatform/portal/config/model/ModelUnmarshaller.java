@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,10 +35,13 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.gatein.common.io.IOTools;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
+import org.staxnav.Axis;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavigator;
 import org.staxnav.StaxNavigatorFactory;
@@ -46,6 +50,15 @@ import org.staxnav.StaxNavigatorFactory;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class ModelUnmarshaller {
+
+    private static <E extends Enum<E>> StaxNavigator<E> createStaxNav(InputStream in, Class<E> type) throws XMLStreamException {
+        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+        inputFactory.setProperty("javax.xml.stream.isCoalescing", true);
+        XMLStreamReader stream = inputFactory.createXMLStreamReader(in);
+        StaxNavigator<E> nav = StaxNavigatorFactory.create(new Naming.Enumerated.Simple<E>(type, null), stream);
+        nav.setTrimContent(true);
+        return nav;
+    }
 
     public static <T> UnmarshalledObject<T> unmarshall(Class<T> type, InputStream in) throws Exception {
         return unmarshall(type, IOTools.getBytes(in));
@@ -74,8 +87,12 @@ public class ModelUnmarshaller {
         baos.reset();
         T obj;
         if (type == PageNavigation.class && version == Version.V_2_0) {
-            obj = type.cast(parse(baos));
+            obj = type.cast(parseNavigation(baos));
+        } else if (type == Page.PageSet.class && version == Version.V_2_0) {
+            obj = type.cast(parsePageSet(baos));
         } else {
+
+            // Legacy parsing using JIBX shit
             IBindingFactory bfact = BindingDirectory.getFactory(type);
             UnmarshallingContext uctx = (UnmarshallingContext) bfact.createUnmarshallingContext();
             uctx.setDocument(baos, null, "UTF-8", false);
@@ -86,7 +103,7 @@ public class ModelUnmarshaller {
         return new UnmarshalledObject<T>(version, obj);
     }
 
-    enum Element {
+    enum NavigationElement {
 
         navigation, node, name, parent_uri, label, icon, start_publication_date, end_publication_date, visibility, page_reference
 
@@ -107,19 +124,14 @@ public class ModelUnmarshaller {
     };
 
     //
-    private static PageNavigation parse(InputStream in) throws XMLStreamException, ParseException {
-
-        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-        inputFactory.setProperty("javax.xml.stream.isCoalescing", true);
-        XMLStreamReader stream = inputFactory.createXMLStreamReader(in);
-        StaxNavigator<Element> nav = StaxNavigatorFactory.create(new Naming.Enumerated.Simple<Element>(Element.class, null), stream);
-        nav.setTrimContent(true);
-        assert Element.navigation == nav.getName();
+    private static PageNavigation parseNavigation(InputStream in) throws XMLStreamException, ParseException {
+        StaxNavigator<NavigationElement> nav = createStaxNav(in, NavigationElement.class);
 
         //
+        validate(NavigationElement.navigation == nav.getName());
         PageNavigation navigation = new PageNavigation();
-        if (nav.child(Element.node)) {
-            for (StaxNavigator<Element> portletNav : nav.fork(Element.node)) {
+        if (nav.child(NavigationElement.node)) {
+            for (StaxNavigator<NavigationElement> portletNav : nav.fork(NavigationElement.node)) {
                 PageNode root = parseNode(portletNav);
                 NavigationFragment fragment = new NavigationFragment();
                 fragment.setParentURI(root.getName());
@@ -135,9 +147,9 @@ public class ModelUnmarshaller {
     }
 
     //
-    private static PageNode parseNode(StaxNavigator<Element> nav) throws ParseException {
+    private static PageNode parseNode(StaxNavigator<NavigationElement> nav) throws ParseException {
         PageNode node = new PageNode();
-        for (Element child = nav.child();child != null;child = nav.sibling()) {
+        for (NavigationElement child = nav.child();child != null;child = nav.sibling()) {
             switch (child) {
                 case name:
                 case parent_uri:
@@ -191,6 +203,108 @@ public class ModelUnmarshaller {
             }
         }
         return node;
+    }
+
+    enum PageElement {
+
+        page_set, page, zone, name, layout, id, portlet, title, description, access_permission, edit_permission,
+        show_info_bar, show_application_state, show_application_mode, application_ref, portlet_ref, preferences,
+        preference, value, read_only
+
+    }
+
+    private static Page.PageSet parsePageSet(InputStream in) throws XMLStreamException, ParseException {
+
+        StaxNavigator<PageElement> nav = createStaxNav(in, PageElement.class);
+
+        //
+        return parsePageSet(nav);
+    }
+
+    private static void validate(boolean b) {
+        if (!b) {
+            throw new RuntimeException("Parse exception");
+        }
+    }
+
+    public static Page.PageSet parsePageSet(StaxNavigator<PageElement> nav) {
+        Page.PageSet set = new Page.PageSet();
+        validate(PageElement.page_set == nav.getName());
+        if (nav.child(PageElement.page)) {
+            for (StaxNavigator<PageElement> pageNav : nav.fork(PageElement.page)) {
+                validate(pageNav.child(PageElement.name));
+                String name = pageNav.getContent();
+                String layout;
+                if (pageNav.sibling(PageElement.layout)) {
+                    layout = pageNav.getContent();
+                } else {
+                    layout = null;
+                }
+                Page page = new Page();
+                page.setName(name);
+                page.setFactoryId(layout);
+                while (pageNav.sibling(PageElement.zone)) {
+                    StaxNavigator<PageElement> zoneNav = pageNav.fork();
+                    validate(zoneNav.child(PageElement.id));
+                    String id = zoneNav.getContent();
+                    Container zone = new Container();
+                    zone.setStorageName(id);
+                    for (PageElement p = zoneNav.sibling();p != null;p = zoneNav.sibling()) {
+                        StaxNavigator<PageElement> windowNav = zoneNav.fork();
+                        validate(windowNav.child(PageElement.name));
+                        String windowName = windowNav.getContent();
+                        String windowTitle = windowNav.sibling(PageElement.title) ? windowNav.getContent() : null;
+                        String windowDescription = windowNav.sibling(PageElement.description) ? windowNav.getContent() : null;
+                        String windowAccessPermission = windowNav.sibling(PageElement.access_permission) ? windowNav.getContent() : null;
+                        String windowEditPermission = windowNav.sibling(PageElement.edit_permission) ? windowNav.getContent() : null;
+                        String windowShowInfoBar = windowNav.sibling(PageElement.show_info_bar) ? windowNav.getContent() : null;
+                        String windowShowApplicationState = windowNav.sibling(PageElement.show_application_state) ? windowNav.getContent() : null;
+                        String windowShowApplicationMode = windowNav.sibling(PageElement.show_application_mode) ? windowNav.getContent() : null;
+                        Application<Portlet> application = Application.createPortletApplication();
+                        application.setStorageName(windowName);
+                        application.setTitle(windowTitle);
+                        application.setDescription(windowDescription);
+                        application.setAccessPermission(windowAccessPermission);
+                        application.setShowInfoBar("true".equals(windowShowInfoBar));
+                        application.setShowApplicationMode("true".equals(windowShowApplicationMode));
+                        application.setShowApplicationState("true".equals(windowShowApplicationState));
+                        switch (p) {
+                            case portlet: {
+                                validate(windowNav.sibling(PageElement.application_ref));
+                                String applicationRef = windowNav.getContent();
+                                validate(windowNav.sibling(PageElement.portlet_ref));
+                                String portletRef = windowNav.getContent();
+                                String contentId = applicationRef + "/" + portletRef;
+                                Portlet portlet = null;
+                                if (windowNav.sibling(PageElement.preferences)) {
+                                    PortletBuilder builder = new PortletBuilder();
+                                    for (boolean b = windowNav.child(PageElement.preference);b;b = windowNav.sibling(PageElement.preference)) {
+                                        validate(windowNav.child(PageElement.name));
+                                        String preferenceName = windowNav.getContent();
+                                        ArrayList<String> values = new ArrayList<String>();
+                                        while (windowNav.sibling(PageElement.value)) {
+                                            values.add(windowNav.getContent());
+                                        }
+                                        boolean readOnly;
+                                        readOnly = windowNav.sibling(PageElement.read_only) && "true".equals(windowNav.getContent());
+                                        builder.add(preferenceName, values, readOnly);
+                                    }
+                                    portlet = builder.build();
+                                }
+                                application.setState(new TransientApplicationState(contentId, portlet));
+                                break;
+                            }
+                            default:
+                                throw new UnsupportedOperationException();
+                        }
+                        zone.getChildren().add(application);
+                    }
+                    page.getChildren().add(zone);
+                }
+                set.getPages().add(page);
+            }
+        }
+        return set;
     }
 
 }

@@ -94,6 +94,7 @@ public class SiteImporter {
             ContainerData container = src.build().getPortalLayout();
             container = new ContainerData(
                     imported.getLayoutId(),
+                    container.getStorageName(),
                     container.getId(),
                     container.getName(),
                     container.getIcon(),
