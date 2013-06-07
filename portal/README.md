@@ -26,6 +26,12 @@ However there is a slight drawback, when user navigates to another page, the par
 on the same page. We will introduce *window session scoped state* to declare that a window will have its state stored in the
 portal session, this should be configured in the deployment descriptor of the application.
 
+## Reactive pages
+
+Page rendering has been improved and provides a new implementation for the rendering based on the Servlet 3.0 features: the new rendering is now parallelized
+instead of being sequential. This provides noticeable improvements when portlets have a long rendering time and the page rendering time can be improved in such
+situations.
+
 ## URL encoding
 
 ### Goals
