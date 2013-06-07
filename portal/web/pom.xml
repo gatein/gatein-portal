@@ -31,6 +31,10 @@
   <packaging>jar</packaging>
   <name>GateIn Portal Web Module</name>
 
+  <properties>
+    <org.apache.tomcat.version>7.0.40</org.apache.tomcat.version>
+  </properties>
+
   <dependencies>
 
     <!-- eXo kernel dependencies -->
@@ -220,12 +224,28 @@
       <version>2.2</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.jboss.shrinkwrap.descriptors</groupId>
       <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
       <version>2.0.0-alpha-4</version>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat</artifactId>
+      <version>${org.apache.tomcat.version}</version>
+      <type>tar.gz</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portal.root</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>org.gatein.portal.examples.portlets</artifactId>
+      <type>war</type>
     </dependency>
 
   </dependencies>
@@ -265,13 +285,26 @@
         </configuration>
         <executions>
           <execution>
+            <id>portal</id>
             <goals>
               <goal>single</goal>
             </goals>
             <phase>package</phase>
             <configuration>
               <descriptors>
-                <descriptor>src/main/assembly/tomcat.xml</descriptor>
+                <descriptor>src/main/assembly/tomcat-portal.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+          <execution>
+            <id>distrib</id>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/tomcat-distrib.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>
@@ -313,7 +346,7 @@
                     <groupId>org.gatein.portal</groupId>
                     <artifactId>portal.web</artifactId>
                     <version>${project.version}</version>
-                    <classifier>tomcat</classifier>
+                    <classifier>tomcat-portal</classifier>
                     <type>war</type>
                   </dependency>
                   <contextPath>/portal</contextPath>

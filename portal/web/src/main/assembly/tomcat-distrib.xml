@@ -1,0 +1,63 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+  <id>tomcat-distrib</id>
+  <formats>
+    <format>tar.gz</format>
+  </formats>
+
+  <includeBaseDirectory>false</includeBaseDirectory>
+
+  <dependencySets>
+    <dependencySet>
+      <includes>
+        <include>org.apache.tomcat:tomcat:tar.gz</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>/</outputDirectory>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <excludes>
+          <exclude>**/ROOT/**</exclude>
+        </excludes>
+      </unpackOptions>
+    </dependencySet>
+    <dependencySet>
+      <scope>provided</scope>
+      <includes>
+        <include>javax.portlet:portlet-api</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/lib/</outputDirectory>
+    </dependencySet>
+    <dependencySet>
+      <includes>
+        <include>org.gatein.portal:portal.root:war</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputFileNameMapping>ROOT.war</outputFileNameMapping>
+      <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/webapps/</outputDirectory>
+    </dependencySet>
+    <dependencySet>
+      <includes>
+        <include>org.gatein.portal:org.gatein.portal.examples.portlets:war</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputFileNameMapping>samples.war</outputFileNameMapping>
+      <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/webapps/</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+
+  <files>
+    <file>
+      <source>${project.build.directory}/${project.build.finalName}-tomcat-portal.war</source>
+      <destName>portal.war</destName>
+      <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/webapps/</outputDirectory>
+    </file>
+  </files>
+
+</assembly>
