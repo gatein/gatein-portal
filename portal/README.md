@@ -94,36 +94,19 @@ Note that some parameters are omitted according to the resource URL cache level:
 
 The new page layout based on the In [Place Editing](https://community.jboss.org/wiki/InPlaceEditing) proposal has been a bit sketched. The existing container based UI structure is kept however it is used differently. Instead of having a container representing a page component, a container represents a visual zone as per defined in the spec.
 
-Therefore a page structure becomes like:
+Deployment descriptor has been adapted to this and the new 2.0 namespace provides the capabilty to name zones and windows with a name:
 
-    <page>
-      <name>homepage</name>
-      <title>Home Page</title>
-      <access-permissions>Everyone</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
-      <container>
-        <name>1</name>
-        <portlet-application>
-          <portlet>
-            <application-ref>portal</application-ref>
-            <portlet-ref>HomePortlet</portlet-ref>
-          </portlet>
-          <title>Home</title>
-          <access-permissions>Everyone</access-permissions>
-          <show-info-bar>false</show-info-bar>
-          <show-application-state>false</show-application-state>
-          <show-application-mode>false</show-application-mode>
-        </portlet-application>
-      </container>
-    </page>
+- the XML is simpler
+- windows are named instead of having a generated UUID like before: so the new URLs are stables (now they were using UUID for scoping the window navigational state)
 
-It is likely not an optimal way to declare it but it works well enough at the moment.
 
 # Deployment descriptor
 
+A simplified and improved navigation XML format has been introduced allowing to reduce the boiler plate and provide new features.
+
 ## Navigation 2.0
 
-A simplified and improved navigation XML format has been introduced allowing to reduce the boiler plate and also to provide a *root* navigation page:
+The XML for navigation looks like:
 
     <navigation
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -144,6 +127,31 @@ A simplified and improved navigation XML format has been introduced allowing to 
       </node>
     </navigation>
 
+- the navigation now provides a *root* navigation page.
+
+## Page 2.0
+
+
+The XML for page looks like:
+
+    <page>
+      <name>homepage</name>
+      <title>Home Page</title>
+      <access-permission>Everyone</access-permission>
+      <edit-permission>*:/platform/administrators</edit-permission>
+      <zone>
+        <id>1</id>
+        <portlet>
+          <name>home</name>
+          <access-permission>Everyone</access-permission>
+          <application-ref>portal</application-ref>
+          <portlet-ref>HomePortlet</portlet-ref>
+        </portlet>
+      </zone>
+    </page>
+
+- the layout hierarchy is gone providing flat *zone* containers
+- windows (portlet) uses a mandatory *name* element for identifying the window in the page (checked with an XSD unique constraint)
 
 # Todo list (close scope)
 
