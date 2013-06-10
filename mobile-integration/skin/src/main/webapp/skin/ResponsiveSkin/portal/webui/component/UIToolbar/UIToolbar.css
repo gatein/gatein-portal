@@ -20,8 +20,30 @@
     color: #1C4E7E;
 }
 
+.UIToolbarContainer .MenuItem a,
+.UIToolbarContainer .MenuItemContainer li {
+    height: auto;
+    line-height: normal;
+}
+
+.UIToolbarContainer .MenuItemContainer .HorizontalSeparator {
+    height: 1px;
+}
+
+.UIToolbarContainer .ToolbarContainer .MenuItem a {
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+
 /* Media Queries for Smaller Screened Devices*/
 @media only screen and (max-width: 45em) {
+
+    .UIToolbarContainer .MenuItem a,
+    .UIToolbarContainer .MenuItemContainer li {
+        white-space: normal;
+    }
+
+
     .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>a,
     .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>span {
         font-size: 0;
@@ -34,5 +56,15 @@
     .UIToolbarContainer .UIUserInfoPortlet .Name>a,
     .UIToolbarContainer .UIUserInfoPortlet .Name>span{
         font-size: 0;
+    }
+
+    .UIToolbarContainer .MenuItemContainer {
+        width: 10em;
+    }
+
+
+    .UIToolbarContainer  .ToolbarContainer .MenuItem a {
+        background-image: none;
+        padding-left: 0.5em;
     }
 }

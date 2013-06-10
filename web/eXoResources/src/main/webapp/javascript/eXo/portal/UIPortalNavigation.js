@@ -833,7 +833,15 @@
 	    var posRight = $(window).width() - base.Browser.findPosX(menuItem[0], true) ;
 	    var rootX = (base.I18n.isLT() ? base.Browser.findPosX(menuItem[0]) : posRight) ;
 	    if (x + menuItemContainer.width() + rootX > $(window).width()) {
-	    	x -= (menuItemContainer.width() + menuItem.width()) ;
+                if (menuItemContainer.width() > rootX) {
+                    if ($(window).width() - x - rootX >  rootX) {
+                      x += $(window).width() - rootX -x - menuItemContainer.width(); 
+                    } else {
+                      x -=  menuItem.width() + rootX;
+                    }
+                } else {
+	                x -= (menuItemContainer.width() + menuItem.width()) ;
+                }
 	    }
 	    this.superClass.setPosition(menuItemContainer[0], x, y, base.I18n.isRT());
 	  },
