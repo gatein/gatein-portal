@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%@ page import="org.exoplatform.webui.application.WebuiRequestContext" %>
+<%@ page import="org.exoplatform.web.application.JavascriptManager" %>
 <portlet:defineObjects />
 
 <%-- The resourceBundle used to retrieve locale string values --%>
@@ -8,6 +9,12 @@
 <c:set var="featuresTitle" value="${renderRequest.getPreferences().getValue('features.title', 'gateinFeatures')}" />
 <c:set var="featureList" value="${renderRequest.getPreferences().getValue('features.list', 'sso, nui, ps')}" />
 <c:set var="featureLink" value="${renderRequest.getAttribute('featureLink')}" />
+
+<%-- Hack because web ui can't properly handle javascript modules after a full ajax page reload --%>
+<%
+  JavascriptManager jsMan = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getJavascriptManager();
+  jsMan.require("SHARED/org_gatein_features", "features").addScripts("features.init();");
+%>
 
 <div class="gtnResponsiveFeaturesPortlet">
     <c:if test="${not empty featuresTitle}">

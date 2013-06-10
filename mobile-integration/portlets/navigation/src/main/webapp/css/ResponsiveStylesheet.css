@@ -93,7 +93,9 @@
 
 
 .gtnResponsiveNavigationPortlet .btn {
-    background-image: url(../images/icon-nav.svg);
+    background-image:  url(../images/icon-nav.png);
+    background-image:  none, url(../images/icon-nav.svg), url(../images/icon-nav.png);
+
     background-color: transparent;
     background-position: center 0.5em;
     background-repeat: no-repeat;

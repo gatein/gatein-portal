@@ -15,8 +15,12 @@
 
 /* The gatein Logo */
 .gtnResponsiveHeaderPortlet .logo {
-    background-image: url("../images/gatein_logo_ltr.svg"); /* orientation=rt */
-    background-image: url("../images/gatein_logo.svg"); /* orientation=lt */
+    background-image:  url("../images/gatein_logo_ltr.png"); /* orientation=rt */
+    background-image:  none, url("../images/gatein_logo_ltr.svg"), url("../images/gatein_logo_ltr.png"); /* orientation=rt */
+
+    background-image:  url("../images/gatein_logo.png"); /* orientation=lt */
+    background-image:  none, url("../images/gatein_logo.svg"), url("../images/gatein_logo.png"); /* orientation=lt */
+
     line-height: 1em;
     background-repeat: no-repeat;
     background-size: cover;
@@ -36,7 +40,8 @@
 
 /* Userpreference specific button icons */
 .gtnResponsiveHeaderPortlet .gtnResponsiveMenuCollapseButton .collapseButtonIcon {
-    background-image: url(../images/icon-user.svg);
+    background-image:  url(../images/icon-user.png);
+    background-image:  none, url(../images/icon-user.svg), url(../images/icon-user.png);
 }
 
 .gtnResponsiveHeaderPortlet .gtnResponsiveMenuCollapseButton:hover .collapseButtonIcon,
