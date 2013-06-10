@@ -1,0 +1,71 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+
+  <context-param>
+    <param-name>juzu.inject</param-name>
+    <param-value>%s</param-value>
+  </context-param>
+  <context-param>
+    <param-name>juzu.run_mode</param-name>
+    <param-value>%s</param-value>
+  </context-param>
+
+  <display-name>portal</display-name>
+
+  <filter>
+    <filter-name>KernelLifeCycle</filter-name>
+    <filter-class>org.gatein.portal.common.kernel.KernelLifeCycle</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+  <filter-mapping>
+    <filter-name>KernelLifeCycle</filter-name>
+    <servlet-name>PortalServlet</servlet-name>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>ClientRequestFilter</filter-name>
+    <filter-class>org.gatein.portal.servlet.ClientRequestFilter</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+  <filter-mapping>
+    <filter-name>ClientRequestFilter</filter-name>
+    <servlet-name>PortalServlet</servlet-name>
+  </filter-mapping>
+
+  <!-- WCI integration for Tomcat7 -->
+  <servlet>
+    <servlet-name>ContainerServlet</servlet-name>
+    <servlet-class>org.gatein.wci.tomcat.TC7ContainerServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
+  <!-- -->
+  <servlet>
+    <servlet-name>PortalServlet</servlet-name>
+    <servlet-class>juzu.bridge.servlet.JuzuServlet</servlet-class>
+    <init-param>
+      <param-name>juzu.app_name</param-name>
+      <param-value>org.gatein.portal</param-value>
+    </init-param>
+    <async-supported>true</async-supported>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PortalServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!-- -->
+  <servlet>
+    <servlet-name>AssetServlet</servlet-name>
+    <servlet-class>juzu.impl.asset.AssetServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AssetServlet</servlet-name>
+    <url-pattern>/assets/*</url-pattern>
+  </servlet-mapping>
+
+</web-app>

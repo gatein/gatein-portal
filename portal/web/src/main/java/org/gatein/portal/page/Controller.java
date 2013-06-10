@@ -343,7 +343,7 @@ public class Controller {
                     ReactivePage rp = new ReactivePage(pageContext, context.getUserContext().getLocale());
 
                     //
-                    return rp.execute(siteLayout, pageLayout, context.getExecutor(true, true));
+                    return rp.execute(siteLayout, pageLayout, context);
                 }
             }
         } else {

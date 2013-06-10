@@ -20,7 +20,6 @@ package org.gatein.portal.page;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -30,6 +29,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import juzu.PropertyMap;
 import juzu.Response;
 import juzu.io.AsyncStreamable;
+import juzu.request.RequestContext;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.portal.layout.Layout;
@@ -90,14 +90,20 @@ class ReactivePage {
      *
      * @param siteLayout the site layout
      * @param pageLayout the page layout
-     * @param executor the executor
+     * @param context the request context
      * @return the response
      */
-    Response execute(Layout siteLayout, Layout pageLayout, Executor executor) {
+    Response execute(
+            Layout siteLayout,
+            Layout pageLayout,
+            RequestContext context) {
 
         //
         this.pageLayout = pageLayout;
         this.siteLayout = siteLayout;
+
+        //
+        Executor executor = context.getExecutor();
 
         // Schedule
         for (ReactiveWindow window : windows) {
@@ -183,7 +189,7 @@ class ReactivePage {
             } else {
                 PortletInvocationResponse response = task.response;
                 if (response instanceof FragmentResponse) {
-                    FragmentResponse fragment = (FragmentResponse)response;
+                    FragmentResponse fragment = (FragmentResponse) response;
                     String title = fragment.getTitle();
                     if (title == null) {
                         title = context.resolveTitle(locale);
@@ -193,7 +199,7 @@ class ReactivePage {
                     throw new UnsupportedOperationException("Not yet handled " + response);
                 }
             }
-            done(this, result);
+            ReactivePage.this.done(ReactiveWindow.this, result);
         }
     }
 }

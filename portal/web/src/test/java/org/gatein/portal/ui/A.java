@@ -1,5 +1,4 @@
 /*
- * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,18 +15,20 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.kernel;
+package org.gatein.portal.ui;
 
-import juzu.impl.request.ExecutionFilter;
-import org.gatein.portal.common.kernel.KernelLifeCycle;
+import juzu.Response;
+import juzu.View;
 
 /**
- * @author Julien Viet
+ * @author <a href="mailto:haithanh0809@gmail.com">Nguyen Thanh Hai</a>
+ * @version $Id$
+ *
  */
-public class KernelFilter implements ExecutionFilter {
-
-    @Override
-    public Runnable onCommand(Runnable command) {
-        return KernelLifeCycle.wrap(command);
-    }
+public class A {
+  
+  @View
+  public Response index() {
+    return Response.ok("<a id='index' href='" + A_.index() + "'>hello</a>");
+  }
 }
