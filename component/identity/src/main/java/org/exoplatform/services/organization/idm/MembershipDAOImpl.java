@@ -732,10 +732,6 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         }
     }
 
-    private IdentitySession getIdentitySession() throws Exception {
-        return service_.getIdentitySession();
-    }
-
     private String getGroupNameFromId(String groupId) {
         String[] ids = groupId.split("/");
 

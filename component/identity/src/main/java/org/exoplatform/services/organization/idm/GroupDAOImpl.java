@@ -766,10 +766,6 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         return jbidGroup;
     }
 
-    private IdentitySession getIdentitySession() throws Exception {
-        return service_.getIdentitySession();
-    }
-
     private IntegrationCache getIntegrationCache() {
         // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
         // TODO: it should be there.

@@ -269,8 +269,4 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
             handleException("Identity operation error: ", e);
         }
     }
-
-    private IdentitySession getIdentitySession() throws Exception {
-        return service_.getIdentitySession();
-    }
 }

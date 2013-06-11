@@ -130,7 +130,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             orgService.flush();
 
             session.getPersistenceManager().createUser(user.getUserName());
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Identity operation error: ", e);
 
         }
@@ -178,7 +178,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             orgService.flush();
 
             foundUser = session.getPersistenceManager().findUser(userName);
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Cannot obtain user: " + userName + "; ", e);
 
         }
@@ -204,7 +204,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         try {
             session.getPersistenceManager().removeUser(foundUser, true);
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Cannot remove user: " + userName + "; ", e);
 
         }
@@ -413,9 +413,8 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             orgService.flush();
 
             plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Cannot find user by email: " + email + "; ", e);
-
         }
 
         User user = null;
@@ -523,7 +522,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             } else {
                 try {
                     am.updatePassword(session.getPersistenceManager().findUser(user.getUserName()), user.getPassword());
-                } catch (IdentityException e) {
+                } catch (Exception e) {
                     handleException("Cannot update password: " + user.getUserName() + "; ", e);
 
                 }
@@ -535,7 +534,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         try {
             am.updateAttributes(user.getUserName(), attrs);
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Cannot update attributes for user: " + user.getUserName() + "; ", e);
 
         }
@@ -549,7 +548,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         try {
             u = session.getPersistenceManager().findUser(userName);
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Cannot obtain user: " + userName + "; ", e);
 
         }
@@ -575,7 +574,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         try {
             attrs = am.getAttributes(new SimpleUser(user.getUserName()));
-        } catch (IdentityException e) {
+        } catch (Exception e) {
 
             handleException("Cannot obtain attributes for user: " + user.getUserName() + "; ", e);
 
@@ -671,7 +670,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             if (attr != null) {
                 am.removeAttributes(user.getUserName(), new String[] { USER_DISPLAY_NAME });
             }
-        } catch (IdentityException e) {
+        } catch (Exception e) {
             handleException("Cannot remove displayName attribute of user: " + user.getUserName() + "; ", e);
         }
     }
