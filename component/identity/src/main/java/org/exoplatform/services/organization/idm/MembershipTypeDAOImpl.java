@@ -92,7 +92,11 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
             preSave(mt, true);
         }
 
-        getIdentitySession().getRoleManager().createRoleType(mt.getName());
+        try {
+            getIdentitySession().getRoleManager().createRoleType(mt.getName());
+        } catch (Exception e) {
+            handleException("Error when creating Membership", e);
+        }
 
         if (broadcast) {
             postSave(mt, true);
@@ -129,7 +133,12 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
             Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipType", new Object[] { "name", name });
         }
 
-        RoleType rt = getIdentitySession().getRoleManager().getRoleType(name);
+        RoleType rt = null;
+        try {
+            rt = getIdentitySession().getRoleManager().getRoleType(name);
+        } catch (Exception e) {
+            handleException("Identity error when finding membership type " + name, e);
+        }
 
         MembershipType mt = null;
 
@@ -158,7 +167,11 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
                 preDelete(mt);
             }
 
-            getIdentitySession().getRoleManager().removeRoleType(mt.getName());
+            try {
+                getIdentitySession().getRoleManager().removeRoleType(mt.getName());
+            } catch (Exception e) {
+                handleException("Error occured when removing membership type", e);
+            }
 
             if (broadcast) {
                 postDelete(mt);
@@ -175,7 +188,13 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
             Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipTypes", null);
         }
 
-        Collection<RoleType> rts = getIdentitySession().getRoleManager().findRoleTypes();
+        Collection<RoleType> rts;
+        try {
+            rts = getIdentitySession().getRoleManager().findRoleTypes();
+        } catch (Exception e) {
+            handleException("Exception occured when looking for membership types", e);
+            rts = new LinkedList<RoleType>();
+        }
 
         List<MembershipType> mts = new LinkedList<MembershipType>();
 
@@ -192,13 +211,14 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
         return mts;
     }
 
-    private IdentitySession getIdentitySession() throws Exception {
-        return service_.getIdentitySession();
-    }
-
     private void updateMembershipType(MembershipType mt) throws Exception {
-
-        RoleType rt = getIdentitySession().getRoleManager().getRoleType(mt.getName());
+        RoleType rt;
+        try {
+            rt = getIdentitySession().getRoleManager().getRoleType(mt.getName());
+        } catch (Exception e) {
+            handleException("Exception occured when finding role type", e);
+            return;
+        }
 
         Map<String, String> props = new HashMap<String, String>();
 
@@ -207,16 +227,25 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
         props.put(MEMBERSHIP_MODIFIED_DATE, mt.getModifiedDate() == null ? null : "" + mt.getModifiedDate().getTime());
         props.put(MEMBERSHIP_OWNER, mt.getOwner());
 
-        getIdentitySession().getRoleManager().setProperties(rt, props);
+        try {
+            getIdentitySession().getRoleManager().setProperties(rt, props);
+        } catch (Exception e) {
+            handleException("Exception when updating membership type", e);
+        }
 
         return;
 
     }
 
     private void populateMembershipType(MembershipType mt) throws Exception {
-        RoleType rt = getIdentitySession().getRoleManager().getRoleType(mt.getName());
-
-        Map<String, String> props = getIdentitySession().getRoleManager().getProperties(rt);
+        Map<String, String> props;
+        try {
+            RoleType rt = getIdentitySession().getRoleManager().getRoleType(mt.getName());
+            props = getIdentitySession().getRoleManager().getProperties(rt);
+        } catch (Exception e) {
+            handleException("Identity error occured when populating membership type", e);
+            return;
+        }
 
         mt.setDescription(props.get(MEMBERSHIP_DESCRIPTION));
         mt.setOwner(props.get(MEMBERSHIP_OWNER));
