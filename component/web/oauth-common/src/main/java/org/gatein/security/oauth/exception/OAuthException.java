@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class OAuthException extends RuntimeException {
 
-    static final long serialVersionUID = -7034897190745766989L;
+    private static final long serialVersionUID = -7034897190745766989L;
 
     // Specify error code
     private final OAuthExceptionCode exceptionCode;

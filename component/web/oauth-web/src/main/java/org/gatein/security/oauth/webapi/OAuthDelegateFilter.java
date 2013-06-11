@@ -43,7 +43,7 @@ import org.gatein.sso.integration.SSODelegateFilter;
  */
 public class OAuthDelegateFilter extends SSODelegateFilter {
 
-    private Map<SSOInterceptor, String> oauthInterceptors;
+    private volatile Map<SSOInterceptor, String> oauthInterceptors;
 
     private static final Logger log = LoggerFactory.getLogger(OAuthDelegateFilter.class);
 
