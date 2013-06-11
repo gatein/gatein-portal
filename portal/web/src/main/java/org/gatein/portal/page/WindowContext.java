@@ -31,6 +31,8 @@ import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 
 import juzu.impl.common.PercentCodec;
+import juzu.impl.request.ContextLifeCycle;
+import juzu.impl.request.Request;
 import juzu.io.Encoding;
 import juzu.request.Phase;
 import org.gatein.common.i18n.LocalizedString;
@@ -188,7 +190,16 @@ public class WindowContext implements PortletInvocationContext {
         action.setNavigationalState(ParametersStateString.create());
         action.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
         action.setPublicNavigationalState(computePublicParameters());
-        return page.portletManager.getInvoker().invoke(action);
+
+        //
+        PortletInvoker invoker = page.portletManager.getInvoker();
+        Request current = Request.getCurrent();
+        ContextLifeCycle clf = current.suspend();
+        try {
+            return invoker.invoke(action);
+        } finally {
+            clf.resume();
+        }
     }
 
     /**

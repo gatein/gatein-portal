@@ -18,6 +18,7 @@
 package org.gatein.portal;
 
 import java.net.URL;
+import java.util.List;
 
 import juzu.impl.common.RunMode;
 import juzu.impl.inject.spi.InjectorProvider;
@@ -42,7 +43,7 @@ import org.openqa.selenium.WebElement;
  *
  */
 @RunWith(Arquillian.class)
-public class JuzuRenderURLTestCase extends AbstractPortalTestCase {
+public class JuzuPortletTestCase extends AbstractPortalTestCase {
   
   @Deployment(testable = false)
   public static WebArchive createPortal() {
@@ -58,9 +59,27 @@ public class JuzuRenderURLTestCase extends AbstractPortalTestCase {
   WebDriver driver;
   
   @Test
-  public void testJuzu() throws Exception {
+  public void testRenderURL() throws Exception {
       driver.get(deploymentURL.toString() + "/page1");
       WebElement element = driver.findElement(By.id("index"));
       Assert.assertTrue(element.getText().contains("hello"));
+  }
+  
+  @Test
+  public void testAction() throws Exception {
+     driver.get(deploymentURL.toString() + "/page1");
+     WebElement element = driver.findElement(By.id("action"));
+     element.click();
+     Assert.assertTrue(driver.findElement(By.id("action")).getText().contains("world"));
+  }
+  
+  // @Test
+  // Commented until header propagation is implemented
+  public void testAsset() throws Exception {
+     driver.get(deploymentURL.toString() + "/page1");
+     List<WebElement> stylesheets = driver.findElements(By.tagName("link"));
+     Assert.assertEquals(1, stylesheets.size());
+     List<WebElement> scripts = driver.findElements(By.tagName("script"));
+     Assert.assertEquals(1, scripts.size());
   }
 }
