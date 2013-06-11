@@ -22,6 +22,7 @@ package org.exoplatform.services.organization;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -32,6 +33,7 @@ import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
 
 /**
  * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov 13, 2007
@@ -150,6 +152,33 @@ public class TestOrganization extends AbstractKernelTest {
         user.setPassword("gtn");
         uHandler.saveUser(user, false);
 
+    }
+
+    public void testLastLoginTime() throws Exception {
+        UserHandler uHandler = organizationService.getUserHandler();
+        User user = uHandler.findUserByName("root");
+        Assert.assertNotNull(user);
+
+        // Assert that last login time is updated by default
+        Thread.sleep(1);
+        Date current = new Date();
+        Thread.sleep(1);
+        Assert.assertTrue(uHandler.authenticate("root", "gtn"));
+        user = uHandler.findUserByName("root");
+        Assert.assertTrue(user.getLastLoginTime().after(current));
+
+        // Assert that last login time is not updated if option is disabled in configuration
+        if (organizationService instanceof PicketLinkIDMOrganizationServiceImpl) {
+            // Hack, but sufficient for now..
+            ((PicketLinkIDMOrganizationServiceImpl)organizationService).getConfiguration().setUpdateLastLoginTimeAfterAuthentication(false);
+            Thread.sleep(1);
+            current = new Date();
+            Thread.sleep(1);
+            Assert.assertTrue(uHandler.authenticate("root", "gtn"));
+            user = uHandler.findUserByName("root");
+            Assert.assertTrue(user.getLastLoginTime().before(current));
+            ((PicketLinkIDMOrganizationServiceImpl)organizationService).getConfiguration().setUpdateLastLoginTimeAfterAuthentication(true);
+        }
     }
 
     public void testDisplayName() throws Exception {

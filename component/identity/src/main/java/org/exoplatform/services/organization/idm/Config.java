@@ -64,6 +64,8 @@ public class Config {
 
     private boolean skipPaginationInMembershipQuery = false;
 
+    private boolean updateLastLoginTimeAfterAuthentication = true;
+
     public Config() {
     }
 
@@ -315,5 +317,13 @@ public class Config {
 
     public void setSkipPaginationInMembershipQuery(boolean skipPaginationInMembershipQuery) {
         this.skipPaginationInMembershipQuery = skipPaginationInMembershipQuery;
+    }
+
+    public boolean isUpdateLastLoginTimeAfterAuthentication() {
+        return updateLastLoginTimeAfterAuthentication;
+    }
+
+    public void setUpdateLastLoginTimeAfterAuthentication(boolean updateLastLoginTimeAfterAuthentication) {
+        this.updateLastLoginTimeAfterAuthentication = updateLastLoginTimeAfterAuthentication;
     }
 }
