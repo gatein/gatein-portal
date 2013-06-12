@@ -26,9 +26,11 @@
   <resources>
     <!-- Insert resources here -->
   </resources>
-  
+
   <dependencies>
     <module name="javax.portlet.api" />
     <module name="javax.servlet.api" />
+
+    <module name="org.gatein.pc" />
   </dependencies>
 </module>
