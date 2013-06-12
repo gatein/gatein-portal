@@ -62,7 +62,7 @@
     <com.google.javascript.version>r1592</com.google.javascript.version>
     <jboss-dmr.version>1.1.1.Final</jboss-dmr.version>
     <org.jboss.portletbridge.version>3.2.0.Final</org.jboss.portletbridge.version>
-    <version.cdi.portlet.integration>1.0.0.Final</version.cdi.portlet.integration>
+    <version.cdi.portlet.integration>1.0.1.Final</version.cdi.portlet.integration>
 
     <!-- TODO: Remove JGroups and JBC once gatein-dep upgraded to 1.2.1.CR04 -->
     <version.jboss.jgroups>2.6.21.Final</version.jboss.jgroups>
