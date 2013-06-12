@@ -76,6 +76,8 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
 
     public static final String WAR_BUNDLES_PORTLETBRIDGE_PARAM = "org.gatein.portletbridge.WAR_BUNDLES_PORTLETBRIDGE";
 
+    public static final String DISABLE_CDI_INTEGRATION_PARAM = "org.gatein.cdi.DISABLE_CDI_INTEGRATION";
+
     private final ListenerMetaData cdiListener;
 
     public PortletBridgeDependencyProcessor() {
@@ -160,7 +162,7 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
             addPortletBridgeDependencies(deploymentUnit, moduleSpecification, moduleLoader);
             addPortletBridgeListener(deploymentUnit);
 
-            if (isCdiDeployment(deploymentUnit)) {
+            if (isCdiDeployment(deploymentUnit) && !disableCdiIntegration(deploymentUnit)) {
                 log.infof("Adding CDI Portlet Integration %s to \"%s\"", cdiPortletIntegrationVersion, deploymentUnit.getName());
 
                 addCdiPortletIntegration(deploymentUnit, moduleSpecification, moduleLoader);
@@ -241,6 +243,37 @@ public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor
 
         for (ParamValueMetaData param : contextParams) {
             if ((param.getParamName().equals(WAR_BUNDLES_PORTLETBRIDGE_PARAM) && (param.getParamValue() != null) && (param
+                    .getParamValue().toLowerCase(Locale.ENGLISH).equals("true")))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean disableCdiIntegration(DeploymentUnit deploymentUnit) {
+        WarMetaData metaData = deploymentUnit.getAttachment(WarMetaData.ATTACHMENT_KEY);
+
+        if (metaData == null) {
+            return false;
+        }
+
+        List<ParamValueMetaData> contextParams = new ArrayList<ParamValueMetaData>();
+
+        if ((metaData.getWebMetaData() != null) && (metaData.getWebMetaData().getContextParams() != null)) {
+            contextParams.addAll(metaData.getWebMetaData().getContextParams());
+        }
+
+        if (metaData.getWebFragmentsMetaData() != null) {
+            for (WebFragmentMetaData fragmentMetaData : metaData.getWebFragmentsMetaData().values()) {
+                if (fragmentMetaData.getContextParams() != null) {
+                    contextParams.addAll(fragmentMetaData.getContextParams());
+                }
+            }
+        }
+
+        for (ParamValueMetaData param : contextParams) {
+            if ((param.getParamName().equals(DISABLE_CDI_INTEGRATION_PARAM) && (param.getParamValue() != null) && (param
                     .getParamValue().toLowerCase(Locale.ENGLISH).equals("true")))) {
                 return true;
             }
