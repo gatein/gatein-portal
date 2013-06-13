@@ -39,8 +39,10 @@
 										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}"><label for="rcuaccont">OR</label></h:panelGroup>
 										<b:input id="rcuaccont" styleClass="contains-input" value="#{rdrEdit.editedCondition.userAgentConditions.contains[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
-											<a4j:commandLink action="#{rdrEdit.removeContains(counter.index)}" styleClass="tooltipTrigger" title="Delete" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete</i></a4j:commandLink>
-											<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add</i></a4j:commandLink>
+											<span class="tooltipTrigger" title="Delete Expression">
+												<a4j:commandLink action="#{rdrEdit.removeContains(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
+											</span>
+											<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add Expression" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
 										</div>
 									</div>
 								</ui:repeat>
@@ -48,8 +50,9 @@
 									<h:panelGroup styleClass="td-condition" rendered="#{not isContainsEmpty}">OR</h:panelGroup>
 									<h:inputText id="rcuaccont" style="visibility: hidden;"/>
 									<div class="action">
-										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeContains(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
-										<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+										<!-- only present for proper spacing -->
+										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeContains(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
+										<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
 									</div>
 								</div>
 							</td>
@@ -63,8 +66,10 @@
 										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}"><label for="rcuacdncont">OR</label></h:panelGroup>
 										<b:input id="rcuacdncont" styleClass="doesnotcontain-input" value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
-											<a4j:commandLink action="#{rdrEdit.removeDoesNotContain(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
-											<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+											<span class="tooltipTrigger" title="Delete Expression">
+												<a4j:commandLink action="#{rdrEdit.removeDoesNotContain(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
+											</span>
+											<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Expression" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
 										</div>
 									</div>
 								</ui:repeat>
@@ -72,8 +77,9 @@
 									<h:panelGroup styleClass="td-condition" rendered="#{not isDoesNotContainEmpty}">OR</h:panelGroup>
 									<h:inputText id="rcuacdncont" style="visibility: hidden;" />
 									<div class="action">
-										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeDoesNotContain(counter.index)}" styleClass="tooltipTrigger" title="Delete Condition" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete User Agent Condition</i></a4j:commandLink>
-										<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Condition" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();"><i class="icon-plus-sign">Add User Agent Condition</i></a4j:commandLink>
+										<!-- only present for proper spacing -->
+										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeDoesNotContain(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
+										<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Expression" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
 									</div>
 								</div>
 							</td>
@@ -149,8 +155,10 @@
  								</span>
 							</td>
  							<td class="actions" style="width: 50px;" >
-								<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" styleClass="tooltipTrigger" title="Delete" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete</i></a4j:commandLink>
-								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="Add" render="condition_properties" onclick="$(this).tooltip('hide');" oncomplete="afterAddProperty();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add</i></a4j:commandLink>
+								<span class="tooltipTrigger" title="Delete Property">
+									<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
+								</span>
+								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="Add Property" render="condition_properties" onclick="$(this).tooltip('hide');" oncomplete="afterAddProperty();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Property</i></a4j:commandLink>
 							</td>
 						</tr>
 						</ui:repeat>
