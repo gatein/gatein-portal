@@ -25,9 +25,11 @@ package org.gatein.web.redirect;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.encoder.EncoderService;
 import org.gatein.web.redirect.api.RedirectKey;
 import org.gatein.web.redirect.api.RedirectType;
 
@@ -47,6 +49,9 @@ public class RedirectCookieService {
     protected Boolean secure;
 
     protected String cookiePrefix;
+
+    // Service to encode the value of the cookie
+    private EncoderService encoderService;
 
     public RedirectCookieService(InitParams params) {
         ValueParam cookieMaxAgeValueParam = params.getValueParam("redirect.cookie.maxage");
@@ -77,6 +82,9 @@ public class RedirectCookieService {
         } else {
             cookiePrefix = DEFAULT_PREFIX;
         }
+
+        PortalContainer portalContainer = PortalContainer.getInstance();
+        this.encoderService = (EncoderService) portalContainer.getComponentInstanceOfType(EncoderService.class);
     }
 
     public Cookie createCookie(String originSite, RedirectKey redirect, String cookiePath) {
@@ -90,7 +98,14 @@ public class RedirectCookieService {
                 redirectValue = originSite;
             }
 
-            Cookie cookie = new Cookie(originName, redirectValue);
+            // Encoded value to store illegal characters in cookie
+            String encodedValue = null;
+            try {
+                encodedValue = encoderService.encode64(redirectValue);
+            } catch (Exception e) {
+            }
+
+            Cookie cookie = new Cookie(originName, (encodedValue == null ? redirectValue : encodedValue));
 
             if (comment != null) {
                 cookie.setComment(comment);
@@ -120,7 +135,12 @@ public class RedirectCookieService {
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals(cookiePrefix + NAME_PREFERENCE_FLAG)) {
-                    String cookieValue = cookie.getValue();
+                    String decodedValue = null;
+                    try {
+                        decodedValue = encoderService.decode64(cookie.getValue());
+                    } catch (Exception e) {
+                    }
+                    String cookieValue = (decodedValue == null?cookie.getValue():decodedValue);
 
                     if (cookieValue.equals(origin.getName())) {
                         return RedirectKey.noRedirect();
