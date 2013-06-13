@@ -77,7 +77,7 @@ public class UIColumnContainer extends UIContainer {
 
         uiNewColumn.setTemplate(selectedColumn.getTemplate());
         uiNewColumn.setFactoryId(selectedColumn.getFactoryId());
-        uiNewColumn.setId(String.valueOf(uiNewColumn.hashCode()));
+        uiNewColumn.setId(String.valueOf(Math.abs(uiNewColumn.hashCode())));
 
         List<UIComponent> listColumn = uiParent.getChildren();
         int position = listColumn.indexOf(selectedColumn);

@@ -64,7 +64,7 @@ public abstract class UIComponent {
 
     public UIComponent setId(String id) {
         if (id == null) {
-            this.id = Integer.toString(hashCode());
+            this.id = Integer.toString(Math.abs(hashCode()));
         } else {
             this.id = id;
         }

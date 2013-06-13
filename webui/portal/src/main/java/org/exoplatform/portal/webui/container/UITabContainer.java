@@ -144,7 +144,7 @@ public class UITabContainer extends UIContainer {
                     newTabContainer.setTemplate(child.getTemplate());
                     child.setRendered(false);
                     newTabContainer.setRendered(true);
-                    newTabContainer.setId(String.valueOf(newTabContainer.hashCode()));
+                    newTabContainer.setId(String.valueOf(Math.abs(newTabContainer.hashCode())));
                     pcontext.addUIComponentToUpdateByAjax(container);
                     pcontext.ignoreAJAXUpdateOnPortlets(true);
                     pcontext.getJavascriptManager().require("SHARED/portalComposer", "portalComposer")

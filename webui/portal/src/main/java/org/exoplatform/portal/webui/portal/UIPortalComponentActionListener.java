@@ -223,7 +223,8 @@ public class UIPortalComponentActionListener {
                     org.exoplatform.portal.webui.container.UIContainer uiContainer = uiTarget.createUIComponent(
                             org.exoplatform.portal.webui.container.UIContainer.class, null, null);
                     Container container = uiContainerConfig.getContainer(sourceId);
-                    container.setId(String.valueOf(container.hashCode()));
+                    // GTNPORTAL-3118: IBM JDK creates negative hashCodes and drag and drop webui logic expects abs values.
+                    container.setId(String.valueOf(Math.abs(container.hashCode())));
                     uiContainer.setStorageId(container.getStorageId());
                     PortalDataMapper.toUIContainer(uiContainer, container);
                     String[] accessPers = uiContainer.getAccessPermissions();
