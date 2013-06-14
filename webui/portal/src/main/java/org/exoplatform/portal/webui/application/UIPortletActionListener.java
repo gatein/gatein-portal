@@ -238,7 +238,7 @@ public class UIPortletActionListener {
         }
 
         private void handleErrorResponse(ErrorResponse response) throws Exception {
-            throw (Exception) response.getCause();
+            throw new Exception(response.getCause());
         }
 
         private void handleSecurityResponse(SecurityResponse response) throws Exception {
