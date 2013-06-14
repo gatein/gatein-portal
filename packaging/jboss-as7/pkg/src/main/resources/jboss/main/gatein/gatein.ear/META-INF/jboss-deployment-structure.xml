@@ -25,6 +25,14 @@
   <sub-deployment name="exoadmin.war" >
     <dependencies>
       <module name="org.gatein.portal.container-dependencies-basic"/>
+      <module name="org.gatein.shindig"/>
+    </dependencies>
+  </sub-deployment>
+
+  <sub-deployment name="eXoGadgetServer.war">
+    <dependencies>
+      <module name="org.gatein.portal.container-dependencies-basic"/>
+      <module name="org.gatein.shindig"/>
     </dependencies>
   </sub-deployment>
 
