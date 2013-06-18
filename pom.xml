@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.gatein</groupId>
     <artifactId>gatein-parent</artifactId>
-    <version>1.2.0.Final</version>
+    <version>1.2.1.Final</version>
   </parent>
 
   <groupId>org.gatein.portal</groupId>
@@ -42,16 +42,16 @@
     <org.exoplatform.ws.version>2.3.3-GA</org.exoplatform.ws.version>
     <org.exoplatform.jcr.version>1.15.3-GA</org.exoplatform.jcr.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
-    <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-3</nl.captcha.simplecaptcha.version>
-    <org.gatein.api.version>1.0.0.CR3</org.gatein.api.version>
-    <org.gatein.common.version>2.1.0.Final</org.gatein.common.version>
-    <org.gatein.wci.version>2.3.1.CR05</org.gatein.wci.version>
-    <org.gatein.pc.version>2.4.1.CR04</org.gatein.pc.version>
-    <org.gatein.sso.version>1.3.3.CR03</org.gatein.sso.version>
-    <org.picketlink.idm>1.4.2.CR02</org.picketlink.idm>
-    <org.gatein.wsrp.version>2.2.8.Final</org.gatein.wsrp.version>
-    <org.gatein.mop.version>1.2.1.CR03</org.gatein.mop.version>
-    <org.gatein.mgmt.version>2.0.0.CR01</org.gatein.mgmt.version>
+    <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-4</nl.captcha.simplecaptcha.version>
+    <org.gatein.api.version>1.0.0.Final</org.gatein.api.version>
+    <org.gatein.common.version>2.1.1.Final</org.gatein.common.version>
+    <org.gatein.wci.version>2.3.1.Final</org.gatein.wci.version>
+    <org.gatein.pc.version>2.4.1.Final</org.gatein.pc.version>
+    <org.gatein.sso.version>1.3.3.Final</org.gatein.sso.version>
+    <org.picketlink.idm>1.4.2.Final</org.picketlink.idm>
+    <org.gatein.wsrp.version>2.2.9.Final</org.gatein.wsrp.version>
+    <org.gatein.mop.version>1.2.1.Final</org.gatein.mop.version>
+    <org.gatein.mgmt.version>2.0.0.Final</org.gatein.mgmt.version>
     <org.slf4j.version>1.6.1</org.slf4j.version>
     <version.chromattic>1.2.2</version.chromattic>
     <version.reflext>1.1.0</version.reflext>
@@ -63,10 +63,6 @@
     <jboss-dmr.version>1.1.1.Final</jboss-dmr.version>
     <org.jboss.portletbridge.version>3.2.0.Final</org.jboss.portletbridge.version>
     <version.cdi.portlet.integration>1.0.2.Final</version.cdi.portlet.integration>
-
-    <!-- TODO: Remove JGroups and JBC once gatein-dep upgraded to 1.2.1.CR04 -->
-    <version.jboss.jgroups>2.6.21.Final</version.jboss.jgroups>
-    <version.jboss.cache>3.2.7.GA</version.jboss.cache>
 
     <!--
     Various log4j properties for unit tests, examples:
@@ -136,7 +132,7 @@
       <dependency>
         <groupId>org.gatein</groupId>
         <artifactId>gatein-dep</artifactId>
-        <version>1.2.1.CR03</version>
+        <version>1.2.1.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -146,18 +142,6 @@
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
         <version>${com.google.javascript.version}</version>
-      </dependency>
-
-      <!-- TODO: Remove JGroups and JBC once gatein-dep upgraded to 1.2.1.CR04 -->
-      <dependency>
-        <groupId>org.jgroups</groupId>
-        <artifactId>jgroups</artifactId>
-        <version>${version.jboss.jgroups}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jboss.cache</groupId>
-        <artifactId>jbosscache-core</artifactId>
-        <version>${version.jboss.cache}</version>
       </dependency>
 
       <!-- eXo JCR stack -->
