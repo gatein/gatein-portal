@@ -71,16 +71,6 @@ form {
     width:36.85em;
 }
 
-h1 {
-    margin:1em auto 1.35em;
-}
-
-h1 a {
-    background:url('../images/gatein_logo.png') no-repeat center;
-    height:44px;
-    width:174px;
-}
-
 input {
     background:#FFF;
     border:.1em solid #ddd;

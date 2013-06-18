@@ -68,7 +68,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>        
         <meta name="description" content="Login screen of the Portal"/>
         <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
-        <link rel="shortcut icon" type="image/x-icon"  href="/portal/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="/gatein-mobile-login/login/css/default.css"/>
         <link rel="stylesheet" type="text/css" href="/gatein-mobile-login/login/css/enchanced.css"/>        
         <!--[if lte IE 8]>
@@ -77,7 +76,7 @@
         <script type="text/javascript" src="/gatein-mobile-login/login/js/login.js"></script>
     </head>
     <body>
-        <h1><a href="#login-form" title="Gate In"><%=res.getString("UILoginForm.label.mobile.GateIn")%></a></h1>
+        <h1><a href="#login-form" title="Gate In"><%=res.getString("UILoginForm.label.mobile.Login")%></a></h1>
         <%/*Begin form*/%>
         <% if(error) { %>
         <div id="error-pane"><p><span><%=res.getString("UILoginForm.label.SigninFail")%></span></p><button id="button-close-alert" type="button"><%=res.getString("UILoginForm.label.mobile.login.Close")%></button></div>

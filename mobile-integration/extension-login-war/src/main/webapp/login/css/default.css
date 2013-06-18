@@ -53,13 +53,7 @@ fieldset legend
 
 h1 a
 {
-    background: url('../images/gatein_logo_small.png') no-repeat center;
-    display: block;
-    height: 38px;
-    width: 150px;
-    margin: 0.2em auto;
-    text-indent: -9999em;
-    font-size: 1em;
+    display: none;
 }
 
 label
