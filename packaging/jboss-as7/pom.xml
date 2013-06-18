@@ -15,7 +15,6 @@
     <version.jboss.as>7.1.1.Final</version.jboss.as>
     <package.filename>package.xml</package.filename>
     <version.org.jboss.vfs>3.1.0.Final</version.org.jboss.vfs>
-    <version.org.gatein.naming>1.1.0.Final</version.org.gatein.naming>
     <server.name>jboss-as-${version.jboss.as}</server.name>
 
     <gatein.working.dir>${project.build.directory}/jboss</gatein.working.dir>
@@ -34,11 +33,6 @@
         <groupId>org.gatein.portal</groupId>
         <artifactId>jboss-as7-integration-extension</artifactId>
         <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.naming</groupId>
-        <artifactId>gatein-naming</artifactId>
-        <version>${version.org.gatein.naming}</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
