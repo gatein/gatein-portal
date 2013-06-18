@@ -63,6 +63,7 @@
     <jboss-dmr.version>1.1.1.Final</jboss-dmr.version>
     <org.jboss.portletbridge.version>3.2.0.Final</org.jboss.portletbridge.version>
     <version.cdi.portlet.integration>1.0.2.Final</version.cdi.portlet.integration>
+    <version.org.gatein.naming>1.1.0.Final</version.org.gatein.naming>
 
     <!--
     Various log4j properties for unit tests, examples:
@@ -1071,6 +1072,13 @@
         <groupId>org.gatein.cdi</groupId>
         <artifactId>gatein-cdi-contexts</artifactId>
         <version>${project.version}</version>
+      </dependency>
+
+      <!--Packaging-->
+      <dependency>
+        <groupId>org.gatein.naming</groupId>
+        <artifactId>gatein-naming</artifactId>
+        <version>${version.org.gatein.naming}</version>
       </dependency>
     </dependencies>
 
