@@ -12,21 +12,12 @@
     @Binding(SiteService.class),
     @Binding(SimpleLayoutFactory.class),
     @Binding(KernelFilter.class)})
-@Assets(stylesheets = {
-    @Stylesheet(src = "bootstrap-2.3.1.min.css"),
-    @Stylesheet(src = "registerportlet.css"),
-    @Stylesheet(src = "sitemap.css")
-},
-    scripts = {
-        @Script(src = "javascripts/jquery-1.7.1.min.js"),
-        @Script(src = "javascripts/sitemap.js")
-})
+@Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"))
 package org.gatein.portal;
 
 import juzu.Application;
 import juzu.plugin.asset.Assets;
 import juzu.plugin.asset.Stylesheet;
-import juzu.plugin.asset.Script;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
 import org.exoplatform.container.PortalContainer;

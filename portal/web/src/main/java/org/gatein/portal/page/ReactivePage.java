@@ -19,20 +19,29 @@
 package org.gatein.portal.page;
 
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReentrantLock;
 
-import juzu.PropertyMap;
+import javax.portlet.MimeResponse;
+
+import juzu.PropertyType;
 import juzu.Response;
-import juzu.io.AsyncStreamable;
+import juzu.io.Chunk;
+import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.portal.layout.Layout;
+import org.w3c.dom.Element;
 
 /**
  * A reactive page.
@@ -54,10 +63,7 @@ class ReactivePage {
     private Map<String, Result> results;
 
     /** The streamable. */
-    private AsyncStreamable streamable;
-
-    /** . */
-    private PropertyMap properties;
+    private ChunkBuffer buffer;
 
     /** . */
     private Layout siteLayout;
@@ -77,11 +83,19 @@ class ReactivePage {
         }
 
         //
+        Thread.UncaughtExceptionHandler logger = new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                e.printStackTrace();
+            }
+        };
+
+        //
         this.context = context;
         this.locale = locale;
         this.windows = windows;
         this.results = new HashMap<String, Result>();
-        this.streamable = new AsyncStreamable();
+        this.buffer = new ChunkBuffer(logger);
         this.lock = new ReentrantLock();
     }
 
@@ -111,7 +125,7 @@ class ReactivePage {
         }
 
         //
-        return new Response.Status(200, properties).content(streamable);
+        return new Response.Content(200, buffer);
     }
 
     private void done(ReactiveWindow window, Result result) {
@@ -141,16 +155,33 @@ class ReactivePage {
                 fragments.put(entry.getKey(), (Result.Fragment) result);
             }
         }
+
+        // Send headers
+        for (Result.Fragment fragment : fragments.values()) {
+            for (Map.Entry<String, String> header : fragment.headers) {
+                buffer.append(new Chunk.Property(header, PropertyType.HEADER));
+            }
+        }
+
+        // Send header tags
+        for (Result.Fragment fragment : fragments.values()) {
+            for (Element headerTag : fragment.headerTags) {
+                buffer.append(new Chunk.Property(headerTag, PropertyType.HEADER_TAG));
+            }
+        }
+
+        // Compute and send page
         try {
             StringBuilder body = new StringBuilder();
-            pageLayout.render(fragments, null, context, properties, body);
-            siteLayout.render(fragments, body.toString(), context, properties, streamable);
+            pageLayout.render(fragments, null, context, body);
+            siteLayout.render(fragments, body.toString(), context, buffer);
         } catch (IOException e) {
             // Could not render page
             // find something useful to do :-)
             e.printStackTrace();
         } finally {
-            streamable.close();
+            System.out.println("CLOSED BUFFER");
+            buffer.close();
         }
     }
 
@@ -190,11 +221,33 @@ class ReactivePage {
                 PortletInvocationResponse response = task.response;
                 if (response instanceof FragmentResponse) {
                     FragmentResponse fragment = (FragmentResponse) response;
+                    ResponseProperties properties = fragment.getProperties();
+                    List<Map.Entry<String, String>> headers = Collections.emptyList();
+                    List<Element> headerTags = Collections.emptyList();
+                    if (properties != null) {
+                        if (properties.getTransportHeaders() != null) {
+                            headers = new LinkedList<Map.Entry<String, String>>();
+                            for (String headerName : properties.getTransportHeaders().keySet()) {
+                                String headerValue = properties.getTransportHeaders().getValue(headerName);
+                                headers.add(new AbstractMap.SimpleEntry<String, String>(headerName, headerValue));
+                            }
+                        }
+                        if (properties.getMarkupHeaders() != null) {
+                            headerTags = new LinkedList<Element>();
+                            for (String headerName : properties.getMarkupHeaders().keySet()) {
+                                if (MimeResponse.MARKUP_HEAD_ELEMENT.equals(headerName)) {
+                                    for (Element headerValue : properties.getMarkupHeaders().getValues(headerName)) {
+                                        headerTags.add(headerValue);
+                                    }
+                                }
+                            }
+                        }
+                    }
                     String title = fragment.getTitle();
                     if (title == null) {
                         title = context.resolveTitle(locale);
                     }
-                    result = new Result.Fragment(title, fragment.getContent());
+                    result = new Result.Fragment(headers, headerTags, title, fragment.getContent());
                 } else {
                     throw new UnsupportedOperationException("Not yet handled " + response);
                 }

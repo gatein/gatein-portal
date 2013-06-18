@@ -44,7 +44,7 @@ import org.openqa.selenium.WebElement;
  */
 @RunWith(Arquillian.class)
 public class JuzuPortletTestCase extends AbstractPortalTestCase {
-  
+
   @Deployment(testable = false)
   public static WebArchive createPortal() {
       WebArchive portal = AbstractPortalTestCase.createPortal(InjectorProvider.INJECT_GUICE, RunMode.PROD);
@@ -57,14 +57,14 @@ public class JuzuPortletTestCase extends AbstractPortalTestCase {
 
   @Drone
   WebDriver driver;
-  
+
   @Test
   public void testRenderURL() throws Exception {
       driver.get(deploymentURL.toString() + "/page1");
       WebElement element = driver.findElement(By.id("index"));
       Assert.assertTrue(element.getText().contains("hello"));
   }
-  
+
   @Test
   public void testAction() throws Exception {
      driver.get(deploymentURL.toString() + "/page1");
@@ -72,13 +72,10 @@ public class JuzuPortletTestCase extends AbstractPortalTestCase {
      element.click();
      Assert.assertTrue(driver.findElement(By.id("action")).getText().contains("world"));
   }
-  
-  // @Test
-  // Commented until header propagation is implemented
+
+  @Test
   public void testAsset() throws Exception {
      driver.get(deploymentURL.toString() + "/page1");
-     List<WebElement> stylesheets = driver.findElements(By.tagName("link"));
-     Assert.assertEquals(1, stylesheets.size());
      List<WebElement> scripts = driver.findElements(By.tagName("script"));
      Assert.assertEquals(1, scripts.size());
   }

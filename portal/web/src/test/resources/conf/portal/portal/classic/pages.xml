@@ -88,22 +88,4 @@
       </portlet-application>
     </container>
   </page>
-  <page>
-    <name>register</name>
-    <access-permissions>Everyone</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>RegisterPortlet</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
-  </page>
 </page-set>

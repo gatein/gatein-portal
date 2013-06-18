@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import juzu.PropertyMap;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageContext;
 import org.gatein.portal.page.Result;
@@ -89,7 +88,7 @@ public class SimpleLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) throws IOException {
+    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, Appendable to) throws IOException {
         root.render(fragments, state, to);
     }
 

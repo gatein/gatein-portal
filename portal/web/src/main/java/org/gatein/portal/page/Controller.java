@@ -284,25 +284,24 @@ public class Controller {
                                     // Headers
                                     sendHttpHeaders(headers, status);
 
-                                    // Determine charset
-                                    Charset charset = null;
-                                    if (content.getEncoding() != null) {
-                                        charset = Charset.forName(content.getEncoding());
+                                    // Charset
+                                    String encoding = content.getEncoding();
+                                    if (encoding != null) {
+                                        Charset charset = Charset.forName(encoding);
+                                        status.with(PropertyType.CHARSET, charset);
+                                    }
+
+                                    // Mime type
+                                    String contentType = content.getContentType();
+                                    if (contentType != null) {
+                                        status.with(PropertyType.MIME_TYPE, contentType);
                                     }
 
                                     //
                                     if (content.getBytes() != null) {
-                                        Response.Body body = status.body(content.getBytes());
-                                        if (content.getContentType() != null) {
-                                            body.withMimeType(content.getContentType()).withCharset(charset);
-                                        }
-                                        status = body;
+                                        status = status.body(content.getBytes());
                                     } else if (content.getChars() != null) {
-                                        Response.Body body = status.body(content.getChars());
-                                        if (content.getContentType() != null) {
-                                            body.withMimeType(content.getContentType()).withCharset(charset);
-                                        }
-                                        status = body;
+                                        status = status.body(content.getChars());
                                     }
 
                                     //

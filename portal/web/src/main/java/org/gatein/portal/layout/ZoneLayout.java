@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import juzu.PropertyMap;
 import juzu.template.Template;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageContext;
@@ -68,7 +67,7 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, PropertyMap properties, Appendable to) {
+    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, Appendable to) {
         Template template = null;
         Map<String, Object> parameters = null;
         if ("1".equals(id)) {

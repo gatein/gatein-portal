@@ -18,6 +18,11 @@
  */
 package org.gatein.portal.page;
 
+import java.util.List;
+import java.util.Map;
+
+import org.w3c.dom.Element;
+
 /**
  * @author Julien Viet
  */
@@ -45,7 +50,19 @@ public class Result {
         /** . */
         public final String content;
 
-        public Fragment(String title, String content) {
+        /** . */
+        public final List<Map.Entry<String, String>> headers;
+
+        /** . */
+        public final List<Element> headerTags;
+
+        public Fragment(
+                List<Map.Entry<String, String>> headers,
+                List<Element> headerTags,
+                String title,
+                String content) {
+            this.headers = headers;
+            this.headerTags = headerTags;
             this.title = title;
             this.content = content;
         }

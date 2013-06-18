@@ -16,9 +16,5 @@
       <name>page3</name>
       <page-reference>portal::classic::page3</page-reference>
     </node>
-    <node>
-      <name>register</name>
-      <page-reference>portal::classic::register</page-reference>
-    </node>
   </node>
 </navigation>
