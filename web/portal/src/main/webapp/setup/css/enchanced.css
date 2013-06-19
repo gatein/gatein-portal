@@ -1,0 +1,211 @@
+/* Medium size devices ( >320px ) */
+@media only screen and (min-width: 20em)  {
+
+    #error-pane p, #footer p {
+        font-size: 1em;
+    }
+
+    label, input, #footer p, #error-pane p {
+        font-size: 0.88em;
+    }
+
+    #error-pane
+    {
+        border-top:0.08em solid #edd3d7;
+        border-bottom:0.08em solid #edd3d7;
+        padding: 0.18em 2.18em 0.18em 0.87em;
+    }
+
+    #error-pane span {
+        display: inline;
+    }
+
+    form {
+        box-shadow:0 0 .5em #ccc;
+        -webkit-box-shadow:0 0 .5em #ccc;
+    }
+
+    fieldset
+    {
+        -webkit-appearance:none;
+        padding:0 0 .5em;
+    }
+
+    fieldset legend
+    {
+        display: block;
+        font-size: 1.7em;
+        padding: .1em .5em 0 .8em;
+        margin-bottom: 0.7em;
+    }
+
+    label
+    {
+        margin-right:5%;
+        margin-top:1em;
+        text-align:right;
+        width: 30%;
+    }
+
+    #password {
+        margin-bottom: 1.07em;
+    }
+
+    input[type=text], input[type=password] {
+        width:60%;
+    }
+
+    input[type=submit]
+    {
+        clear:left;
+        margin: 1.07em auto 0.7em 35%;
+
+    }
+
+    input[type=submit]:hover
+    {
+        background:#1763a4;
+        border:.1em solid #075394;
+        color:#FFF;
+    }
+
+    input[type=checkbox]
+    {
+        float:left;
+        margin-left: 35%;
+        margin-top:0;
+    }
+
+    #forgot
+    {
+        clear:left;
+        margin-left:35%;
+
+    }
+
+    #error-pane {
+        padding: 0.18em;
+    }
+}
+
+/* Big size devices ( >500px ) */
+@media only screen and (min-width: 31.25em) and (min-height: 31.25em) {
+
+    #footer{
+        height: 7em;
+    }
+}
+
+@media only screen and (min-width: 30em)  {
+
+    form
+    {
+        -webkit-border-radius: 1em;
+        border-radius: 1em;
+        margin: 0 auto;
+        width: 26.6em;
+    }
+
+    fieldset legend
+    {
+        padding-top: 0.3em;
+        padding-left: 0.4em;
+        font-size: 1.36em;
+    }
+
+    label
+    {
+        float:left;
+        margin-right:5%;
+        text-align: right;
+        width:22%;
+        margin-top: 1em;
+    }
+
+    #forgot {
+        float: left;
+        display: inline;
+        margin-left: 27%;
+    }
+
+    input[type=text], input[type=password] {
+        -webkit-border-radius:.3em;
+        background:#FFF;
+        border:.1em solid #ddd;
+        border-radius:.3em;
+        display:block;
+        float:left;
+        line-height:1.2em;
+        margin:.5em auto .5em 0;
+        padding:.4em;
+    }
+
+    input[type=submit] {
+        margin-bottom: 1.7em;
+
+    }
+
+    input[type=submit] {
+        margin-left: 27%;
+    }
+
+    #footer p {
+        margin-top:1em;
+    }
+
+    #error-pane
+    {
+        -webkit-border-radius:.5em;
+        border:0.08em solid #edd3d7;
+        border-radius:.5em;
+        position: absolute;
+        margin:-.9em auto -.9em -11.4em;
+        left: 50%;
+        width:19.5em;
+        border-radius: 0.25em;
+        padding: 0.18em 2.18em 0.18em 0.87em;
+    }
+
+    #error-pane p
+    {
+        display:inline;
+    }
+
+    #button-close-alert:hover {
+        opacity: 0.4;
+    }
+
+    #button-close-alert {
+        background: url("../images/icon-close.png") no-repeat scroll left top transparent;
+        border: 0 none;
+        color: #000000;
+        cursor: pointer;
+        display: inline-block;
+        float: right;
+        font-weight: bold;
+        font-size: 1em;
+        height: 0.75em;
+        opacity: 0.2;
+        position: relative;
+        right: -1.31em;
+        text-indent: -99999em;
+        text-shadow: 0 0.6em 0 #FFFFFF;
+        top: 0.18em;
+        width: 0.63em;
+    }
+}
+
+/* Big screen devices ( >600px ) */
+@media only screen and (min-width: 37.5em)  {
+
+    form
+    {
+        width: 31.16em;
+    }
+
+    #forgot {
+        float: none;
+        display: inline;
+        margin-left: 0em;
+    }
+}

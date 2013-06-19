@@ -43,6 +43,7 @@ public class PortalSetupFilter implements Filter {
 
     private static final String SETUP_JSP = "/setup/jsp/setup.jsp";
     private static final String SETUP_ACTION = "/portal/setupaction";
+    private static final String[] resourceExtension = {".css",".png",".jpg"};
     private FilterConfig cfg;
 
     @Override
@@ -53,17 +54,27 @@ public class PortalSetupFilter implements Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 
-        if (PortalSetupService.isSetup()) {
+        HttpServletRequest httpReq = (HttpServletRequest) req;
+        String uri = httpReq.getRequestURI();
+
+        if (PortalSetupService.isSetup() || isResourceUri(uri)) {
             chain.doFilter(req, resp);
         } else {
-            HttpServletRequest httpReq = (HttpServletRequest) req;
-            String uri = httpReq.getRequestURI();
+
             if (uri.equals(SETUP_ACTION))
                 chain.doFilter(req, resp);
             else
                 cfg.getServletContext().getRequestDispatcher(SETUP_JSP).forward(req, resp);
         }
 
+    }
+
+    private boolean isResourceUri(String uri){
+        for(String extension : resourceExtension){
+            if (uri.endsWith(extension))
+                return true;
+        }
+        return false;
     }
 
     @Override

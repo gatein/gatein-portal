@@ -1,0 +1,128 @@
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    src: url('../resources/ubuntu-font.woff') format('woff');    
+}
+
+#error-pane {
+    border:1px solid #edd3d7;
+    left:50%;
+    margin:-.9em auto -.9em -12.8em;
+    padding:3px 35px 3px 14px;
+    position:absolute;
+    width:22em;
+}
+
+#error-pane span, #error-pane p {
+    display:inline;
+}
+
+#footer {
+    height:12em;
+}
+
+#footer p {
+    margin-top:1em;
+}
+
+#password {
+    margin-bottom:1em;
+}
+
+.close {
+    color:#000;
+    float:right;
+    font-size:20px;
+    font-weight:700;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size:.88em;    
+}
+
+#button-close-alert {
+    background:url('../images/icon-close.png') no-repeat scroll left top transparent;
+    border:0 none;
+    cursor:pointer;
+    display:inline-block;
+    height:12px;
+    text-indent:-99999px;
+    top:3px;
+    width:10px;
+    position:relative;
+    right:-21px;
+}
+
+fieldset {
+    padding:0 0 .5em;
+}
+
+fieldset legend {
+    font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display:block;
+    font-size:1.6em;
+    margin-bottom:.7em;
+    padding:.3em .5em 0 .4em;
+}
+
+form {
+    margin:0 auto;
+    width:36.85em;
+}
+
+input {
+    background:#FFF;
+    border:.1em solid #ddd;
+    display:block;
+    float:left;
+    line-height:1.2em;
+    margin:.5em auto .5em 0;
+    padding:.4em;
+}
+
+input[type=checkbox] {
+    float:left;
+    margin-left:27%;
+    margin-top:0;
+    padding:0;
+}
+
+input[type=submit] {
+    clear:left;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin:1em auto 1.7em 27%;
+}
+
+input[type=submit]:hover {
+    background:#1763a4;
+    border:.1em solid #075394;
+    color:#FFF;
+}
+
+input[type=text],input[type=password] {
+    width:60%;
+}
+
+label {
+    float:left;
+    margin-right:5%;
+    margin-top:1em;
+    text-align:right;
+    width:22%;
+}
+
+label[for=rememberme] {
+    float:none;
+    line-height:1em;
+    margin-left:.5em;
+    margin-right:.5em;
+    margin-top:0;
+    text-align:left;
+    text-indent:0;
+    width:auto;
+}
+
+label[for=rememberme],#forgot {
+    font-size:.95em;
+}

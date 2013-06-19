@@ -34,7 +34,10 @@
 
   String contextPath = request.getContextPath() ;
   String error = (String)request.getAttribute("org.gatein.portal.setup.error");
- 
+
+  PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());
+  ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
+  ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
 
   response.setCharacterEncoding("UTF-8"); 
   response.setContentType("text/html; charset=UTF-8");
@@ -44,44 +47,42 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>GateIn Setup</title>
+    <title><%=res.getString("UISetupForm.label.setup.SetPasswordTitle")%></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>        
-    <meta name="description" content="Login screen of the Portal"/>
+    <meta name="description" content="Password setup screen of the Portal"/>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1"/>
-    <link rel="shortcut icon" type="image/x-icon"  href="/portal/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="/gatein-mobile-login/login/css/default.css"/>
-    <link rel="stylesheet" type="text/css" href="/gatein-mobile-login/login/css/enchanced.css"/>        
+    <link rel="stylesheet" type="text/css" href="/portal/setup/css/default.css"/>
+    <link rel="stylesheet" type="text/css" href="/portal/setup/css/enchanced.css"/>
     <!--[if lte IE 8]>
-    <link rel="stylesheet" type="text/css" href="/gatein-mobile-login/login/css/ie8.css"/>
+    <link rel="stylesheet" type="text/css" href="/portal/setup/css/ie8.css"/>
     <![endif]-->
-    <script type="text/javascript" src="/gatein-mobile-login/login/js/login.js"></script>              
   </head>
   <body>
-    <h1><a href="#login-form" title="Gate In">Gate In</a></h1>
+    <h1><a href="#login-form" title="Setup"><%=res.getString("UISetupForm.label.setup.SetPasswordTitle")%></a></h1>
     <%/*Begin form*/%>
     <% if(error != null) { %>
-    <div id="error-pane"><p><span><%= error %></span></p><button id="button-close-alert" type="button">close</button></div>
+    <div id="error-pane"><p><span><%= error %></span></p></div>
     <% } %>
     <form id="setup-form" name="setup-form" action="<%= contextPath + "/setupaction"%>" method="post">
         <fieldset>
-            <legend>Set root password</legend>                
+            <legend><%=res.getString("UISetupForm.label.setup.SetPassword")%></legend>
             
-            <label for="password">Password:</label>
+            <label for="password"><%=res.getString("UISetupForm.label.setup.Password")%></label>
             <input type="password" id="password" name="password" value=""/>
             
-            <label for="password2">Repeat password:</label>
+            <label for="password2"><%=res.getString("UISetupForm.label.setup.PasswordRep")%></label>
             <input type="password" id="password2" name="password2" value=""/>
             
-            <input type="submit" name="setup" value="Setup"/>               
+            <input type="submit" name="setup" value="<%=res.getString("UISetupForm.label.setup.Setup")%>"/>
 
         </fieldset>
     </form>
     <div id="footer">
         <p>
-            Copyright © 2012. All rights reserved,
-            <a href="http://www.redhat.com/">Red Hat, Inc</a>
-            and
-            <a href="http://www.exoplatform.com">eXo Platform SAS</a>
+            <%=res.getString("UISetupForm.label.mobile.copyright.Intro")%>
+            <a href="http://www.redhat.com/"><%=res.getString("UISetupForm.label.mobile.copyright.RH")%></a>
+            <%=res.getString("UISetupForm.label.mobile.copyright.And")%>
+            <a href="http://www.exoplatform.com"><%=res.getString("UISetupForm.label.mobile.copyright.Exo")%></a>
         </p>
     </div>
 </body>   

@@ -1,0 +1,158 @@
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 400;
+}
+
+/* Small size devices ( <320px ) */
+html
+{
+    display:table;
+    height:100%;
+    width:100%;
+    -webkit-text-size-adjust: none; /* fixing font-size change after changing orientation on iPhone */
+}
+
+html *
+{
+    margin: 0;
+    padding:0;
+}
+
+body
+{
+    background: url('/portal/setup/images/uiportal-background.jpg') left top #EFEFEF;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    min-width: 15em;
+    display:table-cell;
+    vertical-align:middle;
+}
+
+form
+{
+    background:#FFF;
+    padding: 0.7em;
+}
+
+form span
+{
+    color:#999;
+}
+
+fieldset
+{
+    border:none;
+}
+
+fieldset legend
+{
+    font-family: "Ubuntu", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: none;
+}
+
+h1 a
+{
+    display: none;
+}
+
+label
+{
+    float: left;
+}
+
+input[type=submit], input[type=text], input[type=password]{
+    -webkit-appearance: none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-border-radius:.3em;
+    background:#FFF;
+    border:.1em solid #ddd;
+    border-radius:.3em;
+    float:left;
+    margin:.5em auto .5em 0;
+    font-size: inherit;
+}
+
+input[type=text], input[type=password] {
+    padding: .5em 0;
+    text-indent: 0.5em;
+    width: 100%;
+}
+
+input[type=submit]
+{
+    padding:.25em 1em;
+    margin-bottom: 0;
+    margin-top: 1em;
+    background-color: #005490;
+    border:.1em solid #1C4E7E;
+    color:#FFF;
+    text-shadow: 0 -0.06em 0 rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    clear:left;
+    line-height: 1.6em;
+    border-color: #0044cc #0044cc #002a80;
+}
+
+input[type=submit]:hover
+{
+    background:#1763a4;
+}
+
+input[type=checkbox]
+{
+    margin: 0;
+    float:right;
+}
+
+#forgot
+{
+    float: left;
+    color: #999;
+    margin-top: 0.5em;
+}
+
+#footer p
+{
+    color:#999;
+    font-size: 0.9em;
+    margin-top:0.5em;
+}
+
+
+#footer a, a {
+    color: #666666;
+    text-decoration: none;
+}
+
+#footer a:hover, a:hover {
+    color: #005580;
+    text-decoration: underline;
+}
+
+#error-pane
+{
+    background:#f1dede;
+    color:#b54b46;
+    text-align:center;
+    text-shadow:#fff 0 0.06em 0;
+}
+
+#error-pane h2
+{
+    display: inline;
+    font-size: inherit;
+}
+
+#error-pane span {
+    display: none;
+}
+
+#button-close-alert
+{
+    display:none;
+}
+
+#footer {
+    text-align:center;
+}
