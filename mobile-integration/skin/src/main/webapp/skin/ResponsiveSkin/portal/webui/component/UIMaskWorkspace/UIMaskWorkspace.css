@@ -7,6 +7,9 @@
     text-align: center;
     background-color: transparent;
     border: none;
+    -mos-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .UIMaskWorkspace:before {
@@ -17,18 +20,7 @@
     margin-left: -0.4em;
     width: 0;
 }
-/*
-.UIMaskWorkspace:after {
-content:"";
 
-display: inline-block;
-height:100%;
-vertical-align:middle;
-
-margin-right: -1em;
-width:0;
-}
-*/
 .UIMaskWorkspace .MaskContainer {
     background-color: #fff;
     width: 300px;
@@ -40,6 +32,7 @@ width:0;
     max-height: 100%;
     max-width: 100%;
     text-align: left;
+    box-shadow: 0px 0px 5px #909090;
 }
 
 .UIMaskWorkspace .UIFormWithTitle {
@@ -52,12 +45,37 @@ width:0;
 }
 
 @media screen and (max-width: 30em) {
+
+    #UIWorkingWorkspace.background {
+        display: none;
+    }
+
+    .MaskLayer {
+        background: inherit;
+    }
+
+    .UIMaskWorkspace {
+        position: relative !important;
+    }
+
     .UIMaskWorkspace .MaskContainer {
         width: 100%;
     }
 }
 
-@media screen and (max-height: 30em) {
+@media screen and (max-height: 35em) {
+    #UIWorkingWorkspace.background {
+       display: none;
+    } 
+
+    .MaskLayer {
+       background: inherit;
+    }
+
+    .UIMaskWorkspace {
+        position: relative !important;
+    }
+
     .UIMaskWorkspace .UITabContent {
         height: auto;
     }
