@@ -178,7 +178,6 @@
       <artifactId>groovy-all</artifactId>
     </dependency>
 
-
     <!-- Needed for now because it contains log4j configuration -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
@@ -231,23 +230,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>tomcat</artifactId>
-      <version>${org.apache.tomcat.version}</version>
-      <type>tar.gz</type>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>portal.root</artifactId>
-      <type>war</type>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>org.gatein.portal.examples.portlets</artifactId>
-      <type>war</type>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -277,40 +259,6 @@
         </executions>
       </plugin>
 
-      <!-- Package for tomcat -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <attach>true</attach>
-        </configuration>
-        <executions>
-          <execution>
-            <id>portal</id>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>src/main/assembly/tomcat-portal.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-          <execution>
-            <id>distrib</id>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <descriptors>
-                <descriptor>src/main/assembly/tomcat-distrib.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- Use always for redeploying a new portal for each TestCase -->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -320,60 +268,241 @@
         </configuration>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>exec-war-only</goal>
-            </goals>
-            <phase>package</phase>
-            <configuration>
-              <warRunDependencies>
-                <warRunDependency>
-                  <dependency>
-                    <groupId>org.gatein.portal</groupId>
-                    <artifactId>portal.root</artifactId>
-                    <version>${project.version}</version>
-                    <type>war</type>
-                  </dependency>
-                  <contextPath>/</contextPath>
-                </warRunDependency>
-                <warRunDependency>
-                  <dependency>
-                    <groupId>org.gatein.portal</groupId>
-                    <artifactId>portal.web</artifactId>
-                    <version>${project.version}</version>
-                    <classifier>tomcat-portal</classifier>
-                    <type>war</type>
-                  </dependency>
-                  <contextPath>/portal</contextPath>
-                </warRunDependency>
-                <warRunDependency>
-                  <dependency>
-                    <groupId>org.gatein.portal</groupId>
-                    <artifactId>org.gatein.portal.examples.portlets</artifactId>
-                    <version>${project.version}</version>
-                    <type>war</type>
-                  </dependency>
-                  <contextPath>/samples</contextPath>
-                </warRunDependency>
-              </warRunDependencies>
-              <extraDependencies>
-                <extraDependency>
-                  <groupId>javax.portlet</groupId>
-                  <artifactId>portlet-api</artifactId>
-                  <version>2.0</version>
-                </extraDependency>
-              </extraDependencies>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>tomcat</id>
+      <activation>
+        <property>
+          <name>!no.tomcat7</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.tomcat</groupId>
+          <artifactId>tomcat</artifactId>
+          <version>${org.apache.tomcat.version}</version>
+          <type>tar.gz</type>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>portal.root</artifactId>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>org.gatein.portal.examples.portlets</artifactId>
+          <type>war</type>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.portal</groupId>
+          <artifactId>exo.portal.component.identity</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.kernel</groupId>
+          <artifactId>exo.kernel.component.cache</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.core</groupId>
+          <artifactId>exo.core.component.organization.api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.core</groupId>
+          <artifactId>exo.core.component.database</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.exoplatform.core</groupId>
+          <artifactId>exo.core.component.security.core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.picketlink.idm</groupId>
+          <artifactId>picketlink-idm-common</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.picketlink.idm</groupId>
+          <artifactId>picketlink-idm-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.picketlink.idm</groupId>
+          <artifactId>picketlink-idm-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.picketlink.idm</groupId>
+          <artifactId>picketlink-idm-cache</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.picketlink.idm</groupId>
+          <artifactId>picketlink-idm-spi</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.picketlink.idm</groupId>
+          <artifactId>picketlink-idm-hibernate</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.hibernate.javax.persistence</groupId>
+          <artifactId>hibernate-jpa-2.0-api</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>dom4j</groupId>
+          <artifactId>dom4j</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.hibernate.common</groupId>
+          <artifactId>hibernate-commons-annotations</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.javassist</groupId>
+          <artifactId>javassist</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>antlr</groupId>
+          <artifactId>antlr</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>jgroups</groupId>
+          <artifactId>jgroups</artifactId>
+          <version>2.6.13.GA</version>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.logging</groupId>
+          <artifactId>jboss-logging</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>javax.transaction</groupId>
+          <artifactId>jta</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.jbossts</groupId>
+          <artifactId>jbossjta</artifactId>
+          <version>4.16.4.Final</version>
+        </dependency>
+        <dependency>
+          <groupId>org.infinispan</groupId>
+          <artifactId>infinispan-core</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.infinispan</groupId>
+          <artifactId>infinispan-tree</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.hsqldb</groupId>
+          <artifactId>hsqldb</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>commons-dbcp</groupId>
+          <artifactId>commons-dbcp</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>commons-pool</groupId>
+          <artifactId>commons-pool</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.marshalling</groupId>
+          <artifactId>jboss-marshalling</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.marshalling</groupId>
+          <artifactId>jboss-marshalling-river</artifactId>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+
+          <!-- Package for tomcat -->
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <configuration>
+              <attach>true</attach>
+            </configuration>
+            <executions>
+              <execution>
+                <id>portal</id>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <descriptors>
+                    <descriptor>src/main/assembly/tomcat-portal.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+              <execution>
+                <id>distrib</id>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <descriptors>
+                    <descriptor>src/main/assembly/tomcat-distrib.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
+            <version>2.1</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>exec-war-only</goal>
+                </goals>
+                <phase>package</phase>
+                <configuration>
+                  <warRunDependencies>
+                    <warRunDependency>
+                      <dependency>
+                        <groupId>org.gatein.portal</groupId>
+                        <artifactId>portal.root</artifactId>
+                        <version>${project.version}</version>
+                        <type>war</type>
+                      </dependency>
+                      <contextPath>/</contextPath>
+                    </warRunDependency>
+                    <warRunDependency>
+                      <dependency>
+                        <groupId>org.gatein.portal</groupId>
+                        <artifactId>portal.web</artifactId>
+                        <version>${project.version}</version>
+                        <classifier>tomcat-portal</classifier>
+                        <type>war</type>
+                      </dependency>
+                      <contextPath>/portal</contextPath>
+                    </warRunDependency>
+                    <warRunDependency>
+                      <dependency>
+                        <groupId>org.gatein.portal</groupId>
+                        <artifactId>org.gatein.portal.examples.portlets</artifactId>
+                        <version>${project.version}</version>
+                        <type>war</type>
+                      </dependency>
+                      <contextPath>/samples</contextPath>
+                    </warRunDependency>
+                  </warRunDependencies>
+                  <extraDependencies>
+                    <extraDependency>
+                      <groupId>javax.portlet</groupId>
+                      <artifactId>portlet-api</artifactId>
+                      <version>2.0</version>
+                    </extraDependency>
+                  </extraDependencies>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

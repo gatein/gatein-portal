@@ -178,4 +178,6 @@
     </init-params>
   </component>
 
+  <import>organization/configuration.xml</import>
+
 </configuration>

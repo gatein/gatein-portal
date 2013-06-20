@@ -52,6 +52,35 @@
         <include>org.gatein.portal:exo.portal.component.portal</include>
         <include>org.gatein.portal:portal.common</include>
         <include>org.gatein.portal:portal.ui</include>
+        <include>org.gatein.portal:exo.portal.component.identity</include>
+        <include>org.exoplatform.kernel:exo.kernel.component.common</include>
+        <include>org.exoplatform.kernel:exo.kernel.component.cache</include>
+        <include>org.exoplatform.core:exo.core.component.organization.api</include>
+        <include>org.exoplatform.core:exo.core.component.database</include>
+        <include>org.exoplatform.core:exo.core.component.security.core</include>
+        <include>org.picketlink.idm:picketlink-idm-common</include>
+        <include>org.picketlink.idm:picketlink-idm-core</include>
+        <include>org.picketlink.idm:picketlink-idm-api</include>
+        <include>org.picketlink.idm:picketlink-idm-spi</include>
+        <include>org.picketlink.idm:picketlink-idm-cache</include>
+        <include>org.picketlink.idm:picketlink-idm-hibernate</include>
+        <include>org.hibernate:hibernate-core</include>
+        <include>org.javassist:javassist</include>
+        <include>dom4j:dom4j</include>
+        <include>antlr:antlr</include>
+        <include>org.hibernate.common:hibernate-commons-annotations</include>
+        <include>org.jboss.logging:jboss-logging</include>
+        <include>javax.transaction:jta</include>
+        <include>org.jboss.jbossts:jbossjta</include>
+        <include>org.infinispan:infinispan-core</include>
+        <include>org.infinispan:infinispan-tree</include>
+        <include>jgroups:jgroups</include>
+        <include>org.hibernate.javax.persistence:hibernate-jpa-2.0-api</include>
+        <include>org.hsqldb:hsqldb</include>
+        <include>commons-dbcp:commons-dbcp</include>
+        <include>commons-pool:commons-pool</include>
+        <include>org.jboss.marshalling:jboss-marshalling</include>
+        <include>org.jboss.marshalling:jboss-marshalling-river</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>
