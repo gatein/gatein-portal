@@ -178,9 +178,6 @@ public class SiteLayoutTestCase extends AbstractPortalTestCase {
         Assert.assertEquals("foo_body", body.foo);
 
         //
-        System.out.println(driver.getPageSource());
-
-        //
         driver.findElement(By.id("header")).click();
         Assert.assertEquals("foo_header", header.foo);
         Assert.assertEquals("foo_body", body.foo);
