@@ -25,6 +25,9 @@ package org.gatein.integration.jboss.as7.deployment.wsrp;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.jar.JarFile;
 
 import org.gatein.integration.jboss.as7.deployment.GateInExtKey;
@@ -37,6 +40,7 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.server.deployment.module.ResourceRoot;
+import org.jboss.as.server.moduleservice.ServiceModuleLoader;
 import org.jboss.logging.Logger;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
@@ -45,9 +49,13 @@ import org.jboss.modules.ResourceLoaderSpec;
 import org.jboss.modules.ResourceLoaders;
 import org.jboss.vfs.VirtualFile;
 
-/** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
+/**
+ * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
+ */
 public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor {
     private static final Logger log = Logger.getLogger(WSRPStructureDeploymentProcessor.class);
+    private final List<ModuleDependency> loadedPluginsAsDependencies = new ArrayList<ModuleDependency>(7);
+    private AtomicReference<ResourceLoaderSpec> resourceLoaderSpec = new AtomicReference<ResourceLoaderSpec>(null);
 
     @Override
     public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
@@ -55,9 +63,20 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
         if (isWSRPPlugin(du)) {
             du.putAttachment(GateInWSRPKey.KEY, GateInWSRPKey.INSTANCE);
 
+            // boot module loader
+            final ModuleLoader moduleLoader = Module.getBootModuleLoader();
+
+            // plugin module loader so that the implicit plugin module can be found later by WSRP admin
+            final ServiceModuleLoader pluginModuleLoader = du.getAttachment(Attachments.SERVICE_MODULE_LOADER);
+
+            // create a dependency on this module to be added to WSRP admin
+            final ModuleIdentifier moduleIdentifier = du.getAttachment(Attachments.MODULE_IDENTIFIER);
+            synchronized (this) {
+                loadedPluginsAsDependencies.add(new ModuleDependency(pluginModuleLoader, moduleIdentifier, false, false, false, false));
+            }
+
             // add dependencies
             final ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
-            final ModuleLoader moduleLoader = Module.getBootModuleLoader();
             ModuleDependency dependency = new ModuleDependency(moduleLoader, ModuleIdentifier.fromString("org.gatein.wsrp"),
                     false, false, false, false);
             moduleSpecification.addSystemDependency(dependency);
@@ -72,31 +91,60 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
                     false, false, false);
             moduleSpecification.addSystemDependency(dependency);
 
-            log.infof("Adding WSRP, PC & Apache WS Security  dependencies to %s", du.getName());
-        }
+            // GTNPORTAL-3133: WSRP integration is needed to so that plugins can access WSRP-specific CXF WS-Security integration
+            dependency = new ModuleDependency(moduleLoader, ModuleIdentifier.fromString("org.gatein.wsrp.integration"), false,
+                    false, false, false);
+            moduleSpecification.addSystemDependency(dependency);
 
-        // add JAX-WS catalog access to WSRP admin and extension
-        final String name = du.getName();
-        if (name.contains("wsrp-admin-gui") || name.contains("extension-war")) {
+            log.infof("Adding WSRP, PC & Apache WS Security dependencies to %s", du.getName());
+        } else {
+            final String name = du.getName();
+            final boolean isWSRPAdmin = name.contains("wsrp-admin-gui");
+            if (isWSRPAdmin || name.contains("extension-war")) {
 
-            ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
-            ModuleLoader moduleLoader = Module.getBootModuleLoader();
+                ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
+                ModuleLoader moduleLoader = Module.getBootModuleLoader();
 
-            try {
-                Module module = moduleLoader.loadModule(ModuleIdentifier.fromString("org.gatein.wsrp.catalog"));
-                URL url = module.getClassLoader().getResource("META-INF/jax-ws-catalog.xml");
-                URLConnection connection = url.openConnection();
+                // create resource loader to load JAX-WS catalog if it doesn't already exist
+                if (resourceLoaderSpec.get() == null) {
+                    try {
+                        Module module = moduleLoader.loadModule(ModuleIdentifier.fromString("org.gatein.wsrp.catalog"));
+                        URL url = module.getClassLoader().getResource("META-INF/jax-ws-catalog.xml");
+                        URLConnection connection = url.openConnection();
 
-                if (!(connection instanceof JarURLConnection)) {
-                    throw new RuntimeException("JAX-WS catalog not found");
+                        if (!(connection instanceof JarURLConnection)) {
+                            throw new RuntimeException("JAX-WS catalog not found");
+                        }
+
+                        JarFile jarFile = ((JarURLConnection) connection).getJarFile();
+
+                        resourceLoaderSpec.set(ResourceLoaderSpec.createResourceLoaderSpec(ResourceLoaders
+                                .createJarResourceLoader("wsrp-catalog", jarFile)));
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                    }
                 }
 
-                JarFile jarFile = ((JarURLConnection) connection).getJarFile();
+                // add JAX-WS catalog access to WSRP admin and extension
+                moduleSpecification.addResourceLoader(resourceLoaderSpec.get());
 
-                moduleSpecification.addResourceLoader(ResourceLoaderSpec.createResourceLoaderSpec(ResourceLoaders
-                        .createJarResourceLoader("wsrp-catalog", jarFile)));
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
+                // if we're processing the WSRP admin, add the plugins as local dependencies as well, just in case
+                if (isWSRPAdmin) {
+                    synchronized (this) {
+                        moduleSpecification.addLocalDependencies(loadedPluginsAsDependencies);
+                    }
+                    log.info("Adding " + loadedPluginsAsDependencies + " dependencies to WSRP admin module");
+                }
+            }
+
+            // GTNPORTAL-3133: if we're processing the WSRP producer WAR, add the plugins as local dependencies so that CXF can access them
+            if (name.contains("wsrp-producer")) {
+                ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
+
+                synchronized (this) {
+                    moduleSpecification.addLocalDependencies(loadedPluginsAsDependencies);
+                }
+                log.info("Adding " + loadedPluginsAsDependencies + " dependencies to WSRP producer module");
             }
         }
     }
