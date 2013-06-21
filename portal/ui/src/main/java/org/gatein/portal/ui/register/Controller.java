@@ -35,9 +35,11 @@ public class Controller {
     @Path("index.gtmpl")
     Template index;
 
-
     @Inject
     Flash flash;
+
+    @Inject
+    UserManager manager;
 
     @View
     public Response index() {
@@ -45,19 +47,24 @@ public class Controller {
     }
 
     @Action
-    public Response register(User user, String confirmPassword) {
-        if (!user.password.equals(confirmPassword)) {
+    public Response register(UserBean userBean, String confirmPassword) {
+        if (!userBean.password.equals(confirmPassword)) {
             flash.setError("Password and Confirm Password must be the same.");
-            return Controller_.index();
+        } else {
+            try {
+                UserBean isExisted = manager.getUser(userBean.userName);
+                if (isExisted != null) {
+                    flash.setError("This user is already existed. Please enter different userName.");
+                } else {
+                    manager.saveUser(userBean);
+                    flash.setSuccess("You have successfully registered a new account!");
+                    flash.setUserName(userBean.userName);
+                }
+            } catch (Exception e) {
+                flash.setError("Could not register user due to internal error.");
+                e.printStackTrace();
+            }
         }
-        User isExisted = User.getUser(user.userName);
-        if (isExisted != null) {
-            flash.setError("This user is already existed. Please enter different userName.");
-            return Controller_.index();
-        }
-        User.saveUser(user);
-        flash.setSuccess("You have successfully registered a new account!");
-        flash.setUserName(user.userName);
         return Controller_.index();
     }
 }

@@ -25,6 +25,10 @@ import java.net.URL;
 
 import junit.framework.AssertionFailedError;
 import juzu.arquillian.Helper;
+import org.exoplatform.container.RootContainer;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 import org.gatein.portal.common.kernel.KernelLifeCycle;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -95,13 +99,13 @@ public class RegisterTestCase {
     public void testRegisterSuccess() {
         driver.get(getBaseURL());
         // fill the form
-        driver.findElements(By.name("userName")).get(0).sendKeys("test");
-        driver.findElements(By.name("password")).get(0).sendKeys("test");
-        driver.findElements(By.name("confirmPassword")).get(0).sendKeys("test");
-        driver.findElements(By.name("firstName")).get(0).sendKeys("test");
-        driver.findElements(By.name("lastName")).get(0).sendKeys("test");
-        driver.findElements(By.name("displayName")).get(0).sendKeys("test");
-        driver.findElements(By.name("emailAddress")).get(0).sendKeys("test");
+        driver.findElements(By.name("userName")).get(0).sendKeys("test_user_name");
+        driver.findElements(By.name("password")).get(0).sendKeys("test_password");
+        driver.findElements(By.name("confirmPassword")).get(0).sendKeys("test_password");
+        driver.findElements(By.name("firstName")).get(0).sendKeys("test_first_name");
+        driver.findElements(By.name("lastName")).get(0).sendKeys("test_last_name");
+        driver.findElements(By.name("displayName")).get(0).sendKeys("test_display_name");
+        driver.findElements(By.name("emailAddress")).get(0).sendKeys("test_email_address");
 
         driver.findElements(By.name("submit")).get(0).click();
         assertTrue(driver.findElement(By.id("registerMessage")).getText().contains("You have successfully registered a new account"));
@@ -109,6 +113,20 @@ public class RegisterTestCase {
 
     @Test
     @InSequence(2)
+     public void testUserExist() throws Exception {
+        OrganizationService orgService = (OrganizationService)RootContainer.getComponent(OrganizationService.class);
+        UserHandler handler = orgService.getUserHandler();
+        User user = handler.findUserByName("test_user_name");
+        assertNotNull(user);
+        assertEquals("test_password", user.getPassword());
+        assertEquals("_test_user_name", user.getFirstName()); // This is due to dumb dummy org service impl
+        assertEquals("test_last_name", user.getLastName());
+        assertEquals("test_display_name", user.getDisplayName());
+        assertEquals("test_user_name@mail.com", user.getEmail()); // This is due to dumb dummy org service impl
+    }
+
+    @Test
+    @InSequence(3)
     @RunAsClient
     public void testPasswordFail() {
         driver.get(getBaseURL());
@@ -126,12 +144,12 @@ public class RegisterTestCase {
     }
 
     @Test
-    @InSequence(3)
+    @InSequence(4)
     @RunAsClient
     public void testAccountExisted() {
         driver.get(getBaseURL());
         // fill the form
-        driver.findElements(By.name("userName")).get(0).sendKeys("test");
+        driver.findElements(By.name("userName")).get(0).sendKeys("test_user_name");
         driver.findElements(By.name("password")).get(0).sendKeys("test");
         driver.findElements(By.name("confirmPassword")).get(0).sendKeys("test");
         driver.findElements(By.name("firstName")).get(0).sendKeys("test");
