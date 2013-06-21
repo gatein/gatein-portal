@@ -60,8 +60,9 @@ public class KernelLifeCycle implements Filter {
 
         // Init portal container
         RootContainer root = RootContainer.getInstance();
-        root.addInitTask(filterConfig.getServletContext(), task);
-        root.registerPortalContainer(filterConfig.getServletContext());
+        ServletContext context = filterConfig.getServletContext();
+        root.addInitTask(context, task);
+        root.registerPortalContainer(context);
 
         //
         PortalContainer container = this.container.get();

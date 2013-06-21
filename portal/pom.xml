@@ -32,7 +32,7 @@
   <name>GateIn Portal Module</name>
 
   <properties>
-    <juzu.version>0.7.0-beta11</juzu.version>
+    <juzu.version>0.7.0-beta12</juzu.version>
   </properties>
 
   <modules>
@@ -41,5 +41,45 @@
     <module>ui</module>
     <module>web</module>
   </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.juzu</groupId>
+        <artifactId>juzu-core</artifactId>
+        <version>${juzu.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.juzu</groupId>
+        <artifactId>juzu-plugins-portlet</artifactId>
+        <version>${juzu.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.juzu</groupId>
+        <artifactId>juzu-bom-arquillian</artifactId>
+        <version>${juzu.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.juzu</groupId>
+        <artifactId>juzu-bom-arquillian-tomcat7</artifactId>
+        <version>${juzu.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jdt.core.compiler</groupId>
+        <artifactId>ecj</artifactId>
+        <version>3.7</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet.jsp</groupId>
+        <artifactId>jsp-api</artifactId>
+        <version>2.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+        <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
+        <version>2.0.0-alpha-4</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 </project>
