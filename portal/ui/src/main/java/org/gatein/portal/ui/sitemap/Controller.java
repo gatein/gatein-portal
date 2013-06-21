@@ -18,12 +18,13 @@
  */
 package org.gatein.portal.ui.sitemap;
 
+import javax.inject.Inject;
+
 import juzu.Path;
 import juzu.Response;
 import juzu.View;
 import juzu.request.UserContext;
 import juzu.template.Template;
-
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
@@ -33,32 +34,30 @@ import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.ui.navigation.UserNode;
 
-import javax.inject.Inject;
-
 /**
  * @author Julien Viet
  */
 public class Controller {
 
-   @Inject
-   @Path("index.gtmpl")
-   Template index;
+    @Inject
+    @Path("index.gtmpl")
+    Template index;
 
-   @Inject
-   NavigationService navigationService;
+    @Inject
+    NavigationService navigationService;
 
-   @Inject
-   DescriptionService descriptionService;
+    @Inject
+    DescriptionService descriptionService;
 
-   @View
-   public Response.Content index(UserContext userContext) {
-      NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
+    @View
+    public Response.Content index(UserContext userContext) {
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
 
-      UserNode.Model model = new UserNode.Model(descriptionService, userContext.getLocale());
+        UserNode.Model model = new UserNode.Model(descriptionService, userContext.getLocale());
 
-      NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.ALL, null);
+        NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.ALL, null);
 
-      return index.with().set("root", root.getNode()).ok();
-   }
+        return index.with().set("root", root.getNode()).ok();
+    }
 
 }

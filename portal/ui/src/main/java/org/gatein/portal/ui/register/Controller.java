@@ -18,45 +18,46 @@
  */
 package org.gatein.portal.ui.register;
 
+import javax.inject.Inject;
+
 import juzu.Action;
 import juzu.Path;
 import juzu.Response;
 import juzu.View;
 import juzu.template.Template;
 
-import javax.inject.Inject;
-
 /**
  * @author Julien Viet
  */
 public class Controller {
 
-   @Inject
-   @Path("index.gtmpl")
-   Template index;
+    @Inject
+    @Path("index.gtmpl")
+    Template index;
 
-   @Inject
-   Flash flash;
 
-   @View
-   public Response index() {
-      return index.with().ok();
-   }
+    @Inject
+    Flash flash;
 
-   @Action
-   public Response register(User user, String confirmPassword) {
-      if (!user.password.equals(confirmPassword)) {
-         flash.setError("Password and Confirm Password must be the same.");
-         return Controller_.index();
-      }
-      User isExisted = User.getUser(user.userName);
-      if (isExisted != null) {
-         flash.setError("This user is already existed. Please enter different userName.");
-         return Controller_.index();
-      }
-      User.saveUser(user);
-      flash.setSuccess("You have successfully registered a new account!");
-      flash.setUserName(user.userName);
-      return Controller_.index();
-   }
+    @View
+    public Response index() {
+        return index.with().ok();
+    }
+
+    @Action
+    public Response register(User user, String confirmPassword) {
+        if (!user.password.equals(confirmPassword)) {
+            flash.setError("Password and Confirm Password must be the same.");
+            return Controller_.index();
+        }
+        User isExisted = User.getUser(user.userName);
+        if (isExisted != null) {
+            flash.setError("This user is already existed. Please enter different userName.");
+            return Controller_.index();
+        }
+        User.saveUser(user);
+        flash.setSuccess("You have successfully registered a new account!");
+        flash.setUserName(user.userName);
+        return Controller_.index();
+    }
 }

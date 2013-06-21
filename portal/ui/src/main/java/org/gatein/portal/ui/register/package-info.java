@@ -3,11 +3,10 @@
  */
 @Application
 @Bindings({
-   @Binding(Flash.class)
+        @Binding(Flash.class)
 })
 @Portlet
-@Assets(stylesheets = @Stylesheet(src = "registerportlet.css"))
-package org.gatein.portal.ui.register;
+@Assets(stylesheets = @Stylesheet(src = "registerportlet.css")) package org.gatein.portal.ui.register;
 
 import juzu.Application;
 import juzu.plugin.asset.Assets;
