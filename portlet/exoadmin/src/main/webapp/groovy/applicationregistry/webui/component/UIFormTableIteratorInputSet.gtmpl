@@ -2,6 +2,7 @@
 	import org.exoplatform.webui.core.UIComponent ;
 	import org.exoplatform.webui.form.UIFormPageIterator ;
 	import org.exoplatform.webui.form.UIFormCheckBoxInput ;
+	import org.exoplatform.webui.form.UIFormRadioBoxInput ;
 	UIFormPageIterator uiIterator = uicomponent.getUIFormPageIterator();
 %>
 <div class="UIFormTableIterator" id="UIFormTableIterator">
@@ -41,9 +42,13 @@
 						<% } else { %>						
 						<td class="text" style="<%=(i==0) ? "text-align: center;" : "";%>">
 						<% if (i==1) { %>						
-						<label for="<%= labelName %>" />
+						<label for="<%= labelName + i%>" />
 						<% } %>
+                                                <% if(UIFormRadioBoxInput.class.isInstance(child.getChild(i))) { %>
+                                                <%= child.getChild(i).renderWithId(i);%>
+                                                <% } else { %>
 						<%child.renderChild(i);%>
+						<% } %>
 						<% if (i==1) { %>
 						</label>
 						<% } %>						

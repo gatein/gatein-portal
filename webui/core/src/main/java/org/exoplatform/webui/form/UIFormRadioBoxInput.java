@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form;
 
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -154,5 +155,54 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String> {
         }
 
     }
+
+    public String renderWithId(int iteration) throws Exception {
+        if (options_ == null)
+            return "";
+        Writer w = new StringWriter();
+        if (value_ == null) {
+            SelectItemOption<String> si = options_.get(0);
+            value_ = si.getValue();
+        }
+
+        int index = 0;
+        for (int i = index; i < options_.size(); i++) {
+            SelectItemOption<String> si = options_.get(i);
+            String checked = "";
+            if (si.getValue().equals(value_))
+                checked = " checked='checked'";
+            // if(align_ == VERTICAL_ALIGN) w.write("<div style='overflow:hidden; width: 100%'>");
+            // if(align_ == VERTICAL_ALIGN) w.write("<div style='clear:both;'><span></span></div>") ;
+            if (align_ == VERTICAL_ALIGN)
+                w.write("<div>");
+            w.write("<input class='radio' type='radio'");
+            if (readonly_)
+                w.write(" readonly ");
+            if (isDisabled())
+                w.write(" disabled ");
+            w.write(checked);
+            w.write(" name='");
+            w.write(getName());
+            w.write("'");
+            w.write(" id='");
+            w.write(getName() + iteration);
+            w.write("'");
+            w.write(" value='");
+            w.write(si.getValue());
+            w.write("'/>");
+            if (align_ == VERTICAL_ALIGN)
+                w.write("</div>");
+            // if(align_ == VERTICAL_ALIGN) w.write("</div>");
+
+            if (topRender_ == 1) {
+                index = i + 1;
+                if (index == options_.size())
+                    index = 0;
+                break;
+            }
+        }
+        return w.toString();
+    }
+
 
 }
