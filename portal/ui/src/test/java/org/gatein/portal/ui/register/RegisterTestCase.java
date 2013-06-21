@@ -19,14 +19,18 @@
 package org.gatein.portal.ui.register;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
+import junit.framework.AssertionFailedError;
 import juzu.arquillian.Helper;
 import org.gatein.portal.common.kernel.KernelLifeCycle;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Node;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -72,14 +76,83 @@ public class RegisterTestCase {
     @Drone
     WebDriver driver;
 
-    @Test
-    @RunAsClient
-    public void testFoo(@ArquillianResource URL deploymentURL) throws Exception {
-        URL url = deploymentURL.toURI().resolve("./embed/RegisterPortlet").toURL();
-        driver.get(url.toString());
+    @ArquillianResource
+    URL deploymentURL;
+    
+    private String getBaseURL() {
+        try {
+            return deploymentURL.toURI().resolve("./embed/RegisterPortlet").toURL().toString();
+        } catch (Exception e) {
+            AssertionFailedError afe = new AssertionFailedError();
+            afe.initCause(e);
+            throw afe;
+        }
+    }
 
-        // Really dumb test for now
-        WebElement register = driver.findElement(By.cssSelector("div.register-unit"));
-        assertNotNull(register);
+    @Test
+    @InSequence(1)
+    @RunAsClient
+    public void testRegisterSuccess() {
+        driver.get(getBaseURL());
+        // fill the form
+        driver.findElements(By.name("userName")).get(0).sendKeys("test");
+        driver.findElements(By.name("password")).get(0).sendKeys("test");
+        driver.findElements(By.name("confirmPassword")).get(0).sendKeys("test");
+        driver.findElements(By.name("firstName")).get(0).sendKeys("test");
+        driver.findElements(By.name("lastName")).get(0).sendKeys("test");
+        driver.findElements(By.name("displayName")).get(0).sendKeys("test");
+        driver.findElements(By.name("emailAddress")).get(0).sendKeys("test");
+
+        driver.findElements(By.name("submit")).get(0).click();
+        assertTrue(driver.findElement(By.id("registerMessage")).getText().contains("You have successfully registered a new account"));
+    }
+
+    @Test
+    @InSequence(2)
+    @RunAsClient
+    public void testPasswordFail() {
+        driver.get(getBaseURL());
+        // fill the form
+        driver.findElements(By.name("userName")).get(0).sendKeys("test_1");
+        driver.findElements(By.name("password")).get(0).sendKeys("test_1");
+        driver.findElements(By.name("confirmPassword")).get(0).sendKeys("test_1test_1");
+        driver.findElements(By.name("firstName")).get(0).sendKeys("test_1");
+        driver.findElements(By.name("lastName")).get(0).sendKeys("test_1");
+        driver.findElements(By.name("displayName")).get(0).sendKeys("test_1");
+        driver.findElements(By.name("emailAddress")).get(0).sendKeys("test_1");
+
+        driver.findElements(By.name("submit")).get(0).click();
+        assertTrue(driver.findElement(By.id("registerMessage")).getText().contains("Password and Confirm Password must be the same"));
+    }
+
+    @Test
+    @InSequence(3)
+    @RunAsClient
+    public void testAccountExisted() {
+        driver.get(getBaseURL());
+        // fill the form
+        driver.findElements(By.name("userName")).get(0).sendKeys("test");
+        driver.findElements(By.name("password")).get(0).sendKeys("test");
+        driver.findElements(By.name("confirmPassword")).get(0).sendKeys("test");
+        driver.findElements(By.name("firstName")).get(0).sendKeys("test");
+        driver.findElements(By.name("lastName")).get(0).sendKeys("test");
+        driver.findElements(By.name("displayName")).get(0).sendKeys("test");
+        driver.findElements(By.name("emailAddress")).get(0).sendKeys("test");
+
+        driver.findElements(By.name("submit")).get(0).click();
+        assertTrue(driver.findElement(By.id("registerMessage")).getText().contains("This user is already existed"));
+    }
+
+    @Test
+    @InSequence(4)
+    @RunAsClient
+    public void testFormReset() {
+        driver.get(getBaseURL());
+        // fill the form
+        driver.findElements(By.name("userName")).get(0).sendKeys("test form reset");
+        assertTrue(driver.findElements(By.name("userName")).get(0).getAttribute("value").equalsIgnoreCase("test form reset"));
+
+        driver.findElements(By.name("reset")).get(0).click();
+        assertTrue(driver.findElements(By.name("userName")).get(0).getAttribute("value").isEmpty());
     }
 }
