@@ -168,5 +168,5 @@ The XML for page looks like:
 * Portlet eventing
 * Group and user navigations
 * Session scoped parameters
-* Header support (http and html)
+* Http Header support
 * Cookie support
