@@ -11,6 +11,7 @@
     @Binding(NavigationService.class),
     @Binding(SiteService.class),
     @Binding(SimpleLayoutFactory.class),
+    @Binding(PortletContentProvider.class),
     @Binding(KernelFilter.class)})
 @Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"))
 package org.gatein.portal;
@@ -28,4 +29,5 @@ import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteService;
+import org.gatein.portal.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.portlet.PortletAppManager;

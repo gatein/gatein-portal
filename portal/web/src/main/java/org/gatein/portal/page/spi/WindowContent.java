@@ -16,20 +16,46 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.page;
+package org.gatein.portal.page.spi;
 
-import org.gatein.portal.mop.hierarchy.NodeContext;
-import org.gatein.portal.mop.layout.ElementState;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.xml.namespace.QName;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * The relationship between a content and a window.
+ *
+ * @author Julien Viet
  */
-public class NodeState {
+public interface WindowContent {
 
-    /** . */
-    public final NodeContext<NodeState, ElementState> context;
+    String getName();
 
-    public NodeState(NodeContext<NodeState, ElementState> context) {
-        this.context = context;
-    }
+    /**
+     * Resolve the title for the specified locale.
+     *
+     * @param locale the locale
+     * @return the title or null
+     */
+    String resolveTitle(Locale locale);
+
+    String getParameters();
+
+    void setParameters(String s);
+
+    String getWindowState();
+
+    void setWindowState(String ws);
+
+    String getMode();
+
+    void setMode(String m);
+
+    Map<String, String[]> computePublicParameters(Map<QName, String[]> parameters);
+
+    Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes);
+
+    WindowContent copy();
+
 }

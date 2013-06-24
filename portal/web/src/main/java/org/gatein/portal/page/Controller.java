@@ -19,7 +19,6 @@
 
 package org.gatein.portal.page;
 
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,12 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.portlet.ResourceResponse;
 import javax.xml.namespace.QName;
 
 import juzu.Param;
 import juzu.Path;
-import juzu.PropertyType;
 import juzu.Response;
 import juzu.Route;
 import juzu.View;
@@ -40,14 +37,6 @@ import juzu.impl.common.Tools;
 import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
 import juzu.template.Template;
-import org.exoplatform.container.PortalContainer;
-import org.gatein.common.util.MultiValuedPropertyMap;
-import org.gatein.pc.api.Mode;
-import org.gatein.pc.api.ParametersStateString;
-import org.gatein.pc.api.invocation.response.ContentResponse;
-import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.gatein.pc.api.invocation.response.ResponseProperties;
-import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
 import org.gatein.portal.layout.Layout;
 import org.gatein.portal.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
@@ -63,7 +52,8 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
-import org.gatein.portal.portlet.PortletAppManager;
+import org.gatein.portal.page.spi.WindowContent;
+import org.gatein.portal.page.spi.portlet.PortletContentProvider;
 
 /**
  * The controller for aggregation.
@@ -74,12 +64,6 @@ public class Controller {
 
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
-
-    @Inject
-    PortalContainer current;
-
-    @Inject
-    PortletAppManager manager;
 
     @Inject
     SiteService siteService;
@@ -98,6 +82,9 @@ public class Controller {
 
     @Inject
     ZoneLayoutFactory layoutFactory;
+
+    @Inject
+    PortletContentProvider contentProvider;
 
     @Inject
     @Path("not_found.gtmpl")
@@ -147,7 +134,7 @@ public class Controller {
             } else {
 
                 // Page builder
-                PageContext.Builder pageBuilder = new PageContext.Builder(path);
+                PageContext.Builder pageBuilder = new PageContext.Builder(contentProvider, customizationService, path);
 
                 // Load site windows
                 SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
@@ -173,22 +160,21 @@ public class Controller {
                             pageBuilder.setParameters(prp);
                         } else if (name.startsWith("javax.portlet.p.")) {
                             String id = name.substring("javax.portlet.p.".length());
-                            Decoder decoder = new Decoder(parameter.getRaw(0));
-                            WindowData window = pageBuilder.getWindow(id);
+                            WindowContent window = pageBuilder.getWindow(id);
                             if (window != null) {
-                                window.parameters = decoder.decode().getParameters();
+                                window.setParameters(parameter.getRaw(0));
                             }
                         } else if (name.startsWith("javax.portlet.w.")) {
                             String id = name.substring("javax.portlet.w.".length());
-                            WindowData window = pageBuilder.getWindow(id);
+                            WindowContent window = pageBuilder.getWindow(id);
                             if (window != null) {
-                                window.windowState = org.gatein.pc.api.WindowState.create(parameter.getValue());
+                                window.setWindowState(parameter.getValue());
                             }
                         } else if (name.startsWith("javax.portlet.m.")) {
                             String id = name.substring("javax.portlet.m.".length());
-                            WindowData window = pageBuilder.getWindow(id);
+                            WindowContent window = pageBuilder.getWindow(id);
                             if (window != null) {
-                                window.mode = org.gatein.pc.api.Mode.create(parameter.getValue());
+                                window.setMode(parameter.getValue());
                             }
                         }
                     } else {
@@ -203,7 +189,7 @@ public class Controller {
                 if (phase != null) {
 
                     //
-                    PageContext pageContext = pageBuilder.build(customizationService, manager);
+                    PageContext pageContext = pageBuilder.build();
 
                     // Going to invoke process action
                     if (target != null) {
@@ -213,37 +199,17 @@ public class Controller {
                             if ("action".equals(phase)) {
 
                                 //
-                                org.gatein.pc.api.WindowState windowState = window.state.windowState;
+                                String windowState = window.state.getWindowState();
                                 if (targetWindowState != null) {
-                                    windowState = org.gatein.pc.api.WindowState.create(targetWindowState);
+                                    windowState = targetWindowState;
                                 }
-                                Mode mode = window.state.mode;
+                                String mode = window.state.getMode();
                                 if (targetMode != null) {
-                                    mode = org.gatein.pc.api.Mode.create(targetMode);
+                                    mode = targetMode;
                                 }
 
                                 //
-                                PortletInvocationResponse response = window.processAction(windowState, mode, parameters);
-                                if (response instanceof UpdateNavigationalStateResponse) {
-                                    UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse) response;
-                                    PageContext.Builder clone = pageContext.builder();
-                                    WindowData windowClone = clone.getWindow(window.state.name);
-                                    ParametersStateString s = (ParametersStateString) update.getNavigationalState();
-                                    windowClone.parameters = s.getParameters();
-                                    if (update.getWindowState() != null) {
-                                        windowClone.windowState = update.getWindowState();
-                                    }
-                                    if (update.getMode() != null) {
-                                        windowClone.mode = update.getMode();
-                                    }
-                                    Map<String, String[]> changes = update.getPublicNavigationalStateUpdates();
-                                    if (changes != null && changes.size() > 0) {
-                                        clone.apply(window.getPublicParametersChanges(changes));
-                                    }
-                                    return clone.build(customizationService, manager).getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
-                                } else {
-                                    throw new UnsupportedOperationException("Not yet handled " + response);
-                                }
+                                return window.processAction(windowState, mode, parameters);
                             } else if ("resource".equals(phase)) {
 
                                 //
@@ -256,59 +222,7 @@ public class Controller {
                                 }
 
                                 //
-                                PortletInvocationResponse response = window.serveResource(id, parameters);
-
-                                //
-                                if (response instanceof ContentResponse) {
-                                    ContentResponse content = (ContentResponse) response;
-
-                                    //
-                                    int code = 200;
-                                    ResponseProperties properties = content.getProperties();
-                                    MultiValuedPropertyMap<String> headers = properties != null ? properties.getTransportHeaders() : null;
-                                    if (headers != null) {
-                                        String value = headers.getValue(ResourceResponse.HTTP_STATUS_CODE);
-                                        if (value != null) {
-                                            try {
-                                                code = Integer.parseInt(value);
-                                            } catch (NumberFormatException e) {
-//                                                throw new ServletException("Bad " + ResourceResponse.HTTP_STATUS_CODE + "=" + value +
-//                                                        " resource value", e);
-                                            }
-                                        }
-                                    }
-
-                                    // Create response
-                                    Response.Status status = Response.status(code);
-
-                                    // Headers
-                                    sendHttpHeaders(headers, status);
-
-                                    // Charset
-                                    String encoding = content.getEncoding();
-                                    if (encoding != null) {
-                                        Charset charset = Charset.forName(encoding);
-                                        status.with(PropertyType.CHARSET, charset);
-                                    }
-
-                                    // Mime type
-                                    String contentType = content.getContentType();
-                                    if (contentType != null) {
-                                        status.with(PropertyType.MIME_TYPE, contentType);
-                                    }
-
-                                    //
-                                    if (content.getBytes() != null) {
-                                        status = status.body(content.getBytes());
-                                    } else if (content.getChars() != null) {
-                                        status = status.body(content.getChars());
-                                    }
-
-                                    //
-                                    return status;
-                                } else {
-                                    throw new UnsupportedOperationException("No yet handled " + response);
-                                }
+                                return window.serveResource(id, parameters);
                             } else {
                                 throw new AssertionError("should not be here");
                             }
@@ -328,7 +242,7 @@ public class Controller {
                     pageBuilder.setParameters(prp);
 
                     // Build page
-                    PageContext pageContext = pageBuilder.build(customizationService, manager);
+                    PageContext pageContext = pageBuilder.build();
 
                     // Render page
                     String layoutId = page.getState().getFactoryId();
@@ -347,22 +261,6 @@ public class Controller {
             }
         } else {
             return Response.notFound("Page for navigation " + path + " could not be located");
-        }
-    }
-
-    private static void sendHttpHeaders(ResponseProperties properties, Response.Status resp) {
-        if (properties != null) {
-            sendHttpHeaders(properties.getTransportHeaders(), resp);
-        }
-    }
-
-    private static void sendHttpHeaders(MultiValuedPropertyMap<String> httpHeaders, Response.Status resp) {
-        if (httpHeaders != null) {
-            for (String headerName : httpHeaders.keySet()) {
-                if (!headerName.equals(ResourceResponse.HTTP_STATUS_CODE)) {
-                    resp.withHeader(headerName, httpHeaders.getValue(headerName));
-                }
-            }
         }
     }
 }

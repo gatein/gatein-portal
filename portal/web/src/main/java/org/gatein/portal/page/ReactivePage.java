@@ -19,28 +19,20 @@
 package org.gatein.portal.page;
 
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.portlet.MimeResponse;
 
 import juzu.PropertyType;
 import juzu.Response;
 import juzu.io.Chunk;
 import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
-import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.portal.layout.Layout;
+import org.gatein.portal.page.spi.RenderTask;
 import org.w3c.dom.Element;
 
 /**
@@ -78,7 +70,7 @@ class ReactivePage {
 
         ArrayList<ReactiveWindow> windows = new ArrayList<ReactiveWindow>();
         for (Map.Entry<String, WindowContext> entry : context) {
-            ReactiveWindow window = new ReactiveWindow(entry.getValue(), results);
+            ReactiveWindow window = new ReactiveWindow(entry.getValue());
             windows.add(window);
         }
 
@@ -134,7 +126,7 @@ class ReactivePage {
         boolean send;
         lock.lock();
         try {
-            results.put(window.context.state.name, result);
+            results.put(window.context.state.getName(), result);
             send = results.size() == windows.size();
         } finally {
             lock.unlock();
@@ -196,62 +188,19 @@ class ReactivePage {
         /** . */
         private final RenderTask task;
 
-        /** . */
-        private final Map<String, Result> fragments;
-
-        ReactiveWindow(WindowContext context, Map<String, Result> fragments) {
+        ReactiveWindow(WindowContext context) {
 
             // Do this now because later it can throw exceptions (capture context)
             RenderTask task = context.createRenderTask();
 
             //
             this.context = context;
-            this.fragments = fragments;
             this.task = task;
         }
 
         @Override
         public void run() {
-            Result result;
-            task.run();
-            if (task.failure != null) {
-                task.failure.printStackTrace();
-                result = new Result.Error(true, task.failure);
-            } else {
-                PortletInvocationResponse response = task.response;
-                if (response instanceof FragmentResponse) {
-                    FragmentResponse fragment = (FragmentResponse) response;
-                    ResponseProperties properties = fragment.getProperties();
-                    List<Map.Entry<String, String>> headers = Collections.emptyList();
-                    List<Element> headerTags = Collections.emptyList();
-                    if (properties != null) {
-                        if (properties.getTransportHeaders() != null) {
-                            headers = new LinkedList<Map.Entry<String, String>>();
-                            for (String headerName : properties.getTransportHeaders().keySet()) {
-                                String headerValue = properties.getTransportHeaders().getValue(headerName);
-                                headers.add(new AbstractMap.SimpleEntry<String, String>(headerName, headerValue));
-                            }
-                        }
-                        if (properties.getMarkupHeaders() != null) {
-                            headerTags = new LinkedList<Element>();
-                            for (String headerName : properties.getMarkupHeaders().keySet()) {
-                                if (MimeResponse.MARKUP_HEAD_ELEMENT.equals(headerName)) {
-                                    for (Element headerValue : properties.getMarkupHeaders().getValues(headerName)) {
-                                        headerTags.add(headerValue);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    String title = fragment.getTitle();
-                    if (title == null) {
-                        title = context.resolveTitle(locale);
-                    }
-                    result = new Result.Fragment(headers, headerTags, title, fragment.getContent());
-                } else {
-                    throw new UnsupportedOperationException("Not yet handled " + response);
-                }
-            }
+            Result result = task.execute(locale);
             ReactivePage.this.done(ReactiveWindow.this, result);
         }
     }

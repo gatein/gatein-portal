@@ -16,38 +16,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.gatein.portal.page.spi;
 
-package org.gatein.portal.page;
+import java.util.Locale;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-
-import org.gatein.common.util.MultiValuedPropertyMap;
-import org.gatein.common.util.SimpleMultiValuedPropertyMap;
-import org.gatein.pc.api.spi.ClientContext;
+import org.gatein.portal.page.Result;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @author Julien Viet
  */
-class GateInClientContext implements ClientContext {
+public abstract class RenderTask {
 
-    /** . */
-    private final SimpleMultiValuedPropertyMap<String> properties = new SimpleMultiValuedPropertyMap<String>();
+    /**
+     * Execute the task and returns a result.
+     *
+     * @param locale the locale
+     * @return the result
+     */
+    public abstract Result execute(Locale locale);
 
-    @Override
-    public String getMethod() {
-        return "GET";
-    }
-
-    @Override
-    public MultiValuedPropertyMap<String> getProperties() {
-        return properties;
-    }
-
-    @Override
-    public List<Cookie> getCookies() {
-        return Collections.emptyList();
-    }
 }

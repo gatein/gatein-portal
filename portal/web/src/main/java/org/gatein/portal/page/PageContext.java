@@ -26,11 +26,14 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import juzu.request.Phase;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.gatein.portal.mop.customization.CustomizationContext;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.portlet.PortletAppManager;
+import org.gatein.portal.page.spi.ContentProvider;
+import org.gatein.portal.page.spi.WindowContent;
 
 /**
  * Encapsulate state and operations on a page.
@@ -44,11 +47,21 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
      */
     public static class Builder implements NodeModel<NodeState, ElementState> {
 
-        public Builder(String path) {
+        /** . */
+        private final ContentProvider contentProvider;
+
+        /** . */
+        private final CustomizationService customizationService;
+
+        public Builder(ContentProvider contentProvider, CustomizationService customizationService, String path) {
+            this.contentProvider = contentProvider;
+            this.customizationService = customizationService;
             this.state = new PageData(path);
         }
 
-        public Builder(PageData state) {
+        public Builder(ContentProvider contentProvider, CustomizationService customizationService, PageData state) {
+            this.contentProvider = contentProvider;
+            this.customizationService = customizationService;
             this.state = state;
         }
 
@@ -56,9 +69,9 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         private PageData state;
 
         /** A map of name -> window. */
-        private final HashMap<String, WindowData> windows = new LinkedHashMap<String, WindowData>();
+        private final HashMap<String, WindowContent> windows = new LinkedHashMap<String, WindowContent>();
 
-        public WindowData getWindow(String name) {
+        public WindowContent getWindow(String name) {
             return windows.get(name);
         }
 
@@ -78,22 +91,24 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         @Override
         public NodeState create(NodeContext<NodeState, ElementState> context) {
             if (context.getState() instanceof ElementState.Window) {
+                CustomizationContext<Portlet> portletCustomization = customizationService.loadCustomization(context.getId());
+                String contentId = portletCustomization.getContentId();
                 NodeState window = new NodeState(context);
-                WindowData windowState = new WindowData(window);
-                windows.put(windowState.name, windowState);
+                WindowContent windowState = contentProvider.getContent(contentId, window);
+                windows.put(windowState.getName(), windowState);
                 return window;
             } else {
                 return new NodeState(context);
             }
         }
 
-        public PageContext build(CustomizationService customizationService, PortletAppManager portletManager) {
-            return new PageContext(this, customizationService, portletManager);
+        public PageContext build() {
+            return new PageContext(this, customizationService, contentProvider);
         }
     }
 
     /** . */
-    final PortletAppManager portletManager;
+    final ContentProvider portletManager;
 
     /** . */
     final CustomizationService customizationService;
@@ -110,12 +125,12 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
     public PageContext(
             Builder builder,
             CustomizationService customizationService,
-            PortletAppManager portletManager) {
+            ContentProvider portletManager) {
 
         //
         LinkedHashMap<String, WindowContext> a = new LinkedHashMap<String, WindowContext>(builder.windows.size());
-        for (WindowData state : builder.windows.values()) {
-            a.put(state.name, new WindowContext(state, this));
+        for (WindowContent state : builder.windows.values()) {
+            a.put(state.getName(), new WindowContext(state, this));
         }
 
         //
@@ -128,12 +143,12 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
 
     public Builder builder() {
 
-        Builder builder = new Builder(new PageData(state));
+        Builder builder = new Builder(portletManager, customizationService, new PageData(state));
 
         // Clone the windows
         for (Map.Entry<String, WindowContext> entry : windowMap.entrySet()) {
             WindowContext window = entry.getValue();
-            builder.windows.put(window.state.name, new WindowData(window.state));
+            builder.windows.put(window.state.getName(), window.state.copy());
         }
 
         //
