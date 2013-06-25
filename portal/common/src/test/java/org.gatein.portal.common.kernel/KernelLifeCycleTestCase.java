@@ -22,6 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -50,6 +51,7 @@ public class KernelLifeCycleTestCase {
                 createFilterMapping().filterName("KernelLifeCycle").servletName("Servlet").up().
                 createServlet().servletName("Servlet").servletClass(ServletImpl.class.getName()).up().
                 createServletMapping().urlPattern("/").servletName("Servlet").up();
+        war.addAsWebInfResource("conf/portal.common-configuration.xml", "conf/configuration.xml");
         war.setWebXML(new StringAsset(desc.exportAsString()));
         return war;
     }
@@ -73,5 +75,7 @@ public class KernelLifeCycleTestCase {
         assertNotNull(container1);
         assertNotNull(container2);
         assertSame(container1, container2);
+        TheService ts = (TheService) container1.getComponentInstance(TheService.class);
+        assertNotNull(ts);
     }
 }
