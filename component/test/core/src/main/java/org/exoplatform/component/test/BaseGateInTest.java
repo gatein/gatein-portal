@@ -19,8 +19,16 @@
 
 package org.exoplatform.component.test;
 
+import java.util.concurrent.Callable;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -59,6 +67,10 @@ public class BaseGateInTest extends TestCase {
         throw afe;
     }
 
+    public static Error failure(String msg) {
+        throw new AssertionFailedError(msg);
+    }
+
     public static Error failure(Throwable t) {
         AssertionFailedError afe = new AssertionFailedError();
         afe.initCause(t);
@@ -69,5 +81,53 @@ public class BaseGateInTest extends TestCase {
         AssertionFailedError afe = new AssertionFailedError(msg);
         afe.initCause(t);
         return afe;
+    }
+
+    /**
+     * Execute the <code>callback</code> argument within the context of the portal container.
+     *
+     * @param callback the callback to execute
+     */
+    public static void inPortalContainer(final Runnable callback) {
+        inPortalContainer(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                callback.run();
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Execute the <code>callback</code> argument within the context of the portal container and return the callback value.
+     *
+     * @param callback the callback to execute
+     */
+    public static <V> V inPortalContainer(Callable<V> callback) {
+        PortalContainer portalContainer = PortalContainer.getInstanceIfPresent();
+        boolean remove;
+        if (portalContainer == null) {
+            remove = true;
+            RootContainer rootContainer = RootContainer.getInstance();
+            portalContainer = (PortalContainer) rootContainer.getComponentInstanceOfType(PortalContainer.class);
+            if (portalContainer == null) {
+                throw failure("Could not obtain a valid portal container");
+            } else {
+                PortalContainer.setInstance(portalContainer);
+            }
+        } else {
+            remove = false;
+        }
+        RequestLifeCycle.begin(portalContainer);
+        try {
+            return callback.call();
+        } catch (Exception e) {
+            throw failure(e);
+        } finally {
+            RequestLifeCycle.end();
+            if (remove) {
+                PortalContainer.setInstance(null);
+            }
+        }
     }
 }

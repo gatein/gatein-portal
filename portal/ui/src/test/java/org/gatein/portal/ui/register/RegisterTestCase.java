@@ -19,12 +19,12 @@
 package org.gatein.portal.ui.register;
 
 import java.net.URL;
+import java.util.concurrent.Callable;
 
 import junit.framework.AssertionFailedError;
 import juzu.arquillian.Helper;
+import org.exoplatform.component.test.BaseGateInTest;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.RootContainer;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
@@ -112,21 +112,21 @@ public class RegisterTestCase {
     @Test
     @InSequence(2)
      public void testUserExist() throws Exception {
-        PortalContainer portalContainer = (PortalContainer) RootContainer.getComponent(PortalContainer.class);
-        RequestLifeCycle.begin(portalContainer);
-        try {
-            OrganizationService orgService = (OrganizationService)portalContainer.getComponentInstanceOfType(OrganizationService.class);
-            UserHandler handler = orgService.getUserHandler();
-            User user = handler.findUserByName("test_user_name");
-            assertNotNull(user);
-            assertEquals(null, user.getPassword());
-            assertEquals("test_first_name", user.getFirstName());
-            assertEquals("test_last_name", user.getLastName());
-            assertEquals("test_display_name", user.getDisplayName());
-            assertEquals("test_email_address", user.getEmail());
-        } finally {
-            RequestLifeCycle.end();
-        }
+        BaseGateInTest.inPortalContainer(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                OrganizationService orgService = (OrganizationService)PortalContainer.getComponent(OrganizationService.class);
+                UserHandler handler = orgService.getUserHandler();
+                User user = handler.findUserByName("test_user_name");
+                assertNotNull(user);
+                assertEquals(null, user.getPassword());
+                assertEquals("test_first_name", user.getFirstName());
+                assertEquals("test_last_name", user.getLastName());
+                assertEquals("test_display_name", user.getDisplayName());
+                assertEquals("test_email_address", user.getEmail());
+                return null;
+            }
+        });
     }
 
     @Test
