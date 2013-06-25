@@ -18,14 +18,13 @@
  */
 package org.gatein.portal.ui.register;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 
 import junit.framework.AssertionFailedError;
 import juzu.arquillian.Helper;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
@@ -39,7 +38,6 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Node;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
-import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
 import org.jboss.shrinkwrap.descriptor.api.portletapp20.PortletDescriptor;
@@ -48,7 +46,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import static org.junit.Assert.*;
 
 /**
@@ -74,6 +71,7 @@ public class RegisterTestCase {
                 createFilterMapping().filterName("KernelLifeCycle").servletName("EmbedServlet").up();
         war.delete(node.getPath());
         war.setWebXML(new StringAsset(webApp.exportAsString()));
+        war.addAsWebInfResource("org/gatein/portal/ui/register/configuration.xml", "conf/configuration.xml");
         return war;
     }
 
@@ -114,15 +112,21 @@ public class RegisterTestCase {
     @Test
     @InSequence(2)
      public void testUserExist() throws Exception {
-        OrganizationService orgService = (OrganizationService)RootContainer.getComponent(OrganizationService.class);
-        UserHandler handler = orgService.getUserHandler();
-        User user = handler.findUserByName("test_user_name");
-        assertNotNull(user);
-        assertEquals("test_password", user.getPassword());
-        assertEquals("_test_user_name", user.getFirstName()); // This is due to dumb dummy org service impl
-        assertEquals("test_last_name", user.getLastName());
-        assertEquals("test_display_name", user.getDisplayName());
-        assertEquals("test_user_name@mail.com", user.getEmail()); // This is due to dumb dummy org service impl
+        PortalContainer portalContainer = (PortalContainer) RootContainer.getComponent(PortalContainer.class);
+        RequestLifeCycle.begin(portalContainer);
+        try {
+            OrganizationService orgService = (OrganizationService)portalContainer.getComponentInstanceOfType(OrganizationService.class);
+            UserHandler handler = orgService.getUserHandler();
+            User user = handler.findUserByName("test_user_name");
+            assertNotNull(user);
+            assertEquals(null, user.getPassword());
+            assertEquals("test_first_name", user.getFirstName());
+            assertEquals("test_last_name", user.getLastName());
+            assertEquals("test_display_name", user.getDisplayName());
+            assertEquals("test_email_address", user.getEmail());
+        } finally {
+            RequestLifeCycle.end();
+        }
     }
 
     @Test

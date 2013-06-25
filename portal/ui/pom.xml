@@ -31,6 +31,11 @@
   <packaging>jar</packaging>
   <name>GateIn Portal UI Module</name>
 
+  <properties>
+    <!-- use in memory hsqldb for tests-->
+    <surefire.exo.profiles>mem</surefire.exo.profiles>
+  </properties>
+
   <dependencies>
 
     <!-- -->
@@ -78,6 +83,11 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.identity</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
       <scope>provided</scope>
@@ -102,6 +112,17 @@
     <dependency>
       <groupId>org.jboss.shrinkwrap.descriptors</groupId>
       <artifactId>shrinkwrap-descriptors-impl-javaee</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.test.core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.identity</artifactId>
+      <type>test-jar</type>
       <scope>test</scope>
     </dependency>
 

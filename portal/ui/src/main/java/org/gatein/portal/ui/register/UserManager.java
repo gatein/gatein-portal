@@ -48,8 +48,14 @@ public class UserManager {
 
     public void saveUser(UserBean userBean) throws Exception {
         UserHandler handler = orgService.getUserHandler();
-        User user = handler.createUserInstance(userBean.userName);
-        userBean.update(user);
-        handler.saveUser(user, true);
+        User user = handler.findUserByName(userBean.userName);
+        if (user != null) {
+            userBean.update(user);
+            handler.saveUser(user, true);
+        } else {
+            user = handler.createUserInstance(userBean.userName);
+            userBean.update(user);
+            handler.createUser(user, true);
+        }
     }
 }
