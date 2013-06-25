@@ -55,7 +55,10 @@ public class KernelLifeCycleTestCase {
     }
 
     /** . */
-    public static PortalContainer container;
+    public static PortalContainer container1;
+
+    /** . */
+    public static PortalContainer container2;
 
     @ArquillianResource
     URL deploymentURL;
@@ -63,10 +66,12 @@ public class KernelLifeCycleTestCase {
     @Test
     @RunAsClient
     public void testContainer() throws Exception {
-        container = null;
+        container1 = null;
         HttpURLConnection conn = (HttpURLConnection) deploymentURL.openConnection();
         conn.connect();
         assertEquals(200, conn.getResponseCode());
-        assertNotNull(container);
+        assertNotNull(container1);
+        assertNotNull(container2);
+        assertSame(container1, container2);
     }
 }

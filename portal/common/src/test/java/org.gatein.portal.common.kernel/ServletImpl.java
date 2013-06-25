@@ -19,6 +19,8 @@
 package org.gatein.portal.common.kernel;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,9 +36,23 @@ public class ServletImpl extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        KernelLifeCycleTestCase.container = KernelLifeCycle.getCurrentContainer();
-        resp.setStatus(200);
-        resp.setContentType("text/plain");
-        resp.getWriter().append("done").close();
+        KernelLifeCycleTestCase.container1 = PortalContainer.getInstance();
+        final CountDownLatch latch = new CountDownLatch(1);
+        Runnable task = KernelLifeCycle.wrap(new Runnable() {
+            @Override
+            public void run() {
+                KernelLifeCycleTestCase.container2 = PortalContainer.getInstance();
+                latch.countDown();
+            }
+        });
+        new Thread(task).start();
+        try {
+            latch.await(10, TimeUnit.SECONDS);
+            resp.setStatus(200);
+            resp.setContentType("text/plain");
+            resp.getWriter().append("done").close();
+        } catch (InterruptedException e) {
+            resp.setStatus(500);
+        }
     }
 }

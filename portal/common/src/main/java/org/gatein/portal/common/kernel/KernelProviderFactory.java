@@ -34,10 +34,7 @@ public class KernelProviderFactory implements ProviderFactory {
 
     @Override
     public <T> Provider<? extends T> getProvider(final Class<T> implementationType) throws Exception {
-
-
-
-        final PortalContainer container = KernelLifeCycle.getCurrentContainer();
+        final PortalContainer container = PortalContainer.getInstance();
         if (container == null) {
             throw new IllegalStateException("Not running in the context of a portal container");
         }

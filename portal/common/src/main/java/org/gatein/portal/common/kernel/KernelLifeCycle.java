@@ -45,10 +45,6 @@ public class KernelLifeCycle implements Filter {
     /** . */
     private static final ThreadLocal<PortalContainer> current = new ThreadLocal<PortalContainer>();
 
-    static PortalContainer getCurrentContainer() {
-        return current.get();
-    }
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         RootContainer.PortalContainerPostCreateTask task = new RootContainer.PortalContainerPostCreateTask() {
