@@ -43,7 +43,7 @@
     </dependencySet>
     <dependencySet>
       <includes>
-        <include>org.gatein.portal:org.gatein.portal.examples.portlets:war</include>
+        <include>org.gatein.portal:examples.portlets:war</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>

@@ -54,6 +54,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.gatein.pc</groupId>
+      <artifactId>pc-api</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.gatein.mop</groupId>
       <artifactId>mop-spi</artifactId>
     </dependency>

@@ -31,7 +31,6 @@
         <include>org.staxnav:staxnav.core</include>
         <include>commons-logging:commons-logging</include>
         <include>org.slf4j:slf4j-api</include>
-        <include>org.slf4j:slf4j-jdk14</include>
         <include>org.exoplatform.kernel:exo.kernel.commons</include>
         <include>org.exoplatform.kernel:exo.kernel.container</include>
         <include>picocontainer:picocontainer</include>
@@ -48,11 +47,11 @@
         <include>org.gatein.pc:pc-api</include>
         <include>org.gatein.pc:pc-portlet</include>
         <include>org.gatein.mop:mop-api</include>
-        <include>org.gatein.portal:exo.portal.component.common</include>
-        <include>org.gatein.portal:exo.portal.component.portal</include>
+        <include>org.gatein.portal:component.common</include>
+        <include>org.gatein.portal:component.portal</include>
+        <include>org.gatein.portal:component.identity</include>
         <include>org.gatein.portal:portal.common</include>
         <include>org.gatein.portal:portal.ui</include>
-        <include>org.gatein.portal:exo.portal.component.identity</include>
         <include>org.exoplatform.kernel:exo.kernel.component.common</include>
         <include>org.exoplatform.kernel:exo.kernel.component.cache</include>
         <include>org.exoplatform.core:exo.core.component.organization.api</include>
