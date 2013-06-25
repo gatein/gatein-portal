@@ -21,6 +21,7 @@ package org.gatein.portal.layout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -51,15 +52,15 @@ public class ZoneLayout extends Layout {
         this.windows = windows;
     }
 
-    private ArrayList<Result.Fragment> getFragments(String zone, Map<String, Result.Fragment> fragments) {
-        ArrayList<Result.Fragment> list = null;
+    private Map<String, Result.Fragment> getFragments(String zone, Map<String, Result.Fragment> fragments) {
+        Map<String, Result.Fragment> list = null;
         ArrayList<WindowLayout> column = windows.get(zone);
         if (column != null) {
-            list = new ArrayList<Result.Fragment>();
+            list = new LinkedHashMap<String, Result.Fragment>();
             for (WindowLayout window : column) {
                 Result.Fragment fragment = fragments.get(window.name);
                 if (fragment != null) {
-                    list.add(fragment);
+                    list.put(window.name, fragment);
                 }
             }
         }

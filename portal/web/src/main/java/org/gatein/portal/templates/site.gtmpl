@@ -1,14 +1,29 @@
 #{decorate path=shared.gtmpl/}
 
-<% header.each { fragment -> %>
+<%
+	def path = "";
+	def req = juzu.impl.request.Request.getCurrent();
+	if (req != null) {
+	    def param = req.getParameters().get("javax.portlet.path");
+	    if (param != null) {
+	        path = param.getValue();
+	    }
+	}
+%>
+
+<% header.each { name, fragment -> %>
 <div>
     <div>${fragment.content}</div>
+	 <div style="position: relative; top: -51px; left: 520px">
+		<a href="<%=org.gatein.portal.page.Controller_.index(path, "edit", null, null, null)%>" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+			Edit Page
+		</a>
+	 </div>
 </div>
 <% } %>
-
 ${body}
 
-<% footer.each { fragment -> %>
+<% footer.each { name, fragment -> %>
 <div>
     <div>${fragment.content}</div>
 </div>

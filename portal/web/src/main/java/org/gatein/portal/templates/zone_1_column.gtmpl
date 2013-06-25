@@ -1,7 +1,21 @@
-<div class="row">
-    <% l1.each { fragment -> %>
-    <div>
-        <h3>${fragment.title}</h3>
+<%
+	def tooltip = "", cursor = "", icon = "";
+	def req = juzu.impl.request.Request.getCurrent();
+	if (req != null) {
+	    def pmap = req.getParameters();
+	    def param = pmap.get("javax.portlet.a");
+	    if (param != null && "edit".equals(param.getValue())) {
+	        tooltip = "Drag to edit page";
+	        cursor = "cursor: move";
+	        icon = "&equiv;";
+	    }
+	}
+%>
+
+<div id="1" class="row sortable">
+    <% l1.each { name, fragment -> %>
+    <div id="${name}">
+        <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
         <div>${fragment.content}</div>
     </div>
     <% } %>

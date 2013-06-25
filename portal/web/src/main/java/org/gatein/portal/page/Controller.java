@@ -186,7 +186,7 @@ public class Controller {
                 }
 
                 //
-                if (phase != null) {
+                if (phase != null && !"edit".equals(phase)) {
 
                     //
                     PageContext pageContext = pageBuilder.build();

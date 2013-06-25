@@ -1,4 +1,18 @@
-<div class="container">
+<%
+	def editing = false;
+	def path = "";
+	def req = juzu.impl.request.Request.getCurrent();
+	if (req != null) {
+	    def pmap = req.getParameters();
+	    def param = pmap.get("javax.portlet.a");
+	    editing = param != null && "edit".equals(param.getValue());
+	    
+	    def pathParam = pmap.get("javax.portlet.path");
+	    path = pathParam != null ? pathParam.getValue() : "";
+	}
+%>
+
+<div class="container <%=editing ? "editing" : ""%>" data-editURL="<%=org.gatein.portal.page.Editor_.edit(path)%>">
 
     #{insert/}
 

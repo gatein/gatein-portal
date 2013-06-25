@@ -1,7 +1,7 @@
 /**
  * The portal web application.
  */
-@Application
+@Application(defaultController = org.gatein.portal.page.Controller.class)
 @Bindings({
     @Binding(PortletAppManager.class),
     @Binding(PortalContainer.class),
@@ -20,14 +20,22 @@
 @Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"),
         declaredStylesheets = {@Stylesheet(id = "login-stylesheet", src = "login.css"),
                 @Stylesheet(id = "social-buttons", src = "social-buttons.css")
-            })
+            },             
+            scripts = {
+                @Script(src = "javascripts/jquery-1.7.1.min.js"),
+                @Script(src = "javascripts/jquery-ui-1.10.3.custom.js"),
+                @Script(src = "javascripts/underscore.js"),
+                @Script(src = "javascripts/backbone.js"),
+                @Script(src = "javascripts/edit.js"))
 package org.gatein.portal;
 
 import juzu.Application;
 import juzu.plugin.asset.Assets;
+import juzu.plugin.asset.Script;
 import juzu.plugin.asset.Stylesheet;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.kernel.KernelFilter;
@@ -42,3 +50,4 @@ import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.portlet.PortletAppManager;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
+import org.gatein.portal.portlet.PortletAppManager;
