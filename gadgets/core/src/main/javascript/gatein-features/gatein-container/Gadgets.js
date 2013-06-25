@@ -533,7 +533,7 @@ gadgets.IfrGadget.prototype.getMainContent = function(continuation) {
    * In control workspace, we set width of iframe by css.
    */
   continuation('<div class="' + this.cssClassGadgetContent + '"><iframe id="' +
-      iframeId + '" name="' + iframeId + '" class="' + this.cssClassGadget +
+      iframeId + '" name="' + iframeId + '" title="Gadget Application ' + iframeId + '" class="' + this.cssClassGadget +
       '" src="' + this.getIframeUrl() +
       '" frameborder="no" scrolling="no"' +
       (this.height ? ' height="' + this.height + '"' : '') +
