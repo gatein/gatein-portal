@@ -69,7 +69,7 @@
     <!-- -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.portal</artifactId>
+      <artifactId>component.portal</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>

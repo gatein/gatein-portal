@@ -93,7 +93,7 @@
     <!-- -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.portal</artifactId>
+      <artifactId>component.portal</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
@@ -164,7 +164,7 @@
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.common</artifactId>
+      <artifactId>component.common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.codehaus.groovy</groupId>
@@ -174,7 +174,7 @@
     <!-- Needed for now because it contains log4j configuration -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.test.core</artifactId>
+      <artifactId>component.test.core</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -280,12 +280,12 @@
         </dependency>
         <dependency>
           <groupId>org.gatein.portal</groupId>
-          <artifactId>org.gatein.portal.examples.portlets</artifactId>
+          <artifactId>examples.portlets</artifactId>
           <type>war</type>
         </dependency>
         <dependency>
           <groupId>org.gatein.portal</groupId>
-          <artifactId>exo.portal.component.identity</artifactId>
+          <artifactId>component.identity</artifactId>
         </dependency>
         <dependency>
           <groupId>org.exoplatform.kernel</groupId>

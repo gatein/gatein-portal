@@ -22,11 +22,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
-    <artifactId>exo.portal.component</artifactId>
+    <artifactId>component</artifactId>
     <version>4.0.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>exo.portal.component.common</artifactId>
+  <artifactId>component.common</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Common</name>
   <dependencies>
@@ -72,13 +72,13 @@
 
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.test.core</artifactId>
+      <artifactId>component.test.core</artifactId>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.test.jcr</artifactId>
+      <artifactId>component.test.jcr</artifactId>
       <scope>test</scope>
     </dependency>
 
