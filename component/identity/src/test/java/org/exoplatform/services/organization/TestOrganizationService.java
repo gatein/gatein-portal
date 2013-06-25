@@ -22,7 +22,7 @@ package org.exoplatform.services.organization;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.component.test.KernelLifeCycle;
+import org.exoplatform.component.test.KernelRule;
 import org.junit.ClassRule;
 
 /**
@@ -35,5 +35,5 @@ import org.junit.ClassRule;
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-configuration.xml") })
 public class TestOrganizationService extends AbstractTestOrganizationService {
     @ClassRule
-    public static KernelLifeCycle kernel = new KernelLifeCycle();
+    public static KernelRule kernel = new KernelRule();
 }

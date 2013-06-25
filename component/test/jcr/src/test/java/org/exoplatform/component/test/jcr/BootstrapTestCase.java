@@ -25,7 +25,7 @@ import javax.jcr.Session;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.component.test.KernelLifeCycle;
+import org.exoplatform.component.test.KernelRule;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
@@ -40,7 +40,7 @@ import org.junit.Test;
 public class BootstrapTestCase {
 
     @ClassRule
-    public static KernelLifeCycle kernel = new KernelLifeCycle();
+    public static KernelRule kernel = new KernelRule();
 
     @Test
     public void testWorkspace() throws Exception {

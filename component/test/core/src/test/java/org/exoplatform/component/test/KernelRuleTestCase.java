@@ -27,7 +27,7 @@ import org.junit.Test;
 public class KernelRuleTestCase {
 
     @ClassRule
-    public static KernelLifeCycle kernel = new KernelLifeCycle();
+    public static KernelRule kernel = new KernelRule();
 
     /** . */
     private BootstrapTestCase delegate = new BootstrapTestCase();

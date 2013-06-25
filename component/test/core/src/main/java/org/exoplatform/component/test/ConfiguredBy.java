@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
 
 /**
  * <p>
- * Declares a set a configuratin for kernel based tests. Such annotation is used when a {@link KernelLifeCycle} JUnit rule is
+ * Declares a set a configuratin for kernel based tests. Such annotation is used when a {@link KernelRule} JUnit rule is
  * declared in the test or when a class extends the {@link AbstractKernelTest}.
  * </p>
  *

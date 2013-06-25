@@ -29,7 +29,7 @@ import org.junit.Test;
 public class KernelRuleTestScopedTestCase {
 
     @Rule
-    public KernelLifeCycle kernel = new KernelLifeCycle();
+    public KernelRule kernel = new KernelRule();
 
     /** . */
     private PortalContainer container;

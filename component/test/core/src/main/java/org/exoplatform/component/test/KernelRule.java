@@ -26,7 +26,7 @@ import org.junit.runners.model.Statement;
 
 /**
  * <p>
- * The kernel life cycle is a JUnit rule for simplifying the life cycle of eXo kernel in unit tests. The kernel configuration
+ * The kernel rule is a JUnit rule for simplifying the life cycle of eXo kernel in unit tests. The kernel configuration
  * uses annotation for declaring the kernel configuration files to load. The rule can either be scoped at the class level or at
  * the test level depending on the life cycle of the kernel required for the tested class.
  * </p>
@@ -40,7 +40,7 @@ import org.junit.runners.model.Statement;
  * public class ClassScopedTestCase {
  *
  *   &#064;ClassRule
- *   public static final KernelLifeCycle kernel = new KernelLifeCycle();
+ *   public static final KernelRule kernel = new KernelRule();
  *   private PortalContainer container;
  *
  *   &#064;Test
@@ -63,7 +63,7 @@ import org.junit.runners.model.Statement;
  * public class MethodScopedTestCase {
  *
  *   &#064;Rule
- *   public final KernelLifeCycle kernel = new KernelLifeCycle();
+ *   public final KernelRule kernel = new KernelRule();
  *   private PortalContainer container;
  *
  *   &#064;Test
@@ -82,7 +82,7 @@ import org.junit.runners.model.Statement;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class KernelLifeCycle implements TestRule {
+public class KernelRule implements TestRule {
 
     /** . */
     private KernelBootstrap bootstrap;
