@@ -24,7 +24,7 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
   <node>
     <display-name>root_label</display-name>
-    <page-reference>portal::classic::root</page-reference>
+    <page-ref>portal::classic::root</page-ref>
     <node>
       <name>bar</name>
       <display-name>bar_label</display-name>

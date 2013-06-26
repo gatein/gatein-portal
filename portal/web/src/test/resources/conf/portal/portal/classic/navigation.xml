@@ -6,15 +6,15 @@
   <node>
     <node>
       <name>page1</name>
-      <page-reference>portal::classic::page1</page-reference>
+      <page-ref>portal::classic::page1</page-ref>
     </node>
     <node>
       <name>page2</name>
-      <page-reference>portal::classic::page2</page-reference>
+      <page-ref>portal::classic::page2</page-ref>
     </node>
     <node>
       <name>page3</name>
-      <page-reference>portal::classic::page3</page-reference>
+      <page-ref>portal::classic::page3</page-ref>
     </node>
   </node>
 </navigation>

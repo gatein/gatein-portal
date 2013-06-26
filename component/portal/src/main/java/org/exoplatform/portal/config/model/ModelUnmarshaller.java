@@ -110,7 +110,7 @@ public class ModelUnmarshaller {
 
     enum NavigationElement {
 
-        navigation, node, name, parent_uri, display_name, icon, start_publication_date, end_publication_date, visibility, page_reference
+        navigation, node, name, parent_uri, display_name, icon, start_publication_date, end_publication_date, visibility, page_ref
 
     }
 
@@ -198,7 +198,7 @@ public class ModelUnmarshaller {
                 case visibility:
                     node.setVisibility(Visibility.valueOf(nav.getContent()));
                     break;
-                case page_reference:
+                case page_ref:
                     node.setPageReference(nav.getContent());
                     break;
                 case node:
