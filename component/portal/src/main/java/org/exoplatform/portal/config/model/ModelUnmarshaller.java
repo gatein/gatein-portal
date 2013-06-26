@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -209,9 +210,7 @@ public class ModelUnmarshaller {
 
     enum PageElement {
 
-        page_set, page, zone, name, layout, id, portlet, display_name, description, access_permission, edit_permission,
-        show_info_bar, show_application_state, show_application_mode, application_ref, portlet_ref, preferences,
-        preference, value, read_only
+        page_set, page, name, display_name, description, access_permission, edit_permission
 
     }
 
@@ -238,79 +237,92 @@ public class ModelUnmarshaller {
                 String name = pageNav.getContent();
                 String[] accessPermission = pageNav.sibling(PageElement.access_permission) ? new String[]{pageNav.getContent()} : EMPTY_STRINGS;
                 String editPermission = pageNav.sibling(PageElement.edit_permission) ? pageNav.getContent() : null;
-                String layout;
-                if (pageNav.sibling(PageElement.layout)) {
-                    layout = pageNav.getContent();
-                } else {
-                    layout = null;
-                }
                 Page page = new Page();
                 page.setName(name);
                 page.setAccessPermissions(accessPermission);
                 page.setEditPermission(editPermission);
-                page.setFactoryId(layout);
-                while (pageNav.sibling(PageElement.zone)) {
-                    StaxNavigator<PageElement> zoneNav = pageNav.fork();
-                    validate(zoneNav.child(PageElement.id));
-                    String id = zoneNav.getContent();
-                    Container zone = new Container();
-                    zone.setStorageName(id);
-                    for (PageElement p = zoneNav.sibling();p != null;p = zoneNav.sibling()) {
-                        StaxNavigator<PageElement> windowNav = zoneNav.fork();
-                        validate(windowNav.child(PageElement.name));
-                        String windowName = windowNav.getContent();
-                        String windowTitle = windowNav.sibling(PageElement.display_name) ? windowNav.getContent() : null;
-                        String windowDescription = windowNav.sibling(PageElement.description) ? windowNav.getContent() : null;
-                        String windowAccessPermission = windowNav.sibling(PageElement.access_permission) ? windowNav.getContent() : null;
-                        String windowEditPermission = windowNav.sibling(PageElement.edit_permission) ? windowNav.getContent() : null;
-                        String windowShowInfoBar = windowNav.sibling(PageElement.show_info_bar) ? windowNav.getContent() : null;
-                        String windowShowApplicationState = windowNav.sibling(PageElement.show_application_state) ? windowNav.getContent() : null;
-                        String windowShowApplicationMode = windowNav.sibling(PageElement.show_application_mode) ? windowNav.getContent() : null;
-                        Application<Portlet> application = Application.createPortletApplication();
-                        application.setStorageName(windowName);
-                        application.setTitle(windowTitle);
-                        application.setDescription(windowDescription);
-                        application.setAccessPermission(windowAccessPermission);
-                        application.setShowInfoBar("true".equals(windowShowInfoBar));
-                        application.setShowApplicationMode("true".equals(windowShowApplicationMode));
-                        application.setShowApplicationState("true".equals(windowShowApplicationState));
-                        switch (p) {
-                            case portlet: {
-                                validate(windowNav.sibling(PageElement.application_ref));
-                                String applicationRef = windowNav.getContent();
-                                validate(windowNav.sibling(PageElement.portlet_ref));
-                                String portletRef = windowNav.getContent();
-                                String contentId = applicationRef + "/" + portletRef;
-                                Portlet portlet = null;
-                                if (windowNav.sibling(PageElement.preferences)) {
-                                    PortletBuilder builder = new PortletBuilder();
-                                    for (boolean b = windowNav.child(PageElement.preference);b;b = windowNav.sibling(PageElement.preference)) {
-                                        validate(windowNav.child(PageElement.name));
-                                        String preferenceName = windowNav.getContent();
-                                        ArrayList<String> values = new ArrayList<String>();
-                                        while (windowNav.sibling(PageElement.value)) {
-                                            values.add(windowNav.getContent());
-                                        }
-                                        boolean readOnly;
-                                        readOnly = windowNav.sibling(PageElement.read_only) && "true".equals(windowNav.getContent());
-                                        builder.add(preferenceName, values, readOnly);
-                                    }
-                                    portlet = builder.build();
-                                }
-                                application.setState(new TransientApplicationState(contentId, portlet));
-                                break;
-                            }
-                            default:
-                                throw new UnsupportedOperationException();
-                        }
-                        zone.getChildren().add(application);
-                    }
-                    page.getChildren().add(zone);
-                }
                 set.getPages().add(page);
+                String layout = parseLayout(pageNav.fork(new Naming.Enumerated.Simple<LayoutElement>(LayoutElement.class, null)), page.getChildren());
+                page.setFactoryId(layout);
             }
         }
         return set;
+    }
+
+    enum LayoutElement {
+
+        zone, name, layout, id, portlet, display_name, description, access_permission, edit_permission,
+        show_info_bar, show_application_state, show_application_mode, application_ref, portlet_ref, preferences,
+        preference, value, read_only
+
+    }
+
+    private static String parseLayout(StaxNavigator<LayoutElement> pageNav, Collection<ModelObject> zones) {
+        String layout;
+        if (pageNav.sibling(LayoutElement.layout)) {
+            layout = pageNav.getContent();
+        } else {
+            layout = null;
+        }
+        while (pageNav.sibling(LayoutElement.zone)) {
+            StaxNavigator<LayoutElement> zoneNav = pageNav.fork();
+            validate(zoneNav.child(LayoutElement.id));
+            String id = zoneNav.getContent();
+            Container zone = new Container();
+            zone.setStorageName(id);
+            for (LayoutElement p = zoneNav.sibling();p != null;p = zoneNav.sibling()) {
+                StaxNavigator<LayoutElement> windowNav = zoneNav.fork();
+                validate(windowNav.child(LayoutElement.name));
+                String windowName = windowNav.getContent();
+                String windowTitle = windowNav.sibling(LayoutElement.display_name) ? windowNav.getContent() : null;
+                String windowDescription = windowNav.sibling(LayoutElement.description) ? windowNav.getContent() : null;
+                String windowAccessPermission = windowNav.sibling(LayoutElement.access_permission) ? windowNav.getContent() : null;
+                String windowEditPermission = windowNav.sibling(LayoutElement.edit_permission) ? windowNav.getContent() : null;
+                String windowShowInfoBar = windowNav.sibling(LayoutElement.show_info_bar) ? windowNav.getContent() : null;
+                String windowShowApplicationState = windowNav.sibling(LayoutElement.show_application_state) ? windowNav.getContent() : null;
+                String windowShowApplicationMode = windowNav.sibling(LayoutElement.show_application_mode) ? windowNav.getContent() : null;
+                Application<Portlet> application = Application.createPortletApplication();
+                application.setStorageName(windowName);
+                application.setTitle(windowTitle);
+                application.setDescription(windowDescription);
+                application.setAccessPermission(windowAccessPermission);
+                application.setShowInfoBar("true".equals(windowShowInfoBar));
+                application.setShowApplicationMode("true".equals(windowShowApplicationMode));
+                application.setShowApplicationState("true".equals(windowShowApplicationState));
+                switch (p) {
+                    case portlet: {
+                        validate(windowNav.sibling(LayoutElement.application_ref));
+                        String applicationRef = windowNav.getContent();
+                        validate(windowNav.sibling(LayoutElement.portlet_ref));
+                        String portletRef = windowNav.getContent();
+                        String contentId = applicationRef + "/" + portletRef;
+                        Portlet portlet = null;
+                        if (windowNav.sibling(LayoutElement.preferences)) {
+                            PortletBuilder builder = new PortletBuilder();
+                            for (boolean b = windowNav.child(LayoutElement.preference);b;b = windowNav.sibling(LayoutElement.preference)) {
+                                validate(windowNav.child(LayoutElement.name));
+                                String preferenceName = windowNav.getContent();
+                                ArrayList<String> values = new ArrayList<String>();
+                                while (windowNav.sibling(LayoutElement.value)) {
+                                    values.add(windowNav.getContent());
+                                }
+                                boolean readOnly;
+                                readOnly = windowNav.sibling(LayoutElement.read_only) && "true".equals(windowNav.getContent());
+                                builder.add(preferenceName, values, readOnly);
+                            }
+                            portlet = builder.build();
+                        }
+                        application.setState(new TransientApplicationState(contentId, portlet));
+                        break;
+                    }
+                    default:
+                        throw new UnsupportedOperationException();
+                }
+                zone.getChildren().add(application);
+            }
+            zones.add(zone);
+        }
+        return layout;
     }
 
 }

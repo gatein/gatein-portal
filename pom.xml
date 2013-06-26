@@ -58,7 +58,7 @@
     <javax.servlet.version>2.5</javax.servlet.version>
     <version.chromattic>1.2.0</version.chromattic>
     <version.reflext>1.1.0</version.reflext>
-    <org.staxnav.version>0.9.6</org.staxnav.version>
+    <org.staxnav.version>0.9.7</org.staxnav.version>
     <jcip.version>1.0</jcip.version>
     <commons-dbcp.version>1.2.2</commons-dbcp.version>
     <com.google.javascript.version>r1592</com.google.javascript.version>
