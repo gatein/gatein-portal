@@ -108,7 +108,14 @@ Deployment descriptor has been adapted to this and the new 2.0 namespace provide
 
 # Deployment descriptor
 
-A simplified and improved navigation XML format has been introduced allowing to reduce the boiler plate and provide new features.
+A simplified and improved navigation XML format has been introduced with the following goals:
+
+- reduce  boiler plate
+- harmonize XML, i.e use the same term everywhere and make consistent
+    - replace `title` and `label` by `display-name`
+    - replace `page-reference` by `page-ref` to be similar to `application-ref` and `portlet-ref`
+    - etc...
+- deliver new features
 
 ## Navigation 2.0
 
@@ -119,20 +126,21 @@ The XML for navigation looks like:
         xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
         xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
       <node>
-        <label xml:lang="en">Home</label>
-        <label xml:lang="fr">Accueil</label>
+        <display-name xml:lang="en">Home</display-name>
+        <display-name xml:lang="fr">Accueil</display-name>
         ...
-        <page-reference>portal::classic::homepage</page-reference>
+        <page-ref>portal::classic::homepage</page-ref>
         <node>
           <name>demo</name>
           <label>Demo</label>
           <visibility>DISPLAYED</visibility>
-          <page-reference>portal::classic::demo</page-reference>
+          <page-ref>portal::classic::demo</page-ref>
         </node>
         ...
       </node>
     </navigation>
 
+- `label` is replaced by `display-name`
 - the navigation now provides a *root* navigation page.
 
 ## Page 2.0
@@ -142,7 +150,7 @@ The XML for page looks like:
 
     <page>
       <name>homepage</name>
-      <title>Home Page</title>
+      <display-name>Home Page</display-name>
       <access-permission>Everyone</access-permission>
       <edit-permission>*:/platform/administrators</edit-permission>
       <zone>
@@ -156,8 +164,41 @@ The XML for page looks like:
       </zone>
     </page>
 
+- `title` is replaced by `display-name`
 - the layout hierarchy is gone providing flat *zone* containers
 - windows (portlet) uses a mandatory *name* element for identifying the window in the page (checked with an XSD unique constraint)
+
+## Site 2.0
+
+The XML for site looks like
+
+    <site
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
+        xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
+      <name>classic</name>
+      <display-name>Classic</display-name>
+      <description>GateIn default portal</description>
+      <access-permission>Everyone</access-permission>
+      <edit-permission>*:/platform/administrators</edit-permission>
+      <locale>en</locale>
+      <properties>
+        <entry key="sessionAlive">onDemand</entry>
+        <entry key="showPortletInfo">0</entry>
+      </properties>
+      <zone>
+        <id>header</id>
+        <portlet>
+          <name>navigation</name>
+          <access-permission>Everyone</access-permission>
+          <application-ref>portal</application-ref>
+          <portlet-ref>NavigationPortlet</portlet-ref>
+        </portlet>
+      </zone>
+    </site>
+
+- `label` is replaced by `display-name`
+- new zone based layout
 
 # Todo list (close scope)
 
