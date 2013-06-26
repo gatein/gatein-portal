@@ -48,6 +48,14 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <!-- The group content of for permissions -->
+  <xs:group name="permissionsGroup">
+    <xs:sequence>
+      <xs:element name="access-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:group>
+
   <!-- A top node-navigation element -->
   <xs:element name="navigation" type="navigationType"/>
 
@@ -92,8 +100,7 @@
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="display-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="layout" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="access-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="permissionsGroup"/>
       <xs:element name="zone" type="zoneType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -112,8 +119,7 @@
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="display-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="access-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="permissionsGroup"/>
       <xs:element name="show-info-bar" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="show-application-state" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="show-application-mode" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
