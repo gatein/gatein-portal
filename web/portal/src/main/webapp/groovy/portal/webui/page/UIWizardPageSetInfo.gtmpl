@@ -1,8 +1,9 @@
 <%	
 	import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 	import org.exoplatform.webui.core.UIComponent;
-  import org.gatein.common.text.EntityEncoder;
+        import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.webui.form.UIFormInputBase;
 
 	String nodeName = "/"; 	
 	boolean isNoSelecter = !uicomponent.getChild(UIPageNodeSelector.class).isRendered();
@@ -38,7 +39,18 @@
 					<div class="HorizontalLayout">
 						<div class="FormContainer">
 							<table class="UIFormGrid" summary="Wizard page form">
-								<%	
+								<%									
+                                                                        boolean required = false;
+                                                                        for (field in uiform.getChildren()) {
+                                                                          if (!required && field instanceof UIFormInputBase) {
+                                                                            required = ((UIFormInputBase) field).isMandatory();
+                                                                          }                                          
+                                                                        }
+                                                                        if (required) {
+                                                                 %>
+                                                                 <tr><td colspan="2" style="text-align: right;"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
+                                                                 <%
+                                                                        }
 									List children = uiform.getChildren();		
 									int bound = children.size() - 1;
 									for(i in 1..bound) { 
