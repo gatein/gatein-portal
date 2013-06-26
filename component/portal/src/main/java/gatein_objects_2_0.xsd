@@ -38,6 +38,22 @@
     </xs:simpleContent>
   </xs:complexType>
 
+  <!-- Properties -->
+  <xs:complexType name="propertiesType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="entry" type="propertiesEntryType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Property entry -->
+  <xs:complexType name="propertiesEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="key" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <!-- The visibility of an item-->
   <xs:simpleType name="visibility">
     <xs:restriction base='xs:string'>
@@ -100,10 +116,16 @@
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="display-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:group ref="permissionsGroup"/>
+      <xs:group ref="layoutGroup"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:group name="layoutGroup">
+    <xs:sequence>
       <xs:element name="layout" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="zone" type="zoneType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
-  </xs:complexType>
+  </xs:group>
 
   <xs:complexType name="zoneType">
     <xs:sequence>
@@ -175,6 +197,14 @@
   </xs:element>
 
   <xs:complexType name="siteType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="display-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="permissionsGroup"/>
+      <xs:element name="locale" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="properties" type="propertiesType" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="layoutGroup"/>
+    </xs:sequence>
   </xs:complexType>
-
 </xs:schema>

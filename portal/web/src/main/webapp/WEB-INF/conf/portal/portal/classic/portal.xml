@@ -20,60 +20,27 @@
 
 -->
 
-<portal-config
+<site
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-  <portal-name>classic</portal-name>
-  <label>Classic</label>
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
+  <name>classic</name>
+  <display-name>Classic</display-name>
   <description>GateIn default portal</description>
-  <locale>en</locale>
-  <access-permissions>Everyone</access-permissions>
+  <access-permission>Everyone</access-permission>
   <edit-permission>*:/platform/administrators</edit-permission>
+  <locale>en</locale>
   <properties>
     <entry key="sessionAlive">onDemand</entry>
     <entry key="showPortletInfo">0</entry>
   </properties>
-
-  <portal-redirects>
-    <portal-redirect>
-      <redirect-site>mobile</redirect-site>
-      <name>Mobile</name>
-      <enabled>true</enabled>
-      <conditions>
-        <condition>
-          <name>Default Mobile Condition</name>
-          <user-agent>
-            <!-- multiple contains means _any_ of the contains must be matched -->
-            <contains>(?i)i(phone|pad|pod)</contains>
-            <contains>(?i)mobile</contains>
-            <contains>(?i)android</contains>
-            <contains>(?)phone</contains>
-            <contains>(?i)tablet</contains>
-          </user-agent>
-        </condition>
-      </conditions>
-      <node-mapping>
-        <use-node-name-matching>true</use-node-name-matching>
-      </node-mapping>
-    </portal-redirect>
-  </portal-redirects>
-
-  <portal-layout>
-    <container>
-      <name>header</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>NavigationPortlet</portlet-ref>
-        </portlet>
-        <title>Navigation Portlet</title>
-        <access-permissions>Everyone</access-permissions>
-        <show-info-bar>false</show-info-bar>
-        <show-application-state>false</show-application-state>
-        <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
-  </portal-layout>
-
-</portal-config>
+  <zone>
+    <id>header</id>
+    <portlet>
+      <name>navigation</name>
+      <access-permission>Everyone</access-permission>
+      <application-ref>portal</application-ref>
+      <portlet-ref>NavigationPortlet</portlet-ref>
+    </portlet>
+  </zone>
+</site>

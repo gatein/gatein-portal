@@ -93,6 +93,8 @@ public class ModelUnmarshaller {
             obj = type.cast(parseNavigation(baos));
         } else if (type == Page.PageSet.class && version == Version.V_2_0) {
             obj = type.cast(parsePageSet(baos));
+        } else if (type == PortalConfig.class && version == Version.V_2_0) {
+            obj = type.cast(parseSite(baos));
         } else {
 
             // Legacy parsing using JIBX shit
@@ -247,6 +249,56 @@ public class ModelUnmarshaller {
             }
         }
         return set;
+    }
+
+    enum SiteElement {
+
+        site, name, display_name, description, access_permission, edit_permission, locale, properties, entry
+
+    }
+
+    private static PortalConfig parseSite(InputStream in) throws XMLStreamException, ParseException {
+
+        StaxNavigator<SiteElement> nav = createStaxNav(in, SiteElement.class);
+
+        validate(SiteElement.site == nav.getName());
+        validate(nav.next(SiteElement.name));
+        String name = nav.getContent();
+        String displayName = nav.sibling(SiteElement.display_name) ? nav.getContent() : null;
+        String description = nav.sibling(SiteElement.description) ? nav.getContent() : null;
+        String[] accessPermission = nav.sibling(SiteElement.access_permission) ? new String[]{nav.getContent()} : EMPTY_STRINGS;
+        String editPermission = nav.sibling(SiteElement.edit_permission) ? nav.getContent() : null;
+        String locale = nav.sibling(SiteElement.locale) ? nav.getContent() : null;
+        Properties properties = null;
+        if (nav.sibling(SiteElement.properties)) {
+            StaxNavigator<SiteElement> f = nav.fork();
+            if (f.child(SiteElement.entry)) {
+                properties = new Properties();
+                do {
+                    String key = f.getAttribute("key");
+                    String value = f.getContent();
+                    properties.put(key, value);
+                }
+                while (f.sibling(SiteElement.entry));
+            }
+        }
+
+        //
+        PortalConfig site = new PortalConfig();
+        site.setProperties(properties);
+        site.setName(name);
+        site.setLabel(displayName);
+        site.setDescription(description);
+        site.setLocale(locale);
+        site.setAccessPermissions(accessPermission);
+        site.setEditPermission(editPermission);
+
+        //
+        String layout = parseLayout(nav.fork(new Naming.Enumerated.Simple<LayoutElement>(LayoutElement.class, null)), site.getPortalLayout().getChildren());
+        site.getPortalLayout().setFactoryId(layout);
+
+        //
+        return site;
     }
 
     enum LayoutElement {

@@ -38,6 +38,7 @@ import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.config.model.Version;
@@ -274,6 +275,14 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(Collections.singletonList("abc"), Arrays.asList(foo.getAccessPermissions()));
         assertEquals("def", foo.getEditPermission());
         assertEquals("foo", foo.getName());
+        assertLayout(foo);
+
+        //
+        Page bar = set.getPages().get(1);
+        assertEquals("bar", bar.getName());
+    }
+
+    private void assertLayout(Container foo) {
         assertEquals(1, foo.getChildren().size());
         assertEquals("1", foo.getFactoryId());
         Container zone1 = (Container)foo.getChildren().get(0);
@@ -295,9 +304,25 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(Arrays.asList("d1", "d2"), pref.getValues());
         assertFalse(pref.isReadOnly());
         assertFalse(i.hasNext());
+    }
+
+    public void testSite2_0() throws Exception {
+        UnmarshalledObject<PortalConfig> obj = ModelUnmarshaller.unmarshall(PortalConfig.class, new FileInputStream(
+                "src/test/resources/xml/site.xml"));
+        PortalConfig site = obj.getObject();
+        assertEquals(Version.V_2_0, obj.getVersion());
 
         //
-        Page bar = set.getPages().get(1);
-        assertEquals("bar", bar.getName());
+        assertEquals("the_site", site.getName());
+        assertEquals("the_display_name", site.getLabel());
+        assertEquals("the_description", site.getDescription());
+        assertEquals("the_locale", site.getLocale());
+        Properties properties = site.getProperties();
+        assertEquals(1, properties.size());
+        assertEquals(Collections.singleton("entry_key"), properties.keySet());
+        assertEquals("entry_value", properties.get("entry_key"));
+        assertEquals(Collections.singletonList("an_access_permission"), Arrays.asList(site.getAccessPermissions()));
+        assertEquals("an_edit_permission", site.getEditPermission());
+        assertLayout(site.getPortalLayout());
     }
 }
