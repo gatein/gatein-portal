@@ -28,7 +28,7 @@
       <id>1</id>
       <portlet>
         <name>foobar</name>
-        <title>ezfzef</title>
+        <display-name>ezfzef</display-name>
         <access-permission>zef</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>

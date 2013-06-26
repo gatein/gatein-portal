@@ -27,7 +27,7 @@
 
   <page>
     <name>homepage</name>
-    <title>Home Page</title>
+    <display-name>Home Page</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
     <zone>
@@ -43,7 +43,7 @@
 
   <page>
     <name>demo1</name>
-    <title>Parameter Demo</title>
+    <display-name>Parameter Demo</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
     <zone>
@@ -65,7 +65,7 @@
 
   <page>
     <name>demo2</name>
-    <title>Parallel Demo</title>
+    <display-name>Parallel Demo</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
     <zone>
@@ -93,7 +93,7 @@
 
   <page>
     <name>register</name>
-    <title>Register</title>
+    <display-name>Register</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
     <zone>
@@ -109,7 +109,7 @@
 
   <page>
     <name>sitemap</name>
-    <title>Site Map</title>
+    <display-name>Site Map</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
     <zone>

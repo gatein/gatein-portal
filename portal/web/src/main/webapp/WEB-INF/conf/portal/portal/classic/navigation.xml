@@ -25,143 +25,143 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
   <node>
-    <label xml:lang="en">Home</label>
-    <label xml:lang="cs">Domů</label>
-    <label xml:lang="fr">Accueil</label>
-    <label xml:lang="es">Inicio</label>
-    <label xml:lang="de">Startseite</label>
-    <label xml:lang="it">Home</label>
-    <label xml:lang="nl">Home</label>
-    <label xml:lang="pt-BR">Principal</label>
-    <label xml:lang="ja">ホーム</label>
-    <label xml:lang="ne">गृह पृष्‍ठ</label>
-    <label xml:lang="ru">Главная</label>
-    <label xml:lang="uk">Додому</label>
-    <label xml:lang="ar">ترحيب</label>
-    <label xml:lang="ko">홈</label>
-    <label xml:lang="vi">Trang chủ</label>
-    <label xml:lang="zh">主页</label>
-    <label xml:lang="zh-TW">首頁</label>
+    <display-name xml:lang="en">Home</display-name>
+    <display-name xml:lang="cs">Domů</display-name>
+    <display-name xml:lang="fr">Accueil</display-name>
+    <display-name xml:lang="es">Inicio</display-name>
+    <display-name xml:lang="de">Startseite</display-name>
+    <display-name xml:lang="it">Home</display-name>
+    <display-name xml:lang="nl">Home</display-name>
+    <display-name xml:lang="pt-BR">Principal</display-name>
+    <display-name xml:lang="ja">ホーム</display-name>
+    <display-name xml:lang="ne">गृह पृष्‍ठ</display-name>
+    <display-name xml:lang="ru">Главная</display-name>
+    <display-name xml:lang="uk">Додому</display-name>
+    <display-name xml:lang="ar">ترحيب</display-name>
+    <display-name xml:lang="ko">홈</display-name>
+    <display-name xml:lang="vi">Trang chủ</display-name>
+    <display-name xml:lang="zh">主页</display-name>
+    <display-name xml:lang="zh-TW">首頁</display-name>
     <page-reference>portal::classic::homepage</page-reference>
     <node>
       <name>demo1</name>
-      <label>Parameter Demo</label>
+      <display-name>Parameter Demo</display-name>
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::classic::demo1</page-reference>
     </node>
     <node>
       <name>demo2</name>
-      <label>Parallel Demo</label>
+      <display-name>Parallel Demo</display-name>
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::classic::demo2</page-reference>
     </node>
     <node>
       <name>sitemap</name>
-      <label xml:lang="en">SiteMap</label>
-      <label xml:lang="cs">Mapa stránek</label>
-      <label xml:lang="fr">SiteMap</label>
-      <label xml:lang="es">Mapa del Sitio</label>
-      <label xml:lang="de">Seitenübersicht</label>
-      <label xml:lang="it">Mappa del Sito</label>
-      <label xml:lang="nl">Sitemap</label>
-      <label xml:lang="pt-BR">Mapa do Site</label>
-      <label xml:lang="ja">サイトマップ</label>
-      <label xml:lang="ne">साईटम्याप</label>
-      <label xml:lang="ru">SiteMap</label>
-      <label xml:lang="ar">خريطة الموقع</label>
-      <label xml:lang="ko">사이트맵</label>
-      <label xml:lang="vi">Sơ đồ</label>
-      <label xml:lang="zh">网站地图</label>
-      <label xml:lang="zh-TW">網站導覽</label>
+      <display-name xml:lang="en">SiteMap</display-name>
+      <display-name xml:lang="cs">Mapa stránek</display-name>
+      <display-name xml:lang="fr">SiteMap</display-name>
+      <display-name xml:lang="es">Mapa del Sitio</display-name>
+      <display-name xml:lang="de">Seitenübersicht</display-name>
+      <display-name xml:lang="it">Mappa del Sito</display-name>
+      <display-name xml:lang="nl">Sitemap</display-name>
+      <display-name xml:lang="pt-BR">Mapa do Site</display-name>
+      <display-name xml:lang="ja">サイトマップ</display-name>
+      <display-name xml:lang="ne">साईटम्याप</display-name>
+      <display-name xml:lang="ru">SiteMap</display-name>
+      <display-name xml:lang="ar">خريطة الموقع</display-name>
+      <display-name xml:lang="ko">사이트맵</display-name>
+      <display-name xml:lang="vi">Sơ đồ</display-name>
+      <display-name xml:lang="zh">网站地图</display-name>
+      <display-name xml:lang="zh-TW">網站導覽</display-name>
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::classic::sitemap</page-reference>
       	<node>
 	      	<name>sitemap_1</name>
-	      	<label xml:lang="en">SiteMap1</label>
+	      	<display-name xml:lang="en">SiteMap1</display-name>
 	      	<visibility>DISPLAYED</visibility>
 	      	<page-reference>portal::classic::sitemap</page-reference>
 	      	<node>
 		      	<name>sitemap_1.1</name>
-		      	<label xml:lang="en">SiteMap1.1</label>
+		      	<display-name xml:lang="en">SiteMap1.1</display-name>
 		      	<visibility>DISPLAYED</visibility>
 		      	<page-reference>portal::classic::sitemap</page-reference>
 		      	<node>
 			      	<name>sitemap_1.1.1</name>
-			      	<label xml:lang="en">SiteMap1.1.1</label>
+			      	<display-name xml:lang="en">SiteMap1.1.1</display-name>
 			      	<visibility>DISPLAYED</visibility>
 			      	<page-reference>portal::classic::sitemap</page-reference>
 			      	<node>
 			      		<name>sitemap_1.1.1.1</name>
-			      		<label xml:lang="en">SiteMap1.1.1.1</label>
+			      		<display-name xml:lang="en">SiteMap1.1.1.1</display-name>
 			      		<visibility>DISPLAYED</visibility>
 			      		<page-reference>portal::classic::sitemap</page-reference>
 	      			</node>
 	      		</node>
 	      		<node>
 			      	<name>sitemap_1.1.2</name>
-			      	<label xml:lang="en">SiteMap1.1.2</label>
+			      	<display-name xml:lang="en">SiteMap1.1.2</display-name>
 			      	<visibility>DISPLAYED</visibility>
 			      	<page-reference>portal::classic::sitemap</page-reference>
 	      		</node>
       		</node>
       		<node>
 		      	<name>sitemap_1.2</name>
-		      	<label xml:lang="en">SiteMap1.2</label>
+		      	<display-name xml:lang="en">SiteMap1.2</display-name>
 		      	<visibility>DISPLAYED</visibility>
 		      	<page-reference>portal::classic::sitemap</page-reference>
 	      	</node>
 	      	<node>
 		      	<name>sitemap_1.3</name>
-		      	<label xml:lang="en">SiteMap1.3</label>
+		      	<display-name xml:lang="en">SiteMap1.3</display-name>
 		      	<visibility>DISPLAYED</visibility>
 		      	<page-reference>portal::classic::sitemap</page-reference>
 	      	</node>
       	</node>
       	<node>
 	      	<name>sitemap_2</name>
-	      	<label xml:lang="en">SiteMap2</label>
+	      	<display-name xml:lang="en">SiteMap2</display-name>
 	      	<visibility>DISPLAYED</visibility>
 	      	<page-reference>portal::classic::sitemap</page-reference>
       	</node>
       	<node>
 	      	<name>sitemap_3</name>
-	      	<label xml:lang="en">SiteMap3</label>
+	      	<display-name xml:lang="en">SiteMap3</display-name>
 	      	<visibility>DISPLAYED</visibility>
 	      	<page-reference>portal::classic::sitemap</page-reference>
       	</node>
     </node>
     <node>
       <name>register</name>
-      <label xml:lang="en">Register</label>
-      <label xml:lang="cs">Registrace</label>
-      <label xml:lang="es">Registrarse</label>
-      <label xml:lang="de">Registrieren</label>
-      <label xml:lang="it">Registrazione</label>
-      <label xml:lang="nl">Registreren</label>
-      <label xml:lang="pt-BR">Cadastrar-se</label>
-      <label xml:lang="ja">登録</label>
-      <label xml:lang="ne">दर्ता</label>
-      <label xml:lang="ko">등록</label>
-      <label xml:lang="vi">Đăng ký</label>
-      <label xml:lang="zh">注册</label>
-      <label xml:lang="zh-TW">註冊</label>
+      <display-name xml:lang="en">Register</display-name>
+      <display-name xml:lang="cs">Registrace</display-name>
+      <display-name xml:lang="es">Registrarse</display-name>
+      <display-name xml:lang="de">Registrieren</display-name>
+      <display-name xml:lang="it">Registrazione</display-name>
+      <display-name xml:lang="nl">Registreren</display-name>
+      <display-name xml:lang="pt-BR">Cadastrar-se</display-name>
+      <display-name xml:lang="ja">登録</display-name>
+      <display-name xml:lang="ne">दर्ता</display-name>
+      <display-name xml:lang="ko">등록</display-name>
+      <display-name xml:lang="vi">Đăng ký</display-name>
+      <display-name xml:lang="zh">注册</display-name>
+      <display-name xml:lang="zh-TW">註冊</display-name>
       <visibility>SYSTEM</visibility>
       <page-reference>portal::classic::register</page-reference>
       	<node>
 	      <name>register_1</name>
-	      <label xml:lang="en">Register1</label>
+	      <display-name xml:lang="en">Register1</display-name>
 	      <visibility>SYSTEM</visibility>
 	      <page-reference>portal::classic::register</page-reference>
     	</node>
     	<node>
 	      <name>register_2</name>
-	      <label xml:lang="en">Register2</label>
+	      <display-name xml:lang="en">Register2</display-name>
 	      <visibility>SYSTEM</visibility>
 	      <page-reference>portal::classic::register</page-reference>
     	</node>
     	<node>
 	      <name>register_3</name>
-	      <label xml:lang="en">Register3</label>
+	      <display-name xml:lang="en">Register3</display-name>
 	      <visibility>SYSTEM</visibility>
 	      <page-reference>portal::classic::register</page-reference>
     	</node>

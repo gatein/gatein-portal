@@ -41,7 +41,6 @@ import org.gatein.common.io.IOTools;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
-import org.staxnav.Axis;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavigator;
 import org.staxnav.StaxNavigatorFactory;
@@ -105,7 +104,7 @@ public class ModelUnmarshaller {
 
     enum NavigationElement {
 
-        navigation, node, name, parent_uri, label, icon, start_publication_date, end_publication_date, visibility, page_reference
+        navigation, node, name, parent_uri, display_name, icon, start_publication_date, end_publication_date, visibility, page_reference
 
     }
 
@@ -155,7 +154,7 @@ public class ModelUnmarshaller {
                 case parent_uri:
                     node.setName(nav.getContent());
                     break;
-                case label:
+                case display_name:
                     String lang = nav.getAttribute(LANG);
                     String value = nav.getContent();
 
@@ -207,7 +206,7 @@ public class ModelUnmarshaller {
 
     enum PageElement {
 
-        page_set, page, zone, name, layout, id, portlet, title, description, access_permission, edit_permission,
+        page_set, page, zone, name, layout, id, portlet, display_name, description, access_permission, edit_permission,
         show_info_bar, show_application_state, show_application_mode, application_ref, portlet_ref, preferences,
         preference, value, read_only
 
@@ -253,7 +252,7 @@ public class ModelUnmarshaller {
                         StaxNavigator<PageElement> windowNav = zoneNav.fork();
                         validate(windowNav.child(PageElement.name));
                         String windowName = windowNav.getContent();
-                        String windowTitle = windowNav.sibling(PageElement.title) ? windowNav.getContent() : null;
+                        String windowTitle = windowNav.sibling(PageElement.display_name) ? windowNav.getContent() : null;
                         String windowDescription = windowNav.sibling(PageElement.description) ? windowNav.getContent() : null;
                         String windowAccessPermission = windowNav.sibling(PageElement.access_permission) ? windowNav.getContent() : null;
                         String windowEditPermission = windowNav.sibling(PageElement.edit_permission) ? windowNav.getContent() : null;
