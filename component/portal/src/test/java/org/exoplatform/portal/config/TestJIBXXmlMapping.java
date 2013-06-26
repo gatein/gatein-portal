@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -270,6 +271,8 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
 
         //
         Page foo = set.getPages().get(0);
+        assertEquals(Collections.singletonList("abc"), Arrays.asList(foo.getAccessPermissions()));
+        assertEquals("def", foo.getEditPermission());
         assertEquals("foo", foo.getName());
         assertEquals(1, foo.getChildren().size());
         assertEquals("1", foo.getFactoryId());

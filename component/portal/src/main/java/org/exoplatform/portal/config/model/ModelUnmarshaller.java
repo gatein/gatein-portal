@@ -50,6 +50,9 @@ import org.staxnav.StaxNavigatorFactory;
  */
 public class ModelUnmarshaller {
 
+    /** . */
+    private static final String[] EMPTY_STRINGS = new String[0];
+
     private static <E extends Enum<E>> StaxNavigator<E> createStaxNav(InputStream in, Class<E> type) throws XMLStreamException {
         XMLInputFactory inputFactory = XMLInputFactory.newInstance();
         inputFactory.setProperty("javax.xml.stream.isCoalescing", true);
@@ -233,6 +236,8 @@ public class ModelUnmarshaller {
             for (StaxNavigator<PageElement> pageNav : nav.fork(PageElement.page)) {
                 validate(pageNav.child(PageElement.name));
                 String name = pageNav.getContent();
+                String[] accessPermission = pageNav.sibling(PageElement.access_permission) ? new String[]{pageNav.getContent()} : EMPTY_STRINGS;
+                String editPermission = pageNav.sibling(PageElement.edit_permission) ? pageNav.getContent() : null;
                 String layout;
                 if (pageNav.sibling(PageElement.layout)) {
                     layout = pageNav.getContent();
@@ -241,6 +246,8 @@ public class ModelUnmarshaller {
                 }
                 Page page = new Page();
                 page.setName(name);
+                page.setAccessPermissions(accessPermission);
+                page.setEditPermission(editPermission);
                 page.setFactoryId(layout);
                 while (pageNav.sibling(PageElement.zone)) {
                     StaxNavigator<PageElement> zoneNav = pageNav.fork();

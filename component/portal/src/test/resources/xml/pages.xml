@@ -23,6 +23,8 @@
           xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
   <page>
     <name>foo</name>
+    <access-permission>abc</access-permission>
+    <edit-permission>def</edit-permission>
     <layout>1</layout>
     <zone>
       <id>1</id>

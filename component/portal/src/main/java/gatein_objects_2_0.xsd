@@ -99,8 +99,8 @@
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="display-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="layout" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:group ref="permissionsGroup"/>
+      <xs:element name="layout" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:element name="zone" type="zoneType" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
