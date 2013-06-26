@@ -26,6 +26,7 @@ import java.security.SecureRandom;
 import java.util.concurrent.CountDownLatch;
 
 import org.exoplatform.container.xml.InitParams;
+import org.picketlink.idm.api.SecureRandomProvider;
 import org.picocontainer.Startable;
 
 /**
@@ -35,7 +36,7 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
  *
  */
-public class SecureRandomService implements Startable {
+public class SecureRandomService implements Startable, SecureRandomProvider {
 
     protected static final String RANDOM_ALGORITHM = "random.algorithm";
     protected static final String RANDOM_ALGORITHM_PROVIDER = "random.algorithm.provider";

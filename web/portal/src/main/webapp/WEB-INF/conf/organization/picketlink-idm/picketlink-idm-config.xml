@@ -47,10 +47,6 @@
           <name>credentialEncoder.hashAlgorithm</name>
           <value>SHA-256</value>
         </option>
-        <option>
-          <name>credentialEncoder.secureRandomAlgorithm</name>
-          <value>SHA1PRNG</value>
-        </option>
       </options>
     </realm>
   </realms>

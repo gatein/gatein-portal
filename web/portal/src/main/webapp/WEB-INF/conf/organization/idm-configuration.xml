@@ -134,6 +134,11 @@
         <value>true</value>
       </value-param>
 
+      <value-param>
+        <name>useSecureRandomService</name>
+        <value>true</value>
+      </value-param>
+
     </init-params>
   </component>
 

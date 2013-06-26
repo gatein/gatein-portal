@@ -35,11 +35,13 @@ import org.exoplatform.services.naming.InitialContextInitializer;
 import org.infinispan.Cache;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
+import org.picketlink.idm.api.SecureRandomProvider;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
 import org.picketlink.idm.cache.APICacheProvider;
 import org.picketlink.idm.common.exception.IdentityConfigurationException;
 import org.picketlink.idm.impl.configuration.IdentityConfigurationImpl;
 import org.picketlink.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
+import org.picketlink.idm.impl.credential.DatabaseReadingSaltEncoder;
 import org.picketlink.idm.spi.cache.IdentityStoreCacheProvider;
 import org.picketlink.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
 import org.picocontainer.Startable;
@@ -56,6 +58,8 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
     public static final String PARAM_JNDI_NAME_OPTION = "jndiName";
 
     public static final String PARAM_SKIP_EXPIRATION_STRUCTURE_CACHE_ENTRIES = "skipExpirationOfStructureCacheEntries";
+
+    public static final String PARAM_USE_SECURE_RANDOM_SERVICE = "useSecureRandomService";
 
     public static final String PARAM_STALE_CACHE_NODES_LINKS_CLEANER_DELAY = "staleCacheNodesLinksCleanerDelay";
 
@@ -96,6 +100,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
         ValueParam realmName = initParams.getValueParam(REALM_NAME_OPTION);
         ValueParam apiCacheConfig = initParams.getValueParam(CACHE_CONFIG_API_OPTION);
         ValueParam storeCacheConfig = initParams.getValueParam(CACHE_CONFIG_STORE_OPTION);
+        ValueParam useSecureRandomService = initParams.getValueParam(PARAM_USE_SECURE_RANDOM_SERVICE);
 
         this.hibernateService = hibernateService;
 
@@ -173,6 +178,11 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
                         staleCacheNodesLinksCleanerDelay, cache);
                 picketLinkIDMCache.register(storeCacheProvider);
                 identityConfiguration.getIdentityConfigurationRegistry().register(storeCacheProvider, "storeCacheProvider");
+            }
+
+            if (useSecureRandomService != null && "true".equals(useSecureRandomService.getValue())) {
+                SecureRandomProvider secureRandomProvider = (SecureRandomProvider)exoContainerContext.getContainer().getComponentInstanceOfType(SecureRandomProvider.class);
+                identityConfiguration.getIdentityConfigurationRegistry().register(secureRandomProvider, DatabaseReadingSaltEncoder.DEFAULT_SECURE_RANDOM_PROVIDER_REGISTRY_NAME);
             }
         } else {
             identitySessionFactory = (IdentitySessionFactory) new InitialContext().lookup(jndiName.getValue());
