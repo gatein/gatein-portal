@@ -168,8 +168,8 @@
                 <![CDATA[<security-domain name="gatein-domain-sample-portal" cache-type="default">
                     <authentication>
                         <login-module code="org.gatein.security.oauth.jaas.OAuthLoginModule" flag="required">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
+                            <module-option name="portalContainerName" value="sample-portal"/>
+                            <module-option name="realmName" value="gatein-domain-sample-portal"/>
                         </login-module>
                         <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
                             <module-option name="enabled" value="#{gatein.sso.login.module.enabled}" />
