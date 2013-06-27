@@ -5,13 +5,16 @@
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.require("SHARED/navigation", "nav").addScripts("nav.UIPortalNavigation.onLoad('" + uicomponent.id + "');");
         boolean isKeepAlive = false;
+        String keepAliveInterval = 300000; // miliseconds
         if (System.getProperty("gatein.webui.keepalive.enabled") != null &&
             "true".equals(System.getProperty("gatein.webui.keepalive.enabled"))) { 
             isKeepAlive = true;
+            if (System.getProperty("gatein.webui.keepalive.interval") != null)
+              keepAliveInterval = System.getProperty("gatein.webui.keepalive.interval");
         }
         if (isKeepAlive) {
           jsmanager.require("SHARED/jquery", "\$")
-            .addScripts("\$(function() { window.setInterval(function(){ \$.post('/portal/login/jsp/keepalive.jsp') }, 60000); });");
+            .addScripts("\$(function() { window.setInterval(function(){ \$.post('/portal/login/jsp/keepalive.jsp') }, " + keepAliveInterval + "); });");
         }
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));";
 	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));";
