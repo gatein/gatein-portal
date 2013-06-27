@@ -59,7 +59,7 @@
 			<div class="UIGadget">
 			  <div class="TopGadget">
                 <div class="ServicesBox ClearFix">
-                    <div class="Text">__MSG_services__</div>
+                    <div class="Text"><label for="servicesSelector">__MSG_services__</label></div>
                     <select id="servicesSelector"></select>
                     <a class="DesIconHome"><span></span></a>
                 </div>
@@ -154,7 +154,7 @@
 				<table cellspacing="0" style="margin: 0px auto;" summary="Services Management configuration">
 					<tbody>
 						<tr>
-							<td><div class="Text">__MSG_services__</div></td>
+                                                        <td><div class="Text"><label for="servicesSelector">__MSG_services__</label></div></td>
 							<td>
 								<select id="servicesSelector"></select>							
 							</td>
