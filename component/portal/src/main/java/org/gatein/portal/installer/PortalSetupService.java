@@ -22,6 +22,7 @@
 
 package org.gatein.portal.installer;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -33,8 +34,6 @@ import javax.jcr.Session;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 
 /**
  * This class is responsible to check a flag in JCR and memory for proper GateIn root password setup.
@@ -43,8 +42,6 @@ import org.gatein.common.logging.LoggerFactory;
  *
  */
 public class PortalSetupService {
-
-    private static final Logger log = LoggerFactory.getLogger(PortalSetupService.class);
 
     public static final String ROOT_PASSWORD_PROPERTY = "gatein.portal.setup.initialpassword.root";
     public static final String REPOSITORY_NAME = "repository";
@@ -55,7 +52,6 @@ public class PortalSetupService {
     public static final String KEY = "somearbitrarycrazystringthatdoesnotmatter";
 
     private static boolean setup = false;
-
 
     public static void checkJcrFlag() {
         setup = false;
@@ -87,7 +83,8 @@ public class PortalSetupService {
 
     public static String rootPassword() {
 
-            String password = null;
+        String password = null;
+        try {
             password = decodePassword(System.getProperty(ROOT_PASSWORD_PROPERTY));
             if (password == null) {
                 password = randomPassword();
@@ -97,27 +94,52 @@ public class PortalSetupService {
                 setJcrFlag();
             }
             return password;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static String decodePassword(String encodedPassword) {
+    public static String decodePassword(String encodedPassword) throws Exception {
 
-        if (encodedPassword == null)
+        if (encodedPassword == null) {
             return null;
-
-        String decodedPassword = null;
-        try {
-            byte[] salt = SALT.substring(0, 8).getBytes();
-            int count = COUNT;
-            char[] password = KEY.toCharArray();
-            PBEParameterSpec cipherSpec = new PBEParameterSpec(salt, count);
-            PBEKeySpec keySpec = new PBEKeySpec(password);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEwithMD5andDES");
-            SecretKey cipherKey = factory.generateSecret(keySpec);
-            decodedPassword = PBEUtils.decode64(encodedPassword, "PBEwithMD5andDES", cipherKey, cipherSpec);
-        } catch (Exception e) {
-            log.warn("First root password can not be decoded!");
         }
-        return decodedPassword;
+
+        byte[] salt = SALT.substring(0, 8).getBytes();
+        int count = COUNT;
+        char[] password = KEY.toCharArray();
+        PBEParameterSpec cipherSpec = new PBEParameterSpec(salt, count);
+        PBEKeySpec keySpec = new PBEKeySpec(password);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEwithMD5andDES");
+        SecretKey cipherKey = factory.generateSecret(keySpec);
+        return PBEUtils.decode64(encodedPassword, "PBEwithMD5andDES", cipherKey, cipherSpec);
+    }
+
+    /**
+     * Encodes a plain text password using PBEwithMD5andDES and Base64.
+     *
+     * @param plainTextPassword
+     * @return
+     * @throws Exception
+     * @throws UnsupportedEncodingException
+     * @throws PortalSetupCommand.SetupCommandException
+     */
+    public static String encodePassword(String plainTextPassword) throws Exception {
+
+        if (plainTextPassword == null) {
+            return null;
+        }
+
+        String encodedPassword = null;
+        byte[] salt = SALT.substring(0, 8).getBytes();
+        int count = COUNT;
+        char[] password = KEY.toCharArray();
+        PBEParameterSpec cipherSpec = new PBEParameterSpec(salt, count);
+        PBEKeySpec keySpec = new PBEKeySpec(password);
+        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEwithMD5andDES");
+        SecretKey cipherKey = factory.generateSecret(keySpec);
+        encodedPassword = PBEUtils.encode64(plainTextPassword.getBytes("UTF-8"), "PBEwithMD5andDES", cipherKey, cipherSpec);
+        return encodedPassword;
     }
 
     public static boolean isSetup() {

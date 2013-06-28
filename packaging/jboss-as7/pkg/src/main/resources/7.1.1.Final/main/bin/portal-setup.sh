@@ -64,4 +64,6 @@ fi
 
 eval \"$JAVA\" $JAVA_OPTS \
          -cp \"$JBOSS_MODULEPATH/org/gatein/lib/main/*\:$JBOSS_MODULEPATH/org/gatein/common/main/*\" \
-         org.gatein.portal.installer.PortalSetupCommand "$@"
+         org.gatein.portal.installer.PortalSetupCommand \
+         -f "$JBOSS_HOME/standalone/configuration/gatein/configuration.properties" \
+         "$@"

@@ -28,15 +28,16 @@ if "%OS%" == "Windows_NT" (
 rem Setup JBoss specific properties
 if "x%JAVA_HOME%" == "x" (
   set  JAVA=java
-  echo JAVA_HOME is not set. Unexpected results may occur.
-  echo Set JAVA_HOME to the directory of your local JDK to avoid this message.
+  echo JAVA_HOME is not set. Using java.exe from PATH environment variable.
+  echo Set JAVA_HOME environment variable to the directory of your local JDK to avoid this message.
 ) else (
   set "JAVA=%JAVA_HOME%\bin\java"
 )
 
 "%JAVA%" ^
-    -cp "..\lib\*" ^
+    -cp "lib\*" ^
     org.gatein.portal.installer.PortalSetupCommand ^
+    -f "gatein\conf\configuration.properties" ^
      %*
 
 :END

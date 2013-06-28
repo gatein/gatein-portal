@@ -70,6 +70,7 @@ if "x%JBOSS_MODULEPATH%" == "x" (
 "%JAVA%" ^
     -cp "%JBOSS_MODULEPATH%\org\gatein\lib\main\*;%JBOSS_MODULEPATH%\org\gatein\common\main\*" ^
     org.gatein.portal.installer.PortalSetupCommand ^
+    -f "%JBOSS_HOME%\standalone\configuration\gatein\configuration.properties" ^
      %*
 
 :END

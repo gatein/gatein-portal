@@ -40,5 +40,7 @@ fi
 #JAVA_OPTS="$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"
 
 eval \"$JAVA\" $JAVA_OPTS \
-         -cp \"../lib/*\" \
-         org.gatein.portal.installer.PortalSetupCommand "$@"
+         -cp \"$DIRNAME/../lib/*\" \
+         org.gatein.portal.installer.PortalSetupCommand \
+         -f \"$DIRNAME/../gatein/conf/configuration.properties\" \
+         "$@"

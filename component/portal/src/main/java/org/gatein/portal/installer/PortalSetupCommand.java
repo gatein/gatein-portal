@@ -26,151 +26,399 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Properties;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
-
 /**
- * Implementation of portal-setup.sh script.
- * This class ask for a first user root password for GateIn portal.
- * Encoded it and stored in configuration.properties under key gatein.portal.setup.initialpassword.root
+ * Implementation of portal-setup.sh script. Either asks for the initial root password in the console or accepts the provided -p
+ * &lt;password&gt; command line parameter. The password is encoded and stored in configuration.properties file provided in -f
+ * command line parameter.
  *
  * @author <a href="mailto:lponce@redhat.com">Lucas Ponce</a>
  *
  */
 public class PortalSetupCommand {
 
-    public static final String CONF_JBOSS = "../standalone/configuration/gatein/configuration.properties";
-    public static final String CONF_TOMCAT = "../gatein/conf/configuration.properties";
-    public static final String TOMCAT_SCRIPT = "catalina.sh";
+    /**
+     * Exception thrown by methods of {@link PortalSetupCommand}. Handlers are expected to call
+     * {@link PortalSetupCommand#usage(Throwable)}.
+     *
+     * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
+     *
+     */
+    public static class SetupCommandException extends Exception {
+
+        private static final long serialVersionUID = 2766753482448227104L;
+
+        /**
+         * @param message
+         */
+        public SetupCommandException(String message) {
+            super(message);
+        }
+
+        /**
+         * @param message
+         * @param cause
+         */
+        public SetupCommandException(String message, Throwable cause) {
+            super(message, cause);
+        }
+
+        /**
+         * @param cause
+         */
+        public SetupCommandException(Throwable cause) {
+            super(cause);
+        }
+
+    }
 
     /**
+     * The command line option -h (Help).
+     */
+    public static final String HELP_OPTION = "-h";
+
+    /**
+     * The command line option -p (Password).
+     */
+    public static final String PASSWORD_OPTION = "-p";
+
+    /**
+     * The command line option -f (Properties File Path).
+     */
+    public static final String PROPERTIES_FILE_OPTION = "-f";
+
+    /**
+     * See {@link Properties#load(java.io.InputStream)}.
+     */
+    public static final String PROPERTIES_STANDARD_ENCODING = "iso-8859-1";
+
+    /**
+     * The name of the wrapper script.
+     */
+    public static final String SCRIPT_NAME = "portal-setup";
+
+    /**
+     * We do not consider logical lines spread over more than one physical line here - see
+     * {@link Properties#load(java.io.Reader)}.
+     *
+     * @param line
+     * @return
+     */
+    private static boolean containsRootPasswordProperty(String line) {
+        int offset = 0;
+        /* ignorable whitespace at the beginning */
+        WHILE: while (offset < line.length()) {
+            switch (line.charAt(offset)) {
+                case ' ':
+                case '\t':
+                case '\f':
+                    offset++;
+                    break;
+                default:
+                    break WHILE;
+            }
+        }
+        /* Try to match propName */
+        String propName = PortalSetupService.ROOT_PASSWORD_PROPERTY;
+        for (int i = 0; i < propName.length(); i++) {
+            if (offset >= line.length() || propName.charAt(i) != line.charAt(offset++)) {
+                return false;
+            }
+        }
+        /*
+         * propName matched what is next?
+         */
+        if (offset == line.length()) {
+            /* no property value */
+            return true;
+        } else {
+            switch (line.charAt(offset)) {
+                case ' ':
+                case '\t':
+                case '\f':
+                case '=':
+                case ':':
+                    /* end of property name */
+                    return true;
+                default:
+                    /* no end of property name */
+                    return false;
+            }
+        }
+    }
+
+    /**
+     * Main method. See {@link PortalSetupCommand}.
+     *
      * @param args
      */
     public static void main(String[] args) {
 
-        System.out.print("Setting root password: ");
-        String password1 = new String(System.console().readPassword());
-        System.out.print("\nRepeat root password: ");
-        String password2 = new String(System.console().readPassword());
-
-        if (!password1.equals(password2)) {
-            System.out.println("ERROR passwords are not equals !");
-            System.exit(1);
-        }
-
-        System.out.println("Creating password...");
-        String encoded = encodePassword(password2);
-        // Reading properties
-        Properties props = new Properties();
-        boolean isTomcat = false;
-        File fCheck= new File(TOMCAT_SCRIPT);
-        File f = null;
-        if (!fCheck.exists()) {
-            File f_jboss = new File(CONF_JBOSS);
-            if (!f_jboss.exists()) {
-                System.out.println("ERROR " + CONF_JBOSS + " doesn't exist !");
-                System.exit(1);
-            }
-            f = f_jboss;
-        } else {
-            File f_tomcat = new File(CONF_TOMCAT);
-            if (!f_tomcat.exists()) {
-                System.out.println("ERROR " + CONF_TOMCAT + " doesn't exist !");
-                System.exit(1);
-            }
-            f = f_tomcat;
-            isTomcat = true;
-        }
-
-        // Check if property is present in file
-        boolean pPresent = false;
+        PortalSetupCommand cmd = new PortalSetupCommand();
         try {
-            props.load(new FileInputStream( f ));
-            if (props.getProperty(PortalSetupService.ROOT_PASSWORD_PROPERTY) != null) pPresent = true;
-        } catch (IOException e) {
-            if (!isTomcat)
-                System.out.println("ERROR problem reading " + CONF_JBOSS + " file");
-            else
-                System.out.println("ERROR problem reading " + CONF_TOMCAT + " file");
-            System.exit(1);
+            cmd.parseArgs(args);
+            cmd.validate();
+            cmd.process();
+        } catch (SetupCommandException e) {
+            cmd.usage(e);
         }
 
-        // Saving properties in raw to preserve comments and layout
-        try {
-            // Property is not in file - appending new property
-            if (!pPresent) {
-                FileWriter fw = new FileWriter(f, true);
-                BufferedWriter bw = new BufferedWriter(fw);
-                bw.write("# Modified by portal-setup.sh\n");
-                bw.write(PortalSetupService.ROOT_PASSWORD_PROPERTY + "=" + encoded);
-                bw.close();
+    }
+
+    /**
+     * Holds root's plain text password.
+     */
+    private String password;
+
+    /**
+     * Portal property file path.
+     */
+    private File propertiesFile;
+
+    /**
+     * A public constructor.
+     */
+    public PortalSetupCommand() {
+    }
+
+    /**
+     * Parses command line arguments and complains if necessary.
+     *
+     * @param args
+     */
+    public void parseArgs(String[] args) throws SetupCommandException {
+
+        if (args != null) {
+            if (args.length < 2) {
+                throw new SetupCommandException("Missing parameter " + PROPERTIES_FILE_OPTION + ".");
             } else {
-                // Reading file by line
-                StringBuffer sb = new StringBuffer();
-                FileInputStream fs = new FileInputStream(f);
-                InputStreamReader is = new InputStreamReader(fs);
-                BufferedReader br = new BufferedReader(is);
-                String line;
-                while(true) {
-                    line = br.readLine();
-                    if (line == null) break;
-                    // Check property and changes it in file
-                    if (line.contains(PortalSetupService.ROOT_PASSWORD_PROPERTY)) {
-                        line = PortalSetupService.ROOT_PASSWORD_PROPERTY + "=" + encoded;
+                for (int i = 0; i < args.length;) {
+                    String arg = args[i++];
+                    if (PASSWORD_OPTION.equals(arg)) {
+                        if (i >= args.length) {
+                            throw new SetupCommandException("Password expected after " + PASSWORD_OPTION + ".");
+                        } else {
+                            this.password = args[i++];
+                        }
+                    } else if (PROPERTIES_FILE_OPTION.equals(arg)) {
+                        if (i >= args.length) {
+                            throw new SetupCommandException("Properties file path expected after " + PROPERTIES_FILE_OPTION
+                                    + ".");
+                        } else {
+                            this.propertiesFile = new File(args[i++]);
+                        }
+                    } else if (HELP_OPTION.equals(arg)) {
+                        throw new SetupCommandException("");
+                    } else {
+                        throw new SetupCommandException("Unrecognized parameter '" + arg + "'.");
                     }
-                    sb.append(line + "<<MARK>>");
                 }
-                fs.close();
-                is.close();
-                br.close();
-                // Writing modified file
-                FileWriter fw = new FileWriter(f);
-                BufferedWriter bw = new BufferedWriter(fw);
-                for (String l : sb.toString().split("<<MARK>>")) {
-                    bw.write(l + "\n");
-                }
-                bw.close();
             }
-            // Finish
-            if (!isTomcat)
-                System.out.println(CONF_JBOSS + " file updated !");
-            else
-                System.out.println(CONF_TOMCAT + " file updated !");
-            System.out.println(PortalSetupService.ROOT_PASSWORD_PROPERTY + "=" + encoded);
+        }
+
+    }
+
+    /**
+     * Writes the changes to {@link #propertiesFile}.
+     *
+     * @throws SetupCommandException
+     *
+     */
+    public void process() throws SetupCommandException {
+
+        Properties props = new Properties();
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(propertiesFile);
+            props.load(in);
+        } catch (FileNotFoundException e) {
+            throw new SetupCommandException("File does not exist: '" + propertiesFile.getAbsolutePath() + "'", e);
         } catch (IOException e) {
-            if (!isTomcat)
-                System.out.println("ERROR problem writting " + CONF_JBOSS + " file");
-            else
-                System.out.println("ERROR problem writting " + CONF_TOMCAT + " file");
+            throw new SetupCommandException(e.getMessage(), e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        if (props.containsKey(PortalSetupService.ROOT_PASSWORD_PROPERTY)) {
+            /* edit the file */
+            BufferedReader r = null;
+
+            OutputStream out = null;
+            BufferedWriter w = null;
+            File propertiesFileBackup = new File(propertiesFile + ".backup");
+            try {
+
+                /* rename the original file */
+                propertiesFile.renameTo(propertiesFileBackup);
+
+                in = new FileInputStream(propertiesFileBackup);
+                r = new BufferedReader(new InputStreamReader(in, PROPERTIES_STANDARD_ENCODING));
+
+                out = new FileOutputStream(propertiesFile);
+                w = new BufferedWriter(new OutputStreamWriter(out, PROPERTIES_STANDARD_ENCODING));
+
+                String line = null;
+                while ((line = r.readLine()) != null) {
+                    if (containsRootPasswordProperty(line)) {
+                        writeRootPasswordLine(w);
+                    } else {
+                        w.write(line);
+                        w.write('\n');
+                    }
+                }
+
+            } catch (FileNotFoundException e) {
+                throw new SetupCommandException("File does not exist: '" + propertiesFile.getAbsolutePath() + "'", e);
+            } catch (UnsupportedEncodingException e) {
+                /* Shoud never happen with PROPERTIES_STANDARD_ENCODING = "iso-8859-1" */
+                throw new SetupCommandException(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new SetupCommandException(e.getMessage(), e);
+            } finally {
+                if (w != null) {
+                    try {
+                        w.close();
+                    } catch (IOException e) {
+                        throw new SetupCommandException(e.getMessage(), e);
+                    }
+                }
+                if (r != null) {
+                    try {
+                        r.close();
+                        propertiesFileBackup.delete();
+                    } catch (IOException e) {
+                        throw new SetupCommandException(e.getMessage(), e);
+                    }
+                }
+            }
+
+        } else {
+            /* append */
+            OutputStream out = null;
+            Writer w = null;
+            try {
+                out = new FileOutputStream(propertiesFile, true);
+                w = new OutputStreamWriter(out, PROPERTIES_STANDARD_ENCODING);
+                writeRootPasswordLine(w);
+            } catch (FileNotFoundException e) {
+                throw new SetupCommandException("File does not exist: '" + propertiesFile.getAbsolutePath() + "'", e);
+            } catch (UnsupportedEncodingException e) {
+                /* Shoud never happen with PROPERTIES_STANDARD_ENCODING = "iso-8859-1" */
+                throw new SetupCommandException(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new SetupCommandException(e.getMessage(), e);
+            } finally {
+                if (w != null) {
+                    try {
+                        w.close();
+                    } catch (IOException e) {
+                        throw new SetupCommandException(e.getMessage(), e);
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Writes the root password line to {@link #propertiesFile}.
+     *
+     * @param w
+     * @throws SetupCommandException
+     * @throws IOException
+     */
+    private void writeRootPasswordLine(Writer w) throws SetupCommandException, IOException {
+        try {
+            String encodedPassword = PortalSetupService.encodePassword(password);
+            w.write(PortalSetupService.ROOT_PASSWORD_PROPERTY);
+            w.write('=');
+            w.write(encodedPassword);
+            w.write(" # Modified by ");
+            w.write(SCRIPT_NAME);
+            w.write(".sh\n");
+        } catch (NoSuchAlgorithmException e) {
+            throw new PortalSetupCommand.SetupCommandException(e.getMessage(), e);
+        } catch (InvalidKeySpecException e) {
+            throw new PortalSetupCommand.SetupCommandException(e.getMessage(), e);
+        } catch (UnsupportedEncodingException e) {
+            throw new PortalSetupCommand.SetupCommandException(e.getMessage(), e);
+        } catch (Exception e) {
+            throw new PortalSetupCommand.SetupCommandException(e.getMessage(), e);
         }
     }
 
-    public static String encodePassword(String decodedPassword) {
-
-        if (decodedPassword == null)
-            return null;
-
-        String encodedPassword = null;
-        try {
-            byte[] salt = PortalSetupService.SALT.substring(0, 8).getBytes();
-            int count = PortalSetupService.COUNT;
-            char[] password = PortalSetupService.KEY.toCharArray();
-            PBEParameterSpec cipherSpec = new PBEParameterSpec(salt, count);
-            PBEKeySpec keySpec = new PBEKeySpec(password);
-            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBEwithMD5andDES");
-            SecretKey cipherKey = factory.generateSecret(keySpec);
-            encodedPassword = PBEUtils.encode64(decodedPassword.getBytes("UTF-8"), "PBEwithMD5andDES", cipherKey, cipherSpec);
-        } catch (Exception e) {
-            System.out.println("ERROR: root password can not be decoded!");
+    /**
+     * Prints an error message if there is any and command usage to stderr.
+     *
+     * @param string
+     */
+    public void usage(Throwable error) {
+        if (error != null) {
+            String msg = error.getMessage();
+            if (msg != null && msg.length() > 0) {
+                System.err.println("Error: " + msg);
+            }
         }
-        return encodedPassword;
+        System.err.println("================================================================================");
+        System.err.println(SCRIPT_NAME + "[ .sh | .bat ] - a utility for setting an initial password for");
+        System.err.println("                portal user 'root'.");
+        System.err.println();
+        System.err.println("Usage: " + SCRIPT_NAME + "[ .sh | .bat ] [ " + PROPERTIES_FILE_OPTION + " <path> ] [ "
+                + PASSWORD_OPTION + " <password> ] [ " + HELP_OPTION + " ]");
+        System.err.println();
+        System.err
+                .println("    " + PROPERTIES_FILE_OPTION + " <path> - path to portal properties file. If not set explicitly,");
+        System.err.println("                the default path for the given platform will be used.");
+        System.err.println();
+        System.err.println("    " + PASSWORD_OPTION
+                + " <password> - the password that will be appended to properties file given");
+        System.err.println("                in " + PROPERTIES_FILE_OPTION + ".");
+        System.err.println();
+        System.err.println("    " + HELP_OPTION + " - Print these usage instructions and exit.");
+        System.err.println();
+    }
+
+    /**
+     * Validates the parameters and asks the user for missing information on the console if necessary.
+     *
+     * @throws IOException
+     * @throws FileNotFoundException
+     *
+     */
+    public void validate() throws SetupCommandException {
+        if (propertiesFile == null) {
+            throw new SetupCommandException("Missing parameter " + PROPERTIES_FILE_OPTION + ".");
+        } else if (!propertiesFile.exists()) {
+            throw new SetupCommandException("File does not exist: '" + propertiesFile.getAbsolutePath() + "'");
+        }
+
+        if (password == null) {
+            System.out.print("Set root password: ");
+            password = new String(System.console().readPassword());
+            System.out.print("Repeat root password: ");
+            String password2 = new String(System.console().readPassword());
+
+            if (!password.equals(password2)) {
+                throw new SetupCommandException("Passwords are not equal.");
+            }
+        }
+
     }
 
 }
