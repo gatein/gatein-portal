@@ -160,7 +160,7 @@
 							</td>
 						</tr>
 						<tr>
-                            <td class="Description" colspan="2"><p><b>__MSG_description__: </b><span id="ServiceDescription">__MSG_noDescription__</span></p></td>
+                                                  <td class="Description" colspan="2"><p><span style="display: none">Information Icon</span><b>__MSG_description__: </b><span id="ServiceDescription">__MSG_noDescription__</span></p></td>
                         </tr>
 					</tbody>
 				</table> 

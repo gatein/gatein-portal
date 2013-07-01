@@ -18,7 +18,7 @@
 				<div class="RightBanner">				
 					<%if(prContext.getRemoteUser() != null) {%>
 					<div class="MiddleBanner">
-						<div class="BannerTitle"><span></span></div>
+						<div class="BannerTitle"><span style="display: none">GateIn</span></div>
 					<%} else {
 					    PortalRequestContext pcontext = Util.getPortalRequestContext(); 
 						PortalURL nodeURL = nodeurl();
@@ -26,7 +26,7 @@
 						String registerURI = nodeURL.setResource(resource).toString();
 					%>
 					<div class="MiddleBanner MiddleBannerSignin ClearFix">
-						<div class="BannerTitle"><span></span></div>
+						<div class="BannerTitle"><span style="display: none">GateIn Logo</span></div>
 						<div class="LeftLoginContainer">
 							<div class="RightLoginContainer">
 								<div class="MiddleLoginContainer Signin ClearFix">

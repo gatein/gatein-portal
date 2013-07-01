@@ -47,9 +47,9 @@ def selectedApp = uicomponent.getSelectedApplication();
 													<%= displayName %>
 												</a>
 												<% if(isSelected) { %>
-												<a class="ControlIcon DeleteIcon" title="<%=_ctx.appRes("UIOrganizer.title.deleteCategory")%>" href="javascript:;" onclick="<%= uicomponent.event("RemoveCategory", "$cName") %>"><span></span></a>
-												<a class="ControlIcon CreateNewIcon" title="<%=_ctx.appRes("UIOrganizer.title.addApplication")%>" href="javascript:;" onclick="<%= uicomponent.event("AddApplication") %>"><span></span></a>
-												<a class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIOrganizer.title.editCategory")%>" href="javascript:;" onclick="<%= uicomponent.event("EditCategory", "$cName") %>"><span></span></a>
+												<a class="ControlIcon DeleteIcon" title="<%=_ctx.appRes("UIOrganizer.title.deleteCategory")%>" href="javascript:;" onclick="<%= uicomponent.event("RemoveCategory", "$cName") %>"><span style="display: none;"><%=_ctx.appRes("UIOrganizer.title.deleteCategory")%></span></a>
+												<a class="ControlIcon CreateNewIcon" title="<%=_ctx.appRes("UIOrganizer.title.addApplication")%>" href="javascript:;" onclick="<%= uicomponent.event("AddApplication") %>"><span style="display: none;"><%=_ctx.appRes("UIOrganizer.title.addApplication")%></span></a>
+												<a class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIOrganizer.title.editCategory")%>" href="javascript:;" onclick="<%= uicomponent.event("EditCategory", "$cName") %>"><span style="display: none;"><%=_ctx.appRes("UIOrganizer.title.editCategory")%></span></a>
 												<% } %>
 											 </div>
 										</div>
@@ -70,7 +70,7 @@ def selectedApp = uicomponent.getSelectedApplication();
                                                                         displayApplicationName = encoder.encode(displayApplicationName);
 									%>
 										<a href="javascript:;" onclick="<%= uicomponent.event("SelectApplication", "$appName") %>" class="ItemLabel" title="<%= application.getDisplayName() %>"><%= displayApplicationName %><span></span></a>
-										<a class="ControlIcon DeletePortalIcon" title="<%=_ctx.appRes("UIOrganizer.title.deleteApplication")%>" href="javascript:;" onclick="<%= uicomponent.event("RemoveApplication", appName) %>"><span></span></a>
+										<a class="ControlIcon DeletePortalIcon" title="<%=_ctx.appRes("UIOrganizer.title.deleteApplication")%>" href="javascript:;" onclick="<%= uicomponent.event("RemoveApplication", appName) %>"><span style="display: none;"><%=_ctx.appRes("UIOrganizer.title.deleteApplication")%></span></a>
 									</div>
 								<% } %>	
 								</div>

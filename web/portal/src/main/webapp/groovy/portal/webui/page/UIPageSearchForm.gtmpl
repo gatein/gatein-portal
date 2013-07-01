@@ -28,7 +28,7 @@
 									}
 								%>
 								<a class="SearchIcon" href="$quickSearchlink" title="<%= _ctx.appRes("UIPageSearchForm.label.QuickSearch") %>">
-									<span></span>
+									<span style="display: none;"><%= _ctx.appRes("UIPageSearchForm.label.QuickSearch") %></span>
 								</a>
 							  </div>	
 							<%uiform.end()%>	 
