@@ -1,5 +1,5 @@
 $(function() {
-	$("#portletJQuery").click(function() {
+	$(document).delegate("#portletJQuery", "click", function() {
 		$('#result').append("<p>The JQuery's version: " + $().jquery + "</p>");
 		$('#result').children('p').fadeOut(3200);
 	});
@@ -7,7 +7,7 @@ $(function() {
 
 require(["SHARED/jquery"], function($) 
 {
-	$("#gateinJQuery").click(function() 
+	$(document).on("click", "#gateinJQuery", function() 
 	{
 		$('#result').append("<p>The JQuery's version: " + $().jquery + "</p>");
 		$('#result').children('p').fadeOut(3200);
