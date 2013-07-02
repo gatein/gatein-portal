@@ -33,7 +33,7 @@ import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import junit.framework.Assert;
+import static org.junit.Assert.*;
 import org.gatein.portal.AbstractPortalTestCase;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
@@ -52,6 +52,9 @@ import org.openqa.selenium.WebElement;
  */
 @RunWith(Arquillian.class)
 public class PortletActionURLTestCase extends AbstractPortalTestCase {
+
+    /** Euro sign. */
+    public static final String EURO = "\u20AC";
 
     @Deployment(testable = false)
     public static WebArchive createPortal() {
@@ -115,18 +118,18 @@ public class PortletActionURLTestCase extends AbstractPortalTestCase {
         m.renderWindowState = m.actionWindowState = null;
         m.renderPortletMode = m.actionPortletMode = null;
         click.click();
-        Assert.assertEquals(PortletMode.EDIT, m.actionPortletMode);
-        Assert.assertEquals(WindowState.MAXIMIZED, m.actionWindowState);
-        Assert.assertNotNull(m.actionFoo);
-        Assert.assertEquals(Arrays.asList("foo_value1"), Arrays.asList(m.actionFoo));
-        Assert.assertNotNull(m.actionBar);
-        Assert.assertEquals(Arrays.asList("bar_value1", "bar_value2"), Arrays.asList(m.actionBar));
-        Assert.assertEquals(PortletMode.HELP, m.renderPortletMode);
-        Assert.assertEquals(WindowState.MINIMIZED, m.renderWindowState);
-        Assert.assertNotNull(m.renderFoo);
-        Assert.assertEquals(Arrays.asList("foo_value2"), Arrays.asList(m.renderFoo));
-        Assert.assertNotNull(m.renderBar);
-        Assert.assertEquals(Arrays.asList("bar_value3", "bar_value4"), Arrays.asList(m.renderBar));
+        assertEquals(PortletMode.EDIT, m.actionPortletMode);
+        assertEquals(WindowState.MAXIMIZED, m.actionWindowState);
+        assertNotNull(m.actionFoo);
+        assertEquals(Arrays.asList("foo_value1"), Arrays.asList(m.actionFoo));
+        assertNotNull(m.actionBar);
+        assertEquals(Arrays.asList("bar_value1", "bar_value2"), Arrays.asList(m.actionBar));
+        assertEquals(PortletMode.HELP, m.renderPortletMode);
+        assertEquals(WindowState.MINIMIZED, m.renderWindowState);
+        assertNotNull(m.renderFoo);
+        assertEquals(Arrays.asList("foo_value2"), Arrays.asList(m.renderFoo));
+        assertNotNull(m.renderBar);
+        assertEquals(Arrays.asList("bar_value3", "bar_value4"), Arrays.asList(m.renderBar));
     }
 
     @Test
@@ -157,11 +160,45 @@ public class PortletActionURLTestCase extends AbstractPortalTestCase {
 
         String url = deploymentURL.toString() + "page1";
         driver.get(url);
-        Assert.assertNull(m.foo);
+        assertNull(m.foo);
         driver.findElement(By.id("render")).click();
-        Assert.assertEquals("foo_value", m.foo);
+        assertEquals("foo_value", m.foo);
         driver.findElement(By.id("action")).click();
-        Assert.assertNull(m.foo);
+        assertNull(m.foo);
+    }
+
+    @Test
+    public void testFormEncoding() {
+        
+        class MyPortlet extends GenericPortlet {
+
+            String param;
+            
+            @Override
+            public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+                param = request.getParameter("param");
+            }
+
+            @Override
+            public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+                response.setContentType("text/html");
+                PrintWriter writer = response.getWriter();
+                writer.append("<form action='").append(response.createActionURL().toString()).append("' method='POST'>");
+                writer.append("<input type='text' id='param' name='param' value=''/>");
+                writer.append("<input type='submit' id='trigger'/>");
+                writer.append("</form>");
+                writer.close();
+            }
+        }
+
+        //
+        MyPortlet m = new MyPortlet();
+        delegate = m;
+        String url = deploymentURL.toString() + "page1";
+        driver.get(url);
+        driver.findElement(By.id("param")).sendKeys(EURO);
+        driver.findElement(By.id("trigger")).click();
+        assertEquals(EURO, m.param);
     }
 
     public static class Portlet1 extends GenericPortlet {
