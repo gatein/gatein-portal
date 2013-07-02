@@ -19,6 +19,8 @@
 package org.gatein.portal.page;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -26,13 +28,19 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReentrantLock;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import juzu.PropertyType;
 import juzu.Response;
+import juzu.impl.common.Tools;
 import juzu.io.Chunk;
 import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
 import org.gatein.portal.layout.Layout;
 import org.gatein.portal.page.spi.RenderTask;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
@@ -139,6 +147,10 @@ class ReactivePage {
     }
 
     private void send() {
+
+        //
+        buffer.append(new Chunk.Property<String>("text/html", PropertyType.MIME_TYPE));
+
         // Get all fragments
         HashMap<String, Result.Fragment> fragments = new HashMap<String, Result.Fragment>();
         for (Map.Entry<String, Result> entry : results.entrySet()) {

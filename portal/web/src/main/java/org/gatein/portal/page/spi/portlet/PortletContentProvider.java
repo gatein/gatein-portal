@@ -252,7 +252,7 @@ public class PortletContentProvider implements ContentProvider {
             String encoding = content.getEncoding();
             if (encoding != null) {
                 Charset charset = Charset.forName(encoding);
-                status.with(PropertyType.CHARSET, charset);
+                status.with(PropertyType.ENCODING, charset);
             }
 
             // Mime type
