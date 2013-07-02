@@ -67,22 +67,4 @@
         <css-path>/skin/ResponsiveSkin/portlet/webui/UIHomePagePortlet/UIHomePagePortlet.css</css-path>
     </portlet-skin>
 
-    <!-- Mobile Portal Specific Javascript -->
-    <portal>
-      <name>mobile</name>
-      <module>
-        <script>
-          <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
-        </script>
-        <depends>
-          <module>uiMaskWorkspace</module>
-          <as>uiMaskWorkspace</as>
-        </depends>
-        <depends>
-          <module>jquery</module>
-          <as>jQuery</as>
-        </depends>
-      </module>
-    </portal>
-
 </gatein-resources>

@@ -21,7 +21,7 @@
  * The mask layer, that appears when an ajax call waits for its result
  */
 
-(function(base, uiMaskLayer) {
+(function(base, uiMaskLayer, $) {
 	
 	eXo.portal.UIMaskWorkspace = {
 	
@@ -39,6 +39,7 @@
 	      }
 	      this.maskWorkpace.style.margin = "auto";
 	      this.maskWorkpace.style.display = "block";
+          $("#UIWorkingWorkspace").addClass("background");
 	
 	      var browser = base.Browser; 
 	      browser.addOnResizeCallback('mid_maskWorkspace',
@@ -55,6 +56,7 @@
 	    uiMaskLayer.removeMask(eXo.portal.UIMaskWorkspace.maskLayer);
 	    eXo.portal.UIMaskWorkspace.maskLayer = null;
 	    this.maskWorkpace.style.display = "none";
+        $("#UIWorkingWorkspace").removeClass("background");
 	  },
 	
 	  /**
@@ -76,4 +78,4 @@
 	};
 	
 	return eXo.portal.UIMaskWorkspace;
-})(base, uiMaskLayer);
+})(base, uiMaskLayer, $);
