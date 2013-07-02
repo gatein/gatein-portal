@@ -19,6 +19,7 @@
 
 package org.gatein.portal.page;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,8 +27,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
+import juzu.Action;
 import juzu.Param;
 import juzu.Path;
 import juzu.Response;
@@ -54,6 +59,11 @@ import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.page.spi.WindowContent;
 import org.gatein.portal.page.spi.portlet.PortletContentProvider;
+import org.gatein.portal.servlet.Context;
+import org.gatein.wci.ServletContainer;
+import org.gatein.wci.ServletContainerFactory;
+import org.gatein.wci.authentication.AuthenticationException;
+import org.gatein.wci.security.Credentials;
 
 /**
  * The controller for aggregation.
@@ -61,6 +71,69 @@ import org.gatein.portal.page.spi.portlet.PortletContentProvider;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class Controller {
+
+
+    /** . */
+    private static final int AUTHENTICATED = 1;
+
+    /** . */
+    private static final int FAILED = 2;
+
+    @Inject
+    @Path("login.gtmpl")
+    private Template login;
+
+    @View
+    @Route(value = "/dologin", priority = 10)
+    public Response doLogin() {
+        try {
+            HttpServletRequest req = Context.getCurrentRequest();
+            int status = req.getRemoteUser() != null ? AUTHENTICATED : FAILED;
+
+            if (status == AUTHENTICATED) {
+                System.out.println("Authenticated :D");
+                return Response.ok("doLogin");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        //return Controller_.login();
+        return Response.ok("test");
+    }
+
+    @Action
+    @Route(value = "/actionLogin", priority = 10)
+    public Response actionLogin(String username, String password) {
+        System.out.println("====================== LOGIN ======================");
+        System.out.println("                      Username: " + username);
+        System.out.println("                      Password: " + password);
+        System.out.println("===================================================");
+
+        Credentials credentials = new Credentials(username, password);
+        ServletContainer container = ServletContainerFactory.getServletContainer();
+
+        try {
+            container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
+            return Controller_.doLogin();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (AuthenticationException ex) {
+            ex.printStackTrace();
+        }
+
+        return Controller_.login();
+    }
+
+    @View
+    @Route(value = "/login", priority = 10)
+    public Response login() {
+        return login.with().ok();
+    }
+
+
+
 
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
@@ -91,7 +164,7 @@ public class Controller {
     Template notFound;
 
     @View()
-    @Route("/{javax.portlet.path}")
+    @Route(value = "/{javax.portlet.path}", priority = 100)
     public Response index(
             RenderContext context,
             @Param(name = "javax.portlet.path", pattern = ".*")

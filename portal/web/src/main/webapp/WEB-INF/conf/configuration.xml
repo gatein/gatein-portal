@@ -179,5 +179,6 @@
   </component>
 
   <import>organization/configuration.xml</import>
+  <import>organization/organization-configuration.xml</import>
 
 </configuration>

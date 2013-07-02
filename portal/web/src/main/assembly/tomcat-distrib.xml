@@ -58,6 +58,14 @@
       <destName>portal.war</destName>
       <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/webapps/</outputDirectory>
     </file>
+    <file>
+      <source>${project.basedir}/src/main/tomcatconf/jaas.conf</source>
+      <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/conf</outputDirectory>
+    </file>
+    <file>
+      <source>${project.basedir}/src/main/tomcatconf/tomcat-users.xml</source>
+      <outputDirectory>apache-tomcat-${org.apache.tomcat.version}/conf</outputDirectory>
+    </file>
   </files>
 
 </assembly>

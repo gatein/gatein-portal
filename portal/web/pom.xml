@@ -507,6 +507,7 @@
                       <version>2.0</version>
                     </extraDependency>
                   </extraDependencies>
+                  <tomcatConfigurationFilesDirectory>src/main/tomcatconf</tomcatConfigurationFilesDirectory>
                 </configuration>
               </execution>
             </executions>

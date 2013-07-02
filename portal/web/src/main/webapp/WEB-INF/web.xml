@@ -72,4 +72,28 @@
     <url-pattern>/assets/*</url-pattern>
   </servlet-mapping>
 
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>user authentication</web-resource-name>
+      <url-pattern>/dologin</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>users</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <security-role>
+    <role-name>users</role-name>
+  </security-role>
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <realm-name>gatein-domain</realm-name>
+    <form-login-config>
+      <form-login-page>/login</form-login-page>
+      <form-error-page>/login</form-error-page>
+    </form-login-config>
+  </login-config>
+
 </web-app>

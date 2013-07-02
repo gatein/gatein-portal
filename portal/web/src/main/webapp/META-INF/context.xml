@@ -20,4 +20,12 @@
 -->
 
 <Context privileged="true">
+  <Realm className='org.apache.catalina.realm.JAASRealm'
+         appName='gatein-domain'
+         userClassNames='org.exoplatform.services.security.jaas.UserPrincipal'
+         roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal'/>
+  <Valve
+      className='org.apache.catalina.authenticator.FormAuthenticator'
+      characterEncoding='UTF-8'/>
+  <!--org.gatein.portal.jaas.BytesLoungeLoginModule required debug=true;-->
 </Context>
