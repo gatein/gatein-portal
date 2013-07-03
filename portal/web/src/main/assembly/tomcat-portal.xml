@@ -80,6 +80,7 @@
         <include>commons-pool:commons-pool</include>
         <include>org.jboss.marshalling:jboss-marshalling</include>
         <include>org.jboss.marshalling:jboss-marshalling-river</include>
+        <include>commons-lang:commons-lang</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>
