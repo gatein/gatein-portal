@@ -160,8 +160,12 @@
 	  hide : function(object) {
 	    if (typeof (object) == "string")
 	      object = document.getElementById(object);
-	    object.style.display = "none";
-	    object.style.visibility = "hidden";
+            // 508 compatibility
+	    // object.style.display = "none";
+	    // object.style.visibility = "hidden";
+            if (object.className.indexOf("skipHidden") === -1) {
+              object.className = object.className + " skipHidden";
+            }
 	  },
 	  /**
 	   * Change object to visibility state
@@ -171,7 +175,11 @@
 	   */
 	  show : function(object) {
 		this.superClass.show(object);
-	    object.style.visibility = "";
+            // 508 compatibility    
+	    // object.style.visibility = "";
+            if (object.className.indexOf("skipHidden") !== -1) {
+              object.className = object.className.replace(" skipHidden", "");
+            }
 	  }
 	};
 	

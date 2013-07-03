@@ -27,7 +27,7 @@
 											<%uiform.renderField(uiform.FIELD_GROUP)%>
 											<a class="SearchIcon" style="display: none" href="<%=uicomponent.event('FindGroup')%>"><span></span></a>
 										</div>
-										<a class="SearchIcon" href="<%=uicomponent.event('SearchGroup')%>" title="<%=uiform.getLabel(uiform.FIELD_GROUP)%>"><span style="display: none;"><%=uiform.getLabel(uiform.FIELD_GROUP)%></span></a>
+										<a class="SearchIcon" href="<%=uicomponent.event('SearchGroup')%>" title="<%=uiform.getLabel(uiform.FIELD_GROUP)%>"><span class="skipHidden"><%=uiform.getLabel(uiform.FIELD_GROUP)%></span></a>
 										<% } %>
 										<% if(uicomponent.isShowSearchUser()) { %>
 											<% if(!uicomponent.isShowSearchGroup()) {%>
@@ -39,7 +39,7 @@
 										<div class="FilterSelect">
 											<%uiform.renderField(uiform.FIELD_FILTER)%>
 										</div>	
-										<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span style="display: none;"><%=uiform.getLabel(uiform.FIELD_KEYWORD)%></span></a>
+										<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span class="skipHidden"><%=uiform.getLabel(uiform.FIELD_KEYWORD)%></span></a>
 										<% } %>
 									</div>
 									

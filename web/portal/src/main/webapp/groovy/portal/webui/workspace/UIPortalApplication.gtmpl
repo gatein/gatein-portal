@@ -110,10 +110,13 @@
 		    }
 		 }		 
 		%>
+		<style type="text/css">
+                  .skipHidden { position:absolute !important; left:-10000px !important; top:auto !important; width:1px !important; height:1px !important; overflow:hidden !important; }
+		</style>
 	</head>
 
 	<body style="height: 100%;">
- 
+	<div class="skipHidden"><a href="#skipContent"><%=_ctx.appRes("UIPortalApplication.msg.skipContent")%></a></div>
 	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
 			
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">

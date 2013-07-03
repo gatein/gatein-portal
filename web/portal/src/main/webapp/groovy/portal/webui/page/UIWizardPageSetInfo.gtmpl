@@ -23,7 +23,7 @@
 			<div class="PageInfoContainer">
 				<div class="PageNodeInfo">
 					<div class="OverflowContainer">
-						<div class="Icon"><span style="display: none;">Select Page Wizard Icon</span></div>
+						<div class="Icon"><span class="skipHidden">Select Page Wizard Icon</span></div>
 						<div class="Label"><%=_ctx.appRes(uicomponent.getId() + ".label.curentSelectedNodeInfo")%>:</div>
 						<% if(nodeName.length() > 40) {
 						      nodeName = nodeName.substring(0,39) + "...";

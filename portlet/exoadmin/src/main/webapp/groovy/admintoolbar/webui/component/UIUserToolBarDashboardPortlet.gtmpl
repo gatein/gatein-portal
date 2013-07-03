@@ -20,7 +20,7 @@
 	PortalURL nodeURL = nodeurl();
 	void renderDashboards(PortalURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
 		print """
-			<ul style="display:none" class="MenuItemContainer">
+			<ul style="display:block" class="MenuItemContainer skipHidden">
 		""";
 					for(UserNode node : nodes) {
 						renderPageNode(nodeURL, pcontext, node);

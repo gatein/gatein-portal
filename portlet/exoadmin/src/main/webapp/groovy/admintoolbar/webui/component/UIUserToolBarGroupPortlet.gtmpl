@@ -75,7 +75,7 @@
 						}
 		if(hasChild) {
 			print """
-				<ul class="MenuItemContainer portlet-menu-cascade-separator" style="position: absolute; display:none">					
+				<ul class="MenuItemContainer portlet-menu-cascade-separator skipHidden" style="position: absolute; display:block">					
 			""" ;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(child, nodeURL);
@@ -96,7 +96,7 @@
 	<li class="UITab NormalToolbarTab portlet-menu-item">
 		<a href="javascript:;" class="GroupIcon TBIcon" title="Group"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
 		<% if (!groupNavigations.isEmpty()) { %>
-		<ul style="display:none" class="MenuItemContainer portlet-menu-cascade">
+		<ul style="display:block" class="MenuItemContainer portlet-menu-cascade skipHidden">
 		<% for(nav in groupNavigations) {
 				renderGroupPageNavigation(nav, nodeURL);
 		} %>

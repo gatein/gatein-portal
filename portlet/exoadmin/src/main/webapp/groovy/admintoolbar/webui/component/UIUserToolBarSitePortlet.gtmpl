@@ -22,7 +22,7 @@
   
 	void renderPortalNavigations(PortalURL nodeURL) {
 			print """
-				<ul style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
+				<ul style="position: absolute; display:block;" class="MenuItemContainer portlet-menu-cascade skipHidden">
 			""";
 			boolean isCurrent = false;
 			String clazz = "";
@@ -122,7 +122,7 @@
 		""" ;
 		if(hasChild) {
 			print """
-				<ul class="MenuItemContainer portlet-menu-indicator" style="position: absolute; display:none">
+				<ul class="MenuItemContainer portlet-menu-indicator skipHidden" style="position: absolute; display:block">
 			""" ;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(nodeURL, child);

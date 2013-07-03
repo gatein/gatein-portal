@@ -9,7 +9,7 @@
 			<div class="WizardStepTitleBarR">
 				<div class="WizardStepTitleBarM">
 					<div class="OverflowContainer">
-						<div class="WizardIcon"><span style="display: none;">New Page Wizard Icon</span></div>
+						<div class="WizardIcon"><span class="skipHidden">New Page Wizard Icon</span></div>
 						<div class="WizardTitle">
 							<%=_ctx.appRes(uicomponent.getId() + ".label.pageCreateWizard")%>:
 						</div>

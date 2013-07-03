@@ -31,7 +31,7 @@
 <ul class="UIAdminToolbarPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab NormalToolbarTab portlet-menu-item">
 		<a class="EditorIcon TBIcon" href="#" title="$editorLabel">$editorLabel</a>
-		<ul class="MenuItemContainer portlet-menu-cascade" style="display:none;">
+		<ul class="MenuItemContainer portlet-menu-cascade skipHidden" style="display:block;">
 			<% if(userCouldEditNavigation){ %>
 				<li class="MenuItem portlet-menu-cascade-item">
 					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="$addPageLabel" class="ItemIcon AddPageIcon">$addPageLabel</a>
