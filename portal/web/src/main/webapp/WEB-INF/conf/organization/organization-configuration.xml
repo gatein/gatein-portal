@@ -29,8 +29,8 @@
     <component-plugin>
       <name>init.service.listener</name>
       <set-method>addListenerPlugin</set-method>
-      <!-- type>org.exoplatform.services.organization.OrganizationDatabaseInitializer</type -->
-      <type>org.gatein.portal.installer.SetupOrganizationDatabaseInitializer</type>
+      <type>org.exoplatform.services.organization.OrganizationDatabaseInitializer</type>
+      <!-- <type>org.gatein.portal.installer.SetupOrganizationDatabaseInitializer</type>  -->
       <description>this listener populate organization data for the first launch</description>
       <init-params>
         <value-param>
@@ -353,7 +353,7 @@
                     </field>
                     <!-- Use configuration.properties to set up root password file -->
                     <field name="password">
-                      <string></string>
+                      <string>gtn</string>
                     </field>
                     <field name="firstName">
                       <string>Root</string>
