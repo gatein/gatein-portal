@@ -67,7 +67,7 @@ public class TwitterFilter extends OAuthProviderFilter<TwitterAccessTokenContext
         try {
             twitterUser = twitter.verifyCredentials();
         } catch (TwitterException te) {
-            throw new OAuthException(OAuthExceptionCode.TWITTER_ERROR, "Error when obtaining user");
+            throw new OAuthException(OAuthExceptionCode.TWITTER_ERROR, "Error when obtaining user", te);
         }
 
         OAuthPrincipal<TwitterAccessTokenContext> oauthPrincipal = OAuthUtils.convertTwitterUserToOAuthPrincipal(twitterUser,

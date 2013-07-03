@@ -65,6 +65,9 @@
     <version.cdi.portlet.integration>1.0.2.Final</version.cdi.portlet.integration>
     <version.org.gatein.naming>1.1.0.Final</version.org.gatein.naming>
 
+    <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
+    <version.twitter4j>3.0.3</version.twitter4j>
+
     <!--
     Various log4j properties for unit tests, examples:
     -Dlog4j.debug=true : show log4j bootstrap (useful for debugging resolution to configuration property file)
@@ -143,6 +146,13 @@
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
         <version>${com.google.javascript.version}</version>
+      </dependency>
+
+      <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
+      <dependency>
+        <groupId>org.twitter4j</groupId>
+        <artifactId>twitter4j-core</artifactId>
+        <version>${version.twitter4j}</version>
       </dependency>
 
       <!-- eXo JCR stack -->
