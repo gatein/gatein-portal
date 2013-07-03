@@ -18,6 +18,9 @@
 <!-- The contents of this file will be loaded for each web application -->
 <Context sessionCookiePath="/">
 
+    <!-- Needed for SSO and OAuth integration -->
+    <Valve className="org.gatein.sso.agent.tomcat.ServletAccessValve" />
+
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
 
