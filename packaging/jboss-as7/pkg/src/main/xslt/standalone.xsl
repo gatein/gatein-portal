@@ -192,6 +192,19 @@
          <sso cache-container="web" cache-name="sso" reauthenticate="false"/>
       </xsl:if>
    </xsl:template>
+
+   <xsl:template name="cache-container-web-start">
+      <xsl:if test="$config='default'">
+         <xsl:comment>Uncommented this if you want persistent HTTP sessions among server restarts (WARN: Performance penalty)</xsl:comment>
+         <xsl:value-of select="'&#xa;&#09;&lt;!--'" disable-output-escaping="yes" />
+      </xsl:if>
+   </xsl:template>
+
+   <xsl:template name="cache-container-web-end">
+      <xsl:if test="$config='default'">
+         <xsl:value-of select="'&#xa;&#09;-->'" disable-output-escaping="yes" />
+      </xsl:if>
+   </xsl:template>
    
    <!-- matching rules -->   
 
@@ -245,6 +258,14 @@
          <xsl:apply-templates select="@*|node()" />
          <xsl:call-template name="virtual-server-clustering"/>
       </xsl:copy>
+   </xsl:template>
+
+   <xsl:template match="node()[name(.)='cache-container' and @name='web']">
+      <xsl:call-template name="cache-container-web-start"/>
+      <xsl:copy>
+         <xsl:apply-templates select="@*|node()" />
+      </xsl:copy>
+      <xsl:call-template name="cache-container-web-end"/>
    </xsl:template>
    
    <xsl:template match="@*|node()">
