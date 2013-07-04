@@ -63,15 +63,35 @@ public class PortalLoginTestCase extends AbstractPortalTestCase {
 
         portal.setWebXML(new StringAsset(servlet));
 
+
+        portal.merge(ShrinkWrap.
+                create(GenericArchive.class).
+                as(ExplodedImporter.class).
+                importDirectory("src/main/webapp/WEB-INF/classes").
+                as(GenericArchive.class), "/WEB-INF/classes", Filters.exclude("web.xml"));
+
+        portal.merge(ShrinkWrap.
+                create(GenericArchive.class).
+                as(ExplodedImporter.class).
+                importDirectory("src/main/webapp/WEB-INF/conf/organization").
+                as(GenericArchive.class), "/WEB-INF/conf/organization", Filters.exclude("web.xml"));
+
+        portal.merge(ShrinkWrap.
+                create(GenericArchive.class).
+                as(ExplodedImporter.class).
+                importDirectory("src/test/resources/conf/portal/portal").
+                as(GenericArchive.class), "/WEB-INF/conf/portal/portal", Filters.exclude("web.xml"));
+
         portal.merge(ShrinkWrap.
                 create(GenericArchive.class).
                 as(ExplodedImporter.class).
                 importDirectory("src/test/resources/WEB-INF").
                 as(GenericArchive.class), "/WEB-INF", Filters.exclude("web.xml"));
+
         portal.merge(ShrinkWrap.
                 create(GenericArchive.class).
                 as(ExplodedImporter.class).
-                importDirectory("src/test/resources/META-INF").
+                importDirectory("src/main/webapp/META-INF").
                 as(GenericArchive.class), "/META-INF", Filters.exclude("web.xml"));
 
         portal.addAsWebInfResource(new StringAsset(descriptor(Portlet1.class).exportAsString()), "portlet.xml");
