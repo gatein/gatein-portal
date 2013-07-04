@@ -1,7 +1,37 @@
-<div>
+<div class="login-unit">
+<%
+    def result = "", message = "";
+    if(flash.success != "") {
+        result = "success";
+        message = flash.success;
+    }
+    if(flash.error != "") {
+        result = "error";
+        message = flash.error;
+    }
+%>
+    <div id="loginMessage" class="alert alert-${result}" style="display:${result == '' ? 'none' : 'block' }" >
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        ${message}
+    </div>
     <form method="post" action="@{Controller.actionLogin()}">
-        <input type="text" name="username"/>
-        <input type="password" name="password"/>
-        <input type="submit" value="Login"/>
+        <table>
+            <tbody>
+                <tr>
+                    <td>Username: </td>
+                    <td><input type="text" name="username"/></td>
+                </tr>
+                <tr>
+                    <td>Password: </td>
+                    <td><input type="password" name="password"/>/td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Login"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </form>
 </div>

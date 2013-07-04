@@ -71,70 +71,6 @@ import org.gatein.wci.security.Credentials;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class Controller {
-
-
-    /** . */
-    private static final int AUTHENTICATED = 1;
-
-    /** . */
-    private static final int FAILED = 2;
-
-    @Inject
-    @Path("login.gtmpl")
-    private Template login;
-
-    @View
-    @Route(value = "/dologin", priority = 10)
-    public Response doLogin() {
-        try {
-            HttpServletRequest req = Context.getCurrentRequest();
-            int status = req.getRemoteUser() != null ? AUTHENTICATED : FAILED;
-
-            if (status == AUTHENTICATED) {
-                System.out.println("Authenticated :D");
-                return Response.ok("doLogin");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        //return Controller_.login();
-        return Response.ok("test");
-    }
-
-    @Action
-    @Route(value = "/actionLogin", priority = 10)
-    public Response actionLogin(String username, String password) {
-        System.out.println("====================== LOGIN ======================");
-        System.out.println("                      Username: " + username);
-        System.out.println("                      Password: " + password);
-        System.out.println("===================================================");
-
-        Credentials credentials = new Credentials(username, password);
-        ServletContainer container = ServletContainerFactory.getServletContainer();
-
-        try {
-            container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
-            return Controller_.doLogin();
-        } catch (ServletException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (AuthenticationException ex) {
-            ex.printStackTrace();
-        }
-
-        return Controller_.login();
-    }
-
-    @View
-    @Route(value = "/login", priority = 10)
-    public Response login() {
-        return login.with().ok();
-    }
-
-
-
-
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
@@ -164,7 +100,7 @@ public class Controller {
     Template notFound;
 
     @View()
-    @Route(value = "/{javax.portlet.path}", priority = 100)
+    @Route(value = "/{javax.portlet.path}", priority = 2)
     public Response index(
             RenderContext context,
             @Param(name = "javax.portlet.path", pattern = ".*")
