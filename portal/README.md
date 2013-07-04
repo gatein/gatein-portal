@@ -96,15 +96,60 @@ Note that some parameters are omitted according to the resource URL cache level:
 2. PORTLET cache level : only the target window parameter is present
 3. FULL cache level : only type (1), target (2), resource parameters (3) and resource id (4)
 
-# Page Layout
+# Page composition
 
-The new page layout based on the In [Place Editing](https://community.jboss.org/wiki/InPlaceEditing) proposal has been a bit sketched. The existing container based UI structure is kept however it is used differently. Instead of having a container representing a page component, a container represents a visual zone as per defined in the spec.
+The new page composition based on the In [Place Editing](https://community.jboss.org/wiki/InPlaceEditing) proposal has been a bit sketched. The existing container based UI structure is kept however it is used differently. Instead of having a container representing a page component, a container represents a visual zone as per defined in the spec.
 
-Deployment descriptor has been adapted to this and the new 2.0 namespace provides the capabilty to name zones and windows with a name:
+Deployment descriptor has been adapted to this and the new 2.0 namespace provides the capability to name zones and windows with a name:
 
 - the XML is simpler
 - windows are named instead of having a generated UUID like before: so the new URLs are stables (now they were using UUID for scoping the window navigational state)
 
+## Templating
+
+This section defines how templating occurs for producing a *web page*.
+
+### Nested templates
+
+GateIn 3.x introduced the notion of nested templates to provide elements related to the hierarchical entities of a page:
+
+* The server : **shared layout**
+* The site : **site layout**
+* The page : **page layout**
+
+Those concepts are conserved in GateIn 4 since they proved to be simple and powerful.
+
+## Layout engine
+
+GateIn 4 defines a layout engine that is a simple decoupling between the controller and the underlying templating technology. The layout engine defines the contract for rendering a page in GateIn.
+
+At runtime GateIn does not make any assumption about the template itself, the goal here is to provide as much as freedom in the templates as we recognize that the base GateIn templates may not cover all the possible use cases.
+
+The layout rendering is based on the *Edit In Place* specification known as *zone based layout*. Each layout is clearly identified by the original spec and the underlying physical template should conform to it.
+
+To provide this degree of independance, the physical layout for a specific layout can be configured.
+
+### Layout blending
+
+When GateIn renders a page, it will assemble the three layouts to produce the final page.
+
+### Layout zones
+
+The *Edit In Place* specification defines a naming for the various zones of a template which are natural numbers from **1 to n**.
+
+Extra zones are used and defined for providing more flexibility:
+
+* **header** zone : rendered by default in the site layout
+* **footer** zone : rendered by default in the site layout
+* etc…
+
+Keep in mind that the structural pages (whether it is the page layout, the site layour or the shared layout) have no restriction upon the zones to be used. So normally a page layout may contain windows scoped in the header and a site layout may contain windows for the zone *1*.
+
+As for now we have not yet defined how the windows from different layout can be assembled in a page, or even interacted with. We have just identified that this can be something powerful to use that provides extra flexiblity.
+
+## Grid composition
+
+todo.
 
 # Deployment descriptor
 
