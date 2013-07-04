@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import juzu.Path;
 import juzu.Response;
 import juzu.View;
+import juzu.request.RequestContext;
 import juzu.request.UserContext;
 import juzu.template.Template;
 import org.gatein.portal.mop.description.DescriptionService;
@@ -49,7 +50,7 @@ public class Controller {
     Template index;
 
     @View
-    public Response.Content index(UserContext userContext) {
+    public Response.Content index(UserContext userContext, RequestContext requestContext) {
 
         //
         NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
@@ -60,8 +61,16 @@ public class Controller {
         //
         NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.CHILDREN, null);
 
+        String username = requestContext.getSecurityContext().getRemoteUser();
+        if(username == null || username.isEmpty()) {
+            username = "_GUEST_";
+        }
+
         //
-        return index.with().set("root", root.getNode()).ok();
+        return index.with()
+                .set("root", root.getNode())
+                .set("username", username)
+                .ok();
     }
 
 }
