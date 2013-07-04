@@ -60,6 +60,12 @@ public class PortalClusteredSSOSupportValve extends ValveBase implements Lifecyc
 
     private SingleSignOn sso = null;
 
+    private boolean requireClusterProfile = true;
+
+    public void setRequireClusterProfile(boolean requireClusterProfile) {
+        this.requireClusterProfile = requireClusterProfile;
+    }
+
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
         if (sso != null) {
@@ -89,7 +95,7 @@ public class PortalClusteredSSOSupportValve extends ValveBase implements Lifecyc
     }
 
     private SingleSignOn findSSOValve() {
-        if (!ExoContainer.getProfiles().contains("cluster")) {
+        if (requireClusterProfile && !ExoContainer.getProfiles().contains("cluster")) {
             return null;
         }
 

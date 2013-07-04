@@ -24,6 +24,10 @@
   <security-domain>java:/jaas/gatein-domain</security-domain>
   <valve>
     <class-name>org.gatein.portal.security.jboss.PortalClusteredSSOSupportValve</class-name>
+    <param>
+      <param-name>requireClusterProfile</param-name>
+      <param-value>true</param-value>
+    </param>
   </valve>
   <valve>
     <class-name>org.gatein.sso.integration.SSODelegateValve</class-name>
