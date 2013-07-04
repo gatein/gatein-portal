@@ -612,7 +612,7 @@
                   $(this).parents(".MenuItem").off("touchstart.gtnMobile");
                   //Note: due to mobile safari not propagating events if a content change occurs in the dom
                   //we cannot use the one method here and we need to manually check if the menu is open or not.
-                  if ($(this).children(".MenuItemContainer").css("display") != "block" || event.target.gtnMouseOver)
+                  if ($(this).children(".MenuItemContainer").css("display") != "block" || $(this).children(".MenuItemContainer").hasClass("skipHidden") || event.target.gtnMouseOver)
                   {
                     $(this).on("click.gtnMobile", function(event)
                     {
