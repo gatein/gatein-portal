@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
+  <!-- -->
+  <component>
+    <type>org.gatein.portal.portlet.PortletAppManager</type>
+  </component>
+
+  <!-- -->
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamSiteStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.site.SiteServiceImpl</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamLayoutStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.layout.LayoutServiceImpl</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamDescriptionStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.description.DescriptionServiceImpl</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamNavigationStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.navigation.NavigationServiceImpl</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamPageStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.page.PageServiceImpl</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamCustomizationStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.customization.CustomizationServiceImpl</type>
+  </component>
+
+  <!-- -->
+  <component>
+    <type>org.gatein.portal.importer.ModelImporter</type>
+    <init-params>
+      <value-param>
+        <name>default.import.mode</name>
+        <value>merge</value>
+      </value-param>
+      <value-param>
+        <name>default.portal</name>
+        <description>The default portal for checking db is empty or not</description>
+        <value>classic</value>
+      </value-param>
+      <value-param>
+        <name>page.templates.location</name>
+        <description>the path to the location that contains Page templates</description>
+        <value>war:/conf/portal/template/pages</value>
+      </value-param>
+      <value-param>
+        <name>override</name>
+        <description>The flag parameter to decide if portal metadata is overriden on restarting server</description>
+        <value>false</value>
+      </value-param>
+      <object-param>
+        <name>site.templates.location</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+          <field name="location">
+            <string>war:/conf/portal</string>
+          </field>
+          <field name="portalTemplates">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>basic</string>
+              </value>
+              <value>
+                <string>classic</string>
+              </value>
+            </collection>
+          </field>
+          <field name="groupTemplates">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>group</string>
+              </value>
+            </collection>
+          </field>
+          <field name="userTemplates">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>user</string>
+              </value>
+            </collection>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>portal.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>classic</string>
+              </value>
+              <value>
+                <string>mobile</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>portal</string>
+          </field>
+          <field name="templateLocation">
+            <string>war:/conf/portal/</string>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>group.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>/platform/administrators</string>
+              </value>
+              <value>
+                <string>/platform/users</string>
+              </value>
+              <value>
+                <string>/platform/guests</string>
+              </value>
+              <value>
+                <string>/organization/management/executive-board</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>group</string>
+          </field>
+          <field name="templateLocation">
+            <string>war:/conf/portal</string>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>user.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>root</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>user</string>
+          </field>
+          <field name="templateLocation">
+            <string>war:/conf/portal</string>
+          </field>
+        </object>
+      </object-param>
+    </init-params>
+  </component>
+
+  <import>war:/conf/organization/configuration.xml</import>
+  <import>war:/conf/organization/organization-configuration.xml</import>
+</configuration>

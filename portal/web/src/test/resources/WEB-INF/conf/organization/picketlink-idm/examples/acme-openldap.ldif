@@ -1,0 +1,160 @@
+dn: o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: dcObject
+objectclass: organization
+o: acme
+dc: acme
+
+dn: ou=placeholder,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: placeholder
+description: entry used to satisfy schmema restrictions for required member attribute in groupOfNames objectClass
+
+dn: ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: People
+
+dn: uid=admin,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: admin
+cn: Administrator
+sn: Duke
+userPassword: admin
+mail: admin@acme.example.com
+
+dn: uid=user,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: user
+cn: User
+sn: Sample
+userPassword: user
+mail: user@acme.example.com
+
+dn: uid=jduke,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: jduke
+cn: Java
+sn: Duke
+userPassword: theduke
+mail: jduke@acme.example.com
+
+dn: uid=jduke1,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: jduke1
+cn: Java 1
+sn: Duke1
+userPassword: theduke
+mail: jduke1@acme.example.com
+
+
+dn: uid=jduke2,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: jduke2
+cn: Java 2
+sn: Duke2
+userPassword: theduke
+mail: jduke2@acme.example.com
+
+dn: uid=jduke3,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: jduke3
+cn: Java 3
+sn: Duke3
+userPassword: theduke
+mail: jduke3@acme.example.com
+
+dn: uid=jduke4,ou=People,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: inetOrgPerson
+objectclass: person
+uid: jduke4
+cn: Java 4
+sn: Duke4
+userPassword: theduke
+mail: jduke4@acme.example.com
+
+dn: ou=Roles,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: Roles
+
+dn: cn=admins,ou=Roles,o=acme,dc=my-domain,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: admins
+description: Portal admin role
+member: uid=admin,ou=People,o=acme,dc=my-domain,dc=com
+
+dn: cn=employees,ou=Roles,o=acme,dc=my-domain,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: employees
+description: ACME Employees
+member: uid=admin,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=user,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke1,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke2,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke3,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke4,ou=People,o=acme,dc=my-domain,dc=com
+
+dn: cn=echo,ou=Roles,o=acme,dc=my-domain,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: echo
+description: Echo role
+member: uid=jduke1,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke3,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke4,ou=People,o=acme,dc=my-domain,dc=com
+
+dn: cn=echo1,ou=Roles,o=acme,dc=my-domain,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: echo1
+description: Echo1 role
+member: uid=jduke2,ou=People,o=acme,dc=my-domain,dc=com
+member: uid=jduke3,ou=People,o=acme,dc=my-domain,dc=com
+
+dn: cn=theduke,ou=Roles,o=acme,dc=my-domain,dc=com
+objectClass: groupOfNames
+objectClass: top
+cn: theduke
+description: TheDuke role
+member: uid=jduke,ou=People,o=acme,dc=my-domain,dc=com
+
+dn: ou=OrganizationUnits,o=acme,dc=my-domain,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: OrganizationUnits
+
+dn: cn=foo,ou=OrganizationUnits,o=acme,dc=my-domain,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: foo
+description: Foo organization unit
+member: uid=admin,ou=People,o=acme,dc=my-domain,dc=com
+
+
+
+dn: cn=bar,ou=OrganizationUnits,o=acme,dc=my-domain,dc=com
+objectClass: top
+objectClass: groupOfNames
+cn: bar
+description: Bar organization
+member: uid=admin,ou=People,o=acme,dc=my-domain,dc=com
+
+

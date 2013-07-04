@@ -1,0 +1,16 @@
+dn: o=gatein,dc=my-domain,dc=com
+objectclass: top
+objectclass: organization
+o: gatein
+
+dn: o=portal,o=gatein,dc=my-domain,dc=com
+objectclass: top
+objectclass: organization
+o: portal
+
+dn: ou=placeholder,o=portal,o=gatein,dc=my-domain,dc=com
+objectclass: top
+objectclass: organizationalUnit
+ou: placeholder
+description: entry used to satisfy schmema restrictions for required member attribute in groupOfNames objectClass
+

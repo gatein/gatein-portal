@@ -281,6 +281,12 @@
         <version>2.14.1</version>
         <configuration>
           <reuseForks>false</reuseForks>
+          <systemProperties>
+            <property>
+              <name>java.security.auth.login.config</name>
+              <value>${basedir}/src/main/tomcatconf/jaas.conf</value>
+            </property>
+          </systemProperties>
         </configuration>
       </plugin>
 

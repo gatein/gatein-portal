@@ -14,7 +14,7 @@
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         ${message}
     </div>
-    <form method="post" action="@{Controller.actionLogin()}">
+    <form id="login-form" method="post" action="@{Controller.actionLogin()}">
         <table>
             <tbody>
                 <tr>
