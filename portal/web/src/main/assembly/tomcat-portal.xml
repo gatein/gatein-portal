@@ -72,7 +72,6 @@
         <include>javax.transaction:jta</include>
         <include>org.jboss.jbossts:jbossjta</include>
         <include>org.infinispan:infinispan-core</include>
-        <include>org.infinispan:infinispan-tree</include>
         <include>jgroups:jgroups</include>
         <include>org.hibernate.javax.persistence:hibernate-jpa-2.0-api</include>
         <include>org.hsqldb:hsqldb</include>

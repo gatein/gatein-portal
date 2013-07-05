@@ -20,27 +20,23 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+  
   <modelVersion>4.0.0</modelVersion>
-
+  
   <parent>
     <groupId>org.gatein.portal</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>component</artifactId>
     <version>4.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>component</artifactId>
+  <artifactId>component.web</artifactId>
   <packaging>pom</packaging>
-
-  <name>GateIn Portal Component</name>
+  
+  <name>GateIn Portal Component Web</name>
 
   <modules>
-    <module>test</module>
-    <module>common</module>
-    <module>application-registry</module>
-    <module>portal</module>
-    <module>identity</module>
-    <module>web</module>
+    <module>oauth-web</module>
+    <module>oauth-common</module>
+    <module>security</module>
   </modules>
-
 </project>

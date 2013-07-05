@@ -46,8 +46,8 @@
     <org.gatein.common.version>2.1.0.Final</org.gatein.common.version>
     <org.gatein.wci.version>2.3.0.Final</org.gatein.wci.version>
     <org.gatein.pc.version>2.4.0.Final</org.gatein.pc.version>
-    <org.gatein.sso.version>1.3.0.Final</org.gatein.sso.version>
-    <org.picketlink.idm>1.4.1.Final</org.picketlink.idm>
+    <org.gatein.sso.version>1.3.4.Final</org.gatein.sso.version>
+    <org.picketlink.idm>1.4.3.Final</org.picketlink.idm>
     <org.gatein.wsrp.version>2.2.1.Final</org.gatein.wsrp.version>
     <org.gatein.mop.version>1.2.0.Final</org.gatein.mop.version>
     <org.gatein.mgmt.version>1.1.0.Final</org.gatein.mgmt.version>
@@ -71,6 +71,9 @@
     <!-- TODO: replace version.apache.commons-httpclient in gatein-dep with this: -->
     <version.org.apache.httpcomponents>4.1.2</version.org.apache.httpcomponents>
     <version.org.apache.httpcomponents.httpcore>4.1.4</version.org.apache.httpcomponents.httpcore>
+
+    <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
+    <version.twitter4j>3.0.3</version.twitter4j>
 
     <!-- SSO deps -->
     <version.cas.client>3.2.1</version.cas.client>
@@ -135,7 +138,7 @@
       <dependency>
         <groupId>org.gatein</groupId>
         <artifactId>gatein-dep</artifactId>
-        <version>1.2.0.Final</version>
+        <version>1.2.1.Final</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -145,6 +148,13 @@
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
         <version>${com.google.javascript.version}</version>
+      </dependency>
+
+      <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
+      <dependency>
+        <groupId>org.twitter4j</groupId>
+        <artifactId>twitter4j-core</artifactId>
+        <version>${version.twitter4j}</version>
       </dependency>
 
       <!-- eXo JCR stack -->
@@ -505,6 +515,32 @@
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
+        <artifactId>component.web</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>component.web.security</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>component.web.oauth-common</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>component.web.oauth-common</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>component.web.oauth-web</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>component.test.core</artifactId>
         <version>4.0.0-SNAPSHOT</version>
       </dependency>
@@ -843,11 +879,6 @@
       <dependency>
         <groupId>org.infinispan</groupId>
         <artifactId>infinispan-core</artifactId>
-        <version>${org.infinispan.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.infinispan</groupId>
-        <artifactId>infinispan-tree</artifactId>
         <version>${org.infinispan.version}</version>
       </dependency>
       <dependency>

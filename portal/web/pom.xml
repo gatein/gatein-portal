@@ -409,10 +409,6 @@
           <artifactId>infinispan-core</artifactId>
         </dependency>
         <dependency>
-          <groupId>org.infinispan</groupId>
-          <artifactId>infinispan-tree</artifactId>
-        </dependency>
-        <dependency>
           <groupId>org.hsqldb</groupId>
           <artifactId>hsqldb</artifactId>
         </dependency>
