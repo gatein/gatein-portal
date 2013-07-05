@@ -1,18 +1,22 @@
 <div class="navbar">
     <div class="navbar-inner">
         <div class="container">
-            <ul class="nav">
-                <li><a href="/portal/">Home</a></li>
-                <% root.children.each { node -> %>
-                <li><a href="${node.link}">${node.label}</a></li>
-                <% } %>
-            </ul>
-            <div class="user">
-                <%if(username == "_GUEST_"){%>
-                    <a href="/portal/dologin">Login</a>
-                <%} else {%>
-                    Hello ${username} [<a href="/portal/dologout">Logout</a>]
-                <%}%>
+            <div class="nav-collapse collapse navbar-responsive-collapse">
+                <ul class="nav">
+                    <li><a href="/portal/">Home</a></li>
+                    <% root.children.each { node -> %>
+                    <li><a href="${node.link}">${node.label}</a></li>
+                    <% } %>
+                </ul>
+                <ul class="nav pull-right">
+                    <%if(username == "_GUEST_"){%>
+                    <li>
+                        <a href="/portal/dologin">Login</a>
+                    </li>
+                    <%} else {%>
+                    <li class="dropdown" style="padding-top:10px;">Account [<a href="/portal/dologout" class="dropdown-toggle" data-toggle="dropdown" style="display: inline;padding: 0;">Logout</a>]</li>
+                    <%}%>
+                </ul>
             </div>
         </div>
     </div>
