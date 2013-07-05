@@ -12,6 +12,7 @@ import juzu.Response;
 import juzu.Route;
 import juzu.View;
 import juzu.template.Template;
+import org.gatein.portal.mop.PropertyType;
 import org.gatein.portal.servlet.Context;
 import org.gatein.wci.ServletContainer;
 import org.gatein.wci.ServletContainerFactory;
@@ -101,6 +102,22 @@ public class Controller {
     @View
     @Route(value = "/login", priority = 1)
     public Response login() {
-        return login.with().ok();
+        try {
+            HttpServletRequest req = Context.getCurrentRequest();
+            int status = req.getRemoteUser() != null ? AUTHENTICATED : FAILED;
+
+            String initURL = req.getParameter("initURL");
+            if(initURL == null || initURL.isEmpty()) {
+                initURL = req.getContextPath();
+            }
+
+            if (status == AUTHENTICATED) {
+                return Response.redirect(initURL);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return login.with().ok().with(juzu.PropertyType.STYLESHEET, "login-stylesheet");
     }
 }
