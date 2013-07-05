@@ -56,6 +56,22 @@
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>component.web.security</artifactId>
+    </dependency>    
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.test.core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.identity</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.identity</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.json</groupId>
