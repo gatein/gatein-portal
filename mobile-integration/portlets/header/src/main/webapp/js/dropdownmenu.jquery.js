@@ -116,8 +116,9 @@
 
         function updateMenu(actionItem) {
                 var menuCategory = actionItem.parent(settings.menuItem);
-                if (menuCategory.children(settings.menuElement).length === 0 && actionItem.attr('href'))
+                if (!menuCategory.attr("gtn.ajax.fetching") && menuCategory.children(settings.menuElement).length === 0 && actionItem.attr('href'))
                 {
+                 menuCategory.attr("gtn.ajax.fetching", true);
                  $.ajax({
                     type: "POST",
                     url: actionItem.attr('href').substring(1),
@@ -125,6 +126,7 @@
                     dataType: "text",
                     success: function(data) {
                         menuCategory.append(data);
+                        menuCategory.attr("gtn.ajax.fetching", false);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         console && console.log("Ajax error");
