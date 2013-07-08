@@ -165,6 +165,13 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
                     container.getChildren().add(unmarshalGadgetApplication(navigator.fork()));
                     current = navigator.sibling();
                     break;
+                case PAGE_BODY:
+                    if (container.getChildren() == null) {
+                        container.setChildren(new ArrayList<ModelObject>());
+                    }
+                    container.getChildren().add(new PageBody());
+                    current = navigator.sibling();
+                    break;
                 case UNKNOWN:
                     throw unknownElement(navigator);
                 default:

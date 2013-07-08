@@ -234,6 +234,13 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
             throw expectedElement(navigator, Element.ACCESS_PERMISSIONS);
         if (portalLayout == null) {
             portalLayout = PortalConfig.DEFAULT_LAYOUT;
+        } else {
+            int count = countPageBodyElements(portalLayout, 0);
+            if (count < 1) {
+                throw new StaxNavException("No page-body element found.");
+            } else if (count > 1) {
+                throw new StaxNavException("Multiple page-body elements found.");
+            }
         }
 
         portalConfig.setPortalLayout(portalLayout);
@@ -258,5 +265,18 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
         public String getLocalName() {
             return name;
         }
+    }
+
+    private static int countPageBodyElements(Container container, int pageBodyCount) {
+        if (container.getChildren() != null) {
+            for (ModelObject child : container.getChildren()) {
+                if (child instanceof PageBody) {
+                    pageBodyCount++;
+                } else if (child instanceof Container) {
+                    pageBodyCount = countPageBodyElements((Container) child, pageBodyCount);
+                }
+            }
+        }
+        return pageBodyCount;
     }
 }

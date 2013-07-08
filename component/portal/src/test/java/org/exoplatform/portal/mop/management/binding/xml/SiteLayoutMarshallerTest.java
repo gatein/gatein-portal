@@ -88,16 +88,6 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertNull(layout.getAccessPermissions());
         List<ModelObject> children = data.getPortalLayout().getChildren();
         assertEquals(5, children.size());
-        int bodyCount = 0;
-        for (ModelObject component : children) {
-            if (component instanceof Application) {
-            } else if (component instanceof PageBody) {
-                bodyCount++;
-            } else {
-                fail("Only application data and one body data should be created for a portal layout.");
-            }
-        }
-        assertEquals(1, bodyCount);
 
         // Verify banner portlet app
         {
@@ -212,5 +202,46 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertEquals(2, actual.getPortalLayout().getChildren().size());
 
         compareComponents(expected.getPortalLayout().getChildren(), actual.getPortalLayout().getChildren());
+    }
+
+    public void testPortalWithPageBodyInContainer() {
+        SiteLayoutMarshaller marshaller = new SiteLayoutMarshaller();
+        PortalConfig data = marshaller.unmarshal(getClass().getResourceAsStream(
+                "/org/exoplatform/portal/mop/management/portal-pagebody.xml"));
+        assertNotNull(data);
+        assertEquals("classic", data.getName());
+        assertEquals("site-label", data.getLabel());
+        assertEquals("site-description", data.getDescription());
+        assertEquals("en", data.getLocale());
+        assertEquals("Everyone", Utils.join(";", data.getAccessPermissions()));
+        assertEquals("*:/platform/administrators", data.getEditPermission());
+        assertNotNull(data.getProperties());
+        assertEquals(1, data.getProperties().size());
+        assertTrue(data.getProperties().containsKey("sessionAlive"));
+        assertEquals("onDemand", data.getProperties().get("sessionAlive"));
+
+        // Verify portal layout container only has children
+        assertNotNull(data.getPortalLayout());
+        Container layout = data.getPortalLayout();
+        assertNull(layout.getStorageId());
+        assertNull(layout.getId());
+        assertNull(layout.getName());
+        assertNull(layout.getIcon());
+        assertNull(layout.getTemplate());
+        assertNull(layout.getFactoryId());
+        assertNull(layout.getTitle());
+        assertNull(layout.getDescription());
+        assertNull(layout.getWidth());
+        assertNull(layout.getHeight());
+        assertNull(layout.getAccessPermissions());
+        List<ModelObject> children = data.getPortalLayout().getChildren();
+        assertEquals(5, children.size());
+
+        // Verify container w/ page-body
+        Container container = (Container) layout.getChildren().get(3);
+        assertNotNull(container.getChildren());
+        assertEquals(2, container.getChildren().size());
+        PageBody body = (PageBody) ((Container) container.getChildren().get(0)).getChildren().get(0);
+        assertNotNull(body);
     }
 }
