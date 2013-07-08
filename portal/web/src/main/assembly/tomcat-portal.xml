@@ -50,6 +50,20 @@
         <include>org.gatein.portal:component.common</include>
         <include>org.gatein.portal:component.portal</include>
         <include>org.gatein.portal:component.identity</include>
+        <!--<include>org.gatein.sso:sso-auth-callback</include>-->
+        <include>org.gatein.sso:sso-agent</include>
+        <!--<include>org.gatein.sso:spnego</include>-->
+        <include>org.gatein.sso:sso-integration</include>
+        <!--<include>org.gatein.sso:sso-saml-plugin</include>-->
+        <include>org.gatein.portal:component.web.oauth-common</include>
+        <include>org.gatein.portal:component.web.oauth-web</include>
+        <include>org.gatein.portal:component.web.security</include>
+        <!--<include>org.exoplatform.ws:exo.ws.commons</include>
+        <include>org.exoplatform.ws:exo.ws.rest.core</include>
+        <include>org.exoplatform.ws:exo.ws.frameworks.servlet</include>
+        <include>org.exoplatform.ws:exo.ws.rest.ext</include>
+        <include>org.exoplatform.ws:exo.ws.frameworks.json</include>-->
+        <include>org.twitter4j:twitter4j-core</include>
         <include>org.gatein.portal:portal.common</include>
         <include>org.gatein.portal:portal.ui</include>
         <include>org.exoplatform.kernel:exo.kernel.component.common</include>

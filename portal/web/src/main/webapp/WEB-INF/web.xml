@@ -24,6 +24,34 @@
     <filter-class>org.gatein.portal.common.kernel.KernelLifeCycle</filter-class>
     <async-supported>true</async-supported>
   </filter>
+
+  <filter>
+    <filter-name>OAuthPreFilter</filter-name>
+    <filter-class>org.gatein.portal.servlet.OAuthPreFilter</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+  <filter-mapping>
+    <filter-name>OAuthPreFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>OAuthDelegateFilter</filter-name>
+    <filter-class>org.gatein.security.oauth.webapi.OAuthDelegateFilter</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>OAuthDelegateFilter</filter-name>
+    <!--<url-pattern>/twitterAuth</url-pattern>-->
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!--<filter-mapping>
+    <filter-name>OAuthDelegateFilter</filter-name>
+    <url-pattern>/login</url-pattern>
+  </filter-mapping>-->
+
+
   <filter-mapping>
     <filter-name>KernelLifeCycle</filter-name>
     <servlet-name>PortalServlet</servlet-name>

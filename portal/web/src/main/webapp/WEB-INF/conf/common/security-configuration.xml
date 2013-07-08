@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
 
     Copyright (C) 2009 eXo Platform SAS.
@@ -19,15 +20,23 @@
 
 -->
 
-<Context privileged="true">
-  <Realm className='org.apache.catalina.realm.JAASRealm'
-         appName='gatein-domain'
-         userClassNames='org.exoplatform.services.security.jaas.UserPrincipal'
-         roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal'/>
-  <Valve
-      className='org.apache.catalina.authenticator.FormAuthenticator'
-      characterEncoding='UTF-8'/>
-  <!--org.gatein.portal.jaas.BytesLoungeLoginModule required debug=true;-->
+<configuration
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+  <!--<component>
+    <key>org.exoplatform.services.security.SecurityService</key>
+    <type>org.exoplatform.services.security.impl.SecurityServiceImpl</type>
+    <init-params>
+      <value-param>
+        <name>security.authentication</name>
+        <value>sso</value>
+      </value-param>
+      <value-param>
+        <name>security.sso-authentication</name>
+        <value>cas</value>
+      </value-param>
+    </init-params>
+  </component>-->
 
-  <!--<Valve className="org.gatein.sso.agent.tomcat.ServletAccessValve" />-->
-</Context>
+</configuration>

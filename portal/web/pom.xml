@@ -172,6 +172,71 @@
       <artifactId>component.common</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.web.oauth-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.web.oauth-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>component.web.security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.twitter4j</groupId>
+      <artifactId>twitter4j-core</artifactId>
+    </dependency>
+
+    <!-- SSO -->
+    <dependency>
+      <groupId>org.gatein.sso</groupId>
+      <artifactId>sso-auth-callback</artifactId>
+      <version>${org.gatein.sso.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.sso</groupId>
+      <artifactId>sso-agent</artifactId>
+      <version>${org.gatein.sso.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.sso</groupId>
+      <artifactId>spnego</artifactId>
+      <version>${org.gatein.sso.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.sso</groupId>
+      <artifactId>sso-integration</artifactId>
+      <version>${org.gatein.sso.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.sso</groupId>
+      <artifactId>sso-saml-plugin</artifactId>
+      <version>${org.gatein.sso.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.commons</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.servlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.rest.ext</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.rest.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.ws</groupId>
+      <artifactId>exo.ws.frameworks.json</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
     </dependency>

@@ -111,8 +111,17 @@ public class Controller {
                 initURL = req.getContextPath();
             }
 
+            String username = req.getParameter("username");
+            String password = req.getParameter("password");
+
             if (status == AUTHENTICATED) {
                 return Response.redirect(initURL);
+
+            } else if(username != null && password != null) {
+                Credentials credentials = new Credentials(username, password);
+                ServletContainer container = ServletContainerFactory.getServletContainer();
+                container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
+                return Controller_.doLogin();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
