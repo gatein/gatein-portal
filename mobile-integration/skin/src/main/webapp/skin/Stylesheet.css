@@ -36,6 +36,8 @@
 
 @import url(ResponsiveSkin/portal/webui/component/UILoginForm/UILoginForm.css);
 
+@import url(ResponsiveSkin/portal/webui/component/UICategoryForm/UICategoryForm.css);
+
 @import url(ResponsiveSkin/portal/webui/component/UIChangeLanguageForm/UIChangeLanguageForm.css);
 
 @import url(ResponsiveSkin/portal/webui/component/UIMaskWorkspace/UIMaskWorkspace.css);
