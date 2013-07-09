@@ -69,7 +69,7 @@ public class Redirector {
                             redirect.getConditions());
                     if (redirectCondition == RedirectType.REDIRECT) {
                         log.debug("Found a match with UAS " + userAgentString + " and DeviceProperties " + deviceProperties
-                                + ". Seting redirect to : " + redirect.getRedirectSite());
+                                + ". Setting redirect to : " + redirect.getRedirectSite());
 
                         return RedirectKey.redirect(redirect.getRedirectSite());
                     } else if (redirectCondition == RedirectType.NEEDDEVICEINFO) {
@@ -79,10 +79,10 @@ public class Redirector {
             }
 
             if (needsBrowserDetection == false) {
-                log.debug("Could not find a match with the specifed uas and device properties. Returning NO_REDIRECT_DETECTED");
+                log.debug("Could not find a match with the specified uas and device properties. Returning NO_REDIRECT_DETECTED");
                 return RedirectKey.noRedirect();
             } else {
-                log.debug("Found a match with the specifed uas but it requires device properties. Returning NO_REDIRECT_DETECTED");
+                log.debug("Found a match with the specified uas but it requires device properties. Returning NO_REDIRECT_DETECTED");
                 return RedirectKey.needDeviceInfo();
             }
         } else {

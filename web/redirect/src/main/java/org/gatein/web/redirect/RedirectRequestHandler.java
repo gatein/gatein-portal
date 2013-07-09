@@ -121,6 +121,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                 request.getRequestURL().length() - request.getServletPath().length());
         if (referer != null && referer.startsWith(siteURL)
                 && (context.getRequest().getSession(true).getAttribute(DEVICE_DETECTION_ATTEMPTED) == null)) {
+            log.debug("Redirect being requested with a referer from the portal site. Do not attempt redirect and follow link. Referer : " + referer);
             return false;
         }
 
@@ -160,7 +161,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                     performRedirectToDeviceDetector(request, response);
                     return true;
                 } else {
-                    log.warn("DeviceDetectionService retruned NEED_BROWSER_DETECTION but the browser has already attempted dection. Setting no redirect.");
+                    log.warn("DeviceDetectionService returned NEED_BROWSER_DETECTION but the browser has already attempted detection. Setting no redirect.");
                     setRedirect(originSite, RedirectKey.noRedirect(), request, response, context);
                     return false;
                 }
@@ -288,6 +289,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                 }
 
                 // set the redirect
+                log.debug("Redirecting to : " + s);
                 response.sendRedirect(response.encodeRedirectURL(s));
                 return true;
             } else {

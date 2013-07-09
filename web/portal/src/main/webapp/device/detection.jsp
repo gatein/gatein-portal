@@ -47,10 +47,13 @@
      propertyMap["gtn.device." + name] = value;
    }
 
+   var submitted = false;
+
    function submitParameters ()
    {
-     if (propertyMap != null)
+     if (propertyMap != null && !submitted)
      {
+       submitted = true;
        var form = document.createElement("form");
        form.setAttribute("method", "post");
        form.setAttribute("action", "<%= initialURI %>");
