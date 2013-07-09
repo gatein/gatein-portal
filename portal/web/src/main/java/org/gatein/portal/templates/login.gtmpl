@@ -25,4 +25,12 @@
         </label>
         <button class="btn btn-large btn-primary" type="submit">Sign in</button>
     </form>
+    <%
+    if (oauthProviders != null) {%>
+    <div class="social-login">
+        <% for (def social : oauthProviders) { %>
+        <a href="${social.link}" class="btn btn-${social.type}"><i class="icon-${social.type}"></i> Login with ${social.name}</a>
+        <%}%>
+    </div>
+    <%}%>
 </div> <!-- /container -->

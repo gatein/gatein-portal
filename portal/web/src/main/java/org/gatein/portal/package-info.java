@@ -15,8 +15,9 @@
     @Binding(KernelFilter.class),
     @Binding(Flash.class)})
 @Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"),
-        declaredStylesheets = @Stylesheet(id = "login-stylesheet", src = "login.css")
-)
+        declaredStylesheets = {@Stylesheet(id = "login-stylesheet", src = "login.css"),
+                @Stylesheet(id = "social-buttons", src = "social-buttons.css")
+            })
 package org.gatein.portal;
 
 import juzu.Application;

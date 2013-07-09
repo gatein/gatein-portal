@@ -1,8 +1,11 @@
 package org.gatein.portal.login;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,13 +14,17 @@ import juzu.Path;
 import juzu.Response;
 import juzu.Route;
 import juzu.View;
+import juzu.request.RequestContext;
 import juzu.template.Template;
+import org.exoplatform.container.PortalContainer;
 import org.gatein.portal.mop.PropertyType;
 import org.gatein.portal.servlet.Context;
+import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.wci.ServletContainer;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.authentication.AuthenticationException;
 import org.gatein.wci.security.Credentials;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 /**
  * Created with IntelliJ IDEA.
@@ -101,9 +108,14 @@ public class Controller {
 
     @View
     @Route(value = "/login", priority = 1)
-    public Response login() {
+    public Response login(RequestContext context) {
+        ServletContext servletContext = null;
+        String contextPath = "";
         try {
             HttpServletRequest req = Context.getCurrentRequest();
+            servletContext = req.getServletContext();
+            contextPath = req.getContextPath();
+
             int status = req.getRemoteUser() != null ? AUTHENTICATED : FAILED;
 
             String initURL = req.getParameter("initURL");
@@ -124,9 +136,32 @@ public class Controller {
                 return Controller_.doLogin();
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            servletContext = null;
+            contextPath = context.getHttpContext().getContextPath();
         }
 
-        return login.with().ok().with(juzu.PropertyType.STYLESHEET, "login-stylesheet");
+        PortalContainer container = null;
+        if(servletContext == null) {
+            container = PortalContainer.getInstance();
+        } else {
+            container = PortalContainer.getCurrentInstance(servletContext);
+        }
+        OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) container.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
+
+        List<OauthProviderDescriptor> oauthProviders = null;
+        if(registry.isOAuthEnabled()) {
+            oauthProviders = new LinkedList<OauthProviderDescriptor>();
+            for(OAuthProviderType provider : registry.getEnabledOAuthProviders()) {
+                String type = "twitter";
+                if(provider.getKey().equals("GOOGLE")) {
+                    type = "google-plus";
+                } else if(provider.getKey().equals("FACEBOOK")) {
+                    type = "facebook";
+                }
+                oauthProviders.add(new OauthProviderDescriptor(provider.getFriendlyName(), provider.getInitOAuthURL(contextPath), type));
+            }
+        }
+
+        return login.with().set("oauthProviders", oauthProviders).ok().with(juzu.PropertyType.STYLESHEET, "login-stylesheet").with(juzu.PropertyType.STYLESHEET, "social-buttons");
     }
 }

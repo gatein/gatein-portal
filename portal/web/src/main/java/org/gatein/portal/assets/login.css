@@ -28,3 +28,8 @@ body {
     margin-bottom: 15px;
     padding: 7px 9px;
 }
+.social-login {
+    text-align: center;
+    max-width: 370px;
+    margin: auto;
+}
