@@ -57,6 +57,7 @@ import org.picocontainer.Startable;
  */
 public class RedirectRequestHandler extends WebRequestHandler implements Startable {
     protected static Logger log = LoggerFactory.getLogger(RedirectRequestHandler.class);
+    protected static boolean debug = log.isDebugEnabled();
 
     // The handler name to use
     public static final String HANDLER_NAME = "siteRedirect";
@@ -106,8 +107,10 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             originRequestPath = null;
         }
 
-        log.debug("Site Redirect being checked on [" + originSite.getName() + "], with type [" + originSite.getTypeName()
-                + "], and request path [" + originRequestPath + "]");
+        if (debug) {
+            log.debug("Site Redirect being checked on [" + originSite.getName() + "], with type [" + originSite.getTypeName()
+                    + "], and request path [" + originRequestPath + "]");
+        }
 
         String redirectFlagValue = request.getParameter(REDIRECT_FLAG);
         if (redirectFlagValue != null && !redirectFlagValue.isEmpty()) {
@@ -137,26 +140,34 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             Map<String, String> deviceProperties = null;
 
             String userAgentString = request.getHeader("User-Agent");
-            log.debug("Found user-agent string : " + userAgentString);
+            if (debug) {
+                log.debug("Found user-agent string : " + userAgentString);
+            }
 
             // we only care if this exists or not, no need to set it to anything other than Object
             Object attemptedDeviceDetection = context.getRequest().getSession(true).getAttribute(DEVICE_DETECTION_ATTEMPTED);
             if (attemptedDeviceDetection != null) {
                 deviceProperties = getDeviceProperties(request);
                 context.getRequest().getSession().removeAttribute(DEVICE_DETECTION_ATTEMPTED);
-                log.debug("Found device properties : " + deviceProperties);
+                if (debug) {
+                    log.debug("Found device properties : " + deviceProperties);
+                }
             }
 
             redirectSite = deviceRedirectionService.getRedirectSite(originSite.getName(), userAgentString, deviceProperties);
 
             if (redirectSite == null || redirectSite.getType() == RedirectType.NOREDIRECT) {
-                log.debug("Redirect returned is null or NO_REDIRECT_DETECTED. Setting NO_REDIRECT for this user");
+                if (debug) {
+                    log.debug("Redirect returned is null or NO_REDIRECT_DETECTED. Setting NO_REDIRECT for this user");
+                }
                 setRedirect(originSite, RedirectKey.noRedirect(), request, response, context);
                 return false;
             } else if (redirectSite.getType() == RedirectType.NEEDDEVICEINFO) {
                 if (attemptedDeviceDetection == null) {
-                    log.debug("Need browser properties detection. Redirecting to BrowserDetectionPage : "
-                            + browserDetectionPath);
+                    if (debug) {
+                        log.debug("Need browser properties detection. Redirecting to BrowserDetectionPage : "
+                                + browserDetectionPath);
+                    }
                     request.getSession().setAttribute(DEVICE_DETECTION_ATTEMPTED, true);
                     performRedirectToDeviceDetector(request, response);
                     return true;
@@ -168,7 +179,9 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             } else {
 
                 // the service gave us a redirection site to use, use it.
-                log.debug("Redirect for origin site " + originSite.getName() + " is being set to : " + redirectSite);
+                if (debug) {
+                    log.debug("Redirect for origin site " + originSite.getName() + " is being set to : " + redirectSite);
+                }
                 return performRedirect(originSite, redirectSite, originRequestPath, context, false);
             }
         }
@@ -240,10 +253,14 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             boolean forceRedirect) throws IOException {
         // If we have a no-redirect type, don't do anything and return null
         if (redirect.getType() == RedirectType.NOREDIRECT) {
-            log.debug("Using NoRedirect for site " + redirect + " with request path :" + requestPath);
+            if (debug) {
+                log.debug("Using NoRedirect for site " + redirect + " with request path :" + requestPath);
+            }
             return false;
         } else {
-            log.debug("Attempting redirect to site " + redirect + " with request path :" + requestPath);
+            if (debug) {
+                log.debug("Attempting redirect to site " + redirect + " with request path :" + requestPath);
+            }
             String redirectLocation = deviceRedirectionService.getRedirectPath(origin.getName(), redirect.getRedirect(),
                     requestPath);
 
@@ -252,7 +269,9 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             }
 
             if (redirectLocation != null) {
-                log.debug("RedirectPath set to : " + redirectLocation);
+                if (debug) {
+                    log.debug("RedirectPath set to : " + redirectLocation);
+                }
 
                 setRedirect(origin, redirect, context.getRequest(), context.getResponse(), context);
 
@@ -293,8 +312,10 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                 response.sendRedirect(response.encodeRedirectURL(s));
                 return true;
             } else {
-                log.debug("Did not get a node match for redirecting to site [" + redirect + "] with requestPath ["
-                        + requestPath + "]. Cannot perform redirect.");
+                if (debug) {
+                    log.debug("Did not get a node match for redirecting to site [" + redirect + "] with requestPath ["
+                            + requestPath + "]. Cannot perform redirect.");
+                }
                 return false;
             }
         }

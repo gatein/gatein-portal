@@ -46,8 +46,7 @@ public class RedirectBean {
     public List<RedirectLink> getAlternativeSites() {
         PortalRequestContext prc = (PortalRequestContext) PortalRequestContext.getCurrentInstance();
 
-        String siteName = ((PortalRequestContext) PortalRequestContext.getCurrentInstance()).getSiteName();
-        String portalName = PortalContainer.getCurrentPortalContainerName();
+        String siteName = prc.getSiteName();
 
         Map<String, String> redirects = redirectHandler.getAlternativeRedirects(siteName, prc.getRequestURI(), true);
 
