@@ -300,6 +300,7 @@ public class EditRedirectBean implements Serializable {
     private int currentConditionIndex;
     private RedirectCondition editedCondition;
 
+    private String backupConditionName;
     private ArrayList<String> backupContains;
     private ArrayList<String> backupDoesNotContain;
     private ArrayList<DevicePropertyCondition> backupDeviceProperties;
@@ -332,10 +333,21 @@ public class EditRedirectBean implements Serializable {
 
     public void setEditedCondition(RedirectCondition editedCondition) {
         this.editedCondition = editedCondition;
+        this.backupConditionName = editedCondition.getName();
         this.backupContains = new ArrayList<String>(editedCondition.getUserAgentConditions().getContains());
         this.backupDoesNotContain = new ArrayList<String>(editedCondition.getUserAgentConditions().getDoesNotContain());
-        this.backupDeviceProperties = editedCondition.getDeviceProperties() == null ? new ArrayList<DevicePropertyCondition>()
-                : new ArrayList<DevicePropertyCondition>(editedCondition.getDeviceProperties());
+        this.backupDeviceProperties = new ArrayList<DevicePropertyCondition>();
+        if (editedCondition.getDeviceProperties() != null) {
+            for (DevicePropertyCondition prop : editedCondition.getDeviceProperties()) {
+                DevicePropertyCondition newProp = new DevicePropertyCondition();
+                newProp.setPropertyName(prop.getPropertyName());
+                newProp.setEquals(prop.getEquals());
+                newProp.setMatches(prop.getMatches());
+                newProp.setLessThan(prop.getLessThan());
+                newProp.setGreaterThan(prop.getGreaterThan());
+                this.backupDeviceProperties.add(newProp);
+            }
+        }
         this.conditionsChanged = false;
     }
 
@@ -438,6 +450,7 @@ public class EditRedirectBean implements Serializable {
      */
     public void rollbackCondition() {
         if (!isNewCondition) {
+            this.editedCondition.setName(backupConditionName);
             this.editedCondition.getUserAgentConditions().setContains(backupContains);
             this.editedCondition.getUserAgentConditions().setDoesNotContain(backupDoesNotContain);
             this.editedCondition.setDeviceProperties(backupDeviceProperties);
