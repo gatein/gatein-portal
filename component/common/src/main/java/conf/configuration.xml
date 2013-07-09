@@ -34,6 +34,10 @@
         <name>properties.url</name>
         <value>jar:/conf/configuration.properties</value>
       </value-param>
+      <properties-param>
+      	<name>properties</name>
+      	<property name="java.security.auth.login.config" value="${java.security.auth.login.config:../conf/jaas.conf}"/>
+      </properties-param>
     </init-params>
 
   </component>
