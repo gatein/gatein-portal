@@ -164,7 +164,7 @@
 															</ui:repeat>
 														</td>
 														<td class="actions">
-															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('Edit'); $('#modal-condition').modal()" title="Edit"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit">Edit</i></a4j:commandLink>
+															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('Edit'); $('#modal-condition').modal('show')" title="Edit"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit">Edit</i></a4j:commandLink>
 															<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" render="conditions-group" onclick="$(this).tooltip('hide');" title="Delete"><i class="icon-trash">Delete</i></a4j:commandLink>
 														</td>
 													</tr>
@@ -273,20 +273,17 @@
 			<a4j:commandLink action="#{rdrEdit.doSortRedirect}"  id="doSortRdrBtn" value="" render="@form sum_form" execute="@form" />
 		</h:form>
 
-		<script type="text/javascript">
-			$('#modal-condition').on('shown', function () {
-				$('.property-operator').change();
-			});
-			$(document).ready(function(){
-				var nodeInput = null;
-			});
-		</script>
-
 		<ui:include src="/admin/redirects/modals/modal-condition.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-select_node.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-delete_site.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-delete_redirect.xhtml" />
 		<ui:include src="/admin/redirects/modals/modal-import_site.xhtml" />
+
+		<h:outputScript>
+			$(document).ready(function(){
+				var nodeInput = null;
+			});
+		</h:outputScript>
 
 	</ui:define>
 </ui:composition>

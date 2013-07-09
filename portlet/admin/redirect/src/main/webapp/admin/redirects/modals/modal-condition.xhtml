@@ -115,7 +115,7 @@
 									<f:selectItem id="mt" itemLabel="Matches" itemValue="mt" />
 								</h:selectOneMenu>
 								-->
-								<select class="attribute property-operator" style="height: 30px;" onchange="changePropertyFields(this);" >
+								<select name="op-rcDevProp" class="attribute property-operator" style="height: 30px;" onchange="changePropertyFields(this, true);" >
 									<option value="eq" selected='#{rcDevPropOp == "eq" ? "selected" : ""}'>Equals</option>
 									<option value="gt" selected='#{rcDevPropOp == "gt" ? "selected" : ""}'>Greater than</option>
 									<option value="lt" selected='#{rcDevPropOp == "lt" ? "selected" : ""}'>Less than</option>

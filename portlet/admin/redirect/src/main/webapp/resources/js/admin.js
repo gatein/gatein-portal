@@ -25,6 +25,7 @@ function init() {
 	accessPermissionTable();
 	feedback();
 	editRedirect();
+	onConditionModal();
 	// Useful js that makes other ones not work
 	//sortable();
 }
@@ -69,7 +70,7 @@ function removeProperty(element) {
 	parent.children('tr:last').find('button.add-property').show();
 }
 
-function changePropertyFields(element) {
+function changePropertyFields(element, focus) {
 	// Change input box(es) according to selected option
 	$(element).next().children().each(function() {
 		otherInput = $(this).children().children();
@@ -81,7 +82,9 @@ function changePropertyFields(element) {
 	curInput = curInputWrapper.children().children();
 	curInput.prop('disabled', false);
 	curInputWrapper.show();
-	curInput.first().focus();
+	if (focus) {
+		curInput.first().focus();
+	}
 }
 
 function addMappingEntry() {
@@ -191,9 +194,13 @@ $('.onoffswitch').live('keydown', function (e) {
 	}
 });
 
-
-
-
+function onConditionModal() {
+	$(document).on('shown', '#modal-condition', function () {
+		$('.property-operator').each(function() {
+			changePropertyFields(this, false);
+		});
+	});
+}
 
 
 
