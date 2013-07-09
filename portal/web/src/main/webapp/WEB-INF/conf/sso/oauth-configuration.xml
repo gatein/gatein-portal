@@ -67,17 +67,17 @@
     <init-params>
       <value-param>
         <name>clientId</name>
-        <value>YTLBBzumiGNPyQIQ8O7qJg</value>
+        <value>${gatein.oauth.twitter.clientId}</value>
       </value-param>
       <value-param>
         <name>clientSecret</name>
-        <value>Onc8rI6hRxntBpslnXJASyEBSt3zjB9OTnFzfWbs</value>
+        <value>${gatein.oauth.twitter.clientSecret}</value>
       </value-param>
       <!-- URL to redirect from Twitter during Twitter OAuth authentication -->
       <value-param>
         <name>redirectURL</name>
         <!--<value>${gatein.oauth.portal.url}/@@portal.container.name@@/twitterAuth</value>-->
-        <value>http://test.gatein.com:8080/portal/twitterAuth</value>
+        <value>${gatein.oauth.twitter.redirectURL}</value>
       </value-param>
     </init-params>
   </component>
@@ -169,7 +169,7 @@
         </value-param>
         <value-param>
           <name>enabled</name>
-          <value>${gatein.oauth.twitter.enabled:true}</value>
+          <value>${gatein.oauth.twitter.enabled:false}</value>
         </value-param>
         <value-param>
           <name>filterMapping</name>
