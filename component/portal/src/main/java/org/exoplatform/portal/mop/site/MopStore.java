@@ -65,7 +65,8 @@ public class MopStore implements SiteStore {
 
     public SiteData loadSite(SiteKey key) {
         POMSession session = manager.getSession();
-        return dataCache.getSiteData(session, key);
+        SiteData data = dataCache.getSiteData(session, key);
+        return data == SiteData.EMPTY ? null : data;
     }
 
     public boolean saveSite(SiteKey key, SiteState state) {

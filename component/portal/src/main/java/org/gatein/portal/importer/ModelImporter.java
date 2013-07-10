@@ -62,6 +62,8 @@ public class ModelImporter implements Startable {
     /** . */
     private SiteService siteService;
 
+    private Importer importer;
+
     public ModelImporter(
             ConfigurationManager configManager,
             InitParams initParams,
@@ -79,6 +81,19 @@ public class ModelImporter implements Startable {
         this.descriptionService = descriptionService;
         this.navigationService = navigationService;
         this.siteService = siteService;
+        if (initParams != null) {
+            try {
+                importer = new Importer(pageService,
+                        configManager,
+                        initParams,
+                        navigationService,
+                        descriptionService,
+                        layoutService,
+                        siteService);
+            } catch (Exception ex) {
+                logger.error("Could not instantiate importer", ex);
+            }
+        }
     }
 
     @Override
@@ -86,19 +101,7 @@ public class ModelImporter implements Startable {
 
         if (initParams != null) {
             try {
-                Importer importer = new Importer(
-                        pageService,
-                        configManager,
-                        initParams,
-                        navigationService,
-                        descriptionService,
-                        layoutService,
-                        siteService
-                );
-
-                //
                 importer.run();
-
             } catch (Exception e) {
                 logger.error("Could not import model", e);
             }
@@ -110,5 +113,9 @@ public class ModelImporter implements Startable {
 
     @Override
     public void stop() {
+    }
+
+    public Importer getImporter() {
+        return importer;
     }
 }

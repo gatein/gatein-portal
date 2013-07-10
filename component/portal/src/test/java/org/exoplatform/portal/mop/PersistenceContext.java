@@ -47,6 +47,7 @@ import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.gatein.portal.mop.page.PageStore;
 import org.gatein.portal.mop.page.PageServiceImpl;
+import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.mop.site.SiteServiceImpl;
 import org.gatein.portal.mop.site.SiteStore;
 
@@ -68,6 +69,8 @@ public abstract class PersistenceContext {
     public abstract PageServiceImpl getPageService();
 
     public abstract LayoutService getLayoutService();
+
+    public abstract SiteService getSiteService();
 
     public abstract NavigationStore getNavigationStore();
 
@@ -120,6 +123,9 @@ public abstract class PersistenceContext {
         private SiteStore siteStore;
 
         /** . */
+        private SiteService siteService;
+
+        /** . */
         private LayoutStore layoutStore;
 
         /** . */
@@ -144,6 +150,7 @@ public abstract class PersistenceContext {
             descriptionStore = new org.exoplatform.portal.mop.description.MopStore(mgr, new SimpleDataCache());
             descriptionService = new DescriptionServiceImpl(descriptionStore);
             siteStore = new MopStore(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
+            siteService = new SiteServiceImpl(siteStore);
             pageStore = new org.exoplatform.portal.mop.page.MopStore(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
             pageService = new PageServiceImpl(pageStore);
             layoutStore = new org.exoplatform.portal.mop.layout.MopStore(mgr);
@@ -190,6 +197,11 @@ public abstract class PersistenceContext {
         @Override
         public LayoutService getLayoutService() {
             return layoutService;
+        }
+
+        @Override
+        public SiteService getSiteService() {
+            return siteService;
         }
 
         @Override
@@ -346,6 +358,11 @@ public abstract class PersistenceContext {
         @Override
         public SiteStore getSiteStore() {
             return siteStore;
+        }
+
+        @Override
+        public SiteService getSiteService() {
+            return siteService;
         }
 
         @Override

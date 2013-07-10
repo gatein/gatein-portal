@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
+
+  <component>
+    <type>org.gatein.portal.importer.MopModelImporter</type>
+    <init-params>
+      <value-param>
+        <name>default.import.mode</name>
+        <value>merge</value>
+      </value-param>
+      <value-param>
+        <name>default.portal</name>
+        <description>The default portal for checking db is empty or not</description>
+        <value>classic</value>
+      </value-param>
+      <value-param>
+        <name>page.templates.location</name>
+        <description>the path to the location that contains Page templates</description>
+        <value>war:/conf/portal/template/pages</value>
+      </value-param>
+      <value-param>
+        <name>override</name>
+        <description>The flag parameter to decide if portal metadata is overriden on restarting server</description>
+        <value>true</value>
+      </value-param>
+      <object-param>
+        <name>site.templates.location</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+          <field name="location">
+            <string>classpath:/org/exoplatform/portal/config/conf</string>
+          </field>
+          <field name="portalTemplates">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>classic</string>
+              </value>
+            </collection>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>conserve.portal.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>conserveImport</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>portal</string>
+          </field>
+          <field name="location">
+            <string>classpath:/org/exoplatform/portal/config/conf</string>
+          </field>
+          <field name="importMode">
+            <string>conserve</string>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>insert.portal.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>insertImport</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>portal</string>
+          </field>
+          <field name="location">
+            <string>classpath:/org/exoplatform/portal/config/conf</string>
+          </field>
+          <field name="importMode">
+            <string>insert</string>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>merge.portal.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>mergeImport</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>portal</string>
+          </field>
+          <field name="location">
+            <string>classpath:/org/exoplatform/portal/config/conf</string>
+          </field>
+          <field name="importMode">
+            <string>merge</string>
+          </field>
+        </object>
+      </object-param>
+      <object-param>
+        <name>import.portal.configuration</name>
+        <description>description</description>
+        <object type="org.exoplatform.portal.config.NewPortalConfig">
+          <field name="predefinedOwner">
+            <collection type="java.util.HashSet">
+              <value>
+                <string>overwriteImport</string>
+              </value>
+            </collection>
+          </field>
+          <field name="ownerType">
+            <string>portal</string>
+          </field>
+          <field name="location">
+            <string>classpath:/org/exoplatform/portal/config/conf</string>
+          </field>
+          <field name="importMode">
+            <string>overwrite</string>
+          </field>
+        </object>
+      </object-param>
+    </init-params>
+  </component>
+
+</configuration>

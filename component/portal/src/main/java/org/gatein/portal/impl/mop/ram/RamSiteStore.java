@@ -83,7 +83,7 @@ public class RamSiteStore implements SiteStore {
         Store current = tx.getContext();
         String root = current.getRoot();
         String type = current.getChild(root, key.getTypeName());
-        String site = current.getChild(type, key.getTypeName());
+        String site = current.getChild(type, key.getName());
         if (site != null) {
             current.remove(site);
             return true;
