@@ -52,7 +52,9 @@ public class DeploymentScannerService implements Service<DeploymentScannerServic
 
     private String deployRoot = "gatein";
     private String extensionsSub = "extensions";
-    private File gateinHome;
+
+    private File deployDir;
+    private File extensionsDir;
 
     private GateInConfiguration config;
 
@@ -63,11 +65,32 @@ public class DeploymentScannerService implements Service<DeploymentScannerServic
             jbossHome = System.getProperty("user.dir");
             log.warn("System property jboss.home.dir not set! Using current working dir: " + jbossHome);
         }
-        gateinHome = new File(jbossHome);
+        File gateinHome = new File(jbossHome);
+
+        String dir = System.getProperty("gatein.deploy.dir");
+        if (dir == null) {
+            deployDir = new File(gateinHome, deployRoot);
+        } else {
+            deployDir = new File(dir);
+            log.info(String.format("Using: '%1$s' as GateIn deploy dir", deployDir.getAbsolutePath()));
+        }
+        if (!deployDir.isDirectory()) {
+            throw new RuntimeException(String.format("GateIn deploy directory does not exist! (%1$s)", deployDir.getAbsolutePath()));
+        }
+
+        dir = System.getProperty("gatein.extensions.dir");
+        if (dir == null) {
+            extensionsDir = new File(deployDir, extensionsSub);
+        } else {
+            extensionsDir = new File(dir);
+            log.info(String.format("Using: '%1$s' as GateIn extensions dir", extensionsDir.getAbsolutePath()));
+        }
+        if (!extensionsDir.isDirectory()) {
+            throw new RuntimeException(String.format("GateIn extensions directory does not exist! (%1$s)", extensionsDir.getAbsolutePath()));
+        }
     }
 
     public ModelNode prepareDeploymentModel() {
-        File deployDir = new File(gateinHome, deployRoot);
         List<File> deployments = new LinkedList<File>();
 
         File gateinEar = new File(deployDir, GATEIN_EAR);
@@ -76,7 +99,6 @@ public class DeploymentScannerService implements Service<DeploymentScannerServic
         }
         deployments.add(gateinEar);
 
-        File extensionsDir = new File(deployDir, extensionsSub);
         File[] extensions = extensionsDir.listFiles();
         for (File ext : extensions) {
             String name = ext.getName();
@@ -115,8 +137,7 @@ public class DeploymentScannerService implements Service<DeploymentScannerServic
             final ModelNode content = new ModelNode();
             final ModelNode contentItem = content.get(0);
 
-            contentItem.get(PATH).set(getRelativePath(deployment));
-            contentItem.get(RELATIVE_TO).set("jboss.home.dir");
+            contentItem.get(PATH).set(deployment.getAbsolutePath());
             contentItem.get(ARCHIVE).set(false);
 
             addOp.get(CONTENT).set(content);
@@ -131,15 +152,6 @@ public class DeploymentScannerService implements Service<DeploymentScannerServic
             allSteps.add(op);
         }
         return deployOperation;
-    }
-
-    private String getRelativePath(File deployment) {
-        String pathName = deployment.getPath();
-        String root = gateinHome.getPath() + File.separatorChar;
-        if (!pathName.startsWith(root))
-            throw new IllegalStateException("Deployment archive path outside JBOSS_HOME (" + gateinHome + "): " + pathName);
-
-        return pathName.substring(root.length());
     }
 
     @Override

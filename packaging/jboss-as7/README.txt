@@ -122,6 +122,58 @@ JBoss AS7 provides mechanisms for configuring which modules are visible to a spe
 
 
 
+Domain mode support
+===================
+
+
+GateIn comes with a ready made domain.xml / host.xml demo configuration for a single-host domain mode setup with two different GateIn instances. It’s a scenario that allows central configuration and management of two differently configured portal instances running side-by-side via JBoss AS management infrastructure.
+
+For more documentation about domain mode, how to set it up, and how to manage it see:
+
+https://docs.jboss.org/author/display/AS72/Admin+Guide#AdminGuide-Managementclients
+https://docs.jboss.org/author/display/AS72/Core+management+concepts
+https://docs.jboss.org/author/display/AS72/Domain+Setup
+
+
+Domain mode demo configuration
+------------------------------
+
+Demo domain configuration establishes two instances that listen on different ports. The one on port 8080 provides WSRP integration, and Mobile support. The other one, listening on port 8330, provides Mobile support, but does not provide WSRP integration. This way we have two different portal instances.
+
+Setting up the demo configuration is easy. Simply run the following shell script:
+
+    $JBOSS_HOME/bin/demo-domain-setup.sh
+
+which is in the same directory as standalone.sh script used to run GateIn in standalone mode.
+
+Then run GateIn in domain mode instead of standalone mode:
+
+    $JBOSS_HOME/bin/standalone.sh
+
+This command will start up a host controller process that in our case also serves as a domain controller. This process contains a domain management console at http://localhost:9990/console. It uses domain.xml, and host.xml configuration files from $JBOSS_HOME/domain/configuration, and based on them it spawns two Gatein instances (two JVM processes).
+
+Console can be used to deploy a portlet application (i.e. simplest-helloworld-portlet.war) to both GateIn instances.
+
+The demo configuration shows how a gatein.extensions.dir system property can be used to assign different extensions directories to different servers in order to allow different portals to coexist on the same host.
+The first server - 'server-one' - uses the default extensions directory location ($JBOSS_HOME/gatein/extensions). For the second one - 'server-two' - we specify an alternate extensions location in host.xml.
+
+The demo configuration also makes two copies of gatein configuration directory ($JBOSS_HOME/standalone/configuration/gatein) - one for each server.
+
+It's possible to specify GateIn configuration directory location for each server, or for a server group by setting several system properties - i.e.:
+
+    <property name="exo.conf.dir" value="${jboss.home.dir}/standalone/configuration/gatein"/>
+    <property name="gatein.conf.dir" value="${jboss.home.dir}/standalone/configuration/gatein"/>
+    <property name="gatein.portlet.config" value="${jboss.home.dir}/standalone/configuration/gatein"/>
+
+GateIn configuration directory is then shared among different server instances.
+
+
+Limitations
+--------------
+
+Only standard portlet applications can be deployed via domain management. GateIn portal extensions have to be deployed by manual copying into gatein extensions directory in order to be deployed on server restart.
+
+
 
 Clustered mode
 ==============
