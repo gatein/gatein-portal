@@ -23,7 +23,7 @@
 											<div class="LeftTab">
 												<div class="RightTab">								
 													<div class="MiddleTab">
-														<a class="Icon AccountProfiles"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountProfiles")%></a>
+														<a class="Icon AccountProfiles" href="javascript:;" tabindex="1"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountProfiles")%></a>
 													</div>
 												</div>
 											</div>
@@ -37,7 +37,7 @@
 											<div class="LeftTab">
 												<div class="RightTab">								
 													<div class="MiddleTab">
-														<a class="Icon ChangePass"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountChangePass")%></a>
+														<a class="Icon ChangePass" href="javascript:;" tabindex="1"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountChangePass")%></a>
 													</div>
 												</div>
 											</div>
@@ -51,7 +51,7 @@
 											<div class="LeftTab">
 												<div class="RightTab">
 													<div class="MiddleTab">
-														<a class="Icon Social"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountSocial")%></a>
+														<a class="Icon Social" href="javascript:;" tabindex="1"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountSocial")%></a>
 													</div>
 												</div>
 											</div>
@@ -82,7 +82,7 @@
 	
 	<div class="UIAction">
 		<%for(action in uicomponent.getActions()) { %>
-				<a href="javascript:void(0);" onclick="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action." + action)%></a>
+				<a href="javascript:void(0);" onclick="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle" tabindex="1"><%=_ctx.appRes(uicomponent.getId() + ".action." + action)%></a>
 		<%} %>
 	</div>
 </div>

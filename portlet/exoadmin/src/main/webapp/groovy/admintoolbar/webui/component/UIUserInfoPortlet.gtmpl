@@ -5,7 +5,7 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	
-	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
+	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true)); document.activeElement.blur();"
 %>
 <ul class="UIUserInfoPortlet" id="$uicomponent.id">
 	<li class="Name">

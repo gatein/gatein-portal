@@ -25,6 +25,7 @@
 			String rowClass = null;
 			boolean even = true;
 			List children = uiIterator.getCurrentPageData();
+			int countChild = 0;
 			for (child in children)	{
 				if(even) rowClass = "EvenRow";
 				else rowClass =	"OddRow";
@@ -42,10 +43,10 @@
 						<% } else { %>						
 						<td class="text" style="<%=(i==0) ? "text-align: center;" : "";%>">
 						<% if (i==1) { %>						
-						<label for="<%= labelName + i%>" />
+						<label for="<%= labelName + countChild %>" />
 						<% } %>
                                                 <% if(UIFormRadioBoxInput.class.isInstance(child.getChild(i))) { %>
-                                                <%= child.getChild(i).renderWithId(i);%>
+                                                <%= child.getChild(i).renderWithId(countChild);%>
                                                 <% } else { %>
 						<%child.renderChild(i);%>
 						<% } %>
@@ -56,7 +57,9 @@
 						<% } %>
 					<%}%>
 				</tr>
-		<%}%>
+		<%              countChild++;
+                        }
+                %>
 		</tbody>
 	</table>
 </div>

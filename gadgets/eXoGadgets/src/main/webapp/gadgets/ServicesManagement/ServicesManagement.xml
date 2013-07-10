@@ -171,8 +171,8 @@
 			</div>
 			
 			<div class="TitleGadget ClearFix">
-				<div id="MethodsTab" class="Tab TabSelected">Methods</div>
-				<div id="PropertiesTab" class="Tab">Properties</div>
+                          <div id="MethodsTab" class="Tab TabSelected"><a href="javascript:;" class="TabLink">Methods</a></div>
+                          <div id="PropertiesTab" class="Tab"><a href="javascript:;" class="TabLink">Properties</a></div>
 			</div>
 			<div id="ServiceMethods" class="GadgetGrid GadgetGmCanvasMessage ContentSelected">
 				<table cellspacing="0" class="UIGrid" summary="Services Management configuration">

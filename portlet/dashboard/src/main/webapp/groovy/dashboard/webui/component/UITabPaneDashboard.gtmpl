@@ -38,5 +38,5 @@
 			</div>
 				<%} %>	
 	<% } %>
-	<a class="AddDashboard"></a>
+	<a class="AddDashboard" href="javascript:;"></a>
 </div>

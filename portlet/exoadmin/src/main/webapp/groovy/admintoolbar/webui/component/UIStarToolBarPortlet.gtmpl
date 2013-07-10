@@ -16,9 +16,9 @@
           jsmanager.require("SHARED/jquery", "\$")
             .addScripts("\$(function() { window.setInterval(function(){ \$.post('/portal/login/jsp/keepalive.jsp') }, " + keepAliveInterval + "); });");
         }
-	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));";
-	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));";
-	String changeSkinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeSkin', true));";
+	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true)); document.activeElement.blur();";
+	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true)); document.activeElement.blur();";
+	String changeSkinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeSkin', true)); document.activeElement.blur();";
 %>
 <ul class="UIStarToolBarPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab portlet-menu-item" style="width: 62px" title="Portal Actions">

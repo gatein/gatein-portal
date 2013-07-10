@@ -105,8 +105,8 @@
 
 <div id="$uicomponent.id" class="UISitemap" >
 	<div class="ClearFix">
-		<div class="CollapseAll FL" onclick="$actionCollapseAll" title="Collapse All">
-			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%>
+		<div class="CollapseAll FL" title="Collapse All">
+			<a href="#" onclick="$actionCollapseAll"><%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%></a>
 		</div>
 	</div>
 	<div class="SitemapContent">

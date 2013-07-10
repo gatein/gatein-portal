@@ -15,7 +15,7 @@ String applicationDescription = encoder.encode(application.getDescription());
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
 	<div class="UIBreadcumb">
-		<a href="javascript:;" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><div class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>"><span style="display: none;"><%=_ctx.appRes("UIApplicationInfo.title.editApplication")%></span></div></a>
+		<a href="javascript:;" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><div class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>"><span class="skipHidden"><%=_ctx.appRes("UIApplicationInfo.title.editApplication")%></span></div></a>
 		<div class="BreadcumbInfo">
 			<div class="FL" title="<%= category.getDisplayName(true) %>"><%= categoryDisplayName %></div>
 			<div class="RightBlackGridArrow16x16Icon"><span></span></div>
