@@ -295,7 +295,7 @@ toggleContent = function() {
 
 // Show / Hide More
 showHideMore = function() {
-	$('nav .more').on('click', function() {
+	$(document).on('click', 'nav .more', function() {
 		$(this).text($(this).text() == "Show more" ? "Hide more" : "Show more");
 		$(this).parent().next('ul').find('.extra').toggleClass('hidden-element');
 	});

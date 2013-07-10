@@ -12,11 +12,11 @@
 				<li id="sites"> <!-- Sites List / begin -->
 					<div>
 						<span class="toggle" style="background: none;">Sites</span>
-						<h:panelGroup styleClass="more" rendered="#{rdrs.sites.size() > 6}">Show more</h:panelGroup>
+						<h:panelGroup styleClass="more" rendered="#{rdrs.sites.size() > 5}">Show more</h:panelGroup>
 					</div>
 					<ul>
 						<ui:repeat value="#{rdrs.sites}" var="s" varStatus="counter">
-							<li class="dropdown #{rdrs.siteName == s.name ? 'active' : ''} #{counter.index > 3 ? 'extra hidden-element' : ''}">
+							<li class="dropdown #{rdrs.siteName == s.name ? 'active' : ''} #{((rdrs.siteName != s.name) and (counter.index > 4)) ? 'extra hidden-element' : ''}">
 								<a4j:commandLink action="#{rdrs.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" onfocus="$(this).next('.dropdown-toggle').click(); return false;" render="@form :sum_form :add_form :form-select-node">
 									<b:icon value="globe" color="grey" /> #{s.name}
 								</a4j:commandLink>
