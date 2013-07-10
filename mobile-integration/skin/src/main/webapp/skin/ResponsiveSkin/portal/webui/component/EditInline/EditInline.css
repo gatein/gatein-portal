@@ -57,9 +57,11 @@
    width: auto;
 }
 
-.UIWizard .UIInfoBar .BlueRoundedStyle {
+.UIInfoBar .BlueRoundedStyle {
    background: #e4e4e7;
    height: auto;
+   max-width: 100%;
+   white-space: normal;
 }
 
 .WizardDecorator .LAYOUT-PORTLET,
