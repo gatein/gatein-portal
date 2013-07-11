@@ -58,6 +58,7 @@
         <include>org.gatein.portal:component.web.oauth-common</include>
         <include>org.gatein.portal:component.web.oauth-web</include>
         <include>org.gatein.portal:component.web.security</include>
+        <include>org.json:json</include>
         <!--<include>org.exoplatform.ws:exo.ws.commons</include>
         <include>org.exoplatform.ws:exo.ws.rest.core</include>
         <include>org.exoplatform.ws:exo.ws.frameworks.servlet</include>
