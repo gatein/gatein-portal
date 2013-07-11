@@ -136,13 +136,16 @@ public class SiteRedirectServiceImpl implements SiteRedirectService, Startable {
     }
 
     @Override
-    public Map<String, String> getAlternativeSites(String site) {
+    public Map<String, String> getAlternativeSites(String site, boolean onlyEnabled) {
         Map<String, String> siteKeys = new LinkedHashMap<String, String>();
         try {
             if (dataStorage != null) {
                 PortalConfig portalConfig = dataStorage.getPortalConfig(site);
                 if (portalConfig != null && portalConfig.getPortalRedirects() != null) {
                     for (PortalRedirect portalRedirect : portalConfig.getPortalRedirects()) {
+                        if (onlyEnabled && !portalRedirect.isEnabled()) {
+                            continue;
+                        }
                         siteKeys.put(portalRedirect.getName(), portalRedirect.getRedirectSite());
                     }
                 }

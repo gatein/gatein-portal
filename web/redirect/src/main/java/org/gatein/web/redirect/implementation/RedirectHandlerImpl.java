@@ -43,7 +43,7 @@ public class RedirectHandlerImpl implements RedirectHandler, Startable {
 
     @Override
     public Map<String, String> getAlternativeRedirects(String siteName, String URI, boolean setPreference) {
-        Map<String, String> redirectNames = siteRedirectService.getAlternativeSites(siteName);
+        Map<String, String> redirectNames = siteRedirectService.getAlternativeSites(siteName, true);
 
         Map<String, String> redirects = new LinkedHashMap<String, String>(); // use LinkedHashMap to keep the List order intact
         for (String redirectName : redirectNames.keySet()) {

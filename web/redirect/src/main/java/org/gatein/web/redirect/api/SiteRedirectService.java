@@ -68,7 +68,8 @@ public interface SiteRedirectService {
      * Returns the list of alternative sites for the specified URL
      *
      * @param site The site
+     * @param onlyEnabled If only enabled sites should be returned
      * @return The list of alternative site names
      */
-    Map<String, String> getAlternativeSites(String originSite);
+    Map<String, String> getAlternativeSites(String originSite, boolean onlyEnabled);
 }
