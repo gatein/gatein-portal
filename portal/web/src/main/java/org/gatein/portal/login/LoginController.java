@@ -22,6 +22,7 @@ package org.gatein.portal.login;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
@@ -34,9 +35,10 @@ import juzu.Response;
 import juzu.Route;
 import juzu.View;
 import juzu.request.RequestContext;
+import juzu.request.RequestParameter;
+import juzu.request.SecurityContext;
 import juzu.template.Template;
 import org.exoplatform.container.PortalContainer;
-import org.gatein.portal.mop.PropertyType;
 import org.gatein.portal.servlet.Context;
 import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.wci.ServletContainer;
@@ -46,138 +48,121 @@ import org.gatein.wci.security.Credentials;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 public class LoginController {
-  /**
-   * .
-   */
-  private static final int AUTHENTICATED = 1;
+    /**
+     * .
+     */
+    private static final int AUTHENTICATED = 1;
 
-  /**
-   * .
-   */
-  private static final int FAILED = 2;
+    /**
+     * .
+     */
+    private static final int FAILED = 2;
 
-  @Inject
-  private Flash flash;
+    @Inject
+    private LoginFailureMessage loginFailureMessage;
 
-  @Inject
-  @Path("login.gtmpl")
-  private Template login;
+    @Inject
+    @Path("login.gtmpl")
+    private Template login;
 
-  @View
-  @Route(value = "/dologout", priority = 1)
-  public Response doLogout() {
-    try {
-      ServletContainer container = ServletContainerFactory.getServletContainer();
-      container.logout(Context.getCurrentRequest(), Context.getCurrentResponse());
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-    HttpServletRequest req = Context.getCurrentRequest();
-    String initURL = req.getParameter("initURL");
-    if (initURL == null || initURL.isEmpty()) {
-      initURL = req.getContextPath();
-    }
-    return Response.redirect(initURL);
-  }
+    @View
+    @Route(value = "/dologout", priority = 1)
+    public Response doLogout(RequestContext context) throws Exception {
+        try {
+            ServletContainer container = ServletContainerFactory.getServletContainer();
+            container.logout(Context.getCurrentRequest(), Context.getCurrentResponse());
+        } catch (Exception e){}
 
-  @View
-  @Route(value = "/dologin", priority = 1)
-  public Response doLogin() {
-    try {
-      HttpServletRequest req = Context.getCurrentRequest();
-      int status = req.getRemoteUser() != null ? AUTHENTICATED : FAILED;
-
-      String initURL = req.getParameter("initURL");
-      if (initURL == null || initURL.isEmpty()) {
-        initURL = req.getContextPath();
-      }
-
-      if (status == AUTHENTICATED) {
-        return Response.redirect(initURL);
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
-
-    String loginURL = Context.getCurrentRequest().getContextPath() + "/login";
-    return Response.redirect(loginURL);
-  }
-
-  @Action
-  @Route(value = "/actionLogin", priority = 1)
-  public Response actionLogin(String username, String password) {
-    try {
-      Credentials credentials = new Credentials(username, password);
-      ServletContainer container = ServletContainerFactory.getServletContainer();
-      container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
-      return Controller_.doLogin();
-    } catch (ServletException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (AuthenticationException ex) {
-      ex.printStackTrace();
-    }
-    flash.setError("Username or password incorrect!");
-    return Controller_.login();
-  }
-
-  @View
-  @Route(value = "/login", priority = 1)
-  public Response login(RequestContext context) {
-    ServletContext servletContext = null;
-    String contextPath = "";
-    try {
-      HttpServletRequest req = Context.getCurrentRequest();
-      servletContext = req.getServletContext();
-      contextPath = req.getContextPath();
-
-      int status = req.getRemoteUser() != null ? AUTHENTICATED : FAILED;
-
-      String initURL = req.getParameter("initURL");
-      if (initURL == null || initURL.isEmpty()) {
-        initURL = req.getContextPath();
-      }
-
-      String username = req.getParameter("username");
-      String password = req.getParameter("password");
-
-      if (status == AUTHENTICATED) {
-        return Response.redirect(initURL);
-
-      } else if (username != null && password != null) {
-        Credentials credentials = new Credentials(username, password);
-        ServletContainer container = ServletContainerFactory.getServletContainer();
-        container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
-        return Controller_.doLogin();
-      }
-    } catch (Exception ex) {
-      servletContext = null;
-      contextPath = context.getHttpContext().getContextPath();
-    }
-
-    PortalContainer container = null;
-    if (servletContext == null) {
-      container = PortalContainer.getInstance();
-    } else {
-      container = PortalContainer.getCurrentInstance(servletContext);
-    }
-    OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) container.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
-
-    List<OauthProviderDescriptor> oauthProviders = null;
-    if (registry.isOAuthEnabled()) {
-      oauthProviders = new LinkedList<OauthProviderDescriptor>();
-      for (OAuthProviderType provider : registry.getEnabledOAuthProviders()) {
-        String type = "twitter";
-        if (provider.getKey().equals("GOOGLE")) {
-          type = "google-plus";
-        } else if (provider.getKey().equals("FACEBOOK")) {
-          type = "facebook";
+        Map<String, RequestParameter> parameters = context.getParameters();
+        String initURL = parameters.containsKey("initURL") ? parameters.get("initURL").getValue() : null;
+        if (initURL == null || initURL.isEmpty()) {
+            initURL = context.getHttpContext().getContextPath();
         }
-        oauthProviders.add(new OauthProviderDescriptor(provider.getFriendlyName(), provider.getInitOAuthURL(contextPath), type));
-      }
+        return Response.redirect(initURL);
     }
 
-    return login.with().set("oauthProviders", oauthProviders).ok().with(juzu.PropertyType.STYLESHEET, "login-stylesheet").with(juzu.PropertyType.STYLESHEET, "social-buttons");
-  }
+    @View
+    @Route(value = "/dologin", priority = 1)
+    public Response doLogin() {
+        return LoginController_.login();
+    }
+
+    @Action
+    @Route(value = "/actionLogin", priority = 1)
+    public Response actionLogin(String username, String password) {
+        try {
+            Credentials credentials = new Credentials(username, password);
+            ServletContainer container = ServletContainerFactory.getServletContainer();
+            container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
+        } catch (Exception e) {
+            loginFailureMessage.setError("Username or password incorrect!");
+        }
+
+        return LoginController_.login();
+    }
+
+    @View
+    @Route(value = "/login", priority = 1)
+    public Response login(RequestContext context) throws Exception {
+        String contextPath = context.getHttpContext().getContextPath();
+        int status = FAILED;
+
+        //TODO: WebRequestBridge alway return null when call getSecurityContext()
+        //So temporary use HttpServletRequest
+        /*if(context.getSecurityContext() != null) {
+            status = context.getSecurityContext().getRemoteUser() != null ? AUTHENTICATED : FAILED;
+        }*/
+        if(Context.getCurrentRequest() != null) {
+            status = Context.getCurrentRequest().getRemoteUser() != null ? AUTHENTICATED : FAILED;
+        }
+
+        Map<String, RequestParameter> parameters = context.getParameters();
+        String username = parameters.containsKey("username") ? parameters.get("username").getValue() : null;
+        String password = parameters.containsKey("password") ? parameters.get("password").getValue() : null;
+        String initURL  = parameters.containsKey("initURL")  ? parameters.get("initURL").getValue()  : null;
+        if (initURL == null || initURL.isEmpty()) {
+            initURL = contextPath;
+        }
+
+        if (status == AUTHENTICATED) {
+            return Response.redirect(initURL);
+        }
+
+        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
+            try {
+                Credentials credentials = new Credentials(username, password);
+                ServletContainer container = ServletContainerFactory.getServletContainer();
+                container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
+                return LoginController_.login();
+            } catch (Exception e){}
+        }
+
+        ServletContext servletContext = null;
+        try {
+            servletContext = Context.getCurrentRequest().getServletContext();
+        } catch (NullPointerException ex) {}
+        PortalContainer container = null;
+        if (servletContext == null) {
+            container = PortalContainer.getInstance();
+        } else {
+            container = PortalContainer.getCurrentInstance(servletContext);
+        }
+
+        OAuthProviderTypeRegistry registry = (OAuthProviderTypeRegistry) container.getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
+        List<OauthProviderDescriptor> oauthProviders = null;
+        if (registry.isOAuthEnabled()) {
+            oauthProviders = new LinkedList<OauthProviderDescriptor>();
+            for (OAuthProviderType provider : registry.getEnabledOAuthProviders()) {
+                String type = "twitter";
+                if (provider.getKey().equals("GOOGLE")) {
+                    type = "google-plus";
+                } else if (provider.getKey().equals("FACEBOOK")) {
+                    type = "facebook";
+                }
+                oauthProviders.add(new OauthProviderDescriptor(provider.getFriendlyName(), provider.getInitOAuthURL(contextPath), type));
+            }
+        }
+
+        return login.with().set("oauthProviders", oauthProviders).ok().with(juzu.PropertyType.STYLESHEET, "login-stylesheet").with(juzu.PropertyType.STYLESHEET, "social-buttons");
+    }
 }

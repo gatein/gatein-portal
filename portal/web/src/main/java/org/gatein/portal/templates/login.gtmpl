@@ -1,28 +1,21 @@
 <%
-    def result = "", message = "";
-    if(flash.success != "") {
-        result = "success";
-        message = flash.success;
-    }
-    if(flash.error != "") {
-        result = "error";
-        message = flash.error;
-    }
+    def error = loginFailureMessage.error;
+    if(error == null) error = "";
 %>
 <div class="container">
-    <form method="POST" action="@{Controller.actionLogin()}" class="form-signin">
+    <form method="POST" action="@{LoginController.actionLogin()}" class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <%if(result != ""){%>
-        <div id="loginMessage" class="alert alert-${result}" >
+        <%if(error != ""){%>
+        <div id="loginMessage" class="alert alert-error" >
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            ${message}
+            ${error}
         </div>
         <%}%>
         <input type="text" name="username" class="input-block-level" placeholder="Username"/>
         <input type="password" name="password" class="input-block-level" placeholder="Password"/>
-        <label class="checkbox">
+        <!--<label class="checkbox">
             <input type="checkbox" value="remember-me"/> Remember me
-        </label>
+        </label>-->
         <button class="btn btn-large btn-primary" type="submit">Sign in</button>
     </form>
     <%

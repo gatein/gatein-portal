@@ -62,11 +62,7 @@ public class Controller {
         NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.CHILDREN, null);
 
         String username = requestContext.getSecurityContext().getRemoteUser();
-        if(username == null || username.isEmpty()) {
-            username = "_GUEST_";
-        }
-
-        //
+        if(username == null) username = "";
         return index.with()
                 .set("root", root.getNode())
                 .set("username", username)

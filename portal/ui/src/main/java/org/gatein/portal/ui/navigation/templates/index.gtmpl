@@ -9,12 +9,12 @@
                     <% } %>
                 </ul>
                 <ul class="nav pull-right">
-                    <%if(username == "_GUEST_"){%>
+                    <%if(username == ""){%>
                     <li>
                         <a href="/portal/dologin">Login</a>
                     </li>
                     <%} else {%>
-                    <li class="dropdown" style="padding-top:10px;">Account [<a href="/portal/dologout" class="dropdown-toggle" data-toggle="dropdown" style="display: inline;padding: 0;">Logout</a>]</li>
+                    <li class="dropdown" style="padding-top:10px;">${username} [<a href="/portal/dologout" class="dropdown-toggle" data-toggle="dropdown" style="display: inline;padding: 0;">Logout</a>]</li>
                     <%}%>
                 </ul>
             </div>
