@@ -305,6 +305,18 @@ public class PortalImplTest extends AbstractApiTest {
     }
 
     @Test
+    public void findSites_NonHidden_Paged() {
+        for (int i=0; i<17; i++) {
+            createSite(new SiteId("site-" + i), i % 2 == 0);
+        }
+        List<Site> sites = portal.findSites(new SiteQuery.Builder().withSiteTypes(SiteType.SITE).withPagination(0, 10).build());
+        assertEquals(9, sites.size());
+        for (int i=0; i<9; i++) {
+            assertEquals("site-" + (i * 2), sites.get(i).getName());
+        }
+    }
+
+    @Test
     public void findSites_NoResults() {
         List<Site> sites = portal.findSites(new SiteQuery.Builder().withAllSiteTypes().build());
 

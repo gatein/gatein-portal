@@ -159,25 +159,31 @@ public class PortalImpl implements Portal {
             pagination = null; // set it to null so the internal DataStorage doesn't use it, and we manually page later
             log.warn("Pagination is not supported internally for SiteQuery's with multiple site types. Therefore this query has the possibility to perform poorly.");
         }
+        boolean includeAll = query.isIncludeEmptySites();
 
         List<Site> sites = new ArrayList<Site>();
         for (SiteType type : query.getSiteTypes()) {
-            List<PortalConfig> internalSites;
+            List<Site> sitesFound;
             switch (type) {
                 case SITE:
-                    internalSites = findSites(pagination, SITES, Comparators.site(query.getSorting()));
+                    sitesFound = findSites(pagination, SITES, Comparators.site(query.getSorting()), includeAll);
                     break;
                 case SPACE:
-                    internalSites = findSites(pagination, SPACES, Comparators.site(query.getSorting()));
+                    sitesFound = findSites(pagination, SPACES, Comparators.site(query.getSorting()), includeAll);
                     break;
                 case DASHBOARD:
-                    internalSites = findSites(pagination, DASHBOARDS, Comparators.site(query.getSorting()));
+                    sitesFound = findSites(pagination, DASHBOARDS, Comparators.site(query.getSorting()), includeAll);
                     break;
                 default:
                     throw new AssertionError();
             }
 
-            sites.addAll(fromList(internalSites, navigationService, query.isIncludeEmptySites()));
+            sites.addAll(sitesFound);
+
+            // No reason to fetch anymore
+            if (pagination != null && sites.size() >= pagination.getLimit()) {
+                break;
+            }
         }
 
         filter(sites, query.getFilter());
@@ -190,23 +196,21 @@ public class PortalImpl implements Portal {
         return sites;
     }
 
-    private <T> List<T> findSites(Pagination pagination, Query<T> query, Comparator<T> comparator) {
+    private List<Site> findSites(Pagination pagination, Query<PortalConfig> query, Comparator<PortalConfig> comparator, boolean includeAllSites) {
         try {
             if (pagination != null) {
-                ListAccess<T> access = dataStorage.find2(query, comparator);
+                ListAccess<PortalConfig> access = dataStorage.find2(query, comparator);
                 int size = access.getSize();
                 int offset = pagination.getOffset();
                 int limit = pagination.getLimit();
                 if (offset >= size) {
                     return Collections.emptyList();
-                } else if (offset + limit > size) {
-                    pagination = new Pagination(offset, size-offset);
                 }
 
-                T[] loaded = access.load(0, pagination.getOffset() + pagination.getLimit());
-                return Arrays.asList(loaded).subList(pagination.getOffset(), pagination.getOffset() + pagination.getLimit());
+                PortalConfig[] sites = loadSites(includeAllSites, access, size, offset, limit);
+                return fromList(Arrays.asList(sites).subList(pagination.getOffset(), sites.length));
             } else {
-                return dataStorage.find(query, comparator).getAll();
+                return fromList(dataStorage.find(query, comparator).getAll());
             }
         } catch (Throwable e) {
             throw new ApiException("Failed to query for sites", e);
@@ -422,22 +426,68 @@ public class PortalImpl implements Portal {
         }
     }
 
-    private static List<Site> fromList(List<PortalConfig> internalSites, NavigationService service, boolean includeAllSites) {
+    private static List<Site> fromList(List<PortalConfig> internalSites) {
         List<Site> sites = new ArrayList<Site>(internalSites.size());
         for (PortalConfig internalSite : internalSites) {
+            if (internalSite == null) continue;
+
+            sites.add(new SiteImpl(internalSite));
+        }
+        return sites;
+    }
+
+    private PortalConfig[] loadSites(boolean includeAllSites, ListAccess<PortalConfig> access, int size, int offset, int limit) throws Exception {
+        PortalConfig[] sites = new PortalConfig[Math.min(limit + offset, size)];
+        PortalConfig[] loaded;
+        int loadIndex = 0;
+        int loadLength = sites.length;
+        int index = 0;
+        int length = 0;
+        while (index < sites.length && loadIndex < size) {
+            // Load sites from backend filtering empty sites if needed (includeAllSites=false)
+            loaded = load(access, loadIndex, loadLength, includeAllSites);
+
+            // Copy contents to sites array
+            int copyLength = Math.min(loaded.length, sites.length - index);
+            System.arraycopy(loaded, 0, sites, index, copyLength);
+
+            // Update what has been copied
+            index = index + loaded.length;
+            length = length + copyLength;
+            if (length == sites.length) {
+                break;
+            }
+
+            // Update what has been loaded
+            loadIndex = loadIndex + sites.length;
+            loadLength = loadLength + limit;
+            if (loadLength + loadIndex > size) {
+                loadLength = size - loadIndex;
+            }
+        }
+        return sites;
+    }
+
+    private PortalConfig[] load(ListAccess<PortalConfig> access, int start, int end, boolean includeAllSites) throws Exception {
+        PortalConfig[] loaded = access.load(start, end);
+        List<PortalConfig> list = new ArrayList<PortalConfig>(loaded.length);
+        for (PortalConfig pc : loaded) {
+            if (pc == null) continue;
+
             NavigationContext ctx = null;
             if (!includeAllSites) {
                 try {
-                    ctx = service.loadNavigation(new SiteKey(internalSite.getType(), internalSite.getName()));
+                    ctx = navigationService.loadNavigation(new SiteKey(pc.getType(), pc.getName()));
                 } catch (Throwable t) {
                     throw new ApiException("Failed to find sites", t);
                 }
             }
 
             if (includeAllSites || ctx != null) {
-                sites.add(new SiteImpl(internalSite));
+                list.add(pc);
             }
         }
-        return sites;
+
+        return list.toArray(new PortalConfig[list.size()]);
     }
 }
