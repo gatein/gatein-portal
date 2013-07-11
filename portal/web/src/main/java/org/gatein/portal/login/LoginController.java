@@ -45,7 +45,7 @@ import org.gatein.wci.authentication.AuthenticationException;
 import org.gatein.wci.security.Credentials;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
-public class Controller {
+public class LoginController {
   /**
    * .
    */

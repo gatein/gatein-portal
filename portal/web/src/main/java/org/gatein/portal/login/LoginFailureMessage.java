@@ -24,7 +24,7 @@ import juzu.FlashScoped;
 
 @Named("flash")
 @FlashScoped
-public class Flash {
+public class LoginFailureMessage {
 
     private String success = "";
 
