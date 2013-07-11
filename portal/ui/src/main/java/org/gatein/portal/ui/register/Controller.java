@@ -20,10 +20,8 @@ package org.gatein.portal.ui.register;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-
 import juzu.Action;
 import juzu.Path;
 import juzu.Response;
