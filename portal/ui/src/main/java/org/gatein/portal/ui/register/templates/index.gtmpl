@@ -19,7 +19,7 @@
          <tbody>
             <tr>
                <td><label>User Name:</label></td>
-               <td><input type="text" name="userName" required> *
+               <td><input type="text" name="userName" value="${userBean.userName}" required> *
             </tr>
             <tr>
                <td><label>Password:</label></td>
@@ -31,19 +31,19 @@
             </tr>
             <tr>
                <td><label>First Name:</label></td>
-               <td><input type="text" name="firstName" required> *</td>
+               <td><input type="text" name="firstName" value="${userBean.firstName}" required> *</td>
             </tr>
             <tr>
                <td><label>Last Name:</label></td>
-               <td><input type="text" name="lastName" required> *</td>
+               <td><input type="text" name="lastName" value="${userBean.lastName}" required> *</td>
             </tr>
             <tr>
                <td><label>Display Name:</label></td>
-               <td><input type="text" name="displayName" required> *</td>
+               <td><input type="text" name="displayName" value="${userBean.displayName}" required> *</td>
             </tr>
             <tr>
                <td><label>Email Address:</label></td>
-               <td><input type="text" name="emailAddress" required> *</td>
+               <td><input type="text" name="emailAddress" value="${userBean.emailAddress}" required> *</td>
             </tr>
          </tbody>
       </table>
@@ -53,4 +53,12 @@
          <a href="/portal" class="btn">Cancel</a>
       </div>
    </form>
+    <%
+    if (oauthProviders != null) {%>
+    <div class="social-login">
+        <% for (def social : oauthProviders) { %>
+        <a href="${social.link}" class="btn btn-${social.type}"><i class="icon-${social.type}"></i> Register with ${social.name}</a>
+        <%}%>
+    </div>
+    <%}%>
 </div>

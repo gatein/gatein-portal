@@ -18,12 +18,12 @@ public class UserBean {
     public String emailAddress;
 
     public UserBean(User user) {
-        this.userName = user.getUserName();
+        this.userName = user.getUserName() == null ? "" : user.getUserName();
         this.password = "";
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.displayName = user.getDisplayName();
-        this.emailAddress = user.getEmail();
+        this.firstName = user.getFirstName() == null ? "" : user.getFirstName();
+        this.lastName = user.getLastName() == null ? "" : user.getLastName();
+        this.displayName = user.getDisplayName() == null ? "" : user.getDisplayName();
+        this.emailAddress = user.getEmail() == null ? "" : user.getEmail();
     }
 
     public UserBean() {
