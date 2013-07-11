@@ -29,6 +29,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
@@ -75,6 +76,7 @@ public class KernelLifeCycle implements Filter {
         PortalContainer c = container.get();
         try {
             before(c);
+            Context.setRequest((HttpServletRequest)req);
             chain.doFilter(req,  resp);
         } finally {
             after();
@@ -102,14 +104,17 @@ public class KernelLifeCycle implements Filter {
 
     public static Runnable wrap(final Runnable runnable) {
         final PortalContainer c = current.get();
+        final HttpServletRequest request = Context.getRequest();
         return new Runnable() {
             @Override
             public void run() {
                 try {
                     before(c);
+                    Context.setRequest(request);
                     runnable.run();
                 } finally {
                     after();
+                    Context.setRequest(null);
                 }
             }
         };
