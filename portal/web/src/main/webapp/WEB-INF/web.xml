@@ -100,6 +100,10 @@
     <url-pattern>/assets/*</url-pattern>
   </servlet-mapping>
 
+  <listener>
+    <listener-class>org.exoplatform.web.security.AuthenticationRegistryListener</listener-class>
+  </listener>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>user authentication</web-resource-name>

@@ -225,14 +225,12 @@
         <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is needed -->
         <value-param>
           <name>registrationUrl</name>
-          <!--<value>/@@portal.container.name@@/</value>-->
-          <value>/portal/</value>
+          <value>/@@portal.container.name@@/register</value>
         </value-param>
         <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is not needed because user is already registered -->
         <value-param>
           <name>loginUrl</name>
-          <!--<value>/@@portal.container.name@@/login</value>-->
-          <value>/portal/login</value>
+          <value>/@@portal.container.name@@/login</value>
         </value-param>
       </init-params>
     </component-plugin>
@@ -310,8 +308,7 @@
         </value-param>
         <value-param>
           <name>enabled</name>
-          <!--<value>${gatein.oauth.twitter.enabled}</value>-->
-          <value>true</value>
+          <value>${gatein.oauth.twitter.enabled}</value>
         </value-param>
         <value-param>
           <name>userNameAttributeName</name>
