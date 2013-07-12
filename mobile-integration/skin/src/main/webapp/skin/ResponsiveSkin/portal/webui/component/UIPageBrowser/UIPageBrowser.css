@@ -1,0 +1,76 @@
+#PopupPageSelector2 {
+  overflow: auto;
+  height: auto;
+  max-height: none;
+  max-width: none;
+  width: 67em !important; /* need to overwrite inline css from javascript */
+}
+
+#PopupPageSelector2 .UIWindowContent {
+  overflow: auto;
+}
+
+#PopupPageSelector2 .UIPageBrowser {
+   min-width: 65em;
+}
+
+#PopupPageSelector2 .UIPageBrowser .UIGrid .Text {
+  white-space: normal;
+  word-break: break-word;
+}
+
+#PopupPageSelector2 .UIPageBrowser .UIGrid #actions {
+  width: 4em;
+}
+
+@media only screen and (max-width: 67em) {
+
+  #PopupPageSelector2 {
+    max-width: 100%;
+  }  
+}
+
+@media only screen and (max-width: 30em) {
+  #PopupPageSelector2 .UIPageBrowser {
+    min-width: inherit;
+  }
+
+
+  #PopupPageSelector2 .UIPageSearchForm {
+    display: none;
+  }
+
+  #PopupPageSelector2 thead, 
+  #PopupPageSelector2 td {
+    display: none;
+    border: none;
+  }
+
+  #PopupPageSelector2 td[headers="pageId"] {
+   display: block;
+   height: auto;
+  }
+
+  #PopupPageSelector2 td[headers="title"],
+  #PopupPageSelector2 td[headers="actions"] {
+    display: inline;
+    height: auto;
+  }
+
+  #PopupPageSelector2 td[headers="title"] {
+    font-size: 90%;
+    color: #1C5182;
+  }
+ 
+  #PopupPageSelector2 td[headers="title"] {
+    float: left;
+  }
+  
+  #PopupPageSelector2 td[headers="pageId"] {
+    float: none;
+  }
+
+  #PopupPageSelector2 td[headers="actions"] {
+    float: right;
+  }
+}

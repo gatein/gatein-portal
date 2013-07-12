@@ -139,12 +139,18 @@
         display: block;
         height: auto;
     }
-    .UIPopupMessages .UIHorizontalTabs .TabsContainer,.UIPopupMessages .UIHorizontalTabs {
+    .UIPopupMessages .UIHorizontalTabs .TabsContainer,
+    .UIPopupMessages .UIHorizontalTabs {
         height: auto;
     }
 
-.UITabSelector .UIHorizontalTabs,
-     .UITabSelector .UIHorizontalTabs .CenterHorizontalTabs,
+    .UIHorizontalTabs .TabsContainer,
+    .UIHorizontalTabs .UITab {
+        display: block;
+    }
+
+    .UITabSelector .UIHorizontalTabs,
+    .UITabSelector .UIHorizontalTabs .CenterHorizontalTabs,
     .UITabSelector .UIHorizontalTabs .TabsContainer {
         height: auto;
         background: none;

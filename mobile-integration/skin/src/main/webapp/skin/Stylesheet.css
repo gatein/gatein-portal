@@ -60,6 +60,8 @@
 
 @import url(ResponsiveSkin/portal/webui/component/UIBannerPortlet/UIBannerPortlet.css);
 
+@import url(ResponsiveSkin/portal/webui/component/UIPageBrowser/UIPageBrowser.css);
+
 @import url(ResponsiveSkin/portal/webui/component/EditInline/EditInline.css);
 
 @import url(ResponsiveSkin/portlet/webui/UIPageManagementPortlet/UIPageManagementPortlet.css);

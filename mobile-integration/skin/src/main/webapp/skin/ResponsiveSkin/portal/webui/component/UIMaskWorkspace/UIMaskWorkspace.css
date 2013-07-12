@@ -50,10 +50,6 @@
         display: none;
     }
 
-    .MaskLayer {
-        background: inherit;
-    }
-
     .UIMaskWorkspace {
         position: relative !important;
     }
@@ -66,10 +62,6 @@
 @media screen and (max-height: 35em) {
     #UIWorkingWorkspace.background {
        display: none;
-    } 
-
-    .MaskLayer {
-       background: inherit;
     }
 
     .UIMaskWorkspace {
