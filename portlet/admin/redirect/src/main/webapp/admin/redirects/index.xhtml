@@ -51,6 +51,7 @@
 						</thead>
 						<tbody class="sortable sortable-rdr">
 						<ui:repeat value="#{rdrs.redirects}" var="r" varStatus="status">
+							<ui:param name="redirectSiteExists" value="#{rdrEdit.checkSiteExists(r.redirectSite)}" />
 							<!-- Redirect Summary Row -->
 							<tr id="rdr_sum_#{status.index}" class="redirect-summary">
 								<td>
@@ -67,7 +68,7 @@
 									</div>
 								</td>
 								<td>#{r.name}</td>
-								<td>Redirect to #{r.redirectSite} <span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
+								<td><span style="#{redirectSiteExists ? '' : 'color: #AA0000;'}"><i class="#{redirectSiteExists ? 'hidden-element' : 'icon-warning-sign tooltipTrigger'}" title="Redirect Site Not Available!"></i> Redirect to #{r.redirectSite}</span><span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
 								<td class="actions" style="text-align: center;">
 									<a4j:commandLink styleClass="configure-redirect redirect-summary" action="#{rdrEdit.load(rdrs.siteName, r.name)}" render=":edit_form" oncomplete="configureRedirect();" title="Configure"><i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i></a4j:commandLink>
 									<h:commandLink styleClass="delete-redirect redirect-summary" title="Delete">

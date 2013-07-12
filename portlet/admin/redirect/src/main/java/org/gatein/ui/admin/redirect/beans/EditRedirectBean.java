@@ -42,6 +42,7 @@ import org.exoplatform.portal.config.model.RedirectCondition;
 import org.exoplatform.portal.config.model.RedirectMappings;
 import org.exoplatform.portal.config.model.UserAgentConditions;
 import org.gatein.api.PortalRequest;
+import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.Node;
 import org.gatein.api.navigation.Nodes;
 import org.gatein.api.site.SiteId;
@@ -613,6 +614,15 @@ public class EditRedirectBean implements Serializable {
         }
     }
 
+    public boolean checkSiteExists(String name) {
+        if (name != null) {
+            Navigation nav = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(name));
+            return nav != null;
+        }
+
+        return false;
+    }
+
     // TODO: move this to a different bean
     public List<String> loadOriginNodes(String siteName) {
         try {
@@ -636,10 +646,12 @@ public class EditRedirectBean implements Serializable {
         try {
             ArrayList<String> nodes = new ArrayList<String>();
             if (this.pr.getRedirectSite() != null) {
-                Node n = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(this.pr.getRedirectSite()))
-                        .getRootNode(Nodes.visitAll());
-                for (Node node : Nodes.asList(n)) {
-                    nodes.add(node.getNodePath().toString());
+                Navigation nav = PortalRequest.getInstance().getPortal().getNavigation(new SiteId(this.pr.getRedirectSite()));
+                if (nav != null) {
+                    Node n = nav.getRootNode(Nodes.visitAll());
+                    for (Node node : Nodes.asList(n)) {
+                        nodes.add(node.getNodePath().toString());
+                    }
                 }
             }
 
