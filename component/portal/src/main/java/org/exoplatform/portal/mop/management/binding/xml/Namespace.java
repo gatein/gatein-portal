@@ -27,15 +27,16 @@ package org.exoplatform.portal.mop.management.binding.xml;
  * @version $Revision$
  */
 public enum Namespace {
-    GATEIN_OBJECTS_1_1("http://www.gatein.org/xml/ns/gatein_objects_1_1"), GATEIN_OBJECTS_1_2(
-            "http://www.gatein.org/xml/ns/gatein_objects_1_2"), GATEIN_OBJECTS_1_3(
-            "http://www.gatein.org/xml/ns/gatein_objects_1_3"),
-            GATEIN_OBJECTS_1_4("http://www.gatein.org/xml/ns/gatein_objects_1_4");
+    GATEIN_OBJECTS_1_1("http://www.gatein.org/xml/ns/gatein_objects_1_1"),
+    GATEIN_OBJECTS_1_2("http://www.gatein.org/xml/ns/gatein_objects_1_2"),
+    GATEIN_OBJECTS_1_3("http://www.gatein.org/xml/ns/gatein_objects_1_3"),
+    GATEIN_OBJECTS_1_4("http://www.gatein.org/xml/ns/gatein_objects_1_4"),
+    GATEIN_OBJECTS_1_5("http://www.gatein.org/xml/ns/gatein_objects_1_5");
 
     /**
      * The current namespace version.
      */
-    public static final Namespace CURRENT = GATEIN_OBJECTS_1_4;
+    public static final Namespace CURRENT = GATEIN_OBJECTS_1_5;
 
     private final String name;
 
