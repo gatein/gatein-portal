@@ -27,17 +27,13 @@
 
   <component>
     <key>org.exoplatform.container.PropertyConfigurator</key>
-    <type>org.exoplatform.container.PropertyConfigurator</type>
+    <type>org.gatein.common.GateInConfigurator</type>
 
     <init-params>
       <value-param>
         <name>properties.url</name>
         <value>jar:/conf/configuration.properties</value>
-      </value-param>
-      <properties-param>
-      	<name>properties</name>
-      	<property name="java.security.auth.login.config" value="${java.security.auth.login.config:../conf/jaas.conf}"/>
-      </properties-param>
+      </value-param> 
     </init-params>
 
   </component>
