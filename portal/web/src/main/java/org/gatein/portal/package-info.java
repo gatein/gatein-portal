@@ -13,7 +13,9 @@
     @Binding(SimpleLayoutFactory.class),
     @Binding(PortletContentProvider.class),
     @Binding(KernelFilter.class),
-    @Binding(LoginFailureMessage.class)})
+    @Binding(LoginFailureMessage.class),
+    @Binding(OAuthProviderTypeRegistry.class),
+    @Binding(LoginHelper.class)})
 @Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"),
         declaredStylesheets = {@Stylesheet(id = "login-stylesheet", src = "login.css"),
                 @Stylesheet(id = "social-buttons", src = "social-buttons.css")
@@ -29,6 +31,7 @@ import org.exoplatform.container.PortalContainer;
 import org.gatein.portal.kernel.KernelFilter;
 import org.gatein.portal.layout.SimpleLayoutFactory;
 import org.gatein.portal.login.LoginFailureMessage;
+import org.gatein.portal.login.LoginHelper;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.navigation.NavigationService;
@@ -36,3 +39,4 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.portlet.PortletAppManager;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;

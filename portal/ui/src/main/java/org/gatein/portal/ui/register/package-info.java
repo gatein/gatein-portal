@@ -7,7 +7,8 @@
         @Binding(UserManager.class),
         @Binding(OrganizationService.class),
         @Binding(AuthenticationRegistry.class),
-        @Binding(OAuthProviderTypeRegistry.class)
+        @Binding(OAuthProviderTypeRegistry.class),
+        @Binding(OauthProviderHelper.class)
 })
 @Portlet
 @Assets(stylesheets = {

@@ -31,7 +31,7 @@ import juzu.template.Template;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.idm.UserImpl;
 import org.exoplatform.web.security.AuthenticationRegistry;
-import org.gatein.portal.common.kernel.Context;
+import org.gatein.portal.common.kernel.ThreadContext;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.spi.OAuthPrincipal;
 import org.gatein.security.oauth.spi.OAuthProviderType;
@@ -56,12 +56,12 @@ public class Controller {
     AuthenticationRegistry registry;
 
     @Inject
-    OAuthProviderTypeRegistry oAuthProviderTypeRegistry;
+    OauthProviderHelper oauthProviderHelper;
 
     @View
     public Response index(RequestContext context) {
         User portalUser = null;
-        HttpServletRequest request = Context.getRequest();
+        HttpServletRequest request = ThreadContext.getCurentHttpServletRequest();
         if(request != null) {
             portalUser = (User)registry.getAttributeOfClient(request, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER);
         }
@@ -71,19 +71,7 @@ public class Controller {
         }
         UserBean userBean = new UserBean(portalUser);
 
-        List<OauthProviderDescriptor> oauthProviders = null;
-        if (oAuthProviderTypeRegistry.isOAuthEnabled()) {
-            oauthProviders = new LinkedList<OauthProviderDescriptor>();
-            for (OAuthProviderType provider : oAuthProviderTypeRegistry.getEnabledOAuthProviders()) {
-                String type = "twitter";
-                if (provider.getKey().equals("GOOGLE")) {
-                    type = "google-plus";
-                } else if (provider.getKey().equals("FACEBOOK")) {
-                    type = "facebook";
-                }
-                oauthProviders.add(new OauthProviderDescriptor(provider.getFriendlyName(), provider.getInitOAuthURL(context.getHttpContext().getContextPath()), type));
-            }
-        }
+        List<OauthProviderDescriptor> oauthProviders = oauthProviderHelper.getOauthProviderDescriptors(context.getHttpContext().getContextPath());
 
         return index.with().set("userBean", userBean).set("oauthProviders", oauthProviders).ok();
     }
@@ -99,12 +87,11 @@ public class Controller {
                     flash.setError("This user is already existed. Please enter different userName.");
                 } else {
                     OAuthPrincipal oauthPrincipal = null;
-                    HttpServletRequest request = Context.getRequest();
+                    HttpServletRequest request = ThreadContext.getCurentHttpServletRequest();
                     if(request != null) {
                          oauthPrincipal = (OAuthPrincipal)registry.getAttributeOfClient(request, OAuthConstants.ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL);
                     }
                     manager.saveUser(userBean, oauthPrincipal);
-                    //TODO: #nttuyen process link to oauth
                     flash.setSuccess("You have successfully registered a new account!");
                     flash.setUserName(userBean.userName);
                 }

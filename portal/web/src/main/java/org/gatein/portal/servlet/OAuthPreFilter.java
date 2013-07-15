@@ -31,9 +31,7 @@ public class OAuthPreFilter implements Filter {
             Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass("org.gatein.sso.agent.tomcat.ServletAccess");
             Method getRequestMethod = clazz.getDeclaredMethod("setRequestAndResponse", HttpServletRequest.class, HttpServletResponse.class);
             getRequestMethod.invoke(null, servletRequest, servletResponse);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        } catch (Exception ex) {}
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } finally {
@@ -42,7 +40,6 @@ public class OAuthPreFilter implements Filter {
                 Method getRequestMethod = clazz.getDeclaredMethod("resetRequestAndResponse");
                 getRequestMethod.invoke(null);
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }

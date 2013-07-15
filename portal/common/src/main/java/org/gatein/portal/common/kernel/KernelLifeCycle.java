@@ -75,16 +75,16 @@ public class KernelLifeCycle implements Filter {
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         PortalContainer c = container.get();
         try {
-            before(c);
-            Context.setRequest((HttpServletRequest)req);
+            before(c, (HttpServletRequest)req);
             chain.doFilter(req,  resp);
         } finally {
             after();
         }
     }
 
-    private static void before(PortalContainer c) {
+    private static void before(PortalContainer c, HttpServletRequest request) {
         current.set(c);
+        ThreadContext.currentHttpServletRequest.set(request);
         RequestLifeCycle.begin(c);
     }
 
@@ -94,6 +94,7 @@ public class KernelLifeCycle implements Filter {
         } finally {
             // Do it anyway
             current.set(null);
+            ThreadContext.currentHttpServletRequest.set(null);
         }
     }
 
@@ -104,17 +105,15 @@ public class KernelLifeCycle implements Filter {
 
     public static Runnable wrap(final Runnable runnable) {
         final PortalContainer c = current.get();
-        final HttpServletRequest request = Context.getRequest();
+        final HttpServletRequest request = ThreadContext.getCurentHttpServletRequest();
         return new Runnable() {
             @Override
             public void run() {
                 try {
-                    before(c);
-                    Context.setRequest(request);
+                    before(c, request);
                     runnable.run();
                 } finally {
                     after();
-                    Context.setRequest(null);
                 }
             }
         };

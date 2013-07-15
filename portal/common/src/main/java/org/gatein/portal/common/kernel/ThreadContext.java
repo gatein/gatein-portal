@@ -20,13 +20,11 @@ package org.gatein.portal.common.kernel;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class Context {
-    private static ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
+public class ThreadContext {
+    static final ThreadLocal<HttpServletRequest> currentHttpServletRequest = new ThreadLocal<HttpServletRequest>();
+    //static final ThreadLocal<PortalContainer> currentPortalContainer = new ThreadLocal<PortalContainer>();
 
-    public static void setRequest(HttpServletRequest req) {
-        request.set(req);
-    }
-    public static HttpServletRequest getRequest() {
-        return request.get();
+    public static HttpServletRequest getCurentHttpServletRequest() {
+        return currentHttpServletRequest.get();
     }
 }
