@@ -23,22 +23,6 @@
 
 package org.exoplatform.portal.webui.application;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.portlet.PortletMode;
-import javax.portlet.ResourceResponse;
-import javax.portlet.WindowState;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.namespace.QName;
-
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -54,6 +38,7 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
@@ -75,6 +60,22 @@ import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.pc.api.invocation.response.SecurityErrorResponse;
 import org.gatein.pc.api.invocation.response.SecurityResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
+
+import javax.portlet.PortletMode;
+import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.namespace.QName;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 
 /** May 29, 2006 */
 public class UIPortletActionListener {
@@ -253,26 +254,57 @@ public class UIPortletActionListener {
         }
     }
 
+    private static List<UIPortlet> recursivelyFindUIPortlets(UIContainer uiContainer) {
+        List<UIPortlet> uiPortletList = new ArrayList<UIPortlet>();
+
+        for(UIComponent uiComponent : uiContainer.getChildren()) {
+            if(UIContainer.class.isAssignableFrom(uiComponent.getClass())) {
+                UIContainer childUIContainer = (UIContainer) uiComponent;
+                if(UIPortlet.class.isAssignableFrom(childUIContainer.getClass())) {
+                    uiPortletList.add((UIPortlet) childUIContainer);
+                } else {
+                    uiPortletList.addAll(recursivelyFindUIPortlets(childUIContainer));
+                }
+            }
+        }
+
+        return uiPortletList;
+    }
+
+    private static void normalizePortletWindowStates(UIPage uiPage) {
+        for(UIPortlet childUIPortlet : recursivelyFindUIPortlets(uiPage)) {
+            if(!WindowState.MINIMIZED.equals(childUIPortlet.getCurrentWindowState())) {
+                childUIPortlet.setCurrentWindowState(WindowState.NORMAL);
+            }
+        }
+    }
+
     /**
      * This method is used to set the next portlet window state if this one needs to be modified because of the incoming request
      */
     public static void setNextState(UIPortlet uiPortlet, WindowState state) {
         if (state != null) {
             UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
+
             if (WindowState.MAXIMIZED.equals(state)) {
-                uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 if (uiPage != null) {
+                    normalizePortletWindowStates(uiPage);
                     uiPage.setMaximizedUIPortlet(uiPortlet);
+                    uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 }
             } else if (WindowState.MINIMIZED.equals(state)) {
                 uiPortlet.setCurrentWindowState(WindowState.MINIMIZED);
                 if (uiPage != null) {
-                    uiPage.setMaximizedUIPortlet(null);
+                    if(uiPage.getMaximizedUIPortlet() != null && uiPage.getMaximizedUIPortlet().getId().equals(uiPortlet.getId())) {
+                        uiPage.setMaximizedUIPortlet(null);
+                    }
                 }
             } else {
                 uiPortlet.setCurrentWindowState(WindowState.NORMAL);
                 if (uiPage != null) {
-                    uiPage.setMaximizedUIPortlet(null);
+                    if(uiPage.getMaximizedUIPortlet() != null && uiPage.getMaximizedUIPortlet().getId().equals(uiPortlet.getId())) {
+                        uiPage.setMaximizedUIPortlet(null);
+                    }
                 }
             }
         }
@@ -709,6 +741,8 @@ public class UIPortletActionListener {
             UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
             if (windowState.equals(WindowState.MAXIMIZED.toString())) {
                 if (uiPageBody != null) {
+                    normalizePortletWindowStates(uiPage);
+
                     uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                     // TODO dang.tung: we have to set maximized portlet for page because in ShowMaxWindow case the PageBody
                     // isn't rendered
