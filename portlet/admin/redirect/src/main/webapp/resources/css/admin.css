@@ -26,7 +26,8 @@
 
 .RedirectAdmin i {
 	text-indent: -99999px;
-	text-align: left;
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
 }
 
 .RedirectAdmin a {color: #1c5182;}
@@ -77,9 +78,11 @@
 	cursor: pointer;
 	background-image: url("../img/icon-arrow-opened.png");
 	background-repeat: no-repeat;
-	background-position: left 2px;
-	padding-left: 16px;
-	line-height: 16px; 
+	background-position: left 2px; /* orientation=lt */
+	background-position: right 2px; /* orientation=rt */
+	padding-left: 16px; /* orientation=lt */
+	padding-right: 16px; /* orientation=rt */
+	line-height: 16px;
 }
 
 .RedirectAdmin .toggle.closed {background-image: url("../img/icon-arrow-closed.png");}
@@ -92,8 +95,10 @@
 }
 
 .RedirectAdmin .dropdown-menu.left {
-	left: auto;
-	right: 0;
+	left: auto; /* orientation=lt */
+	right: auto; /* orientation=rt */
+	right: 0; /* orientation=lt */
+	left 0; /* orientation=rt */
 }
 
 .RedirectAdmin .dropdown-menu li.separator {
@@ -248,7 +253,8 @@
 	line-height: 16px;
 	margin-left: 0;
 	margin-right: 0;
-	padding: 7px 15px 8px 45px;
+	padding: 7px 15px 8px 45px; /* orientation=lt */
+	padding: 7px 45px 8px 15px; /* orientation=rt */
 }
 
 .RedirectAdmin .nav-list .active > ul > .active > a {
@@ -264,7 +270,8 @@
 .RedirectAdmin .nav-list > li li > span {
     position: absolute;
     top: 5px;
-    right: 10px;
+    right: 10px; /* orientation=lt */
+    left: 10px; /* orientation=rt */
     visibility: hidden; /* Put visibility:visible in the admin-responsive */
     cursor: pointer;
 }
@@ -281,8 +288,10 @@
 
 .RedirectAdmin .nav-list .dropdown-menu {
 	top: 26px;
-	right: 2px;
-	left: auto;
+	right: 2px; /* orientation=lt */
+	left: 2px; /* orientation=rt */
+	left: auto; /* orientation=lt */
+	right: auto; /* orientation=rt */
 	z-index: 1000;
 }
 
@@ -292,14 +301,17 @@
 	border-right: 6px solid transparent;
 	content: "";
 	display: inline-block;
-	left: auto;
-	right: 10px;
+	left: auto; /* orientation=lt */
+	right: auto; /* orientation=rt */
+	right: 10px; /* orientation=lt */
+	left: 10px; /* orientation=rt */
 	position: absolute;
 	top: -6px;
 }
 
 .RedirectAdmin .nav-list .more {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	font-size: 12px;
 	color: #999;
 	margin-right: 15px;
@@ -310,7 +322,6 @@
 .RedirectAdmin .nav-list > li:hover .more {visibility: visible;}
 
 .RedirectAdmin li#server {margin-bottom: 20px;}
-
 
 /* Content */
 
@@ -396,8 +407,8 @@
 .RedirectAdmin th.actions,
 .RedirectAdmin td.actions {
 	width: 100px;
-	text-align: right;
-	padding-right: 20px;
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
 }
 
 .RedirectAdmin td.actions > a,
@@ -414,7 +425,8 @@
 .RedirectAdmin td.actions button+a,
 .RedirectAdmin td.actions a+button,
 .RedirectAdmin td.actions a+div {
-	margin-left: 10px;
+	margin-left: 10px; /* orientation=lt */
+	margin-right: 10px; /* orientation=rt */
 	display: inline-block;
 	line-height: 14px;
 }
@@ -457,7 +469,8 @@
 }
 
 .RedirectAdmin #conditions-table {
-    margin-left: 25px;
+    margin-left: 25px; /* orientation=lt */
+    margin-right: 25px; /* orientation=rt */
     width: 668px;
 }
 
@@ -478,7 +491,8 @@
 }
 
 .RedirectAdmin #container-right .form-actions {
-    padding-right: 0;
+    padding-right: 0; /* orientation=lt */
+    padding-left: 0; /* orientation=rt */
     background-color: transparent;
     border-top: none;
     padding-top: 4px;
@@ -487,7 +501,8 @@
 }
 
 .RedirectAdmin .form-actions button+button {
-    margin-left: 10px;
+    margin-left: 10px; /* orientation=lt */
+    margin-right: 10px; /* orientation=rt */
 }
 
 .RedirectAdmin #container-right .btn-primary {
@@ -512,7 +527,8 @@
 	margin-bottom: 0;
 	display: inline-block;
 	width: auto;
-	font-size: 18px;
+	font-size: 21px;
+	color: #333333;
 }
 
 .RedirectAdmin legend i {
@@ -548,11 +564,16 @@
 	background: transparent;
 	border-top: none;
 	margin: 0;
-	text-align: right;	
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 	border-top: none;
 }
 
-.RedirectAdmin .form-actions .btn-primary {margin-left: 5px;}
+.RedirectAdmin .form-actions .btn-primary {
+	margin-left: 5px; /* orientation=lt */
+	margin-right: 5px; /* orientation=rt */
+
+}
 
 
 /* Page Site Redirects */
@@ -599,7 +620,8 @@
 	font-weight: bold;
 	width: auto;
 	display: inline-block;
-	margin-right: 10px;
+	margin-right: 10px; /* orientation=lt */
+	margin-left: 10px; /* orientation=rt */
 }
 
 .RedirectAdmin .header-site-redirect input,
@@ -608,7 +630,10 @@
 .RedirectAdmin option[disabled="disabled"] {color: #aaa;}
 
 .RedirectAdmin a.inside-table,
-.RedirectAdmin button.inside-table {float: right;}
+.RedirectAdmin button.inside-table {
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+}
 
 .RedirectAdmin .table-striped tbody .table-striped tr:nth-child(2n+1) th,
 .RedirectAdmin .table-striped tbody .table-striped tr:nth-child(2n) td {background-color: #fff;}
@@ -677,8 +702,9 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 
 .RedirectAdmin .onoffswitch-inner {
 	display: block;
-	width: 200%; 
-	margin-left: -100%;
+	width: 200%;
+	margin-left: -100%; /* orientation=lt */
+	margin-right: -100%; /* orientation=rt */
 	-moz-transition: margin 0.3s ease-in 0s; 
 	-webkit-transition: margin 0.3s ease-in 0s;
 	-o-transition: margin 0.3s ease-in 0s; 
@@ -686,7 +712,8 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 }
 
 .RedirectAdmin .onoffswitch-inner > span {
-	float: left; 
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 50%; 
 	height: 20px; 
 	padding: 0; 
@@ -700,7 +727,9 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 }
 
 .RedirectAdmin .onoffswitch-inner .onoffswitch-active {
-	padding-left: 6px;
+	padding-left: 6px; /* orientation=lt */
+	padding-right: 6px; /* orientation=rt */
+	text-align: right; /* orientation=rt */
 	background-color: #0097e3;
 	background: -moz-linear-gradient(#00a3f4, #008acf);
 	background: -webkit-linear-gradient(#00a3f4, #008acf);
@@ -711,14 +740,16 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 }
 
 .RedirectAdmin .onoffswitch-inner .onoffswitch-inactive {
-	padding-right: 6px;
+	padding-right: 6px; /* orientation=lt */
+	padding-left: 6px; /* orientation=rt */
 	background-color: #F2F2F2;
 	background: -moz-linear-gradient(#fefefe, #e8e8e8);
 	background: -webkit-linear-gradient(#fefefe, #e8e8e8);
 	background: -o-linear-gradient(#fefefe, #e8e8e8);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#e8e8e8');
 	color: #999999;
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 }
 
 .RedirectAdmin .onoffswitch-switch {
@@ -733,17 +764,24 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 	border-radius: 12px;
 	position: absolute; 
 	top: 0; 
-	bottom: 0; 
-	right: 30px;
+	bottom: 0;
+	right: 30px; /* orientation=lt */
+	left: 30px; /* orientation=rt */
 	-moz-transition: all 0.3s ease-in 0s; 
 	-webkit-transition: all 0.3s ease-in 0s;
 	-o-transition: all 0.3s ease-in 0s; 
 	transition: all 0.3s ease-in 0s;
 }
 
-.RedirectAdmin .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {margin-left: 0;}
+.RedirectAdmin .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+	margin-left: 0; /* orientation=lt */
+	margin-right: 0; /* orientation=rt */
+}
 
-.RedirectAdmin .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {right: 0px;}
+.RedirectAdmin .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+	right: 0; /* orientation=lt */
+	left: 0; /* orientation=rt */
+}
 
 
 /* Footer */
@@ -829,10 +867,13 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 }
 
 .RedirectAdmin .modal .control-group label {
-	float: left;
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 	width: 120px;
-	text-align: right;
-	margin-right: 10px;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
+	margin-right: 10px; /* orientation=lt */
+	margin-left: 10px; /* orientation=rt */
 	padding-top: 4px;
 }
 
@@ -849,18 +890,22 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 	display: inline-block;
 	color: #999;
 	font-size: 11px;
-	padding-right: 5px;
+	padding-right: 5px; /* orientation=lt */
+	padding-left: 5px; /* orientation=rt */
 	width: 22px;
-	text-align: right;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 }
 
 .RedirectAdmin #condition-string label {
-	text-align: left;
+	text-align: left; /* orientation=lt */
+	text-align: right; /* orientation=rt */
 	width: 110px;
 }
 
 .RedirectAdmin #condition-string td > div {
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 	margin-bottom: 8px;
 	width: 390px;
 }
@@ -873,8 +918,10 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 
 .RedirectAdmin #condition-string div div.action {
 	visibility: hidden;
-	float: right;
-	margin-right: 10px;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	margin-right: 10px; /* orientation=lt */
+	margin-left: 10px; /* orientation=rt */
 	margin-top: 5px;
 }
 
@@ -892,22 +939,29 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 .RedirectAdmin #condition-properties input,
 .RedirectAdmin #condition-properties select,
 .RedirectAdmin #condition-properties div {
-    margin-right: 5px;
+    margin-right: 5px; /* orientation=lt */
+    margin-left: 5px; /* orientation=rt */
     margin-bottom: 0;
 }
 
 .RedirectAdmin #condition-properties div+div {
-	margin-right: 0;
-	margin-left: 5px;
+	margin-right: 0; /* orientation=lt */
+	margin-left: 0; /* orientation=rt */
+	margin-left: 5px; /* orientation=lt */
+	margin-right: 5px; /* orientation=rt */
 }
 
 .RedirectAdmin #condition-properties input.property {width: 100px;}
 
-.RedirectAdmin #condition-properties td.condition input.property {margin-left: 31px;}
+.RedirectAdmin #condition-properties td.condition input.property {
+	margin-left: 31px; /* orientation=lt */
+	margin-right: 31px; /* orientation=rt */
+}
 
 .RedirectAdmin #condition-properties div input {
 	width: 40px;
-	margin-right: 0;
+	margin-right: 0; /* orientation=lt */
+	margin-left: 0; /* orientation=rt */
 }
 
 .RedirectAdmin #condition-properties th.actions,
@@ -920,13 +974,16 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 
 .RedirectAdmin .input-append-inline span {
 	position: absolute;
-	right: 4px;
+	right: 4px; /* orientation=lt */
+	left: 4px; /* orientation=rt */
 	bottom: 5px;
 }
 
 .RedirectAdmin .input-append-inline input {
-	text-align: left; /* ammendonca: was right.. */
-	padding-right: 19px;
+	text-align: left; /* orientation=lt */ /* ammendonca: was right.. */
+	text-align: right; /* orientation=rt */
+	padding-right: 8px; /* orientation=lt */
+	padding-left: 8px; /* orientation=rt */
 }
 
 .RedirectAdmin select.attribute {
@@ -979,7 +1036,8 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 	color: #999;
 	display: inline-block;
 	width: 60%;
-	float: right;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
 }
 
 .RedirectAdmin .window-list label input {display: none;}
@@ -1025,4 +1083,24 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 
 .RedirectAdmin .UIFooterPortlet .CopyrightInfo {
     line-height: 23px;
+}
+
+/* Fixes */
+
+.RedirectAdmin select, .RedirectAdmin textarea, .RedirectAdmin input[type="text"],
+.RedirectAdmin input[type="password"], .RedirectAdmin input[type="datetime"],
+.RedirectAdmin input[type="datetime-local"], .RedirectAdmin input[type="date"],
+.RedirectAdmin input[type="month"], .RedirectAdmin input[type="time"],
+.RedirectAdmin input[type="week"], .RedirectAdmin input[type="number"],
+.RedirectAdmin input[type="email"], .RedirectAdmin input[type="url"],
+.RedirectAdmin input[type="search"], .RedirectAdmin input[type="tel"],
+.RedirectAdmin input[type="color"], .RedirectAdmin .uneditable-input {
+	border-radius: 3px 3px 3px 3px;
+	color: #555555;
+	display: inline-block;
+	font-size: 14px;
+	height: 20px;
+	line-height: 20px;
+	margin-bottom: 9px;
+	padding: 4px 6px;
 }
