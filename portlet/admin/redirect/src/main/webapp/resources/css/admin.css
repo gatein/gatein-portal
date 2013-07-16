@@ -13,7 +13,7 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.RedirectAdmin .icon-gray {background-image: url(#{resource['/img/glyphicons-halflings-gray.png']});}
+.RedirectAdmin .icon-gray {background-image: url("../img/glyphicons-halflings-gray.png");}
 
 .RedirectAdmin .gray {color: #999;}
 
@@ -39,7 +39,7 @@
 	display: inline-block;
 	width: 10px;
 	height: 12px;
-	background: url(#{resource['/img/icon-close.png']}) no-repeat left top;
+	background: url("../img/icon-close.png") no-repeat left top;
 }
 
 .RedirectAdmin button.modal-close,
@@ -51,7 +51,7 @@
 	float: right;
 	margin-top: 7px;
 	opacity: 0.2;
-	background: url(#{resource['/img/icon-close.png']}) no-repeat left top;
+	background: url("../img/icon-close.png") no-repeat left top;
 }
 
 .RedirectAdmin .alert .close {top: 3px;}
@@ -75,14 +75,14 @@
 
 .RedirectAdmin .toggle {
 	cursor: pointer;
-	background-image: url(#{resource['/img/icon-arrow-opened.png']});
+	background-image: url("../img/icon-arrow-opened.png");
 	background-repeat: no-repeat;
 	background-position: left 2px;
 	padding-left: 16px;
 	line-height: 16px; 
 }
 
-.RedirectAdmin .toggle.closed {background-image: url(#{resource['/img/icon-arrow-closed.png']});}
+.RedirectAdmin .toggle.closed {background-image: url("../img/icon-arrow-closed.png");}
 
 .RedirectAdmin .dropdown-toggle {cursor: pointer;}
 
@@ -194,7 +194,7 @@
 
 .RedirectAdmin .nav-list li:hover div span.toggle {background-position: left -22px;} /* Arrow appear */
 
-.RedirectAdmin .nav-list li:hover div span.toggle.closed {background-image: url(#{resource['/img/icon-arrow-closed.png']});}
+.RedirectAdmin .nav-list li:hover div span.toggle.closed {background-image: url("../img/icon-arrow-closed.png");}
 
 .RedirectAdmin .nav-list ul {margin-left: 0;}
 
@@ -239,9 +239,9 @@
 
 .RedirectAdmin .nav-list .active > a {font-weight: bold;}
 
-.RedirectAdmin .nav-list li a i {background-image: url("#{resource['/img/glyphicons-halflings-gray.png']}");}
+.RedirectAdmin .nav-list li a i {background-image: url("../img/glyphicons-halflings-gray.png");}
 
-.RedirectAdmin .nav-list .active > a i {background-image: url("#{resource['/img/glyphicons-halflings-white.png']}");}
+.RedirectAdmin .nav-list .active > a i {background-image: url("../img/glyphicons-halflings-white.png");}
 
 .RedirectAdmin .nav-list li.active > ul.subitems li a {
 	display: block;
@@ -273,11 +273,11 @@
 .RedirectAdmin .nav-list > li li.open > span {visibility: visible;}
 
 .RedirectAdmin .nav-list > li li.active > span i,
-.RedirectAdmin .nav-list > li li.active.open > span i {background-image: url("#{resource['/img/glyphicons-halflings-white.png']}");}
+.RedirectAdmin .nav-list > li li.active.open > span i {background-image: url("../img/glyphicons-halflings-white.png");}
 
-.RedirectAdmin .nav-list > li li.open > span i {background-image: url("#{resource['/img/glyphicons-halflings.png']}");}
+.RedirectAdmin .nav-list > li li.open > span i {background-image: url("../img/glyphicons-halflings.png");}
 
-.RedirectAdmin .nav-list > li li:not(.active) > span i:hover {background-image: url("#{resource['/img/glyphicons-halflings.png']}");}
+.RedirectAdmin .nav-list > li li:not(.active) > span i:hover {background-image: url("../img/glyphicons-halflings.png");}
 
 .RedirectAdmin .nav-list .dropdown-menu {
 	top: 26px;
@@ -646,7 +646,7 @@
 .RedirectAdmin tbody.sortable tr:hover td:nth-child(1) {
 	background-repeat: no-repeat;
 	background-position: 5px center;
-	background-image: url(#{resource['/img/icon-grippy.png']});
+	background-image: url("../img/icon-grippy.png");
 }
 
 /*tbody.sortable tr td:nth-child(1) {width: 110px;}
@@ -777,7 +777,7 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 	display: inline-block;
 	padding-left: 9px;
 	margin-left: 4px;
-	background: url(#{resource['/img/bullet-separator.png']}) no-repeat left center;
+	background: url("../img/bullet-separator.png") no-repeat left center;
 }
 
 .RedirectAdmin footer > ul > li:first-child {background: none;}

@@ -2,56 +2,98 @@
 <web-app version="3.0" metadata-complete="true"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-  <display-name>Redirects Admin Portlet</display-name>
+
+  <display-name>redirect-admin</display-name>
+
+  <!-- ALWAYS_DELEGATE: Indicates the Bridge should not render the view itself but rather always delegate the rendering. -->
   <context-param>
     <param-name>javax.portlet.faces.RENDER_POLICY</param-name>
     <param-value>ALWAYS_DELEGATE</param-value>
   </context-param>
+
+  <!-- Commenting the statement below because the taglib file is missing. -->
+  <!--
   <context-param>
     <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
     <param-value>/WEB-INF/app-tags.taglib.xml</param-value>
   </context-param>
+  -->
+
+  <!-- primary to get rid of start-up warning, secondary to leverage the benefit of JMS integration. -->
   <context-param>
+    <description>See http://planet.jboss.org/post/richfaces_4_2_0_cr1_release_announcement</description>
+    <param-name>org.richfaces.push.jms.enabled</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
+  <!-- Project stage is Development since this is a tech preview. -->
+  <context-param>
+    <description>See http://www.java-tutorial.ch/java-server-faces/jsf-project-stage</description>
     <param-name>javax.faces.PROJECT_STAGE</param-name>
     <param-value>Development</param-value>
   </context-param>
+
+  <!-- Disable the automatic inclusion of Portlet Bridge. -->
   <context-param>
+    <description>See https://docs.jboss.org/author/display/PBR31/Getting+Started</description>
     <param-name>org.gatein.portletbridge.WAR_BUNDLES_PORTLETBRIDGE</param-name>
     <param-value>true</param-value>
   </context-param>
+
+  <!-- Skip comments found on a facelet file. -->
   <context-param>
     <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
     <param-value>true</param-value>
   </context-param>
+
+  <!-- Override default RF skinning. -->
   <context-param>
     <param-name>org.richfaces.enableControlSkinning</param-name>
     <param-value>false</param-value>
   </context-param>
+
+  <!-- To enable the resource optimization. -->
   <context-param>
+    <description>See http://docs.jboss.org/richfaces/latest_4_X/Developer_Guide/en-US/html/chap-Developer_Guide-Advanced_features.html</description>
     <param-name>org.richfaces.resourceOptimization.enabled</param-name>
     <param-value>true</param-value>
   </context-param>
+
+  <!-- When "server" state is configured, the data is saved somewhere "on the back end", and (at most) a token is embedded in the data rendered to the user. -->
   <context-param>
+    <description>See http://myfaces.apache.org/core21/myfaces-impl/webconfig.html#javax_faces_STATE_SAVING_METHOD</description>
     <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
     <param-value>server</param-value>
   </context-param>
+
+  <!-- Submitted values are decoded as null values instead empty strings. -->
+  <context-param>
+    <description>See http://myfaces.apache.org/core21/myfaces-impl/webconfig.html#javax_faces_INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</description>
+    <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.jsf</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>/faces/*</url-pattern>
   </servlet-mapping>
+
   <mime-mapping>
-    <extension>xcss</extension>
+    <extension>css</extension>
     <mime-type>text/css</mime-type>
   </mime-mapping>
+
   <login-config>
     <auth-method>BASIC</auth-method>
   </login-config>

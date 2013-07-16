@@ -5,10 +5,10 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
   <portlet-skin>
-    <application-name>redirect-admin-portlet</application-name>
+    <application-name>redirect-admin</application-name>
     <portlet-name>RedirectsAndImportExportAdminPortlet</portlet-name>
     <skin-name>Default</skin-name>
-    <css-path>/css/DefaultStylesheet.css</css-path>
+    <css-path>/resources/css/main.css</css-path>
   </portlet-skin>
 
 </gatein-resources>
