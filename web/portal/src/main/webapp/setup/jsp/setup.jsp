@@ -28,8 +28,8 @@
 <%@ page import="java.util.ResourceBundle"%>
 <%
 
-  if (PortalSetupService.isSetup()) {
-      response.sendRedirect("/portal");
+  if (PortalSetupService.isSetup(request.getContextPath().substring(1))) {
+      response.sendRedirect(request.getContextPath());
   }
 
   String contextPath = request.getContextPath() ;

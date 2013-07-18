@@ -25,6 +25,7 @@ package org.gatein.portal.installer;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.HashMap;
 
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -51,16 +52,21 @@ public class PortalSetupService {
     public static final int COUNT = 9;
     public static final String KEY = "somearbitrarycrazystringthatdoesnotmatter";
 
-    private static boolean setup = false;
+    // We check root password per portal container
+    private static HashMap<String, Boolean> setup = new HashMap<String, Boolean>();
+
+    private static String getPCName() {
+        return ExoContainerContext.getCurrentContainer().getContext().getPortalContainerName();
+    }
 
     public static void checkJcrFlag() {
-        setup = false;
+        setup.put(getPCName(), false);
         try {
             RepositoryService repoService = (RepositoryService) ExoContainerContext.getCurrentContainer()
                     .getComponentInstanceOfType(RepositoryService.class);
             Session session = repoService.getRepository(REPOSITORY_NAME).getSystemSession(WORKSPACE_NAME);
             if (session.itemExists("/" + SETUP_FLAG))
-                setup = true;
+                setup.put(getPCName(), true);
             session.logout();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -75,7 +81,7 @@ public class PortalSetupService {
             session.getRootNode().addNode(SETUP_FLAG);
             session.save();
             session.logout();
-            setup = true;
+            setup.put(getPCName(), true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -88,9 +94,9 @@ public class PortalSetupService {
             password = decodePassword(System.getProperty(ROOT_PASSWORD_PROPERTY));
             if (password == null) {
                 password = randomPassword();
-                setup = false;
+                setup.put(getPCName(), false);
             } else {
-                setup = true;
+                setup.put(getPCName(), true);
                 setJcrFlag();
             }
             return password;
@@ -142,12 +148,20 @@ public class PortalSetupService {
         return encodedPassword;
     }
 
+    /**
+     * PortalContainer's name matches with ServletContextName.
+     * @see org.exoplatform.container.RootContainer
+     */
+    public static boolean isSetup(String context) {
+        return (setup.get(context) != null ? setup.get(context) : false);
+    }
+
     public static boolean isSetup() {
-        return setup;
+        return setup.get(getPCName());
     }
 
     public static void setFlag() {
-        setup = true;
+        setup.put(getPCName(), true);
     }
 
     private static String randomPassword() {

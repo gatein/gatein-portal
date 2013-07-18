@@ -52,12 +52,14 @@ public class PortalSetupServlet extends HttpServlet {
     private static final String PASSWORD2 = "password2";
     private static final String SETUP_JSP = "/setup/jsp/setup.jsp";
     private static final String SETUP_ERROR = "org.gatein.portal.setup.error";
-    private static final String PORTAL = "/portal";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (PortalSetupService.isSetup()) {
-            response.sendRedirect(PORTAL);
+        String uri = request.getRequestURI();
+        String portal = uri.substring(0, uri.length() - "/setupaction".length());
+        String context = request.getContextPath();
+        if (PortalSetupService.isSetup(context)) {
+            response.sendRedirect(portal);
         } else {
             String password = request.getParameter(PASSWORD);
             String password2 = request.getParameter(PASSWORD2);
@@ -98,7 +100,7 @@ public class PortalSetupServlet extends HttpServlet {
                     // Flag
                     PortalSetupService.setJcrFlag();
                     request.setAttribute(SETUP_ERROR, null);
-                    response.sendRedirect(PORTAL);
+                    response.sendRedirect(portal);
                 } catch (Exception e) {
                     log.error("Root user cannot be configured", e);
                     request.setAttribute(SETUP_ERROR, "Root user cannot be configured. See log for details.");

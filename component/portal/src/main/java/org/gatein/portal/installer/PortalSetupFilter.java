@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PortalSetupFilter implements Filter {
 
     private static final String SETUP_JSP = "/setup/jsp/setup.jsp";
-    private static final String SETUP_ACTION = "/portal/setupaction";
+    private static final String SETUP_ACTION = "/setupaction";
     private static final String[] resourceExtension = {".css",".png",".jpg"};
     private FilterConfig cfg;
 
@@ -56,12 +56,13 @@ public class PortalSetupFilter implements Filter {
 
         HttpServletRequest httpReq = (HttpServletRequest) req;
         String uri = httpReq.getRequestURI();
+        String context = httpReq.getContextPath().substring(1);
 
-        if (PortalSetupService.isSetup() || isResourceUri(uri)) {
+        if (PortalSetupService.isSetup(context) || isResourceUri(uri)) {
             chain.doFilter(req, resp);
         } else {
 
-            if (uri.equals(SETUP_ACTION))
+            if (uri.endsWith(SETUP_ACTION))
                 chain.doFilter(req, resp);
             else
                 cfg.getServletContext().getRequestDispatcher(SETUP_JSP).forward(req, resp);
