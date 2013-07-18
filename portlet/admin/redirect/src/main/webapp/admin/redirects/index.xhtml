@@ -110,7 +110,7 @@
 									<h:panelGroup id="rdr-name-group" layout="block" styleClass="control-group rdr-name-group #{name.valid ? '' : 'error'}">
 										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
 											<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="rdr-edit-name">
-												<f:ajax event="blur" render="name-error edit_save rdr-name-group" />
+												<f:ajax event="blur" eventsQueue="rdr" render="name-error edit_save rdr-name-group" />
 												<f:attribute name="vOriginalRedirectName" value="#{rdrEdit.getOriginalName()}" />
 												<f:attribute name="vSiteName" value="#{rdrs.siteName}" />
 											</h:inputText>
@@ -257,7 +257,7 @@
 								</fieldset>
 								<div class="form-actions">
 									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >Cancel</button>
-									<b:commandButton id="edit_save" value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid}" />
+									<a4j:commandButton id="edit_save" value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid}" />
 								</div><!-- End .form-actions -->
 						</td>
 					</tr>
