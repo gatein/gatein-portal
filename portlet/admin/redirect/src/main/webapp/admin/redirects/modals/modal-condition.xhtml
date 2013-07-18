@@ -155,10 +155,8 @@
  								</span>
 							</td>
  							<td class="actions" style="width: 50px;" >
-								<span class="tooltipTrigger" title="Delete Property">
-									<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
-								</span>
-								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="Add Property" render="condition_properties" onclick="$(this).tooltip('hide');" oncomplete="afterAddProperty();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Property</i></a4j:commandLink>
+ 								<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" styleClass="tooltipTrigger" title="Delete Property" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
+ 								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="Add Property" render="condition_properties" onclick="$(this).tooltip('hide');" oncomplete="afterAddProperty();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Property</i></a4j:commandLink>
 							</td>
 						</tr>
 						</ui:repeat>

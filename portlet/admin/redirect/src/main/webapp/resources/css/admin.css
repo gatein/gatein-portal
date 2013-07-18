@@ -424,9 +424,11 @@
 .RedirectAdmin td.actions a+a,
 .RedirectAdmin td.actions button+a,
 .RedirectAdmin td.actions a+button,
-.RedirectAdmin td.actions a+div {
-	margin-left: 10px; /* orientation=lt */
-	margin-right: 10px; /* orientation=rt */
+.RedirectAdmin td.actions a+div,
+.RedirectAdmin td.actions div+a,
+.RedirectAdmin .add-user-agent-string.tooltipTrigger {
+	margin-left: 6px; /* orientation=lt */
+	margin-right: 6px; /* orientation=rt */
 	display: inline-block;
 	line-height: 14px;
 }
@@ -645,7 +647,10 @@
 /* ammendoca: for some reason, padding is already added, this 20px makes it way out.
 .table-striped tbody .table-striped tbody tr td.actions {padding-right: 20px;}
 */
-.RedirectAdmin .table-striped tbody .table-striped tbody tr td.actions {padding-right: 0;}
+.RedirectAdmin .table-striped tbody .table-striped tbody tr td.actions {
+    padding-right: 9px; /* orientation=lt */
+    padding-left: 9px; /* orientation=rt */
+}
 
 .RedirectAdmin .table-striped tbody .table-striped tbody tr:nth-child(2n+1) td {background-color: #F9F9F9;}
 
