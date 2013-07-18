@@ -35,10 +35,16 @@ import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.DevicePropertyCondition;
 import org.exoplatform.portal.config.model.ModelObject;
+import org.exoplatform.portal.config.model.NodeMap;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.PortalRedirect;
+import org.exoplatform.portal.config.model.RedirectCondition;
+import org.exoplatform.portal.config.model.RedirectMappings;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.config.model.UserAgentConditions;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.BodyData;
@@ -48,8 +54,6 @@ import org.exoplatform.portal.pom.data.ContainerData;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
-
-import static junit.framework.Assert.*;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -243,5 +247,339 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertEquals(2, container.getChildren().size());
         PageBody body = (PageBody) ((Container) container.getChildren().get(0)).getChildren().get(0);
         assertNotNull(body);
+    }
+
+    public void testPortalWithRedirect() {
+        SiteLayoutMarshaller marshaller = new SiteLayoutMarshaller();
+        PortalConfig data = marshaller.unmarshal(getClass().getResourceAsStream(
+                "/org/exoplatform/portal/mop/management/portal-redirects.xml"));
+
+        // Create the objects that match what should be parsed from xml
+        List<PortalRedirect> redirects = new ArrayList<PortalRedirect>(2);
+
+        PortalRedirect redirect = new PortalRedirect();
+        redirect.setRedirectSite("redirectA");
+        redirect.setName("Redirect Site A");
+        redirect.setEnabled(true);
+        // condition 0
+        redirect.getConditions().add(new ConditionBuilder("condition 0")
+                .userAgent().contains(".*").build()
+                .deviceProperty("foo").equals("bar").build()
+                .deviceProperty("hello").matches("(?i)world").build()
+                .deviceProperty("number").greaterThan(10.0f).lessThan(25.0f).build()
+                .build());
+        // condition 1
+        redirect.getConditions().add(new ConditionBuilder("condition 1")
+                .userAgent().contains("(?i)foo").doesNotContain("bar").build()
+                .build());
+        // condition 2
+        redirect.getConditions().add(new ConditionBuilder("condition 2")
+                .userAgent().contains("(?i)abc", "(?i)def").doesNotContain("world").build()
+                .build());
+        // condition 3
+        redirect.getConditions().add(new ConditionBuilder("condition 3")
+                .userAgent().contains("(?i)abc").doesNotContain("hello", "world").build()
+                .build());
+        // condition 4
+        redirect.getConditions().add(new ConditionBuilder("condition 4")
+                .userAgent().contains("(?i)abc", "(?i)def").doesNotContain("hello", "world").build()
+                .build());
+        // condition 5
+        redirect.getConditions().add(new ConditionBuilder("condition 5")
+                .userAgent().contains("(?i)abc", "(?i)def").build()
+                .build());
+        // condition 6
+        redirect.getConditions().add(new ConditionBuilder("condition 6")
+                .userAgent().doesNotContain("hello", "world").build()
+                .build());
+        // node mappings
+        redirect.setMappings(new RedirectMappingsBuilder().nameMatching(false).unresolved(RedirectMappings.UnknownNodeMapping.COMMON_ANCESTOR_NAME_MATCH)
+                .map("foo", "bar")
+                .map("hello/world", "redirect/hello/world")
+                .map("/", "redirect_root")
+                .map("root", "/")
+                .map("ABC/123/XYZ", "123")
+                .map("/with_slash", "/with_slash")
+                .map("/with_slash_two", "without_slash")
+                .map("without_slash", "/with_slash_two")
+                .build());
+        // add
+        redirects.add(redirect);
+
+        // redirect 2
+        redirect = new PortalRedirect();
+        redirect.setRedirectSite("redirectB");
+        redirect.setName("Redirect Site B");
+        redirect.setEnabled(false);
+        // add
+        redirects.add(redirect);
+
+        assertEquals(redirects, data.getPortalRedirects(), "redirects", PortalRedirect.class);
+    }
+
+    public void testPortalRedirectMarshalling() {
+        SiteLayoutMarshaller marshaller = new SiteLayoutMarshaller();
+        PortalConfig expected = marshaller.unmarshal(getClass().getResourceAsStream(
+                "/org/exoplatform/portal/mop/management/portal-redirects.xml"));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        marshaller.marshal(expected, baos, false);
+
+        PortalConfig actual = marshaller.unmarshal(new ByteArrayInputStream(baos.toByteArray()));
+
+        assertEquals(expected.getPortalRedirects(), actual.getPortalRedirects(), "redirects", PortalRedirect.class);
+    }
+
+    private static void assertEquals(PortalRedirect expected, PortalRedirect actual) {
+        if (expected == null) {
+            assertNull("Actual redirect was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual redirect was null.", actual);
+        }
+
+        assertEquals(expected.getRedirectSite(), actual.getRedirectSite());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.isEnabled(), actual.isEnabled());
+        assertEquals(expected.getConditions(), actual.getConditions(), "conditions", RedirectCondition.class);
+        assertEquals(expected.getMappings(), actual.getMappings());
+    }
+
+    private static void assertEquals(RedirectCondition expected, RedirectCondition actual) {
+        if (expected == null) {
+            assertNull("Actual condition was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual condition was null.", actual);
+        }
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getUserAgentConditions(), actual.getUserAgentConditions());
+        assertEquals(expected.getDeviceProperties(), actual.getDeviceProperties(), "device properties", DevicePropertyCondition.class);
+    }
+
+    private static void assertEquals(UserAgentConditions expected, UserAgentConditions actual) {
+        if (expected == null) {
+            assertNull("Actual user agent conditions was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual user agent conditions was null.", actual);
+        }
+
+        assertEquals(expected.getContains(), actual.getContains());
+        assertEquals(expected.getDoesNotContain(), actual.getDoesNotContain());
+    }
+
+    private static void assertEquals(DevicePropertyCondition expected, DevicePropertyCondition actual) {
+        if (expected == null) {
+            assertNull("Actual device property condition was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual device property condition was null.", actual);
+        }
+
+        assertEquals(expected.getPropertyName(), actual.getPropertyName());
+        assertEquals(expected.getGreaterThan(), actual.getGreaterThan());
+        assertEquals(expected.getLessThan(), actual.getLessThan());
+        assertEquals(expected.getEquals(), actual.getEquals());
+        assertEquals(expected.getMatches(), actual.getMatches());
+    }
+
+    private static void assertEquals(RedirectMappings expected, RedirectMappings actual) {
+        if (expected == null) {
+            assertNull("Actual mappings was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual mappings was null.", actual);
+        }
+
+        assertEquals(expected.isUseNodeNameMatching(), actual.isUseNodeNameMatching());
+        assertEquals(expected.getUnresolvedNode(), actual.getUnresolvedNode());
+        assertEquals(expected.getMappings(), actual.getMappings(), "mappings", NodeMap.class);
+    }
+
+    private static void assertEquals(NodeMap expected, NodeMap actual) {
+        if (expected == null) {
+            assertNull("Actual node map was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual node map was null.", actual);
+        }
+
+        assertEquals(expected.getOriginNode(), actual.getOriginNode());
+        assertEquals(expected.getRedirectNode(), actual.getRedirectNode());
+    }
+
+    // Would be nice if the actual objects properly supported equals...
+    private static <T> void assertEquals(List<T> expected, List<T> actual, String elements, Class<T> clazz) {
+        if (expected == null) {
+            assertNull("Actual " + elements + " was NOT null.", actual);
+            return;
+        } else {
+            assertNotNull("Actual " + elements + " was null.", actual);
+            assertEquals("Number of " + elements + ".", expected.size(), actual.size());
+        }
+
+        for (int i=0; i<expected.size(); i++) {
+            if (clazz == PortalRedirect.class) {
+                assertEquals((PortalRedirect) expected.get(i), (PortalRedirect) actual.get(i));
+            } else if (clazz == RedirectCondition.class) {
+                assertEquals((RedirectCondition) expected.get(i), (RedirectCondition) actual.get(i));
+            } else if (clazz == DevicePropertyCondition.class) {
+                assertEquals((DevicePropertyCondition) expected.get(i), (DevicePropertyCondition) actual.get(i));
+            } else if (clazz == NodeMap.class) {
+                assertEquals((NodeMap) expected.get(i), (NodeMap) actual.get(i));
+            }
+        }
+    }
+
+    private static class ConditionBuilder {
+
+        private String name;
+        private UserAgentConditions userAgentConditions;
+        private ArrayList<DevicePropertyCondition> devicePropertyConditions;
+
+        public ConditionBuilder(String name) {
+            this.name = name;
+        }
+
+        public UserAgentConditionsBuilder userAgent() {
+            return new UserAgentConditionsBuilder(this);
+        }
+
+        public DevicePropertyConditionBuilder deviceProperty(String propertyName) {
+            if (devicePropertyConditions == null) {
+                devicePropertyConditions = new ArrayList<DevicePropertyCondition>();
+            }
+
+            return new DevicePropertyConditionBuilder(propertyName, this);
+        }
+
+        public RedirectCondition build() {
+            RedirectCondition condition = new RedirectCondition();
+            condition.setName(name);
+            condition.setUserAgentConditions(userAgentConditions);
+            condition.setDeviceProperties(devicePropertyConditions);
+
+            return condition;
+        }
+    }
+
+    private static class UserAgentConditionsBuilder {
+
+        private final ConditionBuilder conditionBuilder;
+        private String[] contains;
+        private String[] doesNotContain;
+
+        private UserAgentConditionsBuilder(ConditionBuilder conditionBuilder) {
+            this.conditionBuilder = conditionBuilder;
+        }
+
+        public UserAgentConditionsBuilder contains(String...contains) {
+            this.contains = contains;
+            return this;
+        }
+
+        public UserAgentConditionsBuilder doesNotContain(String...doesNotContain) {
+            this.doesNotContain = doesNotContain;
+            return this;
+        }
+
+        public ConditionBuilder build() {
+            UserAgentConditions uac = new UserAgentConditions();
+            if (contains != null) {
+                uac.setContains(new ArrayList<String>(Arrays.asList(contains)));
+            }
+            if (doesNotContain != null) {
+                uac.setDoesNotContain(new ArrayList<String>(Arrays.asList(doesNotContain)));
+            }
+            conditionBuilder.userAgentConditions = uac;
+            return conditionBuilder;
+        }
+    }
+
+    private static class DevicePropertyConditionBuilder {
+
+        private final ConditionBuilder conditionBuilder;
+        private final String propertyName;
+        private Float greaterThan;
+        private Float lessThan;
+        private String equals;
+        private String matches;
+
+        private DevicePropertyConditionBuilder(String propertyName, ConditionBuilder conditionBuilder) {
+            this.conditionBuilder = conditionBuilder;
+            this.propertyName = propertyName;
+        }
+
+        public DevicePropertyConditionBuilder greaterThan(Float greaterThan) {
+            this.greaterThan = greaterThan;
+            return this;
+        }
+
+        public DevicePropertyConditionBuilder lessThan(Float lessThan) {
+            this.lessThan = lessThan;
+            return this;
+        }
+
+        public DevicePropertyConditionBuilder equals(String equals) {
+            this.equals = equals;
+            return this;
+        }
+
+        public DevicePropertyConditionBuilder matches(String matches) {
+            this.matches = matches;
+            return this;
+        }
+
+        public ConditionBuilder build() {
+            DevicePropertyCondition condition = new DevicePropertyCondition();
+            condition.setPropertyName(propertyName);
+            condition.setGreaterThan(greaterThan);
+            condition.setLessThan(lessThan);
+            condition.setEquals(equals);
+            condition.setMatches(matches);
+
+            conditionBuilder.devicePropertyConditions.add(condition);
+            return conditionBuilder;
+        }
+    }
+
+    private static class RedirectMappingsBuilder {
+        private Boolean useNodeNameMatching;
+        private RedirectMappings.UnknownNodeMapping unresolvedNode;
+        private ArrayList<NodeMap> mappings;
+
+        public RedirectMappingsBuilder nameMatching(boolean matching) {
+            useNodeNameMatching = matching;
+            return this;
+        }
+
+        public RedirectMappingsBuilder unresolved(RedirectMappings.UnknownNodeMapping unresolvedNode) {
+            this.unresolvedNode = unresolvedNode;
+            return this;
+        }
+
+        public RedirectMappingsBuilder map(String origin, String redirect) {
+            if (mappings == null) {
+                mappings = new ArrayList<NodeMap>();
+            }
+            mappings.add(new NodeMap(origin, redirect));
+            return this;
+        }
+
+        public RedirectMappings build() {
+            RedirectMappings mapping = new RedirectMappings();
+            if (useNodeNameMatching != null) {
+                mapping.setUseNodeNameMatching(useNodeNameMatching);
+            }
+            if (unresolvedNode != null) {
+                mapping.setUnresolvedNode(unresolvedNode);
+            }
+            if (mappings != null) {
+                mapping.setMappings(mappings);
+            }
+
+            return mapping;
+        }
     }
 }

@@ -158,6 +158,22 @@ public class StaxNavUtils {
         return new HashSet<N>(Arrays.asList(names));
     }
 
+    public static <N> StaxNavigator<N> child(StaxNavigator<N> navigator, N name) {
+        if (!name.equals(navigator.child())) {
+            throw expectedElement(navigator, name);
+        }
+
+        return navigator;
+    }
+
+    public static <N> StaxNavigator<N> sibling(StaxNavigator<N> navigator, N name) {
+        if (!name.equals(navigator.sibling())) {
+            throw expectedElement(navigator, name);
+        }
+
+        return navigator;
+    }
+
     private static StaxNavBuilder buildDefaultNavigator() {
         return new StaxNavBuilderImpl()
                 // Do not support external entities in XML documents.

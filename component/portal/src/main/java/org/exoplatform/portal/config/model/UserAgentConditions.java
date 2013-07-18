@@ -54,8 +54,12 @@ public class UserAgentConditions extends ModelObject {
     public RedirectUserAgentConditionData build() {
         RedirectUserAgentConditionData userAgentConditionData = new RedirectUserAgentConditionData(storageId, storageName);
 
-        userAgentConditionData.getUserAgentContains().addAll(contains);
-        userAgentConditionData.getUserAgentDoesNotContain().addAll(doesNotContain);
+        if (contains != null) {
+            userAgentConditionData.getUserAgentContains().addAll(contains);
+        }
+        if (doesNotContain != null) {
+            userAgentConditionData.getUserAgentDoesNotContain().addAll(doesNotContain);
+        }
 
         return userAgentConditionData;
     }

@@ -56,8 +56,8 @@ public class RedirectUserAgentConditionData extends ComponentData {
     public UserAgentConditions build() {
         UserAgentConditions userAgentCondition = new UserAgentConditions();
         userAgentCondition.setStorageName(this.getStorageName());
-        userAgentCondition.setContains((ArrayList) this.userAgentContains);
-        userAgentCondition.setDoesNotContain((ArrayList) this.userAgentDoesNotContain);
+        userAgentCondition.setContains((ArrayList<String>) this.userAgentContains);
+        userAgentCondition.setDoesNotContain((ArrayList<String>) this.userAgentDoesNotContain);
         return userAgentCondition;
     }
 

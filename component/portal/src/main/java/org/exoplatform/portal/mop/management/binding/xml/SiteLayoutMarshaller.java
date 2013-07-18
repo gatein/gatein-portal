@@ -22,14 +22,9 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
-import static org.gatein.common.xml.stax.navigator.Exceptions.*;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredAttribute;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredContent;
-import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
-import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
-
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +34,9 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.PortalRedirect;
 import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.mop.management.binding.xml.portal.redirects.PortalRedirectXmlHandler;
 import org.gatein.common.xml.stax.navigator.StaxNavUtils;
 import org.gatein.common.xml.stax.writer.StaxWriter;
 import org.gatein.common.xml.stax.writer.builder.StaxWriterBuilder;
@@ -48,11 +45,18 @@ import org.staxnav.Axis;
 import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
 
+import static org.gatein.common.xml.stax.navigator.Exceptions.*;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.*;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.*;
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
 public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
+
+    private final PortalRedirectXmlHandler redirectXmlHandler = new PortalRedirectXmlHandler();
+
     @Override
     public void marshal(PortalConfig object, OutputStream outputStream, boolean pretty) throws BindingException {
         try {
@@ -128,6 +132,9 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
             }
         }
 
+        // portal redirects
+        redirectXmlHandler.write(writer, portalConfig.getPortalRedirects());
+
         Container container = portalConfig.getPortalLayout();
         if (container != null) {
             writer.writeStartElement(Element.PORTAL_LAYOUT);
@@ -188,6 +195,10 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
                     break;
                 case EDIT_PERMISSION:
                     portalConfig.setEditPermission(unmarshalEditPermission(navigator));
+                    current = navigator.sibling();
+                    break;
+                case PORTAL_REDIRECTS:
+                    portalConfig.setPortalRedirects((ArrayList<PortalRedirect>) redirectXmlHandler.read(navigator.fork()));
                     current = navigator.sibling();
                     break;
                 case PORTAL_LAYOUT:
