@@ -17,8 +17,7 @@
 			<p style="visibility: hidden;" class="subtitle">All fields are required</p>
 			<div class="control-group">
 				<label class="control-label" for="condition_name">Condition Name </label>
-				<b:input mode="client" styleClass="input-large" required="true" requiredMessage="Value required" id="condition_name" value="#{rdrEdit.editedCondition.name}" onkeyup="validateCondition()">
-				</b:input>
+				<h:inputText styleClass="input-large" required="true" requiredMessage="Value required" id="condition_name" value="#{rdrEdit.editedCondition.name}" maxlength="40" onkeyup="validateConditionName()" />
 				<h:message id="condition_name-message" for="condition_name" />
 			</div><!-- End .control-group -->
 			<div class="control-group">

@@ -49,7 +49,7 @@ public class RedirectNameValidator implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String newName = (String) value;
         // check for empty redirect name
-        if (newName.equals("")) {
+        if (newName == null || newName.equals("")) {
             ((UIInput) component).setValid(false);
             ((UIInput) component).setValidatorMessage("The redirect name cannot be empty.");
             return;

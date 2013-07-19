@@ -109,7 +109,7 @@
 									</div>
 									<h:panelGroup id="rdr-name-group" layout="block" styleClass="control-group rdr-name-group #{name.valid ? '' : 'error'}">
 										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
-											<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="rdr-edit-name">
+											<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="rdr-edit-name" maxlength="40">
 												<f:ajax event="blur" eventsQueue="rdr" render="name-error edit_save rdr-name-group" />
 												<f:attribute name="vOriginalRedirectName" value="#{rdrEdit.getOriginalName()}" />
 												<f:attribute name="vSiteName" value="#{rdrs.siteName}" />
@@ -143,8 +143,8 @@
 												<tbody class="sortable sortable-cnd">
 													<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
 													<tr>
-														<td>#{rc.name}</td>
-														<td>
+														<td class="rdr-cond-name">#{rc.name}</td>
+														<td class="rdr-cond-settings">
 															<h:panelGroup rendered="#{rc.userAgentConditions.contains.size() > 0 or rc.userAgentConditions.doesNotContain.size() > 0}"><strong>User Agent String: </strong></h:panelGroup>
 															<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
 																<h:panelGroup rendered="#{cnt_st.first}">

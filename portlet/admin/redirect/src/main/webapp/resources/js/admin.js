@@ -125,13 +125,16 @@ function deleteMappingEntry(elem) {
 	return false;
 }
 
-function validateCondition() {
-	conditionName = $("input[id$='condition_name']").val();
+/**
+ * Validates the condition name, so it's not left empty.
+ */
+function validateConditionName() {
+	var conditionName = $("input[id$='condition_name']").val();
 	if(!conditionName) {
-		$("input[id$='condition_name']").attr("disabled", "disabled");
+		$("button[id$='save-condition-button']").attr("disabled", "disabled");
 	}
 	else {
-		$("input[id$='condition_name']").removeAttr("disabled");
+		$("button[id$='save-condition-button']").removeAttr("disabled");
 	}
 
 }
