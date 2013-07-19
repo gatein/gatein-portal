@@ -53,7 +53,7 @@ public class UIDashboard extends UIContainer {
     private UIGadget maximizedGadget;
 
     public UIDashboard() throws Exception {
-        UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + hashCode());
+        UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + Math.abs(hashCode()));
         popup.setUIComponent(createUIComponent(UIDashboardSelectContainer.class, null, null));
         addChild(UIDashboardContainer.class, null, null);
     }
