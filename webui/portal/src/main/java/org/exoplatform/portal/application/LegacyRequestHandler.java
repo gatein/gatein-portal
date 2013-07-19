@@ -80,13 +80,23 @@ public class LegacyRequestHandler extends WebRequestHandler {
     public boolean execute(ControllerContext context) throws Exception {
         String requestSiteName = context.getParameter(PortalRequestHandler.REQUEST_SITE_NAME);
         String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
+        String requestURI = context.getRequest().getRequestURI();
+
+        HttpServletRequest request = context.getRequest();
+        HttpServletResponse response = context.getResponse();
+
+        if (requestURI.startsWith(request.getContextPath() + "/private/") && request.getRemoteUser() == null) {
+            String doLoginPath = request.getContextPath() + "/login" + "?initialURI=" + request.getRequestURI();
+            response.sendRedirect(response.encodeRedirectURL(doLoginPath));
+            return true;
+        }
 
         SiteKey siteKey = SiteKey.portal(requestSiteName);
         String uri = requestPath;
 
         // Resolve the user node if node path is indicated
         if (!requestPath.equals("")) {
-            UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(),
+            UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, request.getRemoteUser(),
                     userPortalContext);
             if (cfg != null) {
                 UserPortal userPortal = cfg.getUserPortal();
@@ -108,7 +118,6 @@ public class LegacyRequestHandler extends WebRequestHandler {
         url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
         url.setMimeType(MimeType.PLAIN);
 
-        HttpServletRequest request = context.getRequest();
         Enumeration paraNames = request.getParameterNames();
         while (paraNames.hasMoreElements()) {
             String parameter = paraNames.nextElement().toString();
@@ -117,8 +126,7 @@ public class LegacyRequestHandler extends WebRequestHandler {
 
         String s = url.toString();
 
-        HttpServletResponse resp = context.getResponse();
-        resp.sendRedirect(resp.encodeRedirectURL(s));
+        response.sendRedirect(response.encodeRedirectURL(s));
         return true;
     }
 
