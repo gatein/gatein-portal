@@ -2,7 +2,10 @@
  * The portal web application.
  */
 @Application
-@Bindings({@Binding(NavigationService.class),@Binding(DescriptionService.class)})
+@Bindings({
+    @Binding(NavigationService.class),
+    @Binding(DescriptionService.class),
+    @Binding(SSOHelper.class)})
 @Portlet
 @Assets(stylesheets = @Stylesheet(src = "navigationportlet.css"))
 package org.gatein.portal.ui.navigation;
@@ -14,5 +17,6 @@ import juzu.plugin.asset.Stylesheet;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
 import juzu.plugin.portlet.Portlet;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.navigation.NavigationService;

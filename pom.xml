@@ -39,7 +39,10 @@
   <properties>
     <org.exoplatform.kernel.version>2.4.1-GA</org.exoplatform.kernel.version>
     <org.exoplatform.core.version>2.5.1-CP01</org.exoplatform.core.version>
+    <javax.ws.rs.jsr311.version>1.0</javax.ws.rs.jsr311.version>
     <org.exoplatform.ws.version>2.3.1-GA</org.exoplatform.ws.version>
+    <commons.fileupload.version>1.2.2</commons.fileupload.version>
+    <javax.jcr.version>1.0</javax.jcr.version>
     <org.exoplatform.jcr.version>1.15.1-CP01</org.exoplatform.jcr.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-3</nl.captcha.simplecaptcha.version>
@@ -245,6 +248,11 @@
         <version>${org.exoplatform.core.version}</version>
       </dependency>
       <dependency>
+        <groupId>javax.jcr</groupId>
+        <artifactId>jcr</artifactId>
+        <version>${javax.jcr.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.exoplatform.jcr</groupId>
         <artifactId>exo.jcr.component.core</artifactId>
         <version>${org.exoplatform.jcr.version}</version>
@@ -281,6 +289,11 @@
         <version>${org.exoplatform.jcr.version}</version>
       </dependency>
       <dependency>
+        <groupId>javax.ws.rs</groupId>
+        <artifactId>jsr311-api</artifactId>
+        <version>${javax.ws.rs.jsr311.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.exoplatform.ws</groupId>
         <artifactId>exo.ws.commons</artifactId>
         <version>${org.exoplatform.ws.version}</version>
@@ -304,6 +317,11 @@
         <groupId>org.exoplatform.ws</groupId>
         <artifactId>exo.ws.frameworks.json</artifactId>
         <version>${org.exoplatform.ws.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>${commons.fileupload.version}</version>
       </dependency>
 
       <!-- GateIn components -->
@@ -379,6 +397,11 @@
         </exclusions>
       </dependency>
       <!-- Gatein Mgmt -->
+      <dependency>
+        <groupId>org.gatein.management</groupId>
+        <artifactId>gatein-management-spi</artifactId>
+        <version>${org.gatein.mgmt.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.gatein.management</groupId>
         <artifactId>gatein-management-api</artifactId>

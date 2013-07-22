@@ -25,33 +25,6 @@
     <async-supported>true</async-supported>
   </filter>
 
-  <filter>
-    <filter-name>OAuthPreFilter</filter-name>
-    <filter-class>org.gatein.portal.servlet.OAuthPreFilter</filter-class>
-    <async-supported>true</async-supported>
-  </filter>
-  <filter-mapping>
-    <filter-name>OAuthPreFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-
-  <filter>
-    <filter-name>OAuthDelegateFilter</filter-name>
-    <filter-class>org.gatein.security.oauth.webapi.OAuthDelegateFilter</filter-class>
-    <async-supported>true</async-supported>
-  </filter>
-
-  <filter-mapping>
-    <filter-name>OAuthDelegateFilter</filter-name>
-    <!--<url-pattern>/twitterAuth</url-pattern>-->
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <!--<filter-mapping>
-    <filter-name>OAuthDelegateFilter</filter-name>
-    <url-pattern>/login</url-pattern>
-  </filter-mapping>-->
-
-
   <filter-mapping>
     <filter-name>KernelLifeCycle</filter-name>
     <servlet-name>PortalServlet</servlet-name>
@@ -65,6 +38,11 @@
   <filter-mapping>
     <filter-name>ClientRequestFilter</filter-name>
     <servlet-name>PortalServlet</servlet-name>
+    <dispatcher>ASYNC</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
   </filter-mapping>
 
   <!-- WCI integration for Tomcat7 -->
@@ -99,6 +77,54 @@
     <servlet-name>AssetServlet</servlet-name>
     <url-pattern>/assets/*</url-pattern>
   </servlet-mapping>
+
+  <!-- For REST -->
+  <servlet>
+    <servlet-name>RestServer</servlet-name>
+    <servlet-class>org.exoplatform.services.rest.servlet.RestServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RestServer</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- for login module -->
+  <filter>
+    <filter-name>OAuthPreFilter</filter-name>
+    <filter-class>org.gatein.portal.servlet.OAuthPreFilter</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+  <filter-mapping>
+    <filter-name>OAuthPreFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+    <dispatcher>ASYNC</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>SSODelegateFilter</filter-name>
+    <filter-class>org.gatein.sso.integration.SSODelegateFilter</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+  <filter-mapping>
+    <filter-name>SSODelegateFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>OAuthDelegateFilter</filter-name>
+    <filter-class>org.gatein.security.oauth.webapi.OAuthDelegateFilter</filter-class>
+    <async-supported>true</async-supported>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>OAuthDelegateFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
   <listener>
     <listener-class>org.exoplatform.web.security.AuthenticationRegistryListener</listener-class>

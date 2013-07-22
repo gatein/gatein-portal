@@ -19,10 +19,14 @@
 package org.gatein.portal.login;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.gatein.portal.servlet.Context;
 import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
@@ -37,7 +41,7 @@ public class LoginHelper {
     public void login(String username, String password) throws ServletException, IOException {
         Credentials credentials = new Credentials(username, password);
         ServletContainer container = ServletContainerFactory.getServletContainer();
-        container.login(Context.getCurrentRequest(), Context.getCurrentResponse(), credentials);
+        container.login(this.getCurrentRequest(), this.getCurrentResponse(), credentials);
     }
 
     public void logout() {
@@ -61,5 +65,34 @@ public class LoginHelper {
             }
         }
         return oauthProviders;
+    }
+
+    private HttpServletRequest getCurrentRequest() {
+        HttpServletRequest request = Context.getCurrentRequest();
+        if(request != null) {
+            return request;
+        }
+        try {
+            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass("org.gatein.sso.agent.tomcat.ServletAccess");
+            Method getRequestMethod = clazz.getDeclaredMethod("getRequest");
+            request = (HttpServletRequest)getRequestMethod.invoke(null);
+        } catch (Exception e){}
+
+        return request;
+    }
+
+    private HttpServletResponse getCurrentResponse() {
+        HttpServletResponse response = Context.getCurrentResponse();
+        if(response != null) {
+            return response;
+        }
+        try {
+            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass("org.gatein.sso.agent.tomcat.ServletAccess");
+            Method getRequestMethod = clazz.getDeclaredMethod("getResponse");
+            response = (HttpServletResponse)getRequestMethod.invoke(null);
+        } catch (Exception e){}
+
+
+        return response;
     }
 }

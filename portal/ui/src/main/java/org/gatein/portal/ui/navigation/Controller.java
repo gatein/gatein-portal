@@ -26,6 +26,7 @@ import juzu.View;
 import juzu.request.RequestContext;
 import juzu.request.UserContext;
 import juzu.template.Template;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
@@ -46,6 +47,9 @@ public class Controller {
     DescriptionService descriptionService;
 
     @Inject
+    SSOHelper ssoHelper;
+
+    @Inject
     @Path("index.gtmpl")
     Template index;
 
@@ -63,9 +67,23 @@ public class Controller {
 
         String username = requestContext.getSecurityContext().getRemoteUser();
         if(username == null) username = "";
+
+        //Init Login and Logout URL
+        //TODO: how to init portalURL for login and logout (it's not portletURL)
+        //TODO: initURL = ??
+        String contextPath = requestContext.getHttpContext().getContextPath();
+        String loginURL = new StringBuilder(contextPath)
+                                .append(ssoHelper.isSSOEnabled() ? ssoHelper.getSSORedirectURLSuffix() : "")
+                                .append("/dologin").toString();
+        String logoutURL = new StringBuilder(contextPath)
+                                .append("/dologout")
+                                .append(ssoHelper.isSSOEnabled() ? "?portal:action=Logout" : "").toString();
+
         return index.with()
                 .set("root", root.getNode())
                 .set("username", username)
+                .set("loginURL", loginURL)
+                .set("logoutURL", logoutURL)
                 .ok();
     }
 

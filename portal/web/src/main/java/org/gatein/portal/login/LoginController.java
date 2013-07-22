@@ -31,6 +31,7 @@ import juzu.View;
 import juzu.request.RequestContext;
 import juzu.request.RequestParameter;
 import juzu.template.Template;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.servlet.Context;
 
 public class LoginController {
@@ -42,6 +43,9 @@ public class LoginController {
 
     @Inject
     private LoginHelper loginHelper;
+
+    @Inject
+    private SSOHelper ssoHelper;
 
     @Inject
     @Path("login.gtmpl")
@@ -103,6 +107,10 @@ public class LoginController {
                 loginHelper.login(username, password);
                 return LoginController_.login();
             } catch (Exception e){}
+        }
+
+        if(this.ssoHelper.isSSOEnabled()) {
+            return Response.redirect(contextPath + ssoHelper.getSSORedirectURLSuffix());
         }
 
         List<OauthProviderDescriptor> oauthProviders = loginHelper.getOauthProviderDescriptors(contextPath);

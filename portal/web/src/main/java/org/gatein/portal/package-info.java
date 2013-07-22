@@ -15,7 +15,8 @@
     @Binding(KernelFilter.class),
     @Binding(LoginFailureMessage.class),
     @Binding(OAuthProviderTypeRegistry.class),
-    @Binding(LoginHelper.class)})
+    @Binding(LoginHelper.class),
+    @Binding(SSOHelper.class)})
 @Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"),
         declaredStylesheets = {@Stylesheet(id = "login-stylesheet", src = "login.css"),
                 @Stylesheet(id = "social-buttons", src = "social-buttons.css")
@@ -28,6 +29,7 @@ import juzu.plugin.asset.Stylesheet;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.kernel.KernelFilter;
 import org.gatein.portal.layout.SimpleLayoutFactory;
 import org.gatein.portal.login.LoginFailureMessage;
