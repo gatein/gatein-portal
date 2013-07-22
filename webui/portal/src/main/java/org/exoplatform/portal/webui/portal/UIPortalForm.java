@@ -123,7 +123,8 @@ public class UIPortalForm extends UIFormTabPane {
         setActions(new String[] { "Save", "Close" });
 
         UserPortalConfigService configService = this.getApplicationComponent(UserPortalConfigService.class);
-        Set<String> portalTemplates = configService.getPortalTemplates();
+        List<String> portalTemplates = new ArrayList<String>(configService.getPortalTemplates());
+        Collections.sort(portalTemplates);
         for (String tempName : portalTemplates) {
             SelectItemCategory category = new SelectItemCategory(tempName);
             PortalConfig config = configService.getPortalConfigFromTemplate(tempName);
@@ -228,7 +229,9 @@ public class UIPortalForm extends UIFormTabPane {
 
         List<SelectItemOption<String>> listSkin = new ArrayList<SelectItemOption<String>>();
         SkinService skinService = getApplicationComponent(SkinService.class);
-        for (String skin : skinService.getAvailableSkinNames()) {
+        List<String> skinNames = new ArrayList<String>(skinService.getAvailableSkinNames());
+        Collections.sort(skinNames);
+        for (String skin : skinNames) {
             SelectItemOption<String> skinOption = new SelectItemOption<String>(skin, skin);
             listSkin.add(skinOption);
         }
