@@ -45,6 +45,7 @@ import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.security.oauth.exception.OAuthException;
+import org.gatein.security.oauth.utils.OAuthUtils;
 import org.gatein.sso.agent.filter.api.AbstractSSOInterceptor;
 
 /**
@@ -84,6 +85,7 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
         String interaction = httpRequest.getParameter(OAuthConstants.PARAM_OAUTH_INTERACTION);
         if (OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START.equals(interaction)) {
             initInteraction(httpRequest, httpResponse);
+            saveInitialURI(httpRequest);
         }
 
         // Possibility to init interaction with custom scope. It's needed when custom portlets want bigger scope then the one available in configuration
@@ -172,18 +174,20 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
     protected void redirectAfterOAuthError(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Similar code like in OAuthLinkAccountFilter
         HttpSession session = request.getSession();
-        String urlToRedirect = (String)session.getAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
-        if (urlToRedirect == null) {
-            urlToRedirect = request.getContextPath();
-        } else {
-            session.removeAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
-        }
+        String urlToRedirect = OAuthUtils.getURLToRedirectAfterLinkAccount(request, session);
 
         if (log.isTraceEnabled()) {
             log.trace("Will redirect user to URL: " + urlToRedirect);
         }
 
         response.sendRedirect(response.encodeRedirectURL(urlToRedirect));
+    }
+
+    protected void saveInitialURI(HttpServletRequest request) {
+        String initialURI = request.getParameter(OAuthConstants.PARAM_INITIAL_URI);
+        if (initialURI != null) {
+            request.getSession().setAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT, initialURI);
+        }
     }
 
     protected abstract OAuthProviderType<T> getOAuthProvider();

@@ -40,6 +40,7 @@ import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.spi.OAuthPrincipal;
 import org.gatein.security.oauth.spi.SocialNetworkService;
+import org.gatein.security.oauth.utils.OAuthUtils;
 import org.gatein.sso.agent.filter.api.AbstractSSOInterceptor;
 
 /**
@@ -102,12 +103,7 @@ public class OAuthLinkAccountFilter extends AbstractSSOInterceptor {
             }
         }
 
-        String urlToRedirect = (String)session.getAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
-        if (urlToRedirect == null) {
-            urlToRedirect = httpRequest.getContextPath();
-        } else {
-            session.removeAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
-        }
+        String urlToRedirect = OAuthUtils.getURLToRedirectAfterLinkAccount(httpRequest, session);
 
 
         if (log.isTraceEnabled()) {

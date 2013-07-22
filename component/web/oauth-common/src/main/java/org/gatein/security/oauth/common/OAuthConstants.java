@@ -151,6 +151,8 @@ public class OAuthConstants {
 
     public static final String PARAM_CUSTOM_SCOPE = "_oauthCustomScope";
 
+    public static final String PARAM_INITIAL_URI = "_initialURI";
+
     public static final String PARAM_OAUTH_INTERACTION_VALUE_START = "start";
 
 

@@ -34,9 +34,13 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import com.google.api.services.oauth2.model.Userinfo;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.UserImpl;
+import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.spi.OAuthProviderType;
 import org.gatein.security.oauth.exception.OAuthException;
 import org.gatein.security.oauth.exception.OAuthExceptionCode;
@@ -100,6 +104,17 @@ public class OAuthUtils {
         gateinUser.setEmail(principal.getEmail());
         gateinUser.setDisplayName(principal.getDisplayName());
         return gateinUser;
+    }
+
+    public static String getURLToRedirectAfterLinkAccount(HttpServletRequest request, HttpSession session) {
+        String urlToRedirect = (String)session.getAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
+        if (urlToRedirect == null) {
+            urlToRedirect = request.getContextPath();
+        } else {
+            session.removeAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
+        }
+
+        return urlToRedirect;
     }
 
     // HTTP related utils

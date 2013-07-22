@@ -57,8 +57,9 @@ public class OAuthProviderImpl extends BasicOAuthProviderImpl {
 
         // Redirect to start OAuth2 flow
         String reqContextPath = prc.getRequestContextPath();
+        String requestURI = prc.getRequestURI();
         OAuthProviderType<?> oauthProviderType = getInternalOAuthProvider();
-        String initOauthFlowURL = oauthProviderType.getInitOAuthURL(reqContextPath);
+        String initOauthFlowURL = oauthProviderType.getInitOAuthURL(reqContextPath, requestURI);
 
         // Attach custom scope
         if (neededCustomScope != null) {

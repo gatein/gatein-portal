@@ -110,7 +110,7 @@
           </div>
           <div id="social-login">
             <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
-            <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
+            <a href="<%= oauthProvType.getInitOAuthURL(contextPath, uri) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
               <div><%= oauthProvType.getFriendlyName() %></div>
             </a>
             <% } %>

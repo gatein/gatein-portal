@@ -136,7 +136,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
               </div>
               <div class='SocialLoginButtons'>
                 <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
-                <a href="<%= oauthProvType.getInitOAuthURL(contextPath) %>" id="login-<%= oauthProvType.getKey() %>"
+                <a href="<%= oauthProvType.getInitOAuthURL(contextPath, uri) %>" id="login-<%= oauthProvType.getKey() %>"
                    class="login-button">
                   <div><%= oauthProvType.getFriendlyName() %>
                   </div>

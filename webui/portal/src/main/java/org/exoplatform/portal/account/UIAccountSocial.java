@@ -113,8 +113,8 @@ public class UIAccountSocial extends UIForm {
     }
 
     public String getLinkSocialAccountURL(OAuthProviderType oauthPrType) {
-        String reqContextPath = Util.getPortalRequestContext().getRequestContextPath();
-        return oauthPrType.getInitOAuthURL(reqContextPath);
+        PortalRequestContext prc = Util.getPortalRequestContext();
+        return oauthPrType.getInitOAuthURL(prc.getRequestContextPath(), prc.getRequestURI());
     }
 
     public String getUnlinkSocialAccountURL(OAuthProviderType oauthPrType) throws Exception {

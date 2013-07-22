@@ -24,6 +24,7 @@
 package org.gatein.security.oauth.spi;
 
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.utils.OAuthUtils;
 
 /**
  * Encapsulate data about single OAuth provider (social network), which are needed by portal (not data, which are needed to perform specific OAuth
@@ -77,8 +78,12 @@ public class OAuthProviderType<T extends AccessTokenContext> {
         return oauthProviderProcessor;
     }
 
-    public String getInitOAuthURL(String contextPath) {
-        return contextPath + initOAuthURL + "?" + OAuthConstants.PARAM_OAUTH_INTERACTION + "=" + OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START;
+    public String getInitOAuthURL(String contextPath, String requestURI) {
+        requestURI = OAuthUtils.encodeParam(requestURI);
+
+        return contextPath + initOAuthURL
+                + "?" + OAuthConstants.PARAM_OAUTH_INTERACTION + "=" + OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START
+                + "&" + OAuthConstants.PARAM_INITIAL_URI + "=" + requestURI;
     }
 
     public String getFriendlyName() {

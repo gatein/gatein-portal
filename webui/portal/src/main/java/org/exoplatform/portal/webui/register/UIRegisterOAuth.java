@@ -69,7 +69,7 @@ public class UIRegisterOAuth extends UIContainer {
     private final User portalUser;
 
     public UIRegisterOAuth() throws Exception {
-        addChild(UIRegisterForm.class, REGISTER_FORM_CONFIG_ID, "UIRegisterForm");
+        addChild(UIRegisterForm.class, REGISTER_FORM_CONFIG_ID, REGISTER_FORM_CONFIG_ID);
 
         UIRegisterForm uiRegisterForm = getChild(UIRegisterForm.class);
         uiRegisterForm.setActions(ACTIONS);

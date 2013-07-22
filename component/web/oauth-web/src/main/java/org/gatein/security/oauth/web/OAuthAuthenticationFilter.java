@@ -139,8 +139,19 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
         User gateInUser = OAuthUtils.convertOAuthPrincipalToGateInUser(principal);
         authenticationRegistry.setAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER, gateInUser);
 
-        String registrationRedirectUrl = httpResponse.encodeRedirectURL(registrationUrl);
+        String registrationRedirectUrl = getRegistrationRedirectURL(httpRequest);
+        registrationRedirectUrl = httpResponse.encodeRedirectURL(registrationRedirectUrl);
         httpResponse.sendRedirect(registrationRedirectUrl);
+    }
+
+
+    protected String getRegistrationRedirectURL(HttpServletRequest req) {
+        String registrationURL = (String)req.getSession().getAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT);
+        if (registrationURL == null) {
+            registrationURL = this.registrationUrl;
+        }
+
+        return registrationURL;
     }
 
 
@@ -167,6 +178,10 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
 
             // Use sessionId and system millis as password (similar like spnego is doing)
             url.append("?username=").append(username).append("&password=").append(fakePassword);
+
+            String initialURI = OAuthUtils.getURLToRedirectAfterLinkAccount(req, req.getSession());
+            initialURI = OAuthUtils.encodeParam(initialURI);
+            url.append("&").append("initialURI").append("=").append(initialURI);
         }
 
         return url.toString();
