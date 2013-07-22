@@ -119,8 +119,8 @@
 									<div class="control-group">
 										<h:outputLabel for="redirect" styleClass="control-label">Redirect to</h:outputLabel>
 										<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
-        								    <f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
-    										<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
+											<f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
+											<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
 										</h:selectOneMenu>
 									</div><!-- End .control-group -->
 								</fieldset>
@@ -142,26 +142,46 @@
 												</thead>
 												<tbody class="sortable sortable-cnd">
 													<ui:repeat value="#{rdrEdit.conditions}" var="rc" varStatus="rc_st">
-													<tr class="ui-state-default">
+													<tr>
 														<td>#{rc.name}</td>
 														<td>
+															<h:panelGroup rendered="#{rc.userAgentConditions.contains.size() > 0 or rc.userAgentConditions.doesNotContain.size() > 0}"><strong>User Agent String: </strong></h:panelGroup>
 															<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
 																<h:panelGroup rendered="#{cnt_st.first}">
-																<strong>Contains </strong>
+																	<em>Contains </em>
 																</h:panelGroup>
-																<h:panelGroup rendered="#{not cnt_st.first}">
-																 OR 
-																</h:panelGroup>
+																<h:panelGroup rendered="#{not cnt_st.first}"><span>OR</span></h:panelGroup>
 																'#{rcUACcont}'
 															</ui:repeat>
 															<ui:repeat value="#{rc.userAgentConditions.doesNotContain}" var="rcUACnotcont" varStatus="dnc_st">
 																<h:panelGroup rendered="#{dnc_st.first}">
-																<strong>Does not contain </strong>
+																	<em>Does not contain </em>
 																</h:panelGroup>
-																<h:panelGroup rendered="#{not dnc_st.first}">
-																 OR 
-																</h:panelGroup>
+																<h:panelGroup rendered="#{not dnc_st.first}"><span>OR</span></h:panelGroup>
 																'#{rcUACnotcont}'
+															</ui:repeat>
+															<br/>
+															<ui:repeat value="#{rc.deviceProperties}" var="devProp" varStatus="dp_st">
+																<h:panelGroup rendered="#{dp_st.first}">
+																	<strong>Properties: </strong>
+																</h:panelGroup>
+																<h:panelGroup rendered="#{not dp_st.first}"><span>AND</span></h:panelGroup>
+																'#{devProp.propertyName}'
+																<h:panelGroup rendered="#{devProp.equals != null}">
+																	equals '#{devProp.equals}'
+																</h:panelGroup>
+																<h:panelGroup rendered="#{devProp.matches != null}">
+																	matches '#{devProp.matches}'
+																</h:panelGroup>
+																<h:panelGroup rendered="#{devProp.greaterThan != null and devProp.lessThan != null}">
+																	between #{devProp.lessThan} and #{devProp.greaterThan}
+																</h:panelGroup>
+																<h:panelGroup rendered="#{devProp.greaterThan != null and devProp.lessThan == null}">
+																	greater than #{devProp.greaterThan}
+																</h:panelGroup>
+																<h:panelGroup rendered="#{devProp.lessThan != null and devProp.greaterThan == null}">
+																	equals #{devProp.lessThan}
+																</h:panelGroup>
 															</ui:repeat>
 														</td>
 														<td class="actions">

@@ -36,7 +36,7 @@
 								<ui:param name="isContainsEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.contains == null or rdrEdit.editedCondition.userAgentConditions.contains.size() == 0}" />
 								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.contains}" var="rcUACcont" varStatus="counter">
 									<div class="#{counter.index > 0 ? 'more-condition' : 'condition'}">
-										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}"><label for="rcuaccont">OR</label></h:panelGroup>
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
 										<b:input id="rcuaccont" styleClass="contains-input" value="#{rdrEdit.editedCondition.userAgentConditions.contains[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
 											<span class="tooltipTrigger" title="Delete Expression">
@@ -63,7 +63,7 @@
 								<ui:param name="isDoesNotContainEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain.size() == 0}" />
 								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain}" var="rcUACdncont" varStatus="counter">
 									<div class="#{counter.index == 0 ? 'condition' : 'more-condition'}">
-										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}"><label for="rcuacdncont">OR</label></h:panelGroup>
+										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
 										<b:input id="rcuacdncont" styleClass="doesnotcontain-input" value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
 											<span class="tooltipTrigger" title="Delete Expression">
@@ -104,10 +104,10 @@
 						<ui:repeat value="#{rdrEdit.editedCondition.deviceProperties}" var="rcDevProp" varStatus="counter">
 						<tr>
 							<td class="condition" colspan="2">
- 								<ui:param name="rcDevPropOp" value="#{rcDevProp.equals != null ?  'eq' : rcDevProp.greaterThan != null ? (rcDevProp.lessThan != null ? 'bt' : 'gt') : rcDevProp.lessThan != null ? 'lt' : 'mt'}" />
+								<ui:param name="rcDevPropOp" value="#{rcDevProp.equals != null ?  'eq' : rcDevProp.greaterThan != null ? (rcDevProp.lessThan != null ? 'bt' : 'gt') : rcDevProp.lessThan != null ? 'lt' : 'mt'}" />
 								<h:inputText id="name-rcDevProp" styleClass="property property-name-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].propertyName}" />
 								<!-- For some reason this causes the components to stop working.. using pure HTML
- 								<h:selectOneMenu id="op-rcDevProp" styleClass="attribute" style="height: 30px;" onchange="propertyFields(this);" value="#{rdrEdit.getPropertyOperator(counter.index)}">
+								<h:selectOneMenu id="op-rcDevProp" styleClass="attribute" style="height: 30px;" onchange="propertyFields(this);" value="#{rdrEdit.getPropertyOperator(counter.index)}">
 									<f:selectItem id="eq" itemLabel="Equals" itemValue="eq" />
 									<f:selectItem id="gt" itemLabel="Greater than" itemValue="gt" />
 									<f:selectItem id="lt" itemLabel="Less than" itemValue="lt" />
@@ -123,7 +123,7 @@
 									<option value="bt" selected='#{rcDevPropOp == "bt" ? "selected" : ""}'>Between</option>
 								</select>
 								<span id="value-holder">
- 									<h:panelGroup styleClass="pp-bt" style="#{rcDevPropOp == 'bt' ? '' : 'display:none'}">
+									<h:panelGroup styleClass="pp-bt" style="#{rcDevPropOp == 'bt' ? '' : 'display:none'}">
 										<div class="input-append-inline">
 											<h:inputText id="val-rcDevProp_bt_gt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].greaterThan}" />
 										</div>
@@ -152,7 +152,7 @@
 											<h:inputText id="val-rcDevProp_lt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].lessThan}" />
 										</div>
 									</h:panelGroup>
- 								</span>
+								</span>
 							</td>
  							<td class="actions" style="width: 50px;" >
  								<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" styleClass="tooltipTrigger" title="Delete Property" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
@@ -160,7 +160,7 @@
 							</td>
 						</tr>
 						</ui:repeat>
- 					</tbody>
+					</tbody>
 				</table>
 			</h:panelGroup><!-- End .control-group -->
 		</div><!-- End .modal-body -->
