@@ -124,7 +124,9 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                 request.getRequestURL().length() - request.getServletPath().length());
         if (referer != null && referer.startsWith(siteURL)
                 && (context.getRequest().getSession(true).getAttribute(DEVICE_DETECTION_ATTEMPTED) == null)) {
-            log.debug("Redirect being requested with a referer from the portal site. Do not attempt redirect and follow link. Referer : " + referer);
+            if (debug) {
+                log.debug("Redirect being requested with a referer from the portal site. Do not attempt redirect and follow link. Referer : " + referer);
+            }
             return false;
         }
 
@@ -308,7 +310,9 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
                 }
 
                 // set the redirect
-                log.debug("Redirecting to : " + s);
+                if (debug) {
+                    log.debug("Redirecting to : " + s);
+                }
                 response.sendRedirect(response.encodeRedirectURL(s));
                 return true;
             } else {
