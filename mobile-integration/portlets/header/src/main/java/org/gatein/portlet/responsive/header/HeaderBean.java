@@ -65,12 +65,19 @@ public class HeaderBean {
         return nodeLevel;
     }
 
-    public String generateLoginLink(String defaultAction) {
-        if (ssoHelper != null) {
+    public String generateLoginLink() {
+        if (ssoHelper != null && ssoHelper.isSSOEnabled()) {
             PortalRequestContext pContext = Util.getPortalRequestContext();
-
             String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
             return ssoRedirectURL;
+        } else {
+            return "#";
+        }
+    }
+
+    public String generateLoginAction(String defaultAction) {
+        if (ssoHelper != null && ssoHelper.isSSOEnabled()) {
+            return "#";
         } else {
             return defaultAction;
         }

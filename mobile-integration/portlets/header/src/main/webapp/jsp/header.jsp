@@ -19,8 +19,13 @@ jsMan.require("SHARED/org_gatein_responsive_menu", "menu").addScripts("menu.init
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}" />
 
 <%-- The action to perform to bring up the webui signin modal --%>
-<c:set var="SIGN_IN_ACTION"
+<c:set var="SIGN_IN_LINK"
+    value="${headerbean.generateLoginLink()}" />
+<c:set var="DEFAULT_SIGN_IN_ACTION"
     value="if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" />
+<c:set var="SIGN_IN_ACTION"
+    value="${headerbean.generateLoginAction(DEFAULT_SIGN_IN_ACTION)}" />
+
 <%-- The action to perform to log out the current user --%>
 <c:set var="SIGN_OUT_ACTION" value="eXo.portal.logout();" />
 <%-- The action to bring up the user profile modal --%>
@@ -44,7 +49,7 @@ jsMan.require("SHARED/org_gatein_responsive_menu", "menu").addScripts("menu.init
             <ol class="menu">
                 <c:choose>
                     <c:when test="${renderRequest.getRemoteUser() eq null}">
-                        <li class="menulink"><a class="link" href="#" onclick="${SIGN_IN_ACTION}">${resourceBundle.getString("label.SignIn")}</a></li>
+                        <li class="menulink"><a class="link" href="${SIGN_IN_LINK}" onclick="${SIGN_IN_ACTION}">${resourceBundle.getString("label.SignIn")}</a></li>
                         <li class="menulink"><a class="link" href="${registerLink}">${resourceBundle.getString("label.Register")}</a></li>
                     </c:when>
                     <c:otherwise>
