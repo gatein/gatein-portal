@@ -22,11 +22,12 @@
                 @Stylesheet(id = "social-buttons", src = "social-buttons.css")
             },             
             scripts = {
-                @Script(src = "javascripts/jquery-1.7.1.min.js"),
-                @Script(src = "javascripts/jquery-ui-1.10.3.custom.js"),
-                @Script(src = "javascripts/underscore.js"),
-                @Script(src = "javascripts/backbone.js"),
-                @Script(src = "javascripts/edit.js"))
+                    @Script(src = "javascripts/jquery-1.7.1.min.js"),
+                    @Script(src = "javascripts/jquery-ui-1.10.3.custom.js"),
+                    @Script(src = "javascripts/underscore.js"),
+                    @Script(src = "javascripts/backbone.js"),
+                    @Script(src = "javascripts/page-model.js"),
+                    @Script(src = "javascripts/page-editor.js")})
 package org.gatein.portal;
 
 import juzu.Application;

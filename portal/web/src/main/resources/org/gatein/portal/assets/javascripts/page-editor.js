@@ -1,32 +1,4 @@
 $(function() {
-	var root = $('.editing');
-	var url = root.attr('data-editURL');
-	
-	var App = Backbone.Model.extend({
-		defaults : {
-			'id' : null, 'containerID' : null, 'prev' : null
-		},
-		url : url
-	});
-	var Layout = Backbone.Collection.extend({
-		model : App,
-    	move : function(target, to, prev) {
-    		var app = this.get(target);
-    		if (app) {
-    			app.save({'containerID': to, 'prev': prev}, {'silent': true, 'success': this.onMove, 'error': this.onError});
-    		}
-    	},
-    	onMove: function(model, response, options) {
-    		var layout = response['layout'];
-    		if (layout) {
-    			model.collection.set(layout);
-    		}
-    	},
-    	onError: function(model, xhr, options) {
-    		alert("can't edit page");
-    		window.location.reload();
-    	}
-    });
 
 	var  LayoutView = Backbone.View.extend({
         initialize : function() {
@@ -37,11 +9,13 @@ $(function() {
         			update : function(event, ui) {
         	    		var item = $(ui.item);
         	    		view.collection.move(item.attr('id'), this.id, item.prev('div').attr('id'));
+        	    		view.collection.save();
         	    	}
         		});
         	}
         	
-        	this.listenTo(this.collection, 'change', this.move);
+        	this.listenTo(this.collection, 'change: staleData', this.onFetchError);
+        	this.listenTo(this.collection, 'change:containerID, change: prev', this.move);
         },
         
         move : function(app) {
@@ -53,13 +27,29 @@ $(function() {
         	} else if (to) {
         		to.prepend($app);
         	}
+        },
+        
+        onFetchError : function(app) {
+        	if (app.get('staleData')) {
+        		alert('cant fetch data from server');
+        		window.location.reload();
+        	}
         }
 	});
 		
+	var root = $('.editing');
+	var url = root.attr('data-editURL');	
+
 	var apps = new Layout();
 	$('.sortable').children().each(function() {
 		var $this = $(this);
-		apps.add({'id' : this.id, 'containerID' : $this.closest('.sortable').attr('id'), 'prev' : $this.prev('div').attr('id')});
+		
+		var app = new App({'id' : this.id, 
+					  'containerID' : $this.closest('.sortable').attr('id'), 
+					  'prev' : $this.prev('div').attr('id')
+					  });
+		app.url = url;
+		apps.add(app);
 	});	
 	new LayoutView({el : root.get(0), collection : apps});
 });
