@@ -45,8 +45,10 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -109,6 +111,8 @@ public class PortalRequestContext extends WebuiRequestContext {
 
     /** The path decoded from the request. */
     private final String nodePath_;
+
+    private String resolvedNodePath;
 
     /** . */
     private final String requestURI_;
@@ -442,6 +446,33 @@ public class PortalRequestContext extends WebuiRequestContext {
 
     public String getNodePath() {
         return nodePath_;
+    }
+
+    /**
+     * Returns the resolvable node path. For example if nodePath was /home/foo/bar and /foo/bar did not
+     * exist, /home would be returned.
+     *
+     * @return the resolved node path
+     */
+    public String getResolvedNodePath() {
+        if (resolvedNodePath == null) {
+            UserNode node = null;
+            UserPortal userPortal = getUserPortal();
+            String nodePath = getNodePath();
+            UserNavigation userNavigation = userPortal.getNavigation(siteKey);
+            if (userNavigation == null) {
+                nodePath = ""; // Unknown site was requested, default to no node path
+            } else {
+                node = userPortal.resolvePath(userNavigation, null, nodePath);
+                if (node == null) {
+                    node = userPortal.getDefaultPath(userNavigation, null);
+                }
+            }
+
+            resolvedNodePath = (node == null) ? nodePath : node.getURI();
+        }
+
+        return resolvedNodePath;
     }
 
     public String getRequestURI() {
