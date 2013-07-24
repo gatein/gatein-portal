@@ -35,8 +35,6 @@ import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.servlet.Context;
 
 public class LoginController {
-    private static final int AUTHENTICATED = 1;
-    private static final int FAILED = 2;
 
     @Inject
     private LoginFailureMessage loginFailureMessage;
@@ -61,60 +59,56 @@ public class LoginController {
         return Response.redirect(initURL);
     }
 
-    @View
-    @Route(value = "/dologin", priority = 1)
-    public Response doLogin() {
-        return LoginController_.login();
-    }
-
     @Action
     @Route(value = "/actionLogin", priority = 1)
-    public Response actionLogin(String username, String password) {
+    public Response actionLogin(String username, String password, String initURL) {
         try {
             this.loginHelper.login(username, password);
         } catch (Exception e) {
             loginFailureMessage.setError("Username or password incorrect!");
         }
 
-        return LoginController_.login();
+        return LoginController_.login(initURL);
     }
 
+
+    @View
+    @Route(value = "/dologin", priority = 1)
+    public Response doLogin(String initURL, RequestContext context) {
+        return this.doView(initURL, context);
+    }
     @View
     @Route(value = "/login", priority = 1)
-    public Response login(RequestContext context) throws Exception {
+    public Response login(String initURL, RequestContext context) throws Exception {
+        return this.doView(initURL, context);
+    }
+
+    private Response doView(String initURL, RequestContext context) {
         String contextPath = context.getHttpContext().getContextPath();
-        Map<String, RequestParameter> parameters = context.getParameters();
-        int status = FAILED;
+        if(initURL == null || initURL.isEmpty()) initURL = contextPath;
 
         //TODO: WebRequestBridge alway return null when call getSecurityContext()
         /*if(context.getSecurityContext() != null) {
             status = context.getSecurityContext().getRemoteUser() != null ? AUTHENTICATED : FAILED;
         }*/
         HttpServletRequest request = Context.getCurrentRequest();
-        if(request != null) {
-            status = request.getRemoteUser() != null ? AUTHENTICATED : FAILED;
-        }
-
-        if (status == AUTHENTICATED) {
-            String initURL  = parameters.containsKey("initURL")  ? parameters.get("initURL").getValue()  : contextPath;
+        if(request != null && request.getRemoteUser() != null) {
+            //Redirect to init page when user logged in
             return Response.redirect(initURL);
         }
 
-        String username = parameters.containsKey("username") ? parameters.get("username").getValue() : null;
-        String password = parameters.containsKey("password") ? parameters.get("password").getValue() : null;
-        if (username != null && password != null && !username.isEmpty() && !password.isEmpty()) {
-            try {
-                loginHelper.login(username, password);
-                return LoginController_.login();
-            } catch (Exception e){}
-        }
-
+        //If SSO enable: redirect to sso
         if(this.ssoHelper.isSSOEnabled()) {
             return Response.redirect(contextPath + ssoHelper.getSSORedirectURLSuffix());
         }
 
         List<OauthProviderDescriptor> oauthProviders = loginHelper.getOauthProviderDescriptors(contextPath);
 
-        return login.with().set("oauthProviders", oauthProviders).ok().with(juzu.PropertyType.STYLESHEET, "login-stylesheet").with(juzu.PropertyType.STYLESHEET, "social-buttons");
+        return login.with()
+                .set("oauthProviders", oauthProviders)
+                .set("initURL", initURL)
+                .ok()
+                .with(juzu.PropertyType.STYLESHEET, "login-stylesheet")
+                .with(juzu.PropertyType.STYLESHEET, "social-buttons");
     }
 }

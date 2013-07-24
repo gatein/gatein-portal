@@ -13,6 +13,7 @@
         <%}%>
         <input type="text" name="username" class="input-block-level" placeholder="Username"/>
         <input type="password" name="password" class="input-block-level" placeholder="Password"/>
+        <input type="hidden" name="initURL" value="${initURL}"/>
         <!--<label class="checkbox">
             <input type="checkbox" value="remember-me"/> Remember me
         </label>-->

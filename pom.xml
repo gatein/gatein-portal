@@ -248,11 +248,6 @@
         <version>${org.exoplatform.core.version}</version>
       </dependency>
       <dependency>
-        <groupId>javax.jcr</groupId>
-        <artifactId>jcr</artifactId>
-        <version>${javax.jcr.version}</version>
-      </dependency>
-      <dependency>
         <groupId>org.exoplatform.jcr</groupId>
         <artifactId>exo.jcr.component.core</artifactId>
         <version>${org.exoplatform.jcr.version}</version>
@@ -397,11 +392,6 @@
         </exclusions>
       </dependency>
       <!-- Gatein Mgmt -->
-      <dependency>
-        <groupId>org.gatein.management</groupId>
-        <artifactId>gatein-management-spi</artifactId>
-        <version>${org.gatein.mgmt.version}</version>
-      </dependency>
       <dependency>
         <groupId>org.gatein.management</groupId>
         <artifactId>gatein-management-api</artifactId>

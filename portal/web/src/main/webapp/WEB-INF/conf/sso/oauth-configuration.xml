@@ -230,7 +230,7 @@
         <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is not needed because user is already registered -->
         <value-param>
           <name>loginUrl</name>
-          <value>/@@portal.container.name@@/login</value>
+          <value>/@@portal.container.name@@/actionLogin</value>
         </value-param>
       </init-params>
     </component-plugin>

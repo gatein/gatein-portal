@@ -67,10 +67,6 @@
         <include>org.exoplatform.ws:exo.ws.rest.ext</include>
         <include>org.exoplatform.ws:exo.ws.frameworks.json</include>
         <include>commons-fileupload:commons-fileupload</include>
-        <include>javax.jcr:jcr</include>
-        <include>org.exoplatform.jcr:exo.jcr.component.core</include>
-        <include>org.exoplatform.jcr:exo.jcr.component.ext</include>
-        <include>org.exoplatform.jcr:exo.jcr.framework.web</include>
         <include>com.google.oauth-client:google-oauth-client</include>
         <include>com.google.api-client:google-api-client</include>
         <include>com.google.http-client:google-http-client</include>

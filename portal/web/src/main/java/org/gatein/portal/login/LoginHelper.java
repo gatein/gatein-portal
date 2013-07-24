@@ -39,6 +39,7 @@ public class LoginHelper {
     private OAuthProviderTypeRegistry providerTypeRegistry;
 
     public void login(String username, String password) throws ServletException, IOException {
+        if(username == null || username.isEmpty()) throw new ServletException("Login failure with empty username");
         Credentials credentials = new Credentials(username, password);
         ServletContainer container = ServletContainerFactory.getServletContainer();
         container.login(this.getCurrentRequest(), this.getCurrentResponse(), credentials);

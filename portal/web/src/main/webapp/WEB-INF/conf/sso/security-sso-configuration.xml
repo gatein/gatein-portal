@@ -151,7 +151,7 @@
         </value-param>
         <value-param>
           <name>loginUrl</name>
-          <value>${gatein.sso.portal.url}/@@portal.container.name@@/dologin</value>
+          <value>${gatein.sso.portal.url}/@@portal.container.name@@/actionLogin</value>
         </value-param>
         <value-param>
           <name>ssoCookieName</name>
@@ -219,7 +219,7 @@
         </value-param>
         <value-param>
           <name>loginUrl</name>
-          <value>${gatein.sso.portal.url}/@@portal.container.name@@/dologin</value>
+          <value>${gatein.sso.portal.url}/@@portal.container.name@@/actionLogin</value>
         </value-param>
       </init-params>
     </component-plugin>
