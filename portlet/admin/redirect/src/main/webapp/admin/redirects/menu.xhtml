@@ -11,8 +11,8 @@
 			<ul class="nav nav-list">
 				<li id="sites"> <!-- Sites List / begin -->
 					<div>
-						<span class="toggle" style="background: none;">Sites</span>
-						<h:panelGroup styleClass="more" rendered="#{rdrs.sites.size() > 5}">Show more</h:panelGroup>
+						<span class="toggle" style="background: none;">#{msg['redirect.admin.menu.sites']}</span>
+						<h:panelGroup styleClass="more" rendered="#{rdrs.sites.size() > 5}">#{msg['redirect.admin.menu.more']}</h:panelGroup>
 					</div>
 					<ul>
 						<ui:repeat value="#{rdrs.sites}" var="s" varStatus="counter">
@@ -20,13 +20,13 @@
 								<a4j:commandLink action="#{rdrs.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" onfocus="$(this).next('.dropdown-toggle').click(); return false;" render="@form :sum_form :add_form :form-select-node">
 									<b:icon value="globe" color="grey" /> #{s.name}
 								</a4j:commandLink>
-								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">View actions...</i></span>
+								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
 								<ul class="dropdown-menu">
 									<li>
 										<a4j:mediaOutput element="a" cacheable="false" createContent="#{exporter.exportSite}">
 											<a4j:param name="type" value="portal" assignTo="#{exporter.type}" noEscape="true" />
 											<a4j:param name="name" value="#{s.name}" assignTo="#{exporter.name}" noEscape="true" />
-											<h:outputText value="Export Site" />
+											<h:outputText value="#{msg['redirect.admin.site.export']}" />
 										</a4j:mediaOutput>
 									</li>
 									<!-- <li class="delete-site separator"><a href="#">Delete Site</a></li> -->
@@ -37,8 +37,8 @@
 				</li> <!-- Sites List / end -->
 				<li id="sites"> <!-- Spaces List / begin -->
 					<div>
-						<span class="toggle" style="background: none;">Spaces</span>
-						<h:panelGroup styleClass="more" rendered="#{rdrs.spaces.size() > 5}">Show more</h:panelGroup>
+						<span class="toggle" style="background: none;">#{msg['redirect.admin.menu.spaces']}</span>
+						<h:panelGroup styleClass="more" rendered="#{rdrs.spaces.size() > 5}">#{msg['redirect.admin.menu.more']}</h:panelGroup>
 					</div>
 					<ul>
 						<ui:repeat value="#{rdrs.spaces}" var="s" varStatus="counter">
@@ -46,7 +46,7 @@
 								<a href="#" onclick="event.stopPropagation(); $(this).next('.dropdown-toggle').click(); return false;" title="#{s.name}" onfocusin="$(this).next('.dropdown-toggle').click(); return false;" >
 									<b:icon value="globe" color="grey" /> #{rdrs.getSpaceLabel(s.name)}
 								</a>
-								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">View actions...</i></span>
+								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
 								<ul class="dropdown-menu">
 									<li>
 										<a4j:mediaOutput element="a" cacheable="false" createContent="#{exporter.exportSite}">
@@ -63,7 +63,7 @@
 				</li> <!-- Sites List / end -->
 				<li id="server">
 					<ul>
-						<li><a href="#modal-import-site" class="import-site" data-toggle="modal" id="import-site"><i class="icon-download-alt icon-gray"></i> Import Site/Space</a></li>
+						<li><a href="#modal-import-site" class="import-site" data-toggle="modal" id="import-site"><i class="icon-download-alt icon-gray"></i> #{msg['redirect.admin.menu.import']}</a></li>
 					</ul>
 				</li>
 			</ul>

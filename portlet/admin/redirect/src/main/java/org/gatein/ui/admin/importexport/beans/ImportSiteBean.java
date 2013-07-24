@@ -48,17 +48,17 @@ public class ImportSiteBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static Map<String,Object> importModes;
+    private static Map<String,String> importModes;
 
-    static{
-        importModes = new LinkedHashMap<String,Object>();
-        importModes.put("Conserve", "conserve");
-        importModes.put("Insert", "insert");
-        importModes.put("Merge", "merge");
-        importModes.put("Overwrite", "overwrite");
+    static {
+        importModes = new LinkedHashMap<String,String>();
+        importModes.put("conserve", "redirect.admin.import.item.conserve");
+        importModes.put("insert", "redirect.admin.import.item.insert");
+        importModes.put("merge", "redirect.admin.import.item.merge");
+        importModes.put("overwrite", "redirect.admin.import.item.overwrite");
     }
 
-    public Map<String,Object> getImportModes() {
+    public Map<String,String> getImportModes() {
         return importModes;
     }
 

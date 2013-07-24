@@ -10,19 +10,19 @@
 	<div class="modal hide" id="modal-delete-redirect" data-backdrop="static">
 		<div class="modal-header">
 			<!-- <button class="modal-close" data-dismiss="modal">Close</button> -->
-			<h3>Delete Redirect</h3>
+			<h3>#{msg['redirect.admin.delete.h']}</h3>
 		</div>
 		<div class="modal-body">
 			<p>
-				<strong>Are you sure you want to permanently delete the redirect "<span id="delete-redirect-name-text">UNDEFINED</span>" for the "<span id="delete-redirect-site-text">UNDEFINED</span>" site ?</strong>
+				<strong>#{msg['redirect.admin.delete.msg1']} "<span id="delete-redirect-name-text">#{msg['redirect.admin.delete.undef']}</span>" #{msg['redirect.admin.delete.msg2']} #{msg['redirect.admin.p.left']}<span id="delete-redirect-site-text">#{msg['redirect.admin.delete.undef']}</span>#{msg['redirect.admin.p.right']} #{msg['redirect.admin.delete.msg3']}</strong>
 				<br />
-				<span>You can't undo this action.</span>
+				<span>#{msg['redirect.admin.delete.undo.msg']}</span>
 			</p>
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
+			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.delete.cancel']}</a>
 			<h:commandLink styleClass="btn btn-danger" onclick="$('#modal-delete-redirect').modal('hide')">
-				<f:ajax event="action" render=":sum_form" listener="#{rdrEdit.deleteRedirect()}" onevent="showAlert('Redirect Deleted!', 'The redirect has been successfully deleted.', 'alert-danger')"/>Delete Redirect
+				<f:ajax event="action" render=":sum_form" listener="#{rdrEdit.deleteRedirect()}" onevent="showAlert('#{msg['redirect.admin.delete.alert.h']}', '#{msg['redirect.admin.delete.alert.msg']}', 'alert-danger')"/>#{msg['redirect.admin.delete.delete']}
 			</h:commandLink>
 		</div>
 	</div><!-- end .modal -->
