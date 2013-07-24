@@ -32,6 +32,7 @@ import org.gatein.api.Portal;
 import org.gatein.api.PortalRequest;
 import org.gatein.api.Util;
 import org.gatein.api.common.URIResolver;
+import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.NodePath;
 import org.gatein.api.security.User;
 import org.gatein.api.site.SiteId;
@@ -79,6 +80,17 @@ public class PortalRequestImpl extends PortalRequest {
     @Override
     public Locale getLocale() {
         return context.getLocale();
+    }
+
+    @Override
+    public Navigation getNavigation() {
+        Navigation nav = super.getNavigation();
+        if (nav == null) {
+            String siteName = context.getUserPortalConfig().getPortalName();
+            nav = portal.getNavigation(new SiteId(siteName));
+        }
+
+        return nav;
     }
 
     @Override
