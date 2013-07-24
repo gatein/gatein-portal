@@ -11,7 +11,7 @@
 		<h:panelGroup layout="block" id="modal-select-node-wrapper">
 			<div class="modal-header">
 				<!-- <button class="modal-close" data-dismiss="modal">Close</button> -->
-				<h3>Select Node - #{rdrEdit.currentNodesSiteName}</h3>
+				<h3>#{msg['redirect.admin.select.h']} - #{rdrEdit.currentNodesSiteName}</h3>
 			</div>
 			<div class="modal-body">
 				<div class="window-list">
@@ -23,8 +23,8 @@
 				</div><!-- End .windowList -->
 			</div><!-- End .modal-body -->
 			<div class="modal-footer">
-				<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
-				<a href="#" id="button-select-node" class="btn btn-primary" onclick="selectNodeFromList(); return false;">Select this node</a>
+				<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.select.but.cancel']}</a>
+				<a href="#" id="button-select-node" class="btn btn-primary" onclick="selectNodeFromList(); return false;">#{msg['redirect.admin.select.but.select']}</a>
 			</div>
 		</h:panelGroup>
 	</div><!-- end .modal -->

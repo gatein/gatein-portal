@@ -9,33 +9,33 @@
 
 <ui:define name="content">
 	<h:form id="add_form" styleClass="form-horizontal">
-		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText id="sitename_text" styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">Site</span> Redirects &amp; Export/Import</h1>
+		<h1 class="hOne"><a4j:outputPanel id="siteName"><h:outputText id="sitename_text" styleClass="gray" value="#{rdrs.siteName}" rendered="#{not empty rdrs.siteName}" /></a4j:outputPanel> <span class="gray">#{msg['redirect.admin.site']}</span> #{msg['redirect.admin.impexp']}</h1>
 		<div id="main-alert" class="alert" style="opacity: 0;">
 			<!-- <button data-dismiss="alert" class="modal-close">Close</button> -->
 			<strong id="main-alert-title"></strong> <span id="main-alert-message"></span>
 		</div><!-- End .alert -->
 
-		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}" oncomplete="configureRedirect();">Add Redirect</a4j:commandLink>
+		<a4j:commandLink action="#{rdrEdit.addRedirect(rdrs.siteName)}" styleClass="btn btn-small pull-right add-redirect" render=":edit_form" rendered="#{not empty rdrs.siteName}" oncomplete="configureRedirect();">#{msg['redirect.admin.site.redirect.add']}</a4j:commandLink>
 	</h:form>
 		<h:form id="sum_form" styleClass="form-horizontal">
 			<!-- No site selected -->
 			<h:panelGroup rendered="#{empty rdrs.siteName}">
-				<h2 class="initial">Select a site to set up redirects.</h2>
+				<h2 class="initial">#{msg['redirect.admin.site.select']}</h2>
 				<p class="initial">
-					Redirect to an alternative site based on the device, browser or user preferences.<br />
-					<small style="opacity: 0.5;">Not available for Spaces</small>
+					#{msg['redirect.admin.site.select.msg']}<br />
+					<small style="opacity: 0.5;">#{msg['redirect.admin.site.select.na']}</small>
 				</p>
 				<h:graphicImage class="initial" library="img" name="site-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
 				<p class="initial"> </p>
-				<h2 class="initial">Select a site or space to be exported.</h2>
-				<p class="initial">Export existing sites and spaces or import previously exported sites or spaces into the portal.</p>
+				<h2 class="initial">#{msg['redirect.admin.site.select.export']}</h2>
+				<p class="initial">#{msg['redirect.admin.site.select.export.msg']}</p>
 			</h:panelGroup>
 
 			<span id="redirectSummaryWrapper">
 				<!-- Site selected, with no redirects -->
 				<h:panelGroup rendered="#{not empty rdrs.siteName and rdrs.redirects.size() eq 0}">
-					<h2 class="initial">You have not set up any redirects.</h2>
-					<p class="initial">Redirect to an alternative site based on the device, browser or user preferences.</p>
+					<h2 class="initial">#{msg['redirect.admin.site.redirect.noset']}</h2>
+					<p class="initial">#{msg['redirect.admin.site.redirect.noset.msg']}</p>
 					<h:graphicImage class="initial" library="img" name="site-redirects.png" alt="Illustration: Arrow pointing from a laptop to a tablet and a smartphone" />
 				</h:panelGroup>
 
@@ -43,9 +43,9 @@
 					<table id="redirect-table" class="table table-striped">
 						<thead id="redirect-summary-header" class="redirect-summary" summary="Redirect configuration">
 							<tr>
-								<th scope="col">Status</th>
-								<th scope="col">Redirect name</th>
-								<th scope="col">Configurations</th>
+								<th scope="col">#{msg['redirect.admin.site.redirect.sum.status']}</th>
+								<th scope="col">#{msg['redirect.admin.site.redirect.sum.name']}</th>
+								<th scope="col">#{msg['redirect.admin.site.redirect.sum.config']}</th>
 								<th scope="col" class="actions hidden-element">Actions</th>
 							</tr>
 						</thead>
@@ -60,20 +60,20 @@
 										<h:outputLabel for="rdr_toggle" styleClass="onoffswitch-label">
 											<f:ajax event="click" render="@this" listener="#{rdrEdit.toggleEnabled(rdrs.siteName, r.name)}" />
 											<span class="onoffswitch-inner">
-												<span class="onoffswitch-active">ON</span>
-												<span class="onoffswitch-inactive">OFF</span>
+												<span class="onoffswitch-active">#{msg['redirect.admin.site.redirect.on']}</span>
+												<span class="onoffswitch-inactive">#{msg['redirect.admin.site.redirect.off']}</span>
 											</span>
 											<span class="onoffswitch-switch"></span>
 										</h:outputLabel>
 									</div>
 								</td>
 								<td>#{r.name}</td>
-								<td><span style="#{redirectSiteExists ? '' : 'color: #AA0000;'}"><i class="#{redirectSiteExists ? 'hidden-element' : 'icon-warning-sign tooltipTrigger'}" title="Redirect Site Not Available!"></i> Redirect to #{r.redirectSite}</span><span class="second-info">#{r.conditions.size()} conditions and #{r.mappings.mappings.size()} mappings</span></td>
+								<td><span style="#{redirectSiteExists ? '' : 'color: #AA0000;'}"><i class="#{redirectSiteExists ? 'hidden-element' : 'icon-warning-sign tooltipTrigger'}" title="Redirect Site Not Available!"></i> #{msg['redirect.admin.site.redirect.sum.td.redirectto']} #{r.redirectSite}</span><span class="second-info">#{r.conditions.size()} #{msg['redirect.admin.site.redirect.sum.td.conditions']} #{r.mappings.mappings.size()} #{msg['redirect.admin.site.redirect.sum.td.mappings']}</span></td>
 								<td class="actions" style="text-align: center;">
-									<a4j:commandLink styleClass="configure-redirect redirect-summary" action="#{rdrEdit.load(rdrs.siteName, r.name)}" render=":edit_form" oncomplete="configureRedirect();" title="Configure"><i class="icon-wrench tooltipTrigger" data-original-title="Configure">Configure</i></a4j:commandLink>
+									<a4j:commandLink styleClass="configure-redirect redirect-summary" action="#{rdrEdit.load(rdrs.siteName, r.name)}" render=":edit_form" oncomplete="configureRedirect();" title="Configure"><i class="icon-wrench tooltipTrigger" data-original-title="#{msg['redirect.admin.site.redirect.sum.but.config']}">#{msg['redirect.admin.site.redirect.sum.but.config']}</i></a4j:commandLink>
 									<h:commandLink styleClass="delete-redirect redirect-summary" title="Delete">
 										<f:ajax event="action" listener="#{rdrEdit.setDeleteRedirect(rdrs.siteName, r.name)}" onevent="deleteRedirect('#{rdrs.siteName}','#{r.name}')" />
-										<i class="icon-trash tooltipTrigger" data-original-title="Delete">Delete</i>
+										<i class="icon-trash tooltipTrigger" data-original-title="#{msg['redirect.admin.site.redirect.sum.but.delete']}">#{msg['redirect.admin.site.redirect.sum.but.delete']}</i>
 									</h:commandLink>
 								</td>
 							</tr>
@@ -95,20 +95,20 @@
 						<td colspan="4" style="padding-top: 10px;">
 								<fieldset class="header-site-redirect">
 									<legend class="hidden-element">
-										<span>General Settings</span>
+										<span>#{msg['redirect.admin.site.redirect.h.settings']}</span>
 									</legend>
 									<div class="onoffswitch">
 										<h:selectBooleanCheckbox name="onoffswitch" styleClass="onoffswitch-checkbox" id="redirect3" value="#{rdrEdit.enabled}"/>
 										<h:outputLabel for="redirect3" styleClass="onoffswitch-label">
 											<span class="onoffswitch-inner">
-												<span class="onoffswitch-active">ON</span>
-												<span class="onoffswitch-inactive">OFF</span>
+												<span class="onoffswitch-active">#{msg['redirect.admin.site.redirect.on']}</span>
+												<span class="onoffswitch-inactive">#{msg['redirect.admin.site.redirect.off']}</span>
 											</span>
 											<span class="onoffswitch-switch"></span>
 										</h:outputLabel>
 									</div>
 									<h:panelGroup id="rdr-name-group" layout="block" styleClass="control-group rdr-name-group #{name.valid ? '' : 'error'}">
-										<h:outputLabel for="name" styleClass="control-label">Redirect Name</h:outputLabel>
+										<h:outputLabel for="name" styleClass="control-label">#{msg['redirect.admin.site.redirect.name']}</h:outputLabel>
 											<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="rdr-edit-name" maxlength="40">
 												<f:ajax event="blur" eventsQueue="rdr" render="name-error edit_save rdr-name-group" />
 												<f:attribute name="vOriginalRedirectName" value="#{rdrEdit.getOriginalName()}" />
@@ -117,7 +117,7 @@
 										<h:outputText id="name-error" styleClass="text-error rdr-name-error" value="#{name.valid ? '' : name.validatorMessage}" rendered="#{not name.valid}" />
 									</h:panelGroup>
 									<div class="control-group">
-										<h:outputLabel for="redirect" styleClass="control-label">Redirect to</h:outputLabel>
+										<h:outputLabel for="redirect" styleClass="control-label">#{msg['redirect.admin.site.redirect.to']}</h:outputLabel>
 										<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
 											<f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
 											<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
@@ -126,18 +126,18 @@
 								</fieldset>
 								<fieldset>
 									<legend>
-										<span class="toggle">Conditions</span>
+										<span class="toggle">#{msg['redirect.admin.site.redirect.conditions']}</span>
 									</legend>
 									<div>
 										<h:panelGroup id="conditions-group" styleClass="control-group">
-											<div class="alert" style="#{empty rdrEdit.conditions ? '' : 'display: none;'}">You haven't set conditions yet.</div>
-											<b:commandButton styleClass="btn btn-small inside-table add-condition" value="Add Condition" action="#{rdrEdit.addCondition}" oncomplete="$('#conditionOp').text('Add'); $('#modal-condition').modal('show'); $('input[id$=&quot;condition_name&quot;]').focus();" execute="@this" render=":condition_form" />
+											<div class="alert" style="#{empty rdrEdit.conditions ? '' : 'display: none;'}">#{msg['redirect.admin.site.redirect.conditions.msg']}</div>
+											<b:commandButton styleClass="btn btn-small inside-table add-condition" value="#{msg['redirect.admin.site.redirect.conditions.add']}" action="#{rdrEdit.addCondition}" oncomplete="$('#conditionOp').text('#{msg['redirect.admin.condition.h.condition.add']}'); $('#modal-condition').modal('show'); $('input[id$=&quot;condition_name&quot;]').focus();" execute="@this" render=":condition_form" />
 											<table class="table table-striped button-small" id="conditions-table" summary="Redirect conditions">
 												<thead style="#{empty rdrEdit.conditions ? 'display: none;' : ''}">
 													<tr>
-														<th scope="col">Condition Name</th>
-														<th scope="col">Settings</th>
-														<th scope="col" class="hidden-element actions">Actions</th>
+														<th scope="col">#{msg['redirect.admin.site.redirect.conditions.name']}</th>
+														<th scope="col">#{msg['redirect.admin.site.redirect.conditions.setting']}</th>
+														<th scope="col" class="hidden-element actions">#{msg['redirect.admin.site.redirect.conditions.actions']}</th>
 													</tr>
 												</thead>
 												<tbody class="sortable sortable-cnd">
@@ -145,48 +145,48 @@
 													<tr>
 														<td class="rdr-cond-name">#{rc.name}</td>
 														<td class="rdr-cond-settings">
-															<h:panelGroup rendered="#{rc.userAgentConditions.contains.size() > 0 or rc.userAgentConditions.doesNotContain.size() > 0}"><strong>User Agent String: </strong></h:panelGroup>
+															<h:panelGroup rendered="#{rc.userAgentConditions.contains.size() > 0 or rc.userAgentConditions.doesNotContain.size() > 0}"><strong>#{msg['redirect.admin.site.redirect.conditions.agent']} </strong></h:panelGroup>
 															<ui:repeat value="#{rc.userAgentConditions.contains}" var="rcUACcont" varStatus="cnt_st">
 																<h:panelGroup rendered="#{cnt_st.first}">
-																	<em>Contains </em>
+																	<em>#{msg['redirect.admin.site.redirect.conditions.contains']} </em>
 																</h:panelGroup>
-																<h:panelGroup rendered="#{not cnt_st.first}"><span>OR</span></h:panelGroup>
+																<h:panelGroup rendered="#{not cnt_st.first}"><span>#{msg['redirect.admin.condition.exp.or']}</span></h:panelGroup>
 																'#{rcUACcont}'
 															</ui:repeat>
 															<ui:repeat value="#{rc.userAgentConditions.doesNotContain}" var="rcUACnotcont" varStatus="dnc_st">
 																<h:panelGroup rendered="#{dnc_st.first}">
-																	<em>Does not contain </em>
+																	<em>#{msg['redirect.admin.condition.nocontains']} </em>
 																</h:panelGroup>
-																<h:panelGroup rendered="#{not dnc_st.first}"><span>OR</span></h:panelGroup>
+																<h:panelGroup rendered="#{not dnc_st.first}"><span>#{msg['redirect.admin.condition.exp.or']}</span></h:panelGroup>
 																'#{rcUACnotcont}'
 															</ui:repeat>
 															<br/>
 															<ui:repeat value="#{rc.deviceProperties}" var="devProp" varStatus="dp_st">
 																<h:panelGroup rendered="#{dp_st.first}">
-																	<strong>Properties: </strong>
+																	<strong>#{msg['redirect.admin.condition.properties']} </strong>
 																</h:panelGroup>
-																<h:panelGroup rendered="#{not dp_st.first}"><span>AND</span></h:panelGroup>
+																<h:panelGroup rendered="#{not dp_st.first}"><span>#{msg['redirect.admin.condition.exp.and']}</span></h:panelGroup>
 																'#{devProp.propertyName}'
 																<h:panelGroup rendered="#{devProp.equals != null}">
-																	equals '#{devProp.equals}'
+																	#{msg['redirect.admin.condition.param.eq']} '#{devProp.equals}'
 																</h:panelGroup>
 																<h:panelGroup rendered="#{devProp.matches != null}">
-																	matches '#{devProp.matches}'
+																	#{msg['redirect.admin.condition.param.mt']} '#{devProp.matches}'
 																</h:panelGroup>
 																<h:panelGroup rendered="#{devProp.greaterThan != null and devProp.lessThan != null}">
-																	between #{devProp.lessThan} and #{devProp.greaterThan}
+																	#{msg['redirect.admin.condition.param.bw']} #{devProp.lessThan} and #{devProp.greaterThan}
 																</h:panelGroup>
 																<h:panelGroup rendered="#{devProp.greaterThan != null and devProp.lessThan == null}">
-																	greater than #{devProp.greaterThan}
+																	#{msg['redirect.admin.condition.param.gt']} #{devProp.greaterThan}
 																</h:panelGroup>
 																<h:panelGroup rendered="#{devProp.lessThan != null and devProp.greaterThan == null}">
-																	equals #{devProp.lessThan}
+																	#{msg['redirect.admin.condition.param.lt']} #{devProp.lessThan}
 																</h:panelGroup>
 															</ui:repeat>
 														</td>
 														<td class="actions">
-															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('Edit'); $('#modal-condition').modal('show')" title="Edit"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="Edit">Edit</i></a4j:commandLink>
-															<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" render="conditions-group" onclick="$(this).tooltip('hide');" title="Delete"><i class="icon-trash">Delete</i></a4j:commandLink>
+															<a4j:commandLink styleClass="add-condition" render=":condition_form" execute="@this" oncomplete="$('#conditionOp').text('#{msg['redirect.admin.condition.edit']}'); $('#modal-condition').modal('show')" title="#{msg['redirect.admin.condition.edit']}"><a4j:param value="#{rc_st.index}" assignTo="#{rdrEdit.currentConditionIndex}" /><f:setPropertyActionListener target="#{rdrEdit.editedCondition}" value="#{rc}" /><i class="icon-pencil tooltipTrigger" data-original-title="#{msg['redirect.admin.condition.edit']}">#{msg['redirect.admin.condition.param.bw']}#{msg['redirect.admin.condition.edit']}</i></a4j:commandLink>
+															<a4j:commandLink action="#{rdrEdit.removeCondition(rc_st.index)}" styleClass="tooltipTrigger" render="conditions-group" onclick="$(this).tooltip('hide');" title="#{msg['redirect.admin.condition.delete']}"><i class="icon-trash">#{msg['redirect.admin.condition.delete']}</i></a4j:commandLink>
 														</td>
 													</tr>
 													</ui:repeat>
@@ -198,29 +198,29 @@
 								</fieldset>
 								<fieldset id="node-mappings">
 									<legend>
-										<span class="toggle">Node Mappings</span>
+										<span class="toggle">#{msg['redirect.admin.condition.mapping']}</span>
 									</legend>
 									<div>
 										<div class="control-group">
-											<label for="matching" class="control-label">Matching</label>
+											<label for="matching" class="control-label">#{msg['redirect.admin.condition.mapping.match']}</label>
 											<div class="controls">
 												<label class="checkbox">
-													<h:selectBooleanCheckbox name="matching" id="matching" value="#{rdrEdit.useNodeNameMatching}"/>Use node name matching
+													<h:selectBooleanCheckbox name="matching" id="matching" value="#{rdrEdit.useNodeNameMatching}"/>#{msg['redirect.admin.condition.mapping.match.msg']}
 												</label>
-												<i class="icon-info-sign icon-gray tooltipTrigger" title="Origin Node Name matches Redirect Node Name" data-placement="right">Origin Node Name matches Redirect Node Name</i>
+												<i class="icon-info-sign icon-gray tooltipTrigger" title="#{msg['redirect.admin.condition.mapping.match.origin']}" data-placement="right">#{msg['redirect.admin.condition.mapping.match.origin']}</i>
 											</div>
 										</div><!-- End .control-group -->
 										<h:panelGroup layout="block" id="mappingsWrapper" styleClass="control-group">
-											<label class="control-label">Mappings</label>
+											<label class="control-label">#{msg['redirect.admin.condition.mapping.h']}</label>
 											<div class="controls">
-												<div class="alert" style="#{empty rdrEdit.mappings.mappings ? '' : 'display: none;'}">You haven't set node mappings yet.</div>
-												<a4j:commandLink action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').last().focus();">Add Mapping</a4j:commandLink>
+												<div class="alert" style="#{empty rdrEdit.mappings.mappings ? '' : 'display: none;'}">#{msg['redirect.admin.condition.mapping.missing']}</div>
+												<a4j:commandLink action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').last().focus();">#{msg['redirect.admin.condition.mapping.add']}</a4j:commandLink>
 												<table class="table table-striped action-button" id="mappings" summary="Redirect mappings">
 													<thead style="#{empty rdrEdit.mappings.mappings ? 'display: none;' : ''}">
 														<tr>
-															<th scope="col">Origin Node Name</th>
-															<th scope="col">Redirect Node Name</th>
-															<th scope="col" class="hidden-element actions">Actions</th>
+															<th scope="col">#{msg['redirect.admin.condition.mapping.origin']}</th>
+															<th scope="col">#{msg['redirect.admin.condition.mapping.redirect']}</th>
+															<th scope="col" class="hidden-element actions">#{msg['redirect.admin.condition.mapping.actions']}</th>
 														</tr>
 													</thead>
 													<tbody id="mappings-tbody">
@@ -229,8 +229,8 @@
 															<td>#{m.originNode}</td>
 															<td>#{m.redirectNode}</td>
 															<td class="actions">
-																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="Edit Node Mapping" onclick="editMappingEntry(this); return false;"><i class="icon-pencil">Edit Node Mapping</i></a>
-																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="Delete Node Mapping" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Node Mapping</i></a4j:commandLink>
+																<a href="#" class="edit-node-mapping tooltipTrigger" data-original-title="#{msg['redirect.admin.condition.mapping.edit']}" onclick="editMappingEntry(this); return false;"><i class="icon-pencil">#{msg['redirect.admin.condition.mapping.edit']}</i></a>
+																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="#{msg['redirect.admin.condition.mapping.delete']}" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">#{msg['redirect.admin.condition.mapping.delete']}</i></a4j:commandLink>
 															</td>
 														</tr>
 														<!-- Just so that we keep the odd/even colors -->
@@ -240,7 +240,7 @@
 																<b:input scale="medium" placeholder="e.g. homepage" value="#{m.originNode}" styleClass="origin-node-name-input">
 																	<!-- <b:autocomplete suggestions="#{rdrEdit.originNodeNames}" /> -->
 																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="#{msg['redirect.admin.condition.mapping.view']}" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
 																	</f:facet>
 																</b:input>
 															</td>
@@ -248,12 +248,12 @@
 																<b:input scale="medium" placeholder="e.g. home_page" value="#{m.redirectNode}" styleClass="redirect-node-name-input">
 																	<!-- <b:autocomplete suggestions="#{rdrEdit.redirectNodeNames}" /> -->
 																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="View Node List" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(false)}"><i class="icon-list" ></i></b:commandButton>
+																		<b:commandButton styleClass="tooltipTrigger select-node" title="#{msg['redirect.admin.condition.mapping.view']}" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(false)}"><i class="icon-list" ></i></b:commandButton>
 																	</f:facet>
 																</b:input>
 															</td>
 															<td class="actions">
-																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="Delete Node Mapping" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Node Mapping</i></a4j:commandLink>
+																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="#{msg['redirect.admin.condition.mapping.delete']}" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">#{msg['redirect.admin.condition.mapping.delete']}</i></a4j:commandLink>
 															</td>
 														</tr>
 														</ui:repeat>
@@ -262,22 +262,22 @@
 											</div>
 										</h:panelGroup><!-- End .control-group -->
 										<div class="control-group">
-											<label class="control-label" for="nodes">Unresolved nodes</label>
+											<label class="control-label" for="nodes">#{msg['redirect.admin.condition.mapping.unresolved']}</label>
 											<div class="controls">
 												<h:selectOneMenu id="nodes" style="height: 30px; line-height: 30px;" value="#{rdrEdit.mappings.unresolvedNode}">
-													<f:selectItem itemValue="REDIRECT" itemLabel="Redirect" />
-													<f:selectItem itemValue="NO_REDIRECT" itemLabel="No Redirect" />
-													<f:selectItem itemValue="ROOT" itemLabel="Redirect to root" />
-													<f:selectItem itemValue="COMMON_ANCESTOR_NAME_MATCH" itemLabel="Ancestor Name Match" />
+													<f:selectItem itemValue="REDIRECT" itemLabel="#{msg['redirect.admin.condition.mapping.item.redirect']}" />
+													<f:selectItem itemValue="NO_REDIRECT" itemLabel="#{msg['redirect.admin.condition.mapping.item.noredirect']}" />
+													<f:selectItem itemValue="ROOT" itemLabel="#{msg['redirect.admin.condition.mapping.item.root']}" />
+													<f:selectItem itemValue="COMMON_ANCESTOR_NAME_MATCH" itemLabel="#{msg['redirect.admin.condition.mapping.item.ancestor']}" />
 												</h:selectOneMenu>
-												<i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Nodes which don't match and are not mapped">Nodes which don't match and are not mapped</i>
+												<i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="#{msg['redirect.admin.condition.mapping.unresolved.msg']}">#{msg['redirect.admin.condition.mapping.unresolved.msg']}</i>
 											</div>
 										</div><!-- End .control-group -->
 									</div>
 								</fieldset>
 								<div class="form-actions">
-									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >Cancel</button>
-									<a4j:commandButton id="edit_save" value="Save changes" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid}" />
+									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >#{msg['redirect.admin.condition.mapping.cancel']}</button>
+									<a4j:commandButton id="edit_save" value="#{msg['redirect.admin.condition.mapping.save']}" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid}" />
 								</div><!-- End .form-actions -->
 						</td>
 					</tr>

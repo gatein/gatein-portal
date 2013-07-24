@@ -11,12 +11,12 @@
 		<h:panelGroup layout="block" id="modal-condition-wrapper">
 		<div class="modal-header">
 			<!-- <button class="modal-close" data-dismiss="modal" title="Close">Close</button> -->
-			<h3><span id="conditionOp">Add</span> Condition</h3>
+			<h3><span id="conditionOp">#{msg['redirect.admin.condition.h.condition.add']}</span> #{msg['redirect.admin.condition.h.condition']}</h3>
 		</div>
 		<div class="modal-body">
-			<p style="visibility: hidden;" class="subtitle">All fields are required</p>
+			<p style="visibility: hidden;" class="subtitle">#{msg['redirect.admin.condition.fieldreq']}</p>
 			<div class="control-group">
-				<label class="control-label" for="condition_name">Condition Name </label>
+				<label class="control-label" for="condition_name">#{msg['redirect.admin.condition.condition.name']} </label>
 				<h:inputText styleClass="input-large" required="true" requiredMessage="Value required" id="condition_name" value="#{rdrEdit.editedCondition.name}" maxlength="40" onkeyup="validateConditionName()" />
 				<h:message id="condition_name-message" for="condition_name" />
 			</div><!-- End .control-group -->
@@ -25,60 +25,60 @@
 				<table class="table table-striped" id="condition-string" summary="Redirect condition">
 					<thead>
 						<tr>
-							<th scope="col">User Agent String <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Accepts valid Java Regular Expressions">Accepts valid Java Regular Expressions</i></th>
+							<th scope="col">#{msg['redirect.admin.condition.agent.string']} <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="#{msg['redirect.admin.condition.agent.string.accept']}">#{msg['redirect.admin.condition.agent.string.accept']}</i></th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
 							<td>
-								<label>Contains</label>
+								<label>#{msg['redirect.admin.condition.contains']}</label>
 								<ui:param name="isContainsEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.contains == null or rdrEdit.editedCondition.userAgentConditions.contains.size() == 0}" />
 								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.contains}" var="rcUACcont" varStatus="counter">
 									<div class="#{counter.index > 0 ? 'more-condition' : 'condition'}">
 										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
 										<b:input id="rcuaccont" styleClass="contains-input" value="#{rdrEdit.editedCondition.userAgentConditions.contains[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
-											<span class="tooltipTrigger" title="Delete Expression">
-												<a4j:commandLink action="#{rdrEdit.removeContains(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
+											<span class="tooltipTrigger" title="#{msg['redirect.admin.condition.exp.delete']}">
+												<a4j:commandLink action="#{rdrEdit.removeContains(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">#{msg['redirect.admin.condition.exp.delete']}</i></a4j:commandLink>
 											</span>
-											<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add Expression" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
+											<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="#{msg['redirect.admin.condition.exp.add']}" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">#{msg['redirect.admin.condition.exp.add']}</i></a4j:commandLink>
 										</div>
 									</div>
 								</ui:repeat>
 								<div class="#{isContainsEmpty ? 'condition' : 'more-condition'}" style="#{isContainsEmpty ? '' : 'display: none;'}">
-									<h:panelGroup styleClass="td-condition" rendered="#{not isContainsEmpty}">OR</h:panelGroup>
+									<h:panelGroup styleClass="td-condition" rendered="#{not isContainsEmpty}">#{msg['redirect.admin.condition.exp.or']}</h:panelGroup>
 									<h:inputText id="rcuaccont" style="visibility: hidden;"/>
 									<div class="action">
 										<!-- only present for proper spacing -->
-										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeContains(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
-										<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
+										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeContains(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">#{msg['redirect.admin.condition.exp.delete']}</i></a4j:commandLink>
+										<a4j:commandLink action="#{rdrEdit.addContains}" styleClass="add-user-agent-string tooltipTrigger" title="Add" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.contains-input').last().focus();"><i class="icon-plus-sign">#{msg['redirect.admin.condition.exp.add']}</i></a4j:commandLink>
 									</div>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<label>Does not contain</label>
+								<label>#{msg['redirect.admin.condition.nocontains']}</label>
 								<ui:param name="isDoesNotContainEmpty" value="#{rdrEdit.editedCondition == null or rdrEdit.editedCondition.userAgentConditions == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain == null or rdrEdit.editedCondition.userAgentConditions.doesNotContain.size() == 0}" />
 								<ui:repeat value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain}" var="rcUACdncont" varStatus="counter">
 									<div class="#{counter.index == 0 ? 'condition' : 'more-condition'}">
 										<h:panelGroup styleClass="td-condition" rendered="#{counter.index > 0}">OR</h:panelGroup>
 										<b:input id="rcuacdncont" styleClass="doesnotcontain-input" value="#{rdrEdit.editedCondition.userAgentConditions.doesNotContain[counter.index]}" placeholder="eg: (?i)i(phone|pad|pod)" />
 										<div class="action">
-											<span class="tooltipTrigger" title="Delete Expression">
-												<a4j:commandLink action="#{rdrEdit.removeDoesNotContain(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
+											<span class="tooltipTrigger" title="#{msg['redirect.admin.condition.exp.delete']}">
+												<a4j:commandLink action="#{rdrEdit.removeDoesNotContain(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">"#{msg['redirect.admin.condition.exp.delete']}</i></a4j:commandLink>
 											</span>
-											<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Expression" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
+											<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="#{msg['redirect.admin.condition.exp.add']}" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">#{msg['redirect.admin.condition.exp.add']}</i></a4j:commandLink>
 										</div>
 									</div>
 								</ui:repeat>
 								<div class="#{isDoesNotContainEmpty ? 'condition' : 'more-condition'}" style="#{isDoesNotContainEmpty ? '' : 'display: none;'}">
-									<h:panelGroup styleClass="td-condition" rendered="#{not isDoesNotContainEmpty}">OR</h:panelGroup>
+									<h:panelGroup styleClass="td-condition" rendered="#{not isDoesNotContainEmpty}">#{msg['redirect.admin.condition.exp.or']}</h:panelGroup>
 									<h:inputText id="rcuacdncont" style="visibility: hidden;" />
 									<div class="action">
 										<!-- only present for proper spacing -->
-										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeDoesNotContain(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Expression</i></a4j:commandLink>
-										<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="Add Expression" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();"><i class="icon-plus-sign">Add Expression</i></a4j:commandLink>
+										<a4j:commandLink style="visibility: hidden;" action="#{rdrEdit.removeDoesNotContain(counter.index)}" render="uasHolder" onclick="$(this).tooltip('hide');"><i class="icon-trash">"#{msg['redirect.admin.condition.exp.delete']}</i></a4j:commandLink>
+										<a4j:commandLink action="#{rdrEdit.addDoesNotContain}" styleClass="add-user-agent-string tooltipTrigger" title="#{msg['redirect.admin.condition.exp.add']}" render="uasHolder" onclick="$(this).tooltip('hide');" oncomplete="$('.doesnotcontain-input').last().focus();"><i class="icon-plus-sign">#{msg['redirect.admin.condition.exp.add']}</i></a4j:commandLink>
 									</div>
 								</div>
 							</td>
@@ -90,13 +90,13 @@
 
 			<h:panelGroup id="condition_properties" styleClass="control-group">
 				<h:panelGroup style="#{rdrEdit.editedCondition.deviceProperties == null or rdrEdit.editedCondition.deviceProperties.size() == 0 ? '' : 'display:none;'}">
-					<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="btn btn-mini pull-right" render="condition_properties" oncomplete="afterAddProperty();">Add Properties</a4j:commandLink>
+					<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="btn btn-mini pull-right" render="condition_properties" oncomplete="afterAddProperty();">#{msg['redirect.admin.condition.property.add']}</a4j:commandLink>
 				</h:panelGroup>
 				<table class="table table-striped button-mini" id="condition-properties" style="#{rdrEdit.editedCondition.deviceProperties == null ? 'display: none;' : ''}" summary="Redirect properties">
 					<thead>
 						<tr>
-							<th scope="col">Property <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="Property names specified in detection.jsp">Property names specified in detection.jsp</i></th>
-							<th scope="col" class="hidden-element actions">Actions</th>
+							<th scope="col">#{msg['redirect.admin.condition.property']} <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="#{msg['redirect.admin.condition.property.spec']}">#{msg['redirect.admin.condition.property.spec']}</i></th>
+							<th scope="col" class="hidden-element actions">#{msg['redirect.admin.condition.actions']}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -115,11 +115,11 @@
 								</h:selectOneMenu>
 								-->
 								<select name="op-rcDevProp" class="attribute property-operator" style="height: 30px;" onchange="changePropertyFields(this, true);" >
-									<option value="eq" selected='#{rcDevPropOp == "eq" ? "selected" : ""}'>Equals</option>
-									<option value="gt" selected='#{rcDevPropOp == "gt" ? "selected" : ""}'>Greater than</option>
-									<option value="lt" selected='#{rcDevPropOp == "lt" ? "selected" : ""}'>Less than</option>
-									<option value="mt" selected='#{rcDevPropOp == "mt" ? "selected" : ""}'>Matches</option>
-									<option value="bt" selected='#{rcDevPropOp == "bt" ? "selected" : ""}'>Between</option>
+									<option value="eq" selected='#{rcDevPropOp == "eq" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.eq']}</option>
+									<option value="gt" selected='#{rcDevPropOp == "gt" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.gt']}</option>
+									<option value="lt" selected='#{rcDevPropOp == "lt" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.lt']}</option>
+									<option value="mt" selected='#{rcDevPropOp == "mt" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.mt']}</option>
+									<option value="bt" selected='#{rcDevPropOp == "bt" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.bw']}</option>
 								</select>
 								<span id="value-holder">
 									<h:panelGroup styleClass="pp-bt" style="#{rcDevPropOp == 'bt' ? '' : 'display:none'}">
@@ -154,8 +154,8 @@
 								</span>
 							</td>
  							<td class="actions" style="width: 50px;" >
- 								<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" styleClass="tooltipTrigger" title="Delete Property" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
- 								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="Add Property" render="condition_properties" onclick="$(this).tooltip('hide');" oncomplete="afterAddProperty();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Property</i></a4j:commandLink>
+ 								<a4j:commandLink action="#{rdrEdit.removeProperty(counter.index)}" styleClass="tooltipTrigger" title="#{msg['redirect.admin.condition.property.but.del']}" render="condition_properties" onclick="$(this).tooltip('hide');"><i class="icon-trash">Delete Property</i></a4j:commandLink>
+ 								<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="add-property tooltipTrigger" title="#{msg['redirect.admin.condition.property.but.add']}" render="condition_properties" onclick="$(this).tooltip('hide');" oncomplete="afterAddProperty();" style="#{counter.last ? '' : 'visibility: hidden;'}"><i class="icon-plus-sign">Add Property</i></a4j:commandLink>
 							</td>
 						</tr>
 						</ui:repeat>
@@ -164,8 +164,8 @@
 			</h:panelGroup><!-- End .control-group -->
 		</div><!-- End .modal-body -->
 		<h:panelGroup layout="block" id="condition_footer" styleClass="modal-footer">
-			<b:commandButton value="Cancel" action="#{rdrEdit.rollbackCondition}" oncomplete="$('#modal-condition').modal('hide');" execute="@form" />
-			<b:commandButton id="save-condition-button" value="Save Changes" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group" onclick="$('.property-operator').change();"/>
+			<b:commandButton value="#{msg['redirect.admin.condition.but.cancel']}" action="#{rdrEdit.rollbackCondition}" oncomplete="$('#modal-condition').modal('hide');" execute="@form" />
+			<b:commandButton value="#{msg['redirect.admin.condition.but.save']}" id="save-condition-button" styleClass="btn btn-primary" action="#{rdrEdit.saveCondition}" execute="@form" oncomplete="$('#modal-condition').modal('hide');" render="conditions-group" onclick="$('.property-operator').change();"/>
 		</h:panelGroup>
 	</h:panelGroup><!-- end .modal -->
 	</div><!-- end .modal -->

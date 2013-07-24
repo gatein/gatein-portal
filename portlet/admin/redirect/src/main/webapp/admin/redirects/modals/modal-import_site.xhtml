@@ -67,11 +67,11 @@
 	<div class="modal hide" id="modal-import-site" data-backdrop="static">
 		<div class="modal-header">
 			<!-- <a class="modal-close" data-dismiss="modal" title="Close">Close</a> -->
-			<h3>Import Site</h3>
+			<h3>#{msg['redirect.admin.import.h']}</h3>
 		</div>
 		<div class="modal-body">
 			<div id="file-input-holder" class="control-group">
-				<rich:fileUpload fileUploadListener="#{importer.importSite}" id="upload" acceptedTypes="zip" ontyperejected="alert('Only ZIP files are accepted');" maxFilesQuantity="5" noDuplicate="true" deleteLabel="Remove" addLabel=" Select Site" uploadLabel="Import" clearLabel="Clear" clearAllLabel=" Clear All" onfileselect="$('#no-sites-div').hide();" >
+				<rich:fileUpload fileUploadListener="#{importer.importSite}" id="upload" acceptedTypes="zip" ontyperejected="alert('#{msg['redirect.admin.import.alert']}');" maxFilesQuantity="5" noDuplicate="true" deleteLabel="Remove" addLabel=" #{msg['redirect.admin.import.select']}" uploadLabel="#{msg['redirect.admin.import.import']}" clearLabel="#{msg['redirect.admin.import.clear']}" clearAllLabel="#{msg['redirect.admin.import.clearall']}" onfileselect="$('#no-sites-div').hide();" >
 					<a4j:ajax event="uploadcomplete" execute="@none" render="info" />
 					<f:facet name="progress">
 						<rich:progressBar style="display: none;" onfinish="onFileUploaded($(this));" />
@@ -80,16 +80,16 @@
 			</div><!-- End .control-group -->
 			<br />
 			<div class="control-group">
-				<h:outputLabel for="mode" value="Import Mode" styleClass="control-label" />
+				<h:outputLabel for="mode" value="#{msg['redirect.admin.import.mode']}" styleClass="control-label" />
 				<h:selectOneMenu id="mode" value="#{importer.importMode}" style="height: 30px;" >
-					<f:selectItems value="#{importer.importModes}" />
+					<f:selectItems value="#{importer.importModes.entrySet()}" var="mode" itemLabel="#{msg[mode.value]}" itemValue="#{mode.key}" />
 					<f:ajax />
 				</h:selectOneMenu>
 			</div><!-- End .control-group -->
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a>
-			<a href="#" id="button-import-site" class="btn btn-primary" onclick="$('.rf-fu-btn-cnt-upl').click();">Import</a>
+			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.import.cancel']}</a>
+			<a href="#" id="button-import-site" class="btn btn-primary" onclick="$('.rf-fu-btn-cnt-upl').click();">#{msg['redirect.admin.import.but']}</a>
 		</div>
 	</div><!-- end .modal -->
 	</h:form>
@@ -112,7 +112,7 @@
 
 			noSitesDiv = $(document.createElement("div")).attr("id", "no-sites-div");
 			noSitesDiv.css({"font-size": "40px", "color": "#CCC", "margin-top": "25px", "text-align": "center", "border": "2px dashed #CCC", "padding": "60px 20px", "border-radius": "20px"});
-			noSitesDiv.text("No Sites Selected")
+			noSitesDiv.text("#{msg['redirect.admin.import.nosite']}")
 			$(".rf-fu-lst").append(noSitesDiv);
 			$(".rf-fu-itm").addClass("attachment");
 		});
