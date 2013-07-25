@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -30,6 +31,7 @@ import java.util.Set;
 import junit.framework.AssertionFailedError;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -39,6 +41,8 @@ import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -59,6 +63,7 @@ import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.util.Tools;
+import org.gatein.mop.api.workspace.Workspace;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -165,6 +170,47 @@ public class TestUserPortalConfigService extends AbstractConfigTest {
                 userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
                 portalCfg = userPortalCfg.getPortalConfig();
                 assertEquals("fr", portalCfg.getLocale());
+            }
+        }.execute("root");
+    }
+
+    public void testEnforcedReimporting() {
+        new UnitTest() {
+            public void execute() throws Exception {
+                UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+                assertNotNull(userPortalCfg);
+                PortalConfig portalCfg = userPortalCfg.getPortalConfig();
+                assertNotNull(portalCfg);
+                assertEquals(PortalConfig.PORTAL_TYPE, portalCfg.getType());
+                assertEquals("classic", portalCfg.getName());
+                assertEquals("en", portalCfg.getLocale());
+                portalCfg.setLocale("fr");
+
+                storage_.save(portalCfg);
+
+                userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+                portalCfg = userPortalCfg.getPortalConfig();
+                assertEquals("fr", portalCfg.getLocale());
+
+                // Turn on the flag to trigger re-importing
+                RequestLifeCycle.begin(PortalContainer.getInstance());
+                try {
+                    POMSession session = mgr.getSession();
+                    Workspace workspace = session.getWorkspace();
+                    Imported imported = workspace.adapt(Imported.class);
+                    imported.setLastModificationDate(new Date());
+                    imported.setStatus(Status.WANT_REIMPORT.status());
+                    session.save();
+                } finally {
+                    RequestLifeCycle.end();
+                }
+
+                // Re-import site config from configuration
+                userPortalConfigSer_.start();
+                
+                userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
+                portalCfg = userPortalCfg.getPortalConfig();
+                assertEquals("en", portalCfg.getLocale());
             }
         }.execute("root");
     }

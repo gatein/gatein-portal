@@ -261,15 +261,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             } finally {
                 RequestLifeCycle.end();
             }
-            for (NewPortalConfig ele : configs) {
-                try {
-                    if(ele.getOverrideMode() || prepareImport) {
-                         ele.getPredefinedOwner().clear();
-                    }
-                } catch (Exception e) {
-                    log.error("NewPortalConfig error: " + e.getMessage(), e);
-                }
-            }
         } else {
             RequestLifeCycle.begin(PortalContainer.getInstance());
             try {
@@ -295,11 +286,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
                 }
             } finally {
                 RequestLifeCycle.end();
-            }
-            for (NewPortalConfig ele : configs) {
-                if(ele.getOverrideMode() || prepareImport) {
-                    ele.getPredefinedOwner().clear();
-                }
             }
         }
 
