@@ -37,8 +37,13 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import javax.portlet.WindowState;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * May 19, 2006
@@ -169,6 +174,31 @@ public class UIPage extends UIContainer {
         @Override
         public void execute(Event<UIPage> event) throws Exception {
             event.getSource().switchToEditMode();
+        }
+    }
+
+    private List<UIPortlet> recursivelyFindUIPortlets(org.exoplatform.webui.core.UIContainer uiContainer) {
+        List<UIPortlet> uiPortletList = new ArrayList<UIPortlet>();
+
+        for(UIComponent uiComponent : uiContainer.getChildren()) {
+            if(org.exoplatform.webui.core.UIContainer.class.isAssignableFrom(uiComponent.getClass())) {
+                org.exoplatform.webui.core.UIContainer childUIContainer = (org.exoplatform.webui.core.UIContainer) uiComponent;
+                if(UIPortlet.class.isAssignableFrom(childUIContainer.getClass())) {
+                    uiPortletList.add((UIPortlet) childUIContainer);
+                } else {
+                    uiPortletList.addAll(recursivelyFindUIPortlets(childUIContainer));
+                }
+            }
+        }
+
+        return uiPortletList;
+    }
+
+    public void normalizePortletWindowStates() {
+        for(UIPortlet childUIPortlet : recursivelyFindUIPortlets(this)) {
+            if(!WindowState.MINIMIZED.equals(childUIPortlet.getCurrentWindowState())) {
+                childUIPortlet.setCurrentWindowState(WindowState.NORMAL);
+            }
         }
     }
 }
