@@ -334,7 +334,7 @@
 	padding-top: 30px;
 	padding-bottom: 0;
 	box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
-	width: 741px;
+	min-width: 706px;
 	background-color: #fff;
 	min-height: 540px;
 	font-size: 14px;
@@ -471,9 +471,14 @@
 }
 
 .RedirectAdmin #conditions-table {
+    border-collapse: separate;
     margin-left: 25px; /* orientation=lt */
     margin-right: 25px; /* orientation=rt */
-    width: 668px;
+    border-color: transparent;
+    border-style: solid;
+    border-right-width: 25px; /* orientation=lt */
+    border-left-width: 25px; /* orientation=rt */
+    width: 100%;
 }
 
 .RedirectAdmin .MiddleDecoratorCenter #conditions-table {width: 631px;}
@@ -1131,4 +1136,14 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 	line-height: 20px;
 	margin-bottom: 9px;
 	padding: 4px 6px;
+}
+
+.RedirectAdmin #container-right {
+    width: 76.2%;
+    *width: 76%;
+}
+
+.RedirectAdmin > div > .container-left.span3 {
+    width: 220px;
+    *width: 220px;
 }
