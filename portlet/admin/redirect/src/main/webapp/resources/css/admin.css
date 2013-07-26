@@ -1147,3 +1147,16 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
     width: 220px;
     *width: 220px;
 }
+
+.RedirectAdmin #modal-delete-redirect strong,
+.RedirectAdmin #modal-delete-redirect span {
+    color: #333333;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.RedirectAdmin #modal-delete-redirect .modal-body > p > span {
+    margin-top: 10px;
+    font-size: 12px;
+    display: block;
+}
