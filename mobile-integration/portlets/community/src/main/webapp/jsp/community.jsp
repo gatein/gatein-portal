@@ -50,12 +50,12 @@
             </div>
 
             <div class="accordion-group">
-                <a href="#<portlet:namespace/>tweets-content-mobile" id="<portlet:namespace/>tweets-content-mobile" class="accordion-toggle">
-                    <i class="icon-twitter icon-gray"></i>${resourceBundle.getString("conversation.twitter.label")}
+                <a href="#<portlet:namespace/>vimeo-content-mobile" id="<portlet:namespace/>vimeo-content-mobile" class="accordion-toggle">
+                    <i class="icon-vimeo icon-gray"></i>${resourceBundle.getString("conversation.vimeo.label")}
                 </a>
-                <div class="accordion-body collapse" id="tweets-content-mobile">
+                <div class="accordion-body collapse" id="vimeo-content-mobile">
                   <portlet:resourceURL var="ajaxResourceUrl">
-                    <portlet:param name="type" value="twitter" />
+                    <portlet:param name="type" value="vimeo" />
                   </portlet:resourceURL>
                   <a href="${ajaxResourceUrl}" class="ajaxLoader">${resourceBundle.getString("ajax.load")}</a>
                 </div>
