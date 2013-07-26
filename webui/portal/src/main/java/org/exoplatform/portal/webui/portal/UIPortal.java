@@ -19,14 +19,6 @@
 
 package org.exoplatform.portal.webui.portal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.portlet.WindowState;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PortalProperties;
@@ -36,7 +28,6 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageBody;
@@ -64,6 +55,12 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @ComponentConfig(lifecycle = UIPortalLifecycle.class, template = "system:/groovy/portal/webui/portal/UIPortal.gtmpl", events = {
         @EventConfig(listeners = ChangeApplicationListActionListener.class),
@@ -207,11 +204,11 @@ public class UIPortal extends UIContainer {
             return;
         }
 
-        if (uiPageBody.getMaximizedUIComponent() != null) {
-            UIPortlet currentPortlet = (UIPortlet) uiPageBody.getMaximizedUIComponent();
-            currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-            uiPageBody.setMaximizedUIComponent(null);
-        }
+//        if (uiPageBody.getMaximizedUIComponent() != null) {
+//            UIPortlet currentPortlet = (UIPortlet) uiPageBody.getMaximizedUIComponent();
+//            currentPortlet.setCurrentWindowState(WindowState.NORMAL);
+//            uiPageBody.setMaximizedUIComponent(null);
+//        }
         uiPageBody.setPageBody(getSelectedUserNode(), this);
     }
 

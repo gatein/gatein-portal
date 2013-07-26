@@ -72,7 +72,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -254,27 +253,12 @@ public class UIPortletActionListener {
         }
     }
 
-    private static List<UIPortlet> recursivelyFindUIPortlets(UIContainer uiContainer) {
-        List<UIPortlet> uiPortletList = new ArrayList<UIPortlet>();
-
-        for(UIComponent uiComponent : uiContainer.getChildren()) {
-            if(UIContainer.class.isAssignableFrom(uiComponent.getClass())) {
-                UIContainer childUIContainer = (UIContainer) uiComponent;
-                if(UIPortlet.class.isAssignableFrom(childUIContainer.getClass())) {
-                    uiPortletList.add((UIPortlet) childUIContainer);
-                } else {
-                    uiPortletList.addAll(recursivelyFindUIPortlets(childUIContainer));
-                }
-            }
-        }
-
-        return uiPortletList;
-    }
-
-    private static void normalizePortletWindowStates(UIPage uiPage) {
-        for(UIPortlet childUIPortlet : recursivelyFindUIPortlets(uiPage)) {
-            if(!WindowState.MINIMIZED.equals(childUIPortlet.getCurrentWindowState())) {
-                childUIPortlet.setCurrentWindowState(WindowState.NORMAL);
+    private static void clearMaximizedUIComponent(UIPage uiPage, UIPortlet uiPortlet) {
+        if(uiPage.getMaximizedUIPortlet() != null && uiPage.getMaximizedUIPortlet().getId().equals(uiPortlet.getId())) {
+            uiPage.setMaximizedUIPortlet(null);
+            UIPageBody pageBody = uiPage.getAncestorOfType(UIPageBody.class);
+            if (pageBody != null) {
+                pageBody.setMaximizedUIComponent(null);
             }
         }
     }
@@ -288,23 +272,23 @@ public class UIPortletActionListener {
 
             if (WindowState.MAXIMIZED.equals(state)) {
                 if (uiPage != null) {
-                    normalizePortletWindowStates(uiPage);
+                    uiPage.normalizePortletWindowStates();
                     uiPage.setMaximizedUIPortlet(uiPortlet);
+                    UIPageBody pageBody = uiPage.getAncestorOfType(UIPageBody.class);
+                    if (pageBody != null) {
+                        pageBody.setMaximizedUIComponent(uiPortlet);
+                    }
                     uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 }
             } else if (WindowState.MINIMIZED.equals(state)) {
                 uiPortlet.setCurrentWindowState(WindowState.MINIMIZED);
                 if (uiPage != null) {
-                    if(uiPage.getMaximizedUIPortlet() != null && uiPage.getMaximizedUIPortlet().getId().equals(uiPortlet.getId())) {
-                        uiPage.setMaximizedUIPortlet(null);
-                    }
+                    clearMaximizedUIComponent(uiPage, uiPortlet);
                 }
             } else {
                 uiPortlet.setCurrentWindowState(WindowState.NORMAL);
                 if (uiPage != null) {
-                    if(uiPage.getMaximizedUIPortlet() != null && uiPage.getMaximizedUIPortlet().getId().equals(uiPortlet.getId())) {
-                        uiPage.setMaximizedUIPortlet(null);
-                    }
+                    clearMaximizedUIComponent(uiPage, uiPortlet);
                 }
             }
         }
@@ -516,8 +500,7 @@ public class UIPortletActionListener {
             while (events.size() > 0) {
                 javax.portlet.Event nativeEvent = events.remove(0);
                 QName eventName = nativeEvent.getQName();
-                for (Iterator<UIPortlet> iterator = portletInstancesInPage.iterator(); iterator.hasNext();) {
-                    UIPortlet uiPortletInPage = iterator.next();
+                for (UIPortlet uiPortletInPage : portletInstancesInPage) {
                     if (uiPortletInPage.supportsProcessingEvent(eventName)
                             && !eventsWrapper.isInvokedTooManyTimes(uiPortletInPage)) {
                         List<javax.portlet.Event> newEvents = processEvent(uiPortletInPage, nativeEvent);
@@ -536,6 +519,9 @@ public class UIPortletActionListener {
                         }
                     }
                 }
+            }
+            for (UIPortlet uiPortletInPage : portletInstancesInPage) {
+                setNextState(uiPortletInPage, uiPortletInPage.getCurrentWindowState());
             }
         }
     }
@@ -730,7 +716,9 @@ public class UIPortletActionListener {
                 windowState = event.getRequestContext().getRequestParameter(Constants.PORTAL_WINDOW_STATE);
             }
             if (windowState == null) {
-                windowState = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID).trim();
+                if(event.getRequestContext().getRequestParameter(UIComponent.OBJECTID) != null) {
+                    windowState = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID).trim();
+                }
             }
 
             if (windowState == null) {
@@ -740,9 +728,10 @@ public class UIPortletActionListener {
             UIPageBody uiPageBody = uiPortlet.getAncestorOfType(UIPageBody.class);
             UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
             if (windowState.equals(WindowState.MAXIMIZED.toString())) {
+                if(uiPage != null) {
+                    uiPage.normalizePortletWindowStates();
+                }
                 if (uiPageBody != null) {
-                    normalizePortletWindowStates(uiPage);
-
                     uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                     // TODO dang.tung: we have to set maximized portlet for page because in ShowMaxWindow case the PageBody
                     // isn't rendered
@@ -764,21 +753,32 @@ public class UIPortletActionListener {
                     uiPageBody.setMaximizedUIComponent(null);
                 }
             }
-            // TODO dang.tung: for ShowMaxWindow situation
-            // ----------------------------------------------------------------
-            if (uiPage != null) {
-                UIPortlet maxPortlet = (UIPortlet) uiPage.getMaximizedUIPortlet();
-                if (maxPortlet == uiPortlet) {
-                    uiPage.setMaximizedUIPortlet(null);
-                }
-            }
             // -----------------------------------------------------------------
             if (windowState.equals(WindowState.MINIMIZED.toString())) {
                 uiPortlet.setCurrentWindowState(WindowState.MINIMIZED);
+                if(uiPage.getMaximizedUIPortlet() == uiPortlet) {
+                    uiPage.setMaximizedUIPortlet(null);
+                }
                 return;
             }
             uiPortlet.setCurrentWindowState(WindowState.NORMAL);
 
+            boolean hasMaximizedPortlet = false;
+            for(UIComponent uiComponent : uiPage.getChildren()) {
+                if(UIContainer.class.isAssignableFrom(uiComponent.getClass())) {
+                    UIContainer childUIContainer = (UIContainer) uiComponent;
+                    if(UIPortlet.class.isAssignableFrom(childUIContainer.getClass())) {
+                        UIPortlet childPortlet = (UIPortlet) childUIContainer;
+                        if(WindowState.MAXIMIZED.equals(childPortlet.getCurrentWindowState())) {
+                            hasMaximizedPortlet = true;
+                        }
+                    }
+                }
+            }
+
+            if(!hasMaximizedPortlet) {
+                uiPage.setMaximizedUIPortlet(null);
+            }
         }
     }
 
