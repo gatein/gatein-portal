@@ -21,8 +21,8 @@
     var feedBlog = $(".gtnResponsiveCommunityPortlet #blog-content-mobile");
     loadWithAjax(feedBlog);
 
-    var feedTwitter = $(".gtnResponsiveCommunityPortlet #tweets-content-mobile");
-    loadWithAjax(feedTwitter);
+    var feedVimeo = $(".gtnResponsiveCommunityPortlet #vimeo-content-mobile");
+    loadWithAjax(feedVimeo);
 
     $(".gtnResponsiveCommunityPortlet #conversation-accordion").accordion();
 

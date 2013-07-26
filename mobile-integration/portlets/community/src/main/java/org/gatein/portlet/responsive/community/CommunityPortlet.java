@@ -47,9 +47,9 @@ public class CommunityPortlet extends GenericPortlet {
 
     private String DEFAULT_URL = "/#";
     private String URL_RSS_BLOG = "url.rss.blog";
-    private String URL_RSS_TWITTER = "url.rss.twitter";
+    private String URL_RSS_VIMEO = "url.rss.vimeo";
     private String URL_CONTENT_BLOG = "url.blog";
-    private String URL_CONTENT_TWITTER = "url.twitter";
+    private String URL_CONTENT_VIMEO = "url.vimeo";
     private String PFX_BLOG_AUTHOR = "pfx.url.author";
     private static final Logger log = LoggerFactory.getLogger(CommunityPortlet.class);
 
@@ -96,14 +96,14 @@ public class CommunityPortlet extends GenericPortlet {
 
             PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/feedBlog.jsp");
             prd.include(request, response);
-        } else if ("twitter".equals(contentType)) {
-            String urlRssTwitter = portletPreferences.getValue(URL_RSS_TWITTER, DEFAULT_URL);
-            String urlContentTwitter = portletPreferences.getValue(URL_CONTENT_TWITTER, DEFAULT_URL);
+        } else if ("vimeo".equals(contentType)) {
+            String urlRssVimeo = portletPreferences.getValue(URL_RSS_VIMEO, DEFAULT_URL);
+            String urlContentVimeo = portletPreferences.getValue(URL_CONTENT_VIMEO, DEFAULT_URL);
 
-            RssReaderBean gateInTwitterRssReader = makeReaderBean(urlRssTwitter, urlContentTwitter, 2, null);
-            request.setAttribute("twitterRSSBean", gateInTwitterRssReader);
+            RssReaderBean gateInVimeoRssReader = makeReaderBean(urlRssVimeo, urlContentVimeo, 2, null);
+            request.setAttribute("vimeoRSSBean", gateInVimeoRssReader);
 
-            PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/feedTwitter.jsp");
+            PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/feedVimeo.jsp");
             prd.include(request, response);
         }
     }

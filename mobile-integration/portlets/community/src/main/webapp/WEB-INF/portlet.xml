@@ -30,8 +30,8 @@
                 <value>https://community.jboss.org/community/feeds/blogs?community=2183</value>
             </preference>
             <preference>
-                <name>url.rss.twitter</name>
-                <value>https://api.twitter.com/1/statuses/user_timeline.rss?screen_name=gatein</value>
+                <name>url.rss.vimeo</name>
+                <value>http://vimeo.com/channels/gatein/videos/rss</value>
             </preference>
 
             <preference>
@@ -39,8 +39,8 @@
                 <value>https://community.jboss.org/en/gatein?view=blog#/?tagSet=undefined</value>
             </preference>
             <preference>
-                <name>url.twitter</name>
-                <value>https://twitter.com/gatein</value>
+                <name>url.vimeo</name>
+                <value>https://vimeo.com/channels/gatein/</value>
             </preference>
 
             <preference>

@@ -144,8 +144,8 @@
     background-image: url("../images/rss.png");
 }
 
-.gtnResponsiveCommunityPortlet .icon-twitter {
-    background-image: url("../images/twitter.png");
+.gtnResponsiveCommunityPortlet .icon-vimeo {
+    background-image: url("../images/vimeo.png");
 }
 
 .gtnResponsiveCommunityPortlet .icon-gray {
@@ -156,7 +156,7 @@
 }
 
 .gtnResponsiveCommunityPortlet #blog-content-mobile,
-.gtnResponsiveCommunityPortlet #tweets-content-mobile {
+.gtnResponsiveCommunityPortlet #vimeo-content-mobile {
     overflow: hidden;
     padding: 0 3.57143%;
 }
@@ -202,7 +202,7 @@
     margin-right: 0.25em; /* orientation=lt */
 }
 
-.gtnResponsiveCommunityPortlet #conversation #tweets-content-mobile .info span {
+.gtnResponsiveCommunityPortlet #conversation #vimeo-content-mobile .info span {
     font-size: 0.75em;
     color:#999;
 }
@@ -215,7 +215,7 @@
     line-height: 1.53846153846154em;
 }
 
-.gtnResponsiveCommunityPortlet #conversation #tweets-content-mobile {
+.gtnResponsiveCommunityPortlet #conversation #vimeo-content-mobile {
     display:none;
 }
 
@@ -224,7 +224,7 @@
     color: #e33;
 }
 
-.gtnResponsiveCommunityPortlet #tweets-content-mobile .errorPane a,
+.gtnResponsiveCommunityPortlet #vimeo-content-mobile .errorPane a,
 .gtnResponsiveCommunityPortlet .errorPane > a,
 .gtnResponsiveCommunityPortlet .errorPane > p {
     font-size: 0.875em;

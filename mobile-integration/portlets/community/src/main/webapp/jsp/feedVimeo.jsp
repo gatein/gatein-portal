@@ -8,26 +8,26 @@
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(resourceRequest.locale)}"/>
 
 <c:choose>
-  <c:when test="${twitterRSSBean.valid}">
+  <c:when test="${vimeoRSSBean.valid}">
     <ul>
-      <c:forEach var="twitterTweet" items="${twitterRSSBean.feedTitles}">
+      <c:forEach var="vimeoItem" items="${vimeoRSSBean.feedTitles}">
         <li>
-          <h6><a href="${twitterTweet.link}">${twitterTweet.title}</a></h6>
+          <h6><a href="${vimeoItem.link}">${vimeoItem.title}</a></h6>
 
           <div class="info">
             <span>
-              <fmt:formatDate value="${twitterTweet.publishedDate}" pattern="dd MMM"/>
+              <fmt:formatDate value="${vimeoItem.publishedDate}" pattern="dd MMM"/>
             </span>
           </div>
         </li>
       </c:forEach>
     </ul>
-    <a href="${twitterRSSBean.contentSource}">${resourceBundle.getString("conversation.twitter.link")}</a>
+    <a href="${vimeoRSSBean.contentSource}">${resourceBundle.getString("conversation.vimeo.link")}</a>
   </c:when>
   <c:otherwise>
     <div class="errorPane">
       <p>${resourceBundle.getString("conversation.io.error")}</p>
-      <a href="${twitterRSSBean.sourceIO}">${twitterRSSBean.sourceIO}</a>
+      <a href="${vimeoRSSBean.sourceIO}">${vimeoRSSBean.sourceIO}</a>
     </div>
   </c:otherwise>
 </c:choose>
