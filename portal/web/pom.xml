@@ -359,6 +359,15 @@
       <version>4.2.1</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.axis</groupId>
+      <artifactId>axis-jaxrpc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>wsdl4j</groupId>
+      <artifactId>wsdl4j</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>

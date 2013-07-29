@@ -319,6 +319,17 @@
         <version>${commons.fileupload.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.apache.axis</groupId>
+        <artifactId>axis-jaxrpc</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>wsdl4j</groupId>
+        <artifactId>wsdl4j</artifactId>
+        <version>1.6.2</version>
+      </dependency>
+
       <!-- GateIn components -->
       <dependency>
         <groupId>org.gatein.common</groupId>
