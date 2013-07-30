@@ -214,7 +214,7 @@
 											<label class="control-label">#{msg['redirect.admin.condition.mapping.h']}</label>
 											<div class="controls">
 												<div class="alert" style="#{empty rdrEdit.mappings.mappings ? '' : 'display: none;'}">#{msg['redirect.admin.condition.mapping.missing']}</div>
-												<a4j:commandLink action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').last().focus();">#{msg['redirect.admin.condition.mapping.add']}</a4j:commandLink>
+												<a4j:commandButton id="addMappingButton" action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table pull-right" execute="@this" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').first().focus();" disabled="#{not facesContext.postback or facesContext.validationFailed}" value="#{msg['redirect.admin.condition.mapping.add']}" />
 												<table class="table table-striped action-button" id="mappings" summary="Redirect mappings">
 													<thead style="#{empty rdrEdit.mappings.mappings ? 'display: none;' : ''}">
 														<tr>
@@ -237,23 +237,47 @@
 														<tr class="node-mapping-spacer" style="display: none;"><td></td></tr>
 														<tr class="node-mapping-editor #{empty m.originNode or empty m.redirectNode ? '' : 'hidden-element'}">
 															<td>
-																<b:input scale="medium" placeholder="e.g. homepage" value="#{m.originNode}" styleClass="origin-node-name-input">
-																	<!-- <b:autocomplete suggestions="#{rdrEdit.originNodeNames}" /> -->
-																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="#{msg['redirect.admin.condition.mapping.view']}" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
-																	</f:facet>
-																</b:input>
+																<h:panelGroup id="origin_nm_group" layout="block" styleClass="input-append">
+																	<h:panelGroup id="origin_nm_prev" styleClass="#{origin_nm.valid ? '' : 'error-sibling'}"></h:panelGroup>
+																	<h:inputText binding="#{origin_nm}" id="origin_nm" value="#{m.originNode}" validator="rdrNodeMappingValidator" styleClass="input-medium origin-node-name-input">
+																		<f:ajax event="keyup" eventsQueue="rdr" render="origin_nm_error redirect_nm_error origin_nm_prev :edit_form:addMappingButton :edit_form:edit_save" />
+																	</h:inputText>
+																	<b:commandButton
+																			styleClass="tooltipTrigger select-node"
+																			title="#{msg['redirect.admin.condition.mapping.view']}"
+																			style="width: 40px; margin-left: -5px;"
+																			render="modal-select-node-wrapper"
+																			onclick="nodeInput = $(this).prev('input')"
+																			oncomplete="showNodeList()"
+																			execute="@this"
+																			action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
+																</h:panelGroup>
+																<h:panelGroup id="origin_nm_error">
+																	<h:outputText style="color: #AA0000; font-size: 11px;" styleClass="text-error rdr-origin-nm-error" value="#{origin_nm.valid ? '&#160;' : origin_nm.validatorMessage}" rendered="#{not origin_nm.valid or not redirect_nm.valid}" />
+																</h:panelGroup>
 															</td>
 															<td>
-																<b:input scale="medium" placeholder="e.g. home_page" value="#{m.redirectNode}" styleClass="redirect-node-name-input">
-																	<!-- <b:autocomplete suggestions="#{rdrEdit.redirectNodeNames}" /> -->
-																	<f:facet name="append">
-																		<b:commandButton styleClass="tooltipTrigger select-node" title="#{msg['redirect.admin.condition.mapping.view']}" style="width: 40px; margin-left: -5px;" render="modal-select-node-wrapper" onclick="nodeInput = $(this).prev('input')" oncomplete="showNodeList()" action="#{rdrEdit.setCurrentNodeNames(false)}"><i class="icon-list" ></i></b:commandButton>
-																	</f:facet>
-																</b:input>
+																<h:panelGroup id="redirect_nm_group" layout="block" styleClass="input-append">
+																	<h:panelGroup id="redirect_nm_prev" styleClass="#{redirect_nm.valid ? '' : 'error-sibling'}"></h:panelGroup>
+																	<h:inputText binding="#{redirect_nm}" id="redirect_nm" value="#{m.redirectNode}" validator="rdrNodeMappingValidator" styleClass="input-medium redirect-node-name-input">
+																		<f:ajax event="keyup" eventsQueue="rdr" render="redirect_nm_error origin_nm_error redirect_nm_prev :edit_form:addMappingButton :edit_form:edit_save" />
+																	</h:inputText>
+																	<b:commandButton
+																			styleClass="tooltipTrigger select-node"
+																			title="#{msg['redirect.admin.condition.mapping.view']}"
+																			style="width: 40px; margin-left: -5px;"
+																			render="modal-select-node-wrapper"
+																			onclick="nodeInput = $(this).prev('input')"
+																			oncomplete="showNodeList()"
+																			execute="@this"
+																			action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
+																</h:panelGroup>
+																<h:panelGroup id="redirect_nm_error">
+																	<h:outputText style="color: #AA0000; font-size: 11px;" styleClass="text-error rdr-redirect-nm-error" value="#{redirect_nm.valid ? '&#160;' : redirect_nm.validatorMessage}" rendered="#{not origin_nm.valid or not redirect_nm.valid}" />
+																</h:panelGroup>
 															</td>
 															<td class="actions">
-																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" styleClass="tooltipTrigger" title="#{msg['redirect.admin.condition.mapping.delete']}" render="mappingsWrapper" onclick="$(this).tooltip('hide');"><i class="icon-trash">#{msg['redirect.admin.condition.mapping.delete']}</i></a4j:commandLink>
+																<a4j:commandLink action="#{rdrEdit.removeNodeMapping(counter.index)}" execute="@this" styleClass="tooltipTrigger" title="#{msg['redirect.admin.condition.mapping.delete']}" render="mappingsWrapper :edit_form:edit_save" onclick="$(this).tooltip('hide');"><i class="icon-trash">#{msg['redirect.admin.condition.mapping.delete']}</i></a4j:commandLink>
 															</td>
 														</tr>
 														</ui:repeat>
@@ -277,7 +301,7 @@
 								</fieldset>
 								<div class="form-actions">
 									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >#{msg['redirect.admin.condition.mapping.cancel']}</button>
-									<a4j:commandButton id="edit_save" value="#{msg['redirect.admin.condition.mapping.save']}" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid}" />
+									<a4j:commandButton id="edit_save" value="#{msg['redirect.admin.condition.mapping.save']}" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid or not facesContext.postback or facesContext.validationFailed}" />
 								</div><!-- End .form-actions -->
 						</td>
 					</tr>
