@@ -19,13 +19,14 @@ function init() {
 	clearInputTextValue();
 	switchGroupView();
 	selectGroupInHierarchicalView();
-	// Provisional js	
+	// Provisional js
 	selectPermission();
 	accessPermissionButton();
 	accessPermissionTable();
 	feedback();
 	editRedirect();
 	onConditionModal();
+	nodeMappingPlaceholder();
 	// Useful js that makes other ones not work
 	//sortable();
 }
@@ -205,6 +206,12 @@ function onConditionModal() {
 	});
 }
 
+function nodeMappingPlaceholder() {
+	$(document).on("DOMSubtreeModified", "#node-mappings", function() {
+		$(".origin-node-name-input").attr("placeholder", "e.g. homepage");
+		$(".redirect-node-name-input").attr("placeholder", "e.g. home_page");
+	});
+}
 
 
 // --- UNUSED (SO FAR) ---
@@ -285,15 +292,12 @@ button = function(){
 	});
 };
 
-// Toggle content 
+// Toggle content
 toggleContent = function() {
-	$('.toggle').click(function() {
+	$(document).on('click', '.toggle', function() {
 		$(this).toggleClass('closed');
 		$(this).parent().next().toggleClass('hidden-element');
 	});
-	if ($('aside .toggle').hasClass('closed')) {
-		alert('test');
-    }
 };
 
 // Show / Hide More
@@ -371,16 +375,16 @@ switchGroupView = function() {
 // Select Group in Hierarchical View
 selectGroupInHierarchicalView = function() {
 /*
-	$('.window-tree a').click(function() { 
+	$('.window-tree a').click(function() {
 		$('.window-tree a').parent().removeClass('active');
 		$(this).parent().addClass('active');
 		$(this).parent().parent().children('li.parent').find('ul').addClass('hidden-element');
 		$(this).parent().parent().find('li.parent').removeClass('opened');
 	});
-	$('.window-tree li.parent a').click(function() { 
+	$('.window-tree li.parent a').click(function() {
 		$(this).next('ul').removeClass('hidden-element');
 		$(this).parent('li.parent').addClass('opened');
-	});	
+	});
 */
 	var ulHeight = $('.window-tree div ul').height();
 	if (ulHeight > 375){
@@ -489,10 +493,11 @@ function showNodeList() {
 }
 
 function selectNodeFromList() {
-	sNode = $(".radio-node:checked").attr("id");
+	var sNode = $(".radio-node:checked").attr("id");
 	setTimeout(function() {
 		nodeInput.focus();
 		nodeInput.val(sNode);
+		nodeInput.keyup();
 	}, 50);
 	$('#modal-select-node').modal('hide');
 	return false;
