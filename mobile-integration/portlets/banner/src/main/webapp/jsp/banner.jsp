@@ -6,14 +6,11 @@
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}" />
 
 <div class="gtnResponsiveBannerPortlet">
-    <div class="gtnResponsvieBanner_slogan">
+    <div class="gtnResponsiveBanner_slogan">
         <h1>${resourceBundle.getString("slogan")}</h1>
     </div>
-    <div class="gtnResponsvieBanner_madeBy">
-        <h2>
-            ${resourceBundle.getString("madeBy")} <a href="http://www.redhat.com/">Red Hat</a> + <a
-                href="http://www.exoplatform.com/">eXo Platform SAS</a> + <a href="https://community.jboss.org/en/gatein/dev">${resourceBundle.getString("you")}</a>
-        </h2>
+    <div class="gtnResponsiveBanner_message">
+        <h2>${resourceBundle.getString("message")}</h2>
     </div>
 </div>
 <div class="gtnResponsiveBannerPortletShadow"></div>
