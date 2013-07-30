@@ -71,7 +71,7 @@ public class NavigationPortlet extends GenericPortlet {
         Navigation navigation = PortalRequest.getInstance().getNavigation();
 
         // Diving two levels so the information about children count of children nodes is available
-        Node rootNode = navigation.getRootNode(Nodes.visitNodes(2));
+        Node rootNode = navigation.getRootNode(Nodes.visitNodes(2)).filter().showDefault();
 
         // The root navigation bean contains the top-menu elements (Home and Sitemap by default) as its direct children nodes.
         NavigationNodeBean  navigationRootNodeBean = new NavigationNodeBean(rootNode);
@@ -115,7 +115,7 @@ public class NavigationPortlet extends GenericPortlet {
 
         String chosenNodeURI = request.getParameter("uri");
 
-        Node chosenNode = navigation.getNode(NodePath.fromString(chosenNodeURI), Nodes.visitNodes(2));
+        Node chosenNode = navigation.getNode(NodePath.fromString(chosenNodeURI), Nodes.visitNodes(2)).filter().showDefault();
 
         NavigationNodeBean chosenNodeBean = new NavigationNodeBean(chosenNode);
 
@@ -147,7 +147,7 @@ public class NavigationPortlet extends GenericPortlet {
             Iterator<Node> iterator = n.iterator();
 
             while (iterator.hasNext()){
-                Node child = navigation.getNode(iterator.next().getNodePath(), Nodes.visitNodes(1));
+                Node child = navigation.getNode(iterator.next().getNodePath(), Nodes.visitNodes(1)).filter().showDefault();
 
                 if (!isEmptyCategory(child)){
                     return false;
