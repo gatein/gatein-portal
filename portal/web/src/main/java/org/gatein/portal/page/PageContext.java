@@ -95,7 +95,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
                 String contentId = portletCustomization.getContentId();
                 NodeState window = new NodeState(context);
                 WindowContent windowState = contentProvider.getContent(contentId, window);
-                windows.put(windowState.getName(), windowState);
+                windows.put(window.context.getName(), windowState);
                 return window;
             } else {
                 return new NodeState(context);
@@ -129,8 +129,8 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
 
         //
         LinkedHashMap<String, WindowContext> a = new LinkedHashMap<String, WindowContext>(builder.windows.size());
-        for (WindowContent state : builder.windows.values()) {
-            a.put(state.getName(), new WindowContext(state, this));
+        for (Map.Entry<String, WindowContent> window : builder.windows.entrySet()) {
+            a.put(window.getKey(), new WindowContext(window.getKey(), window.getValue(), this));
         }
 
         //
@@ -148,7 +148,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         // Clone the windows
         for (Map.Entry<String, WindowContext> entry : windowMap.entrySet()) {
             WindowContext window = entry.getValue();
-            builder.windows.put(window.state.getName(), window.state.copy());
+            builder.windows.put(window.name, window.state.copy());
         }
 
         //
@@ -173,6 +173,16 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
     }
 
     //
+
+    public void encodeParameters(Phase.View.Dispatch dispatch) {
+        Map<QName, String[]> parameters = state.getParameters();
+        HashMap<String, String[]> a = new HashMap<String, String[]>(parameters.size());
+        for (Map.Entry<QName, String[]> b : parameters.entrySet()) {
+            a.put(b.getKey().getLocalPart(), b.getValue());
+        }
+        Encoder encoder = new Encoder(a);
+        dispatch.setParameter(WindowContext.ENCODING, "javax.portlet.p", encoder.encode());
+    }
 
     public Phase.View.Dispatch getDispatch() {
         Phase.View.Dispatch view = Controller_.index(state.path, null, null, null, null);

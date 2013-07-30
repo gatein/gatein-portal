@@ -33,6 +33,8 @@ import org.gatein.pc.api.ResourceURL;
 import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.api.spi.PortletInvocationContext;
+import org.gatein.portal.page.Controller_;
+import org.gatein.portal.page.Encoder;
 import org.gatein.portal.page.PageContext;
 import org.gatein.portal.page.WindowContext;
 
@@ -68,13 +70,13 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
 
     @Override
     public String renderURL(ContainerURL containerURL, URLFormat format) {
-        Phase.View.Dispatch view;
+        Phase.View.Dispatch dispatch;
         if (containerURL instanceof RenderURL) {
             RenderURL renderURL = (RenderURL) containerURL;
             PageContext.Builder a = window.page.builder();
 
             // Remove this nasty cast
-            PortletContent copy = (PortletContent) a.getWindow(state.getName());
+            PortletContent copy = (PortletContent) a.getWindow(window.name);
 
             ParametersStateString ns = (ParametersStateString) renderURL.getNavigationalState();
             if (ns != null) {
@@ -90,35 +92,78 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
             if (changes.size() > 0) {
                 a.apply(window.getPublicParametersChanges(changes));
             }
-            view = a.build().getDispatch();
+            dispatch = a.build().getDispatch();
         } else if (containerURL instanceof ActionURL) {
             ActionURL actionURL = (ActionURL) containerURL;
             ParametersStateString is = (ParametersStateString) actionURL.getInteractionState();
-            Map<String, String[]> parameters = is != null ? is.getParameters() : null;
-            view = dispatchOf("action", containerURL.getWindowState(), containerURL.getMode(), parameters, CacheLevel.PAGE);
+            PageContext page = window.page;
+            String targetWindowState = containerURL.getWindowState() != null && !org.gatein.pc.api.WindowState.NORMAL.equals(containerURL.getWindowState()) ? containerURL.getWindowState().toString() : null;
+            String targetMode = containerURL.getMode() != null && !Mode.VIEW.equals(containerURL.getMode()) ? containerURL.getMode().toString() : null;
+            dispatch = Controller_.index(page.state.path, "action", window.name, targetWindowState, targetMode);
+
+            // Encode all windows
+            for (WindowContext w : page.windows) {
+                w.encode(dispatch);
+            }
+
+            // Encode page parameters
+            page.encodeParameters(dispatch);
+
+            //
+            if (is != null) {
+                for (Map.Entry<String, String[]> parameter : is.getParameters().entrySet()) {
+                    dispatch.setParameter(parameter.getKey(), parameter.getValue());
+                }
+            }
         } else {
             ResourceURL resourceURL = (ResourceURL) containerURL;
             CacheLevel level = resourceURL.getCacheability();
             ParametersStateString rs = (ParametersStateString) resourceURL.getResourceState();
             Map<String, String[]> parameters = rs != null ? rs.getParameters() : null;
-            view = window.dispatchOf("resource", state.getWindowState(), state.getMode(), parameters, level);
+            PageContext page = window.page;
+
+            //
+            dispatch = Controller_.index(page.state.path, "resource", window.name, state.getWindowState(), state.getMode());
+
+            //
+            if (level == CacheLevel.PORTLET || level == CacheLevel.PAGE) {
+
+                // Encode this window
+                String ww = window.state.getParameters();
+                if (ww == null) {
+                    ww = new Encoder(PortletContent.NO_PARAMETERS).encode();
+                }
+                window.encode(dispatch, ww, window.state.getWindowState(), window.state.getMode());
+
+                //
+                if (level == CacheLevel.PAGE) {
+
+                    // Encode all windows
+                    for (WindowContext w : page.windows) {
+                        if (w != window) {
+                            w.encode(dispatch);
+                        }
+                    }
+
+                    // Encode page parameters
+                    page.encodeParameters(dispatch);
+                }
+            }
+
+            // Append provided parameters
+            if (parameters != null) {
+                for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                    dispatch.setParameter(parameter.getKey(), parameter.getValue());
+                }
+            }
+
+            //
             String id = resourceURL.getResourceId();
             if (id != null) {
-                view.setParameter("javax.portlet.r", id);
+                dispatch.setParameter("javax.portlet.r", id);
             }
         }
-        return view.toString();
-    }
-
-    private Phase.View.Dispatch dispatchOf(
-            String phase,
-            org.gatein.pc.api.WindowState windowState,
-            Mode mode,
-            Map<String, String[]> parameters,
-            CacheLevel cacheability) {
-        String targetWindowState = windowState != null && !org.gatein.pc.api.WindowState.NORMAL.equals(windowState) ? windowState.toString() : null;
-        String targetMode = mode != null && !Mode.VIEW.equals(mode) ? mode.toString() : null;
-        return window.dispatchOf(phase, targetWindowState, targetMode, parameters, cacheability);
+        return dispatch.toString();
     }
 
     @Override

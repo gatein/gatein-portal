@@ -19,8 +19,6 @@
 package org.gatein.portal.page;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -28,19 +26,13 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import juzu.PropertyType;
 import juzu.Response;
-import juzu.impl.common.Tools;
 import juzu.io.Chunk;
 import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
 import org.gatein.portal.layout.Layout;
 import org.gatein.portal.page.spi.RenderTask;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
@@ -134,7 +126,7 @@ class ReactivePage {
         boolean send;
         lock.lock();
         try {
-            results.put(window.context.state.getName(), result);
+            results.put(window.context.name, result);
             send = results.size() == windows.size();
         } finally {
             lock.unlock();

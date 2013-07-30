@@ -42,7 +42,7 @@ import org.gatein.portal.page.spi.WindowContent;
 /**
  * @author Julien Viet
  */
-class PortletContent implements WindowContent {
+class PortletContent extends WindowContent {
 
     /** . */
     public static final Pattern PORTLET_PATTERN = Pattern.compile("^([^/]+)/([^/]+)$");
@@ -51,13 +51,10 @@ class PortletContent implements WindowContent {
     private static final String[] TITLE_KEYS = { MetaInfo.TITLE, MetaInfo.SHORT_TITLE, MetaInfo.DISPLAY_NAME };
 
     /** . */
-    private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
+    static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
     /** The window id. */
     public final String id;
-
-    /** The window name. */
-    public final String name;
 
     /** The portlet window parameters. */
     public Map<String, String[]> parameters;
@@ -72,7 +69,6 @@ class PortletContent implements WindowContent {
     public final Portlet portlet;
 
     PortletContent(NodeState node, Portlet portlet) {
-        this.name = node.context.getName();
         this.id = node.context.getId();
         this.parameters = null;
         this.windowState = null;
@@ -95,17 +91,11 @@ class PortletContent implements WindowContent {
         }
 
         //
-        this.name = that.name;
         this.id = that.id;
         this.parameters = parameters;
         this.windowState = that.windowState;
         this.mode = that.mode;
         this.portlet = that.portlet;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override

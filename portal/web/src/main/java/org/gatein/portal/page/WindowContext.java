@@ -19,7 +19,6 @@
 package org.gatein.portal.page;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -29,7 +28,6 @@ import juzu.Response;
 import juzu.impl.common.PercentCodec;
 import juzu.io.Encoding;
 import juzu.request.Phase;
-import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.portal.page.spi.RenderTask;
 import org.gatein.portal.page.spi.WindowContent;
 
@@ -61,10 +59,14 @@ public class WindowContext {
     /** The related page. */
     public final PageContext page;
 
+    /** . */
+    public final String name;
+
     /** The intrisic state. */
     public final WindowContent state;
 
-    WindowContext(WindowContent state, PageContext page) {
+    WindowContext(String name, WindowContent state, PageContext page) {
+        this.name = name;
         this.page = page;
         this.state = state;
     }
@@ -107,61 +109,40 @@ public class WindowContext {
         return publicParameters;
     }
 
-    public Phase.View.Dispatch dispatchOf(
-            String phase,
-            String windowState,
-            String mode,
-            Map<String, String[]> parameters,
-            CacheLevel cacheability) {
-
-        //
-        Phase.View.Dispatch dispatch = Controller_.index(page.state.path, phase, state.getName(), windowState, mode);
-
-        // Encode according to cacheability
-        if (cacheability == CacheLevel.PORTLET) {
-            // Only encode this window
-            encode(dispatch);
-        } else if (cacheability == CacheLevel.PAGE) {
-
-            // Encode all windows
-            for (WindowContext w : page.windows) {
-                w.encode(dispatch);
-            }
-
-            // Encode page parameters
-            HashMap<String, String[]> a = new HashMap<String, String[]>(page.getParameters().size());
-            for (Map.Entry<QName, String[]> b : page.getParameters().entrySet()) {
-                a.put(b.getKey().getLocalPart(), b.getValue());
-            }
-            Encoder encoder = new Encoder(a);
-            dispatch.setParameter(ENCODING, "javax.portlet.p", encoder.encode());
-        }
-
-        // Append provided parameters
-        if (parameters != null) {
-            for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
-                dispatch.setParameter(parameter.getKey(), parameter.getValue());
-            }
-        }
-        return dispatch;
-    }
-
     /**
-     * Encode the navigational state of the window in the dispatch object.
+     * Encode the state of this window in the dispatch object.
      *
      * @param dispatch the dispatch
      */
-    void encode(Phase.View.Dispatch dispatch) {
-        String name = state.getName();
-        String parameters = state.getParameters();
+    public void encode(Phase.View.Dispatch dispatch) {
+        encode(dispatch, state);
+    }
+
+    /**
+     * Encode the provided state in the dispatch object for the current window
+     *
+     * @param dispatch the dispatch
+     * @param state the state to encode
+     */
+    public void encode(Phase.View.Dispatch dispatch, WindowContent state) {
+        encode(dispatch, state.getParameters(), state.getWindowState(), state.getMode());
+    }
+
+    /**
+     * Encode the provided state in the dispatch object for the current window
+     *
+     * @param dispatch the dispatch
+     * @param parameters the parameters
+     * @param windowState the window state
+     * @param mode the mode
+     */
+    public void encode(Phase.View.Dispatch dispatch, String parameters, String windowState, String mode) {
         if (parameters != null) {
             dispatch.setParameter(WindowContext.ENCODING, "javax.portlet.p." + name, parameters);
         }
-        String windowState = state.getWindowState();
         if (windowState != null) {
             dispatch.setParameter("javax.portlet.w." + name, windowState);
         }
-        String mode = state.getMode();
         if (mode != null) {
             dispatch.setParameter("javax.portlet.m." + name, mode);
         }
@@ -169,6 +150,6 @@ public class WindowContext {
 
     @Override
     public String toString() {
-        return "WindowState[name=" + state.getName() + ",parameters=" + state.getParameters() + "]";
+        return "WindowState[name=" + name + ",parameters=" + state.getParameters() + "]";
     }
 }

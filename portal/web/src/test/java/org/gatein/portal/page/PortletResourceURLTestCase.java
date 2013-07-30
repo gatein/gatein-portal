@@ -68,104 +68,64 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
     WebDriver driver;
 
     /** . */
-    static String wantedCacheability;
-
-    /** . */
-    static String id;
-
-    /** . */
-    static String[] foo;
-
-    /** . */
-    static String[] bar;
-
-    /** . */
-    static String[] juu;
-
-    /** . */
-    static String[] daa;
-
-    /** . */
-    static WindowState windowState;
-
-    /** . */
-    static PortletMode portletMode;
-
-    /** . */
-    static String cacheability;
-
-    @Test
-    public void testPageLevel() {
-        testPageLevel(ResourceURL.PAGE, Arrays.asList("foo_value"), Arrays.asList("bar_value1", "bar_value2"), PortletMode.EDIT, WindowState.MAXIMIZED);
-        testPageLevel(ResourceURL.PORTLET, Arrays.asList("foo_value"), Arrays.asList("bar_value1", "bar_value2"), PortletMode.EDIT, WindowState.MAXIMIZED);
-        testPageLevel(ResourceURL.FULL, null, null, PortletMode.VIEW, WindowState.NORMAL);
-    }
-
-    private void testPageLevel(
-            String expectedCacheability,
-            List<String> expectedFoo,
-            List<String> expectedBar,
-            PortletMode expectedPortletMode,
-            WindowState expectedWindowState) {
-        wantedCacheability = expectedCacheability;
-        String url = deploymentURL.toString() + "page1";
-        driver.get(url);
-        WebElement render = driver.findElement(By.id("render"));
-        id = null;
-        foo = bar = juu = daa = null;
-        windowState = null;
-        portletMode = null;
-        cacheability = null;
-        render.click();
-        Assert.assertNull(id);
-        Assert.assertNull(cacheability);
-        Assert.assertEquals(PortletMode.EDIT, portletMode);
-        Assert.assertEquals(WindowState.MAXIMIZED, windowState);
-        Assert.assertNotNull(foo);
-        Assert.assertEquals(Arrays.asList("foo_value"), Arrays.asList(foo));
-        Assert.assertNotNull(bar);
-        Assert.assertEquals(Arrays.asList("bar_value1", "bar_value2"), Arrays.asList(bar));
-        Assert.assertNull(juu);
-        Assert.assertNull(daa);
-        WebElement resource = driver.findElement(By.id("resource"));
-        id = null;
-        foo = bar = juu = daa = null;
-        windowState = null;
-        portletMode = null;
-        cacheability = null;
-        resource.click();
-        Assert.assertEquals("the_id", id);
-        Assert.assertEquals(expectedCacheability, cacheability);
-        Assert.assertEquals(expectedPortletMode, portletMode);
-        Assert.assertEquals(expectedWindowState, windowState);
-        if (expectedFoo == null) {
-            Assert.assertNull(foo);
-        } else {
-            Assert.assertNotNull(foo);
-            Assert.assertEquals(expectedFoo, Arrays.asList(foo));
-        }
-        if (expectedBar == null) {
-            Assert.assertNull(bar);
-        } else {
-            Assert.assertNotNull(bar);
-            Assert.assertEquals(expectedBar, Arrays.asList(bar));
-        }
-        Assert.assertNotNull(juu);
-        Assert.assertEquals(Arrays.asList("juu_value"), Arrays.asList(juu));
-        Assert.assertNotNull(daa);
-        Assert.assertEquals(Arrays.asList("daa_value1", "daa_value2"), Arrays.asList(daa));
-    }
+    static GenericPortlet delegate;
 
     public static class Portlet1 extends GenericPortlet {
 
         @Override
         public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
+            delegate.serveResource(request, response);
+        }
+
+        @Override
+        public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+            delegate.render(request, response);
+        }
+    }
+
+    class RenderParametersPortlet extends GenericPortlet {
+
+        /** . */
+        String wantedCacheability;
+
+        /** . */
+        String[] wantedRenderParam1;
+
+        /** . */
+        String[] wantedRenderParam2;
+
+        /** . */
+        String id;
+
+        /** . */
+        String[] renderParam1;
+
+        /** . */
+        String[] renderParam2;
+
+        /** . */
+        String[] resourceParam1;
+
+        /** . */
+        String[] resourceParam2;
+
+        /** . */
+        WindowState windowState;
+
+        /** . */
+        PortletMode portletMode;
+
+        /** . */
+        String cacheability;
+
+        @Override
+        public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
             cacheability = request.getCacheability();
             id = request.getResourceID();
-            foo = request.getParameterMap().get("foo");
-            bar = request.getParameterMap().get("bar");
-            juu = request.getParameterMap().get("juu");
-            daa = request.getParameterMap().get("daa");
+            renderParam1 = request.getParameterMap().get("render_param1");
+            renderParam2 = request.getParameterMap().get("render_param2");
+            resourceParam1 = request.getParameterMap().get("resource_param1");
+            resourceParam2 = request.getParameterMap().get("resource_param2");
             windowState = request.getWindowState();
             portletMode = request.getPortletMode();
             response.setContentType("text/plain");
@@ -175,26 +135,167 @@ public class PortletResourceURLTestCase extends AbstractPortalTestCase {
         @Override
         public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
             response.setContentType("text/html");
-            foo = request.getParameterMap().get("foo");
-            bar = request.getParameterMap().get("bar");
-            juu = request.getParameterMap().get("juu");
-            daa = request.getParameterMap().get("daa");
+            renderParam1 = request.getParameterMap().get("render_param1");
+            renderParam2 = request.getParameterMap().get("render_param2");
+            resourceParam1 = request.getParameterMap().get("resource_param1");
+            resourceParam2 = request.getParameterMap().get("resource_param2");
             windowState = request.getWindowState();
             portletMode = request.getPortletMode();
             ResourceURL resourceURL = response.createResourceURL();
             resourceURL.setResourceID("the_id");
             resourceURL.setCacheability(wantedCacheability);
-            resourceURL.setParameter("juu", "juu_value");
-            resourceURL.setParameter("daa", new String[]{"daa_value1","daa_value2"});
+            resourceURL.setParameter("resource_param1", "juu_value");
+            resourceURL.setParameter("resource_param2", new String[]{"daa_value1","daa_value2"});
             PortletURL renderURL = response.createRenderURL();
             renderURL.setPortletMode(PortletMode.EDIT);
             renderURL.setWindowState(WindowState.MAXIMIZED);
-            renderURL.setParameter("foo", "foo_value");
-            renderURL.setParameter("bar", new String[]{"bar_value1","bar_value2"});
+            renderURL.setParameter("render_param1", wantedRenderParam1);
+            renderURL.setParameter("render_param2", wantedRenderParam2);
             response.getWriter().
                     append("<a id='resource' href='").append(resourceURL.toString()).append("'>resource</a>").
                     append("<a id='render' href='").append(renderURL.toString()).append("'>render</a>").
                     close();
         }
+    }
+
+    @Test
+    public void testRenderParameters() {
+        RenderParametersPortlet portlet = new RenderParametersPortlet();
+        delegate = portlet;
+        testRenderParameters(
+                portlet,
+                ResourceURL.PAGE,
+                Arrays.asList("foo_value"),
+                Arrays.asList("bar_value1", "bar_value2"),
+                Arrays.asList("foo_value"),
+                Arrays.asList("bar_value1", "bar_value2"),
+                PortletMode.EDIT,
+                WindowState.MAXIMIZED);
+        testRenderParameters(
+                portlet,
+                ResourceURL.PORTLET,
+                Arrays.asList("foo_value"),
+                Arrays.asList("bar_value1", "bar_value2"),
+                Arrays.asList("foo_value"),
+                Arrays.asList("bar_value1", "bar_value2"),
+                PortletMode.EDIT,
+                WindowState.MAXIMIZED);
+        testRenderParameters(
+                portlet,
+                ResourceURL.FULL,
+                null,
+                null,
+                Arrays.asList("foo_value"),
+                Arrays.asList("bar_value1", "bar_value2"),
+                PortletMode.VIEW,
+                WindowState.NORMAL);
+    }
+
+    private void testRenderParameters(
+            RenderParametersPortlet portlet,
+            String expectedCacheability,
+            List<String> expectedRenderParam1,
+            List<String> expectedRenderParam2,
+            List<String> renderParam1,
+            List<String> renderParam2,
+            PortletMode expectedPortletMode,
+            WindowState expectedWindowState) {
+        portlet.wantedCacheability = expectedCacheability;
+        portlet.wantedRenderParam1 = renderParam1.toArray(new String[renderParam1.size()]);
+        portlet.wantedRenderParam2 = renderParam2.toArray(new String[renderParam2.size()]);
+        String url = deploymentURL.toString() + "page1";
+        driver.get(url);
+        WebElement render = driver.findElement(By.id("render"));
+        portlet.id = null;
+        portlet.renderParam1 = portlet.renderParam2 = portlet.resourceParam1 = portlet.resourceParam2 = null;
+        portlet.windowState = null;
+        portlet.portletMode = null;
+        portlet.cacheability = null;
+        render.click();
+        Assert.assertNull(portlet.id);
+        Assert.assertNull(portlet.cacheability);
+        Assert.assertEquals(PortletMode.EDIT, portlet.portletMode);
+        Assert.assertEquals(WindowState.MAXIMIZED, portlet.windowState);
+        Assert.assertNotNull(portlet.renderParam1);
+        Assert.assertEquals(Arrays.asList("foo_value"), Arrays.asList(portlet.renderParam1));
+        Assert.assertNotNull(portlet.renderParam2);
+        Assert.assertEquals(Arrays.asList("bar_value1", "bar_value2"), Arrays.asList(portlet.renderParam2));
+        Assert.assertNull(portlet.resourceParam1);
+        Assert.assertNull(portlet.resourceParam2);
+        WebElement resource = driver.findElement(By.id("resource"));
+        portlet.id = null;
+        portlet.renderParam1 = portlet.renderParam2 = portlet.resourceParam1 = portlet.resourceParam2 = null;
+        portlet.windowState = null;
+        portlet.portletMode = null;
+        portlet.cacheability = null;
+        resource.click();
+        Assert.assertEquals("the_id", portlet.id);
+        Assert.assertEquals(expectedCacheability, portlet.cacheability);
+        Assert.assertEquals(expectedPortletMode, portlet.portletMode);
+        Assert.assertEquals(expectedWindowState, portlet.windowState);
+        if (expectedRenderParam1 == null) {
+            Assert.assertNull(portlet.renderParam1);
+        } else {
+            Assert.assertNotNull(portlet.renderParam1);
+            Assert.assertEquals(expectedRenderParam1, Arrays.asList(portlet.renderParam1));
+        }
+        if (expectedRenderParam2 == null) {
+            Assert.assertNull(portlet.renderParam2);
+        } else {
+            Assert.assertNotNull(portlet.renderParam2);
+            Assert.assertEquals(expectedRenderParam2, Arrays.asList(portlet.renderParam2));
+        }
+        Assert.assertNotNull(portlet.resourceParam1);
+        Assert.assertEquals(Arrays.asList("juu_value"), Arrays.asList(portlet.resourceParam1));
+        Assert.assertNotNull(portlet.resourceParam2);
+        Assert.assertEquals(Arrays.asList("daa_value1", "daa_value2"), Arrays.asList(portlet.resourceParam2));
+    }
+
+    class CacheLevelPortlet extends GenericPortlet {
+
+        /** . */
+        String wantedCacheability;
+
+        /** . */
+        String cacheability;
+
+        @Override
+        public void serveResource(ResourceRequest request, ResourceResponse response) throws PortletException, IOException {
+            cacheability = request.getCacheability();
+            response.setContentType("text/plain");
+            response.getWriter().append("the resource").close();
+        }
+
+        @Override
+        public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+            response.setContentType("text/html");
+            ResourceURL resourceURL = response.createResourceURL();
+            resourceURL.setResourceID("the_id");
+            resourceURL.setCacheability(wantedCacheability);
+            response.getWriter().
+                    append("<a id='resource' href='").append(resourceURL.toString()).append("'>resource</a>").
+                    close();
+        }
+    }
+
+    @Test
+    public void testCacheLevel() {
+
+        //
+        CacheLevelPortlet portlet = new CacheLevelPortlet();
+        delegate = portlet;
+        testCacheLevel(portlet, ResourceURL.PAGE);
+        testCacheLevel(portlet, ResourceURL.PORTLET);
+        testCacheLevel(portlet, ResourceURL.FULL);
+    }
+
+    private void testCacheLevel(CacheLevelPortlet portlet, String expectedCacheability) {
+        portlet.wantedCacheability = expectedCacheability;
+        String url = deploymentURL.toString() + "page1";
+        driver.get(url);
+        WebElement resource = driver.findElement(By.id("resource"));
+        portlet.cacheability = null;
+        resource.click();
+        Assert.assertEquals(expectedCacheability, portlet.cacheability);
     }
 }

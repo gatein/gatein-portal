@@ -28,9 +28,7 @@ import javax.xml.namespace.QName;
  *
  * @author Julien Viet
  */
-public interface WindowContent {
-
-    String getName();
+public abstract class WindowContent {
 
     /**
      * Resolve the title for the specified locale.
@@ -38,24 +36,24 @@ public interface WindowContent {
      * @param locale the locale
      * @return the title or null
      */
-    String resolveTitle(Locale locale);
+    public abstract String resolveTitle(Locale locale);
 
-    String getParameters();
+    public abstract String getParameters();
 
-    void setParameters(String s);
+    public abstract void setParameters(String s);
 
-    String getWindowState();
+    public abstract String getWindowState();
 
-    void setWindowState(String ws);
+    public abstract void setWindowState(String ws);
 
-    String getMode();
+    public abstract String getMode();
 
-    void setMode(String m);
+    public abstract void setMode(String m);
 
-    Map<String, String[]> computePublicParameters(Map<QName, String[]> parameters);
+    public abstract Map<String, String[]> computePublicParameters(Map<QName, String[]> parameters);
 
-    Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes);
+    public abstract Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes);
 
-    WindowContent copy();
+    public abstract WindowContent copy();
 
 }

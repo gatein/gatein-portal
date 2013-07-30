@@ -114,8 +114,8 @@ public class PortletContentProvider implements ContentProvider {
         PortletContent state = (PortletContent) window.state;
         action.setClientContext(new GateInClientContext());
         action.setPortalContext(new AbstractPortalContext());
-        action.setInstanceContext(new AbstractInstanceContext(state.name, AccessMode.READ_ONLY));
-        action.setWindowContext(new AbstractWindowContext(state.name));
+        action.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
+        action.setWindowContext(new AbstractWindowContext(window.name));
         action.setUserContext(new AbstractUserContext());
         action.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
         action.setRequest(Context.getCurrentRequest());
@@ -146,7 +146,7 @@ public class PortletContentProvider implements ContentProvider {
             PageContext.Builder clone = window.page.builder();
 
             // Remove this nasty cast
-            PortletContent windowClone = (PortletContent) clone.getWindow(window.state.getName());
+            PortletContent windowClone = (PortletContent) clone.getWindow(window.name);
 
             ParametersStateString s = (ParametersStateString) update.getNavigationalState();
             windowClone.parameters = s.getParameters();
@@ -201,8 +201,8 @@ public class PortletContentProvider implements ContentProvider {
         resource.setCacheLevel(cacheability);
         resource.setClientContext(new GateInClientContext());
         resource.setPortalContext(new AbstractPortalContext());
-        resource.setInstanceContext(new AbstractInstanceContext(state.name, AccessMode.READ_ONLY));
-        resource.setWindowContext(new AbstractWindowContext(state.name));
+        resource.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
+        resource.setWindowContext(new AbstractWindowContext(window.name));
         resource.setUserContext(new AbstractUserContext());
         resource.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
         resource.setRequest(Context.getCurrentRequest());
