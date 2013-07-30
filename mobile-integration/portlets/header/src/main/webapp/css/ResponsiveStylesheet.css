@@ -15,15 +15,15 @@
 
 /* The gatein Logo */
 .gtnResponsiveHeaderPortlet .logo {
-    background-image:  url("../images/gatein_logo_ltr.png"); /* orientation=rt */
-    background-image:  none, url("../images/gatein_logo_ltr.svg"), url("../images/gatein_logo_ltr.png"); /* orientation=rt */
+    background-image:  url("../images/logo_ltr.png"); /* orientation=rt */
+    background-image:  none, url("../images/logo_ltr.svg"), url("../images/logo_ltr.png"); /* orientation=rt */
 
-    background-image:  url("../images/gatein_logo.png"); /* orientation=lt */
-    background-image:  none, url("../images/gatein_logo.svg"), url("../images/gatein_logo.png"); /* orientation=lt */
+    background-image:  url("../images/logo.png"); /* orientation=lt */
+    background-image:  none, url("../images/logo.svg"), url("../images/logo.png"); /* orientation=lt */
 
     line-height: 1em;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     width: 10.375em;
     height: 2.8125em;
     background-position: 0 0;

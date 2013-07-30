@@ -71,3 +71,6 @@
 @import url(ResponsiveSkin/portlet/wsrp/WSRP.css);
 
 @import url(Portlet/Stylesheet.css);
+
+/* User Customizations to the Responsive Skin */
+@import url(ResponsiveSkin/custom/Stylesheet.css);
