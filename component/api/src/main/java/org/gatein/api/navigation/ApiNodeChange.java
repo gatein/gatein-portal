@@ -95,7 +95,7 @@ abstract class ApiNodeChange implements Serializable {
             }
 
             Node child;
-            int index = (previous == null) ? 0 : node.indexOf(previous.getLastSegment());
+            int index = (previous == null) ? 0 : node.indexOf(previous.getLastSegment()) + 1;
             if (index < 0) {
                 child = node.addChild(name);
             } else {

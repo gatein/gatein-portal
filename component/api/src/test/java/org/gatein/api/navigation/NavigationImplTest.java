@@ -601,4 +601,16 @@ public class NavigationImplTest extends AbstractApiTest {
         assertEquals("child", parentNode.getChild(1).getName());
         assertEquals("child2", parentNode.getChild(2).getName());
     }
+
+    @Test
+    public void serialization_Add() throws Exception {
+        createNavigationChildren();
+
+        Node parent = navigation.getNode(NodePath.path("parent"), Nodes.visitAll());
+        parent.addChild("child2");
+
+        Node parentNode = SerializationUtils.serializeDeserialize(parent);
+        assertEquals("child", parentNode.getChild(0).getName());
+        assertEquals("child2", parentNode.getChild(1).getName());
+    }
 }
