@@ -273,13 +273,13 @@ The XML for site looks like
 * Now, we hard-code login and logout link: should get these link programmaticaly
 * How to build initURL when login and logout (the page should redirect to when login and logout success)
 * Should use resource bundle in all of text (now is hard-code)
-* In login module: requestContext.getSecurityContext().getRemoteUser() alway return null when user logged in or not
-* In login module: have ServletAccessValve class, this class need in jar in lib folder of tomcat. But with current packaging, we not put any jar into lib folder.
-  I put a new Filter OAuthPreFilter to do as ServletAccessValve class.
+* In login module: `requestContext.getSecurityContext().getRemoteUser()` alway return null when user logged in or not
+* In login module: have `ServletAccessValve` class, this class need in jar in lib folder of tomcat. But with current packaging, we not put any jar into lib folder.
+  I put a new Filter `OAuthPreFilter` to do as `ServletAccessValve` class.
 * When config SSO with JOSSO, have a config refer to configuration.properties file:
-  gatein.sso.josso.properties.file=file:${jboss.home.dir}/standalone/configuration/gatein/configuration.properties
+  `gatein.sso.josso.properties.file=file:${jboss.home.dir}/standalone/configuration/gatein/configuration.properties`
   Should not use this config
 * In SSO: have some auth callback to gatein (for verify username/password with user/password at gatein database)
-  This call back work base REST. But now can not port REST.war from 3.5 to gatein 4. Because it does not work (In REST context can not to get PortalContainer because it's loaded by other classloader)
+  This call back work base REST. But now can not port REST.war from 3.5 to gatein 4. Because it does not work (In REST context can not to get PortalContainer because it's loaded by other classloader).
   So now, when config sso call back with HTTP POST method will not work
-* Need to test SSO with: SPNEGO, SAML2 and Cluster SSO
+* Need to test SSO with: SPNEGO, SAML2 and Cluster SSO.
