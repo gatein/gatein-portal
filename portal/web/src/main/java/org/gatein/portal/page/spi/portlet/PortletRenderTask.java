@@ -18,8 +18,6 @@
  */
 package org.gatein.portal.page.spi.portlet;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -28,21 +26,19 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.portlet.MimeResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
-import org.gatein.common.net.media.MediaType;
-import org.gatein.pc.api.ContainerURL;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
-import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.ResponseProperties;
-import org.gatein.pc.api.spi.PortletInvocationContext;
 import org.gatein.pc.api.state.AccessMode;
 import org.gatein.pc.portlet.impl.spi.AbstractInstanceContext;
 import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
@@ -58,58 +54,64 @@ import org.w3c.dom.Element;
 /**
  * @author Julien Viet
  */
-class PortletRenderTask extends RenderTask implements PortletInvocationContext {
+class PortletRenderTask extends RenderTask {
 
     /** . */
-    private final WindowContext context;
+    private final PortletContentProvider provider;
+
+    /** . */
+    private final WindowContext windowContext;
 
     /** . */
     private final PortletInvoker invoker;
 
     /** . */
-    private final RenderInvocation invocation;
+    private final PortletContent content;
 
     /** . */
-    private ContextLifeCycle lifeCycle;
+    private final  HttpServletRequest servletReq;
 
     /** . */
-    private final GateInPortletInvocationContext invocationContext;
+    private final  HttpServletResponse servletResp;
 
-    PortletRenderTask(PortletContentProvider provider, WindowContext context) {
-
-        PortletContent pc = (PortletContent) context.state;
-
-        //
-        RenderInvocation invocation = new RenderInvocation(this);
-        invocation.setClientContext(new GateInClientContext());
-        invocation.setPortalContext(new AbstractPortalContext());
-        invocation.setInstanceContext(new AbstractInstanceContext(context.name, AccessMode.READ_ONLY));
-        invocation.setWindowContext(new AbstractWindowContext(context.name));
-        invocation.setUserContext(new AbstractUserContext());
-        invocation.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
-        invocation.setRequest(Context.getCurrentRequest());
-        invocation.setResponse(Context.getCurrentResponse());
-        invocation.setTarget(pc.portlet.getContext());
-        invocation.setMode(pc.mode != null ? pc.mode : Mode.VIEW);
-        invocation.setWindowState(pc.windowState != null ? pc.windowState : org.gatein.pc.api.WindowState.NORMAL);
-        invocation.setNavigationalState(pc.parameters != null ? ParametersStateString.create(pc.parameters) : null);
-        invocation.setPublicNavigationalState(context.computePublicParameters());
-
-        //
-        this.context = context;
+    PortletRenderTask(PortletContentProvider provider, WindowContext windowContext) {
+        this.windowContext = windowContext;
         this.invoker = provider.portletManager.getInvoker();
-        this.invocation = invocation;
-        this.invocationContext = new GateInPortletInvocationContext(provider, context);
+        this.provider = provider;
+        this.content = (PortletContent) windowContext.state;
+        this.servletReq = Context.getCurrentRequest();
+        this.servletResp = Context.getCurrentResponse();
     }
 
     @Override
     public Result execute(Locale locale) {
-        Request request = Request.getCurrent();
-        lifeCycle = request.suspend();
+
+        //
+        ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
         PortletInvocationResponse response = null;
         PortletInvokerException failure = null;
         try {
+
+            //
+            GateInPortletInvocationContext context = new GateInPortletInvocationContext(provider, windowContext, lifeCycle);
+            RenderInvocation invocation = new RenderInvocation(context);
+            invocation.setClientContext(new GateInClientContext());
+            invocation.setPortalContext(new AbstractPortalContext());
+            invocation.setInstanceContext(new AbstractInstanceContext(windowContext.name, AccessMode.READ_ONLY));
+            invocation.setWindowContext(new AbstractWindowContext(windowContext.name));
+            invocation.setUserContext(new AbstractUserContext());
+            invocation.setSecurityContext(new AbstractSecurityContext(servletReq));
+            invocation.setRequest(servletReq);
+            invocation.setResponse(servletResp);
+            invocation.setTarget(content.portlet.getContext());
+            invocation.setMode(content.mode != null ? content.mode : Mode.VIEW);
+            invocation.setWindowState(content.windowState != null ? content.windowState : org.gatein.pc.api.WindowState.NORMAL);
+            invocation.setNavigationalState(content.parameters != null ? ParametersStateString.create(content.parameters) : null);
+            invocation.setPublicNavigationalState(windowContext.computePublicParameters());
+
+            //
             response = invoker.invoke(invocation);
+
         } catch (PortletInvokerException e) {
             failure = e;
         } finally {
@@ -146,7 +148,7 @@ class PortletRenderTask extends RenderTask implements PortletInvocationContext {
                 }
                 String title = fragment.getTitle();
                 if (title == null) {
-                    title = context.resolveTitle(locale);
+                    title = windowContext.resolveTitle(locale);
                 }
                 result = new Result.Fragment(headers, headerTags, title, fragment.getContent());
             } else {
@@ -154,44 +156,5 @@ class PortletRenderTask extends RenderTask implements PortletInvocationContext {
             }
         }
         return result;
-    }
-
-    @Override
-    public MediaType getResponseContentType() {
-        return invocationContext.getResponseContentType();
-    }
-
-    @Override
-    public String encodeResourceURL(String url) throws IllegalArgumentException {
-        return invocationContext.encodeResourceURL(url);
-    }
-
-    @Override
-    public void renderURL(Writer writer, ContainerURL containerURL, URLFormat format) throws IOException {
-        invocationContext.renderURL(writer, containerURL, format);
-    }
-
-    @Override
-    public String renderURL(ContainerURL containerURL, URLFormat format) {
-        Request current = Request.getCurrent();
-        if (current != null) {
-            ContextLifeCycle currentLF = current.suspend();
-            try {
-                return doRenderURL(containerURL, format);
-            } finally {
-                currentLF.resume();
-            }
-        } else {
-            return doRenderURL(containerURL, format);
-        }
-    }
-
-    private String doRenderURL(ContainerURL containerURL, URLFormat format) {
-        lifeCycle.resume();
-        try {
-            return invocationContext.renderURL(containerURL, format);
-        } finally {
-            Request.getCurrent().suspend();
-        }
     }
 }

@@ -62,7 +62,7 @@ public class JuzuPortletTestCase extends AbstractPortalTestCase {
   public void testRenderURL() throws Exception {
       driver.get(deploymentURL.toString() + "/page1");
       WebElement element = driver.findElement(By.id("index"));
-      Assert.assertTrue(element.getText().contains("hello"));
+      Assert.assertTrue(element.getText().contains("view"));
   }
 
   @Test
@@ -70,7 +70,16 @@ public class JuzuPortletTestCase extends AbstractPortalTestCase {
      driver.get(deploymentURL.toString() + "/page1");
      WebElement element = driver.findElement(By.id("action"));
      element.click();
-     Assert.assertTrue(driver.findElement(By.id("action")).getText().contains("world"));
+     Assert.assertTrue(driver.findElement(By.id("action")).getText().contains("action"));
+  }
+  
+  @Test
+  public void testServeResource() throws Exception {
+      driver.get(deploymentURL.toString() + "/page1");
+      WebElement element = driver.findElement(By.id("resource"));
+      element.click();
+      Assert.assertTrue(driver.findElement(By.id("view")).getText().contains("view"));
+      Assert.assertTrue(driver.findElement(By.id("action")).getText().contains("action"));
   }
 
   @Test

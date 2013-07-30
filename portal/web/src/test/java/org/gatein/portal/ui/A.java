@@ -18,6 +18,7 @@
 package org.gatein.portal.ui;
 
 import juzu.Action;
+import juzu.Resource;
 import juzu.Response;
 import juzu.View;
 
@@ -30,12 +31,20 @@ public class A {
   
   @View
   public Response index() {
-    return Response.ok("<a id='index' href='" + A_.index() + "'>hello</a><a id='action' href='" + A_.action() + "'>world</a>");
+    return Response.ok("<a id='index' href='" + A_.index() + "'>view</a>" +
+    		"<a id='action' href='" + A_.action() + "'>action</a>" +
+    		"<a id='resource' href='" + A_.resource() + "'>resource</a>");
   }
   
   @Action
   public Response action() {
      //Do something
      return A_.index();
+  }
+  
+  @Resource
+  public Response resource() {
+      return Response.ok("<html><body><a id='view' href='" + A_.index() + "'>view</a>" +
+                  "<a id='action' href='" + A_.action() + "'>action</a></body></html>");
   }
 }

@@ -110,34 +110,35 @@ public class PortletContentProvider implements ContentProvider {
         Mode mode_ = mode != null ? Mode.create(mode) : Mode.VIEW;
 
         //
-        ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, window));
-        PortletContent state = (PortletContent) window.state;
-        action.setClientContext(new GateInClientContext());
-        action.setPortalContext(new AbstractPortalContext());
-        action.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
-        action.setWindowContext(new AbstractWindowContext(window.name));
-        action.setUserContext(new AbstractUserContext());
-        action.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
-        action.setRequest(Context.getCurrentRequest());
-        action.setResponse(Context.getCurrentResponse());
-        action.setTarget(state.portlet.getContext());
-        action.setMode(mode_);
-        action.setWindowState(windowState_);
-        action.setNavigationalState(ParametersStateString.create());
-        action.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
-        action.setPublicNavigationalState(window.computePublicParameters());
-
-        //
-        PortletInvoker invoker = portletManager.getInvoker();
-        Request current = Request.getCurrent();
-        ContextLifeCycle clf = current.suspend();
+        ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
         PortletInvocationResponse pir;
         try {
+
+            //
+            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, window, lifeCycle));
+            PortletContent state = (PortletContent) window.state;
+            action.setClientContext(new GateInClientContext());
+            action.setPortalContext(new AbstractPortalContext());
+            action.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
+            action.setWindowContext(new AbstractWindowContext(window.name));
+            action.setUserContext(new AbstractUserContext());
+            action.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
+            action.setRequest(Context.getCurrentRequest());
+            action.setResponse(Context.getCurrentResponse());
+            action.setTarget(state.portlet.getContext());
+            action.setMode(mode_);
+            action.setWindowState(windowState_);
+            action.setNavigationalState(ParametersStateString.create());
+            action.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
+            action.setPublicNavigationalState(window.computePublicParameters());
+
+            //
+            PortletInvoker invoker = portletManager.getInvoker();
             pir = invoker.invoke(action);
         } catch (PortletInvokerException e) {
             return Response.error(e);
         } finally {
-            clf.resume();
+            lifeCycle.resume();
         }
 
         //
@@ -196,30 +197,35 @@ public class PortletContentProvider implements ContentProvider {
         }
 
         //
-        ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, window));
-        resource.setResourceId(id);
-        resource.setCacheLevel(cacheability);
-        resource.setClientContext(new GateInClientContext());
-        resource.setPortalContext(new AbstractPortalContext());
-        resource.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
-        resource.setWindowContext(new AbstractWindowContext(window.name));
-        resource.setUserContext(new AbstractUserContext());
-        resource.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
-        resource.setRequest(Context.getCurrentRequest());
-        resource.setResponse(Context.getCurrentResponse());
-        resource.setTarget(state.portlet.getContext());
-        resource.setMode(mode);
-        resource.setWindowState(windowState);
-        resource.setNavigationalState(navigationalState);
-        resource.setResourceState(resourceState != null ? ParametersStateString.create(resourceState) : null);
-        resource.setPublicNavigationalState(window.computePublicParameters());
-
-        //
+        ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
         PortletInvocationResponse pir;
         try {
+
+            //
+            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, window, lifeCycle));
+            resource.setResourceId(id);
+            resource.setCacheLevel(cacheability);
+            resource.setClientContext(new GateInClientContext());
+            resource.setPortalContext(new AbstractPortalContext());
+            resource.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
+            resource.setWindowContext(new AbstractWindowContext(window.name));
+            resource.setUserContext(new AbstractUserContext());
+            resource.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
+            resource.setRequest(Context.getCurrentRequest());
+            resource.setResponse(Context.getCurrentResponse());
+            resource.setTarget(state.portlet.getContext());
+            resource.setMode(mode);
+            resource.setWindowState(windowState);
+            resource.setNavigationalState(navigationalState);
+            resource.setResourceState(resourceState != null ? ParametersStateString.create(resourceState) : null);
+            resource.setPublicNavigationalState(window.computePublicParameters());
+
+            //
             pir = portletManager.getInvoker().invoke(resource);
         } catch (PortletInvokerException e) {
             return Response.error(e);
+        } finally {
+            lifeCycle.resume();
         }
 
         //

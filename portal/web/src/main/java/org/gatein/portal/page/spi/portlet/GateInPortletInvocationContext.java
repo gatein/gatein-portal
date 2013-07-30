@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
+import juzu.impl.request.ContextLifeCycle;
+import juzu.impl.request.Request;
 import juzu.request.Phase;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.pc.api.ActionURL;
@@ -52,10 +54,14 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
     /** . */
     private final PortletContent state;
 
-    GateInPortletInvocationContext(PortletContentProvider portletManager, WindowContext window) {
+    /** . */
+    private final ContextLifeCycle lifeCycle;
+
+    GateInPortletInvocationContext(PortletContentProvider portletManager, WindowContext window, ContextLifeCycle lifeCycle) {
         this.portletManager = portletManager;
         this.window = window;
         this.state = (PortletContent) window.state;
+        this.lifeCycle = lifeCycle;
     }
 
     @Override
@@ -70,6 +76,29 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
 
     @Override
     public String renderURL(ContainerURL containerURL, URLFormat format) {
+        Request current = Request.getCurrent();
+        if (current != null) {
+            ContextLifeCycle currentLF = current.suspend();
+            try {
+                return doRenderURL(containerURL, format);
+            } finally {
+                currentLF.resume();
+            }
+        } else {
+            return doRenderURL(containerURL, format);
+        }
+    }
+
+    private String doRenderURL(ContainerURL containerURL, URLFormat format) {
+        lifeCycle.resume();
+        try {
+            return getDispatch(containerURL).toString();
+        } finally {
+            Request.getCurrent().suspend();
+        }
+    }
+
+    private Phase.View.Dispatch getDispatch(ContainerURL containerURL) {
         Phase.View.Dispatch dispatch;
         if (containerURL instanceof RenderURL) {
             RenderURL renderURL = (RenderURL) containerURL;
@@ -163,7 +192,7 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
                 dispatch.setParameter("javax.portlet.r", id);
             }
         }
-        return dispatch.toString();
+        return dispatch;
     }
 
     @Override
