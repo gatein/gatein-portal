@@ -28,9 +28,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.gatein.api.AbstractApiTest;
+import org.gatein.api.SerializationUtils;
 import org.gatein.api.common.Filter;
 import org.gatein.api.navigation.Visibility.Status;
 import org.gatein.api.page.PageId;
@@ -256,6 +259,30 @@ public class ApiFilteredNodeTest extends AbstractApiTest {
     }
 
     @Test
+    public void serialization() throws Exception {
+    	createPage(defaultSiteId, "page1");
+        setPermission(new PageId(defaultSiteId, "page1"), "Everyone", "*:/platform/administrators");
+
+        createPage(defaultSiteId, "page2");
+        setPermission(new PageId(defaultSiteId, "page2"), "Everyone", "Everyone");
+
+        root.getChild("child1").setPageId(new PageId(defaultSiteId, "page1"));
+        root.getChild("child2").setPageId(new PageId(defaultSiteId, "page2"));
+        root.getChild("child3").setVisibility(false);
+        
+        navigation.saveNode(root);
+
+        FilteredNode filter = root.filter().showVisible().showHasAccess(new User("a")).show(new SerilizationFilter("child4"));
+       
+        assertIterator(filter.iterator(), "child0", "child2");
+        
+        FilteredNode rootNode = SerializationUtils.serializeDeserialize(filter);
+
+        assertIterator(rootNode.showAll().iterator(), "child0", "child1", "child2", "child3", "child4");
+        assertIterator(rootNode.iterator(), "child0", "child2");
+    }
+
+    @Test
     public void showHasEdit() {
         createPage(defaultSiteId, "page1");
         setPermission(new PageId(defaultSiteId, "page1"), "*:/platform/administrators", "Everyone");
@@ -278,4 +305,18 @@ public class ApiFilteredNodeTest extends AbstractApiTest {
         assertEquals(5, root.getChildCount());
         assertNotNull(root.getChild("child1"));
     }
+    
+    public static class SerilizationFilter implements Filter<Node> {
+    	
+    	private String[] hide;
+
+		public SerilizationFilter(String... hide) {
+			this.hide = hide;
+		}
+    	
+		@Override
+		public boolean accept(Node n) {
+			return Arrays.binarySearch(hide, n.getName()) < 0;
+		}
+	}
 }

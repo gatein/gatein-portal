@@ -21,6 +21,8 @@
  */
 package org.gatein.api.navigation;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -46,7 +48,8 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     @SuppressWarnings("unchecked")
     public ApiFilteredNode(NavigationImpl navigation, NodeContext<ApiNode> context) {
-        this(navigation, context, new FilteredNodeMap(Collections.EMPTY_LIST));
+        super(navigation, context);
+        this.map = null;
     }
 
     private ApiFilteredNode(NavigationImpl navigation, NodeContext<ApiNode> context, FilteredNodeMap map) {
@@ -56,12 +59,12 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     @Override
     public Node addChild(int index, String childName) {
-        return map.getFiltered(super.addChild(realIndex(index), childName));
+        return getFiltered(super.addChild(realIndex(index), childName));
     }
 
     @Override
     public Node addChild(String childName) {
-        return map.getFiltered(super.addChild(childName));
+        return getFiltered(super.addChild(childName));
     }
 
     @Override
@@ -69,7 +72,7 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
         int i = 0;
         for (Iterator<Node> itr = iterator(); itr.hasNext();) {
             if (i == index) {
-                return map.getFiltered(itr.next());
+                return getFiltered(itr.next());
             }
 
             i++;
@@ -82,7 +85,7 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
     @Override
     public Node getChild(String childName) {
         Node n = super.getChild(childName);
-        return map.isAccepted(n) ? map.getFiltered(n) : null;
+        return isAccepted(n) ? getFiltered(n) : null;
     }
 
     @Override
@@ -108,13 +111,13 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     @Override
     public Node getParent() {
-        return super.getParent() != null ? map.getFiltered(super.getParent()) : null;
+        return super.getParent() != null ? getFiltered(super.getParent()) : null;
     }
 
     @Override
     public boolean hasChild(String childName) {
         Node n = super.getChild(childName);
-        return n != null ? map.isAccepted(n) : false;
+        return n != null ? isAccepted(n) : false;
     }
 
     @Override
@@ -137,12 +140,12 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     @Override
     public void moveTo(int index) {
-        super.moveTo(map.getFiltered(super.getParent()).realIndex(index));
+        super.moveTo(getFiltered(super.getParent()).realIndex(index));
     }
 
     @Override
     public void moveTo(int index, Node parent) {
-        super.moveTo(map.getFiltered(parent).realIndex(index), parent);
+        super.moveTo(getFiltered(parent).realIndex(index), parent);
     }
 
     @Override
@@ -158,11 +161,11 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     @Override
     public FilteredNode showHasAccess(User user) {
-        return show(new PermissionFilter(user, PortalRequest.getInstance().getPortal(), true));
+        return show(new PermissionFilter(user, true));
     }
 
     public FilteredNode showHasEdit(User user) {
-        return show(new PermissionFilter(user, PortalRequest.getInstance().getPortal(), false));
+        return show(new PermissionFilter(user, false));
     }
 
     @Override
@@ -172,7 +175,10 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     @Override
     public FilteredNode show(Filter<Node> filter) {
-        List<Filter<Node>> filters = new LinkedList<Filter<Node>>(map.filters);
+        List<Filter<Node>> filters = new LinkedList<Filter<Node>>();
+        if (map != null) {
+            filters.addAll(map.filters);
+        }
         filters.add(Parameters.requireNonNull(filter, "filter"));
         return new ApiFilteredNode(navigation, context, new FilteredNodeMap(filters));
     }
@@ -183,7 +189,7 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
         Iterator<Node> itr = super.iterator();
 
         while (itr.hasNext() && j <= index) {
-            if (map.isAccepted(itr.next())) {
+            if (isAccepted(itr.next())) {
                 j++;
             }
             i++;
@@ -230,8 +236,8 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
         private ApiNode findNext() {
             while (itr.hasNext()) {
                 ApiNode n = itr.next();
-                if (map.isAccepted(n)) {
-                    return map.getFiltered(n);
+                if (isAccepted(n)) {
+                    return getFiltered(n);
                 }
             }
 
@@ -239,44 +245,59 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
         }
     }
 
-    private static class FilteredNodeMap {
-        private Map<ApiNode, Boolean> acceptedMap = new WeakHashMap<ApiNode, Boolean>();
+    private ApiFilteredNode getFiltered(Node node) {
+        ApiNode apiNode = (ApiNode) node;
+
+        if (map == null) {
+            return new ApiFilteredNode(apiNode.navigation, apiNode.context);
+        } else if (map.filteredMap.containsKey(apiNode)) {
+            return map.filteredMap.get(apiNode);
+        } else {
+            ApiFilteredNode filteredNode = new ApiFilteredNode(apiNode.navigation, apiNode.context, map);
+            map.filteredMap.put(apiNode, filteredNode);
+            return filteredNode;
+        }
+    }
+
+    private boolean isAccepted(Node node) {
+        ApiNode apiNode = (ApiNode) node;
+
+        if (map == null) {
+            return true;
+        } else if (map.acceptedMap.containsKey(apiNode)) {
+            return map.acceptedMap.get(apiNode);
+        } else {
+            Boolean accepted = true;
+
+            for (Filter<Node> f : map.filters) {
+                accepted = f.accept(node);
+
+                if (!accepted) {
+                    break;
+                }
+            }
+
+            map.acceptedMap.put(apiNode, accepted);
+            return accepted;
+        }
+    }
+
+    private static class FilteredNodeMap implements Serializable {
+        private transient Map<ApiNode, Boolean> acceptedMap = new WeakHashMap<ApiNode, Boolean>();
 
         private List<Filter<Node>> filters;
 
-        private Map<ApiNode, ApiFilteredNode> filteredMap = new WeakHashMap<ApiNode, ApiFilteredNode>();
+        private transient Map<ApiNode, ApiFilteredNode> filteredMap = new WeakHashMap<ApiNode, ApiFilteredNode>();
 
         private FilteredNodeMap(List<Filter<Node>> filters) {
             this.filters = filters;
         }
 
-        private ApiFilteredNode getFiltered(Node node) {
-            ApiNode apiNode = (ApiNode) node;
-            ApiFilteredNode filteredNode = filteredMap.get(apiNode);
-            if (filteredNode == null) {
-                filteredNode = new ApiFilteredNode(apiNode.navigation, apiNode.context, this);
-                filteredMap.put(apiNode, filteredNode);
-            }
-            return filteredNode;
-        }
+        private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+            in.defaultReadObject();
 
-        private boolean isAccepted(Node node) {
-            ApiNode apiNode = (ApiNode) node;
-            Boolean accepted = acceptedMap.get(apiNode);
-            if (accepted == null) {
-                accepted = true;
-
-                for (Filter<Node> f : filters) {
-                    accepted = f.accept(node);
-
-                    if (!accepted) {
-                        break;
-                    }
-                }
-
-                acceptedMap.put(apiNode, accepted);
-            }
-            return accepted;
+            acceptedMap = new WeakHashMap<ApiNode, Boolean>();
+            filteredMap = new WeakHashMap<ApiNode, ApiFilteredNode>();
         }
     }
 
@@ -289,17 +310,17 @@ public class ApiFilteredNode extends ApiNode implements FilteredNode {
 
     private static class PermissionFilter implements Filter<Node> {
         private User user;
-        private Portal portal;
         private boolean access;
 
-        public PermissionFilter(User user, Portal portal, boolean access) {
+        public PermissionFilter(User user, boolean access) {
             this.user = user;
-            this.portal = portal;
             this.access = access;
         }
 
         @Override
         public boolean accept(Node element) {
+            Portal portal = PortalRequest.getInstance().getPortal();
+
             if (element.getPageId() == null) {
                 return true;
             }
