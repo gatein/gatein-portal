@@ -238,7 +238,6 @@
     <dependency>
       <groupId>org.gatein.sso</groupId>
       <artifactId>spnego</artifactId>
-      <version>${org.gatein.sso.version}</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.sso</groupId>
