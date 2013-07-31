@@ -70,30 +70,11 @@ public class LoginHelper {
 
     private HttpServletRequest getCurrentRequest() {
         HttpServletRequest request = Context.getCurrentRequest();
-        if(request != null) {
-            return request;
-        }
-        try {
-            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass("org.gatein.sso.agent.tomcat.ServletAccess");
-            Method getRequestMethod = clazz.getDeclaredMethod("getRequest");
-            request = (HttpServletRequest)getRequestMethod.invoke(null);
-        } catch (Exception e){}
-
         return request;
     }
 
     private HttpServletResponse getCurrentResponse() {
         HttpServletResponse response = Context.getCurrentResponse();
-        if(response != null) {
-            return response;
-        }
-        try {
-            Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass("org.gatein.sso.agent.tomcat.ServletAccess");
-            Method getRequestMethod = clazz.getDeclaredMethod("getResponse");
-            response = (HttpServletResponse)getRequestMethod.invoke(null);
-        } catch (Exception e){}
-
-
         return response;
     }
 }
