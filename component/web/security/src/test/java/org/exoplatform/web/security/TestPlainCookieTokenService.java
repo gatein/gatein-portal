@@ -31,14 +31,10 @@ import org.exoplatform.web.security.security.CookieTokenService;
  */
 public class TestPlainCookieTokenService extends AbstractCookieTokenServiceTest {
 
-
-    /* (non-Javadoc)
-     * @see org.exoplatform.web.security.AbstractCookieTokenServiceTest#createService()
-     */
     @Override
-    protected CookieTokenService createService() {
+    protected void setUp() throws Exception {
         PortalContainer container = getContainer();
-        return (CookieTokenService) container.getComponentInstance("org.exoplatform.web.security.security.PlainCookieTokenService");
+        service = (CookieTokenService) container.getComponentInstance("org.exoplatform.web.security.security.PlainCookieTokenService");
     }
 
 }
