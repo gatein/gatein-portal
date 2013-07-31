@@ -34,15 +34,6 @@ import org.gatein.wci.security.Credentials;
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr-configuration.xml") })
 public abstract class AbstractCookieTokenServiceTest extends AbstractTokenServiceTest<CookieTokenService> {
-    protected void setUp() throws Exception {
-        service = createService();
-        Thread.sleep(1000); // for enough time initial database
-    }
-
-    /**
-     * @return
-     */
-    protected abstract CookieTokenService createService();
 
     @Override
     public void testGetToken() throws Exception {

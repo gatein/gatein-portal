@@ -143,12 +143,13 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         new TokenTask<Void>() {
             @Override
             protected Void execute(SessionContext context) {
-                SessionContext ctx = chromatticLifeCycle.getContext();
-                ChromatticSession session = ctx.getSession();
+                ChromatticSession session = context.getSession();
                 TokenContainer container = session.findByPath(TokenContainer.class, lifecycleName);
                 if (container != null) {
                     /* if the container does not exist, it makes no sense to clean the legacy tokens */
                     container.cleanLegacyTokens();
+                } else {
+                    session.insert(TokenContainer.class, lifecycleName);
                 }
                 return null;
             }
@@ -305,11 +306,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         protected final TokenContainer getTokenContainer() {
             SessionContext ctx = chromatticLifeCycle.getContext();
             ChromatticSession session = ctx.getSession();
-            TokenContainer container = session.findByPath(TokenContainer.class, lifecycleName);
-            if (container == null) {
-                container = session.insert(TokenContainer.class, lifecycleName);
-            }
-            return container;
+            return session.findByPath(TokenContainer.class, lifecycleName);
         }
 
         protected final <A> A getMixin(Object o, Class<A> type) {
