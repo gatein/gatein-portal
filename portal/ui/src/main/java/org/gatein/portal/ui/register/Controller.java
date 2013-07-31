@@ -94,6 +94,10 @@ public class Controller {
                     manager.saveUser(userBean, oauthPrincipal);
                     flash.setSuccess("You have successfully registered a new account!");
                     flash.setUserName(userBean.userName);
+
+                    if(oauthPrincipal != null) {
+                        registry.removeAttributeOfClient(request, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER);
+                    }
                 }
             } catch (Exception e) {
                 flash.setError("Could not register user due to internal error.");
