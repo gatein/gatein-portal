@@ -33,7 +33,6 @@ import org.jboss.arquillian.qunit.api.model.TestMethod;
 import org.jboss.arquillian.qunit.api.model.TestSuite;
 import org.jboss.arquillian.qunit.junit.model.QUnitAssertionImpl;
 import org.jboss.arquillian.qunit.junit.model.QUnitTestImpl;
-import org.jboss.arquillian.qunit.pages.QUnitPage;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.Filters;
@@ -57,7 +56,7 @@ public class GateInQUnitTestCase {
     @ArquillianResource
     private URL contextPath;
 
-    @Drone @FireFox
+    @Drone
     WebDriver driver;
 
     @Page
