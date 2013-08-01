@@ -25,6 +25,15 @@
 
   <dependencySets>
     <dependencySet>
+      <scope>provided</scope>
+      <includes>
+        <include>org.slf4j:slf4j-jdk14</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>/WEB-INF/lib</outputDirectory>
+    </dependencySet>
+    <dependencySet>
       <includes>
         <include>org.jibx:jibx-bind</include>
         <include>org.jibx:jibx-run</include>
