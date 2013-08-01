@@ -545,7 +545,7 @@
 	      var tab = $(this);
 	
 	      var highlightClass = "UITab HighlightNavigationTab";
-	      tab.mouseenter(function()
+	      tab.mouseenter(function(event)
 	      {
 	        portalNav.mouseEnterTab($(this), highlightClass);
                 event.target.gtnMouseEntered = true; //we need to have this hack here due to the event ordering on some touch based devices
