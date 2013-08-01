@@ -540,12 +540,12 @@ public class UIPortalApplication extends UIApplication {
         if (!requestNavData.equals(lastRequestNavData)) {
             lastRequestNavData = requestNavData;
 
-            StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=\"");
-            js.append(getBaseURL()).append("\";\n");
+            StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=decodeURIComponent(\"");
+            js.append(getBaseURL()).append("\");\n");
 
             String url = getPortalURLTemplate();
-            js.append("eXo.env.server.portalURLTemplate=\"");
-            js.append(url).append("\";");
+            js.append("eXo.env.server.portalURLTemplate=decodeURIComponent(\"");
+            js.append(url).append("\");");
 
             pcontext.getJavascriptManager().require("SHARED/base").addScripts(js.toString());
 
@@ -779,16 +779,16 @@ public class UIPortalApplication extends UIApplication {
         PortalRequestContext pcontext = Util.getPortalRequestContext();
         ComponentURL urlTemplate = pcontext.createURL(ComponentURL.TYPE);
         urlTemplate.setMimeType(MimeType.PLAIN);
-        urlTemplate.setPath(pcontext.getResolvedNodePath());
+        urlTemplate.setPath(pcontext.getNodePath());
         urlTemplate.setResource(EMPTY_COMPONENT);
         urlTemplate.setAction("{portal:action}");
 
-        return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
+        return urlTemplate.toString();
     }
 
     public String getBaseURL() throws UnsupportedEncodingException  {
         PortalRequestContext pcontext = Util.getPortalRequestContext();
-        NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE, new NavigationResource(pcontext.getSiteKey(), pcontext.getResolvedNodePath()));
-        return URLDecoder.decode(nodeURL.toString(), "UTF-8");
+        NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE, new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
+        return nodeURL.toString();
     }
 }

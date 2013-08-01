@@ -448,33 +448,6 @@ public class PortalRequestContext extends WebuiRequestContext {
         return nodePath_;
     }
 
-    /**
-     * Returns the resolvable node path. For example if nodePath was /home/foo/bar and /foo/bar did not
-     * exist, /home would be returned.
-     *
-     * @return the resolved node path
-     */
-    public String getResolvedNodePath() {
-        if (resolvedNodePath == null) {
-            UserNode node = null;
-            UserPortal userPortal = getUserPortal();
-            String nodePath = getNodePath();
-            UserNavigation userNavigation = userPortal.getNavigation(siteKey);
-            if (userNavigation == null) {
-                nodePath = ""; // Unknown site was requested, default to no node path
-            } else {
-                node = userPortal.resolvePath(userNavigation, null, nodePath);
-                if (node == null) {
-                    node = userPortal.getDefaultPath(userNavigation, null);
-                }
-            }
-
-            resolvedNodePath = (node == null) ? nodePath : node.getURI();
-        }
-
-        return resolvedNodePath;
-    }
-
     public String getRequestURI() {
         return requestURI_;
     }
