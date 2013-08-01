@@ -27,11 +27,22 @@ import org.exoplatform.container.PropertyConfigurator;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.monitor.jvm.J2EEServerInfo;
 import org.exoplatform.container.xml.InitParams;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
+/**
+ * Extends the {@link org.exoplatform.container.PropertyConfigurator} to setup the virtual machine JAAS configuration
+ * when it is not present (<code>java.security.auth.login.config</code> system property).
+ */
 public class GateInConfigurator extends PropertyConfigurator {
 
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(GateInConfigurator.class);
+
+    /** . */
     public static String JAAS_KEY = "java.security.auth.login.config";
 
+    /** . */
     public static String DEFAULT_PATH = "/conf/jaas.conf";
 
     public GateInConfigurator(ConfigurationManager confManager) {
@@ -41,20 +52,27 @@ public class GateInConfigurator extends PropertyConfigurator {
     public GateInConfigurator(InitParams params, ConfigurationManager confManager) {
         super(params, confManager);
 
-        String serverHome = new J2EEServerInfo().getServerHome();
+        //
         if (PropertyManager.getProperty(JAAS_KEY) == null) {
-            // Find in default location
-            String path = serverHome + DEFAULT_PATH;
 
-            File configFile = new File(path);
+            // Determine the configuration path
+            String path = null;
+            File configFile = new File(new J2EEServerInfo().getServerHome() + DEFAULT_PATH);
             if (configFile.exists()) {
-                PropertyManager.setProperty(JAAS_KEY, path);
+                // We use the explicit configuration
+                path = configFile.getAbsolutePath();
             } else {
-                // extract default config in jar
+                // Use the configuration URL from the jar
                 URL defConfig = Thread.currentThread().getContextClassLoader().getResource("conf/jaas.conf");
                 if (defConfig != null) {
-                    PropertyManager.setProperty(JAAS_KEY, defConfig.toString());
+                    path = defConfig.toString();
                 }
+            }
+
+            //
+            if (path != null) {
+                log.info("Setting JAAS configuration to " + path);
+                PropertyManager.setProperty(JAAS_KEY, path);
             }
         }
     }
