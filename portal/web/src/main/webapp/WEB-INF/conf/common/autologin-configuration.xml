@@ -35,29 +35,4 @@
     <init-params />
   </component>
 
-  <external-component-plugins>
-    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
-    <component-plugin>
-      <name>chromattic</name>
-      <set-method>addLifeCycle</set-method>
-      <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
-      <init-params>
-        <value-param>
-          <name>domain-name</name>
-          <value>autologin</value>
-        </value-param>
-        <value-param>
-          <name>workspace-name</name>
-          <value>portal-work</value>
-        </value-param>
-        <values-param>
-          <name>entities</name>
-          <value>org.exoplatform.web.security.security.TokenContainer</value>
-          <value>org.exoplatform.web.security.security.TokenEntry</value>
-          <value>org.exoplatform.web.security.security.HashedToken</value>
-        </values-param>
-      </init-params>
-    </component-plugin>
-  </external-component-plugins>
-
 </configuration>
