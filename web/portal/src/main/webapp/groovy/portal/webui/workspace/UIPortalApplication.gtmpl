@@ -87,8 +87,8 @@
 			eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
       eXo.env.portal.containerName = "<%=PortalContainer.getInstance().getName()%>" ;
 			eXo.env.server.context = "<%=docBase%>" ;
-			eXo.env.server.portalBaseURL = "<%=uicomponent.getBaseURL()%>" ;
-			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
+			eXo.env.server.portalBaseURL = decodeURIComponent("<%=uicomponent.getBaseURL()%>") ;
+			eXo.env.server.portalURLTemplate = decodeURIComponent("<%=uicomponent.getPortalURLTemplate()%>") ;
 			eXo.env.client.skin = "$skin" ;
 			<% 
 				String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
