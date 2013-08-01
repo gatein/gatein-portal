@@ -127,7 +127,7 @@
   </scm>
 
   <modules>
-    <module>build-config</module>
+    <!--<module>build-config</module>-->
     <module>component</module>
     <module>examples</module>
     <module>portal</module>
@@ -1221,6 +1221,7 @@ memory option properties. This should be removed when we can just set the compil
         </plugin>
 
         <!-- Checkstyle -->
+<!--
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
@@ -1248,6 +1249,7 @@ memory option properties. This should be removed when we can just set the compil
             </execution>
           </executions>
         </plugin>
+-->
 
       </plugins>
     </pluginManagement>
