@@ -18,6 +18,7 @@
  */
 package org.gatein.portal.ui.register;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
@@ -72,7 +73,9 @@ public class Controller {
         UserBean userBean = new UserBean(portalUser);
 
         List<OauthProviderDescriptor> oauthProviders = oauthProviderHelper.getOauthProviderDescriptors(context.getHttpContext().getContextPath());
-
+        if(oauthProviders == null) {
+            oauthProviders = Collections.emptyList();
+        }
         return index.with().set("userBean", userBean).set("oauthProviders", oauthProviders).ok();
     }
 

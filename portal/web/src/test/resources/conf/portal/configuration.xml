@@ -178,4 +178,7 @@
     </init-params>
   </component>
 
+  <import>war:/conf/common/common-configuration.xml</import>
+  <import>war:/conf/sso/security-sso-configuration.xml</import>
+  <import>war:/conf/sso/oauth-configuration.xml</import>
 </configuration>

@@ -92,6 +92,18 @@ public class PortalLoginTestCase extends AbstractPortalTestCase {
         portal.merge(ShrinkWrap.
                 create(GenericArchive.class).
                 as(ExplodedImporter.class).
+                importDirectory("src/test/resources/conf/common").
+                as(GenericArchive.class), "/WEB-INF/conf/common", Filters.exclude("web.xml"));
+
+        portal.merge(ShrinkWrap.
+                create(GenericArchive.class).
+                as(ExplodedImporter.class).
+                importDirectory("src/test/resources/conf/sso").
+                as(GenericArchive.class), "/WEB-INF/conf/sso", Filters.exclude("web.xml"));
+
+        portal.merge(ShrinkWrap.
+                create(GenericArchive.class).
+                as(ExplodedImporter.class).
                 importDirectory("src/test/resources/conf/portal/portal").
                 as(GenericArchive.class), "/WEB-INF/conf/portal/portal", Filters.exclude("web.xml"));
 

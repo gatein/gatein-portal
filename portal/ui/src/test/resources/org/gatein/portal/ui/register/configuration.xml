@@ -11,6 +11,15 @@
   </component>
 -->
 
+  <component>
+    <key>org.exoplatform.web.security.AuthenticationRegistry</key>
+    <type>org.exoplatform.web.security.AuthenticationRegistryImpl</type>
+  </component>
+  <component>
+    <key>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</key>
+    <type>org.gatein.security.oauth.registry.OAuthProviderTypeRegistryImpl</type>
+  </component>
+
   <import>jar:/conf/exo.portal.component.identity-configuration.xml</import>
 
 </configuration>

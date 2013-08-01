@@ -19,6 +19,7 @@
 
 package org.gatein.portal.login;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -103,6 +104,9 @@ public class LoginController {
         }
 
         List<OauthProviderDescriptor> oauthProviders = loginHelper.getOauthProviderDescriptors(contextPath);
+        if(oauthProviders == null) {
+            oauthProviders = Collections.emptyList();
+        }
 
         return login.with()
                 .set("oauthProviders", oauthProviders)
