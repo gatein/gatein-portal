@@ -621,7 +621,7 @@
                     <warRunDependency>
                       <dependency>
                         <groupId>org.gatein.portal</groupId>
-                        <artifactId>org.gatein.portal.examples.portlets</artifactId>
+                        <artifactId>examples.portlets</artifactId>
                         <version>${project.version}</version>
                         <type>war</type>
                       </dependency>
