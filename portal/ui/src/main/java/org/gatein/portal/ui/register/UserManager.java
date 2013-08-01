@@ -24,6 +24,9 @@ import javax.inject.Singleton;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.services.organization.UserProfile;
+import org.exoplatform.services.organization.UserProfileHandler;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
 
 /**
  * Encapsulate operations with org service.
@@ -46,7 +49,7 @@ public class UserManager {
         }
     }
 
-    public void saveUser(UserBean userBean) throws Exception {
+    public void saveUser(UserBean userBean, OAuthPrincipal oAuthPrincipal) throws Exception {
         UserHandler handler = orgService.getUserHandler();
         User user = handler.findUserByName(userBean.userName);
         if (user != null) {
@@ -56,6 +59,14 @@ public class UserManager {
             user = handler.createUserInstance(userBean.userName);
             userBean.update(user);
             handler.createUser(user, true);
+        }
+
+        //Storage profile
+        if(oAuthPrincipal != null) {
+            UserProfileHandler profileHandler = orgService.getUserProfileHandler();
+            UserProfile profile = profileHandler.findUserProfileByName(user.getUserName());
+            profile.setAttribute(oAuthPrincipal.getOauthProviderType().getUserNameAttrName(), oAuthPrincipal.getUserName());
+            profileHandler.saveUserProfile(profile, true);
         }
     }
 }

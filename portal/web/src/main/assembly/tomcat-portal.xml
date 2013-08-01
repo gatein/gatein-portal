@@ -25,6 +25,15 @@
 
   <dependencySets>
     <dependencySet>
+      <scope>provided</scope>
+      <includes>
+        <include>org.slf4j:slf4j-jdk14</include>
+      </includes>
+      <useTransitiveDependencies>false</useTransitiveDependencies>
+      <useProjectArtifact>false</useProjectArtifact>
+      <outputDirectory>/WEB-INF/lib</outputDirectory>
+    </dependencySet>
+    <dependencySet>
       <includes>
         <include>org.jibx:jibx-bind</include>
         <include>org.jibx:jibx-run</include>
@@ -50,6 +59,31 @@
         <include>org.gatein.portal:component.common</include>
         <include>org.gatein.portal:component.portal</include>
         <include>org.gatein.portal:component.identity</include>
+        <include>org.jasig.cas.client:cas-client-core</include>
+        <include>org.gatein.sso:sso-auth-callback</include>
+        <include>org.gatein.sso:sso-agent</include>
+        <!--<include>org.gatein.sso:spnego</include>-->
+        <include>org.gatein.sso:sso-integration</include>
+        <!--<include>org.gatein.sso:sso-saml-plugin</include>-->
+        <include>org.gatein.portal:component.web.oauth-common</include>
+        <include>org.gatein.portal:component.web.oauth-web</include>
+        <include>org.gatein.portal:component.web.security</include>
+        <include>javax.ws.rs:jsr311-api</include>
+        <include>org.exoplatform.ws:exo.ws.rest.core</include>
+        <include>org.json:json</include>
+        <include>org.exoplatform.ws:exo.ws.commons</include>
+        <include>org.exoplatform.ws:exo.ws.frameworks.servlet</include>
+        <include>org.exoplatform.ws:exo.ws.rest.ext</include>
+        <include>org.exoplatform.ws:exo.ws.frameworks.json</include>
+        <include>commons-fileupload:commons-fileupload</include>
+        <include>com.google.oauth-client:google-oauth-client</include>
+        <include>com.google.api-client:google-api-client</include>
+        <include>com.google.http-client:google-http-client</include>
+        <include>com.google.http-client:google-http-client-jackson</include>
+        <include>com.google.apis:google-api-services-plus</include>
+        <include>com.google.apis:google-api-services-oauth2</include>
+        <include>org.codehaus.jackson:jackson-core-asl</include>
+        <include>org.twitter4j:twitter4j-core</include>
         <include>org.gatein.portal:portal.common</include>
         <include>org.gatein.portal:portal.ui</include>
         <include>org.exoplatform.kernel:exo.kernel.component.common</include>
@@ -72,7 +106,6 @@
         <include>javax.transaction:jta</include>
         <include>org.jboss.jbossts:jbossjta</include>
         <include>org.infinispan:infinispan-core</include>
-        <include>org.infinispan:infinispan-tree</include>
         <include>jgroups:jgroups</include>
         <include>org.hibernate.javax.persistence:hibernate-jpa-2.0-api</include>
         <include>org.hsqldb:hsqldb</include>
@@ -80,6 +113,11 @@
         <include>commons-pool:commons-pool</include>
         <include>org.jboss.marshalling:jboss-marshalling</include>
         <include>org.jboss.marshalling:jboss-marshalling-river</include>
+        <include>commons-lang:commons-lang</include>
+        <include>org.apache.axis:axis-jaxrpc</include>
+        <include>wsdl4j:wsdl4j</include>
+        <include>org.apache.httpcomponents:httpcore</include>
+        <include>org.apache.httpcomponents:httpclient</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>

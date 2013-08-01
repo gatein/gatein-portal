@@ -18,13 +18,25 @@
  */
 package org.gatein.portal.ui.register;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import javax.inject.Inject;
-
+import javax.servlet.http.HttpServletRequest;
 import juzu.Action;
 import juzu.Path;
 import juzu.Response;
 import juzu.View;
+import juzu.request.RequestContext;
 import juzu.template.Template;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.idm.UserImpl;
+import org.exoplatform.web.security.AuthenticationRegistry;
+import org.gatein.portal.common.kernel.ThreadContext;
+import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthProviderType;
+import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
 
 /**
  * @author Julien Viet
@@ -41,9 +53,30 @@ public class Controller {
     @Inject
     UserManager manager;
 
+    @Inject
+    AuthenticationRegistry registry;
+
+    @Inject
+    OauthProviderHelper oauthProviderHelper;
+
     @View
-    public Response index() {
-        return index.with().ok();
+    public Response index(RequestContext context) {
+        User portalUser = null;
+        HttpServletRequest request = ThreadContext.getCurentHttpServletRequest();
+        if(request != null) {
+            portalUser = (User)registry.getAttributeOfClient(request, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER);
+        }
+
+        if (portalUser == null) {
+            portalUser = new UserImpl();
+        }
+        UserBean userBean = new UserBean(portalUser);
+
+        List<OauthProviderDescriptor> oauthProviders = oauthProviderHelper.getOauthProviderDescriptors(context.getHttpContext().getContextPath());
+        if(oauthProviders == null) {
+            oauthProviders = Collections.emptyList();
+        }
+        return index.with().set("userBean", userBean).set("oauthProviders", oauthProviders).ok();
     }
 
     @Action
@@ -56,9 +89,18 @@ public class Controller {
                 if (isExisted != null) {
                     flash.setError("This user is already existed. Please enter different userName.");
                 } else {
-                    manager.saveUser(userBean);
+                    OAuthPrincipal oauthPrincipal = null;
+                    HttpServletRequest request = ThreadContext.getCurentHttpServletRequest();
+                    if(request != null) {
+                         oauthPrincipal = (OAuthPrincipal)registry.getAttributeOfClient(request, OAuthConstants.ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL);
+                    }
+                    manager.saveUser(userBean, oauthPrincipal);
                     flash.setSuccess("You have successfully registered a new account!");
                     flash.setUserName(userBean.userName);
+
+                    if(oauthPrincipal != null) {
+                        registry.removeAttributeOfClient(request, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER);
+                    }
                 }
             } catch (Exception e) {
                 flash.setError("Could not register user due to internal error.");

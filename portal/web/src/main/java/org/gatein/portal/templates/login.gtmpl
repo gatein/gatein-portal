@@ -1,0 +1,30 @@
+<%
+    def error = loginFailureMessage.error;
+    if(error == null) error = "";
+%>
+<div class="container">
+    <form method="POST" action="@{LoginController.actionLogin()}" class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <%if(error != ""){%>
+        <div id="loginMessage" class="alert alert-error" >
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            ${error}
+        </div>
+        <%}%>
+        <input type="text" name="username" class="input-block-level" placeholder="Username"/>
+        <input type="password" name="password" class="input-block-level" placeholder="Password"/>
+        <input type="hidden" name="initURL" value="${initURL}"/>
+        <!--<label class="checkbox">
+            <input type="checkbox" value="remember-me"/> Remember me
+        </label>-->
+        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+    </form>
+    <%
+    if (oauthProviders != null) {%>
+    <div class="social-login">
+        <% for (def social : oauthProviders) { %>
+        <a href="${social.link}" class="btn btn-${social.type}"><i class="icon-${social.type}"></i> Login with ${social.name}</a>
+        <%}%>
+    </div>
+    <%}%>
+</div> <!-- /container -->

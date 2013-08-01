@@ -27,15 +27,15 @@
 
   <component>
     <key>org.exoplatform.container.PropertyConfigurator</key>
-    <type>org.exoplatform.container.PropertyConfigurator</type>
-<!--
+    <type>org.gatein.common.GateInConfigurator</type>
+
     <init-params>
       <value-param>
         <name>properties.url</name>
-        <value>configuration.properties</value>
-      </value-param>
+        <value>jar:/conf/configuration.properties</value>
+      </value-param> 
     </init-params>
--->
+
   </component>
 
 </configuration>

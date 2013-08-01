@@ -28,6 +28,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 
+import juzu.Action;
 import juzu.Param;
 import juzu.Path;
 import juzu.Response;
@@ -61,7 +62,6 @@ import org.gatein.portal.page.spi.portlet.PortletContentProvider;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class Controller {
-
     /** . */
     private static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
@@ -91,7 +91,7 @@ public class Controller {
     Template notFound;
 
     @View()
-    @Route("/{javax.portlet.path}")
+    @Route(value = "/{javax.portlet.path}", priority = 2)
     public Response index(
             RenderContext context,
             @Param(name = "javax.portlet.path", pattern = ".*")

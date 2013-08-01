@@ -401,8 +401,13 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
     }
 
     public User findUserByEmail(String email) throws Exception {
+        return findUserByUniqueAttribute(USER_EMAIL, email);
+    }
+
+    public User findUserByUniqueAttribute(String attributeName, String attributeValue) throws Exception {
         if (log.isTraceEnabled()) {
-            Tools.logMethodIn(log, LogLevel.TRACE, "findUserByEmail", new Object[] { "findUserByEmail", email });
+            Tools.logMethodIn(log, LogLevel.TRACE, "findUserByUniqueAttribute", new Object[] { "findUserByUniqueAttribute",
+                    attributeName, attributeValue });
         }
 
         IdentitySession session = service_.getIdentitySession();
@@ -412,9 +417,10 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         try {
             orgService.flush();
 
-            plUser = session.getAttributesManager().findUserByUniqueAttribute(USER_EMAIL, email);
+            plUser = session.getAttributesManager().findUserByUniqueAttribute(attributeName, attributeValue);
         } catch (IdentityException e) {
-            handleException("Cannot find user by email: " + email + "; ", e);
+            handleException("Cannot find user by unique attribute: attrName=" + attributeName +
+                    ", attrValue="  + attributeValue + "; ", e);
 
         }
 
@@ -427,7 +433,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         }
 
         if (log.isTraceEnabled()) {
-            Tools.logMethodOut(log, LogLevel.TRACE, "findUserByEmail", user);
+            Tools.logMethodOut(log, LogLevel.TRACE, "findUserByUniqueAttribute", user);
         }
 
         return user;

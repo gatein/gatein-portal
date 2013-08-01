@@ -40,6 +40,7 @@
     <module>application-registry</module>
     <module>portal</module>
     <module>identity</module>
+    <module>web</module>
   </modules>
 
 </project>
