@@ -19,7 +19,6 @@
 
 package org.gatein.portal.page;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,9 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
 import juzu.Action;
@@ -59,11 +55,6 @@ import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.page.spi.WindowContent;
 import org.gatein.portal.page.spi.portlet.PortletContentProvider;
-import org.gatein.portal.servlet.Context;
-import org.gatein.wci.ServletContainer;
-import org.gatein.wci.ServletContainerFactory;
-import org.gatein.wci.authentication.AuthenticationException;
-import org.gatein.wci.security.Credentials;
 
 /**
  * The controller for aggregation.
