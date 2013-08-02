@@ -25,15 +25,6 @@
 
   <dependencySets>
     <dependencySet>
-      <scope>provided</scope>
-      <includes>
-        <include>org.slf4j:slf4j-jdk14</include>
-      </includes>
-      <useTransitiveDependencies>false</useTransitiveDependencies>
-      <useProjectArtifact>false</useProjectArtifact>
-      <outputDirectory>/WEB-INF/lib</outputDirectory>
-    </dependencySet>
-    <dependencySet>
       <includes>
         <include>org.jibx:jibx-bind</include>
         <include>org.jibx:jibx-run</include>
@@ -123,27 +114,15 @@
       <useProjectArtifact>false</useProjectArtifact>
       <outputDirectory>/WEB-INF/lib</outputDirectory>
     </dependencySet>
-  </dependencySets>
-
-<!--
-  <dependencySets>
-
     <dependencySet>
+      <scope>runtime</scope>
       <includes>
-        <include>org.juzu:juzu-bom-core</include>
+        <include>org.slf4j:slf4j-jdk14</include>
       </includes>
-      <unpack>true</unpack>
-      <unpackOptions>
-        <includes>
-          <include>jboss-deployment-structure.xml</include>
-        </includes>
-      </unpackOptions>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>
-      <outputDirectory>/WEB-INF</outputDirectory>
+      <outputDirectory>/WEB-INF/lib</outputDirectory>
     </dependencySet>
-
   </dependencySets>
--->
 
 </assembly>
