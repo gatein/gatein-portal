@@ -329,12 +329,17 @@ public class UIPageNodeForm extends UIFormTabPane {
             }
             node.setVisibility(visibility);
 
-            Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
-            Date date = (cal != null) ? cal.getTime() : null;
-            node.setStartPublicationTime(date == null ? -1 : date.getTime());
-            cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
-            date = (cal != null) ? cal.getTime() : null;
-            node.setEndPublicationTime(date == null ? -1 : date.getTime());
+            if (getUICheckBoxInput(VISIBLE).isChecked() && getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked()) {
+                Calendar cal = getUIFormDateTimeInput(START_PUBLICATION_DATE).getCalendar();
+                Date date = (cal != null) ? cal.getTime() : null;
+                node.setStartPublicationTime(date == null ? -1 : date.getTime());
+                cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
+                date = (cal != null) ? cal.getTime() : null;
+                node.setEndPublicationTime(date == null ? -1 : date.getTime());
+            } else {
+                node.setStartPublicationTime(-1);
+                node.setEndPublicationTime(-1);
+            }
         }
 
         cachedLabels.put(getUIFormSelectBox(LANGUAGES).getValue(), new Described.State(getUIStringInput(I18N_LABEL).getValue(),
@@ -419,10 +424,13 @@ public class UIPageNodeForm extends UIFormTabPane {
             UIPageNodeForm uiPageNodeForm = event.getSource();
             UIApplication uiPortalApp = ctx.getUIApplication();
             TreeNode pageNode = uiPageNodeForm.getPageNode();
+            boolean isVisible = uiPageNodeForm.getUICheckBoxInput(VISIBLE).isChecked();
+            boolean isShowPubDate = uiPageNodeForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
+            boolean isSystemVisibility = false;
+            if (pageNode != null)
+                isSystemVisibility = pageNode.getVisibility() == Visibility.SYSTEM;
 
-            if (pageNode == null
-                    || (pageNode.getVisibility() != Visibility.SYSTEM && uiPageNodeForm.getUICheckBoxInput(
-                            SHOW_PUBLICATION_DATE).isChecked())) {
+            if (isVisible && isShowPubDate && !isSystemVisibility) {
                 Calendar currentCalendar = Calendar.getInstance();
                 currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH),
                         currentCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
