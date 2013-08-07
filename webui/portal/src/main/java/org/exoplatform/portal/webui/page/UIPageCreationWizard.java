@@ -209,7 +209,8 @@ public class UIPageCreationWizard extends UIPageWizard {
                 return;
             }
 
-            if (uiPageSetInfo.getUICheckBoxInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE).isChecked()) {
+            if (uiPageSetInfo.getUICheckBoxInput(UIWizardPageSetInfo.VISIBLE).isChecked()
+                    && uiPageSetInfo.getUICheckBoxInput(UIWizardPageSetInfo.SHOW_PUBLICATION_DATE).isChecked()) {
 
                 Calendar currentCalendar = Calendar.getInstance();
                 currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH),
