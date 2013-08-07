@@ -15,9 +15,8 @@ var Layout = Backbone.Collection.extend({
 	},
 	save : function() {
 		function moveSuccess(model, response, options) {
-			var layout = response['layout'];
-			if (layout) {
-				model.collection.set(layout);
+			if (response) {
+				model.collection.set(response);
 			}
 		}
 		function moveError(model, xhr, options) {

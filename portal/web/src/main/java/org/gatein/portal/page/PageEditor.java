@@ -50,7 +50,7 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.page.spi.portlet.PortletContentProvider;
 
-public class Editor {
+public class PageEditor {
 
     @Inject
     NavigationService navigationService;
@@ -135,9 +135,7 @@ public class Editor {
 
                 List<JSON> apps = new LinkedList<JSON>();
                 buildResponse(pageStructure, apps);
-                JSON response = new JSON();
-                response.map("layout", apps);
-                body = response.toString();
+                body = apps.toString();
             }
         }
 

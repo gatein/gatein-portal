@@ -14,8 +14,8 @@ $(function() {
         		});
         	}
         	
-        	this.listenTo(this.collection, 'change: staleData', this.onFetchError);
-        	this.listenTo(this.collection, 'change:containerID, change: prev', this.move);
+        	this.listenTo(this.collection, 'change:staleData', this.onFetchError);
+        	this.listenTo(this.collection, 'change:containerID, change:prev', this.move);
         },
         
         move : function(app) {

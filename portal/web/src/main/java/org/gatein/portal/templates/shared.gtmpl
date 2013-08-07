@@ -12,7 +12,7 @@
 	}
 %>
 
-<div class="container <%=editing ? "editing" : ""%>" data-editURL="<%=org.gatein.portal.page.Editor_.edit(path)%>">
+<div class="container <%=editing ? "editing" : ""%>" data-editURL="<%=org.gatein.portal.page.PageEditor_.edit(path)%>">
 
     #{insert/}
 
