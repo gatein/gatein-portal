@@ -121,18 +121,18 @@ public class UIUserInfo extends UIFormTabPane {
                 String language = userProfile.getAttribute(Constants.USER_LANGUAGE);
 
                 UIPortalApplication uiApp = Util.getUIPortalApplication();
-                if (language == null || language.trim().length() < 1)
-                    return;
-                LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
-                LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
-                if (localeConfig == null)
-                    localeConfig = localeConfigService.getDefaultLocaleConfig();
-                PortalRequestContext prqCtx = Util.getPortalRequestContext();
-                prqCtx.setLocale(localeConfig.getLocale());
+                if (language != null && language.trim().length() >= 1) {
+                    LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
+                    LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
+                    if (localeConfig == null)
+                        localeConfig = localeConfigService.getDefaultLocaleConfig();
+                    PortalRequestContext prqCtx = Util.getPortalRequestContext();
+                    prqCtx.setLocale(localeConfig.getLocale());
 
-                Util.getPortalRequestContext().addUIComponentToUpdateByAjax(
-                        uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
-                Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
+                    Util.getPortalRequestContext().addUIComponentToUpdateByAjax(
+                            uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
+                    Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
+                }
             }
 
             UIAccountEditInputSet accountInput = uiUserInfo.getChild(UIAccountEditInputSet.class);
