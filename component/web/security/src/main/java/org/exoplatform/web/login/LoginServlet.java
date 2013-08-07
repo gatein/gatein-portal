@@ -21,6 +21,8 @@ package org.exoplatform.web.login;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -180,21 +182,32 @@ public class LoginServlet extends AbstractHttpServlet {
         }
 
         // Obtain initial URI
-        String uri = req.getParameter("initialURI");
+        String initialURI = req.getParameter("initialURI");
 
         // Otherwise compute one
-        if (uri == null || uri.length() == 0) {
-            uri = req.getContextPath();
-            log.debug("No initial URI found, will use default " + uri + " instead ");
+        if (initialURI == null || initialURI.length() == 0) {
+            initialURI = req.getContextPath();
+            log.debug("No initial URI found, will use default " + initialURI + " instead ");
         } else {
-            log.debug("Found initial URI " + uri);
+            log.debug("Found initial URI " + initialURI);
+        }
+
+        try {
+            URI uri = new URI(initialURI);
+            if (uri.isAbsolute() && !(uri.getHost().equals(req.getServerName()))) {
+                log.warn("Cannot redirect to an URI outside of the current host when using a login redirect. Redirecting to the portal context path instead.");
+                initialURI = req.getContextPath();
+            }
+        } catch (URISyntaxException e) {
+            log.warn("Initial URI in login link is malformed. Redirecting to the portal context path instead.");
+            initialURI = req.getContextPath();
         }
 
         // Redirect to initialURI
         if (status == AUTHENTICATED) {
             // Response may be already committed in case of SAML or other SSO providers
             if (!resp.isCommitted()) {
-                resp.sendRedirect(resp.encodeRedirectURL(uri));
+                resp.sendRedirect(resp.encodeRedirectURL(initialURI));
             }
         } else {
             if (status == FAILED) {
@@ -202,7 +215,7 @@ public class LoginServlet extends AbstractHttpServlet {
             }
 
             // Show login form or redirect to SSO url (/portal/sso) if SSO is enabled
-            req.setAttribute("org.gatein.portal.login.initial_uri", uri);
+            req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
             SSOHelper ssoHelper = (SSOHelper) getContainer().getComponentInstanceOfType(SSOHelper.class);
             if (ssoHelper.skipJSPRedirection()) {
                 String ssoRedirectUrl = req.getContextPath() + ssoHelper.getSSORedirectURLSuffix();
