@@ -1,8 +1,5 @@
 package org.exoplatform.applicationregistry.webui.component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
@@ -18,17 +15,25 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormPageIterator;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by The eXo Platform SAS Author : LiemNC Email:ncliam@gmail.com November 09, 2009
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIForm.gtmpl", lifecycle = UIFormLifecycle.class, events = {
         @EventConfig(listeners = UICategorySelector.SaveActionListener.class),
-        @EventConfig(listeners = UICategorySelector.CancelActionListener.class, phase = Phase.DECODE) })
+        @EventConfig(listeners = UICategorySelector.ShowPageActionListener.class),
+        @EventConfig(listeners = UICategorySelector.CancelActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UICategorySelector.SelectBoxActionListener.class, phase = Phase.DECODE) })
 @Serialized
 public class UICategorySelector extends UIForm {
     private Application application;
@@ -36,6 +41,8 @@ public class UICategorySelector extends UIForm {
     private static final String[] ACTIONS = new String[] { "Save", "Cancel" };
 
     private static final String[] TABLE_COLUMNS = { "choose", "categoryName" };
+
+    private Set<String> selectedCategories = new HashSet<String>();
 
     public UICategorySelector() throws Exception {
         init();
@@ -65,7 +72,7 @@ public class UICategorySelector extends UIForm {
         addChild(uiTableInputSet);
 
         UIFormInputSet uiInputSet;
-        UIFormCheckBoxInput<Boolean> checkBoxInput;
+        UICheckBoxInput checkBoxInput;
         UIFormInputInfo uiInfo;
 
         HTMLEntityEncoder encoder = HTMLEntityEncoder.getInstance();
@@ -81,7 +88,8 @@ public class UICategorySelector extends UIForm {
                 String definitionName = application.getDisplayName().replace(' ', '_');
                 defaultValue = appRegService.getApplication(category.getName(), definitionName) != null;
             }
-            checkBoxInput = new UIFormCheckBoxInput<Boolean>("category_" + category.getName(), null, defaultValue);
+            checkBoxInput = new UICheckBoxInput("category_" + category.getName(), null, defaultValue);
+            checkBoxInput.setOnChange("SelectBox");
             uiInfo = new UIFormInputInfo("categoryName", null, encoder.encode(category.getDisplayName(true)));
             uiInputSet.addChild(checkBoxInput);
             uiInputSet.addChild(uiInfo);
@@ -107,21 +115,34 @@ public class UICategorySelector extends UIForm {
         return this.application;
     }
 
+    private void clearSelectedCategories() {
+        selectedCategories.clear();
+    }
+
+    private void addSelectedCategory(String category) {
+        selectedCategories.add(category);
+    }
+
+    private Set<String> getSelectedCategories() {
+        return Collections.unmodifiableSet(selectedCategories);
+    }
+
     public static class SaveActionListener extends EventListener<UICategorySelector> {
         public void execute(Event<UICategorySelector> event) throws Exception {
             UICategorySelector selector = event.getSource();
+
             ApplicationRegistryService appRegService = selector.getApplicationComponent(ApplicationRegistryService.class);
             List<ApplicationCategory> categories = appRegService.getApplicationCategories();
             categories = categories != null ? categories : new ArrayList<ApplicationCategory>();
-            UIFormCheckBoxInput<Boolean> chkInput;
             for (ApplicationCategory category : categories) {
-                chkInput = selector.getUIInput("category_" + category.getName());
-                if (chkInput != null && chkInput.isChecked()) {
+                if (selector.getSelectedCategories().contains("category_" + category.getName())) {
                     Application newApp = cloneApplication(selector.getApplication());
                     UIApplicationRegistryPortlet.setPermissionToEveryone(newApp);
                     appRegService.save(category, newApp);
                 }
             }
+            selector.clearSelectedCategories();
+
             UIContainer appInfo = selector.getParent();
             appInfo.getChild(UICategorySelector.class).setRendered(false);
             UIApplicationRegistryPortlet uiPortlet = appInfo.getAncestorOfType(UIApplicationRegistryPortlet.class);
@@ -151,6 +172,7 @@ public class UICategorySelector extends UIForm {
     public static class CancelActionListener extends EventListener<UICategorySelector> {
         public void execute(Event<UICategorySelector> event) throws Exception {
             UICategorySelector selector = event.getSource();
+            selector.clearSelectedCategories();
             UIContainer appInfo = selector.getParent();
             appInfo.getChild(UICategorySelector.class).setRendered(false);
             event.getRequestContext().addUIComponentToUpdateByAjax(appInfo);
@@ -158,15 +180,32 @@ public class UICategorySelector extends UIForm {
 
     }
 
-    public static class ShowPageActionListener extends EventListener<UICategorySelector> {
+    public static class SelectBoxActionListener extends EventListener<UICategorySelector> {
+
+        @Override
         public void execute(Event<UICategorySelector> event) throws Exception {
             UICategorySelector selector = event.getSource();
-            int page = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
-            UIFormTableIteratorInputSet inputSet = selector.getChild(UIFormTableIteratorInputSet.class);
-            inputSet.getUIFormPageIterator().setCurrentPage(page);
-            selector.init();
-            event.getRequestContext().addUIComponentToUpdateByAjax(selector);
+            ApplicationRegistryService appRegService = selector.getApplicationComponent(ApplicationRegistryService.class);
+            List<ApplicationCategory> categories = appRegService.getApplicationCategories();
+            UICheckBoxInput chkInput;
+            for (ApplicationCategory category : categories) {
+                chkInput = selector.getUIInput("category_" + category.getName());
+                if (chkInput != null && chkInput.isChecked()) {
+                    selector.addSelectedCategory("category_" + category.getName());
+                }
+            }
         }
     }
 
+    public static class ShowPageActionListener extends EventListener<UICategorySelector> {
+        public void execute(Event<UICategorySelector> event) throws Exception {
+            UICategorySelector selector = event.getSource();
+            UICheckBoxInput chkInput;
+            for (String category : selector.getSelectedCategories()) {
+                chkInput = selector.getUIInput(category);
+                chkInput.setChecked(true);
+            }
+            event.getRequestContext().addUIComponentToUpdateByAjax(selector);
+        }
+    }
 }
