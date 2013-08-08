@@ -103,7 +103,7 @@
                   <li class="HorizontalSeparator"></li>
                     <li class="MenuItem portlet-menu-cascade-item">
                     <a class="EditorIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>" title="<%=_ctx.appRes("UIUserToolBarGroupPortlet.editGroup")%>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.editGroup")%></a>
-                  <li>
+                  </li>
 
 		</ul>
 		<% } %>
