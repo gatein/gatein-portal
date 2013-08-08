@@ -502,14 +502,22 @@ public class UIPortalApplication extends UIApplication {
     private Set<SkinConfig> getPortalPortletSkins() {
         Set<SkinConfig> portletConfigs = new HashSet<SkinConfig>();
         for (UIComponent child : findFirstComponentOfType(UIPortal.class).getChildren()) {
-            if (child instanceof UIPortlet) {
-                SkinConfig portletConfig = getPortletSkinConfig((UIPortlet) child);
-                if (portletConfig != null) {
-                    portletConfigs.add(portletConfig);
-                }
-            }
+            getPortalPortletSkinConfig(portletConfigs, child);
         }
         return portletConfigs;
+    }
+
+    private void getPortalPortletSkinConfig(Set<SkinConfig> portletConfigs, UIComponent component) {
+        if(component instanceof UIPortlet) {
+            SkinConfig portletConfig = getPortletSkinConfig((UIPortlet) component);
+            if (portletConfig != null) {
+                portletConfigs.add(portletConfig);
+            }
+        } else if (component instanceof UIContainer) {
+            for(UIComponent child : ((UIContainer) component).getChildren()) {
+                getPortalPortletSkinConfig(portletConfigs, child);
+            }
+        }
     }
 
     public String getSkin() {
