@@ -41,7 +41,6 @@ import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.AttributesManager;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.query.UserQueryBuilder;
-import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.SimpleAttribute;
 import org.picketlink.idm.impl.api.model.SimpleUser;
 
@@ -165,6 +164,11 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         }
     }
 
+    @Override
+    public User setEnabled(String userName, boolean enabled, boolean broadcast) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
     public User removeUser(String userName, boolean broadcast) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "removeUser", new Object[] { "userName", userName, "broadcast", broadcast });
@@ -236,6 +240,11 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         return user;
     }
 
+    @Override
+    public User findUserByName(String userName, boolean enabledOnly) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
     public LazyPageList getUserPageList(int pageSize) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "getUserPagetList", new Object[] { "pageSize", pageSize });
@@ -254,6 +263,11 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
         return new IDMUserListAccess(qb, 20, true);
+    }
+
+    @Override
+    public ListAccess<User> findAllUsers(boolean enabledOnly) throws Exception {
+        throw new UnsupportedOperationException();
     }
 
     //
@@ -392,6 +406,11 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         return list;
     }
 
+    @Override
+    public ListAccess<User> findUsersByQuery(Query query, boolean enabledOnly) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
     public LazyPageList findUsersByGroup(String groupId) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findUsersByGroup", new Object[] { "groupId", groupId });
@@ -457,6 +476,11 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         qb.addRelatedGroup(jbidGroup);
 
         return new IDMUserListAccess(qb, 20, false);
+    }
+
+    @Override
+    public ListAccess<User> findUsersByGroupId(String groupId, boolean enabledOnly) throws Exception {
+        throw new UnsupportedOperationException();
     }
 
     //

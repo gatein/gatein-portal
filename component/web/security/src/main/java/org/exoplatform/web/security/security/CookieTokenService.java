@@ -38,8 +38,8 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -116,7 +116,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
             throws TokenServiceInitializationException {
         super(initParams);
 
-        ArrayList<?> serviceConfig = initParams.getValuesParam(SERVICE_CONFIG).getValues();
+        List<?> serviceConfig = initParams.getValuesParam(SERVICE_CONFIG).getValues();
         if (serviceConfig.size() > 3) {
             lifecycleName = (String) serviceConfig.get(3);
         }
