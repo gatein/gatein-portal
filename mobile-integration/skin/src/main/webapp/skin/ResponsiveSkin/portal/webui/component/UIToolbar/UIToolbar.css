@@ -43,19 +43,26 @@
         white-space: normal;
     }
 
+    .UIStarToolBarPortlet.UIHorizontalTabs,
+    .UIToolbarContainer .UIUserInfoPortlet .Name,
+    .UIToolbarContainer .UITab {
+        max-width: 48px;
+        margin: 0 auto;
+    }
 
     .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>a,
-    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>span {
-        font-size: 0;
-    }
+    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>span,
     .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>a,
-    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>span {
-        font-size: 0;
-    }
-
+    .UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>span,
     .UIToolbarContainer .UIUserInfoPortlet .Name>a,
-    .UIToolbarContainer .UIUserInfoPortlet .Name>span{
-        font-size: 0;
+    .UIToolbarContainer .UIUserInfoPortlet .Name>span {
+        display: block;
+        width: 0;
+        overflow: hidden;
+        text-indent: -10em; /* orientation=rt */
+        text-indent: 10em; /* orientation=lt */
+        white-space: nowrap;
+        /* font-size: 0; NOTE: font-size:0 is all that is needed for these classes, but older android browser versions don't suppor it. */
     }
 
     .UIToolbarContainer .MenuItemContainer {
@@ -65,6 +72,7 @@
 
     .UIToolbarContainer  .ToolbarContainer .MenuItem a {
         background-image: none;
-        padding-left: 0.5em;
+        padding-right: 0.5em; /* orientation=rt */
+        padding-left: 0.5em; /* orientation=lt */
     }
 }
