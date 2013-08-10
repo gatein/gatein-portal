@@ -138,7 +138,8 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
             }
 
             // GTNPORTAL-3133: if we're processing the WSRP producer WAR, add the plugins as local dependencies so that CXF can access them
-            if (name.contains("wsrp-producer")) {
+            // GTNPORTAL-3232: also include the portal.war so that the consumer can access the plugins
+            if (name.contains("wsrp-producer") || name.contains("portal.war")) {
                 ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
 
                 synchronized (this) {
