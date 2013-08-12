@@ -66,8 +66,6 @@ class UserNodeListener implements NodeChangeListener<NodeContext<UserNode>> {
 
     public void onRename(NodeContext<UserNode> target, NodeContext<UserNode> parent, String name) {
         UserNode unwrappedTarget = unwrap(target);
-        unwrappedTarget.resolvedLabel = null;
-        unwrappedTarget.encodedResolvedLabel = null;
         unwrappedTarget.uri = null;
         if (next != null) {
             next.onRename(unwrappedTarget, unwrap(parent), name);
@@ -76,8 +74,6 @@ class UserNodeListener implements NodeChangeListener<NodeContext<UserNode>> {
 
     public void onUpdate(NodeContext<UserNode> target, NodeState state) {
         UserNode unwrappedTarget = unwrap(target);
-        unwrappedTarget.resolvedLabel = null;
-        unwrappedTarget.encodedResolvedLabel = null;
         if (next != null) {
             next.onUpdate(unwrappedTarget, state);
         }
