@@ -48,19 +48,11 @@ public class UserNode {
     final NodeContext<UserNode> context;
 
     /** . */
-    String resolvedLabel;
-
-    /** . */
-    String encodedResolvedLabel;
-
-    /** . */
     String uri;
 
     UserNode(UserNodeContext owner, NodeContext<UserNode> context) {
         this.owner = owner;
         this.context = context;
-        this.resolvedLabel = null;
-        this.encodedResolvedLabel = null;
         this.uri = null;
     }
 
@@ -86,8 +78,6 @@ public class UserNode {
 
         //
         this.uri = null;
-        this.resolvedLabel = null;
-        this.encodedResolvedLabel = null;
     }
 
     public String getURI() {
@@ -116,10 +106,6 @@ public class UserNode {
 
     public void setLabel(String label) {
         context.setState(new NodeState.Builder(context.getState()).label(label).build());
-
-        //
-        this.resolvedLabel = null;
-        this.encodedResolvedLabel = null;
     }
 
     public String getIcon() {
@@ -163,34 +149,31 @@ public class UserNode {
     }
 
     public String getResolvedLabel() {
-        if (resolvedLabel == null) {
-            String resolvedLabel = null;
+        String resolvedLabel = null;
 
-            //
-            String id = context.getId();
+        //
+        String id = context.getId();
 
-            //
-            if (context.getState().getLabel() != null) {
-                ResourceBundle bundle = owner.navigation.getBundle();
-                resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
-            } else if (id != null) {
-                Locale userLocale = owner.navigation.portal.context.getUserLocale();
-                Locale portalLocale = owner.navigation.portal.getLocale();
-                DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
-                Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
-                if (description != null) {
-                    resolvedLabel = description.getName();
-                }
+        //
+        if (context.getState().getLabel() != null) {
+            ResourceBundle bundle = owner.navigation.getBundle();
+            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
+        } else if (id != null) {
+            Locale userLocale = owner.navigation.portal.context.getUserLocale();
+            Locale portalLocale = owner.navigation.portal.getLocale();
+            DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
+            Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
+            if (description != null) {
+                resolvedLabel = description.getName();
             }
-
-            //
-            if (resolvedLabel == null) {
-                resolvedLabel = getName();
-            }
-
-            //
-            this.resolvedLabel = resolvedLabel;
         }
+
+        //
+        if (resolvedLabel == null) {
+            resolvedLabel = getName();
+        }
+
+        //
         return resolvedLabel;
     }
 
@@ -202,14 +185,10 @@ public class UserNode {
         Described.State description = new Described.State(label, null);
 
         descriptionService.setDescription(id, userLocale, description);
-        this.resolvedLabel = label;
     }
 
     public String getEncodedResolvedLabel() {
-        if (encodedResolvedLabel == null) {
-            encodedResolvedLabel = HTMLEntityEncoder.getInstance().encode(getResolvedLabel());
-        }
-        return encodedResolvedLabel;
+        return HTMLEntityEncoder.getInstance().encode(getResolvedLabel());
     }
 
     public UserNode getParent() {
