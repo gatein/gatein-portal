@@ -45,16 +45,19 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
 
     private final boolean countAll;
 
+    private final boolean enabledOnly;
+
     private List<org.picketlink.idm.api.User> fullResults;
 
     private int size = -1;
 
     private User lastExisting;
 
-    public IDMUserListAccess(UserQueryBuilder userQueryBuilder, int pageSize, boolean countAll) {
+    public IDMUserListAccess(UserQueryBuilder userQueryBuilder, int pageSize, boolean countAll, boolean enabledOnly) {
         this.userQueryBuilder = userQueryBuilder;
         this.pageSize = pageSize;
         this.countAll = countAll;
+        this.enabledOnly = enabledOnly;
     }
 
     public User[] load(int index, int length) throws Exception {
@@ -116,6 +119,11 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
             if (fullResults != null) {
                 result = fullResults.size();
             } else if (countAll) {
+                /*
+                    wait for PersistenceManager.getUserCount(true)
+                    see https://community.jboss.org/wiki/DisabledUser
+                */
+//             result = getIDMService().getIdentitySession().getPersistenceManager().getUserCount(enabledOnly);
                 result = getIDMService().getIdentitySession().getPersistenceManager().getUserCount();
             } else {
                 userQueryBuilder.page(0, 0);

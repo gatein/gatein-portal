@@ -1059,6 +1059,9 @@
 .Check {
 	background: url('icons/NavigationIcons/Check.png') no-repeat center left;
 }
+.CheckDisable {
+    background: url('icons/NavigationIcons/CheckDisable.png') no-repeat center left;
+}
 
 .Check2 {
 	background: url('icons/NavigationIcons/Check2.gif') no-repeat center left;

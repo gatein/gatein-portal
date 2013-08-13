@@ -104,7 +104,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         UIApplication uiApp = context.getUIApplication();
         String username = getUIStringInput(USERNAME).getValue();
-        User user = service.getUserHandler().findUserByName(username);
+        User user = service.getUserHandler().findUserByName(username, false);
         if (user == null) {
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null, ApplicationMessage.WARNING));
             UIUserInfo userInfo = getParent();
@@ -135,7 +135,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         Query query = new Query();
         String email = getUIStringInput("email").getValue();
         query.setEmail(email);
-        if (service.getUserHandler().findUsers(query).getAll().size() > 0 && !oldEmail.equals(email)) {
+        if (service.getUserHandler().findUsersByQuery(query, false).getSize() > 0 && !oldEmail.equals(email)) {
             // Be sure it keep old value
             user.setEmail(oldEmail);
             query.setEmail(oldEmail);

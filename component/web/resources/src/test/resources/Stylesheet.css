@@ -4398,6 +4398,9 @@ background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/
 .Check {
 background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/16x16/icons/NavigationIcons/Check.png') no-repeat center left;
 }
+.CheckDisable {
+background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/16x16/icons/NavigationIcons/CheckDisable.png') no-repeat center left;
+}
 
 .Check2 {
 background: url('/eXoResources/skin/DefaultSkin/webui/component/../../skinIcons/16x16/icons/NavigationIcons/Check2.gif') no-repeat center left;

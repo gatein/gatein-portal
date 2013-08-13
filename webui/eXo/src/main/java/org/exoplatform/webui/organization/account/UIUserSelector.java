@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.commons.utils.PageList;
@@ -103,6 +104,8 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
     private String selectedUsers;
 
     private boolean multi = true;
+
+    private boolean isShowOnlyEnabledUser = true;
 
     public UIUserSelector() throws Exception {
         addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null));
@@ -250,7 +253,10 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
             }
         }
         List results = new CopyOnWriteArrayList();
-        results.addAll(service.getUserHandler().findUsers(q).getAll());
+        ListAccess<User> listUsers = service.getUserHandler().findUsersByQuery(q, isShowOnlyEnabledUser);
+        for (User user : listUsers.load(0, listUsers.getSize())) {
+            results.add(user);
+        }
         // remove if user doesn't exist in selected group
         MembershipHandler memberShipHandler = service.getMembershipHandler();
 
@@ -267,6 +273,14 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
 
     public boolean isShowSearchUser() {
         return isShowSearchUser;
+    }
+
+    public boolean isShowOnlyEnabledUser() {
+        return isShowOnlyEnabledUser;
+    }
+
+    public void setShowOnlyEnabledUser(boolean isShowOnlyEnabledUser) {
+        this.isShowOnlyEnabledUser = isShowOnlyEnabledUser;
     }
 
     public String getSelectedGroup() {

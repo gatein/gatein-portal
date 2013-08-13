@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
@@ -101,9 +102,9 @@ public class UIForgetPassword extends UIForm {
                 // Querying on email won't work. PLIDM-12
                 // Note that querying on email is inefficient as it loops over all users...
                 query.setEmail(email);
-                PageList<User> users = orgSrc.getUserHandler().findUsers(query);
-                if (users.getAll().size() > 0) {
-                    user = users.getAll().get(0);
+                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query);
+                if (users.getSize() > 0) {
+                    user = users.load(0, 1)[0];
                 } else {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.email-not-exist", null));

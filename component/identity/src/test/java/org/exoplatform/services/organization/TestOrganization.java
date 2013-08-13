@@ -44,17 +44,27 @@ import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServic
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganization-configuration.xml") })
 public class TestOrganization extends AbstractKernelTest {
 
-    private static final String GROUP_1 = "testOrganization_group1";
-    private static final String GROUP_2 = "testOrganization_group2";
-    private static final String GROUP_3 = "testOrganization_group3";
+    protected static final String GROUP_1 = "testOrganization_group1";
+    protected static final String GROUP_2 = "testOrganization_group2";
+    protected static final String GROUP_3 = "testOrganization_group3";
 
-    private static final String USER_1 = "testOrganization_user1";
-    private static final String USER_2 = "testOrganization_user2";
-    private static final String USER_3 = "testOrganization_user3";
-    private static final String DEFAULT_PASSWORD = "defaultpassword";
-    private static final String DESCRIPTION = " Description";
+    protected static final String USER_1 = "testOrganization_user1";
+    protected static final String USER_2 = "testOrganization_user2";
+    protected static final String USER_3 = "testOrganization_user3";
+    protected static final String DEFAULT_PASSWORD = "defaultpassword";
+    protected static final String DESCRIPTION = " Description";
 
-    private OrganizationService organizationService;
+    protected OrganizationService organizationService;
+    
+    protected UserHandler userHandler_;
+
+    protected UserProfileHandler profileHandler_;
+
+    protected GroupHandler groupHandler_;
+
+    protected MembershipTypeHandler mtHandler_;
+
+    protected MembershipHandler membershipHandler_;
 
     @Override
     protected void setUp() throws Exception {
@@ -62,6 +72,11 @@ public class TestOrganization extends AbstractKernelTest {
         begin();
         PortalContainer container = getContainer();
         organizationService = (OrganizationService) container.getComponentInstance(OrganizationService.class);
+        userHandler_ = organizationService.getUserHandler();
+        profileHandler_ = organizationService.getUserProfileHandler();
+        groupHandler_ = organizationService.getGroupHandler();
+        mtHandler_ = organizationService.getMembershipTypeHandler();
+        membershipHandler_ = organizationService.getMembershipHandler();
 
         createGroup(null, GROUP_1);
         createGroup(GROUP_1, GROUP_2);
@@ -135,25 +150,6 @@ public class TestOrganization extends AbstractKernelTest {
         }
     }
 
-    public void testChangePassword() throws Exception {
-        UserHandler uHandler = organizationService.getUserHandler();
-        User user = uHandler.findUserByName("root");
-        Assert.assertNotNull(user);
-        Assert.assertTrue(uHandler.authenticate("root", "gtn"));
-
-        // Test changing password
-        user.setPassword("newPassword");
-        uHandler.saveUser(user, false);
-        user = uHandler.findUserByName("root");
-        Assert.assertNotNull(user);
-        Assert.assertTrue(uHandler.authenticate("root", "newPassword"));
-
-        // Reset to default password
-        user.setPassword("gtn");
-        uHandler.saveUser(user, false);
-
-    }
-
     public void testLastLoginTime() throws Exception {
         UserHandler uHandler = organizationService.getUserHandler();
         User user = uHandler.findUserByName("root");
@@ -219,7 +215,7 @@ public class TestOrganization extends AbstractKernelTest {
         // Assert.assertEquals("Demo Demo", demo.getDisplayName());
     }
 
-    private void createGroup(String parent, String name) {
+    protected void createGroup(String parent, String name) {
         GroupHandler groupHandler = organizationService.getGroupHandler();
         try {
             Group parentGroup = null;
@@ -250,14 +246,16 @@ public class TestOrganization extends AbstractKernelTest {
         }
     }
 
-    private void createUser(String username, String... groups) {
+    protected void createUser(String username, String... groups) {
         UserHandler userHandler = organizationService.getUserHandler();
         User user = userHandler.createUserInstance(username);
         user.setPassword(DEFAULT_PASSWORD);
         user.setFirstName("default");
         user.setLastName("default");
-        user.setEmail("exo@exoportal.org");
-        user.setOrganizationId(groups[0]);
+        user.setEmail(username + "@exoportal.org");
+        if (groups.length > 0) {
+            user.setOrganizationId(groups[0]);            
+        }
         try {
             userHandler.createUser(user, true);
         } catch (Exception e) {
@@ -269,12 +267,12 @@ public class TestOrganization extends AbstractKernelTest {
         }
     }
 
-    private void deleteUser(String username) {
+    protected void deleteUser(String username) {
         UserHandler userHandler = organizationService.getUserHandler();
         try {
             userHandler.removeUser(username, true);
         } catch (Exception e) {
 
         }
-    }
+    }    
 }

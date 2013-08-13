@@ -54,7 +54,8 @@
   //
   String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
   boolean error = request.getAttribute("org.gatein.portal.login.error") != null;
-
+  String disabledUser = (String)request.getAttribute(org.exoplatform.web.login.FilterDisabledLoginModule.DISABLED_USER_NAME);
+  
   response.setCharacterEncoding("UTF-8"); 
   response.setContentType("text/html; charset=UTF-8");
 %>
@@ -78,9 +79,15 @@
     <body>
         <h1><a href="#login-form" title="Gate In"><%=res.getString("UILoginForm.label.mobile.Login")%></a></h1>
         <%/*Begin form*/%>
-        <% if(error) { %>
-        <div id="error-pane"><p><span><%=res.getString("UILoginForm.label.SigninFail")%></span></p><button id="button-close-alert" type="button"><%=res.getString("UILoginForm.label.mobile.login.Close")%></button></div>
-        <% } %>
+        <% if (error) {%>
+        <div id="error-pane"><p>
+        <%    if (disabledUser != null) {%>
+        <span><%=disabledUser%> <%=res.getString("UILoginForm.label.DisabledUserSignin")%></span>
+        <%	 } else {%>
+        <span><%=res.getString("UILoginForm.label.SigninFail")%></span>
+        <%   }%>
+        <button id="button-close-alert" type="button"><%=res.getString("UILoginForm.label.mobile.login.Close")%></button></p></div>
+        <% }%>
         <form id="login-form" name="login-form" action="<%= contextPath + "/login"%>" method="post">
             <fieldset>
                 <legend><%=res.getString("UILoginForm.label.Signin")%></legend>
