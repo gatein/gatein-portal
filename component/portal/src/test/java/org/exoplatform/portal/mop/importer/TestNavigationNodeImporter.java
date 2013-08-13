@@ -45,17 +45,17 @@ public class TestNavigationNodeImporter extends AbstractMopServiceTest {
 
         //
         NavigationContext ctx = new NavigationContext(SiteKey.portal("remove_orphan"), new NavigationState(1));
-        navigationService.saveNavigation(ctx);
-        NodeContext root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        getNavigationService().saveNavigation(ctx);
+        NodeContext root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(0, "foo", NodeState.INITIAL).add(0, "bar", NodeState.INITIAL);
-        navigationService.saveNode(root, null);
+        getNavigationService().saveNode(root, null);
 
         //
         NavigationFragment imported = fragment("foo").build();
 
         //
-        NavigationNodeImporter importer = new NavigationNodeImporter(new String[0], navigationService,
-                SiteKey.portal("remove_orphan"), Locale.ENGLISH, descriptionService, imported, new ImportConfig(true, false,
+        NavigationNodeImporter importer = new NavigationNodeImporter(new String[0], getNavigationService(),
+                SiteKey.portal("remove_orphan"), Locale.ENGLISH, getDescriptionService(), imported, new ImportConfig(true, false,
                         false));
         NodeContext node = importer.perform();
         assertEquals(0, node.getNodeSize());
@@ -67,33 +67,33 @@ public class TestNavigationNodeImporter extends AbstractMopServiceTest {
 
         //
         NavigationContext ctx = new NavigationContext(SiteKey.portal("create_missing_path"), new NavigationState(1));
-        navigationService.saveNavigation(ctx);
-        NodeContext root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        getNavigationService().saveNavigation(ctx);
+        NodeContext root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(0, "foo", NodeState.INITIAL).add(0, "bar", NodeState.INITIAL);
-        navigationService.saveNode(root, null);
+        getNavigationService().saveNode(root, null);
 
         //
         NavigationFragment imported = fragment("foo").add(node("juu")).build();
 
         //
-        NavigationNodeImporter importer = new NavigationNodeImporter(new String[] { "foo", "bar" }, navigationService,
-                SiteKey.portal("create_missing_path"), Locale.ENGLISH, descriptionService, imported, ImportMode.INSERT.config);
+        NavigationNodeImporter importer = new NavigationNodeImporter(new String[] { "foo", "bar" }, getNavigationService(),
+                SiteKey.portal("create_missing_path"), Locale.ENGLISH, getDescriptionService(), imported, ImportMode.INSERT.config);
         NodeContext node = importer.perform();
         assertNotNull(node);
         assertEquals("bar", node.getName());
         assertNotNull(node.get("juu"));
 
         //
-        importer = new NavigationNodeImporter(new String[] { "foo", "bar", "daa" }, navigationService,
-                SiteKey.portal("create_missing_path"), Locale.ENGLISH, descriptionService, imported, ImportMode.INSERT.config);
+        importer = new NavigationNodeImporter(new String[] { "foo", "bar", "daa" }, getNavigationService(),
+                SiteKey.portal("create_missing_path"), Locale.ENGLISH, getDescriptionService(), imported, ImportMode.INSERT.config);
         node = importer.perform();
         assertNotNull(node);
         assertEquals("daa", node.getName());
         assertNotNull(node.get("juu"));
 
         //
-        importer = new NavigationNodeImporter(new String[] { "foo" }, navigationService, SiteKey.portal("create_missing_path"),
-                Locale.ENGLISH, descriptionService, imported, ImportMode.INSERT.config);
+        importer = new NavigationNodeImporter(new String[] { "foo" }, getNavigationService(), SiteKey.portal("create_missing_path"),
+                Locale.ENGLISH, getDescriptionService(), imported, ImportMode.INSERT.config);
         node = importer.perform();
         assertEquals("foo", node.getName());
         assertNotNull(node.get("juu"));

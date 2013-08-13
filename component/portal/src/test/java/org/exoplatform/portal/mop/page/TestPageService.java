@@ -48,8 +48,8 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         // Read twice (to load and check and the get from cache and check)
-        assertNull(pageService.loadPage(site.key.page("foo")));
-        assertNull(pageService.loadPage(site.key.page("foo")));
+        assertNull(getPageService().loadPage(site.key.page("foo")));
+        assertNull(getPageService().loadPage(site.key.page("foo")));
 
         //
         PageState state = new PageState(
@@ -63,8 +63,8 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         //
-        pageService.clear();
-        PageContext page = pageService.loadPage(site.key.page("foo"));
+        getPageService().clear();
+        PageContext page = getPageService().loadPage(site.key.page("foo"));
         assertNotNull(page);
         assertNull(page.getState(true));
         assertNotNull(page.getData());
@@ -82,9 +82,9 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         // Read twice (to load and check and the get from cache and check)
-        assertNotNull(pageService.loadPages(site.key));
-        assertNotNull(pageService.loadPages(site.key));
-        assertEquals(0, pageService.loadPages(site.key).size());
+        assertNotNull(getPageService().loadPages(site.key));
+        assertNotNull(getPageService().loadPages(site.key));
+        assertEquals(0, getPageService().loadPages(site.key).size());
 
         //
         PageState fooState = new PageState(
@@ -106,9 +106,9 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         //
-        pageService.clear();
+        getPageService().clear();
 
-        List<PageContext> pages = pageService.loadPages(site.key);
+        List<PageContext> pages = getPageService().loadPages(site.key);
         assertNotNull(pages);
         assertEquals(2, pages.size());
 
@@ -148,7 +148,7 @@ public class TestPageService extends AbstractMopServiceTest {
         //
         PageContext pageCtx = new PageContext(site.page("foo"), new PageState("foo_name", "foo_description", true,
                 "foo_factory_id", Arrays.asList("foo_access_permission"), "foo_edit_permission"));
-        assertTrue(pageService.savePage(pageCtx));
+        assertTrue(getPageService().savePage(pageCtx));
         sync(true);
 
         //
@@ -177,7 +177,7 @@ public class TestPageService extends AbstractMopServiceTest {
         PageContext pageCtx = new PageContext(site.key.page("foo"), new PageState("foo_name_2", "foo_description_2", false,
                 "foo_factory_id_2", Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"),
                 "foo_edit_permission_2"));
-        assertFalse(pageService.savePage(pageCtx));
+        assertFalse(getPageService().savePage(pageCtx));
         sync(true);
 
         //
@@ -196,7 +196,7 @@ public class TestPageService extends AbstractMopServiceTest {
 
         //
         PageKey pageKey = site.key.page("foo");
-        assertFalse(pageService.destroyPage(pageKey));
+        assertFalse(getPageService().destroyPage(pageKey));
 
         //
         PageState state = new PageState(
@@ -210,8 +210,8 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertTrue(pageService.destroyPage(pageKey));
-        assertNull(pageService.loadPage(CLASSIC_FOO));
+        assertTrue(getPageService().destroyPage(pageKey));
+        assertNull(getPageService().loadPage(CLASSIC_FOO));
         sync(true);
 
         //
@@ -232,7 +232,7 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         //
-        QueryResult<PageContext> result = pageService.findPages(0, 10, SiteType.PORTAL, "find_pages", null, null);
+        QueryResult<PageContext> result = getPageService().findPages(0, 10, SiteType.PORTAL, "find_pages", null, null);
         assertEquals(2, result.getSize());
     }
 
@@ -249,7 +249,7 @@ public class TestPageService extends AbstractMopServiceTest {
         sync(true);
 
         //
-        PageContext bar = pageService.clone(site.key.page("foo"), site.key.page("bar"));
+        PageContext bar = getPageService().clone(site.key.page("foo"), site.key.page("bar"));
         assertNotNull(bar);
         assertNull(bar.getState(true));
         assertNotNull(bar.getData());
@@ -322,14 +322,14 @@ public class TestPageService extends AbstractMopServiceTest {
     }
 
     public void testLoadWithoutSite() {
-        assertNull(pageService.loadPage(SiteKey.portal("foo").page("homepage")));
+        assertNull(getPageService().loadPage(SiteKey.portal("foo").page("homepage")));
     }
 
     public void testCreateWithoutSite() {
         PageContext page = new PageContext(SiteKey.portal("foo").page("homepage"), new PageState("foo", "Foo", false,
                 "factory-id", Arrays.asList("*:/platform/administrators"), "Everyone"));
         try {
-            pageService.savePage(page);
+            getPageService().savePage(page);
             fail();
         } catch (PageServiceException e) {
             assertEquals(PageError.NO_SITE, e.getError());
@@ -338,7 +338,7 @@ public class TestPageService extends AbstractMopServiceTest {
 
     public void testDestroyWithoutSite() {
         try {
-            pageService.destroyPage(SiteKey.portal("foo").page("homepage"));
+            getPageService().destroyPage(SiteKey.portal("foo").page("homepage"));
             fail();
         } catch (PageServiceException e) {
             assertEquals(PageError.NO_SITE, e.getError());

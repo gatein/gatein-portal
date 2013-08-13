@@ -58,15 +58,6 @@ import org.gatein.portal.mop.site.SiteType;
 public abstract class AbstractMopServiceTest extends AbstractMOPTest {
 
     /** . */
-    protected PageServiceImpl pageService;
-
-    /** . */
-    protected NavigationServiceImpl navigationService;
-
-    /** . */
-    protected DescriptionService descriptionService;
-
-    /** . */
     protected PersistenceContext context;
 
     protected PersistenceContext createPersistenceContext() {
@@ -77,9 +68,6 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
     protected void setUp() throws Exception {
         context = createPersistenceContext();
         context.setUp();
-        navigationService = context.getNavigationService();
-        descriptionService = context.getDescriptionService();
-        pageService = context.getPageService();
         super.setUp();
     }
 
@@ -245,5 +233,17 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
 
     protected final void assertSessionModified() {
         assertTrue(context.assertSessionModified());
+    }
+
+    public final PageServiceImpl getPageService() {
+        return context.getPageService();
+    }
+
+    public final NavigationServiceImpl getNavigationService() {
+        return context.getNavigationService();
+    }
+
+    public final DescriptionService getDescriptionService() {
+        return context.getDescriptionService();
     }
 }

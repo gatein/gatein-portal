@@ -45,9 +45,9 @@ public class TestPageImporter extends AbstractMopServiceTest {
         Container container = new Container();
         container.setStorageName("foo");
         page.getChildren().add(container);
-        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), pageService);
+        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService());
         importer.perform();
-        PageContext pageContext = pageService.loadPage(PageKey.parse("portal::bilto::the_page"));
+        PageContext pageContext = getPageService().loadPage(PageKey.parse("portal::bilto::the_page"));
         NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>)context.getLayoutService().loadLayout(ElementState.model(), pageContext.getLayoutId(), null);
         assertEquals(1, ret.getSize());
         assertNotNull(ret.get("foo"));
@@ -62,7 +62,7 @@ public class TestPageImporter extends AbstractMopServiceTest {
         page.setName("the_page");
         page.getChildren().add(new Container().setStorageName("foo"));
         page.getChildren().add(new Container().setStorageName("foo"));
-        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), pageService);
+        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService());
         try {
             importer.perform();
         } catch (HierarchyException e) {

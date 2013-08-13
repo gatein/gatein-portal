@@ -66,14 +66,14 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal(name)));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal(name)));
         PageNavigation src = new PageNavigation("portal", name);
         src.setPriority(2);
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, mode, src, navigationService, descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, mode, src, getNavigationService(), getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal(name));
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal(name));
         assertEquals(2, (int) ctx.getState().getPriority());
     }
 
@@ -82,20 +82,20 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal("insert_navigation")));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal("insert_navigation")));
 
         //
         FragmentBuilder builder = fragment().add(node("a"));
 
         //
         PageNavigation src = new PageNavigation("portal", "insert_navigation").addFragment(builder.build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
-                descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, getNavigationService(),
+                getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("insert_navigation"));
-        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal("insert_navigation"));
+        NodeContext<?, NodeState> node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         NodeContext<?, NodeState> a = node.get("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
@@ -108,20 +108,20 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal("insert_fragment")));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal("insert_fragment")));
 
         //
         FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
         //
         PageNavigation src = new PageNavigation("portal", "insert_fragment").addFragment(builder.build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
-                descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, getNavigationService(),
+                getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("insert_fragment"));
-        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal("insert_fragment"));
+        NodeContext<?, NodeState> node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         NodeContext<?, NodeState> a = node.get("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
@@ -149,20 +149,20 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal(name)));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal(name)));
 
         //
         FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
         //
         PageNavigation src = new PageNavigation("portal", name).addFragment(builder.build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, navigationService,
-                descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, getNavigationService(),
+                getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal(name));
-        Node node = navigationService.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal(name));
+        Node node = getNavigationService().loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
         Node a = node.getChild("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
@@ -175,12 +175,12 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         //
         builder = fragment().add(node("a").add(node("d"))).add(node("c"));
         src = new PageNavigation("portal", name).addFragment(builder.build());
-        importer = new NavigationImporter(Locale.ENGLISH, importMode, src, navigationService, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, importMode, src, getNavigationService(), getDescriptionService());
         importer.perform();
 
         //
-        ctx = navigationService.loadNavigation(SiteKey.portal(name));
-        node = navigationService.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
+        ctx = getNavigationService().loadNavigation(SiteKey.portal(name));
+        node = getNavigationService().loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
         switch (importMode) {
             case INSERT: {
                 assertEquals(2, node.getNodeCount());
@@ -236,18 +236,18 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal("order")));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal("order")));
 
         //
         PageNavigation src = new PageNavigation("portal", "order").addFragment(fragment().add(node("a"), node("b"), node("c"))
                 .build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
-                descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, getNavigationService(),
+                getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("order"));
-        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal("order"));
+        NodeContext<?, NodeState> node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(3, node.getNodeCount());
         assertEquals("a", node.get(0).getName());
         assertEquals("b", node.get(1).getName());
@@ -255,11 +255,11 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         //
         src.getFragment().getNodes().add(0, node("d").build());
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, getNavigationService(), getDescriptionService());
         importer.perform();
 
         //
-        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(4, node.getNodeCount());
         assertEquals("d", node.get(0).getName());
         assertEquals("a", node.get(1).getName());
@@ -268,11 +268,11 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         //
         src.getFragment().getNodes().add(node("e").build());
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, getNavigationService(), getDescriptionService());
         importer.perform();
 
         //
-        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(5, node.getNodeCount());
         assertEquals("d", node.get(0).getName());
         assertEquals("a", node.get(1).getName());
@@ -286,7 +286,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal("extended_label")));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal("extended_label")));
 
         //
         PageNavigation src = new PageNavigation("portal", "extended_label").addFragment(fragment().add(node("a"), node("b"),
@@ -298,17 +298,17 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
                 .setLabels(new I18NString(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH)));
         fragment.getNode("c").setLabels(new I18NString(new LocalizedString("c_en")));
         src.setOwnerId("extended_label");
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, navigationService,
-                descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, getNavigationService(),
+                getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("extended_label"));
-        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal("extended_label"));
+        NodeContext<?, NodeState> node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
 
         // The fully explicit case
         NodeContext<?, NodeState> a = node.get("a");
-        Map<Locale, DescriptionState> aDesc = descriptionService.loadDescriptions(a.getId());
+        Map<Locale, DescriptionState> aDesc = getDescriptionService().loadDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
         assertEquals(new DescriptionState("a_en", null), aDesc.get(Locale.ENGLISH));
@@ -317,7 +317,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // No explicit language means to use the portal locale
         NodeContext<?, NodeState> b = node.get("b");
-        Map<Locale, DescriptionState> bDesc = descriptionService.loadDescriptions(b.getId());
+        Map<Locale, DescriptionState> bDesc = getDescriptionService().loadDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
         assertEquals(new DescriptionState("b_en", null), bDesc.get(Locale.ENGLISH));
@@ -326,7 +326,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The simple use case : one single label without the xml:lang attribute
         NodeContext<?, NodeState> c = node.get("c");
-        Map<Locale, DescriptionState> cDesc = descriptionService.loadDescriptions(c.getId());
+        Map<Locale, DescriptionState> cDesc = getDescriptionService().loadDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("c_en", c.getState().getLabel());
 
@@ -341,16 +341,16 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         fragment.getNode("c").setLabels(new I18NString(new LocalizedString("foo_c_en")));
         src.setOwnerId("extended_label");
 
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, navigationService, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, getNavigationService(), getDescriptionService());
         importer.perform();
 
         //
-        ctx = navigationService.loadNavigation(SiteKey.portal("extended_label"));
-        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        ctx = getNavigationService().loadNavigation(SiteKey.portal("extended_label"));
+        node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
 
         // The fully explicit case
         a = node.get("a");
-        aDesc = descriptionService.loadDescriptions(a.getId());
+        aDesc = getDescriptionService().loadDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ITALIAN, Locale.GERMAN), aDesc.keySet());
         assertEquals(new DescriptionState("a_it", null), aDesc.get(Locale.ITALIAN));
@@ -359,7 +359,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // No explicit language means to use the portal locale
         b = node.get("b");
-        bDesc = descriptionService.loadDescriptions(b.getId());
+        bDesc = getDescriptionService().loadDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.ITALIAN), bDesc.keySet());
         assertEquals(new DescriptionState("foo_b_en", null), bDesc.get(Locale.ENGLISH));
@@ -368,7 +368,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The simple use case : one single label without the xml:lang attribute
         c = node.get("c");
-        cDesc = descriptionService.loadDescriptions(c.getId());
+        cDesc = getDescriptionService().loadDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("foo_c_en", c.getState().getLabel());
 
@@ -385,16 +385,16 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         fragment.getNode("c").setLabels(new I18NString(new LocalizedString("bar_c_en")));
         src.setOwnerId("extended_label");
 
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, navigationService, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, getNavigationService(), getDescriptionService());
         importer.perform();
 
         //
-        ctx = navigationService.loadNavigation(SiteKey.portal("extended_label"));
-        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        ctx = getNavigationService().loadNavigation(SiteKey.portal("extended_label"));
+        node = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
 
         // The fully explicit case
         a = node.get("a");
-        aDesc = descriptionService.loadDescriptions(a.getId());
+        aDesc = getDescriptionService().loadDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
         assertEquals(new DescriptionState("bar_a_en", null), aDesc.get(Locale.ENGLISH));
@@ -403,7 +403,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // No explicit language means to use the portal locale
         b = node.get("b");
-        bDesc = descriptionService.loadDescriptions(b.getId());
+        bDesc = getDescriptionService().loadDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
         assertEquals(new DescriptionState("bar_b_en", null), bDesc.get(Locale.ENGLISH));
@@ -412,7 +412,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         // The simple use case : one single label without the xml:lang attribute
         c = node.get("c");
-        cDesc = descriptionService.loadDescriptions(c.getId());
+        cDesc = getDescriptionService().loadDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("bar_c_en", c.getState().getLabel());
     }
@@ -422,7 +422,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         sync(true);
 
         //
-        assertNull(navigationService.loadNavigation(SiteKey.portal("full_navigation")));
+        assertNull(getNavigationService().loadNavigation(SiteKey.portal("full_navigation")));
 
         //
         PageNavigation src = new PageNavigation("portal", "full_navigation").addFragment(fragment().add(node("a")).build());
@@ -430,13 +430,13 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
         src.addFragment(fragment("a").add(node("d")).build());
 
         //
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
-                descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, getNavigationService(),
+                getDescriptionService());
         importer.perform();
 
         //
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("full_navigation"));
-        NodeContext<?, NodeState> root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal("full_navigation"));
+        NodeContext<?, NodeState> root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(3, root.getNodeSize());
         Iterator<? extends NodeContext<?, NodeState>> i = root.iterator();
         NodeContext<?, NodeState> a = i.next();

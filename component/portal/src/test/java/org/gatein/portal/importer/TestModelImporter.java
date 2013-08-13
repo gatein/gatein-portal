@@ -69,34 +69,34 @@ public class TestModelImporter extends AbstractMopServiceTest {
         mopModelImporter.doImport();
 
         //Check conserve import
-        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("conserveImport"));
+        NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal("conserveImport"));
         assertNotNull(ctx);
-        NodeContext root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NodeContext root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertNotNull(root.get("conserve_foo"));
         assertNotNull(root.get("conserve_foo").get("conserve_bar"));
         assertNull(root.get("home"));
 
         //Check insert import
-        ctx = navigationService.loadNavigation(SiteKey.portal("insertImport"));
+        ctx = getNavigationService().loadNavigation(SiteKey.portal("insertImport"));
         assertNotNull(ctx);
-        root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertNotNull(root.get("insert_foo"));
         assertNotNull(root.get("insert_foo").get("insert_bar"));
         assertNotNull(root.get("home"));
 
         //Check merge import
-        ctx = navigationService.loadNavigation(SiteKey.portal("mergeImport"));
+        ctx = getNavigationService().loadNavigation(SiteKey.portal("mergeImport"));
         assertNotNull(ctx);
-        root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertNotNull(root.get("merge_foo"));
         assertNotNull(root.get("merge_foo").get("merge_bar"));
         assertNotNull(root.get("home"));
         assertNotNull(root.get("webexplorer"));
 
         //Check overwrite import
-        ctx = navigationService.loadNavigation(SiteKey.portal("overwriteImport"));
+        ctx = getNavigationService().loadNavigation(SiteKey.portal("overwriteImport"));
         assertNotNull(ctx);
-        root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertNull(root.get("overwrite_foo"));
         assertNotNull(root.get("home"));
         assertNotNull(root.get("webexplorer"));
@@ -124,28 +124,28 @@ public class TestModelImporter extends AbstractMopServiceTest {
 
     private void createNavigationData() {
         NavigationContext ctx = new NavigationContext(SiteKey.portal("conserveImport"), new NavigationState(1));
-        navigationService.saveNavigation(ctx);
-        NodeContext root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        getNavigationService().saveNavigation(ctx);
+        NodeContext root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(null, "conserve_foo", NodeState.INITIAL).add(null, "conserve_bar", NodeState.INITIAL);
-        navigationService.saveNode(root, null);
+        getNavigationService().saveNode(root, null);
 
         ctx = new NavigationContext(SiteKey.portal("insertImport"), new NavigationState(1));
-        navigationService.saveNavigation(ctx);
-        root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        getNavigationService().saveNavigation(ctx);
+        root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(null, "insert_foo", NodeState.INITIAL).add(null, "insert_bar", NodeState.INITIAL);
-        navigationService.saveNode(root, null);
+        getNavigationService().saveNode(root, null);
 
         ctx = new NavigationContext(SiteKey.portal("mergeImport"), new NavigationState(1));
-        navigationService.saveNavigation(ctx);
-        root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        getNavigationService().saveNavigation(ctx);
+        root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(null, "merge_foo", NodeState.INITIAL).add(null, "merge_bar", NodeState.INITIAL);
-        navigationService.saveNode(root, null);
+        getNavigationService().saveNode(root, null);
 
         ctx = new NavigationContext(SiteKey.portal("overwriteImport"), new NavigationState(1));
-        navigationService.saveNavigation(ctx);
-        root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        getNavigationService().saveNavigation(ctx);
+        root = getNavigationService().loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(null, "overwrite_foo", NodeState.INITIAL).add(null, "overwrite_bar", NodeState.INITIAL);
-        navigationService.saveNode(root, null);
+        getNavigationService().saveNode(root, null);
 
         sync(true);
     }
@@ -174,9 +174,9 @@ public class TestModelImporter extends AbstractMopServiceTest {
                 Arrays.asList("Everyone"),
                 "*:/platform/administrators"
         );
-        pageService.savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_foo"), fooState));
-        pageService.savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_home"), homeState));
-        pageService.savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_webexplorer"), webexState));
+        getPageService().savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_foo"), fooState));
+        getPageService().savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_home"), homeState));
+        getPageService().savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_webexplorer"), webexState));
     }
 
     private void createPageData() {
