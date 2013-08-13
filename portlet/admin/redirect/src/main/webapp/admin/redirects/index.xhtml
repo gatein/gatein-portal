@@ -269,8 +269,8 @@
 																			render="modal-select-node-wrapper"
 																			onclick="nodeInput = $(this).prev('input')"
 																			oncomplete="showNodeList()"
-																			execute="@this"
-																			action="#{rdrEdit.setCurrentNodeNames(true)}"><i class="icon-list" ></i></b:commandButton>
+																			execute="@this redirect"
+																			action="#{rdrEdit.setCurrentNodeNames(false)}"><i class="icon-list" ></i></b:commandButton>
 																</h:panelGroup>
 																<h:panelGroup id="redirect_nm_error">
 																	<h:outputText style="color: #AA0000; font-size: 11px;" styleClass="text-error rdr-redirect-nm-error" value="#{redirect_nm.valid ? '&#160;' : redirect_nm.validatorMessage}" rendered="#{not origin_nm.valid or not redirect_nm.valid}" />
