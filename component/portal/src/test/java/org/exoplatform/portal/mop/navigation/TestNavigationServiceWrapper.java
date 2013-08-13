@@ -153,7 +153,7 @@ public class TestNavigationServiceWrapper extends AbstractMopServiceTest {
 
         //
         begin();
-        createNavigatation(createSite(SiteType.PORTAL, "wrapper_cache_invalidation"));
+        createNavigation(createSite(SiteType.PORTAL, "wrapper_cache_invalidation"));
         end(true);
 
         //

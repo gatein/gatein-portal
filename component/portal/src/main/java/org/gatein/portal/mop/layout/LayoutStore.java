@@ -24,5 +24,10 @@ import org.gatein.portal.mop.hierarchy.NodeStore;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public interface LayoutStore extends NodeStore<ElementState> {
+public interface LayoutStore {
+
+    NodeStore<ElementState> begin(String rootId, boolean write);
+
+    void end(NodeStore<ElementState> store);
+
 }

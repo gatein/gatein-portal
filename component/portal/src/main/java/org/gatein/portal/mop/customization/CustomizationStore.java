@@ -30,6 +30,6 @@ public interface CustomizationStore {
 
     String cloneCustomization(String id);
 
-    <S extends Serializable> CustomizationData<S> saveCustomization(String id, S state);
+    <S extends Serializable> S saveCustomization(String id, S state);
 
 }

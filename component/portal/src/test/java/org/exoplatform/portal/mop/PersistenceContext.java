@@ -26,6 +26,7 @@ import org.exoplatform.portal.mop.site.MopStore;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.gatein.portal.impl.mop.mongo.MongoStore;
 import org.gatein.portal.impl.mop.ram.RamCustomizationStore;
 import org.gatein.portal.impl.mop.ram.RamDescriptionStore;
 import org.gatein.portal.impl.mop.ram.RamLayoutStore;
@@ -56,7 +57,11 @@ import org.gatein.portal.mop.site.SiteStore;
  */
 public abstract class PersistenceContext {
 
-    abstract void setUp();
+    protected void setUp() throws Exception {
+    }
+
+    protected void tearDown() throws Exception {
+    }
 
     public abstract boolean isSessionModified();
 
@@ -132,7 +137,7 @@ public abstract class PersistenceContext {
         private org.exoplatform.portal.mop.description.MopStore descriptionStore;
 
         @Override
-        void setUp() {
+        protected void setUp() {
             PortalContainer container = PortalContainer.getInstance();
 
             //
@@ -285,7 +290,7 @@ public abstract class PersistenceContext {
         RamNavigationStore navigationStore;
 
         @Override
-        void setUp() {
+        protected void setUp() {
             store = new RamStore();
             navigationService = new NavigationServiceImpl(navigationStore = new RamNavigationStore(store));
             pageService = new PageServiceImpl(pageStore = new RamPageStore(store));
@@ -373,6 +378,142 @@ public abstract class PersistenceContext {
         @Override
         public boolean assertSessionModified() {
             return true;
+        }
+    }
+
+    public static class Mongo extends PersistenceContext {
+
+        /** . */
+        private MongoStore store;
+
+        /** . */
+        private SiteStore siteStore;
+
+        /** . */
+        private SiteService siteService;
+
+        /** . */
+        private PageStore pageStore;
+
+        /** . */
+        private PageServiceImpl pageService;
+
+        /** . */
+        private NavigationStore navigationStore;
+
+        /** . */
+        private NavigationServiceImpl navigationService;
+
+        /** . */
+        private LayoutService layoutService;
+
+        /** . */
+        private LayoutStore layoutStore;
+
+        /** . */
+        private DescriptionService descriptionService;
+
+        /** . */
+        private DescriptionStore descriptionStore;
+
+        /** . */
+        private CustomizationService customizationService;
+
+        @Override
+        protected void setUp() throws Exception {
+            store = new MongoStore();
+            store.start();
+            siteService = new SiteServiceImpl(siteStore = store.getSiteStore());
+            pageService = new PageServiceImpl(pageStore = store.getPageStore());
+            navigationService = new NavigationServiceImpl(navigationStore = store.getNavigationStore());
+            layoutService = new LayoutServiceImpl(layoutStore = store.getLayoutStore());
+            descriptionService = new DescriptionServiceImpl(descriptionStore = store.getDescriptionStore());
+            customizationService = new CustomizationServiceImpl(store.getCustomizationStore());
+        }
+
+        @Override
+        protected void tearDown() throws Exception {
+            store.stop();
+        }
+
+        @Override
+        public void begin() {
+
+        }
+
+        @Override
+        public void end(boolean save) {
+
+        }
+
+        @Override
+        public boolean assertSessionNotModified() {
+            return true;
+        }
+
+        @Override
+        public boolean assertSessionModified() {
+            return true;
+        }
+
+        @Override
+        public boolean isSessionModified() {
+            return false;
+        }
+
+        @Override
+        public SiteStore getSiteStore() {
+            return siteStore;
+        }
+
+        @Override
+        public SiteService getSiteService() {
+            return siteService;
+        }
+
+        @Override
+        public PageServiceImpl getPageService() {
+            return pageService;
+        }
+
+        @Override
+        public PageStore getPageStore() {
+            return pageStore;
+        }
+
+        @Override
+        public NavigationServiceImpl getNavigationService() {
+            return navigationService;
+        }
+
+        @Override
+        public NavigationStore getNavigationStore() {
+            return navigationStore;
+        }
+
+        @Override
+        public LayoutStore getLayoutStore() {
+            return layoutStore;
+        }
+
+        @Override
+        public LayoutService getLayoutService() {
+            return layoutService;
+        }
+
+        @Override
+        public DescriptionService getDescriptionService() {
+            return descriptionService;
+        }
+
+        @Override
+        public DescriptionStore getDescriptionStore() {
+            return descriptionStore;
+        }
+
+        @Override
+        public CustomizationService getCustomizationService() {
+            return customizationService;
         }
     }
 }

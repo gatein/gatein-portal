@@ -1179,7 +1179,7 @@ public class TestDataStorage extends AbstractConfigTest {
         String storageId = gadget.getStorageId();
 
         // Now get the gadget by StorageId
-        Application<Object> applicationModel = storage_.getApplicationModel(storageId);
+        Application<?> applicationModel = storage_.getApplicationModel(storageId);
         assertEquals(gadget.getId(), applicationModel.getId());
 
         String[] siteInfo = storage_.getSiteInfo(storageId);

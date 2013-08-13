@@ -45,6 +45,7 @@ import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.mop.core.util.Tools;
+import org.gatein.portal.mop.hierarchy.NodeStore;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutStore;
 import org.gatein.portal.mop.Properties;
@@ -53,7 +54,7 @@ import org.gatein.portal.mop.Property;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopStore implements LayoutStore {
+public class MopStore implements LayoutStore, NodeStore<ElementState> {
 
     /** . */
     private static final Set<String> propertiesBlackList = Tools.set("jcr:uuid", "jcr:primaryType");
@@ -71,6 +72,16 @@ public class MopStore implements LayoutStore {
 
     public MopStore(POMSessionManager mgr) {
         this.mgr = mgr;
+    }
+
+    @Override
+    public NodeStore<ElementState> begin(String rootId, boolean write) {
+        return this;
+    }
+
+    @Override
+    public void end(NodeStore<ElementState> store) {
+        // Do nothing
     }
 
     @Override

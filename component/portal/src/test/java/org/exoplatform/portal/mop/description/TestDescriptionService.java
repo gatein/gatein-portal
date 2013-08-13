@@ -29,6 +29,7 @@ import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.common.util.Tools;
 import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteType;
 
 /**
@@ -47,23 +48,37 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         persistence = context.getDescriptionStore();
     }
 
+    public void testLifeCycle() throws Exception {
+        SiteData site = createSite(SiteType.PORTAL, "foo");
+        String id = createNavigation(site).id;
+
+        //
+        assertEquals(null, getDescriptionService().loadDescriptions(id));
+        getDescriptionService().saveDescription(id, Locale.ENGLISH, new DescriptionState("foo", "bar"));
+        assertNotNull(getDescriptionService().loadDescriptions(id));
+
+        //
+        getNavigationStore().destroyNavigation(site.key);
+        assertEquals(null, getDescriptionService().loadDescriptions(id));
+    }
+
     public void testResolveNoDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
         assertEquals(null, getDescriptionService().resolveDescription(id, null, Locale.ENGLISH));
     }
 
     public void testResolveDefaultDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
-        getNavigationPersistence().updateNode(id, NodeState.INITIAL.builder().label("foo_name").build());
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
+        getNavigationStore().updateNode(id, NodeState.INITIAL.builder().label("foo_name").build());
 
         //
         assertEquals(null, getDescriptionService().resolveDescription(id, null, Locale.ENGLISH));
     }
 
     public void testResolveLocalizedDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
         HashMap<Locale, DescriptionState> descriptions = new HashMap<Locale, DescriptionState>();
         descriptions.put(Locale.ENGLISH, new DescriptionState("name_en", null));
         descriptions.put(Locale.UK, new DescriptionState("name_en_GB", null));
@@ -81,8 +96,8 @@ public class TestDescriptionService extends AbstractMopServiceTest {
     }
 
     public void testResolveDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
-        getNavigationPersistence().updateNode(id, NodeState.INITIAL.builder().label("name").build());
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
+        getNavigationStore().updateNode(id, NodeState.INITIAL.builder().label("name").build());
 
         HashMap<Locale, DescriptionState> descriptions = new HashMap<Locale, DescriptionState>();
         descriptions.put(Locale.ENGLISH, new DescriptionState("name_en", null));
@@ -99,38 +114,8 @@ public class TestDescriptionService extends AbstractMopServiceTest {
         assertEquals(new DescriptionState("name_en_GB", null), getDescriptionService().resolveDescription(id, null, Locale.UK));
     }
 
-    public void testGetDefaultDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
-        getNavigationPersistence().updateNode(id, NodeState.INITIAL.builder().label("foo_name").build());
-
-        //
-        assertEquals(new DescriptionState("foo_name", null), getDescriptionService().loadDescription(id));
-    }
-
-    public void testSetDefaultDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
-
-        //
-        assertNull(getDescriptionService().loadDescription(id));
-
-        //
-        getDescriptionService().saveDescription(id, new DescriptionState("foo_name", null));
-
-        //
-        NodeState state = getNavigationPersistence().loadNode(id).state;
-        assertEquals("foo_name", state.getLabel());
-    }
-
-    public void testRemoveDefaultDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
-        getNavigationPersistence().updateNode(id, NodeState.INITIAL.builder().label("foo_name").build());
-
-        //
-        getDescriptionService().saveDescription(id, null);
-    }
-
     public void testSetLocalizedDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
         getDescriptionService().saveDescription(id, Locale.ENGLISH, new DescriptionState("foo_english", null));
@@ -141,7 +126,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
     }
 
     public void testSetInvalidLocaleDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
         try {
@@ -159,7 +144,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
     }
 
     public void testAddLocalizedDescription() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
         persistence.saveDescription(id, Locale.ENGLISH, new DescriptionState("add_english", null));
 
         //
@@ -173,7 +158,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
     }
 
     public void testGetDescriptions() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
         assertNull(getDescriptionService().loadDescriptions(id));
@@ -192,7 +177,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
     }
 
     public void testSetDescriptions() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
         assertNull(getDescriptionService().loadDescriptions(id));
@@ -221,7 +206,7 @@ public class TestDescriptionService extends AbstractMopServiceTest {
     }
 
     public void testSetInvalidLocaleDescriptions() throws Exception {
-        String id = createNavigatation(createSite(SiteType.PORTAL, "foo")).id;
+        String id = createNavigation(createSite(SiteType.PORTAL, "foo")).id;
 
         //
         try {

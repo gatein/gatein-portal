@@ -124,16 +124,21 @@ public class Store {
     }
 
     public final String getChild(String parentId, String name) throws NoSuchElementException {
-        List<String> children = getChildren(parentId);
-        for (int i = children.size() - 1;i >= 0;i--) {
-            String childId = children.get(i);
-            NodeImpl child = nodes.get(childId);
-            if (child == null) {
-                child = origin.nodes.get(childId);
+        List<String> children = null;
+        try {
+            children = getChildren(parentId);
+            for (int i = children.size() - 1;i >= 0;i--) {
+                String childId = children.get(i);
+                NodeImpl child = nodes.get(childId);
+                if (child == null) {
+                    child = origin.nodes.get(childId);
+                }
+                if (child.name.equals(name)) {
+                    return childId;
+                }
             }
-            if (child.name.equals(name)) {
-                return childId;
-            }
+        } catch (NoSuchElementException ignore) {
+            //
         }
         return null;
     }

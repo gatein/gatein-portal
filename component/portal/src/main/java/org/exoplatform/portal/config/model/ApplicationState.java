@@ -29,7 +29,7 @@ import java.io.Serializable;
  * @version $Revision$
  * @param <S> the content state type
  */
-public abstract class ApplicationState<S> implements Serializable {
+public abstract class ApplicationState<S extends Serializable> implements Serializable {
 
     public abstract boolean equals(Object o);
 

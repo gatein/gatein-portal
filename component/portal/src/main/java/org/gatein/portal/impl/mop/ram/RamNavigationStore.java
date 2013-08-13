@@ -102,10 +102,9 @@ public class RamNavigationStore implements NavigationStore {
     }
 
     @Override
-    public boolean destroyNavigation(NavigationData data) {
+    public boolean destroyNavigation(SiteKey key) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
-        SiteKey key = data.key;
         String root = current.getRoot();
         String type = current.getChild(root, key.getTypeName());
         String site = current.getChild(type, key.getName());

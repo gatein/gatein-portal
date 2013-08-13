@@ -28,6 +28,13 @@ public interface SiteStore {
 
     SiteData loadSite(SiteKey key);
 
+    /**
+     * Save a site.
+     *
+     * @param key the site key
+     * @param state the site state
+     * @return true when the site was created, false when the site is updated
+     */
     boolean saveSite(SiteKey key, SiteState state);
 
     boolean destroySite(SiteKey key);

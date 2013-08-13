@@ -40,31 +40,6 @@ public class RamDescriptionStore implements DescriptionStore {
         this.store = persistence.store;
     }
 
-    private Locale parent(Locale locale) {
-        if (locale.getVariant() != null && !locale.getVariant().isEmpty()) {
-            return new Locale(locale.getLanguage(), locale.getCountry());
-        } else if (locale.getCountry() != null && !locale.getCountry().isEmpty()) {
-            return new Locale(locale.getLanguage());
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * todo : move this code to DescriptionService
-     */
-    private void validateLocale(Locale locale) {
-        if (locale.getLanguage().length() != 2) {
-            throw new IllegalArgumentException("Illegal locale");
-        }
-        if (locale.getCountry().length() != 0 && locale.getCountry().length() != 2) {
-            throw new IllegalArgumentException("Illegal locale");
-        }
-        if (locale.getVariant().length() != 0 && locale.getVariant().length() != 2) {
-            throw new IllegalArgumentException("Illegal locale");
-        }
-    }
-
     @Override
     public DescriptionState loadDescription(String id, Locale locale, boolean resolve) {
         Tx tx = Tx.associate(store);
@@ -76,7 +51,7 @@ public class RamDescriptionStore implements DescriptionStore {
                 return new DescriptionState(nodeState.getLabel(), null);
             }
         } else {
-            for (Locale l = locale; l != null; l = parent(l)) {
+            for (Locale l = locale; l != null; l = I18N.getParent(l)) {
                 String descriptions = current.getChild(id, "descriptions");
                 if (descriptions != null) {
                     String description = current.getChild(descriptions, l.toString());
@@ -95,7 +70,6 @@ public class RamDescriptionStore implements DescriptionStore {
 
     @Override
     public void saveDescription(String id, Locale locale, DescriptionState state) {
-        validateLocale(locale);
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
         String descriptions = current.getChild(id, "descriptions");
@@ -108,15 +82,6 @@ public class RamDescriptionStore implements DescriptionStore {
         } else {
             current.update(description, state);
         }
-    }
-
-    @Override
-    public void loadDescription(String id, DescriptionState description) {
-        Tx tx = Tx.associate(store);
-        Store current = tx.getContext();
-        NodeState state = (NodeState) current.getNode(id).getState();
-        String label = description != null ? description.getName() : null;
-        current.update(id, state.builder().label(label).build());
     }
 
     @Override
@@ -140,9 +105,6 @@ public class RamDescriptionStore implements DescriptionStore {
 
     @Override
     public void saveDescriptions(String id, Map<Locale, DescriptionState> states) {
-        for (Locale locale : states.keySet()) {
-            validateLocale(locale);
-        }
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
         String descriptions = current.getChild(id, "descriptions");

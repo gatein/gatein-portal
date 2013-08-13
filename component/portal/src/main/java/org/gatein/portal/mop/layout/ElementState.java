@@ -73,7 +73,7 @@ public abstract class ElementState implements Serializable {
 
     }
 
-    public static class Window<S> extends ElementState {
+    public static class Window<S extends Serializable> extends ElementState {
 
         /** . */
         public static final PropertyType<String> TITLE = new PropertyType<String>("title,", String.class){};

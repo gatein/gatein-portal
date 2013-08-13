@@ -132,9 +132,12 @@ public final class Properties implements Iterable<Property>, Serializable {
             return this;
         }
 
-        public Builder set(Map<String, String> entries) {
-            for (Map.Entry<String, String> property : entries.entrySet()) {
-                set(property.getKey(), property.getValue());
+        public Builder set(Map<String, ?> entries) {
+            for (Map.Entry<String, ?> property : entries.entrySet()) {
+                Object value = property.getValue();
+                if (value != null) {
+                    set(property.getKey(), value.toString());
+                }
             }
             return this;
         }

@@ -129,22 +129,20 @@ public class MopStore implements NavigationStore {
         cache.removeNavigation(key);
     }
 
-    public boolean destroyNavigation(NavigationData data) {
-        ObjectType<Site> objectType = objectType(data.key.getType());
+    public boolean destroyNavigation(SiteKey key) {
+        ObjectType<Site> objectType = objectType(key.getType());
         Workspace workspace = mgr.getSession().getWorkspace();
-        Site site = workspace.getSite(objectType, data.key.getName());
+        Site site = workspace.getSite(objectType, key.getName());
         if (site == null) {
             throw new NavigationServiceException(NavigationError.NAVIGATION_NO_SITE);
         }
         Navigation rootNode = site.getRootNavigation();
         Navigation defaultNode = rootNode.getChild("default");
         if (defaultNode != null) {
+            String rootId = defaultNode.getObjectId();
             defaultNode.destroy();
-            cache.removeNavigation(data.key);
-            String rootId = data.rootId;
-            if (rootId != null) {
-                cache.removeNodes(Collections.singleton(rootId));
-            }
+            cache.removeNodes(Collections.singleton(rootId));
+            cache.removeNavigation(key);
             return true;
         } else {
             return false;

@@ -72,6 +72,14 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
     }
 
     @Override
+    protected void tearDown() throws Exception {
+        if (context != null) {
+            context.tearDown();
+        }
+        super.tearDown();
+    }
+
+    @Override
     protected void begin() {
         super.begin();
         context.begin();
@@ -83,7 +91,7 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
         super.end(save);
     }
 
-    protected final NavigationStore getNavigationPersistence() {
+    protected final NavigationStore getNavigationStore() {
         return context.getNavigationStore();
     }
 
@@ -112,15 +120,15 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
         return siteStore.destroySite(key);
     }
 
-    protected final NodeData createNavigatation(SiteData data) {
-        NavigationStore navigationPersistence = getNavigationPersistence();
+    protected final NodeData createNavigation(SiteData data) {
+        NavigationStore navigationPersistence = getNavigationStore();
         navigationPersistence.saveNavigation(data.key, new NavigationState(0));
         NavigationData navigation = navigationPersistence.loadNavigationData(data.key);
         return navigationPersistence.loadNode(navigation.rootId);
     }
 
     protected final NodeData[] createNodeChild(NodeData parent, String... names) {
-        NavigationStore navigationPersistence = getNavigationPersistence();
+        NavigationStore navigationPersistence = getNavigationStore();
         String previous = parent.getLastChild();
         NodeData[] created = new NodeData[names.length];
         for (int i = 0;i < names.length;i++) {
@@ -148,7 +156,7 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
     }
 
     protected final Map<String, NodeData> createNodes(NodeData parent, Map<String, NodeState> nodes) {
-        NavigationStore navigationPersistence = getNavigationPersistence();
+        NavigationStore navigationPersistence = getNavigationStore();
         String previous = parent.getLastChild();
         LinkedHashMap<String, NodeData> created = new LinkedHashMap<String, NodeData>(nodes.size());
         for (Map.Entry<String, NodeState> node : nodes.entrySet()) {
@@ -160,15 +168,23 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
     }
 
     protected final NodeData<ElementState>[] createElements(String layoutId, ElementState.Builder<?>... elements) {
-        NodeStore<ElementState> persistence = context.getLayoutStore();
-        NodeData<ElementState> root = persistence.loadNode(layoutId);
-        return createElements(root, elements);
+        NodeStore<ElementState> store = context.getLayoutStore().begin(layoutId, true);
+        try {
+            NodeData<ElementState> root = store.loadNode(layoutId);
+            return createElements(store, root, elements);
+        } finally {
+            context.getLayoutStore().end(store);
+        }
     }
 
     protected final NodeData<ElementState>[] createElements(String layoutId, ElementState... elements) {
-        NodeStore<ElementState> persistence = context.getLayoutStore();
-        NodeData<ElementState> root = persistence.loadNode(layoutId);
-        return createElements(root, elements);
+        NodeStore<ElementState> store = context.getLayoutStore().begin(layoutId, true);
+        try {
+            NodeData<ElementState> root = store.loadNode(layoutId);
+            return createElements(store, root, elements);
+        } finally {
+            context.getLayoutStore().end(store);
+        }
     }
 
     protected final NodeData<ElementState>[] createElements(SiteData site, ElementState.Builder<?>... elements) {
@@ -187,16 +203,15 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
         return createElements(page.layoutId, elements);
     }
 
-    protected final NodeData<ElementState>[] createElements(NodeData<ElementState> parent, ElementState.Builder<?>... elements) {
+    protected final NodeData<ElementState>[] createElements(NodeStore<ElementState> persistence, NodeData<ElementState> parent, ElementState.Builder<?>... elements) {
         ElementState[] states = new ElementState[elements.length];
         for (int i = 0;i < elements.length;i++) {
             states[i] = elements[i].build();
         }
-        return createElements(parent, states);
+        return createElements(persistence, parent, states);
     }
 
-    protected final NodeData<ElementState>[] createElements(NodeData<ElementState> parent, ElementState... elements) {
-        NodeStore<ElementState> persistence = context.getLayoutStore();
+    protected final NodeData<ElementState>[] createElements(NodeStore<ElementState> persistence, NodeData<ElementState> parent, ElementState... elements) {
         String previous = parent.getLastChild();
         NodeData<ElementState>[] created = new NodeData[elements.length];
         for (int i = 0;i < elements.length;i++) {
@@ -209,17 +224,12 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
     }
 
     public final NodeData<ElementState> getElement(SiteData site) {
-        NodeStore<ElementState> persistence = context.getLayoutStore();
+        NodeStore<ElementState> persistence = context.getLayoutStore().begin(site.layoutId, false);
         return persistence.loadNode(site.layoutId);
     }
 
-    public final NodeData<ElementState> getElement(NodeData<ElementState> element) {
-        NodeStore<ElementState> persistence = context.getLayoutStore();
-        return persistence.loadNode(element.id);
-    }
-
-    public final NodeData<ElementState> getElement(String parentId) {
-        NodeStore<ElementState> persistence = context.getLayoutStore();
+    public final NodeData<ElementState> getElement(String rootId, String parentId) {
+        NodeStore<ElementState> persistence = context.getLayoutStore().begin(rootId, false);
         return persistence.loadNode(parentId);
     }
 

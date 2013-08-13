@@ -1,5 +1,6 @@
 package org.exoplatform.portal.mop.management.operations.page;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,7 +78,7 @@ public class PageUtils {
                 page.getEditPermission());
     }
 
-    public static <S> Application<S> copy(Application<S> existing) {
+    public static <S extends Serializable> Application<S> copy(Application<S> existing) {
         Application<S> application = new Application<S>(existing.getType());
         application.setAccessPermissions(copy(existing.getAccessPermissions()));
         application.setDescription(existing.getDescription());
@@ -97,7 +98,7 @@ public class PageUtils {
         return application;
     }
 
-    public static <S> ApplicationState<S> copy(ApplicationType<S> type, ApplicationState<S> existing) {
+    public static <S extends Serializable> ApplicationState<S> copy(ApplicationType<S> type, ApplicationState<S> existing) {
         if (existing instanceof TransientApplicationState) {
             TransientApplicationState<S> state = (TransientApplicationState<S>) existing;
             return new TransientApplicationState<S>(state.getContentId(), state.getContentState(), state.getOwnerType(),

@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.pom.data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ import org.exoplatform.portal.config.model.ApplicationType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ApplicationData<S> extends ComponentData {
+public class ApplicationData<S extends Serializable> extends ComponentData {
 
     /** . */
     private final ApplicationType<S> type;

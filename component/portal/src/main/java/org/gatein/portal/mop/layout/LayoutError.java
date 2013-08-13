@@ -23,4 +23,7 @@ package org.gatein.portal.mop.layout;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public enum LayoutError {
+
+    INTERNAL_ERROR
+
 }

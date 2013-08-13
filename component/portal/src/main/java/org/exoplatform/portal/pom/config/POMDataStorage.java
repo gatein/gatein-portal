@@ -406,7 +406,7 @@ public class POMDataStorage implements ModelDataStorage {
         return Collections.emptyList();
     }
 
-    public <S> String getId(ApplicationState<S> state) throws Exception {
+    public <S extends Serializable> String getId(ApplicationState<S> state) throws Exception {
         String contentId;
         if (state instanceof TransientApplicationState) {
             TransientApplicationState tstate = (TransientApplicationState) state;
@@ -424,7 +424,7 @@ public class POMDataStorage implements ModelDataStorage {
         return contentId;
     }
 
-    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception {
+    public <S extends Serializable> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception {
         Class<S> clazz = type.getContentType().getStateClass();
         if (state instanceof TransientApplicationState) {
             TransientApplicationState<S> transientState = (TransientApplicationState<S>) state;
@@ -442,7 +442,7 @@ public class POMDataStorage implements ModelDataStorage {
         }
     }
 
-    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception {
+    public <S extends Serializable> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception {
         if (state instanceof TransientApplicationState) {
             throw new AssertionError("Does not make sense");
         } else {
@@ -614,7 +614,7 @@ public class POMDataStorage implements ModelDataStorage {
         throw new Exception("The provided ID is not associated with an application");
     }
 
-    public <S> ApplicationData<S> getApplicationData(String applicationStorageId) {
+    public <S extends Serializable> ApplicationData<S> getApplicationData(String applicationStorageId) {
         // TODO Auto-generated method stub
 
         POMSession session = pomMgr.getSession();

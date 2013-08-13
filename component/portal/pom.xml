@@ -73,7 +73,6 @@
       <artifactId>gatein-management-spi</artifactId>
     </dependency>
 
-
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
@@ -83,6 +82,17 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongo-java-driver</artifactId>
+      <version>2.11.1</version>
+    </dependency>
+    <dependency>
+      <groupId>de.flapdoodle.embed</groupId>
+      <artifactId>de.flapdoodle.embed.mongo</artifactId>
+      <version>1.27</version>
     </dependency>
 
     <dependency>

@@ -18,11 +18,13 @@
  */
 package org.exoplatform.portal.config.model;
 
+import java.io.Serializable;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class CloneApplicationState<S> extends ApplicationState<S> {
+public class CloneApplicationState<S extends Serializable> extends ApplicationState<S> {
 
     /** . */
     private final String storageId;

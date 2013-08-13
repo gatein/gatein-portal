@@ -36,7 +36,7 @@ public class LayoutServiceImpl implements LayoutService {
     private final Scope<ElementState> ALL = GenericScope.treeShape(-1);
 
     /** . */
-    private final NodeManager<ElementState> nodeManager;
+    private final LayoutStore persistence;
 
     public LayoutServiceImpl(LayoutStore persistence) {
         if (persistence == null) {
@@ -44,17 +44,28 @@ public class LayoutServiceImpl implements LayoutService {
         }
 
         //
-        this.nodeManager = new NodeManager<ElementState>(persistence);
+        this.persistence = persistence;
+    }
+
+    private NodeManager<ElementState> getManager(String rootId, boolean write) {
+        return new NodeManager<ElementState>(persistence.begin(rootId, write));
+    }
+
+    private NodeManager<ElementState> getManager(NodeContext<?, ElementState> root, boolean write) {
+        return new NodeManager<ElementState>(persistence.begin(root.getId(), write));
     }
 
     @Override
     public <L, N> void saveLayout(NodeAdapter<L, N, ElementState> adapter, N node, NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) {
-
-        // Make a diff
-        nodeManager.diff(adapter, node, context);
-
-        // Perform save
-        nodeManager.saveNode(context, listener);
+        NodeManager<ElementState> nodeManager = getManager(context, true);
+        try {
+            // Make a diff
+            nodeManager.diff(adapter, node, context);
+            // Perform save
+            nodeManager.saveNode(context, listener);
+        } finally {
+            persistence.end(nodeManager.getStore());
+        }
     }
 
     @Override
@@ -67,11 +78,19 @@ public class LayoutServiceImpl implements LayoutService {
         }
 
         //
+        NodeManager<ElementState> nodeManager = getManager(layoutId, false);
+
+        //
         return nodeManager.loadNode(model, layoutId, ALL, listener);
     }
 
     @Override
     public <N> void saveLayout(NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException {
-        nodeManager.saveNode(context, listener);
+        NodeManager<ElementState> nodeManager = getManager(context, true);
+        try {
+            nodeManager.saveNode(context, listener);
+        } finally {
+            persistence.end(nodeManager.getStore());
+        }
     }
 }

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.data;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -57,11 +58,11 @@ public interface ModelDataStorage {
      */
     List<ModelChange> save(PageData page) throws Exception;
 
-    <S> String getId(ApplicationState<S> state) throws Exception;
+    <S extends Serializable> String getId(ApplicationState<S> state) throws Exception;
 
-    <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
+    <S extends Serializable> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
 
-    <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
+    <S extends Serializable> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
 
     <T> LazyPageList<T> find(Query<T> q) throws Exception;
 
@@ -77,7 +78,7 @@ public interface ModelDataStorage {
 
     String[] getSiteInfo(String workspaceObjectId) throws Exception;
 
-    <S> ApplicationData<S> getApplicationData(String applicationStorageId);
+    <S extends Serializable> ApplicationData<S> getApplicationData(String applicationStorageId);
 
     /****************************************************************
      * Proxy methods of public API to access/modify MOP mixins,

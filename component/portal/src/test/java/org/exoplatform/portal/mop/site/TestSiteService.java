@@ -19,6 +19,7 @@
 package org.exoplatform.portal.mop.site;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.site.SiteContext;
@@ -35,69 +36,71 @@ public class TestSiteService extends AbstractMopServiceTest {
 
     private SiteService siteService;
 
-    private static final SiteKey FOO_SITE = SiteKey.portal("foo_site");
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         siteService = context.getSiteService();
     }
 
-    @Test
     public void testLoadSite() {
+        SiteKey key = SiteKey.portal("load_site");
+        assertNull(getSitePersistence().loadSite(key));
         SiteState state = new SiteState(
                 "en",
-                "foo_site",
-                "foo_site_description",
+                "load_site",
+                "load_site_description",
                 Arrays.asList("Everyone"),
                 "/platform/administrators",
-                null,
-                "foo_skin");
-        getSitePersistence().saveSite(FOO_SITE, state);
+                Collections.<String, String>emptyMap(),
+                "load_site_skin");
+        getSitePersistence().saveSite(key, state);
         sync(true);
-
-        assertNotNull(siteService.loadSite(FOO_SITE));
-        getSitePersistence().destroySite(FOO_SITE);
+        SiteContext site = siteService.loadSite(key);
+        assertNotNull(site);
+        assertNotNull(site.getId());
+        assertEquals(key, site.getKey());
+        assertEquals(state, site.getState());
+        getSitePersistence().destroySite(key);
         sync(true);
     }
 
-    @Test
     public void testCreateSite() {
-        assertNull(getSitePersistence().loadSite(FOO_SITE));
+        SiteKey key = SiteKey.portal("create_site");
+        assertNull(getSitePersistence().loadSite(key));
         SiteState state = new SiteState(
                 "en",
-                "foo_site",
-                "foo_site_description",
+                "create_site",
+                "create_site_description",
                 Arrays.asList("Everyone"),
                 "/platform/administrators",
                 null,
-                "foo_skin");
-        siteService.saveSite(new SiteContext(FOO_SITE, state));
+                "create_site_skin");
+        siteService.saveSite(new SiteContext(key, state));
         sync(true);
 
-        assertNotNull(getSitePersistence().loadSite(FOO_SITE));
-        getSitePersistence().destroySite(FOO_SITE);
+        assertNotNull(getSitePersistence().loadSite(key));
+        getSitePersistence().destroySite(key);
         sync(true);
     }
 
-    @Test
     public void testDestroySite() {
-        assertNull(getSitePersistence().loadSite(FOO_SITE));
+        SiteKey key = SiteKey.portal("destroy_site");
+        assertNull(getSitePersistence().loadSite(key));
         SiteState state = new SiteState(
                 "en",
-                "foo_site",
-                "foo_site_description",
+                "destroy_site",
+                "destroy_site_description",
                 Arrays.asList("Everyone"),
                 "/platform/administrators",
                 null,
-                "foo_skin");
-        siteService.saveSite(new SiteContext(FOO_SITE, state));
+                "destroy_site_skin");
+        siteService.saveSite(new SiteContext(key, state));
         sync(true);
 
-        assertNotNull(getSitePersistence().loadSite(FOO_SITE));
-        siteService.destroySite(FOO_SITE);
+        assertNotNull(getSitePersistence().loadSite(key));
+        siteService.destroySite(key);
         sync(true);
 
-        assertNull(getSitePersistence().loadSite(FOO_SITE));
+        assertNull(getSitePersistence().loadSite(key));
     }
 }

@@ -24,13 +24,14 @@ import java.util.List;
 
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.hierarchy.NodeStore;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutStore;
 
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public class RamLayoutStore implements LayoutStore {
+public class RamLayoutStore implements LayoutStore, NodeStore<ElementState> {
 
     /** . */
     static final ElementState.Container INITIAL = new ElementState.Container(
@@ -75,6 +76,16 @@ public class RamLayoutStore implements LayoutStore {
                 element.getName(),
                 state,
                 children.toArray(new String[children.size()]));
+    }
+
+    @Override
+    public NodeStore<ElementState> begin(String rootId, boolean write) {
+        return this;
+    }
+
+    @Override
+    public void end(NodeStore<ElementState> store) {
+        // Do nothing
     }
 
     @Override

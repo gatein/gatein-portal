@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.config;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,11 +105,11 @@ public class DataStorageImpl implements DataStorage {
         throw new UnsupportedOperationException();
     }
 
-    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception {
+    public <S extends Serializable> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception {
         return delegate.load(state, type);
     }
 
-    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception {
+    public <S extends Serializable> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception {
         return delegate.save(state, preferences);
     }
 
@@ -250,7 +251,7 @@ public class DataStorageImpl implements DataStorage {
         return find(q, null);
     }
 
-    public <S> String getId(ApplicationState<S> state) throws Exception {
+    public <S extends Serializable> String getId(ApplicationState<S> state) throws Exception {
         return delegate.getId(state);
     }
 
@@ -286,7 +287,7 @@ public class DataStorageImpl implements DataStorage {
         return delegate.getSiteInfo(applicationStorageId);
     }
 
-    public <S> Application<S> getApplicationModel(String applicationStorageId) throws Exception {
+    public <S extends Serializable> Application<S> getApplicationModel(String applicationStorageId) throws Exception {
         // TODO Auto-generated method stub
         try {
             ApplicationData<S> applicationData = delegate.getApplicationData(applicationStorageId);

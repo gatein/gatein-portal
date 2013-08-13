@@ -99,7 +99,7 @@ public class TestLayout extends AbstractMopServiceTest {
         assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
 
         //
-        NodeData<ElementState> root = getElement(layoutId);
+        NodeData<ElementState> root = getElement(layoutId, layoutId);
         assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId(), context.get(2).getId()), Tools.list(root.iterator()));
 
         // Test update
@@ -107,14 +107,14 @@ public class TestLayout extends AbstractMopServiceTest {
         layoutService.saveLayout(context, null);
 
         //
-        assertEquals("foodesc", ((ElementState.Window)getElement(context.getNode(0).getId()).getState()).properties.get(ElementState.Window.DESCRIPTION));
+        assertEquals("foodesc", ((ElementState.Window)getElement(layoutId, context.getNode(0).getId()).getState()).properties.get(ElementState.Window.DESCRIPTION));
 
         // Test destroy
         assertTrue(context.get(0).removeNode());
         layoutService.saveLayout(context, null);
 
         //
-        root = getElement(layoutId);
+        root = getElement(layoutId, layoutId);
         assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId()), Tools.list(root.iterator()));
     }
 }

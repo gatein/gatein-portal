@@ -57,12 +57,7 @@ public class MopStore implements DescriptionStore {
             POMSession session = manager.getSession();
             WorkspaceObject obj = session.findObjectById(id);
             I18NAdapter able = obj.adapt(I18NAdapter.class);
-            Described desc;
-            if (locale != null) {
-                desc = able.getI18NMixin(Described.class, locale, false);
-            } else {
-                desc = able.getMixin(Described.class, false);
-            }
+            Described desc = able.getI18NMixin(Described.class, locale, false);
             return desc != null ? desc.getState() : null;
         }
     }
@@ -78,35 +73,23 @@ public class MopStore implements DescriptionStore {
     }
 
     @Override
-    public void loadDescription(String id, DescriptionState description) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        POMSession session = manager.getSession();
-        WorkspaceObject obj = session.findObjectById(id);
-        I18NAdapter able = obj.adapt(I18NAdapter.class);
-        if (description != null) {
-            Described desc = able.getMixin(Described.class, true);
-            desc.setState(description);
-        } else {
-            able.removeMixin(Described.class);
-        }
-    }
-
-    @Override
     public Map<Locale, DescriptionState> loadDescriptions(String id) {
         POMSession session = manager.getSession();
         WorkspaceObject obj = session.findObjectById(id);
-        I18NAdapter able = obj.adapt(I18NAdapter.class);
-        Map<Locale, Described> mixins = able.getI18NMixin(Described.class);
-        Map<Locale, DescriptionState> names = null;
-        if (mixins != null) {
-            names = new HashMap<Locale, DescriptionState>(mixins.size());
-            for (Map.Entry<Locale, Described> entry : mixins.entrySet()) {
-                names.put(entry.getKey(), entry.getValue().getState());
+        if (obj != null) {
+            I18NAdapter able = obj.adapt(I18NAdapter.class);
+            Map<Locale, Described> mixins = able.getI18NMixin(Described.class);
+            Map<Locale, DescriptionState> names = null;
+            if (mixins != null) {
+                names = new HashMap<Locale, DescriptionState>(mixins.size());
+                for (Map.Entry<Locale, Described> entry : mixins.entrySet()) {
+                    names.put(entry.getKey(), entry.getValue().getState());
+                }
             }
+            return names;
+        } else {
+            return null;
         }
-        return names;
     }
 
     @Override

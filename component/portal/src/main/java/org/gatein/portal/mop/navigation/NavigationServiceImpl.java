@@ -102,7 +102,7 @@ public class NavigationServiceImpl implements NavigationService {
 
         //
         try {
-            if (store.destroyNavigation(navigation.data)) {
+            if (store.destroyNavigation(navigation.key)) {
                 navigation.data = null;
                 return true;
             } else {

@@ -50,7 +50,7 @@ public class RamCustomizationStore implements CustomizationStore {
     }
 
     @Override
-    public <S extends Serializable> CustomizationData<S> saveCustomization(String id, S state) {
+    public <S extends Serializable> S saveCustomization(String id, S state) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
         Node customization = current.getNode(id);
@@ -59,7 +59,7 @@ public class RamCustomizationStore implements CustomizationStore {
         appState = new TransientApplicationState(appState.getContentId(), state, appState.getOwnerType(), appState.getOwnerId());
         windowState = new ElementState.Window(windowState.type, appState, windowState.properties, windowState.accessPermissions);
         current.update(id, windowState);
-        return new CustomizationData<S>(id, (ContentType<S>) ContentType.PORTLET, appState.getContentId(), (S) appState.getContentState());
+        return state;
     }
 
     @Override

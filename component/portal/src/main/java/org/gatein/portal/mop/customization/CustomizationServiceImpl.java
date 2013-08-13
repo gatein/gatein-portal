@@ -55,7 +55,11 @@ public class CustomizationServiceImpl implements CustomizationService {
             throw new NullPointerException("No null customization accepted");
         }
         if (customization.update != null) {
-            customization.data = store.saveCustomization(customization.id, customization.update);
+            S state = store.saveCustomization(customization.id, customization.update);
+            customization.data = new CustomizationData<S>(
+                    customization.data.id,
+                    customization.data.contentType,
+                    customization.data.contentId, state);
             customization.update = null;
         }
     }

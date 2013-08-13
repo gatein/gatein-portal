@@ -39,7 +39,7 @@ import org.gatein.portal.mop.site.SiteType;
 public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
     public void testRebase1() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase1"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase1"));
         createNodeChild(node, "a", "d");
 
         //
@@ -71,7 +71,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testRebase2() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase2"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase2"));
         createNodeChild(node, "a", "b");
 
         //
@@ -102,7 +102,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testRebase3() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase3"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase3"));
         createNodeChild(node, "a", "b");
 
         //
@@ -136,7 +136,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
      * state. Indeed the move / destroy operations would fail otherwise as the move operation would not find its source.
      */
     public void testRebase4() {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase4"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase4"));
         createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
@@ -153,7 +153,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testRebaseAddDuplicate() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_add_duplicate"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase_add_duplicate"));
 
         //
         sync(true);
@@ -180,7 +180,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testRebaseMoveDuplicate() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_move_duplicate"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase_move_duplicate"));
         createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
@@ -208,7 +208,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testRebaseRenameDuplicate() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_rename_duplicate"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase_rename_duplicate"));
         createNodeChild(node, "a");
 
         //
@@ -235,7 +235,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testFederation() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_federation"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase_federation"));
         createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
@@ -279,7 +279,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testTransientParent() throws Exception {
-        createNavigatation(createSite(SiteType.PORTAL, "rebase_transient_parent"));
+        createNavigation(createSite(SiteType.PORTAL, "rebase_transient_parent"));
 
         //
         sync(true);
@@ -295,7 +295,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testRemovedNavigation() throws Exception {
-        createNavigatation(createSite(SiteType.PORTAL, "rebase_removed_navigation"));
+        createNavigation(createSite(SiteType.PORTAL, "rebase_removed_navigation"));
 
         //
         sync(true);
@@ -317,7 +317,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testStateRebase() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_state"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase_state"));
         createNodeChild(node, "a");
 
         //
@@ -341,7 +341,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
     }
 
     public void testNameRebase() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_name"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "rebase_name"));
         createNodeChild(node, "a");
 
         //

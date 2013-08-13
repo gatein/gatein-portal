@@ -21,6 +21,7 @@ package org.gatein.portal.mop.hierarchy;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -75,6 +76,36 @@ public class NodeData<S extends Serializable> implements Serializable, Iterable<
         this.name = name;
         this.state = state;
         this.children = children;
+    }
+
+    /**
+     * Create a new node but with a new parent.
+     *
+     * @param parentId the new parent id
+     * @return the newly created node
+     */
+    public NodeData<S> withParent(String parentId) {
+        return new NodeData<S>(parentId, id, name, state, children);
+    }
+
+    /**
+     * Create a new node but with a new set of children.
+     *
+     * @param children the new children
+     * @return the newly created node
+     */
+    public NodeData<S> withChildren(Collection<String> children) {
+        return new NodeData<S>(parentId, id, name, state, children.toArray(new String[children.size()]));
+    }
+
+    /**
+     * Create a new node but with a new parent.
+     *
+     * @param state the new state
+     * @return the newly created node
+     */
+    public NodeData<S> withState(S state) {
+        return new NodeData<S>(parentId, id, name, state, children);
     }
 
     public Iterator<String> iterator() {

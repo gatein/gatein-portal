@@ -45,7 +45,6 @@ import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageError;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageStore;
-import org.gatein.portal.mop.page.PageServiceException;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
@@ -81,7 +80,7 @@ public class MopStore implements PageStore {
         Workspace workspace = session.getWorkspace();
         Site site = workspace.getSite(objectType, siteKey.getName());
         if (site == null) {
-            throw new PageServiceException(PageError.NO_SITE);
+            throw PageError.noSite(key.site);
         }
         org.gatein.mop.api.workspace.Page root = site.getRootPage();
         org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
@@ -119,7 +118,7 @@ public class MopStore implements PageStore {
         Workspace workspace = session.getWorkspace();
         Site site = workspace.getSite(objectType, key.getSite().getName());
         if (site == null) {
-            throw new PageServiceException(PageError.NO_SITE);
+            throw PageError.noSite(key.site);
         }
         org.gatein.mop.api.workspace.Page root = site.getRootPage();
         org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
@@ -143,8 +142,7 @@ public class MopStore implements PageStore {
         ObjectType<Site> srcType = Utils.objectType(src.site.getType());
         Site srcSite = workspace.getSite(srcType, src.site.getName());
         if (srcSite == null) {
-            throw new PageServiceException(PageError.CLONE_NO_SRC_SITE, "Could not clone page " + src.getName()
-                    + "from non existing site of type " + src.site.getType() + " with id " + src.site.getName());
+            throw PageError.cloneNoSrcSite(src);
         } else {
             org.gatein.mop.api.workspace.Page root = srcSite.getRootPage();
             org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
@@ -153,24 +151,21 @@ public class MopStore implements PageStore {
 
         //
         if (srcPage == null) {
-            throw new PageServiceException(PageError.CLONE_NO_SRC_PAGE, "Could not clone non existing page " + src.getName()
-                    + " from site of type " + src.site.getType() + " with id " + src.site.getName());
+            throw PageError.cloneNoSrcPage(src);
         }
 
         //
         ObjectType<Site> dstType = Utils.objectType(dst.getSite().getType());
         Site dstSite = workspace.getSite(dstType, dst.getSite().getName());
         if (dstSite == null) {
-            throw new PageServiceException(PageError.CLONE_NO_DST_SITE, "Could not clone page " + dst.name
-                    + "to non existing site of type " + dst.site.getType() + " with id " + dst.site.getName());
+            throw PageError.cloneNoDstSite(src);
         }
 
         //
         org.gatein.mop.api.workspace.Page dstRoot = srcSite.getRootPage();
         org.gatein.mop.api.workspace.Page dstPages = dstRoot.getChild("pages");
         if (dstPages.getChild(dst.getName()) != null) {
-            throw new PageServiceException(PageError.CLONE_DST_ALREADY_EXIST, "Could not clone page " + dst.name
-                    + "to existing page " + dst.site.getType() + " with id " + dst.site.getName());
+            throw PageError.cloneDstAlreadyExists(src);
         }
 
         //
@@ -280,7 +275,7 @@ public class MopStore implements PageStore {
         Workspace workspace = session.getWorkspace();
         Site site = workspace.getSite(objectType, siteKey.getName());
         if (site == null) {
-            throw new PageServiceException(PageError.NO_SITE);
+            throw PageError.noSite(siteKey);
         }
         org.gatein.mop.api.workspace.Page root = site.getRootPage();
         Collection<Page> pages = root.getChild("pages").getChildren();

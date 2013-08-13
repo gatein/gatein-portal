@@ -67,24 +67,6 @@ public interface DescriptionService {
     DescriptionState resolveDescription(String id, Locale locale2, Locale locale1) throws NullPointerException;
 
     /**
-     * Returns the default description or null if it does not exist.
-     *
-     * @param id the object id
-     * @return the description
-     * @throws NullPointerException if the id argument is null
-     */
-    DescriptionState loadDescription(String id) throws NullPointerException;
-
-    /**
-     * Update the default description to the new description or remove it if the description argument is null.
-     *
-     * @param id the object id
-     * @param description the new description
-     * @throws NullPointerException if the id argument is null
-     */
-    void saveDescription(String id, DescriptionState description) throws NullPointerException;
-
-    /**
      * Returns a description for the specified locale argument or null if it does not exist.
      *
      * @param id the object id

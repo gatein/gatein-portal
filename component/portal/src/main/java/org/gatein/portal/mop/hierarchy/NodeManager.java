@@ -34,6 +34,10 @@ public class NodeManager<S extends Serializable> {
         this.store = store;
     }
 
+    public NodeStore<S> getStore() {
+        return store;
+    }
+
     public <N> NodeContext<N, S> loadNode(
             NodeModel<N, S> model,
             String nodeId,

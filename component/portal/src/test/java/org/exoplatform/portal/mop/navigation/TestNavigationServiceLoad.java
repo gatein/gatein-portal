@@ -52,7 +52,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testLoadSingleScope() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "load_single_scope"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "load_single_scope"));
         createNodeChild(node, "home", "webexplorer");
 
         //
@@ -85,7 +85,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testLoadChildrenScope() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "load_children_scope"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "load_children_scope"));
         createNodeChild(node, "home", "webexplorer");
 
         //
@@ -111,7 +111,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     private void createLargeNavigation(String name) {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, name));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, name));
         NodeData[] ab = createNodeChild(node, "a", "b");
         NodeData[] c = createNodeChild(ab[0], "c");
         NodeData[] d = createNodeChild(ab[1], "d");
@@ -182,7 +182,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testState() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "state"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "state"));
         createNodes(node, MapBuilder.<String, NodeState>linkedHashMap().
                 put("node_name", NodeState.INITIAL.
                         builder().
@@ -224,7 +224,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testDepth() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "depth"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "depth"));
         createNodes(node, MapBuilder.<String, NodeState>linkedHashMap().
                 put("node_name", NodeState.INITIAL).
                 get());
@@ -246,7 +246,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testHiddenNode() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "hidden_node"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "hidden_node"));
         createNodeChild(node, "a", "b", "c");
 
         //
@@ -311,7 +311,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testHiddenInsert1() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "hidden_insert_1"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "hidden_insert_1"));
         createNodeChild(node, "a");
 
         //
@@ -348,7 +348,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testHiddenInsert2() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "hidden_insert_2"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "hidden_insert_2"));
         createNodeChild(node, "a", "b");
 
         //
@@ -410,7 +410,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testHiddenInsert3() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "hidden_insert_3"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "hidden_insert_3"));
         createNodeChild(node, "a", "b", "c");
 
         //
@@ -773,7 +773,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
 */
 
     public void testCount() {
-        createNavigatation(createSite(SiteType.PORTAL, "count"));
+        createNavigation(createSite(SiteType.PORTAL, "count"));
 
         //
         sync(true);
@@ -800,7 +800,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testInsertDuplicate() {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "insert_duplicate"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "insert_duplicate"));
         createNodeChild(node, "a");
 
         //

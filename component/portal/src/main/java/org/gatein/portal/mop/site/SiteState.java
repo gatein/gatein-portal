@@ -109,9 +109,17 @@ public class SiteState implements Serializable {
                     Safe.equals(label, that.label) &&
                     Safe.equals(description, that.description) &&
                     Safe.equals(accessPermissions, that.accessPermissions) &&
+                    Safe.equals(editPermission, that.editPermission) &&
                     Safe.equals(properties, that.properties) &&
                     Safe.equals(skin, that.skin);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "SiteState[locale=" + locale + ",label=" + label + ",description=" + description +
+                ",accessPermissions=" + accessPermissions + ",editPermission=" + editPermission +
+                ",properties=" + properties + ",skin=" + skin + "]";
     }
 }

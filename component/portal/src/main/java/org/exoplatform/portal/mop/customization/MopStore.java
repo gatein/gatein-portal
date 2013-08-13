@@ -55,7 +55,7 @@ public class MopStore implements CustomizationStore {
     }
 
     @Override
-    public <S extends Serializable> CustomizationData<S> saveCustomization(String id, S state) {
+    public <S extends Serializable> S saveCustomization(String id, S state) {
         POMSession session = manager.getSession();
         UIWindow window = (UIWindow) session.findObjectById(id);
         Customization customization = window.getCustomization();
@@ -75,7 +75,7 @@ public class MopStore implements CustomizationStore {
         } else {
             customization.setState(state);
         }
-        return dataCache.loadCustomization(session, id);
+        return state;
     }
 
     @Override

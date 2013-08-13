@@ -55,18 +55,8 @@ public class DescriptionServiceWrapper implements DescriptionService {
     }
 
     @Override
-    public DescriptionState loadDescription(String id) {
-        return service.loadDescription(id);
-    }
-
-    @Override
     public void saveDescription(String id, Locale locale, DescriptionState description) {
         service.saveDescription(id, locale, description);
-    }
-
-    @Override
-    public void saveDescription(String id, DescriptionState description) {
-        service.saveDescription(id, description);
     }
 
     @Override

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.pom.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -534,7 +535,7 @@ public class Mapper {
             save((ContainerData) src, (UIContainer) dst);
             saveChildren((ContainerData) src, (UIContainer) dst, changes, hierarchyRelationships);
         } else if (src instanceof ApplicationData) {
-            save((ApplicationData<?>) src, (UIWindow) dst);
+            save((ApplicationData<Serializable>) src, (UIWindow) dst);
         } else if (src instanceof BodyData) {
             // Stateless
         } else {
@@ -774,7 +775,7 @@ public class Mapper {
         }
     }
 
-    public <S> ApplicationData<S> load(UIWindow src) {
+    public <S extends Serializable> ApplicationData<S> load(UIWindow src) {
         Attributes attrs = src.getAttributes();
 
         //
@@ -819,7 +820,7 @@ public class Mapper {
                 Utils.safeImmutableMap(properties), Utils.safeImmutableList(accessPermissions));
     }
 
-    public <S> void save(ApplicationData<S> src, UIWindow dst) {
+    public <S extends Serializable> void save(ApplicationData<S> src, UIWindow dst) {
 
         ProtectedResource pr = dst.adapt(ProtectedResource.class);
         pr.setAccessPermissions(src.getAccessPermissions());

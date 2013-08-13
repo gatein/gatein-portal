@@ -28,7 +28,6 @@ import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageError;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageStore;
-import org.gatein.portal.mop.page.PageServiceException;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
@@ -87,7 +86,7 @@ public class RamPageStore implements PageStore {
                 return true;
             }
         } else {
-            throw new PageServiceException(PageError.NO_SITE);
+            throw PageError.noSite(key.site);
         }
     }
 
@@ -108,7 +107,7 @@ public class RamPageStore implements PageStore {
                 return false;
             }
         } else {
-            throw new PageServiceException(PageError.NO_SITE);
+            throw PageError.noSite(key.site);
         }
     }
 
@@ -120,26 +119,22 @@ public class RamPageStore implements PageStore {
         String srcType = current.getChild(root, src.getSite().getTypeName());
         String srcSite = current.getChild(srcType, src.getSite().getName());
         if (srcSite == null) {
-            throw new PageServiceException(PageError.CLONE_NO_SRC_SITE, "Could not clone page " + src.getName()
-                    + "from non existing site of type " + src.site.getType() + " with id " + src.site.getName());
+            throw PageError.cloneNoSrcSite(src);
         }
         String srcPages = current.getChild(srcSite, "pages");
         String srcPage = current.getChild(srcPages, src.getName());
         if (srcPage == null) {
-            throw new PageServiceException(PageError.CLONE_NO_SRC_PAGE, "Could not clone non existing page " + src.getName()
-                    + " from site of type " + src.site.getType() + " with id " + src.site.getName());
+            throw PageError.cloneNoSrcPage(src);
         }
         String dstType = current.getChild(root, dst.getSite().getTypeName());
         String dstSite = current.getChild(dstType, dst.getSite().getName());
         if (dstSite == null) {
-            throw new PageServiceException(PageError.CLONE_NO_DST_SITE, "Could not clone page " + dst.name
-                    + "to non existing site of type " + dst.site.getType() + " with id " + dst.site.getName());
+            throw PageError.cloneNoSrcPage(dst);
         }
         String dstPages = current.getChild(dstSite, "pages");
         String dstPage = current.getChild(dstPages, dst.getName());
         if (dstPage != null) {
-            throw new PageServiceException(PageError.CLONE_DST_ALREADY_EXIST, "Could not clone page " + dst.name
-                    + "to existing page " + dst.site.getType() + " with id " + dst.site.getName());
+            throw PageError.cloneDstAlreadyExists(dst);
         }
         String clone = current.clone(srcPage, dstPages, dst.getName());
         return data(current, dst, clone);

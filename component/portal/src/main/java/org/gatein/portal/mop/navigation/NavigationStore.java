@@ -36,7 +36,7 @@ public interface NavigationStore extends NodeStore<NodeState> {
 
     void saveNavigation(SiteKey key, NavigationState state);
 
-    boolean destroyNavigation(NavigationData data);
+    boolean destroyNavigation(SiteKey key);
 
     void clear();
 

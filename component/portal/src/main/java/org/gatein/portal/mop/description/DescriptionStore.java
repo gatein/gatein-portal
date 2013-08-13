@@ -29,11 +29,9 @@ public interface DescriptionStore {
 
     DescriptionState loadDescription(String id, Locale locale, boolean resolve);
 
-    void saveDescription(String id, Locale locale, DescriptionState description);
-
-    void loadDescription(String id, DescriptionState description);
-
     Map<Locale, DescriptionState> loadDescriptions(String id);
+
+    void saveDescription(String id, Locale locale, DescriptionState description);
 
     void saveDescriptions(String id, Map<Locale, DescriptionState> descriptions);
 }

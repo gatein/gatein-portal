@@ -27,6 +27,7 @@ import static org.gatein.common.xml.stax.navigator.StaxNavUtils.*;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalContent;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -471,7 +472,7 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
         writeOptionalElement(writer, Element.HEIGHT, application.getHeight());
     }
 
-    protected <S> Application<S> unmarshalApplication(StaxNavigator<Element> navigator, Application<S> application)
+    protected <S extends Serializable> Application<S> unmarshalApplication(StaxNavigator<Element> navigator, Application<S> application)
             throws XMLStreamException {
         boolean showInfoBarParsed = false;
 
@@ -562,7 +563,7 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private <S> Application<S> safeCast(Application application, Class<S> stateClass) {
+    private <S extends Serializable> Application<S> safeCast(Application application, Class<S> stateClass) {
         return (Application<S>) application;
     }
 

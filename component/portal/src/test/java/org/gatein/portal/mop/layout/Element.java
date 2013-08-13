@@ -19,6 +19,7 @@
 
 package org.gatein.portal.mop.layout;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -53,7 +54,7 @@ public class Element extends ModelNode<Element, ElementState> {
         return portlet(portletId, null);
     }
 
-    public static ElementState.WindowBuilder portlet(String portletId, Object portletState) {
+    public static ElementState.WindowBuilder portlet(String portletId, Serializable portletState) {
         return new ElementState.WindowBuilder(
                 ApplicationType.PORTLET,
                 new TransientApplicationState(portletId, portletState),

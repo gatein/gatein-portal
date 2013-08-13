@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -145,7 +146,7 @@ public interface DataStorage {
      *
      * @param state
      */
-    <S> String getId(ApplicationState<S> state) throws Exception;
+    <S extends Serializable> String getId(ApplicationState<S> state) throws Exception;
 
     /**
      * Return content state. If can't find, return null
@@ -153,7 +154,7 @@ public interface DataStorage {
      * @param state - ApplicationState object
      * @param type - ApplicationType object
      */
-    <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
+    <S extends Serializable> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
 
     /**
      * Save content state <br />
@@ -161,7 +162,7 @@ public interface DataStorage {
      * @param state - ApplicationState object. It must be CloneApplicationState or PersistentApplicationState object
      * @param preferences - object to be saved
      */
-    <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
+    <S extends Serializable> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
 
     /**
      * Return LazyPageList of object (unsorted) which type and other info determined in Query object
@@ -233,7 +234,7 @@ public interface DataStorage {
      */
     String[] getSiteInfo(String applicationStorageId) throws Exception;
 
-    <S> Application<S> getApplicationModel(String applicationStorageId) throws Exception;
+    <S extends Serializable> Application<S> getApplicationModel(String applicationStorageId) throws Exception;
 
     /*************************************************************
      * Public API to access/modify MOP mixin, temporarily put here

@@ -42,7 +42,7 @@ import org.gatein.portal.mop.site.SiteType;
 public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
 
     public void testNoop() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_no_op"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_no_op"));
         createNodeChild(node, "a", "b", "c", "d");
 
         //
@@ -56,7 +56,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testHasChanges() throws Exception {
-        createNavigatation(createSite(SiteType.PORTAL, "update_cannot_save"));
+        createNavigation(createSite(SiteType.PORTAL, "update_cannot_save"));
 
         //
         sync(true);
@@ -87,7 +87,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testAddFirst() throws Exception {
-        createNavigatation(createSite(SiteType.PORTAL, "update_add_first"));
+        createNavigation(createSite(SiteType.PORTAL, "update_add_first"));
 
         //
         sync(true);
@@ -112,7 +112,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testAddSecond() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_add_second"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_add_second"));
         createNodeChild(node, "a");
 
         //
@@ -143,7 +143,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testRemove() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_remove"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_remove"));
         createNodeChild(node, "a");
 
         //
@@ -171,7 +171,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testMove() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_move"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_move"));
         createNodeChild(createNodeChild(node, "a", "c")[0], "b");
 
         //
@@ -204,7 +204,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testAddWithSameName() throws Exception {
-        createNavigatation(createSite(SiteType.PORTAL, "update_add_with_same_name"));
+        createNavigation(createSite(SiteType.PORTAL, "update_add_with_same_name"));
 
         //
         sync(true);
@@ -252,7 +252,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testComplex() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_complex"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_complex"));
 
         //
         sync(true);
@@ -331,7 +331,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testReplaceChild() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_replace_child"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_replace_child"));
         createNodeChild(node, "foo");
         sync(true);
 
@@ -364,7 +364,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testRename() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_rename"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_rename"));
         createNodeChild(node, "foo");
         sync(true);
 
@@ -388,7 +388,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testState() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_state"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_state"));
         createNodeChild(createNodeChild(node, "foo")[0], "bar");
         sync(true);
 
@@ -437,7 +437,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testUseMostActualChildren() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_with_most_actual_children"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_with_most_actual_children"));
         createNodeChild(createNodeChild(node, "foo")[0], "bar");
         sync(true);
 
@@ -463,7 +463,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testUpdateDeletedNode() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_deleted_node"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_deleted_node"));
         createNodeChild(createNodeChild(node, "foo")[0], "bar");
         sync(true);
 
@@ -487,7 +487,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testLoadEvents() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_load_events"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_load_events"));
         createNodeChild(createNodeChild(node, "foo")[0], "bar1", "bar2");
         sync(true);
 
@@ -517,7 +517,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testUpdateTwice2() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_twice2"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_twice2"));
         createNodeChild(createNodeChild(node, "foo")[0], "bar");
         sync(true);
 
@@ -541,7 +541,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testMove2() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_move2"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_move2"));
         createNodeChild(createNodeChild(node, "a", "c")[0], "b");
 
         //
@@ -572,7 +572,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testScope() throws Exception {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_scope"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_scope"));
         NodeData[] ac = createNodeChild(node, "a", "c");
         createNodeChild(ac[0], "b");
         createNodeChild(ac[1], "d");
@@ -607,7 +607,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void _testPendingChange() throws NullPointerException, NavigationServiceException {
-        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "update_pending_change"));
+        NodeData node = createNavigation(createSite(SiteType.PORTAL, "update_pending_change"));
         createNodeChild(node, "foo", "bar");
 
         //
@@ -628,7 +628,7 @@ public class TestNavigationServiceUpdate extends AbstractMopServiceTest {
     }
 
     public void testRemovedNavigation() throws Exception {
-        createNavigatation(createSite(SiteType.PORTAL, "update_removed_navigation"));
+        createNavigation(createSite(SiteType.PORTAL, "update_removed_navigation"));
 
         //
         sync(true);

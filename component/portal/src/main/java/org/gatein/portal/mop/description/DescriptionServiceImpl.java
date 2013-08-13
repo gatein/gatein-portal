@@ -69,13 +69,6 @@ public class DescriptionServiceImpl implements DescriptionService {
         return store.loadDescription(id, locale, false);
     }
 
-    public DescriptionState loadDescription(String id) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        return store.loadDescription(id, null, false);
-    }
-
     public void saveDescription(String id, Locale locale, DescriptionState description) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
@@ -83,14 +76,8 @@ public class DescriptionServiceImpl implements DescriptionService {
         if (locale == null) {
             throw new NullPointerException("No null locale accepted");
         }
+        validateLocale(locale);
         store.saveDescription(id, locale, description);
-    }
-
-    public void saveDescription(String id, DescriptionState description) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        store.loadDescription(id, description);
     }
 
     public Map<Locale, DescriptionState> loadDescriptions(String id) {
@@ -104,6 +91,21 @@ public class DescriptionServiceImpl implements DescriptionService {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
+        for (Locale locale : descriptions.keySet()) {
+            validateLocale(locale);
+        }
         store.saveDescriptions(id, descriptions);
+    }
+
+    private void validateLocale(Locale locale) {
+        if (locale.getLanguage().length() != 2) {
+            throw new IllegalArgumentException("Illegal locale");
+        }
+        if (locale.getCountry().length() != 0 && locale.getCountry().length() != 2) {
+            throw new IllegalArgumentException("Illegal locale");
+        }
+        if (locale.getVariant().length() != 0 && locale.getVariant().length() != 2) {
+            throw new IllegalArgumentException("Illegal locale");
+        }
     }
 }
