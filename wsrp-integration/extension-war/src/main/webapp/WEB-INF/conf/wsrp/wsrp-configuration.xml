@@ -34,12 +34,12 @@
       <value-param>
         <name>producerConfigLocation</name>
         <description>Location of the default producer configuration file</description>
-        <value>${gatein.conf.dir:classpath:/conf}/wsrp-producer-config.xml</value>
+        <value>${gatein.conf.dir:classpath:/conf}/wsrp/wsrp-producer-config.xml</value>
       </value-param>
       <value-param>
         <name>consumersConfigLocation</name>
         <description>Location of the default consumers configuration file</description>
-        <value>${gatein.conf.dir:classpath:/conf}/wsrp-consumers-config.xml</value>
+        <value>${gatein.conf.dir:classpath:/conf}/wsrp/wsrp-consumers-config.xml</value>
       </value-param>
       <value-param>
         <name>consumersInitDelay</name>
