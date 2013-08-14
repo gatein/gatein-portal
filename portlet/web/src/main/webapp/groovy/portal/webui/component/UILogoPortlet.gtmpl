@@ -5,13 +5,14 @@
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.mop.SiteType;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();
 	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" ;
 	String portletId = uicomponent.getId() ;
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
-	String navTitle = uicomponent.getNavigationTitle();
+	String navTitle = HTMLEntityEncoder.getInstance().encode(uicomponent.getNavigationTitle());
 %>
 
 <div class="UILogoPortlet ClearFix" id="$uicomponent.id" >
