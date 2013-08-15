@@ -92,7 +92,8 @@
         width: 96.3964%;
         clear: right; /* orientation=rt */
         clear: left;  /* orientation=lt */
-        margin-top: 1.5625em;
+        margin-top: 1.875em;
+        display: inline-block;
     }
     
     .gtnResponsiveFeaturesPortlet div.feature:nth-child(1) {margin-top: 0.9375em;}
