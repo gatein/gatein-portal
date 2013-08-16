@@ -17,7 +17,7 @@
     @Binding(OAuthProviderTypeRegistry.class),
     @Binding(LoginHelper.class),
     @Binding(SSOHelper.class)})
-@Assets(stylesheets = @Stylesheet(src = "bootstrap-2.3.1.min.css"),
+@Assets(stylesheets = {@Stylesheet(src = "bootstrap-2.3.1.min.css"), @Stylesheet(src = "editor.css")},
         declaredStylesheets = {@Stylesheet(id = "login-stylesheet", src = "login.css"),
                 @Stylesheet(id = "social-buttons", src = "social-buttons.css")
             },             

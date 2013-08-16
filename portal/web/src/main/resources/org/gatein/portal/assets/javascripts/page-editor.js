@@ -5,6 +5,7 @@ $(function() {
         	var editing = this.$el.hasClass("editing"), view = this;
         	if (editing) {
         		this.$( ".sortable" ).sortable({
+        			placeholder: "portlet-placeholder",
         			revert: true,
         			update : function(event, ui) {
         	    		var item = $(ui.item);

@@ -1,0 +1,22 @@
+.editing .row {
+    border: 1px dashed #A2A2A2;
+    padding: 10px;
+}
+
+.editing .portlet {
+    border: 1px solid #AAAAAA;
+    border-radius: 4px 4px 4px 4px;
+    padding: 5px;
+}
+
+.portlet + .portlet {
+    margin-top: 10px;
+}
+
+.portlet-placeholder {
+   height: 6.5em;
+   line-height: 1.2em;
+   background: #FAFAFA;
+   border-radius: 4px;
+   margin: 5px;
+}
