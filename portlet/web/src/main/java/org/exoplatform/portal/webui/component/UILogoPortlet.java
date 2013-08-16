@@ -63,7 +63,7 @@ public class UILogoPortlet extends UIPortletApplication {
         } else if (nav.getKey().getType().equals(SiteType.USER)) {
             ConversationState state = ConversationState.getCurrent();
             User user = (User) state.getAttribute(CacheUserProfileFilter.USER_PROFILE);
-            return user.getDisplayName();
+            return user.getFullName();
         }
         return "";
     }
