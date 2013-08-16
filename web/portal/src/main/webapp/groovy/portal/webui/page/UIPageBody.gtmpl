@@ -12,7 +12,7 @@
 		jsManager.require("SHARED/portalDragDrop", "portalDragDrop").addScripts("portalDragDrop.init(['UIPageBody']);");		   
 	}
 %>
-<a name="skipContent" id="skipContent"></a>
+<a name="skipContent" id="skipContent" tabindex="-1"></a>
 <div class="UIPageBody" id="${uicomponent.id}">		
 	<div class="UIComponent UIComponentBlock">
 	<%if(portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {%>
