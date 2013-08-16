@@ -154,18 +154,24 @@ function showAlert(title, message, aclass) {
 	$('#main-alert').addClass(aclass);
 	$('#main-alert').animate({
 		opacity: 1
-	}, 1000, function() {
-		setTimeout(function(){hideAlert(aclass);}, 2000);
-	});
+	}, 1000);
+
+    if (window.hideAlertTimer) {
+        clearTimeout(window.hideAlertTimer);
+    }
+    window.hideAlertTimer = setTimeout(function(){hideAlert(aclass);}, 3000);
 }
 
 function hideAlert(aclass) {
+    window.hideAlertTimer = null;
 	$('#main-alert').animate({
 		opacity: 0
 	}, 1000, function() {
-		$('#main-alert').removeClass(aclass);
-		$('#main-alert-title').text("<undefined>");
-		$('#main-alert-message').text("<undefined>");
+        if (!window.hideAlertTimer) {
+            $('#main-alert').removeClass(aclass);
+            $('#main-alert-title').text("<undefined>");
+            $('#main-alert-message').text("<undefined>");
+        }
 	});
 }
 

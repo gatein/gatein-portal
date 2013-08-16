@@ -1103,6 +1103,9 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
 	height: 34px;
 }
 
+.RedirectAdmin .node-mapping-viewer > td {
+    word-break: break-all;
+}
 
 /* Footer */
 
