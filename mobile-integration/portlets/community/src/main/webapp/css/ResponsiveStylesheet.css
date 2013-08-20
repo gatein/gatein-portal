@@ -284,7 +284,8 @@
     width: 2.5em;
     height: 2.5em;
     margin: 1em auto;
-    text-indent: -9999px;
+    text-indent: 10em;
+    overflow: hidden;
     display: block;
     float: none;
 }

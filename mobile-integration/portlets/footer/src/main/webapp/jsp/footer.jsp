@@ -6,7 +6,7 @@
 
 <%-- Action to change the language--%>
 <c:set var="CHANGE_LANGUAGE_ACTION"
-    value="if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));" />
+    value="if(document.getElementById('UIMaskWorkspace')) { ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));}" />
 <%-- The current language name in the current locale --%>
 <c:set var="localeDisplayLanguage" value="${renderRequest.getLocale().getDisplayLanguage(renderRequest.getLocale())}" />
 <%-- The resourceBundle used to retrieve locale string values --%>
@@ -26,7 +26,7 @@
                         <a href="${alternativeSites.value}">${alternativeSiteTitle}</a>
                     </li>
                 </c:forEach>
-                <li class="language"><a href="#" onclick="${CHANGE_LANGUAGE_ACTION}">${localeDisplayLanguage}</a>
+                <li class="language" onclick="${CHANGE_LANGUAGE_ACTION}"><a href="#">${localeDisplayLanguage}</a>
                     <div class="downCaret"></div></li>
             </ul>
             <div class="clear"></div>
@@ -35,6 +35,5 @@
             <p>${resourceBundle.getString("copyrightText")}</p>
         </div>
     </div>
-    <div class="clear" />
-</div>
+    <div class="clear"></div>
 </div>
