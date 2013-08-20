@@ -147,54 +147,52 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
     }
 
     public void flush() {
-        try {
-
-            if (configuration.isUseJTA()) {
-                if (traceLoggingEnabled) {
-                    log.trace("Flushing UserTransaction in method flush");
-                }
-                // Complete restart of JTA transaction don't have good performance. So we will only sync identitySession (same
-                // as for non-jta environment)
-                // finishJTATransaction();
-                // beginJTATransaction();
+        if (configuration.isUseJTA()) {
+            if (traceLoggingEnabled) {
+                log.trace("Flushing UserTransaction in method flush");
+            }
+            // Complete restart of JTA transaction don't have good performance. So we will only sync identitySession (same
+            // as for non-jta environment)
+            // finishJTATransaction();
+            // beginJTATransaction();
+            try {
                 if (jtaTransactionLifecycleService.getUserTransaction().getStatus() == Status.STATUS_ACTIVE) {
                     idmService_.getIdentitySession().save();
                 }
-            } else {
-                try {
-                    if (idmService_.getIdentitySession().getTransaction().isActive()) {
-                        idmService_.getIdentitySession().save();
-                    }
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    recoverFromIDMError(e);
-                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
-
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        } else {
+            try {
+                if (idmService_.getIdentitySession().getTransaction().isActive()) {
+                    idmService_.getIdentitySession().save();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                recoverFromIDMError(e);
+            }
         }
     }
 
     public void endRequest(ExoContainer container) {
-        try {
-            if (configuration.isUseJTA()) {
-                if (traceLoggingEnabled) {
-                    log.trace("Finishing UserTransaction in method endRequest");
-                }
-                jtaTransactionLifecycleService.finishJTATransaction();
-            } else {
-                try {
-                    if (idmService_.getIdentitySession().getTransaction().isActive()) {
-                        idmService_.getIdentitySession().getTransaction().commit();
-                    }
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
-                    recoverFromIDMError(e);
-                }
+        if (configuration.isUseJTA()) {
+            if (traceLoggingEnabled) {
+                log.trace("Finishing UserTransaction in method endRequest");
             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            try {
+                jtaTransactionLifecycleService.finishJTATransaction();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        } else {
+            try {
+                if (idmService_.getIdentitySession().getTransaction().isActive()) {
+                    idmService_.getIdentitySession().getTransaction().commit();
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+                recoverFromIDMError(e);
+            }
         }
     }
 
