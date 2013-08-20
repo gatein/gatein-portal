@@ -19,28 +19,6 @@
 
 package org.exoplatform.portal.webui.application;
 
-import java.io.Serializable;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.portlet.MimeResponse;
-import javax.portlet.PortletMode;
-import javax.portlet.WindowState;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.namespace.QName;
-
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.Text;
 import org.exoplatform.container.ExoContainer;
@@ -108,6 +86,27 @@ import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.w3c.dom.Element;
+
+import javax.portlet.MimeResponse;
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.namespace.QName;
+import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
 
 /** May 19, 2006 */
 @ComponentConfig(lifecycle = UIPortletLifecycle.class, template = "system:/groovy/portal/webui/application/UIPortlet.gtmpl", events = {
@@ -267,7 +266,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
 
     public String getSuitedTheme(String skin) {
         if (skin == null) {
-            skin = getAncestorOfType(UIPortalApplication.class).getSkin();
+            skin = Util.getUIPortalApplication().getSkin();
         }
         Map<String, String> themeMap = stringToThemeMap(getTheme());
         if (themeMap.containsKey(skin)) {
@@ -278,7 +277,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
 
     public void putSuitedTheme(String skin, String theme) {
         if (skin == null) {
-            skin = getAncestorOfType(UIPortalApplication.class).getSkin();
+            skin = Util.getUIPortalApplication().getSkin();
         }
         Map<String, String> themeMap = stringToThemeMap(getTheme());
         themeMap.put(skin, theme);
