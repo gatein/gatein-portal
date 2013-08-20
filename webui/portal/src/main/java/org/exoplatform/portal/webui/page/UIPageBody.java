@@ -147,8 +147,10 @@ public class UIPageBody extends UIComponentDecorator {
 
     public void processRender(WebuiRequestContext context) throws Exception {
         if (maximizedUIComponent != null && Util.getUIPortalApplication().getModeState() % 2 == 0) {
-            maximizedUIComponent.processRender((WebuiRequestContext) WebuiRequestContext.getCurrentInstance());
-            return;
+            if(maximizedUIComponent.getAncestorOfType(UIPage.class) == getUIComponent()) {
+                maximizedUIComponent.processRender((WebuiRequestContext) WebuiRequestContext.getCurrentInstance());
+                return;
+            }
         }
 
         super.processRender(context);
