@@ -362,12 +362,6 @@ public class UITabPaneDashboard extends UIContainer {
 
             // If the node is removed successfully, then redirect to the node specified by tab on the left
             if (selectedNode != null) {
-                // set maximizedUIComponent of UIPageBody is null if it is maximized portlet of removed page
-                UIPortal uiPortal = Util.getUIPortal();
-                UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-                if (uiPageBody != null && uiPageBody.getMaximizedUIComponent() != null) {
-                    uiPageBody.setMaximizedUIComponent(null);
-                }
                 nextNode = selectedNode;
             }
 

@@ -107,13 +107,6 @@ public class UIPortalComponentActionListener {
                     if (id.equals(uiPortal.getMaximizedUIComponent().getId())) {
                         uiPortal.setMaximizedUIComponent(null);
                     }
-                } else {
-                    UIPageBody uiPageBody = uiPortal.findFirstComponentOfType(UIPageBody.class);
-                    if (uiPageBody != null && uiPageBody.getMaximizedUIComponent() != null) {
-                        if (id.equals(uiPageBody.getMaximizedUIComponent().getId())) {
-                            uiPageBody.setMaximizedUIComponent(null);
-                        }
-                    }
                 }
             }
 

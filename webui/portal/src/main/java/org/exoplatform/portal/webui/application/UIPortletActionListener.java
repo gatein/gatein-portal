@@ -24,10 +24,10 @@
 package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.commons.utils.Safe;
+
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.page.UIPage;
-import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -38,7 +38,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
@@ -256,10 +255,6 @@ public class UIPortletActionListener {
     private static void clearMaximizedUIComponent(UIPage uiPage, UIPortlet uiPortlet) {
         if(uiPage.getMaximizedUIPortlet() != null && uiPage.getMaximizedUIPortlet().getId().equals(uiPortlet.getId())) {
             uiPage.setMaximizedUIPortlet(null);
-            UIPageBody pageBody = uiPage.getAncestorOfType(UIPageBody.class);
-            if (pageBody != null) {
-                pageBody.setMaximizedUIComponent(null);
-            }
         }
     }
 
@@ -274,10 +269,6 @@ public class UIPortletActionListener {
                 if (uiPage != null) {
                     uiPage.normalizePortletWindowStates();
                     uiPage.setMaximizedUIPortlet(uiPortlet);
-                    UIPageBody pageBody = uiPage.getAncestorOfType(UIPageBody.class);
-                    if (pageBody != null) {
-                        pageBody.setMaximizedUIComponent(uiPortlet);
-                    }
                     uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 }
             } else if (WindowState.MINIMIZED.equals(state)) {
@@ -725,59 +716,23 @@ public class UIPortletActionListener {
                 windowState = uiPortlet.getCurrentWindowState().toString();
             }
 
-            UIPageBody uiPageBody = uiPortlet.getAncestorOfType(UIPageBody.class);
             UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
             if (windowState.equals(WindowState.MAXIMIZED.toString())) {
+                uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 if(uiPage != null) {
                     uiPage.normalizePortletWindowStates();
+                    uiPage.setMaximizedUIPortlet(uiPortlet);
                 }
-                if (uiPageBody != null) {
-                    uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
-                    // TODO dang.tung: we have to set maximized portlet for page because in ShowMaxWindow case the PageBody
-                    // isn't rendered
-                    // reference: UIPortalLifecycle, UIPageLifecycle, renderChildren() in UIPageBody
-                    // ---------------------------------------------------------
-                    if (uiPage != null && uiPage.isShowMaxWindow()) {
-                        uiPage.setMaximizedUIPortlet(uiPortlet);
-                    }
-                    // ---------------------------------------------------------
-                    uiPageBody.setMaximizedUIComponent(uiPortlet);
+                return;
+            } else {
+                if (windowState.equals(WindowState.MINIMIZED.toString())) {
+                    uiPortlet.setCurrentWindowState(WindowState.MINIMIZED);
                 } else {
                     uiPortlet.setCurrentWindowState(WindowState.NORMAL);
                 }
-                return;
-            }
-            if (uiPageBody != null) {
-                UIPortlet maxPortlet = (UIPortlet) uiPageBody.getMaximizedUIComponent();
-                if (maxPortlet == uiPortlet) {
-                    uiPageBody.setMaximizedUIComponent(null);
-                }
-            }
-            // -----------------------------------------------------------------
-            if (windowState.equals(WindowState.MINIMIZED.toString())) {
-                uiPortlet.setCurrentWindowState(WindowState.MINIMIZED);
-                if(uiPage.getMaximizedUIPortlet() == uiPortlet) {
+                if (uiPage != null) {
                     uiPage.setMaximizedUIPortlet(null);
                 }
-                return;
-            }
-            uiPortlet.setCurrentWindowState(WindowState.NORMAL);
-
-            boolean hasMaximizedPortlet = false;
-            for(UIComponent uiComponent : uiPage.getChildren()) {
-                if(UIContainer.class.isAssignableFrom(uiComponent.getClass())) {
-                    UIContainer childUIContainer = (UIContainer) uiComponent;
-                    if(UIPortlet.class.isAssignableFrom(childUIContainer.getClass())) {
-                        UIPortlet childPortlet = (UIPortlet) childUIContainer;
-                        if(WindowState.MAXIMIZED.equals(childPortlet.getCurrentWindowState())) {
-                            hasMaximizedPortlet = true;
-                        }
-                    }
-                }
-            }
-
-            if(!hasMaximizedPortlet) {
-                uiPage.setMaximizedUIPortlet(null);
             }
         }
     }

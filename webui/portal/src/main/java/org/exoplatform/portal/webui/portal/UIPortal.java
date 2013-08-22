@@ -204,11 +204,6 @@ public class UIPortal extends UIContainer {
             return;
         }
 
-//        if (uiPageBody.getMaximizedUIComponent() != null) {
-//            UIPortlet currentPortlet = (UIPortlet) uiPageBody.getMaximizedUIComponent();
-//            currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-//            uiPageBody.setMaximizedUIComponent(null);
-//        }
         uiPageBody.setPageBody(getSelectedUserNode(), this);
     }
 
