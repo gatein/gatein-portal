@@ -26,7 +26,6 @@ import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -41,8 +40,6 @@ import org.gatein.common.logging.LoggerFactory;
  */
 @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBody.gtmpl")
 public class UIPageBody extends UIComponentDecorator {
-
-    private UIPortalComponent maximizedUIComponent;
 
     private String storageId;
 
@@ -80,6 +77,7 @@ public class UIPageBody extends UIComponentDecorator {
             return;
         }
 
+        setUIComponent(uiPage);
         if (uiPage.isShowMaxWindow()) {
             uiPortal.setMaximizedUIComponent(uiPage);
         } else {
@@ -87,12 +85,7 @@ public class UIPageBody extends UIComponentDecorator {
             if (maximizedComponent != null && maximizedComponent instanceof UIPage) {
                 uiPortal.setMaximizedUIComponent(null);
             }
-            maximizedComponent = this.getMaximizedUIComponent();
-            if (maximizedComponent != null && maximizedComponent instanceof UIPage) {
-                this.setMaximizedUIComponent(null);
-            }
         }
-        setUIComponent(uiPage);
     }
 
     /**
@@ -144,34 +137,4 @@ public class UIPageBody extends UIComponentDecorator {
 
         return uiPage;
     }
-
-    public void processRender(WebuiRequestContext context) throws Exception {
-        if (maximizedUIComponent != null && Util.getUIPortalApplication().getModeState() % 2 == 0) {
-            if(maximizedUIComponent.getAncestorOfType(UIPage.class) == getUIComponent()) {
-                maximizedUIComponent.processRender((WebuiRequestContext) WebuiRequestContext.getCurrentInstance());
-                return;
-            }
-        }
-
-        super.processRender(context);
-    }
-
-    /**
-     * Retrieve the UIApplication which is maximized to cover whole the PageBody
-     *
-     * @return the maximized portlet
-     */
-    public UIPortalComponent getMaximizedUIComponent() {
-        return maximizedUIComponent;
-    }
-
-    /**
-     * Store the portlet maximized into the current PageBody
-     *
-     * @param uiMaximizedComponent the portlet to be stored in UIPageBody
-     */
-    public void setMaximizedUIComponent(UIPortalComponent uiMaximizedComponent) {
-        this.maximizedUIComponent = uiMaximizedComponent;
-    }
-
 }

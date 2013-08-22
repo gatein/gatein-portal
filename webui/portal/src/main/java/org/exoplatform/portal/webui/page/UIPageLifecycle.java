@@ -21,7 +21,6 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.lifecycle.Lifecycle;
 
 import javax.portlet.WindowState;
@@ -29,23 +28,18 @@ import javax.portlet.WindowState;
 /**
  * Created by The eXo Platform SARL Author : Tuan Nguyen tuan08@users.sourceforge.net May 8, 2006
  */
-public class UIPageLifecycle extends Lifecycle {
+public class UIPageLifecycle extends Lifecycle<UIPage> {
 
-    public void processRender(UIComponent uicomponent, WebuiRequestContext context) throws Exception {
-        UIPage uiPage = (UIPage) uicomponent;
+    public void processRender(UIPage uiPage, WebuiRequestContext context) throws Exception {
         uiPage.normalizePortletWindowStates();
 
         if (uiPage.getMaximizedUIPortlet() != null) {
-            UIComponent uiComponent = uiPage.getMaximizedUIPortlet();
-
-            if(UIPortlet.class.isAssignableFrom(uiComponent.getClass())) {
-                ((UIPortlet<?, ?>) uiComponent).setCurrentWindowState(WindowState.MAXIMIZED);
-            }
-
-            uiComponent.processRender(context);
+            UIPortlet uiPortlet = uiPage.getMaximizedUIPortlet();
+            uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
+            uiPortlet.processRender(context);
             return;
         }
-        super.processRender(uicomponent, context);
+        super.processRender(uiPage, context);
     }
 
 }
