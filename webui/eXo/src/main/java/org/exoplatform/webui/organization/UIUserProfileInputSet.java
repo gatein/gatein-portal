@@ -58,8 +58,6 @@ import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 @Serialized
 public class UIUserProfileInputSet extends UIFormInputSet {
 
-    private String user_;
-
     public static final String MALE = "male";
 
     public static final String FEMALE = "female";
@@ -187,7 +185,6 @@ public class UIUserProfileInputSet extends UIFormInputSet {
 
     @SuppressWarnings("deprecation")
     public void setUserProfile(String user) throws Exception {
-        user_ = user;
         if (user == null)
             return;
         OrganizationService service = getApplicationComponent(OrganizationService.class);
@@ -210,13 +207,13 @@ public class UIUserProfileInputSet extends UIFormInputSet {
 
     @SuppressWarnings("deprecation")
     public void save(OrganizationService service, String user, boolean isnewUser) throws Exception {
-        user_ = user;
+
         UserProfileHandler hanlder = service.getUserProfileHandler();
-        UserProfile userProfile = hanlder.findUserProfileByName(user_);
+        UserProfile userProfile = hanlder.findUserProfileByName(user);
 
         if (userProfile == null) {
             userProfile = hanlder.createUserProfileInstance();
-            userProfile.setUserName(user_);
+            userProfile.setUserName(user);
         }
 
         for (UIComponent set : getChildren()) {
@@ -231,9 +228,10 @@ public class UIUserProfileInputSet extends UIFormInputSet {
 
         hanlder.saveUserProfile(userProfile, true);
 
-        Object[] args = { "UserProfile", user_ };
+        Object[] args = { "UserProfile", user };
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         UIApplication uiApp = context.getUIApplication();
+
         if (isnewUser) {
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.successful.create.user", args));
             return;
