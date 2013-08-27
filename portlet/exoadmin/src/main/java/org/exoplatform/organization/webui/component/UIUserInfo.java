@@ -31,6 +31,7 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.web.application.AbstractApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -44,6 +45,8 @@ import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.organization.UIUserMembershipSelector;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
+
+import java.util.ResourceBundle;
 
 /** Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
@@ -129,9 +132,22 @@ public class UIUserInfo extends UIFormTabPane {
                     PortalRequestContext prqCtx = Util.getPortalRequestContext();
                     prqCtx.setLocale(localeConfig.getLocale());
 
+                    // GTNPORTAL-3244: A workaround to update localization in the popup messages
+                    ResourceBundle bundle = Util.getPortalRequestContext().getApplication().getResourceBundle(localeConfig.getLocale());
+                    for(AbstractApplicationMessage message : uiApp.getUIPopupMessages().getErrors()) {
+                        message.setResourceBundle(bundle);
+                    }
+                    for(AbstractApplicationMessage message : uiApp.getUIPopupMessages().getWarnings()) {
+                        message.setResourceBundle(bundle);
+                    }
+                    for(AbstractApplicationMessage message : uiApp.getUIPopupMessages().getInfos()) {
+                        message.setResourceBundle(bundle);
+                    }
+
                     Util.getPortalRequestContext().addUIComponentToUpdateByAjax(
                             uiApp.findFirstComponentOfType(UIWorkingWorkspace.class));
                     Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
+
                 }
             }
 
