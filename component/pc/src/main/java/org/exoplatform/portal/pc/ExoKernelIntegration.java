@@ -70,6 +70,11 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
     /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
     private final ResourceBundleService resourceBundleService;
 
+    /**
+     * Indicates whether or not the producerPortletInvoker has been registered from this class
+     */
+    private boolean producerPortletInvokerSet;
+
     /** . */
     private Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
 
@@ -168,6 +173,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
         // register the producer portlet invoker if it hasn't been already
         if (!federatingPortletInvoker.isResolved(PortletInvoker.LOCAL_PORTLET_INVOKER_ID)) {
             federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, producerPortletInvoker);
+            producerPortletInvokerSet = true;
         }
 
         // The consumer portlet invoker
@@ -188,13 +194,24 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
 
     public void stop() {
         ServletContainerFactory.getServletContainer().removeWebAppListener(this);
+        if (!producerPortletInvokerSet || !PropertyManager.isDevelopping()) {
+           // The current instance did not register the producerPortletInvoker so we have nothing to do or we are not in
+           // developing mode
+           return;
+        }
+        final ExoContainer topContainer = ExoContainerContext.getTopContainer();
+        FederatingPortletInvoker federatingPortletInvoker = (FederatingPortletInvoker) topContainer
+                .getComponentInstanceOfType(FederatingPortletInvoker.class);
+        if (federatingPortletInvoker != null && federatingPortletInvoker.isResolved(PortletInvoker.LOCAL_PORTLET_INVOKER_ID)) {
+           // The current instance registered the producerPortletInvoker so we have to unregister it
+           federatingPortletInvoker.unregisterInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID);
+        }
     }
 
     public PortletApplicationDeployer getPortletApplicationRegistry() {
         return portletApplicationRegistry;
     }
 
-    @Override
     public void onEvent(WebAppEvent event) {
         if (event instanceof WebAppLifeCycleEvent) {
             WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent) event;
