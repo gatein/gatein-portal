@@ -18,13 +18,6 @@
  */
 package org.exoplatform.application.gadget;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.ServletContext;
-
 import org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.commons.xml.XMLValidator;
@@ -43,6 +36,13 @@ import org.picocontainer.Startable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -96,7 +96,7 @@ public class GadgetDeployer implements WebAppListener, Startable {
     }
 
     public void stop() {
-        ServletContainerFactory.getServletContainer().addWebAppListener(this);
+        ServletContainerFactory.getServletContainer().removeWebAppListener(this);
     }
 
     private void handle(ServletContext scontext, URL gadgetsURL) {
