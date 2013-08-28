@@ -1025,10 +1025,6 @@
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.infinispan</groupId>
-      <artifactId>infinispan-tree</artifactId>
-    </dependency>
     <!--<dependency>-->
     <!--<groupId>org.jdom</groupId>-->
     <!--<artifactId>jdom</artifactId>-->

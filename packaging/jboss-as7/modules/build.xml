@@ -140,7 +140,6 @@
       <maven-resource group="howl" artifact="howl-logger"/>
       <maven-resource group="org.htmlparser" artifact="htmlparser"/>
       <maven-resource group="com.ibm.icu" artifact="icu4j"/>
-      <maven-resource group="org.infinispan" artifact="infinispan-tree"/>
       <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
       <!--maven-resource group="org.jboss.jbossts" artifact="jbossjts" /-->
       <maven-resource group="org.jgroups" artifact="jgroups"/>
