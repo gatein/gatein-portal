@@ -36,6 +36,11 @@
       <artifactId>common-common</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-logging</artifactId>
+      <type>jar</type>
+    </dependency>
 
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
