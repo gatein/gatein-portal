@@ -61,6 +61,16 @@
 			height: 0;
 			margin: 0;
 		}
+
+		.rf-fu-itm.itm-error {
+			background: #f0dfd8;
+		}
+		.rf-fu-itm.itm-success {
+			background: #dff0d8;
+		}
+		.msg-hidden {
+			display: none;
+		}
 	</style>
 
 	<h:form id="form-import-site">
@@ -71,7 +81,7 @@
 		</div>
 		<div class="modal-body">
 			<div id="file-input-holder" class="control-group">
-				<rich:fileUpload id="upload" acceptedTypes="zip"
+				<rich:fileUpload id="upload" acceptedTypes="zip" binding="${importer.component}"
                                  maxFilesQuantity="5" noDuplicate="true"
                                  fileUploadListener="#{importer.importSite}"
                                  ontyperejected="alert('#{msg['redirect.admin.import.alert']}');"
@@ -80,12 +90,11 @@
                                  uploadLabel="#{msg['redirect.admin.import.import']}"
                                  clearLabel="#{msg['redirect.admin.import.clear']}"
                                  clearAllLabel="#{msg['redirect.admin.import.clearall']}"
-                                 onfileselect="$('#no-sites-div').hide();" >
-					<a4j:ajax event="uploadcomplete" execute="@none" render="info" />
-					<f:facet name="progress">
-						<rich:progressBar style="display: none;" onfinish="onFileUploaded($(this));" />
-					</f:facet>
+                                 onfileselect="$('#no-sites-div').hide();"
+                                 onuploadcomplete="processLastUploadedFile()"
+                                 onfilesubmit="processLastUploadedFile()">
 				</rich:fileUpload>
+				<rich:message for="upload" layout="list" styleClass="msg-hidden"/>
 			</div><!-- End .control-group -->
 			<br />
 			<div class="control-group">
@@ -104,9 +113,41 @@
 	</h:form>
 
 	<script type="text/javascript">
-		function onFileUploaded(el) {
-			el.parent().parent().parent().css('background-color','#dff0d8');
+
+		var classError = "itm-error";
+		var classSuccess = "itm-success";
+		// Done message inserted via RF after file is uploaded
+		var msgDone = "Done";
+
+		// The status (error or success) of the last uploaded file is set depending
+		// on the error message.
+		function processLastUploadedFile(){
+			// Iterate through the file list in the fileUpload component
+			$(".RedirectAdmin .rf-fu-lst .rf-fu-itm").each(function(){
+				var fileItem = $(this);
+				var msg = fileItem.find(".rf-fu-itm-st").html();
+				// Status of file is already known
+				var wasUpdated = fileItem.hasClass(classError) || fileItem.hasClass(classSuccess);
+				// If the file was already uploaded and the status of processing
+				// is yet unknown, set the status depending on the error message
+				if ((msg == msgDone) &amp;&amp; (!wasUpdated) ){
+					updateFileStatus(fileItem);
+					return fileItem;
+				}
+			});
 		}
+
+		function updateFileStatus(fileElement) {
+		// If error is present, there was an error while processing the file
+			var error = $(".RedirectAdmin span.rf-msg.msg-hidden .rf-msg-det").size() > 0;
+
+			if (error){
+				fileElement.addClass(classError);
+			} else {
+				fileElement.addClass(classSuccess);
+			}
+		}
+
 		$(document).ready(function () {
 			$(".rf-fu-btn-cnt-add").addClass("icon-download-alt").css("width", "auto");
 			$(".rf-fu-btn-add").addClass("btn");
