@@ -61,8 +61,8 @@ window.ajaxPost = function(url, queryString, callback) {
 };
 
 eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
-  var url = eXo.env.server.portalURLTemplate.replace("{portal:componentId}", targetComponentId);
-  url = url.replace("{portal:action}", actionName);
+  var url = eXo.env.server.portalURLTemplate.replace("_portal:componentId_", targetComponentId);
+  url = url.replace("_portal:action_", actionName);
   
   if(params != null) {
   	var len = params.length ;
@@ -74,7 +74,7 @@ eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax
   }
   if(useAjax) url += "&ajaxRequest=true" ;
 
-  return  url;
+  return url;
 };
 
 eXo.env.addLoadedRemoteScripts = function(scripts) {
