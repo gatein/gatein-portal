@@ -177,7 +177,14 @@ public class PortletApplicationController extends GenericPortlet {
                         controller.removeApplication(applicationId_);
                     }
                 }
+
+                PortletConfigRegistry registry = (PortletConfigRegistry) container
+                        .getComponentInstanceOfType(PortletConfigRegistry.class);
+                if (registry != null) {
+                    registry.removePortletConfig(getPortletName());
+                }
             }
+
         } catch (Exception ex) {
             log.error("Error while destroying the porlet", ex);
         }

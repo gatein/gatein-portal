@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -109,6 +110,8 @@ public class JavascriptConfigParser {
     /** . */
     private final String contextPath;
 
+    private static final String SCRIPT_RESOURCE_DESCRIPTORS_ATTR = "gatein.script.resource.descriptors";
+
     private static final Log log = ExoLogger.getExoLogger(JavascriptConfigParser.class);
 
     public JavascriptConfigParser(String contextPath) {
@@ -117,11 +120,27 @@ public class JavascriptConfigParser {
 
     public static void processConfigResource(InputStream is, JavascriptConfigService service, ServletContext scontext) {
         JavascriptConfigParser parser = new JavascriptConfigParser(scontext.getContextPath());
+        LinkedList<ScriptResourceDescriptor> descriptors = new LinkedList<ScriptResourceDescriptor>();
         JavascriptTask task = new JavascriptTask();
         for (ScriptResourceDescriptor script : parser.parseConfig(is)) {
             task.addDescriptor(script);
+            descriptors.add(script);
+        }
+        scontext.setAttribute(SCRIPT_RESOURCE_DESCRIPTORS_ATTR, Collections.unmodifiableList(descriptors));
+        task.execute(service, scontext);
+    }
+
+    public static void unregisterResources(JavascriptConfigService service, ServletContext scontext) {
+        List<ScriptResourceDescriptor> descriptors = (List<ScriptResourceDescriptor>) scontext.getAttribute(SCRIPT_RESOURCE_DESCRIPTORS_ATTR);
+        if (descriptors == null)
+            return;
+
+        JavascriptUnregisterTask task = new JavascriptUnregisterTask();
+        for (ScriptResourceDescriptor script : descriptors) {
+            task.addDescriptor(script);
         }
         task.execute(service, scontext);
+        scontext.removeAttribute(SCRIPT_RESOURCE_DESCRIPTORS_ATTR);
     }
 
     public List<ScriptResourceDescriptor> parseConfig(InputStream is) {

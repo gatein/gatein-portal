@@ -53,4 +53,14 @@ public class PortletConfigRegistry {
         }
     }
 
+    /**
+     * Remove the PortletConfig associated with given portletName
+     *
+     * @param portletName
+     */
+    public void removePortletConfig(String portletName) {
+        synchronized (configs) {
+            configs.remove(portletName);
+        }
+    }
 }

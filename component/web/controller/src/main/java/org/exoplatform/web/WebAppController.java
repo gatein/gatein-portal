@@ -60,6 +60,7 @@ import org.exoplatform.web.controller.router.RouterConfigException;
 import org.gatein.common.http.QueryStringParser;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.picocontainer.Startable;
 
 /**
  * The WebAppController is the entry point of the GateIn service.
@@ -68,7 +69,7 @@ import org.gatein.common.logging.LoggerFactory;
 @ManagedDescription("The portal controller")
 @NameTemplate({ @Property(key = "view", value = "portal"), @Property(key = "service", value = "controller") })
 @RESTEndpoint(path = "portalcontroller")
-public class WebAppController {
+public class WebAppController implements Startable {
 
     /** . */
     public static final QualifiedName HANDLER_PARAM = QualifiedName.create("gtn", "handler");
@@ -252,8 +253,10 @@ public class WebAppController {
     }
 
     public void unregister(String[] paths) {
-        for (String path : paths)
-            handlers.remove(path);
+        for (String path : paths) {
+            WebRequestHandler handler = handlers.remove(path);
+            handler.onDestroy(this);
+        }
     }
 
     public void onHandlersInit(ServletConfig config) throws Exception {
@@ -348,6 +351,17 @@ public class WebAppController {
         } else {
             log.error("Missing valid router configuration " + configurationPathRef.get());
             res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void stop() {
+        for (WebRequestHandler handler : handlers.values()) {
+            handler.onDestroy(this);
         }
     }
 }
