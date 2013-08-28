@@ -227,11 +227,25 @@ public class ScriptGraph {
     }
 
     public ScriptResource removeResource(ResourceId id) {
-        ScriptResource removed = resources.get(id.getScope()).remove(id.getName());
-        if (removed != null) {
-            removed.graph = null;
+        return removeResource(id, null);
+    }
+
+    public ScriptResource removeResource(ResourceId id, String contextPath) {
+        ScriptResource toRemove = resources.get(id.getScope()).get(id.getName());
+
+        if (toRemove != null) {
+            if (ResourceScope.SHARED.equals(id.getScope()) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(id.getName())) {
+                toRemove.removeModuleByContextPath(contextPath);
+
+                if (toRemove.getModules().size() > 0)
+                    return toRemove;
+            }
+
+            resources.get(id.getScope()).remove(id.getName());
+            toRemove.graph = null;
         }
-        return removed;
+
+        return toRemove;
     }
 
     public ScriptGroup getLoadGroup(String groupName) {

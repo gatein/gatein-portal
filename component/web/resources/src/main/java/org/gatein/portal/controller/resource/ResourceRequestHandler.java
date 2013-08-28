@@ -19,15 +19,17 @@
 
 package org.gatein.portal.controller.resource;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.utils.I18N;
@@ -35,20 +37,28 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.application.ResourceRequestFilter;
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
+import org.exoplatform.web.application.javascript.JavascriptConfigDeployer;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.ServletContainerFactory;
+import org.gatein.wci.WebAppEvent;
+import org.gatein.wci.WebAppLifeCycleEvent;
+import org.gatein.wci.WebAppListener;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ResourceRequestHandler extends WebRequestHandler {
+public class ResourceRequestHandler extends WebRequestHandler implements WebAppListener {
 
     public static final String IF_MODIFIED_SINCE = "If-Modified-Since";
 
     public static final String LAST_MODIFIED = "Last-Modified";
+
+    public static final String SUPPORT_GATEIN_RESOURCES = "org.gatein.supports.gatein-resources.";
 
     /** . */
     private static String PATH = "META-INF/maven/org.gatein.portal/exo.portal.component.web.resources/pom.properties";
@@ -221,5 +231,38 @@ public class ResourceRequestHandler extends WebRequestHandler {
     @Override
     protected boolean getRequiresLifeCycle() {
         return false;
+    }
+
+    @Override
+    public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception {
+        super.onInit(controller, sConfig);
+        log.debug("Registering ResourceRequestHandler for servlet container events");
+        ServletContainerFactory.getServletContainer().addWebAppListener(this);
+    }
+
+    @Override
+    public void onDestroy(WebAppController controller) {
+        super.onDestroy(controller);
+        log.debug("Unregistering ResourceRequestHandler for servlet container events");
+        ServletContainerFactory.getServletContainer().removeWebAppListener(this);
+    }
+
+    @Override
+    public void onEvent(WebAppEvent event) {
+        if (event instanceof WebAppLifeCycleEvent) {
+            WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent) event;
+            ServletContext servletContext = lifeCycleEvent.getWebApp().getServletContext();
+
+            if (WebAppLifeCycleEvent.ADDED == lifeCycleEvent.getType()) {
+                InputStream is = servletContext.getResourceAsStream(JavascriptConfigDeployer.GATEIN_CONFIG_RESOURCE);
+                if (is != null) {
+                    servletContext.setAttribute(SUPPORT_GATEIN_RESOURCES, true);
+                }
+            } else if (servletContext.getAttribute(SUPPORT_GATEIN_RESOURCES) != null
+                    && WebAppLifeCycleEvent.REMOVED == lifeCycleEvent.getType()) {
+                cache.clear();
+                servletContext.removeAttribute(SUPPORT_GATEIN_RESOURCES);
+            }
+        }
     }
 }
