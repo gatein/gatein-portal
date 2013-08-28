@@ -108,7 +108,7 @@ public class UIPortalApplication extends UIApplication {
 
     public static final UIComponent EMPTY_COMPONENT = new UIComponent() {
         public String getId() {
-            return "{portal:componentId}";
+            return "_portal:componentId_";
         };
     };
 
@@ -540,12 +540,12 @@ public class UIPortalApplication extends UIApplication {
         if (!requestNavData.equals(lastRequestNavData)) {
             lastRequestNavData = requestNavData;
 
-            StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=decodeURIComponent(\"");
-            js.append(getBaseURL()).append("\");\n");
+            StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=\"");
+            js.append(getBaseURL()).append("\";\n");
 
             String url = getPortalURLTemplate();
-            js.append("eXo.env.server.portalURLTemplate=decodeURIComponent(\"");
-            js.append(url).append("\");");
+            js.append("eXo.env.server.portalURLTemplate=\"");
+            js.append(url).append("\";");
 
             pcontext.getJavascriptManager().require("SHARED/base").addScripts(js.toString());
 
@@ -781,7 +781,7 @@ public class UIPortalApplication extends UIApplication {
         urlTemplate.setMimeType(MimeType.PLAIN);
         urlTemplate.setPath(pcontext.getNodePath());
         urlTemplate.setResource(EMPTY_COMPONENT);
-        urlTemplate.setAction("{portal:action}");
+        urlTemplate.setAction("_portal:action_");
 
         return urlTemplate.toString();
     }
