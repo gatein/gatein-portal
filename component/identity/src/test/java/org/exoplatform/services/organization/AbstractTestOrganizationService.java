@@ -170,7 +170,7 @@ public class AbstractTestOrganizationService {
         assertEquals("Expect user name is: ", USER, user.getUserName());
         UserProfile userProfile = profileHandler_.findUserProfileByName(USER);
         assertNull(profileHandler_.removeUserProfile(USER, true));
-        assertNotNull(profileHandler_.findUserProfileByName(USER));
+        assertNull(profileHandler_.findUserProfileByName(USER));
 
         userProfile = profileHandler_.createUserProfileInstance(USER);
         userProfile.getUserInfoMap().put("key", "value");
@@ -329,10 +329,13 @@ public class AbstractTestOrganizationService {
         groupHandler_.removeGroup(groupHandler_.findGroupById(groupChild1.getId()), true);
         assertNull("Expect child group has been removed: ", groupHandler_.findGroupById(groupChild1.getId()));
         assertEquals("Expect only 1 child group in parent group", 1, groupHandler_.findGroups(groupParent).size());
-        /* Remove Parent group, all it's group child will be removed */
-        groupHandler_.removeGroup(groupParent, true);
-        assertEquals("Expect ParentGroup is removed:", null, groupHandler_.findGroupById(groupParent.getId()));
-        assertEquals("Expect all child group is removed: ", 0, groupHandler_.findGroups(groupParent).size());
+        /* Remove Parent group, expect exception thrown */
+        try {
+            groupHandler_.removeGroup(groupParent, true);
+            fail("Exception should be thrown when try return parennt group");
+        } catch (Exception e) {}
+        assertNotNull("Expect ParentGroup is not removed:", groupHandler_.findGroupById(groupParent.getId()));
+        assertEquals("Expect all child group is not removed: ", 1, groupHandler_.findGroups(groupParent).size());
         
         Collection<Group> groups = groupHandler_.findGroupByMembership("demo", "member");
         assertNotNull(groups);

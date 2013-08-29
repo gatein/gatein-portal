@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.DisabledUserException;
@@ -433,7 +434,15 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
         if (q.getUserName() != null) {
-            qb.idFilter(q.getUserName());
+            //Process username
+            String username = q.getUserName();
+            if(!username.startsWith("*")) {
+                username = "*" + username;
+            }
+            if(!username.endsWith("*")) {
+                username = username + "*";
+            }
+            qb.idFilter(username);
         }
         if (q.getEmail() != null) {
             qb.attributeValuesFilter(UserDAOImpl.USER_EMAIL, new String[] { q.getEmail() });
@@ -534,6 +543,22 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         } catch (Exception e) {
             handleException("Cannot obtain group: " + groupId + "; ", e);
 
+        }
+
+        //As test case supposed, we should return empty list instead of Exception if group is not exist.
+        if(jbidGroup == null) {
+            return new ListAccess<User>() {
+                public User[] load(int index, int length) throws Exception {
+                    if(index > 0 || length > 0) {
+                        throw new IndexOutOfBoundsException("Try to access an empty list");
+                    }
+                    return new User[0];
+                }
+
+                public int getSize() throws Exception {
+                    return 0;
+                }
+            };
         }
 
         qb.addRelatedGroup(jbidGroup);

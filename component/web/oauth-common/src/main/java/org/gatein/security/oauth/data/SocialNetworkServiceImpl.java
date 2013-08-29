@@ -83,6 +83,9 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
+            if(userProfile == null) {
+                userProfile = userProfileHandler.createUserProfileInstance(username);
+            }
 
             OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
             oauthProviderProcessor.saveAccessTokenAttributesToUserProfile(userProfile, this, accessToken);

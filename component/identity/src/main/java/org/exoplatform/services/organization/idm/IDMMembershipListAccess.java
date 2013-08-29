@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.OrganizationService;
@@ -167,11 +168,11 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
     }
 
     PicketLinkIDMService getIDMService() {
-        return (PicketLinkIDMService) PortalContainer.getInstance().getComponentInstanceOfType(PicketLinkIDMService.class);
+        return ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PicketLinkIDMService.class);
     }
 
     PicketLinkIDMOrganizationServiceImpl getOrganizationService() {
-        return (PicketLinkIDMOrganizationServiceImpl) PortalContainer.getInstance().getComponentInstanceOfType(
+        return (PicketLinkIDMOrganizationServiceImpl) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
                 OrganizationService.class);
     }
 }

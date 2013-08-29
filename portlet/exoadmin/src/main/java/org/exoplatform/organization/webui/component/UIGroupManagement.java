@@ -132,11 +132,18 @@ public class UIGroupManagement extends UIContainer {
             UserACL acl = uiGroupManagement.getApplicationComponent(UserACL.class);
             List<String> mandatories = acl.getMandatoryGroups();
             if (!mandatories.isEmpty() && isMandatory(service.getGroupHandler(), currentGroup, mandatories)) {
-                uiApp.addMessage(new ApplicationMessage("UIGroupManagement.msg.DeleteMandatory", null));
+                uiApp.addMessage(new ApplicationMessage("UIGroupManagement.msg.DeleteParent", null));
                 return;
             }
             String parentId = currentGroup.getParentId();
-            service.getGroupHandler().removeGroup(currentGroup, true);
+            GroupHandler groupHandler = service.getGroupHandler();
+            try {
+                service.getGroupHandler().removeGroup(currentGroup, true);
+            } catch (IllegalStateException e) {
+                //Can not remove group because it has at least one child.
+                uiApp.addMessage(new ApplicationMessage("UIGroupManagement.msg.DeleteParent", null));
+                return;
+            }
             uiGroupExplorer.changeGroup(parentId);
         }
 

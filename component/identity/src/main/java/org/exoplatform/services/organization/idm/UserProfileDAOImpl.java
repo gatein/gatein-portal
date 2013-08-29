@@ -23,11 +23,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.naming.InvalidNameException;
+
 import org.apache.poi.hslf.model.Placeholder;
+import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileEventListener;
 import org.exoplatform.services.organization.UserProfileHandler;
@@ -84,6 +90,16 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
     public void saveUserProfile(UserProfile profile, boolean broadcast) throws Exception {
         // We need to check if userProfile exists, because organization API is limited and it doesn't have separate methods for
         // "creation" and for "update" of user profile :/
+
+        String username = profile.getUserName();
+        UserHandler userHandler = this.orgService.getUserHandler();
+        //This is temporary because disabled user feature is not implemented
+        //userHandler.findUserByName(username, true)
+        User user = userHandler.findUserByName(username);
+        if(user == null) {
+            throw new InvalidNameException("User " + username + " not exists");
+        }
+
         boolean isNew = true;
         if (broadcast) {
             UserProfile found = getProfile(profile.getUserName());
@@ -153,16 +169,32 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
             // julien : integration bug fix
             // Return an empty profile to avoid NPE in portal
             // Should clarify what do do (maybe portal should care about returned value)
-            UserProfileImpl profile = new UserProfileImpl();
+            /*UserProfileImpl profile = new UserProfileImpl();
             profile.setUserName(userName);
-            return profile;
+            return profile;*/
+
+            //Return NULL as TCK suppose
+            return null;
         } else {
             return up;
         }
     }
 
     public Collection findUserProfiles() throws Exception {
-        return null;
+        List<UserProfile> profiles = new LinkedList<UserProfile>();
+
+        UserHandler userHandler = this.orgService.getUserHandler();
+        //This should find enabled user
+        ListAccess<User> users = userHandler.findAllUsers();
+        int size = users.getSize();
+        for(User u : users.load(0, size)) {
+            UserProfile profile = this.getProfile(u.getUserName());
+            if(profile != null) {
+                profiles.add(profile);
+            }
+        }
+
+        return profiles;
     }
 
     private void preSave(UserProfile profile, boolean isNew) throws Exception {

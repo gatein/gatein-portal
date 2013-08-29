@@ -28,6 +28,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.InvalidNameException;
+
 import org.exoplatform.commons.utils.ListenerStack;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.MembershipTypeEventListener;
@@ -115,13 +117,13 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
         mt.setModifiedDate(now);
 
         if (broadcast) {
-            preSave(mt, true);
+            preSave(mt, false);
         }
 
         updateMembershipType(mt);
 
         if (broadcast) {
-            postSave(mt, true);
+            postSave(mt, false);
         }
 
         return mt;
@@ -160,6 +162,10 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
         }
 
         MembershipType mt = findMembershipType(name);
+        if (mt == null) {
+            throw new InvalidNameException("Can not remove membership type" + name
+                    + "record, because membership type does not exist.");
+        }
 
         if (mt != null) {
             if (broadcast) {

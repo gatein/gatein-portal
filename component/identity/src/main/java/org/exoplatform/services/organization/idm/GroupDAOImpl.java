@@ -102,6 +102,9 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
                 handleException("Cannot obtain group: " + parentPLGroupName, e);
 
             }
+            if(parentGroup == null) {
+                throw new Exception("Parent group is not exist");
+            }
 
             ((ExtGroup) child).setId(parent.getId() + "/" + child.getGroupName());
 
@@ -154,10 +157,6 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
             Tools.logMethodIn(log, LogLevel.TRACE, "removeGroup", new Object[] { "group", group, "broadcast", broadcast });
         }
 
-        if (broadcast) {
-            preDelete(group);
-        }
-
         org.picketlink.idm.api.Group jbidGroup = null;
 
         String plGroupName = getPLIDMGroupName(group.getGroupName());
@@ -173,13 +172,34 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         }
 
         if (jbidGroup == null) {
-            return group;
+            //As test case suppose, api should throw exception here
+            throw new Exception("Group is not exists");
+            //return group;
         }
 
         // MembershipDAOImpl.removeMembershipEntriesOfGroup(group, getIdentitySession());
 
+        //Check: Has this group got any child?
+        Collection<org.picketlink.idm.api.Group> oneLevelChilds = null;
+        orgService.flush();
         try {
-            orgService.flush();
+            oneLevelChilds = getIdentitySession().getRelationshipManager()
+                    .findAssociatedGroups(jbidGroup, null, true, false);
+        } catch (Exception e) {
+            handleException("Cannot clear group relationships: " + plGroupName + "; ", e);
+        } finally {
+            if(oneLevelChilds != null && oneLevelChilds.size() > 0) {
+                throw new IllegalStateException("Group " + group.getGroupName() + " has at least one child group");
+            }
+        }
+
+        //preDelete event should be raise here, when group will be really removed
+        if (broadcast) {
+            preDelete(group);
+        }
+
+        try {
+            /*orgService.flush();
 
             Collection<org.picketlink.idm.api.Group> oneLevelChilds = getIdentitySession().getRelationshipManager()
                     .findAssociatedGroups(jbidGroup, null, true, false);
@@ -192,7 +212,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
             for (org.picketlink.idm.api.Group child : allChilds) {
                 // TODO: impl force in IDM
                 getIdentitySession().getPersistenceManager().removeGroup(child, true);
-            }
+            }*/
 
             // Obtain parents
 

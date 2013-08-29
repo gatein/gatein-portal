@@ -99,9 +99,23 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
 
         orgService.flush();
 
+        if (user == null) {
+            throw new InvalidNameException("Can not create membership record because user is null");
+        }
+        if (orgService.getUserHandler().findUserByName(user.getUserName()) == null) {
+            throw new InvalidNameException("Can not create membership record because user " + user.getUserName() + " does not exist.");
+        }
+
+
         if (g == null) {
             throw new InvalidNameException("Can not create membership record for " + user.getUserName()
                     + " because group is null");
+        }
+        //Check group exist
+        Group g1 = this.orgService.getGroupHandler().findGroupById(g.getId());
+        if(g1 == null) {
+            throw new InvalidNameException("Can not create membership record for " + user.getUserName()
+                    + " because group " + g.getGroupName() + " is not exist");
         }
 
         if (mt == null) {
@@ -213,7 +227,14 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
 
         orgService.flush();
 
-        Membership m = new MembershipImpl(id);
+        Membership m = null;
+        try {
+            m = new MembershipImpl(id);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            //If MembershipID is not valid with format 'membershipType:username:groupId'
+            //It is seemed as membership not exist
+            return null;
+        }
 
         String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
@@ -240,7 +261,10 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         }
 
         if (!hasRole && !(isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated)) {
-            return m;
+            //As test case expect, if meembership does not exist
+            //This method should return null
+            return null;
+            //return m;
         }
 
         if (broadcast) {
@@ -739,8 +763,11 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
     }
 
     private String getGroupTypeFromId(String groupId) {
-
-        String parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+        //Need to fixbug: exception when groupId is not valid format
+        String parentId = "";
+        if(groupId != null && groupId.lastIndexOf('/') > -1) {
+            parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+        }
 
         return orgService.getConfiguration().getGroupType(parentId);
     }

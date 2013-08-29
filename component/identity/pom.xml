@@ -19,7 +19,8 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.component</artifactId>
@@ -81,7 +82,13 @@
       <scope>test</scope>
     </dependency>
 
-
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.tests</artifactId>
+      <version>${org.exoplatform.core.version}</version>
+      <classifier>test-sources</classifier>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
 
@@ -94,6 +101,19 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
             <forkMode>always</forkMode>
+            <includes>
+              <include>org/exoplatform/services/tck/organization/Test*.java</include>
+              <include>org/exoplatform/services/organization/Test*.java</include>
+            </includes>
+            <excludes>
+              <exclude>**/AbstractOrganizationServiceTest.java</exclude>
+              <exclude>**/AbstractTestOrganizationService.java</exclude>
+            </excludes>
+            <systemPropertyVariables>
+              <gatein.test.tmp.dir>${project.build.directory}/datadir</gatein.test.tmp.dir>
+              <orgservice.test.configuration.skipDateTests>true</orgservice.test.configuration.skipDateTests>
+              <orgservice.test.configuration.skipCISearchTests>true</orgservice.test.configuration.skipCISearchTests>
+            </systemPropertyVariables>
           </configuration>
         </plugin>
       </plugins>
@@ -109,6 +129,65 @@
             <goals>
               <goal>test-jar</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.exoplatform.core</groupId>
+                  <artifactId>exo.core.component.organization.tests</artifactId>
+                  <classifier>test-sources</classifier>
+                  <type>jar</type>
+                  <overWrite>false</overWrite>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/org-service-tck-tests</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.3</version>
+        <executions>
+          <execution>
+            <id>add-test-resource</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/org-service-tck-tests</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/org-service-tck-tests</source>
+              </sources>
+            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -63,6 +64,15 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
     public User[] load(int index, int length) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "load", new Object[] { "index", index, "length", length });
+        }
+
+        if(length == 0) {
+            return new User[0];
+        }
+
+        //As test suppose, we should throw exception when try to load more element than size
+        if(index + length > this.getSize()) {
+            throw new IllegalArgumentException("Try to get more than number users can retrieve");
         }
 
         List<org.picketlink.idm.api.User> users = null;
@@ -146,11 +156,11 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
     }
 
     PicketLinkIDMService getIDMService() {
-        return (PicketLinkIDMService) PortalContainer.getInstance().getComponentInstanceOfType(PicketLinkIDMService.class);
+        return ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PicketLinkIDMService.class);
     }
 
     PicketLinkIDMOrganizationServiceImpl getOrganizationService() {
-        return (PicketLinkIDMOrganizationServiceImpl) PortalContainer.getInstance().getComponentInstanceOfType(
+        return (PicketLinkIDMOrganizationServiceImpl) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
                 OrganizationService.class);
     }
 }

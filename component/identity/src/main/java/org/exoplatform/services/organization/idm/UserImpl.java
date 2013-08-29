@@ -64,6 +64,6 @@ public class UserImpl extends org.exoplatform.services.organization.impl.UserImp
 
     @Override
     public String getDisplayName() {
-        return this.displayName;
+        return this.displayName != null ? this.displayName : this.getFirstName() + " " + this.getLastName();
     }
 }

@@ -57,6 +57,9 @@ public class AccessTokenInvalidationListener extends UserProfileEventListener {
     @Override
     public void preSave(UserProfile userProfile, boolean isNew) throws Exception {
         UserProfile foundUserProfile = userProfileHandler.findUserProfileByName(userProfile.getUserName());
+        if(foundUserProfile == null) {
+            foundUserProfile = userProfileHandler.createUserProfileInstance(userProfile.getUserName());
+        }
 
         for (OAuthProviderType opt : oauthProviderTypeRegistry.getEnabledOAuthProviders()) {
             String oauthProviderUsername = userProfile.getAttribute(opt.getUserNameAttrName());
