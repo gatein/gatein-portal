@@ -718,11 +718,11 @@ public class UIPortletActionListener {
 
             UIPage uiPage = uiPortlet.getAncestorOfType(UIPage.class);
             if (windowState.equals(WindowState.MAXIMIZED.toString())) {
-                uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 if(uiPage != null) {
                     uiPage.normalizePortletWindowStates();
                     uiPage.setMaximizedUIPortlet(uiPortlet);
                 }
+                uiPortlet.setCurrentWindowState(WindowState.MAXIMIZED);
                 return;
             } else {
                 if (windowState.equals(WindowState.MINIMIZED.toString())) {
@@ -731,7 +731,7 @@ public class UIPortletActionListener {
                     uiPortlet.setCurrentWindowState(WindowState.NORMAL);
                 }
                 if (uiPage != null) {
-                    uiPage.setMaximizedUIPortlet(null);
+                    clearMaximizedUIComponent(uiPage, uiPortlet);
                 }
             }
         }
