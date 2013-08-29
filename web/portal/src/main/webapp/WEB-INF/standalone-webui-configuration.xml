@@ -34,7 +34,6 @@
     <application-lifecycle-listeners>
       <listener>org.exoplatform.portal.application.PortalLogoutLifecycle</listener>
       <listener>org.exoplatform.portal.application.PortalStatisticLifecycle</listener>
-      <listener>org.exoplatform.portal.application.PortalApplicationLifecycle</listener>
       <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>
       <!--<listener>org.exoplatform.portal.application.localization.LocalizationLifecycle</listener>-->
     </application-lifecycle-listeners>

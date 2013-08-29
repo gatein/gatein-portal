@@ -19,27 +19,17 @@
 
 package org.exoplatform.web.filter;
 
-import java.io.BufferedReader;
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.test.mocks.servlet.MockServletRequest;
+
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.exoplatform.component.test.AbstractGateInTest;
 
 /**
  * Created by The eXo Platform SAS Author : Nicolas Filotto nicolas.filotto@exoplatform.com 25 sept. 2009
@@ -53,7 +43,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         MockFilterOKWTF mockFilterOKWTF = new MockFilterOKWTF();
         MockFilterChain chain = new MockFilterChain();
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF)));
-        exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+        exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
         assertTrue(mockFilterOKTF.start);
         assertTrue(mockFilterOKTF.end);
         assertTrue(mockFilterOKWTF.start);
@@ -65,7 +55,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         chain = new MockFilterChain();
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF),
                 getFilterDefinition(new MockFilterKO())));
-        exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+        exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
         assertTrue(mockFilterOKTF.start);
         assertTrue(mockFilterOKTF.end);
         assertTrue(mockFilterOKWTF.start);
@@ -78,7 +68,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF),
                 getFilterDefinition(new MockFilterKOIO())));
         try {
-            exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+            exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
             fail("IOException is expected");
         } catch (IOException e) {
         }
@@ -94,7 +84,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF),
                 getFilterDefinition(new MockFilterKOSE())));
         try {
-            exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+            exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
             fail("ServletException is expected");
         } catch (ServletException e) {
         }
@@ -110,7 +100,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF),
                 getFilterDefinition(new MockFilterKORE())));
         try {
-            exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+            exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
             fail("RuntimeException is expected");
         } catch (RuntimeException e) {
         }
@@ -126,7 +116,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF),
                 getFilterDefinition(new MockFilterKOER())));
         try {
-            exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+            exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
             fail("Error is expected");
         } catch (Error e) {
         }
@@ -143,7 +133,7 @@ public class TestExtensibleFilter extends AbstractGateInTest {
         exFilter.addFilterDefinitions(Arrays.asList(getFilterDefinition(mockFilterOKTF), getFilterDefinition(mockFilterOKWTF),
                 getFilterDefinition(new MockFilterKOIO()), getFilterDefinition(mockFilterOKTF2)));
         try {
-            exFilter.doFilter(new MockServletRequest(), null, chain, pathRequest);
+            exFilter.doFilter(new MockServletRequest(null, null), null, chain, pathRequest);
             fail("IOException is expected");
         } catch (IOException e) {
         }
@@ -235,276 +225,5 @@ public class TestExtensibleFilter extends AbstractGateInTest {
                 ServletException {
             throw new Error();
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static class MockServletRequest implements HttpServletRequest {
-
-        public String getAuthType() {
-
-            return null;
-        }
-
-        public String getContextPath() {
-
-            return null;
-        }
-
-        public Cookie[] getCookies() {
-
-            return null;
-        }
-
-        public long getDateHeader(String name) {
-
-            return 0;
-        }
-
-        public String getHeader(String name) {
-
-            return null;
-        }
-
-        public Enumeration getHeaderNames() {
-
-            return null;
-        }
-
-        public Enumeration getHeaders(String name) {
-
-            return null;
-        }
-
-        public int getIntHeader(String name) {
-
-            return 0;
-        }
-
-        public String getMethod() {
-
-            return null;
-        }
-
-        public String getPathInfo() {
-            return null;
-        }
-
-        public String getPathTranslated() {
-
-            return null;
-        }
-
-        public String getQueryString() {
-
-            return null;
-        }
-
-        public String getRemoteUser() {
-
-            return null;
-        }
-
-        public String getRequestURI() {
-
-            return "/";
-        }
-
-        public StringBuffer getRequestURL() {
-
-            return null;
-        }
-
-        public String getRequestedSessionId() {
-
-            return null;
-        }
-
-        public String getServletPath() {
-
-            return null;
-        }
-
-        public HttpSession getSession() {
-
-            return null;
-        }
-
-        public HttpSession getSession(boolean create) {
-
-            return null;
-        }
-
-        public Principal getUserPrincipal() {
-
-            return null;
-        }
-
-        public boolean isRequestedSessionIdFromCookie() {
-
-            return false;
-        }
-
-        public boolean isRequestedSessionIdFromURL() {
-
-            return false;
-        }
-
-        public boolean isRequestedSessionIdFromUrl() {
-
-            return false;
-        }
-
-        public boolean isRequestedSessionIdValid() {
-
-            return false;
-        }
-
-        public boolean isUserInRole(String role) {
-
-            return false;
-        }
-
-        public Object getAttribute(String name) {
-
-            return null;
-        }
-
-        public Enumeration getAttributeNames() {
-
-            return null;
-        }
-
-        public String getCharacterEncoding() {
-
-            return null;
-        }
-
-        public int getContentLength() {
-
-            return 0;
-        }
-
-        public String getContentType() {
-
-            return null;
-        }
-
-        public ServletInputStream getInputStream() throws IOException {
-
-            return null;
-        }
-
-        public String getLocalAddr() {
-
-            return null;
-        }
-
-        public String getLocalName() {
-
-            return null;
-        }
-
-        public int getLocalPort() {
-
-            return 0;
-        }
-
-        public Locale getLocale() {
-
-            return null;
-        }
-
-        public Enumeration getLocales() {
-
-            return null;
-        }
-
-        public String getParameter(String name) {
-
-            return null;
-        }
-
-        public Map getParameterMap() {
-
-            return null;
-        }
-
-        public Enumeration getParameterNames() {
-
-            return null;
-        }
-
-        public String[] getParameterValues(String name) {
-
-            return null;
-        }
-
-        public String getProtocol() {
-
-            return null;
-        }
-
-        public BufferedReader getReader() throws IOException {
-
-            return null;
-        }
-
-        public String getRealPath(String path) {
-
-            return null;
-        }
-
-        public String getRemoteAddr() {
-
-            return null;
-        }
-
-        public String getRemoteHost() {
-
-            return null;
-        }
-
-        public int getRemotePort() {
-
-            return 0;
-        }
-
-        public RequestDispatcher getRequestDispatcher(String path) {
-
-            return null;
-        }
-
-        public String getScheme() {
-
-            return null;
-        }
-
-        public String getServerName() {
-
-            return null;
-        }
-
-        public int getServerPort() {
-
-            return 0;
-        }
-
-        public boolean isSecure() {
-
-            return false;
-        }
-
-        public void removeAttribute(String name) {
-
-        }
-
-        public void setAttribute(String name, Object o) {
-
-        }
-
-        public void setCharacterEncoding(String env) throws UnsupportedEncodingException {
-
-        }
-
     }
 }
