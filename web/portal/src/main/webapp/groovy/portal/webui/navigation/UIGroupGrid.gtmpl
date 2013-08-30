@@ -25,7 +25,7 @@
        		<div class="Label"><%= groupName %></div>
 				</td>	
         <td class="ActionBlock">
-        	<a href="$addLink" class="AddGroupIcon"><%=_ctx.appRes("UIAddGroupNavigation.Action.Add")%></a>
+        	<a href="javascript:void(0);" onclick="$addLink" class="AddGroupIcon"><%=_ctx.appRes("UIAddGroupNavigation.Action.Add")%></a>
 	   		</td>	
     </tr>
   </table>  

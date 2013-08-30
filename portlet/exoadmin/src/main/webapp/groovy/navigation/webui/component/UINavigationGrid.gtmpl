@@ -42,9 +42,9 @@
             <div>$descriptionLabel: $groupDescription</div>
         </td>   
         <td class="ActionBlock">
-            <a href="<%=editLink%>" class="EditNavIcon">$editNavigationLabel</a> 
-            <a href="<%=editProperties%>" class="EditProIcon">$editPropertiesLabel</a> 
-            <a href="<%=deleteLink%>" class="DeleteIcon">$deleteNavigationLabel</a>
+            <a href="javascript:void(0);" onclick="<%=editLink%>" class="EditNavIcon">$editNavigationLabel</a> 
+            <a href="javascript:void(0);" onclick="<%=editProperties%>" class="EditProIcon">$editPropertiesLabel</a> 
+            <a href="javascript:void(0);" onclick="<%=deleteLink%>" class="DeleteIcon">$deleteNavigationLabel</a>
         </td>   
     </tr>                               
   </table>  

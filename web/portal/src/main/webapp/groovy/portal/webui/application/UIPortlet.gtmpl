@@ -104,7 +104,7 @@
 																	String actionLink = uicomponent.event("ChangePortletMode", mode);
 																	String modeLabel = _ctx.appRes("PortletMode.label." + mode);
 															%>
-																		<a class="CategoryItem" href="$actionLink" title="$modeLabel">
+																		<a class="CategoryItem" href="javascript:void(0);" onclick="$actionLink" title="$modeLabel">
 																			$modeLabel
 																		</a>
 															<%				
@@ -112,7 +112,7 @@
 															if(supportModes != null && supportModes.size() > 0 && !supportModes.contains("view")) {
 																String modeLabel = _ctx.appRes("PortletMode.label.view");
 														%> 
-																	<a class="CategoryItem" href="<%=uicomponent.event("ChangePortletMode", "view")%>" title="$modeLabel">
+																	<a class="CategoryItem" href="javascript:void(0);" onclick="<%=uicomponent.event("ChangePortletMode", "view")%>" title="$modeLabel">
 																		$modeLabel
 																	</a>												
 														 <%}%> 	
@@ -216,8 +216,8 @@
 							%>
 							<div class="PortletIcon $portletIcon"><%=hasPermission ? title : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 							<%if(hasPermission) {%>
-								<a href="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>" class="EditIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
-								<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
+								<a href="javascript:void(0);" onclick="<%=uicomponent.event("EditPortlet","$uicomponent.id")%>" class="EditIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.editPortlet");%>"></a>
+								<a href="javascript:void(0);" onclick="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.deletePortlet");%>"></a>
 							<%}%>	
 						</div>
 						<%/*End InfoBar*/ %>

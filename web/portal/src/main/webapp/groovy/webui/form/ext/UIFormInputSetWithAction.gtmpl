@@ -75,7 +75,7 @@
 														<%} else { %>
 															<div class="ClearFix">
 																<div class="ActionField FL">
-																	[ <a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');">
+																	[ <a href="javascript:void(0);" onclick="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');">
 																			<%=arrInfor[i]%>
 																	</a> ]
 																</div>
@@ -87,7 +87,7 @@
 														%>
 														<div class="ActionFieldContainer">
 															<div class="ActionField">
-																[ <a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');">
+																[ <a href= "javascript:void(0);" onclick="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');">
 																	<%=arrInfor[i]%>
 																</a> ]
 															</div>	

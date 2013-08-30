@@ -38,7 +38,7 @@
                     <td><%=_ctx.appRes("UILoginForm.label.RememberOnComputer")%></td>
                   </tr>
                 </table>
-              <div class="ForgetPass"><a href="<%= uicomponent.event("ForgetPassword") %>"><%=_ctx.appRes("UILoginForm.label.forgot")%></a></div>
+              <div class="ForgetPass"><a href="javascript:void(0);" onclick="<%= uicomponent.event("ForgetPassword") %>"><%=_ctx.appRes("UILoginForm.label.forgot")%></a></div>
               <div class="UIAction"> 
                  <input type="submit" name="signIn" class="ActionButton SimpleStyle" value="<%=_ctx.appRes("UILoginForm.label.Signin")%>"></input>
                  <input type="button" name="discard" class="ActionButton SimpleStyle" value="<%=_ctx.appRes("UILoginForm.label.Discard")%>" onclick="<%=uicomponent.event("Close");%>"></input>

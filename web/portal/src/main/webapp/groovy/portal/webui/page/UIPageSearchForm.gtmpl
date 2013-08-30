@@ -27,7 +27,7 @@
 										uiform.renderField(field)
 									}
 								%>
-								<a class="SearchIcon" href="$quickSearchlink" title="<%= _ctx.appRes("UIPageSearchForm.label.QuickSearch") %>">
+								<a class="SearchIcon" href="javascript:void(0);" onclick="$quickSearchlink" title="<%= _ctx.appRes("UIPageSearchForm.label.QuickSearch") %>">
 									<span></span>
 								</a>
 							  </div>	

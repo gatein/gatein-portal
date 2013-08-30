@@ -113,7 +113,7 @@
 				<span class="LoadingProgressBar"></span>
 				
 				<div class="UIAction"> 
-					<a href="javascript:ajaxAbort();" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPortalApplication.label.Abort")%></a>
+					<a onclick="javascript:ajaxAbort();" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPortalApplication.label.Abort")%></a>
 				</div>
 			
 			</div>

@@ -32,7 +32,15 @@
 							String label = entityEncoder.encode(localPath.label) 
 							if(i == list.size()-1) note = "Selected";
 				%>
-							<a href="<%=(localPath.getId() == null) ? "#" : actionLink%>"	class="$note">$label</a> 																
+              <% if (localPath.getId() == null) { %>
+                <a href="#" class="$note">$label</a> 
+              <% } else { %>
+                <% if (useAJAX) { %>
+							  <a href="javascript:void(0);" onclick="<%=actionLink%>"	class="$note">$label</a>
+                <% } else { %>
+                <a href="<%=actionLink%>" class="$note">$label</a> 
+                <% } %>
+              <%} %>   																
 				<%			
 							if(i != list.size()-1) {
 				%>

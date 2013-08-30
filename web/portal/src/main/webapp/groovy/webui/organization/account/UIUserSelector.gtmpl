@@ -25,9 +25,9 @@
 										</div>
 										<div class="GroupInput">
 											<%uiform.renderField(uiform.FIELD_GROUP)%>
-											<a class="SearchIcon" style="display: none" href="<%=uicomponent.event('FindGroup')%>"><span></span></a>
+											<a class="SearchIcon" style="display: none" href="javascript:void(0);" onclick="<%=uicomponent.event('FindGroup')%>"><span></span></a>
 										</div>
-										<a class="SearchIcon" href="<%=uicomponent.event('SearchGroup')%>" title="<%=uiform.getLabel(uiform.FIELD_GROUP)%>"><span></span></a>
+										<a class="SearchIcon" href="javascript:void(0);" onclick="<%=uicomponent.event('SearchGroup')%>" title="<%=uiform.getLabel(uiform.FIELD_GROUP)%>"><span></span></a>
 										<% } %>
 										<% if(uicomponent.isShowSearchUser()) { %>
 											<% if(!uicomponent.isShowSearchGroup()) {%>
@@ -39,7 +39,7 @@
 										<div class="FilterSelect">
 											<%uiform.renderField(uiform.FIELD_FILTER)%>
 										</div>	
-										<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=_ctx.appRes("UIUserSelector.label.quickSearch")%>"><span></span></a>
+										<a class="SearchIcon" href="javascript:void(0);" onclick="<%=uicomponent.event('Search')%>" title="<%=_ctx.appRes("UIUserSelector.label.quickSearch")%>"><span></span></a>
 										<% } %>
 									</div>
 									
@@ -133,7 +133,7 @@
 	<% if(isMulti) { %>
 	<div class="UIAction"> 
 		<%for(String action : uicomponent.getActions()){%>
-				<a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel(action)%></a>
+				<a href="javascript:void(0);" onclick="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel(action)%></a>
 		<%}%>
 	</div>
 	<% } %>	

@@ -79,9 +79,9 @@
 	                        if(action == null) continue;
 	                      String title = _ctx.appRes(uiParent.getParent().getName() + ".action.title." + action);
 	                      String actionLink = uiParent.event(action, beanId);
-	                    %>             
-	                        <img onclick="$actionLink" alt="" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" />
-	                  <%}%>                 
+	                    %>
+	                        <a href="javascript:void(0);" onclick="$actionLink" title="$title"><img alt="$title" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon" /></a>
+	                  <%}%>
 	                </div>
 	            </td>
 	      <%

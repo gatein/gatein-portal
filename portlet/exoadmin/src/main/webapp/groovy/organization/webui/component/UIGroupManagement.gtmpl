@@ -13,7 +13,7 @@
 		<div class="GroupNavigation">
 			<div class="TitleBar">
 				<div class="Title"><%=_ctx.appRes("UIGroupManagement.label.Groups")%></div>
-				<% String actionLink = "#";
+				<% String actionLink = "javascript:void(0);";
 					 Group group = uicomponent.getChild(UIGroupExplorer.class).getCurrentGroup();
 					 String groupId = null;
 					 if (group != null)
@@ -22,11 +22,11 @@
 					 		((groupId != null) && GroupManagement.isSuperUserOfGroup(null, groupId))) {
 				%>
 						<% actionLink = uicomponent.event("DeleteGroup","delete"); %>
-						<a class="TreeActionIcon RemoveGroupIcon" href="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.DeleteGroup")%>"><span></span></a>
+						<a class="TreeActionIcon RemoveGroupIcon" href="javascript:void(0);" onclick="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.DeleteGroup")%>"><span></span></a>
 						<% actionLink = uicomponent.event("EditGroup","Edit"); %>
-						<a class="TreeActionIcon EditGroupIcon" href="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.EditGroup")%>"><span></span></a>
+						<a class="TreeActionIcon EditGroupIcon" href="javascript:void(0);" onclick="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.EditGroup")%>"><span></span></a>
 						<% actionLink = uicomponent.event("AddGroup","add"); %>
-						<a class="TreeActionIcon AddGroupIcon" href="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.AddGroup")%>"><span></span></a>
+						<a class="TreeActionIcon AddGroupIcon" href="javascript:void(0);" onclick="$actionLink" title="<%=_ctx.appRes("UIGroupManagement.label.AddGroup")%>"><span></span></a>
 				 <%}%>
 			</div> 
 			<div class="GroupNavigationContainer"><% uicomponent.renderChild(UIGroupExplorer.class) %></div>

@@ -40,7 +40,7 @@
 							<td>
 								<div class="ActionContainer" style="width: 19px; margin: auto">
 									<div class="OverflowContainer">
-										<a class="DustBin16x16Icon" href="<%=uicomponent.event("DeleteMembership", String.valueOf(i))%>"><span></span></a>
+										<a class="DustBin16x16Icon" href="javascript:void(0);" onclick="<%=uicomponent.event("DeleteMembership", String.valueOf(i))%>"><span></span></a>
 									</div>	
 								</div>
 							</td>
