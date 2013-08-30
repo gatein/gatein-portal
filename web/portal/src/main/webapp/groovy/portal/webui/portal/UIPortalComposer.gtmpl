@@ -13,12 +13,12 @@
 	<div class="OverflowContainer ClearFix">
 		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>"></span>
 			<% if(uicomponent.isShowControl) { %>
-			<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
+			<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="javascript:void(0);" onclick="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
 				<% if (uicomponent.isUsedInWizard()) { %>
 					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.url("Finish")%>"></a>
-					<a class="BackButton" title="<%=_ctx.appRes("word.back")%>" href="<%=uicomponent.event("Back")%>"></a>
+					<a class="BackButton" title="<%=_ctx.appRes("word.back")%>" href="javascript:void(0);" onclick="<%=uicomponent.event("Back")%>"></a>
 				<% } else {%>
-					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"></a>
+					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="javascript:void(0);" onclick="<%=uicomponent.event("Finish")%>"></a>
 			<%	 }
 				 } %>
 		<span class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ popupId)%></span>

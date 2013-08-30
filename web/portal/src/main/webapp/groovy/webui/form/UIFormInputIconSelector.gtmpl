@@ -54,7 +54,7 @@
 				<div class="TitleIcon ViewListIcon"><span></span></div>
 				<div class="Title"><%=_ctx.appRes("UIFormInputIconSelector.label.iconPreview")%></div>
 				<div class="SetDefault FR">
-					<a href="<%=form.event('SelectIcon', "Default");%>"><%= _ctx.appRes(uicomponent.getParent().getId() + "." + uicomponent.getId() + ".title.SetDefault") %></a>
+					<a href="javascript:void(0);" onclick="<%=form.event('SelectIcon', "Default");%>"><%= _ctx.appRes(uicomponent.getParent().getId() + "." + uicomponent.getId() + ".title.SetDefault") %></a>
 				</div>
 		</div>
 			<%/*Template 1*/%>
