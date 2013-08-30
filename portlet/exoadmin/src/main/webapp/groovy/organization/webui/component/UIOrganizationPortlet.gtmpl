@@ -18,7 +18,7 @@
 									 style = "ButtonLabel"; 
 									 if(uicomponent.getChild(0).isRendered()){ style = "SelectButtonLabel"; }
 								 %>
-									<a class="UserButton" href="<%=uicomponent.event("ViewChild", "UIUserManagement")%>">
+									<a class="UserButton" href="javascript:void(0);" onclick="<%=uicomponent.event("ViewChild", "UIUserManagement")%>">
 										<div class="UserManagementIcon"><span></span></div>
 										<div class="$style"><%=_ctx.appRes("UIOrganizationPortlet.label.userManagement")%></div>
 									</a>
@@ -27,7 +27,7 @@
 										style = "ButtonLabel"; 
 										if(uicomponent.getChild(1).isRendered()){ style = "SelectButtonLabel"; }
 									%>
-									<a class="GroupButton" href="<%=uicomponent.event("ViewChild", "UIGroupManagement")%>">
+									<a class="GroupButton" href="javascript:void(0);" onclick="<%=uicomponent.event("ViewChild", "UIGroupManagement")%>">
 										<div class="GroupManagementIcon"><span></span></div>
 										<div class="$style"><%=_ctx.appRes("UIOrganizationPortlet.label.groupManagement")%></div>
 									</a>
@@ -36,7 +36,7 @@
 									 style = "ButtonLabel"; 
 									 if(uicomponent.getChild(2).isRendered()){ style = "SelectButtonLabel"; }
 									%>
-									<a class="MembershipButton" href="<%=uicomponent.event("ViewChild", "UIMembershipManagement")%>">
+									<a class="MembershipButton" href="javascript:void(0);" onclick="<%=uicomponent.event("ViewChild", "UIMembershipManagement")%>">
 										<div class="MembershipManagementIcon"><span></span></div>
 										<div class="$style"><%=_ctx.appRes("UIOrganizationPortlet.label.membershipManagement")%></div>
 									</a>

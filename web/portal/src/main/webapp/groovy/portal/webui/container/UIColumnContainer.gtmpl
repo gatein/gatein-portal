@@ -87,10 +87,10 @@
 													<div class="UIPopupCategory" style="display: none;">
 														<div class="PopupCategoryDecorator">
 		
-															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
+															<a class="CategoryItem" href="javascript:void(0);" onclick="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertLeft") %></div>
 															</a>
-															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_AFTER) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertRight") %>">
+															<a class="CategoryItem" href="javascript:void(0);" onclick="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_AFTER) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertRight") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertRight") %></div>
 															</a>
 
@@ -99,8 +99,8 @@
 												</div>
 												<% /*End Popup Menu*/ %>
 											</div>
-											<a href="<%=uicomponent.event("EditContainer")%>" class="EditIcon" title="<%=_ctx.appRes("UIColumnContainer.tooltip.editContainer")%>"><span></span></a>
-											<a href="<%=uicomponent.event("DeleteComponent")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIColumnContainer.tooltip.closeContainer")%>"><span></span></a>
+											<a href="javascript:void(0);" onclick="<%=uicomponent.event("EditContainer")%>" class="EditIcon" title="<%=_ctx.appRes("UIColumnContainer.tooltip.editContainer")%>"><span></span></a>
+											<a href="javascript:void(0);" onclick="<%=uicomponent.event("DeleteComponent")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIColumnContainer.tooltip.closeContainer")%>"><span></span></a>
 											
 										<%}%>
 		

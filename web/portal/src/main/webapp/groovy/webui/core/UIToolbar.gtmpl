@@ -21,7 +21,7 @@
 						%>
 									<a class="Icon <%=event.getName();%>Icon" <%=uicomponent.getJavascript();%> title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>
 						<%	} else {	%>
-									<a class="Icon <%=event.getName();%>Icon" href="<%=uicomponent.event(event.getName())%>" title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>
+									<a class="Icon <%=event.getName();%>Icon" href="javascript:void(0);" onclick="<%=uicomponent.event(event.getName())%>" title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>
 						<%	} %>
 						<%}%>
 					</div>
