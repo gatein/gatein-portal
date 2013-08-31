@@ -27,18 +27,49 @@ public enum SiteType {
 
     PORTAL, GROUP, USER;
 
-    /** ; */
+    /**
+     * Returns the site type for the specified site type name. If no type matches the
+     * site name then null is returned.
+     *
+     * @param name the site name
+     * @return the site type
+     */
+    public static SiteType forName(String name) {
+        if (PORTAL.name.equals(name)) {
+            return PORTAL;
+        } else if (GROUP.name.equals(name)) {
+            return GROUP;
+        } else if (USER.name.equals(name)) {
+            return USER;
+        } else {
+            return null;
+        }
+    }
+
+    /** . */
     final String name;
 
     SiteType() {
         this.name = name().toLowerCase();
     }
 
+    /**
+     * Returns the name of the site type, which is the enum string in lower case.
+     *
+     * @return the type name
+     */
     public String getName() {
         return name;
     }
 
-    public SiteKey key(String name) {
+    /**
+     * Creates a site key with the current type and the provided <code>name</code> argument.
+     *
+     * @param name the site name
+     * @return the site key
+     * @throws NullPointerException when the <code>name</code> argument is null
+     */
+    public SiteKey key(String name) throws NullPointerException {
         return new SiteKey(this, name);
     }
 }

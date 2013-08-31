@@ -33,9 +33,12 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.common.io.IOTools;
-import org.gatein.mop.core.util.Tools;
+import org.gatein.common.util.Tools;
 import org.gatein.portal.mop.Properties;
+import org.gatein.portal.mop.Property;
+import org.gatein.portal.mop.ValueType;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.hierarchy.NodeStore;
 import org.gatein.portal.mop.layout.ElementState;
@@ -78,25 +81,43 @@ class MongoElementStore implements NodeStore<ElementState> {
                     childrenIds = children.toArray(new String[children.size()]);
                 }
                 Properties.Builder props = Properties.EMPTY.builder();
-                props.set(ElementState.Container.TITLE, (String) docState.get("display-name"));
-                props.set(ElementState.Container.DESCRIPTION, (String) docState.get("description"));
-                state = new ElementState.Container(null, props.build(), Collections.<String>emptyList(), false);
+                for (String propertyName : docState.keySet()) {
+                    Object propertyValue = docState.get(propertyName);
+                    if (propertyValue instanceof String) {
+                        props.set(propertyName, ValueType.STRING, (String) propertyValue);
+                    } else if (propertyValue instanceof Boolean) {
+                        props.set(propertyName, ValueType.BOOLEAN, (Boolean) propertyValue);
+                    }
+                }
+                state = new ElementState.Container(
+                        null,
+                        props.build(),
+                        (List<String>) element.get("access-permissions"),
+                        false);
             } else {
                 if ("window".equals(type)) {
                     Properties.Builder props = Properties.EMPTY.builder();
-                    props.set(ElementState.Window.TITLE, (String) docState.get("display-name"));
-                    props.set(ElementState.Window.DESCRIPTION, (String) docState.get("description"));
+                    for (String propertyName : docState.keySet()) {
+                        Object propertyValue = docState.get(propertyName);
+                        if (propertyValue instanceof String) {
+                            props.set(propertyName, ValueType.STRING, (String) propertyValue);
+                        } else if (propertyValue instanceof Boolean) {
+                            props.set(propertyName, ValueType.BOOLEAN, (Boolean) propertyValue);
+                        }
+                    }
                     DBObject content = (DBObject) element.get("content");
                     String contentType = (String) content.get("type");
+                    ApplicationType<Portlet> applicationType;
                     if (ApplicationType.PORTLET.getContentType().getMimeType().equals(contentType)) {
+                        applicationType = ApplicationType.PORTLET;
                     } else {
                         throw new UnsupportedOperationException("Implement me");
                     }
                     state = new ElementState.Window(
-                            ApplicationType.PORTLET,
+                            applicationType,
                             new PersistentApplicationState(id),
                             props.build(),
-                            Collections.<String>emptyList());
+                            (List<String>) element.get("access-permissions"));
                     contents.put(id, content);
                 } else if ("body".equals(type)) {
                     state = new ElementState.Body();
@@ -143,7 +164,7 @@ class MongoElementStore implements NodeStore<ElementState> {
             }
             setState(element, node.state);
             if (node.state instanceof ElementState.Container) {
-                element.put("children", Tools.list(node.iterator()));
+                element.put("children", Tools.toList(node.iterator()));
             }
             elements.put(node.id, element);
         }
@@ -165,31 +186,17 @@ class MongoElementStore implements NodeStore<ElementState> {
             type = "container";
             content = null;
             ElementState.Container containerState = (ElementState.Container) state;
-            doc.put("access-permissions", containerState.accessPermissions);
-            doc.put("display-name", containerState.properties.get(ElementState.Container.TITLE));
-            doc.put("description", containerState.properties.get(ElementState.Container.DESCRIPTION));
-//            dstAttrs.setValue(MappedAttributes.ID, containerState.id);
-            doc.put("type", containerState.dashboard ? "dashboard" : null);
-            doc.put("icon", containerState.properties.get(ElementState.Container.ICON));
-            doc.put("template", containerState.properties.get(ElementState.Container.TEMPLATE));
-            doc.put("factory-id", containerState.properties.get(ElementState.Container.FACTORY_ID));
-            doc.put("width", containerState.properties.get(ElementState.Container.WIDTH));
-            doc.put("height", containerState.properties.get(ElementState.Container.HEIGHT));
-//            dstAttrs.setValue(MappedAttributes.NAME, containerState.properties.get(ElementState.Container.NAME));
+            dom.put("access-permissions", containerState.accessPermissions);
+            for (Property property : containerState.properties) {
+                doc.put(property.getName(), property.getValue());
+            }
         } else if (state instanceof ElementState.Window) {
             type = "window";
             ElementState.Window windowState = (ElementState.Window) state;
-            doc.put("access-permissions", windowState.accessPermissions);
-            doc.put("display-name", windowState.properties.get(ElementState.Window.TITLE));
-            doc.put("description", windowState.properties.get(ElementState.Window.DESCRIPTION));
-            doc.put("showinfobar", windowState.properties.get(ElementState.Window.SHOW_INFO_BAR));
-            doc.put("showwindowstate", windowState.properties.get(ElementState.Window.SHOW_APPLICATION_STATE));
-            doc.put("showmode", windowState.properties.get(ElementState.Window.SHOW_APPLICATION_MODE));
-            doc.put("theme", windowState.properties.get(ElementState.Window.THEME));
-            doc.put("icon", windowState.properties.get(ElementState.Window.ICON));
-            doc.put("width", windowState.properties.get(ElementState.Window.WIDTH));
-            doc.put("height", windowState.properties.get(ElementState.Window.HEIGHT));
-            // save(windowState.properties, attrs, windowPropertiesBlackList);
+            dom.put("access-permissions", windowState.accessPermissions);
+            for (Property property : windowState.properties) {
+                doc.put(property.getName(), property.getValue());
+            }
             ApplicationState instanceState = windowState.state;
             if (instanceState instanceof TransientApplicationState) {
                 TransientApplicationState transientState = (TransientApplicationState) instanceState;
@@ -206,7 +213,6 @@ class MongoElementStore implements NodeStore<ElementState> {
                     }
                     content.put("state", blob);
                 }
-                doc.put("content", content);
             } else if (instanceState instanceof CloneApplicationState) {
                 // CloneApplicationState cloneState = (CloneApplicationState) instanceState;
                 // UIWindow customization = (UIWindow)session.findObjectById(cloneState.getStorageId());
@@ -228,8 +234,6 @@ class MongoElementStore implements NodeStore<ElementState> {
         //
         dom.put("type", type);
         dom.put("state", doc);
-
-        //
         if (content != null) {
             dom.put("content", content);
         }
@@ -245,7 +249,7 @@ class MongoElementStore implements NodeStore<ElementState> {
         String id = UUID.randomUUID().toString();
         NodeData<ElementState> parent = nodes.get(parentId);
         NodeData<ElementState> node = new NodeData<ElementState>(parentId, id, name, state, ElementState.EMPTY_STRINGS);
-        List<String> childrenIds = Tools.list(parent.iterator());
+        List<String> childrenIds = Tools.toList(parent.iterator());
         int index = previousId != null ? childrenIds.indexOf(previousId) + 1 : 0;
         childrenIds.add(index, id);
         nodes.put(parentId, parent = new NodeData<ElementState>(parent.parentId, parent.id, parent.name, parent.state, childrenIds.toArray(new String[childrenIds.size()])));
@@ -258,7 +262,7 @@ class MongoElementStore implements NodeStore<ElementState> {
         NodeData<ElementState> target = nodes.remove(targetId);
         String parentId = target.parentId;
         NodeData<ElementState> parent = nodes.get(parentId);
-        List<String> children = Tools.list(parent.iterator());
+        List<String> children = Tools.toList(parent.iterator());
         children.remove(targetId);
         nodes.put(parentId, parent = parent.withChildren(children));
         return parent;
@@ -277,14 +281,14 @@ class MongoElementStore implements NodeStore<ElementState> {
         NodeData<ElementState> from = nodes.get(fromId);
         NodeData<ElementState> to = nodes.get(toId);
         if (fromId.equals(toId)) {
-            List<String> children = Tools.list(from.iterator());
+            List<String> children = Tools.toList(from.iterator());
             children.remove(targetId);
             int index = previousId != null ? children.indexOf(previousId) + 1: 0;
             children.add(index, targetId);
             nodes.put(fromId, from = to = from.withChildren(children));
         } else {
-            List<String> fromChildren = Tools.list(from.iterator());
-            List<String> toChildren = Tools.list(to.iterator());
+            List<String> fromChildren = Tools.toList(from.iterator());
+            List<String> toChildren = Tools.toList(to.iterator());
             fromChildren.remove(targetId);
             int index = previousId != null ? toChildren.indexOf(previousId) + 1: 0;
             toChildren.add(index, targetId);

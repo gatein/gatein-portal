@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.Utils;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.PropertyType;
+import org.gatein.portal.mop.ValueType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 
@@ -76,31 +77,31 @@ public abstract class ElementState implements Serializable {
     public static class Window<S extends Serializable> extends ElementState {
 
         /** . */
-        public static final PropertyType<String> TITLE = new PropertyType<String>("title,", String.class){};
+        public static final PropertyType<String> TITLE = new PropertyType<String>("title,", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> ICON = new PropertyType<String>("icon", String.class){};
+        public static final PropertyType<String> ICON = new PropertyType<String>("icon", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> DESCRIPTION = new PropertyType<String>("description", String.class){};
+        public static final PropertyType<String> DESCRIPTION = new PropertyType<String>("description", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<Boolean> SHOW_INFO_BAR = new PropertyType<Boolean>("show-info-bar", Boolean.class){};
+        public static final PropertyType<Boolean> SHOW_INFO_BAR = new PropertyType<Boolean>("show-info-bar", ValueType.BOOLEAN){};
 
         /** . */
-        public static final PropertyType<Boolean> SHOW_APPLICATION_STATE = new PropertyType<Boolean>("show-application-state", Boolean.class){};
+        public static final PropertyType<Boolean> SHOW_APPLICATION_STATE = new PropertyType<Boolean>("show-application-state", ValueType.BOOLEAN){};
 
         /** . */
-        public static final PropertyType<Boolean> SHOW_APPLICATION_MODE = new PropertyType<Boolean>("show-application-mode", Boolean.class){};
+        public static final PropertyType<Boolean> SHOW_APPLICATION_MODE = new PropertyType<Boolean>("show-application-mode", ValueType.BOOLEAN){};
 
         /** . */
-        public static final PropertyType<String> THEME = new PropertyType<String>("theme", String.class){};
+        public static final PropertyType<String> THEME = new PropertyType<String>("theme", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> WIDTH = new PropertyType<String>("width", String.class){};
+        public static final PropertyType<String> WIDTH = new PropertyType<String>("width", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", String.class){};
+        public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", ValueType.STRING){};
 
         /** . */
         public final ApplicationType<S> type;
@@ -153,7 +154,7 @@ public abstract class ElementState implements Serializable {
             builder.set(THEME, theme);
             builder.set(WIDTH, width);
             builder.set(HEIGHT, height);
-            builder.set(properties);
+            // builder.set(properties);
 
             //
             this.type = type;
@@ -277,6 +278,7 @@ public abstract class ElementState implements Serializable {
             return this;
         }
 
+/*
         public WindowBuilder properties(Map<String, String> properties) {
             this.properties.set(properties);
             return this;
@@ -286,6 +288,7 @@ public abstract class ElementState implements Serializable {
             properties.set(name, value);
             return this;
         }
+*/
 
         public WindowBuilder accessPermissions(String... accessPermissions) {
             this.accessPermissions = accessPermissions;
@@ -339,28 +342,28 @@ public abstract class ElementState implements Serializable {
     public static class Container extends ElementState {
 
         /** . */
-        public static final PropertyType<String> NAME = new PropertyType<String>("name", String.class){};
+        public static final PropertyType<String> NAME = new PropertyType<String>("name", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> ICON = new PropertyType<String>("icon", String.class){};
+        public static final PropertyType<String> ICON = new PropertyType<String>("icon", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> TEMPLATE = new PropertyType<String>("template", String.class){};
+        public static final PropertyType<String> TEMPLATE = new PropertyType<String>("template", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> FACTORY_ID = new PropertyType<String>("factory_id", String.class){};
+        public static final PropertyType<String> FACTORY_ID = new PropertyType<String>("factory_id", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> TITLE = new PropertyType<String>("title", String.class){};
+        public static final PropertyType<String> TITLE = new PropertyType<String>("title", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> DESCRIPTION = new PropertyType<String>("description", String.class){};
+        public static final PropertyType<String> DESCRIPTION = new PropertyType<String>("description", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> WIDTH = new PropertyType<String>("width", String.class){};
+        public static final PropertyType<String> WIDTH = new PropertyType<String>("width", ValueType.STRING){};
 
         /** . */
-        public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", String.class){};
+        public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", ValueType.STRING){};
 
         /** . */
         public final String id;

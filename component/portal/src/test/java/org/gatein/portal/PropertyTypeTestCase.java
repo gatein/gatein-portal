@@ -22,6 +22,7 @@ package org.gatein.portal;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.gatein.common.io.IOTools;
 import org.gatein.portal.mop.PropertyType;
+import org.gatein.portal.mop.ValueType;
 import org.gatein.portal.mop.layout.ElementState;
 
 /**
@@ -31,7 +32,9 @@ public class PropertyTypeTestCase extends AbstractGateInTest {
 
     public void testSimple() {
         assertEquals("description", ElementState.Window.DESCRIPTION.getName());
-        assertEquals(String.class, ElementState.Window.DESCRIPTION.getType());
+        assertEquals(ValueType.STRING, ElementState.Window.DESCRIPTION.getType());
+        assertEquals("show-application-mode", ElementState.Window.SHOW_APPLICATION_MODE.getName());
+        assertEquals(ValueType.BOOLEAN, ElementState.Window.SHOW_APPLICATION_MODE.getType());
     }
 
     public void testSerialization() throws Exception {

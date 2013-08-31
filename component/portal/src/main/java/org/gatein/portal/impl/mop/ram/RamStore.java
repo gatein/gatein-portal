@@ -30,7 +30,7 @@ import org.json.JSONObject;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class RamStore implements ComponentRequestLifecycle {
+public class RamStore implements ComponentRequestLifecycle, org.gatein.portal.mop.Store {
 
     /** . */
     final Store store = new Store();

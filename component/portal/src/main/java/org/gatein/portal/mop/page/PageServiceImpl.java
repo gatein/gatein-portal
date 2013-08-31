@@ -34,7 +34,7 @@ public class PageServiceImpl implements PageService {
     @Override
     public PageContext loadPage(PageKey key) {
         if (key == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("No null key accepted");
         }
 
         //

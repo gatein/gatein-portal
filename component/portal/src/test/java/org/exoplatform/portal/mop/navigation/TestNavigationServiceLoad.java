@@ -25,6 +25,8 @@ import java.util.List;
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.common.util.MapBuilder;
 import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Visibility;
@@ -182,7 +184,9 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
     }
 
     public void testState() throws Exception {
-        NodeData node = createNavigation(createSite(SiteType.PORTAL, "state"));
+        SiteData site = createSite(SiteType.PORTAL, "state");
+        NodeData node = createNavigation(site);
+        createPage(site, "test1", new PageState.Builder().build());
         createNodes(node, MapBuilder.<String, NodeState>linkedHashMap().
                 put("node_name", NodeState.INITIAL.
                         builder().
@@ -212,14 +216,14 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
         Node child1 = root.getChild("node_name");
         assertEquals("node_name", child1.getName());
         assertEquals("node_label", child1.getContext().getState().getLabel());
-//        assertEquals(SiteKey.portal("state").page("test1"), child1.getContext().getState().getPageRef());
+        assertEquals(SiteKey.portal("state").page("test1"), child1.getContext().getState().getPageRef());
         assertEquals(Visibility.TEMPORAL, child1.getContext().getState().getVisibility());
         assertEquals(953602380000L, child1.getContext().getState().getStartPublicationTime());
         assertEquals(1237599180000L, child1.getContext().getState().getEndPublicationTime());
         Node child2 = root.getChild("node_name4");
         assertEquals("node_name4", child2.getName());
         assertEquals("node_label4", child2.getContext().getState().getLabel());
-//        assertEquals(SiteKey.portal("state").page("test1"), child2.getContext().getState().getPageRef());
+        assertEquals(SiteKey.portal("state").page("test1"), child2.getContext().getState().getPageRef());
         assertEquals(Visibility.DISPLAYED, child2.getContext().getState().getVisibility());
     }
 

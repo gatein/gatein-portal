@@ -25,6 +25,8 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.gatein.portal.mop.page.PageKey;
 
 /**
+ * An immutable key for a site.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
@@ -48,7 +50,14 @@ public final class SiteKey implements Serializable {
     /** . */
     private final String name;
 
-    public SiteKey(SiteType type, String name) {
+    /**
+     * Create a new site key.
+     *
+     * @param type the site type
+     * @param name the site name
+     * @throws NullPointerException if any argument is null
+     */
+    public SiteKey(SiteType type, String name) throws NullPointerException {
         if (type == null) {
             throw new NullPointerException("No null type can be provided");
         }

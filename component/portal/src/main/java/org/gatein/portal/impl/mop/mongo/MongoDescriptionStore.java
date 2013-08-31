@@ -36,12 +36,12 @@ import org.gatein.portal.mop.description.DescriptionStore;
 /**
  * @author Julien Viet
  */
-class MongoDescriptionStore implements DescriptionStore {
+public class MongoDescriptionStore implements DescriptionStore {
 
     /** . */
     private final MongoStore store;
 
-    MongoDescriptionStore(MongoStore store) {
+    public MongoDescriptionStore(MongoStore store) {
         this.store = store;
     }
 

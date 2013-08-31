@@ -39,12 +39,12 @@ import org.gatein.portal.mop.site.SiteType;
 /**
  * @author Julien Viet
  */
-class MongoPageStore implements PageStore {
+public class MongoPageStore implements PageStore {
 
     /** . */
     private final MongoStore store;
 
-    MongoPageStore(MongoStore store) {
+    public MongoPageStore(MongoStore store) {
         this.store = store;
     }
 

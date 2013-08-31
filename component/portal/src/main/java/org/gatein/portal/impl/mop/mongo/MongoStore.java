@@ -28,12 +28,13 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
+import org.gatein.portal.mop.Store;
 import org.picocontainer.Startable;
 
 /**
  * @author Julien Viet
  */
-public class MongoStore {
+public class MongoStore implements Store, Startable {
 
     /** . */
     private DB db;
@@ -62,7 +63,7 @@ public class MongoStore {
     /** . */
     private MongoCustomizationStore customizationStore;
 
-    public void start() throws Exception {
+    public void start() {
         try {
             MongodStarter runtime = MongodStarter.getDefaultInstance();
             this.mongodExe = runtime.prepare(new MongodConfig(Version.V2_0_5, 27777, Network.localhostIsIPv6()));

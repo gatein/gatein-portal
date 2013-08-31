@@ -71,10 +71,12 @@ public class LayoutModelImpl implements NodeModel<ComponentData, ElementState> {
             ElementState.Window window = (ElementState.Window) state;
             HashMap<String, String> properties = new HashMap<String, String>();
             for (Property p : window.properties) {
+/*
                 if (p instanceof Property.Raw) {
                     Property.Raw  raw = (Property.Raw) p;
                     properties.put(raw.getName(), raw.getValue());
                 }
+*/
             }
             return new ApplicationData(
                     context.getId(),

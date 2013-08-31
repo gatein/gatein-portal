@@ -36,12 +36,12 @@ import org.gatein.portal.mop.site.SiteType;
 /**
  * @author Julien Viet
  */
-class MongoSiteStore implements SiteStore {
+public class MongoSiteStore implements SiteStore {
 
     /** . */
     private final MongoStore store;
 
-    MongoSiteStore(MongoStore store) {
+    public MongoSiteStore(MongoStore store) {
         this.store = store;
     }
 

@@ -33,13 +33,14 @@ import org.gatein.portal.mop.navigation.NavigationData;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author Julien Viet
  */
-class MongoNavigationStore implements NavigationStore {
+public class MongoNavigationStore implements NavigationStore {
 
     /** . */
     private final MongoStore store;
@@ -47,7 +48,7 @@ class MongoNavigationStore implements NavigationStore {
     /** . */
     private final MongoDescriptionStore descriptionStore;
 
-    MongoNavigationStore(MongoStore store, MongoDescriptionStore descriptionStore) {
+    public MongoNavigationStore(MongoStore store, MongoDescriptionStore descriptionStore) {
         this.store = store;
         this.descriptionStore = descriptionStore;
     }
@@ -143,16 +144,37 @@ class MongoNavigationStore implements NavigationStore {
         long endPublicationDate = (Long) doc.get("end_publication_date");
         Visibility visibility = Visibility.valueOf(((String) doc.get("visibility")).toUpperCase());
         List<String> children = (ArrayList<String>) doc.get("children");
-        NodeState state = new NodeState(label, icon, startPublicationDate, endPublicationDate, visibility, null);
+        PageKey link;
+        DBObject linkDoc = (DBObject) doc.get("link");
+        if (linkDoc != null) {
+            String siteType = (String) linkDoc.get("site_type");
+            String siteName = (String) linkDoc.get("site_name");
+            String pageName = (String) linkDoc.get("name");
+            link = SiteType.forName(siteType).key(siteName).page(pageName);
+        } else {
+            link = null;
+        }
+        NodeState state = new NodeState(label, icon, startPublicationDate, endPublicationDate, visibility, link);
         return new NodeData<NodeState>(parentId, id, name, state, children.toArray(new String[children.size()]));
     }
 
     private DBObject toDoc(DBObject doc, NodeState nodeState) {
+        PageKey key = nodeState.getPageRef();
+        DBObject link;
+        if (key != null) {
+            link = new BasicDBObject();
+            link.put("site_type", key.getSite().getTypeName());
+            link.put("site_name", key.getSite().getName());
+            link.put("name", key.getName());
+        } else {
+            link = null;
+        }
         doc.put("label", nodeState.getLabel());
         doc.put("visibility", nodeState.getVisibility().name().toLowerCase());
         doc.put("start_publication_date", nodeState.getStartPublicationTime());
         doc.put("end_publication_date", nodeState.getEndPublicationTime());
         doc.put("icon", nodeState.getIcon());
+        doc.put("link", link);
         return doc;
     }
 

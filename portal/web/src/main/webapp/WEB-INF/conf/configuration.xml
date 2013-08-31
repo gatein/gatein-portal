@@ -4,47 +4,86 @@
     xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
+  <!-- Ram data store -->
+  <component>
+    <key>org.gatein.portal.mop.Store</key>
+    <type>org.gatein.portal.impl.mop.ram.RamStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.site.SiteStore</key>
+    <type>org.gatein.portal.impl.mop.ram.RamSiteStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.layout.LayoutStore</key>
+    <type>org.gatein.portal.impl.mop.ram.RamLayoutStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.description.DescriptionStore</key>
+    <type>org.gatein.portal.impl.mop.ram.RamDescriptionStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.navigation.NavigationStore</key>
+    <type>org.gatein.portal.impl.mop.ram.RamNavigationStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.page.PageStore</key>
+    <type>org.gatein.portal.impl.mop.ram.RamPageStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.customization.CustomizationStore</key>
+    <type>org.gatein.portal.impl.mop.ram.RamCustomizationStore</type>
+  </component>
+
+  <!-- Mongo data store -->
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.Store</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoStore</type>
+  </component>
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.site.SiteStore</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoSiteStore</type>
+  </component>
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.layout.LayoutStore</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoLayoutStore</type>
+  </component>
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.description.DescriptionStore</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoDescriptionStore</type>
+  </component>
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.navigation.NavigationStore</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoNavigationStore</type>
+  </component>
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.page.PageStore</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoPageStore</type>
+  </component>
+  <component profiles="mongo">
+    <key>org.gatein.portal.mop.customization.CustomizationStore</key>
+    <type>org.gatein.portal.impl.mop.mongo.MongoCustomizationStore</type>
+  </component>
+
   <!-- -->
   <component>
     <type>org.gatein.portal.portlet.PortletAppManager</type>
   </component>
 
-  <!-- -->
-  <component>
-    <type>org.gatein.portal.impl.mop.ram.RamStore</type>
-  </component>
-  <component>
-    <type>org.gatein.portal.impl.mop.ram.RamSiteStore</type>
-  </component>
+  <!-- Data services -->
   <component>
     <type>org.gatein.portal.mop.site.SiteServiceImpl</type>
-  </component>
-  <component>
-    <type>org.gatein.portal.impl.mop.ram.RamLayoutStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.layout.LayoutServiceImpl</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamDescriptionStore</type>
-  </component>
-  <component>
     <type>org.gatein.portal.mop.description.DescriptionServiceImpl</type>
-  </component>
-  <component>
-    <type>org.gatein.portal.impl.mop.ram.RamNavigationStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.navigation.NavigationServiceImpl</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamPageStore</type>
-  </component>
-  <component>
     <type>org.gatein.portal.mop.page.PageServiceImpl</type>
-  </component>
-  <component>
-    <type>org.gatein.portal.impl.mop.ram.RamCustomizationStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.customization.CustomizationServiceImpl</type>

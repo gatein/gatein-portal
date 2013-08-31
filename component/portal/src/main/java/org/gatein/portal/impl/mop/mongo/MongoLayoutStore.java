@@ -29,12 +29,12 @@ import org.gatein.portal.mop.layout.LayoutStore;
 /**
  * @author Julien Viet
  */
-class MongoLayoutStore implements LayoutStore {
+public class MongoLayoutStore implements LayoutStore {
 
     /** . */
     private final MongoStore store;
 
-    MongoLayoutStore(MongoStore store) {
+    public MongoLayoutStore(MongoStore store) {
         this.store = store;
     }
 

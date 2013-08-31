@@ -320,12 +320,9 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
 
     public static void save(Properties src, Attributes dst, Set<String> blackList) {
         for (Property property : src) {
-            if (property instanceof Property.Raw) {
-                Property.Raw rawProperty = (Property.Raw) property;
-                String name = property.getName();
-                if (!blackList.contains(name) && !propertiesBlackList.contains(name)) {
-                    dst.setString(name, rawProperty.getValue());
-                }
+            String name = property.getName();
+            if (!blackList.contains(name) && !propertiesBlackList.contains(name)) {
+                dst.setObject(name, property.getValue());
             }
         }
     }

@@ -24,73 +24,48 @@ import java.io.Serializable;
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public abstract class Property implements Serializable {
+public class Property<T> implements Serializable {
 
-    public abstract String getName();
+    /** . */
+    final String name;
 
-    public static class Qualified<T> extends Property {
+    /** . */
+    final T value;
 
-        /** . */
-        final PropertyType<T> type;
+    /** . */
+    final ValueType<T> type;
 
-        /** . */
-        final T value;
+    protected Property(String name, T value, ValueType<T> type) {
+        this.name = name;
+        this.value = value;
+        this.type = type;
+    }
 
-        Qualified(PropertyType<T> type, T value) {
-            this.type = type;
-            this.value = value;
-        }
+    public String getName() {
+        return name;
+    }
 
-        @Override
-        public String getName() {
-            return type.getName();
-        }
+    public T getValue() {
+        return value;
+    }
 
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            } else if (obj instanceof Qualified<?>) {
-                Qualified<?> that = (Qualified<?>) obj;
-                return type.equals(that.type) && value.equals(that.value);
-            } else {
-                return false;
-            }
+    public ValueType<T> getType() {
+        return type;
+    }
+
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        } else if (obj instanceof Property<?>) {
+            Property<?> that = (Property<?>) obj;
+            return type.equals(that.type) && value.equals(that.value);
+        } else {
+            return false;
         }
     }
 
-    public static class Raw extends Property {
-
-        /** . */
-        final String name;
-
-        /** . */
-        final String value;
-
-        Raw(String name, String value) {
-            this.name = name;
-            this.value = value;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            } else if (obj instanceof Raw) {
-                Raw that = (Raw) obj;
-                return name.equals(that.name) && value.equals(that.value);
-            } else {
-                return false;
-            }
-        }
+    @Override
+    public String toString() {
+        return "Property[name=" + name + ",type=" + type + ",value=" + value + "]";
     }
 }

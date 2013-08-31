@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.layout;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.mop.core.util.Tools;
@@ -39,6 +40,22 @@ import org.gatein.portal.mop.site.SiteType;
 public class TestLayout extends AbstractMopServiceTest {
 
     /** . */
+    private static final ElementState.WindowBuilder BAR_PORTLET = Element.portlet("app/bar").title("bar");
+
+    /** . */
+    private static final ElementState.WindowBuilder FOO_PORTLET = Element.portlet("app/foo").
+            title("foo_title").
+            description("foo_description").
+            accessPermissions("foo_access_permissions").
+            icon("foo_icon").
+            showApplicationMode(true).
+            showApplicationState(true).
+            showInfoBar(false).
+            theme("foo_theme").
+            width("foo_width").
+            height("foo_height");
+
+    /** . */
     private LayoutService layoutService;
 
     @Override
@@ -51,13 +68,13 @@ public class TestLayout extends AbstractMopServiceTest {
 
     public void testSite() {
         SiteData site = createSite(SiteType.PORTAL, "test_layout_site");
-        createElements(site, Element.portlet("app/foo").title("foo"), Element.portlet("app/bar").title("bar"));
+        createElements(site, FOO_PORTLET, BAR_PORTLET);
         testAll(site.layoutId);
     }
 
     public void testPage() {
         PageData page = createPage(createSite(SiteType.PORTAL, "test_layout_page"), "page", new PageState.Builder().build());
-        createElements(page, Element.portlet("app/foo").title("foo"), Element.portlet("app/bar").title("bar"));
+        createElements(page, FOO_PORTLET, BAR_PORTLET);
         testAll(page.layoutId);
     }
 
@@ -71,7 +88,13 @@ public class TestLayout extends AbstractMopServiceTest {
         assertEquals(2, context.getNodeSize());
         Element foo = context.getNode(0);
         Element bar = context.getNode(1);
-        assertEquals("foo", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
+        ElementState.Window fooWindow = (ElementState.Window) foo.getState();
+        assertEquals(Collections.singletonList("foo_access_permissions"), fooWindow.accessPermissions);
+        assertEquals("foo_title", fooWindow.properties.get(ElementState.Window.TITLE));
+        assertEquals("foo_description", fooWindow.properties.get(ElementState.Window.DESCRIPTION));
+        assertEquals("foo_theme", fooWindow.properties.get(ElementState.Window.THEME));
+        assertEquals("foo_height", fooWindow.properties.get(ElementState.Window.HEIGHT));
+        assertEquals("foo_width", fooWindow.properties.get(ElementState.Window.WIDTH));
         assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
 
         // Add a new portlet in the background
@@ -83,7 +106,7 @@ public class TestLayout extends AbstractMopServiceTest {
         foo = context.getNode(0);
         bar = context.getNode(1);
         Element juu = context.getNode(2);
-        assertEquals("foo", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("foo_title", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
         assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
         assertEquals("juu", ((ElementState.Window) juu.getState()).properties.get(ElementState.Window.TITLE));
 
@@ -94,7 +117,7 @@ public class TestLayout extends AbstractMopServiceTest {
         foo = context.getNode(0);
         juu = context.getNode(1);
         bar = context.getNode(2);
-        assertEquals("foo", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
+        assertEquals("foo_title", ((ElementState.Window) foo.getState()).properties.get(ElementState.Window.TITLE));
         assertEquals("juu", ((ElementState.Window) juu.getState()).properties.get(ElementState.Window.TITLE));
         assertEquals("bar", ((ElementState.Window) bar.getState()).properties.get(ElementState.Window.TITLE));
 

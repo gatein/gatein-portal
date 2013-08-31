@@ -45,20 +45,17 @@ public final class Properties implements Iterable<Property>, Serializable {
     }
 
     public <T> T get(PropertyType<T> type) {
-        Property property = state.get(type.getName());
-        if (property instanceof Property.Qualified<?>) {
-            Property.Qualified<?> qualifiedProperty = (Property.Qualified<?>) property;
-            if (qualifiedProperty.type.equals(type)) {
-                return type.getType().cast(qualifiedProperty.value);
-            }
+        Property<?> property = state.get(type.getName());
+        if (property != null && property.getType() == type.getType()) {
+            return type.cast(property.value);
         }
         return null;
     }
 
-    public String get(String name) {
-        Property property = state.get(name);
-        if (property instanceof Property.Raw) {
-            return ((Property.Raw) property).value;
+    public Object get(String name) {
+        Property<?> property = state.get(name);
+        if (property != null) {
+            return property.value;
         } else {
             return null;
         }
@@ -106,7 +103,7 @@ public final class Properties implements Iterable<Property>, Serializable {
                 if (state == EMPTY_MAP) {
                     state = new HashMap<String, Property>();
                 }
-                state.put(type.getName(), new Property.Qualified<T>(type, value));
+                state.put(type.getName(), new Property<T>(type.getName(), value, type.getType()));
             } else {
                 if (state != EMPTY_MAP) {
                     state.remove(type.getName());
@@ -115,7 +112,7 @@ public final class Properties implements Iterable<Property>, Serializable {
             return this;
         }
 
-        public Builder set(String name, String value) {
+        public <T> Builder set(String name, ValueType<T> type, T value) {
             if (name == null) {
                 throw new NullPointerException();
             }
@@ -123,7 +120,7 @@ public final class Properties implements Iterable<Property>, Serializable {
                 if (state == EMPTY_MAP) {
                     state = new HashMap<String, Property>();
                 }
-                state.put(name, new Property.Raw(name, value));
+                state.put(name, new Property<T>(name, value, type));
             } else {
                 if (state != EMPTY_MAP) {
                     state.remove(name);
@@ -132,6 +129,7 @@ public final class Properties implements Iterable<Property>, Serializable {
             return this;
         }
 
+/*
         public Builder set(Map<String, ?> entries) {
             for (Map.Entry<String, ?> property : entries.entrySet()) {
                 Object value = property.getValue();
@@ -141,6 +139,7 @@ public final class Properties implements Iterable<Property>, Serializable {
             }
             return this;
         }
+*/
 
         public Properties build() {
             Map<String, Property> a = new HashMap<String, Property>(origin.state.size() + state.size());

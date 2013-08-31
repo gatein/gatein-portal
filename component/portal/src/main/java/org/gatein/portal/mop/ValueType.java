@@ -16,52 +16,45 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.gatein.portal.mop;
 
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @author Julien Viet
  */
-public abstract class PropertyType<T> implements Serializable {
+public class ValueType<T> implements Serializable {
 
     /** . */
-    private static final ConcurrentHashMap<Class<?>, PropertyType<?>> REGISTRY = new ConcurrentHashMap<Class<?>, PropertyType<?>>();
+    public static final ValueType<String> STRING = new ValueType<String>(String.class);
 
     /** . */
-    private final String name;
+    public static final ValueType<Boolean> BOOLEAN = new ValueType<Boolean>(Boolean.class);
 
     /** . */
-    private final ValueType<T> type;
+    private final Class<T> javaClass;
 
-    public PropertyType(String name, ValueType<T> type) throws NullPointerException {
-        if (name == null) {
-            throw new NullPointerException("No null name accepted");
-        }
-        if (type == null) {
-            throw new NullPointerException("No null type accepted");
-        }
-        REGISTRY.put(getClass(), this);
-        this.name = name;
-        this.type = type;
-    }
-
-    public final String getName() {
-        return name;
-    }
-
-    public final ValueType<T> getType() {
-        return type;
+    public ValueType(Class<T> javaClass) {
+        this.javaClass = javaClass;
     }
 
     public final T cast(Object o) {
-        return type.cast(o);
+        return javaClass.cast(o);
     }
 
     protected final Object readResolve() throws ObjectStreamException {
-        return REGISTRY.get(getClass());
+        if (javaClass.equals(String.class)) {
+            return STRING;
+        } else if (javaClass.equals(Boolean.class)) {
+            return BOOLEAN;
+        } else {
+            return this;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return javaClass.getSimpleName();
     }
 }
