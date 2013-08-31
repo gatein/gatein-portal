@@ -167,7 +167,7 @@ class MongoNavigationStore implements NavigationStore {
         String id = doc.get("_id").toString();
         DBObject parentDoc = navigations.findOne(new BasicDBObject("_id", new ObjectId(parentId)));
         List<String> children = (List<String>) parentDoc.get("children");
-        int index = previousId != null ? children.indexOf(previousId) + 1 : children.size();
+        int index = previousId != null ? children.indexOf(previousId) + 1 : 0;
         children.add(index, id);
         navigations.update(new BasicDBObject("_id", new ObjectId(parentId)), new BasicDBObject("$set", new BasicDBObject("children", children)));
         return new NodeData[]{

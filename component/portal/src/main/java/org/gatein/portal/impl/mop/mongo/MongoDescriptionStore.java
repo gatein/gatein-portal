@@ -118,7 +118,7 @@ class MongoDescriptionStore implements DescriptionStore {
     @Override
     public void saveDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
         BasicDBObject doc = new BasicDBObject("_id", new ObjectId(id));
-        if (descriptions != null) {
+        if (descriptions != null && descriptions.size() > 0) {
             for (Map.Entry<Locale, DescriptionState> entry : descriptions.entrySet()) {
                 doc.put(I18N.toJavaIdentifier(entry.getKey()), make(entry.getValue()));
             }
