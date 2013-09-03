@@ -75,19 +75,30 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector {
     }
 
     public void setSelectOptionItem(String value) {
-        for (SelectItemCategory itemCategory : categories_) {
-            for (SelectItemOption<?> itemOption : itemCategory.getSelectItemOptions()) {
-                if (itemOption.getLabel().equals(value)) {
-                    selectedItemOption_ = itemOption;
-                    for (SelectItemOption<?> item : itemCategory.getSelectItemOptions()) {
-                        item.setSelected(false);
+        boolean found = false;
+        for (SelectItemCategory category : categories_) {
+            category.setSelected(false);
+            if (!found) {
+                for (SelectItemOption<?> itemOption : category.getSelectItemOptions()) {
+                    if (itemOption.getLabel().equals(value)) {
+
+                        UIDropDownControl uiItemSelector = findFirstComponentOfType(UIDropDownControl.class);
+                        uiItemSelector.setValue(category.getName());
+
+                        category.setSelected(true);
+                        selectedItemOption_ = itemOption;
+                        for (SelectItemOption<?> item : category.getSelectItemOptions()) {
+                            item.setSelected(false);
+                        }
+                        itemOption.setSelected(true);
+                        found = true;
                     }
-                    itemOption.setSelected(true);
-                    return;
                 }
             }
         }
-        selectedItemOption_ = null;
+        if (!found) {
+            selectedItemOption_ = null;
+        }
     }
 
     public SelectItemOption getSelectedItemOption() {
@@ -98,10 +109,6 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector {
         if (input == null || String.valueOf(input).length() < 1)
             return;
         setSelectOptionItem((String) input);
-    }
-
-    public void setSelectedOption(SelectItemOption selectedItemOption) {
-        selectedItemOption_ = selectedItemOption;
     }
 
     public Page createPageFromSelectedOption(String ownerType, String ownerId) throws Exception {
