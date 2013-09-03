@@ -110,7 +110,7 @@ public class UIPortalForm extends UIFormTabPane {
     private List<SelectItemOption<String>> languages = new ArrayList<SelectItemOption<String>>();
 
     public void initPortalTemplateTab() throws Exception {
-        UIFormInputItemSelector uiTemplateInput = new UIFormInputItemSelector("PortalTemplate", null);
+        UIFormInputItemSelector<String> uiTemplateInput = new UIFormInputItemSelector<String>("PortalTemplate", null, String.class);
         addUIFormInput(uiTemplateInput);
         setSelectedTab(uiTemplateInput.getId());
 
@@ -126,7 +126,7 @@ public class UIPortalForm extends UIFormTabPane {
         List<String> portalTemplates = new ArrayList<String>(configService.getPortalTemplates());
         Collections.sort(portalTemplates);
         for (String tempName : portalTemplates) {
-            SelectItemCategory category = new SelectItemCategory(tempName);
+            SelectItemCategory<String> category = new SelectItemCategory<String>(tempName);
             PortalConfig config = configService.getPortalConfigFromTemplate(tempName);
             if (config != null) {
                 SelectItemOption<String> option = new SelectItemOption<String>(config.getLabel(), tempName,
@@ -177,8 +177,8 @@ public class UIPortalForm extends UIFormTabPane {
         setActions(new String[] { "Save", "Close" });
     }
 
-    private class LanguagesComparator implements Comparator<SelectItemOption> {
-        public int compare(SelectItemOption o1, SelectItemOption o2) {
+    private class LanguagesComparator implements Comparator<SelectItemOption<String>> {
+        public int compare(SelectItemOption<String> o1, SelectItemOption<String> o2) {
             return o1.getLabel().compareToIgnoreCase(o2.getLabel());
         }
     }
@@ -385,7 +385,7 @@ public class UIPortalForm extends UIFormTabPane {
     public static class SelectItemOptionActionListener extends EventListener<UIPortalForm> {
         public void execute(Event<UIPortalForm> event) throws Exception {
             UIPortalForm uiForm = event.getSource();
-            UIFormInputItemSelector templateInput = uiForm.getChild(UIFormInputItemSelector.class);
+            UIFormInputItemSelector<?> templateInput = uiForm.getChild(UIFormInputItemSelector.class);
             uiForm.setSelectedTab(templateInput.getId());
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
         }

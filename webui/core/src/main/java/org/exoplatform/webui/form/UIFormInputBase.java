@@ -82,7 +82,7 @@ public abstract class UIFormInputBase<T> extends UIContainer implements UIFormIn
     /**
      * The type of value that is expected
      */
-    protected Class<T> typeValue_;
+    protected Class<? extends T> typeValue_;
 
     /**
      * @deprecated According to the deprecation of the {@link #setEnable(boolean)} method
@@ -150,7 +150,7 @@ public abstract class UIFormInputBase<T> extends UIContainer implements UIFormIn
         return this;
     }
 
-    public Class<T> getTypeValue() {
+    public Class<? extends T> getTypeValue() {
         return typeValue_;
     }
 

@@ -32,7 +32,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * An item selector represented by a normal list
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIItemSelector.gtmpl")
-public class UIItemSelector extends UIComponent {
+public class UIItemSelector<T> extends UIComponent {
     /**
      * The name of this selector
      */
@@ -41,26 +41,26 @@ public class UIItemSelector extends UIComponent {
     /**
      * The item categories, each category contains items
      */
-    private List<SelectItemCategory> categories_;
+    private List<SelectItemCategory<T>> categories_;
 
     public UIItemSelector(String name) {
         name_ = name;
         setComponentConfig(getClass(), null);
-        categories_ = new ArrayList<SelectItemCategory>();
+        categories_ = new ArrayList<SelectItemCategory<T>>();
     }
 
     public String getName() {
         return name_;
     }
 
-    public List<SelectItemCategory> getItemCategories() {
+    public List<SelectItemCategory<T>> getItemCategories() {
         return categories_;
     }
 
-    public void setItemCategories(List<SelectItemCategory> categories) {
+    public void setItemCategories(List<SelectItemCategory<T>> categories) {
         categories_ = categories;
         boolean selected = false;
-        for (SelectItemCategory ele : categories) {
+        for (SelectItemCategory<T> ele : categories) {
             if (ele.isSelected()) {
                 if (selected)
                     ele.setSelected(false);
@@ -72,13 +72,13 @@ public class UIItemSelector extends UIComponent {
             categories_.get(0).setSelected(true);
     }
 
-    public SelectItemCategory getSelectedItemCategory() {
-        for (SelectItemCategory category : categories_) {
+    public SelectItemCategory<T> getSelectedItemCategory() {
+        for (SelectItemCategory<T> category : categories_) {
             if (category.isSelected())
                 return category;
         }
         if (categories_.size() > 0) {
-            SelectItemCategory category = categories_.get(0);
+            SelectItemCategory<T> category = categories_.get(0);
             category.setSelected(true);
             category.getSelectItemOptions().get(0).setSelected(true);
             return category;
@@ -86,8 +86,8 @@ public class UIItemSelector extends UIComponent {
         return null;
     }
 
-    public SelectItemOption getSelectedItemOption() {
-        SelectItemCategory selectedCategory = getSelectedItemCategory();
+    public SelectItemOption<T> getSelectedItemOption() {
+        SelectItemCategory<T> selectedCategory = getSelectedItemCategory();
         if (selectedCategory != null)
             return selectedCategory.getSelectedItemOption();
         return null;
