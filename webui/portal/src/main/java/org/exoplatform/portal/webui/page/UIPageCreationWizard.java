@@ -334,7 +334,6 @@ public class UIPageCreationWizard extends UIPageWizard {
             uiPagePreview.setUIComponent(uiPage);
 
             uiWizard.updateWizardComponent();
-            uiPageTemplateOptions.setSelectedOption(null);
         }
     }
 
