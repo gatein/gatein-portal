@@ -28,6 +28,8 @@ import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.MongodConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.gatein.portal.mop.Store;
 import org.picocontainer.Startable;
 
@@ -38,12 +40,6 @@ public class MongoStore implements Store, Startable {
 
     /** . */
     private DB db;
-
-    /** . */
-    private MongodProcess mongod;
-
-    /** . */
-    private MongodExecutable mongodExe;
 
     /** . */
     private MongoSiteStore siteStore;
@@ -63,12 +59,52 @@ public class MongoStore implements Store, Startable {
     /** . */
     private MongoCustomizationStore customizationStore;
 
+    /** . */
+    private final String host;
+
+    /** . */
+    private final int port;
+
+    /**
+     * Create a mongo store with the specified init params.
+     *
+     * @param params the init params
+     */
+    public MongoStore(InitParams params) {
+
+        //
+        ValueParam hostParam = params.getValueParam("host");
+        ValueParam portParam = params.getValueParam("port");
+
+        //
+        String host = hostParam != null ? hostParam.getValue().trim() : "localhost";
+        int port = portParam != null ? Integer.parseInt(portParam.getValue().trim()) : 27017;
+
+        this.host = host;
+        this.port = port;
+    }
+
+    /**
+     * Create a mongo store with <code>localhost</code> host and <code>27017</code> port.
+     */
+    public MongoStore() {
+        this("localhost", 27017);
+    }
+
+    /**
+     * Create a mongo store with the specified connection parameters.
+     *
+     * @param host the host
+     * @param port the port
+     */
+    public MongoStore(String host, int port) {
+        this.host = host;
+        this.port = port;
+    }
+
     public void start() {
         try {
-            MongodStarter runtime = MongodStarter.getDefaultInstance();
-            this.mongodExe = runtime.prepare(new MongodConfig(Version.V2_0_5, 27777, Network.localhostIsIPv6()));
-            this.mongod = mongodExe.start();
-            MongoClient mongo = new MongoClient("localhost", 27777);
+            MongoClient mongo = new MongoClient(host, port);
             this.db = mongo.getDB("gatein");
             this.siteStore = new MongoSiteStore(this);
             this.pageStore = new MongoPageStore(this);
@@ -79,6 +115,9 @@ public class MongoStore implements Store, Startable {
         } catch (Exception e) {
             throw new UndeclaredThrowableException(e);
         }
+    }
+
+    public void stop() {
     }
 
     public MongoSiteStore getSiteStore() {
@@ -103,16 +142,6 @@ public class MongoStore implements Store, Startable {
 
     public MongoCustomizationStore getCustomizationStore() {
         return customizationStore;
-    }
-
-    public void stop() {
-        if (mongod != null) {
-            if (db != null) {
-                db.dropDatabase();
-            }
-            mongod.stop();
-            mongodExe.stop();
-        }
     }
 
     public DB getDB() {

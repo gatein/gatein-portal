@@ -19,6 +19,14 @@
 
 package org.exoplatform.portal.mop;
 
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodProcess;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.description.SimpleDataCache;
@@ -384,6 +392,12 @@ public abstract class PersistenceContext {
     public static class Mongo extends PersistenceContext {
 
         /** . */
+        private MongodExecutable mongodExe;
+
+        /** . */
+        private MongodProcess mongod;
+
+        /** . */
         private MongoStore store;
 
         /** . */
@@ -421,7 +435,9 @@ public abstract class PersistenceContext {
 
         @Override
         protected void setUp() throws Exception {
-            store = new MongoStore();
+            mongodExe = MongodStarter.getDefaultInstance().prepare(new MongodConfig(Version.V2_0_5, 27777, Network.localhostIsIPv6()));
+            mongod = mongodExe.start();
+            store = new MongoStore("localhost", 27777);
             store.start();
             siteService = new SiteServiceImpl(siteStore = store.getSiteStore());
             pageService = new PageServiceImpl(pageStore = store.getPageStore());
@@ -433,17 +449,25 @@ public abstract class PersistenceContext {
 
         @Override
         protected void tearDown() throws Exception {
+            if (mongodExe != null) {
+                if (mongod != null) {
+                    MongoClient mongo = new MongoClient("localhost", 27777);
+                    DB db = mongo.getDB("gatein");
+                    db.dropDatabase();
+                    mongo.close();
+                    mongod.stop();
+                }
+                mongodExe.stop();
+            }
             store.stop();
         }
 
         @Override
         public void begin() {
-
         }
 
         @Override
         public void end(boolean save) {
-
         }
 
         @Override

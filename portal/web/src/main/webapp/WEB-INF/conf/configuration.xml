@@ -38,6 +38,16 @@
   <component profiles="mongo">
     <key>org.gatein.portal.mop.Store</key>
     <type>org.gatein.portal.impl.mop.mongo.MongoStore</type>
+    <init-params>
+      <value-param>
+        <name>host</name>
+        <value>${gatein.mop.mongo.host:localhost}</value>
+      </value-param>
+      <value-param>
+        <name>port</name>
+        <value>${gatein.mop.mongo.port:27017}</value>
+      </value-param>
+    </init-params>
   </component>
   <component profiles="mongo">
     <key>org.gatein.portal.mop.site.SiteStore</key>

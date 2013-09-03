@@ -257,8 +257,48 @@ The XML for site looks like
 * Http Header support
 * Cookie support
 
+# Model Object for Portal (MOP)
 
+## Storage
 
+Since GateIn 4.x provides multiple storage implementations for persisting the MOP. In addition of the Java Content Repository
+store (developed in the GateIn 3.x series) we do provide additional storage
+
+### RAM Persistence
+
+RAM persistence was developed for testing purposes of GateIn with several goals:
+
+* zero configuration
+* transient
+* very fast
+
+This store does not write any single data on the disk that helps to achieve some of the goals above.
+
+### MongoDB Persistence
+
+Documented oriented databases are a good fit for the MOP storage.
+
+#### Usage
+
+* The Mongo client (GAV org.mongodb:mongo-java-driver) must be in the classpath of the `portal.war` archive (`/lib`
+of Tomcat does the job perfectly)
+* Run GateIn with the *mongo* profile
+
+For example:
+
+    cp mongo-java-driver-2.11.1.jar apache-tomcat-7.0.40/lib/
+    cp commons-compress-1.3.jar apache-tomcat-7.0.40/lib/
+    cp guava-11.0.1.jar apache-tomcat-7.0.40/lib/
+    cd apache-tomcat-7.0.40/bin
+    export CATALINA_OPTS=-Dexo.profiles=mongo
+    ./catalina.sh run
+
+#### Configuration
+
+Mongo host and ports can be configured:
+
+* `gatein.mop.mongo.host` property for the host
+* `gatein.mop.mongo.port` property for the port
 
 # Login module
 
@@ -268,7 +308,7 @@ The XML for site looks like
 * OAuth: Enable user login with Facebook, twitter and google
 * SSO: only tested with CAS, JOSSO and OpenAM server
 
-## TODO
+## Todo
 
 * Now, we hard-code login and logout link: should get these link programmaticaly
 * How to build initURL when login and logout (the page should redirect to when login and logout success)
