@@ -110,7 +110,7 @@ public class SiteImporter {
 
             // We cheat a bit with this cast
             // but well it's easier to do this way
-            NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), container.getStorageId(), null);
+            NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), imported.getLayoutId(), null);
 
             // Save element
             layoutService.saveLayout(new ContainerAdapter(container), container, ret, null);
