@@ -30,8 +30,8 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.portal.mop.hierarchy.HierarchyError;
 import org.gatein.portal.mop.hierarchy.HierarchyException;
+import org.gatein.portal.mop.navigation.NavigationNode;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.exoplatform.services.listener.Event;
@@ -123,7 +123,7 @@ public class TestNavigationServiceWrapper extends AbstractMopServiceTest {
 
         // Update
         navigation = wrapper.loadNavigation(SiteKey.portal("notification"));
-        Node root = wrapper.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        NavigationNode root = wrapper.loadNode(NavigationNode.MODEL, navigation, Scope.CHILDREN, null).getNode();
         root.setState(new NodeState.Builder(root.getState()).label("foo").build());
         wrapper.saveNode(root.getContext(), null);
         assertEquals(0, createListener.events.size());
@@ -165,7 +165,7 @@ public class TestNavigationServiceWrapper extends AbstractMopServiceTest {
         begin();
         NavigationContext nav = wrapper.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<Node, NodeState> root = wrapper.loadNode(Node.MODEL, nav, Scope.ALL, null);
+        NodeContext<NavigationNode, NodeState> root = wrapper.loadNode(NavigationNode.MODEL, nav, Scope.ALL, null);
         assertNotNull(root);
         end(true);
 

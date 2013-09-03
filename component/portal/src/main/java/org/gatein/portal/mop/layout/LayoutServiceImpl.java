@@ -20,7 +20,8 @@
 package org.gatein.portal.mop.layout;
 
 import org.gatein.portal.mop.hierarchy.GenericScope;
-import org.gatein.portal.mop.hierarchy.NodeAdapter;
+import org.gatein.portal.mop.hierarchy.HierarchyException;
+import org.gatein.portal.mop.hierarchy.ModelAdapter;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeManager;
@@ -56,7 +57,7 @@ public class LayoutServiceImpl implements LayoutService {
     }
 
     @Override
-    public <L, N> void saveLayout(NodeAdapter<L, N, ElementState> adapter, N node, NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) {
+    public <N> void saveLayout(ModelAdapter<N, ElementState> adapter, N node, NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException, LayoutServiceException, HierarchyException {
         NodeManager<ElementState> nodeManager = getManager(context, true);
         try {
             // Make a diff

@@ -25,8 +25,8 @@ import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.hierarchy.HierarchyError;
 import org.gatein.portal.mop.hierarchy.HierarchyException;
 import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.navigation.NavigationNode;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeChange;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.navigation.NavigationContext;
@@ -47,14 +47,14 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase1"));
-        Node root1 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
-        Node a = root1.getChild("a");
-        Node d = root1.getChild("d");
-        Node b = root1.addChild(1, "b");
+        NavigationNode root1 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode a = root1.getChild("a");
+        NavigationNode d = root1.getChild("d");
+        NavigationNode b = root1.addChild(1, "b");
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
-        Node c2 = root2.addChild(1, "c");
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode c2 = root2.addChild(1, "c");
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
 
@@ -63,7 +63,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
         assertEquals(4, root1.getNodeCount());
         assertSame(a, root1.getChild(0));
         assertSame(b, root1.getChild(1));
-        Node c1 = root1.getChild(2);
+        NavigationNode c1 = root1.getChild(2);
         assertEquals("c", c1.getName());
         assertEquals(c2.getId(), c1.getId());
         assertSame(d, root1.getChild(3));
@@ -79,13 +79,13 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase2"));
-        Node root1 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
-        Node a = root1.getChild("a");
-        Node b = root1.getChild("b");
-        Node c = a.addChild("c");
+        NavigationNode root1 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode a = root1.getChild("a");
+        NavigationNode b = root1.getChild("b");
+        NavigationNode c = a.addChild("c");
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root2.getChild("b").addChild(root2.getChild("a"));
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
@@ -112,11 +112,11 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase3"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root.getChild("a").addChild("foo");
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root2.removeChild("a");
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
@@ -144,7 +144,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase4"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root.addChild(root.getChild("a").getChild("b"));
         root.removeChild("a");
 
@@ -160,11 +160,11 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_add_duplicate"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root.addChild("a");
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("a");
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
@@ -188,11 +188,11 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_move_duplicate"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root.addChild(root.getChild("a").getChild("b"));
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("b");
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
@@ -216,11 +216,11 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_rename_duplicate"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root.getChild("a").setName("b");
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("b");
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
@@ -243,35 +243,35 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_federation"));
-        Node root1 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
-        final Node a = root1.getChild("a");
-        final Node c = root1.addChild("c");
+        NavigationNode root1 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        final NavigationNode a = root1.getChild("a");
+        final NavigationNode c = root1.addChild("c");
 
         //
-        Node root2 = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root2 = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("d").addChild("e");
         getNavigationService().saveNode(root2.getContext(), null);
         sync(true);
 
         //
-        Iterator<NodeChange<Node, NodeState>> changes = a.rebase(getNavigationService(), Scope.CHILDREN);
-        Iterator<Node> children = root1.getChildren().iterator();
+        Iterator<NodeChange<NavigationNode, NodeState>> changes = a.rebase(getNavigationService(), Scope.CHILDREN);
+        Iterator<NavigationNode> children = root1.getChildren().iterator();
         assertSame(a, children.next());
         assertSame(c, children.next());
-        Node d = children.next();
+        NavigationNode d = children.next();
         assertEquals("d", d.getName());
         assertFalse(children.hasNext());
         assertFalse(d.getContext().isExpanded());
         children = a.getChildren().iterator();
-        Node b = children.next();
+        NavigationNode b = children.next();
         assertEquals("b", b.getName());
         assertFalse(children.hasNext());
         assertFalse(b.getContext().isExpanded());
-        NodeChange.Added<Node, NodeState> added1 = (NodeChange.Added<Node, NodeState>) changes.next();
+        NodeChange.Added<NavigationNode, NodeState> added1 = (NodeChange.Added<NavigationNode, NodeState>) changes.next();
         assertSame(b, added1.getTarget());
         assertSame(null, added1.getPrevious());
         assertSame(a, added1.getParent());
-        NodeChange.Added<Node, NodeState> added2 = (NodeChange.Added<Node, NodeState>) changes.next();
+        NodeChange.Added<NavigationNode, NodeState> added2 = (NodeChange.Added<NavigationNode, NodeState>) changes.next();
         assertSame(d, added2.getTarget());
         assertSame(c, added2.getPrevious());
         assertSame(root1, added2.getParent());
@@ -286,9 +286,9 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_transient_parent"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
-        Node a = root.addChild("a");
-        Node b = root.addChild("b"); // It is only failed if we add more than one transient node
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        NavigationNode a = root.addChild("a");
+        NavigationNode b = root.addChild("b"); // It is only failed if we add more than one transient node
 
         //
         getNavigationService().rebaseNode(a.getContext(), Scope.CHILDREN, null);
@@ -302,7 +302,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_removed_navigation"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
         getNavigationService().destroyNavigation(navigation);
 
         //
@@ -325,7 +325,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_state"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
 
         NodeState state = new NodeState.Builder().label("foo").build();
         root.getChild("a").setState(state);
@@ -335,7 +335,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
         sync(true);
 
         //
-        Iterator<NodeChange<Node, NodeState>> changes = root.rebase(getNavigationService(), null);
+        Iterator<NodeChange<NavigationNode, NodeState>> changes = root.rebase(getNavigationService(), null);
         assertFalse(changes.hasNext());
         assertSame(state, root.getChild("a").getState());
     }
@@ -349,9 +349,9 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
         //
         NavigationContext navigation = getNavigationService().loadNavigation(SiteKey.portal("rebase_name"));
-        Node root = getNavigationService().loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationNode root = getNavigationService().loadNode(NavigationNode.MODEL, navigation, Scope.ALL, null).getNode();
 
-        Node a = root.getChild("a");
+        NavigationNode a = root.getChild("a");
         a.setName("b");
         assertSame("b", a.getName());
 
@@ -359,7 +359,7 @@ public class TestNavigationServiceRebase extends AbstractMopServiceTest {
         sync(true);
 
         //
-        Iterator<NodeChange<Node, NodeState>> changes = root.rebase(getNavigationService(), null);
+        Iterator<NodeChange<NavigationNode, NodeState>> changes = root.rebase(getNavigationService(), null);
         assertFalse(changes.hasNext());
         assertSame("b", a.getName());
     }

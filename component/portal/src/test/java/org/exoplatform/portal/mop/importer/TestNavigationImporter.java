@@ -32,9 +32,9 @@ import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.description.DescriptionState;
+import org.gatein.portal.mop.navigation.NavigationNode;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.navigation.NavigationContext;
-import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.hierarchy.Scope;
@@ -162,12 +162,12 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         //
         NavigationContext ctx = getNavigationService().loadNavigation(SiteKey.portal(name));
-        Node node = getNavigationService().loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
-        Node a = node.getChild("a");
+        NavigationNode node = getNavigationService().loadNode(NavigationNode.MODEL, ctx, Scope.ALL, null).getNode();
+        NavigationNode a = node.getChild("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
         assertEquals(1, a.getNodeCount());
-        Node b = a.getChild("b");
+        NavigationNode b = a.getChild("b");
         assertNotNull(b);
         assertEquals("b", b.getName());
         assertEquals(0, b.getNodeCount());
@@ -180,7 +180,7 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
 
         //
         ctx = getNavigationService().loadNavigation(SiteKey.portal(name));
-        node = getNavigationService().loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
+        node = getNavigationService().loadNode(NavigationNode.MODEL, ctx, Scope.ALL, null).getNode();
         switch (importMode) {
             case INSERT: {
                 assertEquals(2, node.getNodeCount());
@@ -192,11 +192,11 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
                 assertNotNull(b);
                 assertEquals("b", b.getState().getLabel());
                 assertEquals(0, b.getNodeCount());
-                Node c = node.getChild("c");
+                NavigationNode c = node.getChild("c");
                 assertNotNull(c);
                 assertEquals("c", c.getState().getLabel());
                 assertEquals(0, c.getNodeCount());
-                Node d = a.getChild("d");
+                NavigationNode d = a.getChild("d");
                 assertNotNull(d);
                 assertEquals("d", d.getName());
                 assertEquals(0, d.getNodeCount());
@@ -218,11 +218,11 @@ public class TestNavigationImporter extends AbstractMopServiceTest {
                 assertNotNull(a);
                 assertEquals("a", a.getState().getLabel());
                 assertEquals(1, a.getNodeCount());
-                Node c = node.getChild("c");
+                NavigationNode c = node.getChild("c");
                 assertNotNull(c);
                 assertEquals("c", c.getState().getLabel());
                 assertEquals(0, c.getNodeCount());
-                Node d = a.getChild("d");
+                NavigationNode d = a.getChild("d");
                 assertNotNull(d);
                 assertEquals("d", d.getName());
                 assertEquals(0, d.getNodeCount());

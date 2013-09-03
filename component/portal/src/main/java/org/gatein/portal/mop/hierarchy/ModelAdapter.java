@@ -20,6 +20,7 @@
 package org.gatein.portal.mop.hierarchy;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.exoplatform.portal.tree.diff.ListAdapter;
@@ -27,7 +28,9 @@ import org.exoplatform.portal.tree.diff.ListAdapter;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-interface NodeAdapter<L, N, S extends Serializable> extends HierarchyAdapter<L, N, String>, ListAdapter<L, String> {
+public interface ModelAdapter<N, S extends Serializable> {
+
+    String getId(N node);
 
     String getName(N node);
 
@@ -37,5 +40,8 @@ interface NodeAdapter<L, N, S extends Serializable> extends HierarchyAdapter<L, 
 
     N getPrevious(N parent, N node);
 
-    void setHandle(N node, String handle);
+    Iterator<N> getChildren(N node, boolean reverse);
+
+    int size(N node);
+
 }

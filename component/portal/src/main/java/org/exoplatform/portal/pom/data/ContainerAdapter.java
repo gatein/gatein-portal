@@ -19,20 +19,20 @@
 
 package org.exoplatform.portal.pom.data;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 
-import org.gatein.portal.mop.hierarchy.NodeAdapter;
+import org.gatein.portal.mop.hierarchy.ModelAdapter;
 import org.gatein.portal.mop.layout.ElementState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ContainerAdapter implements NodeAdapter<List<ComponentData>, ComponentData, ElementState> {
+public class ContainerAdapter implements ModelAdapter<ComponentData, ElementState> {
 
     /** . */
     final ContainerData root;
@@ -56,60 +56,20 @@ public class ContainerAdapter implements NodeAdapter<List<ComponentData>, Compon
     }
 
     @Override
-    public String getHandle(ComponentData node) {
-        String handle = node.getStorageId();
-        if (handle == null) {
-            handle = handles.get(node);
-            if (handle == null) {
-                handles.put(node, handle = UUID.randomUUID().toString());
-            }
-        }
-        return handle;
+    public String getId(ComponentData node) {
+        return node.getStorageId();
     }
+
     @Override
-    public List<ComponentData> getChildren(ComponentData node) {
-        if (node instanceof ContainerData) {
-            return ((ContainerData)node).getChildren();
-        } else {
-            return Collections.emptyList();
-        }
+    public ElementState getState(ComponentData node) {
+        return create(node);
     }
+
     @Override
-    public ComponentData getDescendant(ComponentData node, String handle) {
-        String h = getHandle(node);
-        if (h.equals(handle)) {
-            return node;
-        } else if (node instanceof ContainerData) {
-            ContainerData container = (ContainerData) node;
-            for (ComponentData child : container.getChildren()) {
-                ComponentData descendant = getDescendant(child, handle);
-                if (descendant != null) {
-                    return descendant;
-                }
-            }
-            return null;
-        } else {
-            return null;
-        }
-    }
-    @Override
-    public int size(List<ComponentData> list) {
-        return list.size();
-    }
-    @Override
-    public Iterator<String> iterator(List<ComponentData> list, boolean reverse) {
-        ArrayList<String> ret = new ArrayList<String>();
-        for (ComponentData c : list) {
-            ret.add(getHandle(c));
-        }
-        if (reverse) {
-            Collections.reverse(ret);
-        }
-        return ret.iterator();
-    }
     public ContainerData getParent(ComponentData node) {
         return getParent(root, node);
     }
+
     private ContainerData getParent(ContainerData container, ComponentData node) {
         for (ComponentData child : container.getChildren()) {
             if (child == node) {
@@ -125,11 +85,6 @@ public class ContainerAdapter implements NodeAdapter<List<ComponentData>, Compon
     }
 
     @Override
-    public ElementState getState(ComponentData node) {
-        return create(node);
-    }
-
-    @Override
     public ComponentData getPrevious(ComponentData parent, ComponentData node) {
         ContainerData container = (ContainerData) parent;
         int index = container.getChildren().indexOf(node);
@@ -137,8 +92,40 @@ public class ContainerAdapter implements NodeAdapter<List<ComponentData>, Compon
     }
 
     @Override
-    public void setHandle(ComponentData node, String handle) {
-        handles.put(node, handle);
+    public Iterator<ComponentData> getChildren(ComponentData node, boolean reverse) {
+        if (node instanceof ContainerData) {
+            List<ComponentData> list = ((ContainerData) node).getChildren();
+            if (reverse) {
+                final ListIterator<ComponentData> iterator = list.listIterator(list.size());
+                return new Iterator<ComponentData>() {
+                    @Override
+                    public boolean hasNext() {
+                        return iterator.hasPrevious();
+                    }
+                    @Override
+                    public ComponentData next() {
+                        return iterator.previous();
+                    }
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            } else {
+                return list.iterator();
+            }
+        } else {
+            return Collections.<ComponentData>emptyList().iterator();
+        }
+    }
+
+    @Override
+    public int size(ComponentData node) {
+        if (node instanceof ContainerData) {
+            return ((ContainerData) node).getChildren().size();
+        } else {
+            return 0;
+        }
     }
 
     private ElementState create(ComponentData data) {

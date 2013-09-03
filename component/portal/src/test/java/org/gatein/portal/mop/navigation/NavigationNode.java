@@ -19,12 +19,8 @@
 
 package org.gatein.portal.mop.navigation;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
-import junit.framework.Assert;
 import org.gatein.portal.mop.hierarchy.ModelNode;
 import org.gatein.portal.mop.hierarchy.NodeChange;
 import org.gatein.portal.mop.hierarchy.NodeChangeQueue;
@@ -39,46 +35,46 @@ import org.gatein.portal.mop.hierarchy.Scope;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Node extends ModelNode<Node, NodeState> {
+public class NavigationNode extends ModelNode<NavigationNode, NodeState> {
 
     /** . */
-    public static final NodeModel<Node, NodeState> MODEL = new NodeModel<Node, NodeState>() {
-        public NodeContext<Node, NodeState> getContext(Node node) {
+    public static final NodeModel<NavigationNode, NodeState> MODEL = new NodeModel<NavigationNode, NodeState>() {
+        public NodeContext<NavigationNode, NodeState> getContext(NavigationNode node) {
             return node.context;
         }
 
-        public Node create(NodeContext<Node, NodeState> context) {
-            return new Node(context);
+        public NavigationNode create(NodeContext<NavigationNode, NodeState> context) {
+            return new NavigationNode(context);
         }
     };
 
-    public Node(NodeContext<Node, NodeState> context) {
+    public NavigationNode(NodeContext<NavigationNode, NodeState> context) {
         super(context);
     }
 
-    public Node addChild(String childName) {
+    public NavigationNode addChild(String childName) {
         return addChild(childName, NodeState.INITIAL);
     }
 
-    public Node addChild(int index, String childName) {
+    public NavigationNode addChild(int index, String childName) {
         return addChild(index, childName, NodeState.INITIAL);
     }
 
-    public Iterator<NodeChange<Node, NodeState>> update(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
-        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
-        service.updateNode(context, scope, new NodeContextChangeAdapter<Node, NodeState>(queue));
+    public Iterator<NodeChange<NavigationNode, NodeState>> update(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
+        NodeChangeQueue<NavigationNode, NodeState> queue = new NodeChangeQueue<NavigationNode, NodeState>();
+        service.updateNode(context, scope, new NodeContextChangeAdapter<NavigationNode, NodeState>(queue));
         return queue.iterator();
     }
 
-    public Iterator<NodeChange<Node, NodeState>> rebase(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
-        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
-        service.rebaseNode(context, scope, new NodeContextChangeAdapter<Node, NodeState>(queue));
+    public Iterator<NodeChange<NavigationNode, NodeState>> rebase(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
+        NodeChangeQueue<NavigationNode, NodeState> queue = new NodeChangeQueue<NavigationNode, NodeState>();
+        service.rebaseNode(context, scope, new NodeContextChangeAdapter<NavigationNode, NodeState>(queue));
         return queue.iterator();
     }
 
-    public Iterator<NodeChange<Node, NodeState>> save(NavigationService service) throws NavigationServiceException {
-        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
-        service.saveNode(context, new NodeContextChangeAdapter<Node, NodeState>(queue));
+    public Iterator<NodeChange<NavigationNode, NodeState>> save(NavigationService service) throws NavigationServiceException {
+        NodeChangeQueue<NavigationNode, NodeState> queue = new NodeChangeQueue<NavigationNode, NodeState>();
+        service.saveNode(context, new NodeContextChangeAdapter<NavigationNode, NodeState>(queue));
         return queue.iterator();
     }
 }
