@@ -38,23 +38,22 @@ import org.exoplatform.webui.form.UIFormInputItemSelector;
  * Created by The eXo Platform SARL Author : Nguyen Viet Chung nguyenchung136@yahoo.com Aug 10, 2006
  */
 @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageTemplateOptions.gtmpl", initParams = @ParamConfig(name = "PageLayout", value = "system:/WEB-INF/conf/uiconf/portal/webui/page/PageConfigOptions.groovy"))
-public class UIPageTemplateOptions extends UIFormInputItemSelector {
+public class UIPageTemplateOptions extends UIFormInputItemSelector<String> {
 
-    private SelectItemOption<?> selectedItemOption_ = null;
+    private SelectItemOption<String> selectedItemOption_ = null;
 
-    @SuppressWarnings("unchecked")
     public UIPageTemplateOptions(InitParams initParams) throws Exception {
-        super("UIPageTemplateOptions", null);
+        super("UIPageTemplateOptions", null, String.class);
         if (initParams == null)
             return;
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         Param param = initParams.getParam("PageLayout");
-        categories_ = (List<SelectItemCategory>) param.getFreshObject(context);
+        categories_ = (List<SelectItemCategory<String>>) param.getFreshObject(context);
         selectedItemOption_ = getDefaultItemOption();
         List<SelectItemOption<String>> itemOptions = new ArrayList<SelectItemOption<String>>();
 
-        for (SelectItemCategory itemCategory : categories_) {
-            itemOptions.add(new SelectItemOption(itemCategory.getName()));
+        for (SelectItemCategory<String> itemCategory : categories_) {
+            itemOptions.add(new SelectItemOption<String>(itemCategory.getName()));
         }
 
         // modify: Dang.Tung
@@ -64,11 +63,11 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector {
         // end modify
     }
 
-    public SelectItemOption<?> getDefaultItemOption() {
-        SelectItemCategory category = getSelectedCategory();
+    public SelectItemOption<String> getDefaultItemOption() {
+        SelectItemCategory<String> category = getSelectedCategory();
         if (category == null)
             return null;
-        SelectItemOption<?> itemOption = category.getSelectedItemOption();
+        SelectItemOption<String> itemOption = category.getSelectedItemOption();
         if (itemOption == null)
             return null;
         return itemOption;
@@ -76,10 +75,10 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector {
 
     public void setSelectOptionItem(String value) {
         boolean found = false;
-        for (SelectItemCategory category : categories_) {
+        for (SelectItemCategory<String> category : categories_) {
             category.setSelected(false);
             if (!found) {
-                for (SelectItemOption<?> itemOption : category.getSelectItemOptions()) {
+                for (SelectItemOption<String> itemOption : category.getSelectItemOptions()) {
                     if (itemOption.getLabel().equals(value)) {
 
                         UIDropDownControl uiItemSelector = findFirstComponentOfType(UIDropDownControl.class);
@@ -87,7 +86,7 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector {
 
                         category.setSelected(true);
                         selectedItemOption_ = itemOption;
-                        for (SelectItemOption<?> item : category.getSelectItemOptions()) {
+                        for (SelectItemOption<String> item : category.getSelectItemOptions()) {
                             item.setSelected(false);
                         }
                         itemOption.setSelected(true);
@@ -101,7 +100,7 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector {
         }
     }
 
-    public SelectItemOption getSelectedItemOption() {
+    public SelectItemOption<String> getSelectedItemOption() {
         return selectedItemOption_;
     }
 

@@ -31,7 +31,7 @@ import java.util.List;
  * @see org.exoplatform.webui.form.UIFormInputItemSelector
  * @see SelectItemOption
  */
-public class SelectItemCategory {
+public class SelectItemCategory<T> {
     /**
      * The name of the category
      */
@@ -45,7 +45,7 @@ public class SelectItemCategory {
     /**
      * The list of SelectItemOption that this category contains
      */
-    private List<SelectItemOption> options_;
+    private List<SelectItemOption<T>> options_;
 
     /**
      * Whether this category is selected
@@ -86,27 +86,26 @@ public class SelectItemCategory {
         selected_ = b;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends SelectItemOption> List<T> getSelectItemOptions() {
-        return (List<T>) options_;
+    public List<SelectItemOption<T>> getSelectItemOptions() {
+        return options_;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends SelectItemOption> void setSelectItemOptions(List<T> options) {
-        options_ = (List<SelectItemOption>) options;
+    public void setSelectItemOptions(List<SelectItemOption<T>> options) {
+        this.options_ = options;
     }
 
-    public SelectItemCategory addSelectItemOption(SelectItemOption option) {
-        if (options_ == null)
-            options_ = new ArrayList<SelectItemOption>();
+    public SelectItemCategory<T> addSelectItemOption(SelectItemOption<T> option) {
+        if (options_ == null) {
+            options_ = new ArrayList<SelectItemOption<T>>();
+        }
         options_.add(option);
         return this;
     }
 
-    public SelectItemOption getSelectedItemOption() {
+    public SelectItemOption<T> getSelectedItemOption() {
         if (options_ == null)
             return null;
-        for (SelectItemOption item : options_) {
+        for (SelectItemOption<T> item : options_) {
             if (item.isSelected())
                 return item;
         }

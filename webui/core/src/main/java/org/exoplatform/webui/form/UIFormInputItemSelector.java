@@ -33,27 +33,27 @@ import org.exoplatform.webui.core.model.SelectItemOption;
  * Represents any item selector, of a given type
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIFormInputItemSelector.gtmpl")
-public class UIFormInputItemSelector extends UIFormInputBase<Object> {
+public class UIFormInputItemSelector<T> extends UIFormInputBase<T> {
     /**
      * The type of item selectable
      */
-    private Class type_;
+    private Class<? extends T> type_;
 
-    protected List<SelectItemCategory> categories_ = new ArrayList<SelectItemCategory>();
+    protected List<SelectItemCategory<T>> categories_ = new ArrayList<SelectItemCategory<T>>();
 
-    public UIFormInputItemSelector(String name, String bindingField) {
-        super(name, bindingField, Object.class);
+    public UIFormInputItemSelector(String name, String bindingField, Class<T> typeValue) {
+        super(name, bindingField, typeValue);
         setComponentConfig(getClass(), null);
     }
 
-    public List<SelectItemCategory> getItemCategories() {
+    public List<SelectItemCategory<T>> getItemCategories() {
         return categories_;
     }
 
-    public void setItemCategories(List<SelectItemCategory> categories) {
+    public void setItemCategories(List<SelectItemCategory<T>> categories) {
         categories_ = categories;
         boolean selected = false;
-        for (SelectItemCategory ele : categories) {
+        for (SelectItemCategory<T> ele : categories) {
             if (ele.isSelected()) {
                 if (selected)
                     ele.setSelected(false);
@@ -65,13 +65,13 @@ public class UIFormInputItemSelector extends UIFormInputBase<Object> {
             categories_.get(0).setSelected(true);
     }
 
-    public SelectItemCategory getSelectedCategory() {
-        for (SelectItemCategory category : categories_) {
+    public SelectItemCategory<T> getSelectedCategory() {
+        for (SelectItemCategory<T> category : categories_) {
             if (category.isSelected())
                 return category;
         }
         if (categories_.size() > 0) {
-            SelectItemCategory category = categories_.get(0);
+            SelectItemCategory<T> category = categories_.get(0);
             category.setSelected(true);
             category.getSelectItemOptions().get(0).setSelected(true);
             return category;
@@ -79,48 +79,47 @@ public class UIFormInputItemSelector extends UIFormInputBase<Object> {
         return null;
     }
 
-    public SelectItemOption getSelectedItemOption() {
-        SelectItemCategory selectedCategory = getSelectedCategory();
+    public SelectItemOption<T> getSelectedItemOption() {
+        SelectItemCategory<T> selectedCategory = getSelectedCategory();
         if (selectedCategory == null)
             return null;
         return selectedCategory.getSelectedItemOption();
     }
 
-    public Object getValue() {
-        SelectItemCategory selectedCategory = getSelectedCategory();
+    public T getValue() {
+        SelectItemCategory<T> selectedCategory = getSelectedCategory();
         if (selectedCategory == null)
             return null;
-        SelectItemOption selectedItem = selectedCategory.getSelectedItemOption();
+        SelectItemOption<T> selectedItem = selectedCategory.getSelectedItemOption();
         if (selectedItem == null)
             return null;
         return selectedItem.getValue();
     }
 
-    @SuppressWarnings("unchecked")
-    public UIFormInputItemSelector setValue(Object input) {
-        for (SelectItemCategory category : categories_) {
+    public UIFormInputItemSelector<T> setValue(Object input) {
+        for (SelectItemCategory<T> category : categories_) {
             category.setSelected(isSelectItemCategory(category, input));
         }
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    public Class getTypeValue() {
+    public Class<? extends T> getTypeValue() {
         if (type_ != null)
             return type_;
         if (getSelectedCategory() == null || getSelectedCategory().getSelectedItemOption() == null
                 || getSelectedCategory().getSelectedItemOption().getValue() == null)
             return typeValue_;
-        return getSelectedCategory().getSelectedItemOption().getValue().getClass();
+        T val = getSelectedCategory().getSelectedItemOption().getValue();
+        return (Class<? extends T>) val.getClass();
     }
 
-    public void setTypeValue(Class type) {
+    public void setTypeValue(Class<? extends T> type) {
         this.type_ = type;
     }
 
-    private boolean isSelectItemCategory(SelectItemCategory category, Object input) {
-        List<SelectItemOption> options = category.getSelectItemOptions();
-        for (SelectItemOption option : options) {
+    private boolean isSelectItemCategory(SelectItemCategory<T> category, Object input) {
+        List<SelectItemOption<T>> options = category.getSelectItemOptions();
+        for (SelectItemOption<T> option : options) {
             if (option.getValue().equals(input)) {
                 option.setSelected(true);
                 return true;
@@ -129,7 +128,6 @@ public class UIFormInputItemSelector extends UIFormInputBase<Object> {
         return category.getName().equals(input);
     }
 
-    @SuppressWarnings("unused")
     public void decode(Object input, WebuiRequestContext context) {
         // System.out.println("\n\n\n == > current input value is "+input+"\n\n");
         if (input == null || String.valueOf(input).length() < 1)
