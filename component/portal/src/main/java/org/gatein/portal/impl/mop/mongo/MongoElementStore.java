@@ -111,7 +111,7 @@ class MongoElementStore implements NodeStore<ElementState> {
                     if (ApplicationType.PORTLET.getContentType().getMimeType().equals(contentType)) {
                         applicationType = ApplicationType.PORTLET;
                     } else {
-                        throw new UnsupportedOperationException("Implement me");
+                        throw new UnsupportedOperationException("Implement me " + contentType);
                     }
                     state = new ElementState.Window(
                             applicationType,
