@@ -21,6 +21,7 @@ package org.gatein.portal.impl.mop.ram;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.gatein.portal.mop.hierarchy.NodeData;
@@ -55,7 +56,12 @@ public class RamLayoutStore implements LayoutStore, NodeStore<ElementState> {
     }
 
     private NodeData<ElementState> getNode(Store current, String nodeId) {
-        String parent = current.getParent(nodeId);
+        String parent;
+        try {
+            parent = current.getParent(nodeId);
+        } catch (NoSuchElementException e) {
+            return null;
+        }
         Node parentNode = current.getNode(parent);
         String parentId = parentNode.getState() instanceof ElementState ? parent : null;
         List<String> children = current.getChildren(nodeId);
