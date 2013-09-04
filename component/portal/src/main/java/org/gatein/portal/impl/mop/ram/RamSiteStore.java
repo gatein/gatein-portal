@@ -71,8 +71,7 @@ public class RamSiteStore implements SiteStore {
             return true;
         } else {
             Node entry = current.getNode(site);
-            SiteData data = (SiteData)entry;
-            current.update(data.id, state);
+            current.update(entry.getId(), state);
             return false;
         }
     }

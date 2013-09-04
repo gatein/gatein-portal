@@ -112,6 +112,16 @@ public class SiteImporter {
             // but well it's easier to do this way
             NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), imported.getLayoutId(), null);
 
+            // Remove children
+            while (true) {
+                NodeContext<ComponentData, ElementState> first = ret.getFirst();
+                if (first != null) {
+                    first.removeNode();
+                } else {
+                    break;
+                }
+            }
+
             // Save element
             layoutService.saveLayout(new ContainerAdapter(container), container, ret, null);
         }
