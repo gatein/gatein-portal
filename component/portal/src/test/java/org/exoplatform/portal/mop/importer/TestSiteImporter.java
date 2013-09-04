@@ -36,42 +36,16 @@ import org.gatein.portal.mop.site.SiteType;
  */
 public class TestSiteImporter extends AbstractMopServiceTest {
 
-    public void testFoo() throws Exception {
-
-        PortalConfig site = new PortalConfig("portal", "foobarjuu");
-
+    public void testOverwrite() throws Exception {
+        PortalConfig site = new PortalConfig("portal", "overwrite");
         Container layout = new Container();
         layout.getChildren().add(new Container().setStorageName("foo"));
         layout.getChildren().add(new Container().setStorageName("bar"));
         site.setPortalLayout(layout);
-
         SiteImporter importer = new SiteImporter(ImportMode.OVERWRITE, site, context.getSiteService(), context.getLayoutService());
         importer.perform();
-
         sync(true);
-
         importer = new SiteImporter(ImportMode.OVERWRITE, site, context.getSiteService(), context.getLayoutService());
         importer.perform();
-
-
-
-
-/*
-        createSite(SiteType.PORTAL, "bilto");
-        sync(true);
-        Page page = new Page();
-        page.setOwnerId("bilto");
-        page.setOwnerType("portal");
-        page.setName("the_page");
-        Container container = new Container();
-        container.setStorageName("foo");
-        page.getChildren().add(container);
-        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService());
-        importer.perform();
-        PageContext pageContext = getPageService().loadPage(PageKey.parse("portal::bilto::the_page"));
-        NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>)context.getLayoutService().loadLayout(ElementState.model(), pageContext.getLayoutId(), null);
-        assertEquals(1, ret.getSize());
-        assertNotNull(ret.get("foo"));
-*/
     }
 }

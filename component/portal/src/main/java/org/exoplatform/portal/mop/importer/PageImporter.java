@@ -116,6 +116,16 @@ public class PageImporter {
                     data.getAccessPermissions(),
                     data.getChildren());
 
+            // Remove children
+            while (true) {
+                NodeContext<ComponentData, ElementState> first = context.getFirst();
+                if (first != null) {
+                    first.removeNode();
+                } else {
+                    break;
+                }
+            }
+
             // Then save page layout
             layoutService.saveLayout(new ContainerAdapter(container), container, context, null);
         }

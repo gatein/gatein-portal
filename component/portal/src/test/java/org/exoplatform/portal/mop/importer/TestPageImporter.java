@@ -35,7 +35,7 @@ import org.gatein.portal.mop.site.SiteType;
  */
 public class TestPageImporter extends AbstractMopServiceTest {
 
-    public void testFoo() throws Exception {
+    public void testInsert() throws Exception {
         createSite(SiteType.PORTAL, "bilto");
         sync(true);
         Page page = new Page();
@@ -68,5 +68,20 @@ public class TestPageImporter extends AbstractMopServiceTest {
         } catch (HierarchyException e) {
             assertEquals(HierarchyError.ADD_CONCURRENTLY_ADDED_NODE, e.getError());
         }
+    }
+
+    public void testOverwrite() throws Exception {
+        createSite(SiteType.PORTAL, "overwrite");
+        Page page = new Page();
+        page.setOwnerId("overwrite");
+        page.setOwnerType("portal");
+        page.setName("the_page");
+        page.getChildren().add(new Container().setStorageName("foo"));
+        page.getChildren().add(new Container().setStorageName("bar"));
+        PageImporter importer = new PageImporter(ImportMode.OVERWRITE, page, context.getLayoutService(), context.getPageService());
+        importer.perform();
+        sync(true);
+        importer = new PageImporter(ImportMode.OVERWRITE, page, context.getLayoutService(), context.getPageService());
+        importer.perform();
     }
 }
