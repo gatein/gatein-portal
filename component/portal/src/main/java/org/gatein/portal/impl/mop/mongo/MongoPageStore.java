@@ -138,9 +138,15 @@ public class MongoPageStore implements PageStore {
         //
         DBCollection pages = getPages();
         BasicDBObject key = getKey(pageKey);
-        boolean destroyed = pages.findOne(key) != null;
-        pages.remove(key);
-        return destroyed;
+        DBObject doc = pages.findOne(key);
+        if (doc != null) {
+            pages.remove(key);
+            ObjectId id = (ObjectId) doc.get("_id");
+            store.getLayoutStore().destroy(id.toString());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

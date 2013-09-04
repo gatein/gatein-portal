@@ -88,7 +88,7 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
     public NodeData<ElementState> loadNode(String nodeId) {
         POMSession session = mgr.getSession();
         UIComponent component = session.findObjectById(ObjectType.COMPONENT, nodeId);
-        return create(component);
+        return component != null ? create(component) : null;
     }
 
     private NodeData<ElementState> create(UIComponent component) {

@@ -105,9 +105,16 @@ public class MongoSiteStore implements SiteStore {
     @Override
     public boolean destroySite(SiteKey siteKey) {
         DBCollection sites = getSites();
-        BasicDBObject key = getKey(siteKey);
-        sites.remove(key);
-        return false;
+        DBObject key = getKey(siteKey);
+        DBObject doc = sites.findOne(key);
+        if (doc != null) {
+            sites.remove(key);
+            ObjectId id = (ObjectId) doc.get("_id");
+            store.getLayoutStore().destroy(id.toString());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

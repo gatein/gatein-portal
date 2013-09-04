@@ -69,13 +69,20 @@ public class TestLayout extends AbstractMopServiceTest {
     public void testSite() {
         SiteData site = createSite(SiteType.PORTAL, "test_layout_site");
         createElements(site, FOO_PORTLET, BAR_PORTLET);
-        testAll(site.layoutId);
+        String layoutId = site.layoutId;
+        testAll(layoutId);
+        context.getSiteService().destroySite(site.key);
+        assertEmptyLayout(layoutId);
+
     }
 
     public void testPage() {
         PageData page = createPage(createSite(SiteType.PORTAL, "test_layout_page"), "page", new PageState.Builder().build());
         createElements(page, FOO_PORTLET, BAR_PORTLET);
-        testAll(page.layoutId);
+        String layoutId = page.layoutId;
+        testAll(layoutId);
+        context.getPageService().destroyPage(page.key);
+        assertEmptyLayout(layoutId);
     }
 
     /**
@@ -139,5 +146,10 @@ public class TestLayout extends AbstractMopServiceTest {
         //
         root = getElement(layoutId, layoutId);
         assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId()), Tools.list(root.iterator()));
+    }
+
+    private void assertEmptyLayout(String layoutId) {
+        NodeContext<Element, ElementState> context = layoutService.loadLayout(Element.MODEL, layoutId, null);
+        assertEquals(0, context.getSize());
     }
 }

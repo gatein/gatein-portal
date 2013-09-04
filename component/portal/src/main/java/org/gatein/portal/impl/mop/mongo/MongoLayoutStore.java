@@ -57,4 +57,10 @@ public class MongoLayoutStore implements LayoutStore {
         DBObject doc = ((MongoElementStore) store).assemble();
         getLayouts().save(doc);
     }
+
+    public void destroy(String rootId) {
+        BasicDBObject key = new BasicDBObject("_id", new ObjectId(rootId));
+        int n = getLayouts().remove(key).getN();
+        System.out.println(n);
+    }
 }
