@@ -68,4 +68,15 @@ public class ClasspathResourceResolver extends ResourceResolver {
         return "classpath:";
     }
 
+    @Override
+    protected String removeScheme(String url) {
+        String scaledURL = super.removeScheme(url);
+
+        // Support url with a leading slash
+        if (scaledURL.startsWith("/")) {
+            scaledURL = scaledURL.substring(1);
+        }
+        return scaledURL;
+    }
+
 }
