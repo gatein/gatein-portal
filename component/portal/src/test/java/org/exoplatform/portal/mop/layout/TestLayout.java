@@ -150,6 +150,8 @@ public class TestLayout extends AbstractMopServiceTest {
 
     private void assertEmptyLayout(String layoutId) {
         NodeContext<Element, ElementState> context = layoutService.loadLayout(Element.MODEL, layoutId, null);
-        assertEquals(0, context.getSize());
+        if (context != null) {
+            assertEquals(0, context.getSize());
+        }
     }
 }
