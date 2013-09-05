@@ -151,7 +151,7 @@
       <properties>
         <version.jboss.as>7.2.0.Final</version.jboss.as>
         <package.filename>package.xml</package.filename>
-        <jbossas.modules.target.dir>${jbossas.target.dir}/modules/system/add-ons/gatein</jbossas.modules.target.dir>
+        <jbossas.modules.target.dir>${jbossas.target.dir}/modules/system/layers/gatein</jbossas.modules.target.dir>
         <ws.security.consumer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/consumer</ws.security.consumer.dir>
         <ws.security.producer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/producer</ws.security.producer.dir>
       </properties>
@@ -169,7 +169,7 @@
         <version.jboss.as>7.2.0.Final-redhat-8</version.jboss.as>
         <server.name>jboss-eap-6.1</server.name>
         <package.filename>package.xml</package.filename>
-        <jbossas.modules.target.dir>${jbossas.target.dir}/modules/system/add-ons/gatein</jbossas.modules.target.dir>
+        <jbossas.modules.target.dir>${jbossas.target.dir}/modules/system/layers/gatein</jbossas.modules.target.dir>
         <ws.security.consumer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/consumer</ws.security.consumer.dir>
         <ws.security.producer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/producer</ws.security.producer.dir>
       </properties>
