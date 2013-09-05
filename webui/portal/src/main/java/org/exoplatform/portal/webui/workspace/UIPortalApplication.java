@@ -21,8 +21,6 @@ package org.exoplatform.portal.webui.workspace;
 
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,6 +36,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -96,14 +95,58 @@ import org.json.JSONObject;
  */
 @ComponentConfig(lifecycle = UIPortalApplicationLifecycle.class, template = "system:/groovy/portal/webui/workspace/UIPortalApplication.gtmpl", events = { @EventConfig(listeners = ChangeNodeActionListener.class) })
 public class UIPortalApplication extends UIApplication {
+
+    /**
+     * Property settable in the portal'S configuration.properties file. See {@link EditMode} for possible values. See also
+     * {@link #getDefaultEditMode()}.
+     */
+    public static final String DEFAULT_MODE_PROPERTY = "gatein.portal.pageEditor.defaultEditMode";
+
+    public enum EditMode {
+        /**
+         * Edit mode with plain rectangles in place of portlets.
+         */
+        BLOCK,
+        /**
+         * Edit mode with portlets rendered.
+         */
+        PREVIEW
+    }
+
+    public enum ComponentTab {
+        /**
+         * For situations when Applications Tab of Page Editor dialog is selected.
+         */
+        APPLICATIONS,
+        /**
+         * For situations when Containers Tab of Page Editor dialog is selected.
+         */
+        CONTAINERS
+    }
+
+    /**
+     * The normal, non-edit mode.
+     */
     public static final int NORMAL_MODE = 0;
 
+    /**
+     * The combination of {@link EditMode#BLOCK} and {@link ComponentTab#APPLICATIONS}.
+     */
     public static final int APP_BLOCK_EDIT_MODE = 1;
 
+    /**
+     * The combination of {@link EditMode#PREVIEW} and {@link ComponentTab#APPLICATIONS}.
+     */
     public static final int APP_VIEW_EDIT_MODE = 2;
 
+    /**
+     * The combination of {@link EditMode#BLOCK} and {@link ComponentTab#CONTAINERS}.
+     */
     public static final int CONTAINER_BLOCK_EDIT_MODE = 3;
 
+    /**
+     * The combination of {@link EditMode#PREVIEW} and {@link ComponentTab#CONTAINERS}.
+     */
     public static final int CONTAINER_VIEW_EDIT_MODE = 4;
 
     public static final UIComponent EMPTY_COMPONENT = new UIComponent() {
@@ -111,6 +154,8 @@ public class UIPortalApplication extends UIApplication {
             return "_portal:componentId_";
         };
     };
+
+    private static EditMode defaultEditMode = null;
 
     private int modeState = NORMAL_MODE;
 
@@ -139,6 +184,45 @@ public class UIPortalApplication extends UIApplication {
     private RequestNavigationData lastRequestNavData;
 
     private String lastPortal;
+
+    /**
+     * Returns a locally cached value of {@value #DEFAULT_MODE_PROPERTY} property from configuration.properties.
+     *
+     * @return
+     */
+    public static EditMode getDefaultEditMode() {
+        if (defaultEditMode == null) {
+            /*
+             * Initialization: For performance reasons, we have chosen to prefer to ignore the potential concurrent updates on
+             * app startup to some kind of locking. The concurrent updates should be harmless as they all produce the same
+             * result.
+             */
+            String val = PropertyManager.getProperty(DEFAULT_MODE_PROPERTY);
+            if (val == null || val.length() == 0) {
+                /* hard coded default */
+                defaultEditMode = EditMode.BLOCK;
+            } else {
+                try {
+                    defaultEditMode = EditMode.valueOf(val.toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    StringBuilder msg = new StringBuilder().append("Ignoring illegal value '").append(val).append("' of ")
+                            .append(DEFAULT_MODE_PROPERTY).append(" property in configuration.properties. One of [");
+                    for (EditMode mode : EditMode.values()) {
+                        if (msg.charAt(msg.length() - 1) != '[') {
+                            msg.append(", ");
+                        }
+                        msg.append(mode.name());
+                    }
+                    msg.append("] is expected. Using default value '").append(EditMode.BLOCK.name()).append("'.");
+                    log.warn(msg.toString());
+                    defaultEditMode = EditMode.BLOCK;
+                }
+            }
+        }
+        return defaultEditMode;
+    }
+
+
 
     /**
      * The constructor of this class is used to build the tree of UI components that will be aggregated in the portal page.<br/>
@@ -294,6 +378,48 @@ public class UIPortalApplication extends UIApplication {
         this.modeState = mode;
     }
 
+    public void setDefaultEditMode(ComponentTab componentTab) {
+        EditMode editMode = getDefaultEditMode();
+        switch (componentTab) {
+            case APPLICATIONS:
+                switch (editMode) {
+                    case BLOCK:
+                        this.modeState = APP_BLOCK_EDIT_MODE;
+                        break;
+                    case PREVIEW:
+                        this.modeState = APP_VIEW_EDIT_MODE;
+                        break;
+                    default:
+                        log.warn("Ignoring unexpected "+ EditMode.class.getName() +" value '"+ editMode.name() +"' and using '"+ EditMode.BLOCK.name() +"'.");
+                }
+                break;
+            case CONTAINERS:
+                switch (editMode) {
+                    case BLOCK:
+                        this.modeState = CONTAINER_BLOCK_EDIT_MODE;
+                        break;
+                    case PREVIEW:
+                        this.modeState = CONTAINER_VIEW_EDIT_MODE;
+                        break;
+                    default:
+                        log.warn("Ignoring unexpected "+ EditMode.class.getName() +" value '"+ editMode.name() +"' and using '"+ EditMode.BLOCK.name() +"'.");
+                }
+                break;
+            default:
+                log.warn("Ignoring unexpected "+ ComponentTab.class.getName() +" value '"+ componentTab.name() +"' and using '"+ ComponentTab.APPLICATIONS.name() +"'.");
+                switch (editMode) {
+                    case BLOCK:
+                        this.modeState = APP_BLOCK_EDIT_MODE;
+                        break;
+                    case PREVIEW:
+                        this.modeState = APP_VIEW_EDIT_MODE;
+                        break;
+                    default:
+                        log.warn("Ignoring unexpected "+ EditMode.class.getName() +" value '"+ editMode.name() +"' and using '"+ EditMode.BLOCK.name() +"'.");
+                }
+        }
+    }
+
     public int getModeState() {
         return modeState;
     }
@@ -326,7 +452,7 @@ public class UIPortalApplication extends UIApplication {
         Map<ScriptResource, FetchMode> resolved = service.resolveIds(requiredResources);
         for (ScriptResource rs : resolved.keySet()) {
             ResourceId id = rs.getId();
-            //SHARED/bootstrap should be loaded first
+            // SHARED/bootstrap should be loaded first
             if (ResourceScope.SHARED.equals(id.getScope()) && "bootstrap".equals(id.getName())) {
                 ret.put(id.toString(), false);
             } else {
@@ -786,9 +912,10 @@ public class UIPortalApplication extends UIApplication {
         return urlTemplate.toString();
     }
 
-    public String getBaseURL() throws UnsupportedEncodingException  {
+    public String getBaseURL() throws UnsupportedEncodingException {
         PortalRequestContext pcontext = Util.getPortalRequestContext();
-        NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE, new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
+        NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE,
+                new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
         return nodeURL.toString();
     }
 }

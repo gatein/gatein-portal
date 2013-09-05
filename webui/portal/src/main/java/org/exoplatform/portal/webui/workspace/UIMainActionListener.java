@@ -40,6 +40,7 @@ import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -81,7 +82,7 @@ public class UIMainActionListener {
                 return;
             }
 
-            uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+            uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
             uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
 
             UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class);
@@ -143,7 +144,7 @@ public class UIMainActionListener {
             transientPortal.refreshUIPage();
 
             uiWorkingWS.setBackupUIPortal(currentPortal);
-            portalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+            portalApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
 
             UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
             uiEditWS.setUIComponent(transientPortal);

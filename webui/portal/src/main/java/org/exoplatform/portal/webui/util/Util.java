@@ -147,9 +147,7 @@ public class Util {
         return uiPage;
     }
 
-    public static void showComponentLayoutMode(Class clazz) {
-        if (clazz == null)
-            return;
+    public static void showComponentEditInBlockMode() {
         UIPortalApplication portalApp = getUIPortalApplication();
         UIEditInlineWorkspace uiEditWS = portalApp.findFirstComponentOfType(UIEditInlineWorkspace.class);
         UIContainer uiParent = null;
@@ -166,18 +164,15 @@ public class Util {
         }
         if (uiParent == null)
             return;
-        String layoutMode = clazz.getSimpleName();
 
         PortalRequestContext context = Util.getPortalRequestContext();
         if (uiParent instanceof UIPage) {
             context.getJavascriptManager().require("SHARED/portal", "portal")
-                    .addScripts("eXo.portal.UIPortal.showLayoutModeForPage('" + layoutMode + "');");
+                    .addScripts("eXo.portal.UIPortal.showComponentEditInBlockMode();");
         }
     }
 
-    public static void showComponentEditInViewMode(Class clazz) {
-        if (clazz == null)
-            return;
+    public static void showComponentEditInViewMode() {
         UIPortalApplication portalApp = getUIPortalApplication();
         UIEditInlineWorkspace uiEditWS = portalApp.findFirstComponentOfType(UIEditInlineWorkspace.class);
 
@@ -187,11 +182,9 @@ public class Util {
             uiPortal.setMaximizedUIComponent(null);
         }
 
-        String layoutMode = clazz.getSimpleName();
-
         PortalRequestContext context = Util.getPortalRequestContext();
         context.getJavascriptManager().require("SHARED/portal", "portal")
-                .addScripts("portal.UIPortal.showViewMode('" + layoutMode + "');");
+                .addScripts("portal.UIPortal.showComponentEditInViewMode();");
     }
 
     public static UIWorkingWorkspace updateUIApplication(Event<? extends UIComponent> event) {

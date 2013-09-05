@@ -52,6 +52,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
@@ -287,11 +288,11 @@ public class UIPortalComposer extends UIContainer {
             switch (portalMode) {
                 case UIPortalApplication.APP_BLOCK_EDIT_MODE:
                 case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE:
-                    Util.showComponentLayoutMode(UIPortlet.class);
+                    Util.showComponentEditInBlockMode();
                     break;
                 case UIPortalApplication.APP_VIEW_EDIT_MODE:
                 case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE:
-                    Util.showComponentEditInViewMode(UIPortlet.class);
+                    Util.showComponentEditInViewMode();
                     break;
             }
         }
@@ -306,19 +307,31 @@ public class UIPortalComposer extends UIContainer {
             UITabPane uiTabPane = this.getChild(UITabPane.class);
             UIComponent uiComponent = uiTabPane.getChildById(uiTabPane.getSelectedTabId());
             if (uiComponent instanceof UIApplicationList) {
-                if (portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE) {
-                    Util.showComponentEditInViewMode(UIPortlet.class);
-                } else {
-                    uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-                    Util.showComponentLayoutMode(UIPortlet.class);
-                }
+                uiPortalApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
+//                if (portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE) {
+//                    Util.showComponentEditInViewMode(UIPortlet.class);
+//                } else {
+//                    uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+//                    Util.showComponentLayoutMode(UIPortlet.class);
+//                }
             } else if (uiComponent instanceof UIContainerList) {
-                if (portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE) {
-                    Util.showComponentEditInViewMode(org.exoplatform.portal.webui.container.UIContainer.class);
-                } else {
-                    uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
-                    Util.showComponentLayoutMode(org.exoplatform.portal.webui.container.UIContainer.class);
-                }
+                uiPortalApp.setDefaultEditMode(ComponentTab.CONTAINERS);
+//                if (portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE) {
+//                    Util.showComponentEditInViewMode(org.exoplatform.portal.webui.container.UIContainer.class);
+//                } else {
+//                    uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
+//                    Util.showComponentLayoutMode(org.exoplatform.portal.webui.container.UIContainer.class);
+//                }
+            }
+            switch (uiPortalApp.getDefaultEditMode()) {
+                case PREVIEW:
+                    Util.showComponentEditInViewMode();
+                    break;
+                case BLOCK:
+                    Util.showComponentEditInBlockMode();
+                    break;
+                default:
+                    break;
             }
         }
         super.processRender(context);

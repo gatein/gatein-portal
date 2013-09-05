@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -18,23 +18,23 @@
  */
 
 (function($, base, msg) {
-	
+
 
 var uiFormInputThemeSelector = {
 
   initForm : function() {
 	  $(".UIFormInputThemeSelector").find(".SetDefault").on("click", function() {
 		  uiFormInputThemeSelector.setDefaultTheme(this,'DefaultTheme');
-	  });	  
+	  });
   },
-  
+
   initSelector : function() {
 	  $(".UIFormInputThemeSelector").find(".UIThemeSelector").parent().on("click", function() {
 		  var theme = $(this).children("div").attr("class").replace("UIThemeSelector ", "");
-		  uiFormInputThemeSelector.showThemeSelected(this, theme); 
+		  uiFormInputThemeSelector.showThemeSelected(this, theme);
 	  });
   },
-  
+
   showThemeSelected : function(obj, param) {
     var jqObj = $(obj);
     var itemListContainer = jqObj.parent().closest(".ItemListContainer");
@@ -52,14 +52,14 @@ var uiFormInputThemeSelector = {
 
     detailList.next("div").html(msg.getMessage("DefaultTheme"));
     itemDetailList.prev("div").find("div.ItemList").eq(0).parent().children("input").eq(0).val(param);
-  }  
+  }
 };
 
 eXo.webui.UIPageTemplateOptions = {
 
   /**
    * @author dang.tung
-   * 
+   *
    * TODO To change the template layout in page config Called by
    * UIPageTemplateOptions.java Review UIDropDownControl.java: set javascrip
    * action UIDropDownControl.js : set this method to do
@@ -106,7 +106,7 @@ eXo.portal.UIPortal = {
 	  comp[0].onmouseover = function(event) {eXo.portal.UIPortal.blockOnMouseOver(event, this, true);};
 	  comp[0].onmouseout = function(event) {eXo.portal.UIPortal.blockOnMouseOver(event, this, false);};
   },
-  
+
   blockOnMouseOver : function(event, block, isOver) {
     var jqBlock = $(block);
     if (!eXo.portal.portalMode || eXo.portal.isInDragging)
@@ -236,7 +236,7 @@ eXo.portal.UIPortal = {
   },
 
   /** Repaired: by Vu Duy Tu 25/04/07* */
-  showLayoutModeForPage : function() {
+  showComponentEditInBlockMode : function() {
     var uiPage = $(document.body).find("div.UIPage");
     if (uiPage.length == 0)
       return;
@@ -256,7 +256,7 @@ eXo.portal.UIPortal = {
     }
   },
 
-  showViewMode : function() {
+  showComponentEditInViewMode : function() {
     var wkWs = $("#UIWorkingWorkspace");
     if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer").length == 0)
     {
@@ -286,7 +286,7 @@ eXo.portal.UIPortal = {
   },
   /**
    * Remove a component of portal
-   * 
+   *
    * @param {String}
    *          componentId identifier of component
    */
@@ -310,7 +310,7 @@ eXo.portal.UIPortal = {
     {
       viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-  }  
+  }
 };
 
 return {UIPortal : eXo.portal.UIPortal,

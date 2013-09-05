@@ -33,6 +33,7 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -42,6 +43,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import javax.portlet.WindowState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -154,7 +156,7 @@ public class UIPage extends UIContainer {
 
         UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
         uiToolPanel.setShowMaskLayer(false);
-        uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+        uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
 
         // We clone the edited UIPage object, that is required for Abort action
         UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
