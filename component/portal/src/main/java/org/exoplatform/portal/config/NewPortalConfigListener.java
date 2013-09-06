@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
@@ -540,7 +541,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             path = "/" + ownerType + "/template/" + templateName + "/" + fileName + ".xml";
             xml = getDefaultConfig(config.getTemplateLocation(), path);
             if (xml != null) {
-                xml = OWNER_PATTERN.matcher(xml).replaceAll(owner);
+                xml = OWNER_PATTERN.matcher(xml).replaceAll(StringEscapeUtils.escapeXml(owner));
             }
         }
 
