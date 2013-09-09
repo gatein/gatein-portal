@@ -59,10 +59,11 @@
         display: block;
         width: 0;
         overflow: hidden;
-        text-indent: -10em; /* orientation=rt */
+        /* NOTE: for rt languages, this should really also be +10em, but certain older browsers don't handle it properly */
+        text-indent: -20em; /* orientation=rt */
         text-indent: 10em; /* orientation=lt */
         white-space: nowrap;
-        /* font-size: 0; NOTE: font-size:0 is all that is needed for these classes, but older android browser versions don't suppor it. */
+        /* font-size: 0; NOTE: font-size:0 is all that is needed for these classes, but older android browser versions don't support it. */
     }
 
     .UIToolbarContainer .MenuItemContainer {

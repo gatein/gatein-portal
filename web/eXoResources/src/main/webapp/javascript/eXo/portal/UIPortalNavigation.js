@@ -767,10 +767,11 @@
 				menuItemContainer.css("left", x + "px");
 			}
 	  	} else {
-			if(posXinBrowser + tab.width() < menuItemContainer.width()) {
-				x += (tab.width() - menuItemContainer.width()) ;
-				menuItemContainer.css("right", x + "px");
-			}
+                        //if the x offset if negative, its renders outside of the screen, move the menuItemContainer to the right by this amount
+                        if (posXinBrowser < 0)
+                        {
+                              menuItemContainer.css("right", posXinBrowser + "px");
+                        }
 		}
 	  },
 	
