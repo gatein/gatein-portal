@@ -942,23 +942,14 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
 
     }
 
-    @Override
-    public void processRender(WebuiRequestContext context) throws Exception {
-        UIPortalApplication uiApp = (UIPortalApplication) context.getUIApplication();
-        int portalMode = uiApp.getModeState();
-        if (portalMode != UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE
-                && portalMode != UIPortalApplication.APP_BLOCK_EDIT_MODE && hasPermission()) {
-            JavascriptManager jsMan = context.getJavascriptManager();
-            jsMan.loadScriptResource(ResourceScope.PORTLET, getApplicationId());
-        }
-        super.processRender(context);
-    }
-
     public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestContext context) {
         PortalRequestContext prcontext = (PortalRequestContext) context;
 
         Text markup = null;
         if (pir instanceof FragmentResponse) {
+            JavascriptManager jsMan = context.getJavascriptManager();
+            jsMan.loadScriptResource(ResourceScope.PORTLET, getApplicationId());
+
             FragmentResponse fragmentResponse = (FragmentResponse) pir;
             switch (fragmentResponse.getType()) {
                 case FragmentResponse.TYPE_CHARS:
@@ -979,7 +970,6 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
                 if (fragmentResponse.getProperties().getTransportHeaders() != null) {
                     MultiValuedPropertyMap<String> transportHeaders = fragmentResponse.getProperties().getTransportHeaders();
                     for (String key : transportHeaders.keySet()) {
-                        JavascriptManager jsMan = context.getJavascriptManager();
                         if (JAVASCRIPT_DEPENDENCY.equals(key)) {
                             for (String value : transportHeaders.getValues(key)) {
                                 jsMan.require(value);
