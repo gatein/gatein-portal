@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.workspace;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -107,7 +108,7 @@ public class UIPortalApplication extends UIApplication {
 
     public static final UIComponent EMPTY_COMPONENT = new UIComponent() {
         public String getId() {
-            return "{portal:componentId}";
+            return "_portal:componentId_";
         };
     };
 
@@ -780,12 +781,12 @@ public class UIPortalApplication extends UIApplication {
         urlTemplate.setMimeType(MimeType.PLAIN);
         urlTemplate.setPath(pcontext.getNodePath());
         urlTemplate.setResource(EMPTY_COMPONENT);
-        urlTemplate.setAction("{portal:action}");
+        urlTemplate.setAction("_portal:action_");
 
-        return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
+        return urlTemplate.toString();
     }
 
-    public String getBaseURL() {
+    public String getBaseURL() throws UnsupportedEncodingException  {
         PortalRequestContext pcontext = Util.getPortalRequestContext();
         NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE, new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
         return nodeURL.toString();
