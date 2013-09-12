@@ -39,10 +39,12 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
+import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.mop.redirects.Condition;
 import org.exoplatform.portal.mop.redirects.DeviceProperty;
@@ -294,7 +296,8 @@ public class Mapper {
             ContainerData realSrcContainer = new ContainerData(dstContainer.getObjectId(), srcContainer.getId(),
                     srcContainer.getName(), srcContainer.getIcon(), srcContainer.getTemplate(), srcContainer.getFactoryId(),
                     srcContainer.getTitle(), srcContainer.getDescription(), srcContainer.getWidth(), srcContainer.getHeight(),
-                    srcContainer.getAccessPermissions(), srcContainer.getChildren());
+                    srcContainer.getAccessPermissions(), srcContainer.getMoveAppsPermissions(),
+                    srcContainer.getMoveContainersPermissions(), srcContainer.getChildren());
 
             //
             save(realSrcContainer, dstContainer);
@@ -410,11 +413,21 @@ public class Mapper {
         String ownerId = site.getName();
         String name = src.getName();
         List<ComponentData> children = loadChildren(src.getRootComponent());
-        Attributes attrs = src.getAttributes();
 
+        List<String> moveAppsPermissions = null;
+        List<String> moveContainersPermissions = null;
+        if (src.isAdapted(ProtectedContainer.class)) {
+            ProtectedContainer pc = src.adapt(ProtectedContainer.class);
+            moveAppsPermissions = pc.getMoveAppsPermissions();
+            moveContainersPermissions = pc.getMoveContainersPermissions();
+        } else {
+            moveAppsPermissions = Collections.emptyList();
+            moveContainersPermissions = Collections.emptyList();
+        }
         //
         return new PageData(src.getObjectId(), null, name, null, null, null, null, null, null, null,
-                Collections.<String> emptyList(), children, ownerType, ownerId, null, false);
+                Collections.<String> emptyList(), children, ownerType, ownerId, null, false, moveAppsPermissions,
+                moveContainersPermissions);
     }
 
     private ContainerData load(UIContainer src, List<ComponentData> children) {
@@ -423,6 +436,17 @@ public class Mapper {
         if (src.isAdapted(ProtectedResource.class)) {
             ProtectedResource pr = src.adapt(ProtectedResource.class);
             accessPermissions = pr.getAccessPermissions();
+        }
+        List<String> moveAppsPermissions = null;
+        List<String> moveContainersPermissions = null;
+        if (src.isAdapted(ProtectedContainer.class)) {
+            ProtectedContainer pc = src.adapt(ProtectedContainer.class);
+            moveAppsPermissions = pc.getMoveAppsPermissions();
+            moveContainersPermissions = pc.getMoveContainersPermissions();
+        } else {
+            /* legacy mode */
+            moveAppsPermissions = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
+            moveContainersPermissions = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
         }
 
         //
@@ -433,7 +457,8 @@ public class Mapper {
                 attrs.getValue(MappedAttributes.ICON), attrs.getValue(MappedAttributes.TEMPLATE),
                 attrs.getValue(MappedAttributes.FACTORY_ID), described.getName(), described.getDescription(),
                 attrs.getValue(MappedAttributes.WIDTH), attrs.getValue(MappedAttributes.HEIGHT),
-                Utils.safeImmutableList(accessPermissions), children);
+                Utils.safeImmutableList(accessPermissions), Utils.safeImmutableList(moveAppsPermissions),
+                Utils.safeImmutableList(moveContainersPermissions), children);
     }
 
     private List<ComponentData> loadChildren(UIContainer src) {
@@ -483,7 +508,7 @@ public class Mapper {
                 }
             } else if (component instanceof UIWindow) {
                 UIWindow window = (UIWindow) component;
-                ApplicationData application = load(window);
+                ApplicationData<?> application = load(window);
                 mo = application;
             } else if (component instanceof UIBody) {
                 mo = new BodyData(component.getObjectId(), BodyType.PAGE);
@@ -520,7 +545,8 @@ public class Mapper {
         // so it's likely the best fix we can do at the moment
         PageData src2 = new PageData(rootContainer.getObjectId(), src.getId(), src.getName(), src.getIcon(), src.getTemplate(),
                 null, null, null, src.getWidth(), src.getHeight(), Collections.<String> emptyList(), src.getChildren(),
-                src.getOwnerType(), src.getOwnerId(), null, false);
+                src.getOwnerType(), src.getOwnerId(), null, false, src.getMoveAppsPermissions(),
+                src.getMoveContainersPermissions());
 
         //
         LinkedList<ModelChange> childrenChanges = saveChildren(src2, rootContainer);
@@ -536,6 +562,10 @@ public class Mapper {
 
         ProtectedResource pr = dst.adapt(ProtectedResource.class);
         pr.setAccessPermissions(src.getAccessPermissions());
+
+        ProtectedContainer pc = dst.adapt(ProtectedContainer.class);
+        pc.setMoveAppsPermissions(src.getMoveAppsPermissions());
+        pc.setMoveContainersPermissions(src.getMoveContainersPermissions());
 
         Described described = dst.adapt(Described.class);
         described.setName(src.getTitle());
@@ -620,7 +650,7 @@ public class Mapper {
             // this should be removed once we make the dashboard as first class
             // citizen of the portal
             if (srcChild instanceof ApplicationData) {
-                ApplicationData<?> app = (ApplicationData) srcChild;
+                ApplicationData<?> app = (ApplicationData<?>) srcChild;
                 // todo julien: shouldn't we be checking for WSRP as well here?
                 if (app.getType() == ApplicationType.PORTLET && app.getState() instanceof TransientApplicationState) {
                     TransientApplicationState<?> state = (TransientApplicationState<?>) app.getState();
@@ -666,7 +696,7 @@ public class Mapper {
 
                         data = new DashboardData(data.getStorageId(), data.getId(), data.getName(), icon, data.getTemplate(),
                                 data.getFactoryId(), title, description, width, height, app.getAccessPermissions(),
-                                data.getChildren());
+                                data.getMoveAppsPermissions(), data.getMoveContainersPermissions(), data.getChildren());
 
                         //
                         srcChild = data;
@@ -956,6 +986,17 @@ public class Mapper {
             accessPermissions = pr.getAccessPermissions();
         }
 
+        List<String> moveAppsPermissions = null;
+        List<String> moveContainersPermissions = null;
+        if (container.isAdapted(ProtectedContainer.class)) {
+            ProtectedContainer pc = container.adapt(ProtectedContainer.class);
+            moveAppsPermissions = pc.getMoveAppsPermissions();
+            moveContainersPermissions = pc.getMoveContainersPermissions();
+        } else {
+            moveAppsPermissions = Collections.emptyList();
+            moveContainersPermissions = Collections.emptyList();
+        }
+
         //
         Described described = container.adapt(Described.class);
 
@@ -966,7 +1007,7 @@ public class Mapper {
                 attrs.getValue(MappedAttributes.NAME), attrs.getValue(MappedAttributes.ICON),
                 attrs.getValue(MappedAttributes.TEMPLATE), attrs.getValue(MappedAttributes.FACTORY_ID), described.getName(),
                 described.getDescription(), attrs.getValue(MappedAttributes.WIDTH), attrs.getValue(MappedAttributes.HEIGHT),
-                Utils.safeImmutableList(accessPermissions), children);
+                Utils.safeImmutableList(accessPermissions), moveAppsPermissions, moveContainersPermissions, children);
     }
 
     public void saveDashboard(DashboardData dashboard, UIContainer dst) {

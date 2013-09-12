@@ -38,6 +38,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -79,6 +80,18 @@ public class UIPage extends UIContainer {
             fullPreview = Boolean.valueOf(PropertyManager.getProperty(FULL_PREVIEW_PROPERTY));
         }
         return fullPreview.booleanValue();
+    }
+
+    public static boolean isFullPreviewInPageEditor() {
+        if (!isFullPreview()) {
+            return false;
+        } else {
+            UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
+            int state = uiPortalApp.getModeState();
+            return (state == UIPortalApplication.APP_VIEW_EDIT_MODE
+                        || state == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE)
+                    && uiPortalApp.getEditLevel() == EditLevel.EDIT_PAGE;
+        }
     }
 
     /** . */
@@ -175,15 +188,15 @@ public class UIPage extends UIContainer {
         uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
 
         UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
-        portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
-        portalComposer.setId("UIPageEditor");
+        portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
+        portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
         portalComposer.setShowControl(true);
         portalComposer.setEditted(false);
         portalComposer.setCollapse(false);
 
         UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
         uiToolPanel.setShowMaskLayer(false);
-        uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
+        uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS, EditLevel.EDIT_PAGE);
 
         // We clone the edited UIPage object, that is required for Abort action
         UIPage newUIPage = uiWorkingWS.createUIComponent(UIPage.class, null, null);
@@ -203,7 +216,6 @@ public class UIPage extends UIContainer {
         @Override
         public void execute(Event<UIPage> event) throws Exception {
             event.getSource().switchToEditMode();
-            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", "true");
         }
     }
 
@@ -230,6 +242,18 @@ public class UIPage extends UIContainer {
                 childUIPortlet.setCurrentWindowState(WindowState.NORMAL);
             }
         }
+    }
+
+    @Override
+    public String getPermissionClasses() {
+        StringBuilder permissionClasses = new StringBuilder();
+        if (!hasMoveAppsPermission()) {
+            permissionClasses.append(" CannotMoveApps");
+        }
+        if (!hasMoveContainersPermission()) {
+            permissionClasses.append(" CannotMoveContainers");
+        }
+        return permissionClasses.toString();
     }
 
 }

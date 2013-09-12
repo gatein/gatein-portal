@@ -148,31 +148,27 @@ public class Util {
     }
 
     public static void showComponentEditInBlockMode() {
+        updatePortalMode();
         UIPortalApplication portalApp = getUIPortalApplication();
         UIEditInlineWorkspace uiEditWS = portalApp.findFirstComponentOfType(UIEditInlineWorkspace.class);
-        UIContainer uiParent = null;
 
         UIComponent uiComponent = uiEditWS.getUIComponent();
         if (uiComponent instanceof UIPortal) {
             UIPortal uiPortal = (UIPortal) uiComponent;
             uiPortal.setMaximizedUIComponent(null);
-            uiParent = uiPortal;
         } else {
             UIPortalToolPanel uiPortalToolPanel = getUIPortalToolPanel();
             UIPage uiPage = uiPortalToolPanel.findFirstComponentOfType(UIPage.class);
-            uiParent = uiPage;
-        }
-        if (uiParent == null)
-            return;
-
-        PortalRequestContext context = Util.getPortalRequestContext();
-        if (uiParent instanceof UIPage) {
-            context.getJavascriptManager().require("SHARED/portal", "portal")
-                    .addScripts("eXo.portal.UIPortal.showComponentEditInBlockMode();");
+            if (uiPage != null) {
+                Util.getPortalRequestContext()
+                        .getJavascriptManager().require("SHARED/portal", "portal")
+                        .addScripts("eXo.portal.UIPortal.showComponentEditInBlockMode();");
+            }
         }
     }
 
     public static void showComponentEditInViewMode() {
+        updatePortalMode();
         UIPortalApplication portalApp = getUIPortalApplication();
         UIEditInlineWorkspace uiEditWS = portalApp.findFirstComponentOfType(UIEditInlineWorkspace.class);
 
@@ -195,6 +191,17 @@ public class Util {
         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
         pcontext.ignoreAJAXUpdateOnPortlets(true);
         return uiWorkingWS;
+    }
+
+    public static void updatePortalMode() {
+        PortalRequestContext context = Util.getPortalRequestContext();
+        UIPortalApplication uiPortalApp = (UIPortalApplication)context.getUIApplication();
+        context .getJavascriptManager()
+                .require("SHARED/portal", "portal")
+                .addScripts(
+                        "eXo.portal.portalMode=" + uiPortalApp.getModeState() + ";\n"
+                        + "eXo.portal.portalEditLevel='" + uiPortalApp.getEditLevel().toString() + "';\n"
+                        + "eXo.portal.fullPreview=" + Boolean.toString(UIPage.isFullPreview()) + ";\n");
     }
 
 }

@@ -70,7 +70,7 @@ public class PortalDataMapper {
         } else if (uiComponent instanceof UIPage) {
             model = toPageModel((UIPage) uiComponent);
         } else if (uiComponent instanceof UIPortlet) {
-            model = toPortletModel((UIPortlet) uiComponent);
+            model = toPortletModel((UIPortlet<Object, ?>) uiComponent);
         } else if (uiComponent instanceof UIContainer) {
             model = toContainer((UIContainer) uiComponent);
         } else if (uiComponent instanceof UIGadget) {
@@ -98,6 +98,8 @@ public class PortalDataMapper {
         model.setTemplate(uiContainer.getTemplate());
         model.setFactoryId(uiContainer.getFactoryId());
         model.setAccessPermissions(uiContainer.getAccessPermissions());
+        model.setMoveAppsPermissions(uiContainer.getMoveAppsPermissions());
+        model.setMoveContainersPermissions(uiContainer.getMoveContainersPermissions());
 
         List<UIComponent> uiChildren = uiContainer.getChildren();
         if (uiChildren == null)
@@ -265,8 +267,11 @@ public class PortalDataMapper {
         uiContainer.setFactoryId(model.getFactoryId());
         uiContainer.setName(model.getName());
         uiContainer.setTemplate(model.getTemplate());
-        if (model.getAccessPermissions() != null)
+        if (model.getAccessPermissions() != null) {
             uiContainer.setAccessPermissions(model.getAccessPermissions());
+        }
+        uiContainer.setMoveAppsPermissions(model.getMoveAppsPermissions());
+        uiContainer.setMoveContainersPermissions(model.getMoveContainersPermissions());
 
         List<ModelObject> children = model.getChildren();
         if (children == null)
@@ -312,7 +317,11 @@ public class PortalDataMapper {
         uiPortal.setProperties(model.getProperties());
         uiPortal.setRedirects(model.getPortalRedirects());
 
-        List<ModelObject> children = model.getPortalLayout().getChildren();
+
+        Container layout = model.getPortalLayout();
+        uiPortal.setMoveAppsPermissions(layout.getMoveAppsPermissions());
+        uiPortal.setMoveContainersPermissions(layout.getMoveContainersPermissions());
+        List<ModelObject> children = layout .getChildren();
         if (children != null) {
             for (Object child : children) {
                 buildUIContainer(uiPortal, child, false);

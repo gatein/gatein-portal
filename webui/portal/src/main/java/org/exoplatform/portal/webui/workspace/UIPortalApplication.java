@@ -124,6 +124,12 @@ public class UIPortalApplication extends UIApplication {
         CONTAINERS
     }
 
+    public enum EditLevel {
+        NO_EDIT,
+        EDIT_SITE,
+        EDIT_PAGE
+    }
+
     /**
      * The normal, non-edit mode.
      */
@@ -158,6 +164,8 @@ public class UIPortalApplication extends UIApplication {
     private static EditMode defaultEditMode = null;
 
     private int modeState = NORMAL_MODE;
+
+    private EditLevel editLevel = EditLevel.NO_EDIT;
 
     private Orientation orientation_ = Orientation.LT;
 
@@ -376,9 +384,13 @@ public class UIPortalApplication extends UIApplication {
 
     public void setModeState(int mode) {
         this.modeState = mode;
+        if (modeState == NORMAL_MODE) {
+            editLevel = EditLevel.NO_EDIT;
+        }
     }
 
-    public void setDefaultEditMode(ComponentTab componentTab) {
+    public void setDefaultEditMode(ComponentTab componentTab, EditLevel editLevel) {
+        this.editLevel = editLevel;
         EditMode editMode = getDefaultEditMode();
         switch (componentTab) {
             case APPLICATIONS:
@@ -957,5 +969,21 @@ public class UIPortalApplication extends UIApplication {
         NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE,
                 new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
         return nodeURL.toString();
+    }
+
+
+
+    /**
+     * @return the editLevel
+     */
+    public EditLevel getEditLevel() {
+        return editLevel;
+    }
+
+    /**
+     * @param editLevel the editLevel to set
+     */
+    public void setEditLevel(EditLevel editLevel) {
+        this.editLevel = editLevel;
     }
 }

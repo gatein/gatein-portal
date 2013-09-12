@@ -22,9 +22,9 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<portal-config xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_5"
+<portal-config xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_6"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_5 http://www.gatein.org/xml/ns/gatein_objects_1_5">
+               xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_6 http://www.gatein.org/xml/ns/gatein_objects_1_6">
   <portal-name>classic</portal-name>
   <label>site-label</label>
   <description>site-description</description>
@@ -35,6 +35,8 @@
     <entry key="sessionAlive">onDemand</entry>
   </properties>
   <portal-layout>
+    <move-apps-permissions>*:/platform/app-movers</move-apps-permissions>
+    <move-containers-permissions>*:/platform/container-movers</move-containers-permissions>
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>

@@ -1,8 +1,11 @@
-<%	
-	String popupId = uicomponent.getId(); 
-	def rcontext = _ctx.getRequestContext(); 
-	
-	boolean isEditted = uicomponent.isEditted; 
+<%
+	String popupId = uicomponent.getId();
+	def rcontext = _ctx.getRequestContext();
+
+	boolean isEditted = uicomponent.isEditted;
+	String titleKey = rcontext.getUIApplication().getEditLevel() == org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel.EDIT_PAGE ?
+			"UIPageEditor.title.UIPageEditor" :
+			popupId + ".title."+ popupId;
 	def portalMode = uicomponent.getPortalMode();
 	rcontext.getJavascriptManager()
     .require("SHARED/uiPopupWindow", "uiPopupWindow").addScripts("uiPopupWindow.show('$popupId');")
@@ -21,22 +24,22 @@
 					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="javascript:void(0);" onclick="<%=uicomponent.event("Finish")%>"></a>
 			<%	 }
 				 } %>
-		<span class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ popupId)%></span>
+		<span class="PopupTitle"><%=_ctx.appRes(titleKey)%></span>
 	</div>
-	
+
 	<div class="UIWindowContent" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>" >
 		<div class="PopupContent Component" style="height: 390px">
 			<% uicomponent.renderChildren(); %>
 		</div>
-		
-		<div class="UIAction" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>"> 
+
+		<div class="UIAction" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>">
 			<span onclick="<%= uicomponent.event("ViewProperties") %>" class="ActionButton SimpleStyle1">
 				<a href="javascript:void(0);" class="PageProfileIcon"><%=_ctx.appRes(popupId + ".action.ViewProperties")%></a>
 			</span>
 			<% String changeEditMode = uicomponent.event("SwitchMode", null, null); %>
 			<span onclick="$changeEditMode" class="ActionButton SimpleStyle1" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
 				<a href="javascript:void(0);" class="ViewAsBlockIcon"><%=_ctx.appRes(popupId + ".action.SwitchMode")%></a>
-			</span>						
+			</span>
 		</div>
 	</div>
 	<span class="ResizeButton"></span>

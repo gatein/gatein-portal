@@ -22,7 +22,12 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +70,6 @@ public class PageImportTaskTest extends TestCase {
     private MOPSiteProvider siteProvider;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void setUp() throws Exception {
         dataStorage = mock(DataStorage.class);
         pageService = mock(PageServiceImpl.class);
@@ -79,10 +83,6 @@ public class PageImportTaskTest extends TestCase {
                 return site;
             }
         };
-    }
-
-    private org.gatein.mop.api.workspace.Page getRootPage() {
-        return null;
     }
 
     public void testConserve_NoPages() throws Exception {
@@ -657,7 +657,8 @@ public class PageImportTaskTest extends TestCase {
 
         public Builder addPage(String name) {
             PageData page = new PageData(null, "", name, null, null, null, null, null, null, null,
-                    Collections.<String> emptyList(), Collections.<ComponentData> emptyList(), "", "", null, false);
+                    Collections.<String> emptyList(), Collections.<ComponentData> emptyList(), "", "", null, false,
+                    Collections.<String> emptyList(), Collections.<String> emptyList());
             pages.getPages().add(new Page(page));
 
             return this;
@@ -671,7 +672,7 @@ public class PageImportTaskTest extends TestCase {
     private class PageContextBuilder {
         PageContext page(String name) {
             return new PageContext(siteKey.page(name), new PageState(null, null, false, null, Collections.<String> emptyList(),
-                    null));
+                    null, null, null));
         }
 
         List<PageContext> pages(Iterable<String> names) {
@@ -683,8 +684,5 @@ public class PageImportTaskTest extends TestCase {
             return pages;
         }
 
-        List<PageContext> pages(String... names) {
-            return pages(Arrays.asList(names));
-        }
     }
 }

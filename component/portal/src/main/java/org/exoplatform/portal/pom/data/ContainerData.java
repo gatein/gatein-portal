@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class ContainerData extends ComponentData {
 
+    private static final long serialVersionUID = 7328080023001711540L;
+
     /** . */
     private final String id;
 
@@ -57,11 +59,16 @@ public class ContainerData extends ComponentData {
     /** . */
     private final List<String> accessPermissions;
 
+    private final List<String> moveAppsPermissions;
+
+    private final List<String> moveContainersPermissions;
+
     /** . */
     private final List<ComponentData> children;
 
     public ContainerData(String storageId, String id, String name, String icon, String template, String factoryId,
             String title, String description, String width, String height, List<String> accessPermissions,
+            List<String> moveAppsPermissions, List<String> moveContainersPermissions,
             List<ComponentData> children) {
         super(storageId, null);
 
@@ -76,6 +83,8 @@ public class ContainerData extends ComponentData {
         this.width = width;
         this.height = height;
         this.accessPermissions = accessPermissions;
+        this.moveAppsPermissions = moveAppsPermissions;
+        this.moveContainersPermissions = moveContainersPermissions;
         this.children = children;
     }
 
@@ -121,5 +130,19 @@ public class ContainerData extends ComponentData {
 
     public List<ComponentData> getChildren() {
         return children;
+    }
+
+    /**
+     * @return the moveAppsPermissions
+     */
+    public List<String> getMoveAppsPermissions() {
+        return moveAppsPermissions;
+    }
+
+    /**
+     * @return the moveContainersPermissions
+     */
+    public List<String> getMoveContainersPermissions() {
+        return moveContainersPermissions;
     }
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerData;
@@ -56,15 +57,20 @@ public class Container extends ModelObject {
 
     protected String[] accessPermissions;
 
+    protected String[] moveAppsPermissions;
+
+    protected String[] moveContainersPermissions;
+
     protected ArrayList<ModelObject> children;
 
     public Container() {
+        setDefaultPermissions();
         children = new ArrayList<ModelObject>();
     }
 
     public Container(String storageId) {
         super(storageId);
-
+        setDefaultPermissions();
         //
         this.children = new ArrayList<ModelObject>();
     }
@@ -89,7 +95,18 @@ public class Container extends ModelObject {
         this.width = data.getWidth();
         this.height = data.getHeight();
         this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
+        List<String> permisssions = data.getMoveAppsPermissions();
+        this.moveAppsPermissions = permisssions != null ? permisssions.toArray(new String[permisssions.size()]) : null;
+        permisssions = data.getMoveContainersPermissions();
+        this.moveContainersPermissions = permisssions != null ? permisssions.toArray(new String[permisssions.size()]) : null;
         this.children = children;
+    }
+
+    private void setDefaultPermissions() {
+        List<String> permissions = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
+        this.moveAppsPermissions = permissions.toArray(new String[permissions.size()]);
+        permissions = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
+        this.moveContainersPermissions = permissions.toArray(new String[permissions.size()]);
     }
 
     public String getId() {
@@ -180,6 +197,23 @@ public class Container extends ModelObject {
         this.accessPermissions = accessPermissions;
     }
 
+
+    public String[] getMoveAppsPermissions() {
+        return moveAppsPermissions;
+    }
+
+    public void setMoveAppsPermissions(String[] moveAppsPermissions) {
+        this.moveAppsPermissions = moveAppsPermissions;
+    }
+
+    public String[] getMoveContainersPermissions() {
+        return moveContainersPermissions;
+    }
+
+    public void setMoveContainersPermissions(String[] moveContainersPermissions) {
+        this.moveContainersPermissions = moveContainersPermissions;
+    }
+
     public String getDecorator() {
         // Here to please jibx binding but not used anymore
         return null;
@@ -194,7 +228,8 @@ public class Container extends ModelObject {
     public ContainerData build() {
         List<ComponentData> children = buildChildren();
         return new ContainerData(storageId, id, name, icon, template, factoryId, title, description, width, height,
-                Utils.safeImmutableList(accessPermissions), children);
+                Utils.safeImmutableList(accessPermissions), Utils.safeImmutableList(moveAppsPermissions),
+                Utils.safeImmutableList(moveContainersPermissions), children);
     }
 
     protected List<ComponentData> buildChildren() {

@@ -26,7 +26,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.UIWizard;
@@ -118,9 +117,7 @@ public abstract class UIPageWizard extends UIWizard {
             UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             toolPanel.setUIComponent(null);
             pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-            jsManager.require("SHARED/portal", "portal").addScripts(
-                    "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            Util.updatePortalMode();
         }
     }
 }

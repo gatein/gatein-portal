@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class PageData extends ContainerData {
 
+    private static final long serialVersionUID = 2741613958131096156L;
+
     /** . */
     private final PageKey key;
 
@@ -38,8 +40,10 @@ public class PageData extends ContainerData {
 
     public PageData(String storageId, String id, String name, String icon, String template, String factoryId, String title,
             String description, String width, String height, List<String> accessPermissions, List<ComponentData> children,
-            String ownerType, String ownerId, String editPermission, boolean showMaxWindow) {
-        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
+            String ownerType, String ownerId, String editPermission, boolean showMaxWindow,
+            List<String> moveAppsPermissions, List<String> moveContainersPermissions) {
+        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions,
+                moveContainersPermissions, moveContainersPermissions, children);
 
         //
         this.key = new PageKey(ownerType, ownerId, name);

@@ -21,7 +21,9 @@ package org.exoplatform.portal.config.serialize;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
+import org.exoplatform.portal.config.UserACL;
 
 /**
  * Created by The eXo Platform SARL Author : Nhu Dinh Thuan nhudinhthuan@exoplatform.com Jun 2, 2007
@@ -29,30 +31,85 @@ import java.util.List;
 public class JibxArraySerialize {
 
     public static String serializeStringArray(String[] values) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < values.length; i++) {
-            if (i > 0)
-                builder.append(';');
-            builder.append(values[i]);
+        if (values == null || values.length == 0) {
+            return "";
+        } else {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] != null) {
+                    String value = values[i].trim();
+                    if (value.length() > 0) {
+                        if (builder.length() > 0) {
+                            builder.append(';');
+                        }
+                        builder.append(value);
+                    }
+                }
+            }
+            return builder.toString();
         }
-        return builder.toString();
     }
 
     public static String[] deserializeStringArray(String text) {
-        if (text == null || text.trim().length() < 1)
+        if (text == null) {
             return new String[0];
-        text = text.trim();
-        List<String> list = new ArrayList<String>(5);
-        String[] components = text.split(";");
-        for (String ele : components) {
-            ele = ele.trim();
-            if (ele.length() < 1)
-                continue;
-            list.add(ele);
+        } else {
+            text = text.trim();
+            if (text.length() == 0) {
+                return new String[0];
+            } else {
+                List<String> list = new ArrayList<String>(5);
+                StringTokenizer st = new StringTokenizer(text, ";");
+                while (st.hasMoreTokens()) {
+                    String token = st.nextToken().trim();
+                    if (token.length() > 0) {
+                        list.add(token);
+                    }
+                }
+                return list.toArray(new String[list.size()]);
+            }
         }
-        String[] values = new String[list.size()];
-        list.toArray(values);
-        return values;
+    }
+
+    public static String serializePermissions(String[] values) {
+        if (values == null || values.length == 0) {
+            return UserACL.NOBODY;
+        } else {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < values.length; i++) {
+                if (values[i] != null) {
+                    String value = values[i].trim();
+                    if (value.length() > 0) {
+                        if (builder.length() > 0) {
+                            builder.append(';');
+                        }
+                        builder.append(value);
+                    }
+                }
+            }
+            return builder.length() == 0 ? UserACL.NOBODY : builder.toString();
+        }
+    }
+
+    public static String[] deserializePermissions(String text) {
+        if (text == null) {
+            return new String[0];
+        } else {
+            text = text.trim();
+            if (text.length() == 0 || UserACL.NOBODY.equals(text)) {
+                return new String[0];
+            } else {
+                List<String> list = new ArrayList<String>(5);
+                StringTokenizer st = new StringTokenizer(text, ";");
+                while (st.hasMoreTokens()) {
+                    String token = st.nextToken().trim();
+                    if (token.length() > 0) {
+                        list.add(token);
+                    }
+                }
+                return list.toArray(new String[list.size()]);
+            }
+        }
     }
 
 }

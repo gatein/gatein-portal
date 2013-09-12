@@ -73,15 +73,20 @@ public class UIPortalComponent extends UIContainer {
         this.accessPermissions = accessPermissions;
     }
 
+    /**
+     *
+     * @return
+     * @deprecated Use {@link #hasAccessPermission()}
+     */
+    @Deprecated
     public boolean hasPermission() {
+        return hasAccessPermission();
+    }
+
+    public boolean hasAccessPermission() {
         ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
         UserACL acl = (UserACL) exoContainer.getComponentInstanceOfType(UserACL.class);
-        for (String per : accessPermissions) {
-            if (acl.hasPermission(per)) {
-                return true;
-            }
-        }
-        return false;
+        return acl.hasPermission(accessPermissions);
     }
 
     public String getWidth() {

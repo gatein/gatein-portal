@@ -67,7 +67,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         UnmarshalledObject<PageSet> obj = ModelUnmarshaller.unmarshall(PageSet.class, input);
         PageSet pages = obj.getObject();
         assertNotNull(pages);
-        assertEquals(2, pages.getPages().size());
+        assertEquals(3, pages.getPages().size());
     }
 
     public void testPortalConfigMapping() throws Exception {
@@ -98,9 +98,10 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     public void testPortletApplicationMapping() throws Exception {
         IBindingFactory bfact = BindingDirectory.getFactory(PortalConfig.class);
         IUnmarshallingContext uctx = bfact.createUnmarshallingContext();
+        @SuppressWarnings("unchecked")
         Application<Portlet> app = (Application<Portlet>) uctx.unmarshalDocument(new FileInputStream(
                 "src/test/resources/jibx/portlet-application.xml"), null);
-        TransientApplicationState portletState = (TransientApplicationState) app.getState();
+        TransientApplicationState<Portlet> portletState = (TransientApplicationState<Portlet>) app.getState();
         assertNotNull(portletState);
         assertEquals("web/BannerPortlet", portletState.getContentId());
         Portlet preferences = (Portlet) portletState.getContentState();
@@ -112,7 +113,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/jibx/simple-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
-        assertEquals(Version.V_1_5, obj.getVersion());
+        assertEquals(Version.V_1_6, obj.getVersion());
 
         //
         PageNode bar = nav.getFragment().getNode("bar");
@@ -130,7 +131,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/jibx/extended-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
-        assertEquals(Version.V_1_5, obj.getVersion());
+        assertEquals(Version.V_1_6, obj.getVersion());
 
         //
         PageNode foo = nav.getFragment().getNode("foo");
@@ -177,7 +178,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/jibx/fragment-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
-        assertEquals(Version.V_1_5, obj.getVersion());
+        assertEquals(Version.V_1_6, obj.getVersion());
 
         //
         ArrayList<NavigationFragment> fragments = nav.getFragments();

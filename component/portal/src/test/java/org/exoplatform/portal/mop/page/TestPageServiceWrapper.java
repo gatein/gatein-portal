@@ -65,10 +65,10 @@ public class TestPageServiceWrapper extends AbstractMOPTest {
         class ListenerImpl extends Listener<PageService, PageKey> {
 
             /** . */
-            private final LinkedList<Event> events = new LinkedList<Event>();
+            private final LinkedList<Event<PageService, PageKey>> events = new LinkedList<Event<PageService, PageKey>>();
 
             @Override
-            public void onEvent(Event event) throws Exception {
+            public void onEvent(Event<PageService, PageKey> event) throws Exception {
                 events.addLast(event);
             }
         }
@@ -93,21 +93,24 @@ public class TestPageServiceWrapper extends AbstractMOPTest {
 
         // Create
         PageContext page = new PageContext(key, new PageState("home", "description", true, null,
-                Collections.singletonList("foo"), "bar"));
+                Collections.singletonList("foo"), "bar", Collections.singletonList("moveAppsPermissions"),
+                Collections.singletonList("moveContainersPermissions")));
         assertTrue(serviceWrapper.savePage(page));
         assertEquals(1, createListener.events.size());
         assertEquals(0, updateListener.events.size());
         assertEquals(0, destroyListener.events.size());
 
         // Update
-        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar"));
+        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar", Collections
+                .singletonList("moveAppsPermissions"), Collections.singletonList("moveContainersPermissions")));
         assertFalse(serviceWrapper.savePage(page));
         assertEquals(1, createListener.events.size());
         assertEquals(1, updateListener.events.size());
         assertEquals(0, destroyListener.events.size());
 
         // Destroy
-        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar"));
+        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar", Collections
+                .singletonList("moveAppsPermissions"), Collections.singletonList("moveContainersPermissions")));
         assertTrue(serviceWrapper.destroyPage(key));
         assertEquals(1, createListener.events.size());
         assertEquals(1, updateListener.events.size());

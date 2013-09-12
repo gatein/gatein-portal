@@ -79,4 +79,40 @@ class Utils {
 
         return new LocalizedString(value, lang);
     }
+
+    /**
+     * Removes empty strings and {@code null} elements from the given string {@code array}. Returns the submitted instance if
+     * there is no change.
+     *
+     * @param array the array to tidy up
+     * @return A new array with empty strings and {@code null} elements removed or the instance submitted over {@code array}
+     *         argument if there is no change necessary.
+     */
+    public static String[] tidyUp(String[] array) {
+        if (array == null || array.length == 0) {
+            return array;
+        } else {
+            int resultLength = array.length;
+            for (int i = 0; i < resultLength; i++) {
+                if (array[i] == null || array[i].length() == 0) {
+                    /* shift the remaining elements to the left */
+                    for (int j = i; j + 1 < resultLength; j++) {
+                        array[j] = array[j + 1];
+                    }
+                    resultLength--;
+                    i--;
+                }
+            }
+            if (resultLength < array.length) {
+                /* cut */
+                String[] result = new String[resultLength];
+                System.arraycopy(array, 0, result, 0, resultLength);
+                return result;
+            } else {
+                /* no change */
+                return array;
+            }
+        }
+    }
+
 }

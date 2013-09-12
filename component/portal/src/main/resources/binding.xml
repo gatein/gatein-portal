@@ -1,17 +1,17 @@
 <!--
 
     Copyright (C) 2009 eXo Platform SAS.
-    
+
     This is free software; you can redistribute it and/or modify it
     under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation; either version 2.1 of
     the License, or (at your option) any later version.
-    
+
     This software is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
     Lesser General Public License for more details.
-    
+
     You should have received a copy of the GNU Lesser General Public
     License along with this software; if not, write to the Free
     Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -61,12 +61,17 @@
     <value name="title" field="title" usage="optional"/>
     <value name="icon" field="icon" usage="optional"/>
     <value name="template" field="template" usage="optional" style="attribute"/>
-    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="access-permissions" field="accessPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
     <value name="factory-id" field="factoryId" usage="optional"/>
     <value name="decorator" field="decorator" usage="optional" style="attribute"/>
     <value name="description" field="description" usage="optional"/>
     <value name="width" usage="optional" field="width" style="attribute"/>
     <value name="height" usage="optional" field="height" style="attribute"/>
+    <value name="move-apps-permissions" field="moveAppsPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
+    <value name="move-containers-permissions" field="moveContainersPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
     <collection field="children" ordered="false">
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
@@ -83,9 +88,14 @@
     <value name="name" field="name"/>
     <value name="title" field="title" usage="optional"/>
     <value name="factory-id" field="factoryId" usage="optional"/>
-    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="access-permissions" field="accessPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
     <value name="edit-permission" field="editPermission" usage="optional"/>
     <value name="show-max-window" field="showMaxWindow" usage="optional"/>
+    <value name="move-apps-permissions" field="moveAppsPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
+    <value name="move-containers-permissions" field="moveContainersPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
     <collection field="children" ordered="false">
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
@@ -115,7 +125,8 @@
     <value name="label" field="label" default=""/>
     <value name="description" field="description" default=""/>
     <value name="locale" field="locale"/>
-    <value name="access-permissions" field="accessPermissions" usage="optional"/>
+    <value name="access-permissions" field="accessPermissions" usage="optional" default="Everyone" serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializePermissions"
+          deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializePermissions"/>
     <value name="edit-permission" field="editPermission" usage="optional"/>
     <value name="skin" field="skin" usage="optional"/>
     <structure field="properties" usage="optional"/>

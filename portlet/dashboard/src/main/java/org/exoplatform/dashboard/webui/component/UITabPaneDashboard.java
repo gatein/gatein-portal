@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
@@ -235,9 +236,7 @@ public class UITabPaneDashboard extends UIContainer {
 
             //
             PageKey pageKey = new PageKey(siteKey, page.getName());
-            PageState pageState = new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(),
-                    page.getFactoryId(), page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions())
-                            : null, page.getEditPermission());
+            PageState pageState = PageUtils.toPageState(page);
             configService.getPageService().savePage(new PageContext(pageKey, pageState));
 
             //

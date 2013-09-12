@@ -22,6 +22,15 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
+import static org.gatein.common.xml.stax.navigator.Exceptions.expectedElement;
+import static org.gatein.common.xml.stax.navigator.Exceptions.unexpectedElement;
+import static org.gatein.common.xml.stax.navigator.Exceptions.unknownElement;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredAttribute;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredContent;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -36,6 +45,7 @@ import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
 import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.config.serialize.JibxArraySerialize;
 import org.exoplatform.portal.mop.management.binding.xml.portal.redirects.PortalRedirectXmlHandler;
 import org.gatein.common.xml.stax.navigator.StaxNavUtils;
 import org.gatein.common.xml.stax.writer.StaxWriter;
@@ -44,10 +54,6 @@ import org.gatein.management.api.binding.BindingException;
 import org.staxnav.Axis;
 import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
-
-import static org.gatein.common.xml.stax.navigator.Exceptions.*;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.*;
-import static org.gatein.common.xml.stax.writer.StaxWriterUtils.*;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -138,6 +144,10 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
         Container container = portalConfig.getPortalLayout();
         if (container != null) {
             writer.writeStartElement(Element.PORTAL_LAYOUT);
+
+            marshalPermissions(writer, Element.MOVE_APPLICATIONS_PERMISSIONS, container.getMoveAppsPermissions());
+            marshalPermissions(writer, Element.MOVE_CONTAINERS_PERMISSIONS, container.getMoveContainersPermissions());
+
             List<ModelObject> children = container.getChildren();
             if (children != null && !children.isEmpty()) {
                 for (ModelObject child : children) {
@@ -204,6 +214,20 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
                 case PORTAL_LAYOUT:
                     portalLayout = new Container();
                     current = navigator.child();
+                    break;
+                case MOVE_APPLICATIONS_PERMISSIONS:
+                    if (portalLayout == null) {
+                        throw expectedElement(navigator, Element.PORTAL_LAYOUT);
+                    }
+                    portalLayout.setMoveAppsPermissions(unmarshalPermissions(navigator, false));
+                    current = navigator.sibling();
+                    break;
+                case MOVE_CONTAINERS_PERMISSIONS:
+                    if (portalLayout == null) {
+                        throw expectedElement(navigator, Element.PORTAL_LAYOUT);
+                    }
+                    portalLayout.setMoveContainersPermissions(unmarshalPermissions(navigator, false));
+                    current = navigator.sibling();
                     break;
                 case PAGE_BODY:
                     if (portalLayout == null) {

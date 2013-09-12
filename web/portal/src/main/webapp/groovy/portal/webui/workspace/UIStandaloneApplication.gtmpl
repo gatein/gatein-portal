@@ -1,4 +1,4 @@
-<!DOCTYPE html 
+<!DOCTYPE html
 		PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 					 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%
@@ -11,17 +11,17 @@
 	import org.exoplatform.container.PortalContainer;
 
 	def rcontext = _ctx.getRequestContext() ;
-	String docBase =	rcontext.getRequestContextPath() ;	
+	String docBase =	rcontext.getRequestContextPath() ;
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
 	def scriptsURLs = uicomponent.getScripts();
-	def headerScripts = new LinkedList();	
-	def jsConfig = uicomponent.getJSConfig();	
+	def headerScripts = new LinkedList();
+	def jsConfig = uicomponent.getJSConfig();
 	def remoteScripts = new JSONArray();
 	for (module in scriptsURLs.keySet()) {
 	  def url = jsConfig.get("paths").get(module);
-	  headerScripts.add(url != null ? url + ".js" : module);	    
+	  headerScripts.add(url != null ? url + ".js" : module);
 	  if (scriptsURLs.get(module)) {
 	    remoteScripts.put(module);
 	  }
@@ -44,7 +44,7 @@
 		%>
 		 	<meta name="<%=metaName%>" content="<%=metaContent%>" />
 		<% } } %>
-		
+
 		<link rel="shortcut icon" type="image/x-icon"	href="<%=docBase%>/favicon.ico" />
 		<%for(skinConfig in portalSkins) {
 		def url = skinConfig.createURL(rcontext.controllerContext);
@@ -57,18 +57,18 @@
 		url.setOrientation(orientation);
 		%>
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
-		<%}%>		
+		<%}%>
 		<script type="text/javascript">
 			var require = <%=jsConfig%>;
 		</script>
 		<% for (url in headerScripts) { %>
             <script type="text/javascript" src="<%= url %>"></script>
-		<% } %>		
-		<script type="text/javascript">			
+		<% } %>
+		<script type="text/javascript">
 		eXo.env.addLoadedRemoteScripts(<%=remoteScripts%>);
 		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
-		<% } %>		
+		<% } %>
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
 			else
@@ -79,41 +79,43 @@
 			eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
-			<% 
+			<%
 				UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
 				String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
 				boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
 			%>
 			eXo.portal.portalMode = <%= uicomponent.getModeState() %>;
+			eXo.portal.portalEditLevel = '<%= uicomponent.getEditLevel().toString() %>';
+			eXo.portal.fullPreview = '<%= org.exoplatform.portal.webui.page.UIPage.isFullPreview() %>';
 			eXo.session.level = "$sessionAliveLevel";
 			eXo.session.canKeepState = $canKeepState;
 			eXo.session.isOpen = <%=uicomponent.isSessionOpen()%> ;
 			eXo.session.itvTime = ${((PortalRequestContext)rcontext).getRequest().getSession().getMaxInactiveInterval()} ;
-		</script>		
-		<% 
+		</script>
+		<%
 		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
-		 if (headerElements != null) 
+		 if (headerElements != null)
 		 {
 		    for (element in headerElements)
 		    {
-		    	print(element);  
+		    	print(element);
 		    }
-		 }		 
+		 }
 		%>
 	</head>
 
 	<body style="height: 100%;">
- 
+
 	  <div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
-			
+
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
 			<div class="LoadingContainer">
 				<div class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></div>
 				<span class="LoadingProgressBar"></span>
-				
-				<div class="UIAction"> 
+
+				<div class="UIAction">
 					<a onclick="javascript:ajaxAbort();" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPortalApplication.label.Abort")%></a>
 				</div>
-			
+
 			</div>
 		</div>

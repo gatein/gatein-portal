@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.MappedAttributes;
@@ -21,6 +22,8 @@ import org.gatein.mop.api.workspace.Page;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class PageState implements Serializable {
+
+    private static final long serialVersionUID = 7874166775312871923L;
 
     /** . */
     final String editPermission;
@@ -39,6 +42,10 @@ public class PageState implements Serializable {
 
     /** . */
     final List<String> accessPermissions;
+
+    final List<String> moveAppsPermissions;
+
+    final List<String> moveContainersPermissions;
 
     public PageState(Page page) {
 
@@ -61,16 +68,30 @@ public class PageState implements Serializable {
         this.accessPermissions = Utils.safeImmutableList(accessPermissions);
         this.editPermission = editPermission;
         this.showMaxWindow = attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false);
+
+        if (page.isAdapted(ProtectedContainer.class)) {
+            ProtectedContainer pc = page.adapt(ProtectedContainer.class);
+            this.moveAppsPermissions = pc.getMoveAppsPermissions();
+            this.moveContainersPermissions = pc.getMoveContainersPermissions();
+        } else {
+            /* legacy mode */
+            this.moveAppsPermissions = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
+            this.moveContainersPermissions = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
+        }
+
     }
 
     public PageState(String displayName, String description, boolean showMaxWindow, String factoryId,
-            List<String> accessPermissions, String editPermission) {
+            List<String> accessPermissions, String editPermission, List<String> moveAppsPermissions,
+            List<String> moveContainersPermissions) {
         this.editPermission = editPermission;
         this.showMaxWindow = showMaxWindow;
         this.factoryId = factoryId;
         this.displayName = displayName;
         this.description = description;
         this.accessPermissions = accessPermissions;
+        this.moveAppsPermissions = moveAppsPermissions;
+        this.moveContainersPermissions = moveContainersPermissions;
     }
 
     public String getEditPermission() {
@@ -95,6 +116,20 @@ public class PageState implements Serializable {
 
     public List<String> getAccessPermissions() {
         return accessPermissions;
+    }
+
+    /**
+     * @return the moveAppsPermissions
+     */
+    public List<String> getMoveAppsPermissions() {
+        return moveAppsPermissions;
+    }
+
+    /**
+     * @return the moveContainersPermissions
+     */
+    public List<String> getMoveContainersPermissions() {
+        return moveContainersPermissions;
     }
 
     @Override
@@ -123,7 +158,7 @@ public class PageState implements Serializable {
     }
 
     public Builder builder() {
-        return new Builder(editPermission, showMaxWindow, factoryId, displayName, description, accessPermissions);
+        return new Builder(editPermission, showMaxWindow, factoryId, displayName, description, accessPermissions, moveAppsPermissions, moveContainersPermissions);
     }
 
     public static class Builder {
@@ -146,14 +181,20 @@ public class PageState implements Serializable {
         /** . */
         private List<String> accessPermissions;
 
+        private List<String> moveAppsPermissions;
+
+        private List<String> moveContainersPermissions;
+
         private Builder(String editPermission, boolean showMaxWindow, String factoryId, String displayName, String description,
-                List<String> accessPermissions) {
+                List<String> accessPermissions, List<String> moveAppsPermissions, List<String> moveContainersPermissions) {
             this.editPermission = editPermission;
             this.showMaxWindow = showMaxWindow;
             this.factoryId = factoryId;
             this.displayName = displayName;
             this.description = description;
             this.accessPermissions = accessPermissions;
+            this.moveAppsPermissions = moveAppsPermissions;
+            this.moveContainersPermissions = moveContainersPermissions;
         }
 
         public Builder editPermission(String editPermission) {
@@ -192,7 +233,7 @@ public class PageState implements Serializable {
         }
 
         public PageState build() {
-            return new PageState(displayName, description, showMaxWindow, factoryId, accessPermissions, editPermission);
+            return new PageState(displayName, description, showMaxWindow, factoryId, accessPermissions, editPermission, moveAppsPermissions, moveContainersPermissions);
         }
     }
 }

@@ -22,12 +22,15 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +93,8 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertNull(layout.getWidth());
         assertNull(layout.getHeight());
         assertNull(layout.getAccessPermissions());
+        assertArrayEquals(new String[] {"*:/platform/app-movers"}, layout.getMoveAppsPermissions());
+        assertArrayEquals(new String[] {"*:/platform/container-movers"}, layout.getMoveContainersPermissions());
         List<ModelObject> children = data.getPortalLayout().getChildren();
         assertEquals(5, children.size());
 
@@ -105,7 +110,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
             assertEquals("web/BannerPortlet", tas.getContentId());
             Portlet portlet = tas.getContentState();
             int count = 0;
-            for (Preference pref : portlet) {
+            for (Iterator<Preference> it = portlet.iterator(); it.hasNext(); it.next()) {
                 count++;
             }
             assertEquals(1, count);
@@ -172,7 +177,9 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         children.add(new BodyData(null, BodyType.PAGE));
 
         ContainerData layout = new ContainerData(null, null, "container-name", "container-icon", "container-template",
-                "factoryId", "title", "description", "width", "height", Collections.singletonList("blah"), children);
+                "factoryId", "title", "description", "width", "height", Collections.singletonList("accessPermissions"),
+                Collections.singletonList("moveAppsPermissions"), Collections.singletonList("moveContainersPermissions"),
+                children);
 
         Map<String, String> properties = new HashMap<String, String>();
         properties.put("key1", "value1");
@@ -182,6 +189,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
                 Collections.singletonList("access-permissions"), "edit-permissions", properties, "skin", layout, null);
 
         PortalConfig expected = new PortalConfig(expectedData);
+        Container expectedLayout = expected.getPortalLayout();
 
         SiteLayoutMarshaller marshaller = new SiteLayoutMarshaller();
         marshaller.marshal(expected, baos, false);
@@ -201,7 +209,10 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertEquals("edit-permissions", actual.getEditPermission());
         assertEquals(properties, actual.getProperties());
         assertEquals("skin", actual.getSkin());
-        assertNotNull(actual.getPortalLayout());
+        Container actualLayout = actual.getPortalLayout();
+        assertNotNull(actualLayout);
+        assertArrayEquals(expectedLayout.getMoveAppsPermissions(), actualLayout.getMoveAppsPermissions());
+        assertArrayEquals(expectedLayout.getMoveContainersPermissions(), actualLayout.getMoveContainersPermissions());
         assertNotNull(actual.getPortalLayout().getChildren());
         assertEquals(2, actual.getPortalLayout().getChildren().size());
 
@@ -243,9 +254,12 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
 
         // Verify container w/ page-body
         Container container = (Container) layout.getChildren().get(3);
+        assertArrayEquals(new String[] {"*:/platform/app-movers"}, container.getMoveAppsPermissions());
+        assertArrayEquals(new String[] {"*:/platform/container-movers"}, container.getMoveContainersPermissions());
         assertNotNull(container.getChildren());
         assertEquals(2, container.getChildren().size());
-        PageBody body = (PageBody) ((Container) container.getChildren().get(0)).getChildren().get(0);
+        Container container0 = (Container) container.getChildren().get(0);
+        PageBody body = (PageBody) container0 .getChildren().get(0);
         assertNotNull(body);
     }
 

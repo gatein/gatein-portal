@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.chromattic.api.annotations.MixinType;
@@ -32,6 +33,9 @@ import org.chromattic.api.annotations.Property;
  */
 @MixinType(name = "gtn:protectedresource")
 public abstract class ProtectedResource {
+
+    public static final String EVERYONE = "Everyone";
+    public static final List<String> DEFAULT_ACCESS_PERMISSIONS = Collections.singletonList(ProtectedResource.EVERYONE);
 
     @Property(name = "gtn:access-permissions")
     public abstract List<String> getAccessPermissions();

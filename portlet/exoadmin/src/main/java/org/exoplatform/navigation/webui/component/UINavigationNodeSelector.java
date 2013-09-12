@@ -51,6 +51,8 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -423,10 +425,7 @@ public class UINavigationNodeSelector extends UIContainer {
                     return;
                 }
 
-                uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-                // uiWorkingWS.setRenderedChild(UIPortalToolPanel.class);
-                // uiWorkingWS.addChild(UIPortalComposer.class, "UIPageEditor",
-                // null);
+                uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS, EditLevel.EDIT_PAGE);
 
                 UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
                 UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class).setRendered(true);
@@ -437,8 +436,8 @@ public class UINavigationNodeSelector extends UIContainer {
                 portalComposer.setShowControl(true);
                 portalComposer.setEditted(false);
                 portalComposer.setCollapse(false);
-                portalComposer.setId("UIPageEditor");
-                portalComposer.setComponentConfig(UIPortalComposer.class, "UIPageEditor");
+                portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
+                portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
 
                 uiToolPanel.setShowMaskLayer(false);
                 uiToolPanel.setWorkingComponent(UIPage.class, null);

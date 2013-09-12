@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
@@ -76,9 +77,7 @@ public class PageImporter {
         }
 
         if (dst != null) {
-            PageState dstState = new PageState(dst.getTitle(), dst.getDescription(), dst.isShowMaxWindow(), dst.getFactoryId(),
-                    dst.getAccessPermissions() != null ? Arrays.asList(dst.getAccessPermissions()) : null,
-                    dst.getEditPermission());
+            PageState dstState = PageUtils.toPageState(dst);
 
             pageService.savePage(new PageContext(src.getPageKey(), dstState));
             service.save(dst);

@@ -1,5 +1,7 @@
 package org.exoplatform.portal.mop.page;
 
+import java.util.List;
+
 import org.exoplatform.portal.config.model.Page;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
@@ -74,12 +76,20 @@ public class PageContext {
         if (page == null) {
             throw new NullPointerException();
         }
-        page.setTitle(getState().displayName);
-        page.setDescription(getState().description);
-        page.setFactoryId(getState().factoryId);
-        page.setShowMaxWindow(getState().showMaxWindow);
-        page.setAccessPermissions(getState().accessPermissions != null ? getState().accessPermissions
-                .toArray(new String[getState().accessPermissions.size()]) : null);
+        PageState s = getState();
+        page.setTitle(s.displayName);
+        page.setDescription(s.description);
+        page.setFactoryId(s.factoryId);
+        page.setShowMaxWindow(s.showMaxWindow);
+
+        List<String> permisssions = s.accessPermissions;
+        page.setAccessPermissions(permisssions != null ? permisssions.toArray(new String[permisssions.size()]) : null);
         page.setEditPermission(getState().editPermission);
+
+        permisssions = s.moveAppsPermissions;
+        page.setMoveAppsPermissions(permisssions != null ? permisssions.toArray(new String[permisssions.size()]) : null);
+
+        permisssions = s.moveContainersPermissions;
+        page.setMoveContainersPermissions(permisssions != null ? permisssions.toArray(new String[permisssions.size()]) : null);
     }
 }

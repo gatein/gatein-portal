@@ -46,13 +46,18 @@ import org.exoplatform.services.security.MembershipEntry;
 public class UserACL {
     public static final String EVERYONE = "Everyone";
 
+    /**
+     * {@code "Nobody"} is equivalent to empty list of permissions.
+     */
+    public static final String NOBODY = "Nobody";
+
     protected static Log log = ExoLogger.getLogger("organization:UserACL");
 
-    private final Collection<MembershipEntry> NO_MEMBERSHIP = Collections.emptyList();
+    private static final Collection<MembershipEntry> NO_MEMBERSHIP = Collections.emptyList();
 
-    private final Collection<String> NO_ROLES = Collections.emptyList();
+    private static final Collection<String> NO_ROLES = Collections.emptyList();
 
-    private final Identity guest = new Identity(null, NO_MEMBERSHIP, NO_ROLES);
+    private static final Identity guest = new Identity(null, NO_MEMBERSHIP, NO_ROLES);
 
     private String superUser_;
 
@@ -72,7 +77,6 @@ public class UserACL {
 
     private String adminMSType;
 
-    @SuppressWarnings("unchecked")
     public UserACL(InitParams params) {
         UserACLMetaData md = new UserACLMetaData(params);
 
@@ -393,6 +397,23 @@ public class UserACL {
         return hasPermission(getIdentity(), expPerm);
     }
 
+    public boolean hasPermission(String[] permissions) {
+        Identity identity = this.getIdentity();
+        String currentUser = identity.getUserId();
+        if (superUser_.equals(currentUser)) {
+            return true;
+        } else if (permissions == null || permissions.length == 0) {
+            return false;
+        } else {
+            for (String per : permissions) {
+                if (hasPermission(identity, per)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     /**
      * @param group
      * @return
@@ -470,6 +491,8 @@ public class UserACL {
     }
 
     public static class Permission implements Serializable {
+
+        private static final long serialVersionUID = -2642107810551203332L;
 
         private String name_;
 

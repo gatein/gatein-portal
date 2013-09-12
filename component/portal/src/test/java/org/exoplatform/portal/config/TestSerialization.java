@@ -49,7 +49,8 @@ public class TestSerialization extends AbstractGateInTest {
 
     /** . */
     private final ContainerData container = new ContainerData("foo01", "foo02", "foo03", "foo04", "foo05", "foo06", "foo07",
-            "foo08", "foo09", "foo10", Arrays.asList("foo11"), Arrays.<ComponentData> asList(body));
+            "foo08", "foo09", "foo10", Collections.singletonList("foo11"), Collections.singletonList("foo11"),
+            Collections.singletonList("foo11"), Collections.<ComponentData> singletonList(body));
 
     public void testNavigationKey() throws Exception {
         NavigationKey key = new NavigationKey("foo", "bar");
@@ -98,7 +99,8 @@ public class TestSerialization extends AbstractGateInTest {
 
     public void testPage() throws Exception {
         PageData obj = new PageData("foo01", "foo02", "foo03", "foo04", "foo05", "foo06", "foo07", "foo08", "foo09", "foo10",
-                Arrays.asList("foo11"), Arrays.<ComponentData> asList(body), "foo12", "foo13", "foo14", true);
+                Collections.singletonList("foo11"), Arrays.<ComponentData> asList(body), "foo12", "foo13", "foo14", true,
+                Collections.singletonList("foo11"), Collections.singletonList("foo11"));
         PageData clone = IOTools.clone(obj);
         assertEquals(obj.getStorageId(), clone.getStorageId());
         assertEquals(obj.getStorageName(), clone.getStorageName());
@@ -141,11 +143,11 @@ public class TestSerialization extends AbstractGateInTest {
         ApplicationData<?> obj = new ApplicationData<Gadget>("foo01", "foo02", ApplicationType.GADGET,
                 new PersistentApplicationState<Gadget>("bar"), "foo03", "foo04", "foo05", "foo06", true, true, true, "foo07",
                 "foo08", "foo09", Collections.singletonMap("foo10", "foo11"), Arrays.asList("foo12"));
-        ApplicationData clone = IOTools.clone(obj);
+        ApplicationData<?> clone = IOTools.clone(obj);
         assertEquals(obj.getStorageId(), clone.getStorageId());
         assertEquals(obj.getType(), clone.getType());
-        assertEquals(((PersistentApplicationState) obj.getState()).getStorageId(),
-                ((PersistentApplicationState) clone.getState()).getStorageId());
+        assertEquals(((PersistentApplicationState<?>) obj.getState()).getStorageId(),
+                ((PersistentApplicationState<?>) clone.getState()).getStorageId());
         assertEquals(obj.getId(), clone.getId());
         assertEquals(obj.getTitle(), clone.getTitle());
         assertEquals(obj.getIcon(), clone.getIcon());

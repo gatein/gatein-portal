@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
@@ -140,7 +141,14 @@ public class UIPageForm extends UIFormTabPane {
         UserACL userACL = getApplicationComponent(UserACL.class);
         userACL.hasPermission(page);
 
-        UIFormInputItemSelector uiTemplate = getChildById("Template");
+        /* Once there is a UI for setting these permissions, the defaults should
+         * be replaced accordingly */
+        List<String> appPerms = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
+        page.setMoveAppsPermissions(appPerms.toArray(new String[appPerms.size()]));
+        List<String> contPerms = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
+        page.setMoveContainersPermissions(contPerms.toArray(new String[contPerms.size()]));
+
+        UIFormInputItemSelector<?> uiTemplate = getChildById("Template");
         if (uiTemplate != null) {
             SelectItemOption<?> itemOption = uiTemplate.getSelectedItemOption();
             if (itemOption != null) {

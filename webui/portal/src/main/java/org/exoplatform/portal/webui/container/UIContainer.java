@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.webui.container;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.DeleteComponentActionListener;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -38,6 +41,10 @@ public class UIContainer extends UIPortalComponent {
     protected String icon;
 
     protected String description;
+
+    protected String[] moveContainersPermissions;
+
+    protected String[] moveAppsPermissions;
 
     public UIContainer() {
     }
@@ -65,4 +72,48 @@ public class UIContainer extends UIPortalComponent {
     public void setDescription(String desc) {
         this.description = desc;
     }
+
+
+    public String[] getMoveContainersPermissions() {
+        return moveContainersPermissions;
+    }
+
+    public void setMoveContainersPermissions(String[] moveContainersPermissions) {
+        this.moveContainersPermissions = moveContainersPermissions;
+    }
+
+    public boolean hasMoveContainersPermission() {
+        ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+        UserACL acl = (UserACL) exoContainer.getComponentInstanceOfType(UserACL.class);
+        return acl.hasPermission(moveContainersPermissions);
+    }
+
+    public String[] getMoveAppsPermissions() {
+        return moveAppsPermissions;
+    }
+
+    public void setMoveAppsPermissions(String[] moveAppsPermissions) {
+        this.moveAppsPermissions = moveAppsPermissions;
+    }
+
+    public boolean hasMoveAppsPermission() {
+        ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+        UserACL acl = (UserACL) exoContainer.getComponentInstanceOfType(UserACL.class);
+        return acl.hasPermission(moveAppsPermissions);
+    }
+
+    public String getPermissionClasses() {
+        StringBuilder permissionClasses = new StringBuilder();
+        if (!hasAccessPermission()) {
+            permissionClasses.append(" ProtectedContainer");
+        }
+        if (!hasMoveAppsPermission()) {
+            permissionClasses.append(" CannotMoveApps");
+        }
+        if (!hasMoveContainersPermission()) {
+            permissionClasses.append(" CannotMoveContainers");
+        }
+        return permissionClasses.toString();
+    }
+
 }

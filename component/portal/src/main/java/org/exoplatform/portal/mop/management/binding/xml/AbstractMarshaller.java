@@ -22,8 +22,15 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
-import static org.gatein.common.xml.stax.navigator.Exceptions.*;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.*;
+import static org.gatein.common.xml.stax.navigator.Exceptions.expectedElement;
+import static org.gatein.common.xml.stax.navigator.Exceptions.unexpectedElement;
+import static org.gatein.common.xml.stax.navigator.Exceptions.unknownElement;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseRequiredContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.requiresChild;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.requiresSibling;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalContent;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
 
@@ -45,12 +52,14 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.config.serialize.JibxArraySerialize;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.gatein.common.xml.stax.navigator.Exceptions;
 import org.gatein.common.xml.stax.writer.StaxWriter;
 import org.gatein.common.xml.stax.writer.WritableValueTypes;
 import org.gatein.management.api.binding.Marshaller;
@@ -64,8 +73,8 @@ import org.staxnav.ValueType;
 public abstract class AbstractMarshaller<T> implements Marshaller<T> {
     protected void marshalModelObject(StaxWriter<Element> writer, ModelObject modelObject) throws XMLStreamException {
         if (modelObject instanceof Application) {
-            Application application = (Application) modelObject;
-            ApplicationType type = application.getType();
+            Application<?> application = (Application<?>) modelObject;
+            ApplicationType<?> type = application.getType();
             if (ApplicationType.PORTLET == type) {
                 marshalPortletApplication(writer, safeCast(application, Portlet.class));
             } else if (ApplicationType.GADGET == type) {
@@ -101,6 +110,9 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
         marshalAccessPermissions(writer, container.getAccessPermissions());
 
         writeOptionalElement(writer, Element.FACTORY_ID, container.getFactoryId());
+
+        marshalPermissions(writer, Element.MOVE_APPLICATIONS_PERMISSIONS, container.getMoveAppsPermissions());
+        marshalPermissions(writer, Element.MOVE_CONTAINERS_PERMISSIONS, container.getMoveContainersPermissions());
 
         List<ModelObject> children = container.getChildren();
         for (ModelObject child : children) {
@@ -138,6 +150,14 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
                     break;
                 case ACCESS_PERMISSIONS:
                     container.setAccessPermissions(unmarshalAccessPermissions(navigator, false));
+                    current = navigator.sibling();
+                    break;
+                case MOVE_APPLICATIONS_PERMISSIONS:
+                    container.setMoveAppsPermissions(unmarshalPermissions(navigator, false));
+                    current = navigator.sibling();
+                    break;
+                case MOVE_CONTAINERS_PERMISSIONS:
+                    container.setMoveContainersPermissions(unmarshalPermissions(navigator, false));
                     current = navigator.sibling();
                     break;
                 case FACTORY_ID:
@@ -544,15 +564,27 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
 
     protected void marshalAccessPermissions(StaxWriter<Element> writer, String[] accessPermissions) throws XMLStreamException {
         accessPermissions = (accessPermissions == null || accessPermissions.length == 0) ? null : accessPermissions;
-
         writeOptionalElement(writer, Element.ACCESS_PERMISSIONS, DelimitedValueType.SEMI_COLON, accessPermissions);
+    }
+
+    protected void marshalPermissions(StaxWriter<Element> writer, Element element, String[] accessPermissions) throws XMLStreamException {
+        writeOptionalElement(writer, element, JibxArraySerialize.serializePermissions(accessPermissions));
     }
 
     protected String[] unmarshalAccessPermissions(StaxNavigator<Element> navigator, boolean required) throws XMLStreamException {
         if (required) {
-            return parseRequiredContent(navigator, DelimitedValueType.SEMI_COLON);
+            return Utils.tidyUp(parseRequiredContent(navigator, DelimitedValueType.SEMI_COLON));
         } else {
-            return parseContent(navigator, DelimitedValueType.SEMI_COLON, null);
+            return Utils.tidyUp(parseContent(navigator, DelimitedValueType.SEMI_COLON, null));
+        }
+    }
+
+    protected String[] unmarshalPermissions(StaxNavigator<Element> navigator, boolean required) throws XMLStreamException {
+        String content = parseContent(navigator, DelimitedValueType.TRIMMED_STRING, null);
+        if (required && content == null) {
+            throw Exceptions.contentRequired(navigator);
+        } else {
+            return JibxArraySerialize.deserializePermissions(content);
         }
     }
 
@@ -569,11 +601,11 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private <S> Application<S> safeCast(Application application, Class<S> stateClass) {
+    private <S> Application<S> safeCast(Application<?> application, Class<S> stateClass) {
         return (Application<S>) application;
     }
 
-    private static void writeOptionalAttribute(StaxWriter writer, Attribute attribute, String value) throws XMLStreamException {
+    private static void writeOptionalAttribute(StaxWriter<?> writer, Attribute attribute, String value) throws XMLStreamException {
         if (value == null)
             return;
 

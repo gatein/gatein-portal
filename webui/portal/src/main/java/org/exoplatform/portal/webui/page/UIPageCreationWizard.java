@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.page;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +33,7 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
@@ -50,7 +50,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -110,9 +109,7 @@ public class UIPageCreationWizard extends UIPageWizard {
 
         //
         PageService pageService = getApplicationComponent(PageService.class);
-        PageState pageState = new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(),
-                page.getFactoryId(), page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null,
-                page.getEditPermission());
+        PageState pageState = PageUtils.toPageState(page);
         pageService.savePage(new PageContext(page.getPageKey(), pageState));
 
         //

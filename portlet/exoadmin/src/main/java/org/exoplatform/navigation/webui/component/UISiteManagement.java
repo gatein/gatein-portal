@@ -49,7 +49,9 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.login.LogoutControl;
@@ -296,7 +298,7 @@ public class UISiteManagement extends UIContainer {
             }
 
             editPortal.refreshUIPage();
-            portalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
+            portalApp.setDefaultEditMode(ComponentTab.APPLICATIONS, EditLevel.EDIT_SITE);
             uiWorkingWS.setRenderedChild(UIPortalApplication.UI_EDITTING_WS_ID);
 
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
@@ -156,6 +157,10 @@ public class PageServiceImpl implements PageService {
             pr.setAccessPermissions(page.state.accessPermissions);
             pr.setEditPermission(page.state.editPermission);
 
+            ProtectedContainer dstPc = dst.adapt(ProtectedContainer.class);
+            dstPc.setMoveAppsPermissions(page.state.moveAppsPermissions);
+            dstPc.setMoveContainersPermissions(page.state.moveContainersPermissions);
+
             //
             Described described = dst.adapt(Described.class);
             described.setName(page.state.displayName);
@@ -271,6 +276,13 @@ public class PageServiceImpl implements PageService {
         dstPR.setAccessPermissions(srcPR.getAccessPermissions());
         dstPR.setEditPermission(srcPR.getEditPermission());
 
+        if (srcPage.isAdapted(ProtectedContainer.class)) {
+            ProtectedContainer srcPc = srcPage.adapt(ProtectedContainer.class);
+            ProtectedContainer dstPc = dstPage.adapt(ProtectedContainer.class);
+            dstPc.setMoveAppsPermissions(srcPc.getMoveAppsPermissions());
+            dstPc.setMoveContainersPermissions(srcPc.getMoveContainersPermissions());
+        }
+
         // Need to clone page data structure as well
         copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());
 
@@ -300,6 +312,14 @@ public class PageServiceImpl implements PageService {
                 dstPR.setAccessPermissions(srcPR.getAccessPermissions());
                 dstPR.setEditPermission(srcPR.getEditPermission());
             }
+
+            if (srcChild.isAdapted(ProtectedContainer.class)) {
+                ProtectedContainer srcPc = srcPage.adapt(ProtectedContainer.class);
+                ProtectedContainer dstPc = dstPage.adapt(ProtectedContainer.class);
+                dstPc.setMoveAppsPermissions(srcPc.getMoveAppsPermissions());
+                dstPc.setMoveContainersPermissions(srcPc.getMoveContainersPermissions());
+            }
+
 
             //
             Attributes srcAttrs = srcChild.getAttributes();

@@ -36,18 +36,28 @@
 				<li class="MenuItem portlet-menu-cascade-item">
 					<a href="javascript:void(0);" onclick="ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="$addPageLabel" class="ItemIcon AddPageIcon">$addPageLabel</a>
 				</li>
-			<% } %>
+			<% }
 
-			<% if(userCouldEditPage){
+				if(userCouldEditPage){
 
-				UIPortalApplication portalApp = Util.getUIPortalApplication();
-				UIPage uiPage = portalApp.findFirstComponentOfType(UIPage.class);//TODO: Find a better solution than this traversing
-				String editPageRequest = "ajaxGet(eXo.env.server.createPortalURL('" + uiPage.getId() + "', 'EditCurrentPage', true))";
+					UIPortalApplication portalApp = Util.getUIPortalApplication();
+					UIPage uiPage = portalApp.findFirstComponentOfType(UIPage.class);//TODO: Find a better solution than this traversing
+					String editPageRequest = "ajaxGet(eXo.env.server.createPortalURL('" + uiPage.getId() + "', 'EditCurrentPage', true))";
+					if (UIPage.isFullPreview()) {
+				%>
+					<li class="MenuItem portlet-menu-cascade-item">
+						<a href="javascript:void(0);" onclick="ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditPageInFullPreview', true))" title="$editPageLabel" class="ItemIcon EditPageIcon">$editPageLabel</a>
+					</li>
+				<%
+					} else {
+				%>
+					<li class="MenuItem">
+						<a href="javascript:void(0);" onclick="$editPageRequest" title="$editPageLabel" class="ItemIcon EditPageIcon">$editPageLabel</a>
+					</li>
+				<%
+					}
+				}
 			%>
-				<li class="MenuItem">
-					<a href="javascript:void(0);" onclick="$editPageRequest" title="$editPageLabel" class="ItemIcon EditPageIcon">$editPageLabel</a>
-				</li>
-			<% } %>
 
 			<% if(userCouldEditPortal){ %>
 				<li class="MenuItem portlet-menu-cascade-item">

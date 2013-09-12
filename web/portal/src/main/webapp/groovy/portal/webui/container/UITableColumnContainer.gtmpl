@@ -1,16 +1,16 @@
-<%	
+<%
 	import org.exoplatform.commons.utils.ExpressionUtil;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
-	
-	def rcontext = _ctx.getRequestContext(); 
-	ResourceBundle res = rcontext.getApplicationResourceBundle(); 
-	
+
+	def rcontext = _ctx.getRequestContext();
+	ResourceBundle res = rcontext.getApplicationResourceBundle();
+
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-	boolean hasPermission = uicomponent.hasPermission();
-	if(!uiPortalApp.isEditing() && !hasPermission) return;
-	
+	boolean hasAccessPermission = uicomponent.hasAccessPermission();
+	if(!uiPortalApp.isEditing() && !hasAccessPermission) return;
+
 	/** Trim the prefix UIContainer- if any, this hardcoded part is needed to update nested container via Ajax */
 	String componentId = uicomponent.getId();
 	if(componentId.startsWith("UIContainer-")){
@@ -19,24 +19,24 @@
 
 	if (uiPortalApp.isEditing())
 	{
-	   JavascriptManager jsManager = rcontext.getJavascriptManager();
-	  	jsManager.require("SHARED/portal", "portal").require("SHARED/portalDragDrop", "portalDragDrop")
-	  				.addScripts("portalDragDrop.init(['UIContainer']);")
-	  				.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
-%>  
-<div class="UIContainer UITableColumnContainer EdittingContainer <%=hasPermission?"":"ProtectedContainer"%>" 
+		JavascriptManager jsManager = rcontext.getJavascriptManager();
+			jsManager.require("SHARED/portal", "portal").require("SHARED/portalDragDrop", "portalDragDrop")
+						.addScripts("portalDragDrop.init(['UIContainer']);")
+						.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
+%>
+<div class="UIContainer UITableColumnContainer EdittingContainer<%=uicomponent.getPermissionClasses()%>"
 				id="${uicomponent.id}">
 <%
-  }
-  else
-  {   
+	}
+	else
+	{
 %>
-<div class="UIContainer UITableColumnContainer <%=hasPermission?"":"ProtectedContainer"%>" id="${uicomponent.id}">
+<div class="UIContainer UITableColumnContainer <%=hasAccessPermission?"":"ProtectedContainer"%>" id="${uicomponent.id}">
 <%
-  }
+	}
 %>
 	<div class="NormalContainerBlock UIComponentBlock">
-		<% 
+		<%
 			int portalMode = uiPortalApp.getModeState();
 			String style = "";
 			String width	= uicomponent.getWidth();
@@ -50,7 +50,7 @@
 		<div class="VIEW-CONTAINER VIEW-BLOCK">
 		<%} %>
 			<div>
-				<%if(hasPermission) {%>		
+				<%if(hasAccessPermission) {%>
 				<table class="UITableColumn" style="table-layout: fixed; margin: 0px auto; $style">
 					<tr class="TRContainer">
 						<% for(uiChild in uicomponent.getChildren()) {%>
@@ -59,10 +59,10 @@
 				 </tr>
 				</table>
 				<%} else {print "<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>";}%>
-			</div>		
+			</div>
 		</div>
 		<%/*Debug On IE	-----For DND */%>
-		
+
 		<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
 		<div class="EDITION-BLOCK EDITION-CONTAINER" style="display: none;position: relative;">
 			<div style="position: absolute; top: -86px;">
@@ -71,14 +71,14 @@
 					<%/*Begin InfoBar*/%>
 					<div class="BlueRoundedStyle ClearFix">
 						<div class="DragControlArea" title="<%=_ctx.appRes("UITableColumnContainer.title.DragControlArea")%>"><span></span></div>
-						<% 
+						<%
 							String strTitle = uicomponent.getTitle() != null ?
 										ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :
 										_ctx.appRes("UITableColumnContainer.title.Container");
-							strTitle = hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent");
+							strTitle = hasAccessPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent");
 						%>
 						<div class="ContainerIcon DefaultContainer16x16Icon"><%=HTMLEntityEncoder.getInstance().encode(strTitle)%></div>
-						<%if(hasPermission) {%>
+						<%if(hasAccessPermission) {%>
 							<a href="javascript:void(0);" onclick="<%=uicomponent.event("EditContainer","$uicomponent.id")%>" class="EditIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.editContainer")%>"></a>
 							<a href="javascript:void(0);" onclick="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.closeContainer")%>"></a>
 						<%}%>

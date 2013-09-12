@@ -76,7 +76,8 @@ public class PageUtils {
     public static PageState toPageState(Page page) {
         return new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(), page.getFactoryId(),
                 page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null,
-                page.getEditPermission());
+                page.getEditPermission(), page.getMoveAppsPermissions() != null ? Arrays.asList(page.getMoveAppsPermissions()) : null,
+                page.getMoveContainersPermissions() != null ? Arrays.asList(page.getMoveContainersPermissions()) : null);
     }
 
     public static <S> Application<S> copy(Application<S> existing) {
@@ -166,7 +167,6 @@ public class PageUtils {
         return pageSet;
     }
 
-    @SuppressWarnings("unused")
     public static PageBody copy(PageBody existing) {
         return new PageBody();
     }
@@ -187,6 +187,8 @@ public class PageUtils {
 
     private static void copyFields(Container existing, Container container) {
         container.setAccessPermissions(copy(existing.getAccessPermissions()));
+        container.setMoveAppsPermissions(copy(existing.getMoveAppsPermissions()));
+        container.setMoveContainersPermissions(copy(existing.getMoveContainersPermissions()));
         container.setChildren(copyChildren(existing.getChildren()));
         container.setDecorator(existing.getDecorator());
         container.setDescription(existing.getDescription());
@@ -207,8 +209,7 @@ public class PageUtils {
 
         for (ModelObject object : existing) {
             if (object instanceof Application) {
-                @SuppressWarnings("unchecked")
-                Application app = copy((Application) object);
+                Application<?> app = copy((Application<?>) object);
 
                 children.add(app);
             }

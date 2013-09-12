@@ -46,6 +46,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.login.LogoutControl;
+import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.web.url.navigation.NavigationResource;
@@ -58,8 +59,10 @@ import org.exoplatform.webui.event.EventListener;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ComponentConfig(lifecycle = UIPortalLifecycle.class, template = "system:/groovy/portal/webui/portal/UIPortal.gtmpl", events = {
@@ -322,7 +325,7 @@ public class UIPortal extends UIContainer {
             // Delete the token from JCR
             String token = getTokenCookie(req);
             if (token != null) {
-                AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+                AbstractTokenService<GateInToken, String> tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
                 tokenService.deleteToken(token);
             }
 
@@ -387,5 +390,35 @@ public class UIPortal extends UIContainer {
 
     public ArrayList<PortalRedirect> getPortalRedirects() {
         return portalRedirects;
+    }
+
+    @Override
+    public String getPermissionClasses() {
+        StringBuilder permissionClasses = new StringBuilder();
+        /* here we use ProtectedContainer to mark the situation when header and footer
+         * should not be editable in during fullPreview. ProtectedContainer is used by JavaScript
+         * on the client side. */
+        if (UIPage.isFullPreviewInPageEditor()) {
+            permissionClasses.append(" ProtectedContainer");
+        }
+
+        if (!hasMoveAppsPermission()) {
+            permissionClasses.append(" CannotMoveApps");
+        }
+        if (!hasMoveContainersPermission()) {
+            permissionClasses.append(" CannotMoveContainers");
+        }
+        return permissionClasses.toString();
+    }
+
+    public void setHeaderAndFooterRendered(boolean headerAndFooterRendered) {
+        List<UIComponent> list = getChildren();
+        for (UIComponent child : list) {
+            if (child instanceof UIPageBody) {
+                /* do not touch the page body */
+            } else if (child.isRendered() != headerAndFooterRendered) {
+                child.setRendered(headerAndFooterRendered);
+            }
+        }
     }
 }

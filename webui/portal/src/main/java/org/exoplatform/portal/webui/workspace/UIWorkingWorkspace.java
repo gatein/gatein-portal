@@ -25,6 +25,7 @@ import java.util.List;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.application.UIPortlet;
+import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -39,7 +40,8 @@ import org.exoplatform.webui.core.UIContainer;
         @EventConfig(listeners = UIMainActionListener.CreatePortalActionListener.class),
         @EventConfig(listeners = UIMainActionListener.PageCreationWizardActionListener.class),
         @EventConfig(listeners = UIMainActionListener.EditBackgroundActionListener.class),
-        @EventConfig(listeners = UIMainActionListener.EditInlineActionListener.class) })
+        @EventConfig(listeners = UIMainActionListener.EditInlineActionListener.class),
+        @EventConfig(listeners = UIMainActionListener.EditPageInFullPreviewActionListener.class)})
 public class UIWorkingWorkspace extends UIContainer {
 
     private UIPortal backupUIPortal = null;
@@ -50,6 +52,17 @@ public class UIWorkingWorkspace extends UIContainer {
 
     public void setBackupUIPortal(UIPortal uiPortal) {
         backupUIPortal = uiPortal;
+    }
+
+    public UIPortal restoreUIPortal() {
+        UIPortal result = backupUIPortal;
+        if (result == null) {
+            throw new IllegalStateException("backupUIPortal not available");
+        } else {
+            UISiteBody siteBody = findFirstComponentOfType(UISiteBody.class);
+            siteBody.setUIComponent(result);
+            return result;
+        }
     }
 
     public void updatePortletByWindowId(String windowId) {

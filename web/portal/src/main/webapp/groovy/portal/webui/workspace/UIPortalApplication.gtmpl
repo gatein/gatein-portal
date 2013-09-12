@@ -1,4 +1,4 @@
-<!DOCTYPE html 
+<!DOCTYPE html
 		PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 					 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <%
@@ -8,24 +8,24 @@
 	import org.exoplatform.portal.webui.portal.UIPortal ;
 	import org.exoplatform.portal.config.model.PortalProperties ;
 	import org.json.JSONArray;
-  import org.exoplatform.container.PortalContainer;
-  import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.container.PortalContainer;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
 	def rcontext = _ctx.getRequestContext() ;
-	String docBase =	rcontext.getRequestContextPath() ;	
+	String docBase = rcontext.getRequestContextPath() ;
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
 	def scriptsURLs = uicomponent.getScripts();
-	def headerScripts = new LinkedList();	
-	def jsConfig = uicomponent.getJSConfig();	
+	def headerScripts = new LinkedList();
+	def jsConfig = uicomponent.getJSConfig();
 	def remoteScripts = new JSONArray();
 	for (module in scriptsURLs.keySet()) {
-	  def url = jsConfig.get("paths").get(module);
-	  headerScripts.add(url != null ? url + ".js" : module);	    
-	  if (scriptsURLs.get(module)) {
-	    remoteScripts.put(module);
-	  }
+		def url = jsConfig.get("paths").get(module);
+		headerScripts.add(url != null ? url + ".js" : module);
+		if (scriptsURLs.get(module)) {
+			remoteScripts.put(module);
+		}
 	}
 	def lang = uicomponent.getLocale().getLanguage();
 	def title = rcontext.getTitle();
@@ -34,12 +34,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="$lang" lang="$lang" dir="$dir">
 	<head id="head">
-                <% 
+                <%
                       UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
                  %>
 		<title><%=HTMLEntityEncoder.getInstance().encode(title)%></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-                <% 
+                <%
                         if (portal.viewport != null) {
                  %>
                         <meta name="viewport" content = "${portal.viewport}"/>
@@ -55,7 +55,7 @@
 		%>
 		 	<meta name="<%=metaName%>" content="<%=metaContent%>" />
 		<% } } %>
-		
+
 		<link rel="shortcut icon" type="image/x-icon" href="<%=docBase%>/favicon.ico" />
 		<%for(skinConfig in portalSkins) {
 		def url = skinConfig.createURL(rcontext.controllerContext);
@@ -73,28 +73,30 @@
 			var require = <%=jsConfig%>;
 		</script>
 		<% for (url in headerScripts) { %>
-            <script type="text/javascript" src="<%= url %>"></script>
+			<script type="text/javascript" src="<%= url %>"></script>
 		<% } %>
-		<script type="text/javascript">			
+		<script type="text/javascript">
 		eXo.env.addLoadedRemoteScripts(<%=remoteScripts%>);
 		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
-		<% } %>		
+		<% } %>
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
 			else
 			{%>eXo.env.portal.accessMode = "private" ;<%}%>
 			eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
-      eXo.env.portal.containerName = "<%=PortalContainer.getInstance().getName()%>" ;
+			eXo.env.portal.containerName = "<%=PortalContainer.getInstance().getName()%>" ;
 			eXo.env.server.context = "<%=docBase%>" ;
 			eXo.env.server.portalBaseURL = "<%=uicomponent.getBaseURL()%>" ;
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
-			<% 
+			<%
 				String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
 				boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
 			%>
 			eXo.portal.portalMode = <%= uicomponent.getModeState() %>;
+			eXo.portal.portalEditLevel = '<%= uicomponent.getEditLevel().toString() %>';
+			eXo.portal.fullPreview = '<%= org.exoplatform.portal.webui.page.UIPage.isFullPreview() %>';
 			eXo.session.level = "$sessionAliveLevel";
 			eXo.session.canKeepState = $canKeepState;
 			eXo.session.isOpen = <%=uicomponent.isSessionOpen()%> ;
@@ -102,22 +104,22 @@
 		</script>
       <%
 		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
-		 if (headerElements != null) 
+		 if (headerElements != null)
 		 {
 		    for (element in headerElements)
 		    {
-		    	print(element);  
+		    	print(element);
 		    }
-		 }		 
+		 }
 		%>
                 <!-- 508 Compliancy -->
                 <style type="text/css">
-                  .skipHidden { 
+                  .skipHidden {
                      position:absolute !important;
                      left:-10000px !important;
-                     top:auto !important; 
-                     width:1px !important; 
-                     height:1px !important; 
+                     top:auto !important;
+                     width:1px !important;
+                     height:1px !important;
                      overflow:hidden !important; }
 
                   html[dir="rtl"] .skipHidden {
@@ -149,16 +151,16 @@
 	<body style="height: 100%;">
 	<div class="skipHidden"><a href="#skipContent"><%=_ctx.appRes("UIPortalApplication.msg.skipContent")%></a></div>
 	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
-			
+
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
 			<div class="LoadingContainer">
 				<div class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></div>
 				<span class="LoadingProgressBar"></span>
-				
-				<div class="UIAction"> 
+
+				<div class="UIAction">
 					<a onclick="javascript:ajaxAbort();" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPortalApplication.label.Abort")%></a>
 				</div>
-			
+
 			</div>
 		</div>
-	
+

@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.exoplatform.portal.config.UserACL;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -29,27 +31,32 @@ import java.util.List;
  */
 public class DashboardData extends ContainerData {
 
+    private static final long serialVersionUID = 4972445293885684663L;
+
     public DashboardData(String storageId, String id, String name, String icon, String template, String factoryId,
             String title, String description, String width, String height, List<String> accessPermissions,
+            List<String> moveAppsPermissions, List<String> moveContainersPermissions,
             List<ComponentData> children) {
-        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
+        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions,
+                moveContainersPermissions, moveContainersPermissions, children);
     }
 
     /** . */
     static final DashboardData INITIAL_DASHBOARD;
 
     static {
+        final List<String> everyOneSingleton = Collections.singletonList(UserACL.EVERYONE);
         List<ComponentData> children = new ArrayList<ComponentData>();
         for (int i = 0; i < 3; i++) {
             ContainerData row = new ContainerData(null, null, null, null,
                     "classpath:groovy/dashboard/webui/component/UIContainer.gtmpl", null, null, null, null, null,
-                    Collections.<String> emptyList(), Collections.<ComponentData> emptyList());
+                    Collections.<String> emptyList(), everyOneSingleton, everyOneSingleton, Collections.<ComponentData> emptyList());
             children.add(row);
         }
 
         INITIAL_DASHBOARD = new DashboardData(null, null, null, null,
                 "classpath:groovy/dashboard/webui/component/UIColumnContainer.gtmpl", null, null, null, null, null,
-                Collections.<String> emptyList(), Collections.unmodifiableList(children));
+                Collections.<String> emptyList(), everyOneSingleton, everyOneSingleton, Collections.unmodifiableList(children));
     }
 
 }

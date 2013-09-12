@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
@@ -87,9 +88,7 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
                     page.setTitle(DEFAULT_TAB_NAME);
 
                     //
-                    PageState pageState = new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(),
-                            page.getFactoryId(), page.getAccessPermissions() != null ? Arrays.asList(page
-                                    .getAccessPermissions()) : null, page.getEditPermission());
+                    PageState pageState = PageUtils.toPageState(page);
                     configService.getPageService().savePage(new PageContext(page.getPageKey(), pageState));
 
                     //

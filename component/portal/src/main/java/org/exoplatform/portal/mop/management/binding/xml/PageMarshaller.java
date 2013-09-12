@@ -24,7 +24,11 @@ package org.exoplatform.portal.mop.management.binding.xml;
 
 import static org.gatein.common.xml.stax.navigator.Exceptions.unexpectedElement;
 import static org.gatein.common.xml.stax.navigator.Exceptions.unknownElement;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.*;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.createNavigator;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseRequiredContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.requiresChild;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
 
@@ -37,6 +41,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.serialize.JibxArraySerialize;
+import org.gatein.common.xml.stax.navigator.Exceptions;
+import org.gatein.common.xml.stax.navigator.StaxNavUtils;
 import org.gatein.common.xml.stax.writer.StaxWriter;
 import org.gatein.common.xml.stax.writer.WritableValueTypes;
 import org.gatein.common.xml.stax.writer.builder.StaxWriterBuilder;
@@ -124,6 +131,9 @@ public class PageMarshaller extends AbstractMarshaller<Page.PageSet> {
 
         writeOptionalElement(writer, Element.SHOW_MAX_WINDOW, WritableValueTypes.BOOLEAN, page.isShowMaxWindow());
 
+        marshalPermissions(writer, Element.MOVE_APPLICATIONS_PERMISSIONS, page.getMoveAppsPermissions());
+        marshalPermissions(writer, Element.MOVE_CONTAINERS_PERMISSIONS, page.getMoveContainersPermissions());
+
         List<ModelObject> children = page.getChildren();
         for (ModelObject child : children) {
             marshalModelObject(writer, child);
@@ -161,6 +171,14 @@ public class PageMarshaller extends AbstractMarshaller<Page.PageSet> {
                     break;
                 case SHOW_MAX_WINDOW:
                     page.setShowMaxWindow(parseRequiredContent(navigator, ValueType.BOOLEAN));
+                    current = navigator.sibling();
+                    break;
+                case MOVE_APPLICATIONS_PERMISSIONS:
+                    page.setMoveAppsPermissions(unmarshalPermissions(navigator, false));
+                    current = navigator.sibling();
+                    break;
+                case MOVE_CONTAINERS_PERMISSIONS:
+                    page.setMoveContainersPermissions(unmarshalPermissions(navigator, false));
                     current = navigator.sibling();
                     break;
                 case CONTAINER:

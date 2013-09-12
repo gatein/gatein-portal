@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
@@ -275,10 +276,12 @@ public class PortalImpl implements Portal {
             throw new EntityNotFoundException("Site " + pageId.getSiteId() + " doesn't exist");
         }
 
-        Permission access = Permission.everyone();
         Permission edit = Permission.any("platform", "administrators");
-        PageState pageState = new PageState(pageId.getPageName(), null, false, null, Arrays.asList(Util.from(access)),
-            Util.from(edit)[0]);
+        List<String> moveAppsPermissions = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
+        List<String> moveContainersPermissions = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
+
+        PageState pageState = new PageState(pageId.getPageName(), null, false, null, Arrays.asList(Util.from(Permission
+                .everyone())), Util.from(edit)[0], moveAppsPermissions, moveContainersPermissions);
 
         PageImpl p = new PageImpl(new PageContext(Util.from(pageId), pageState));
         p.setCreate(true);

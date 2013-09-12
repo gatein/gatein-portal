@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.portal;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -37,13 +36,13 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
-import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageForm;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -53,6 +52,7 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.organization.OrganizationService;
@@ -60,7 +60,6 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -296,8 +295,6 @@ public class UIPortalComposer extends UIContainer {
                     break;
             }
         }
-        JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
-        jsManager.require("SHARED/portal", "portal").addScripts("eXo.portal.portalMode=" + portalMode + ";");
     }
 
     public void processRender(WebuiRequestContext context) throws Exception {
@@ -307,23 +304,11 @@ public class UIPortalComposer extends UIContainer {
             UITabPane uiTabPane = this.getChild(UITabPane.class);
             UIComponent uiComponent = uiTabPane.getChildById(uiTabPane.getSelectedTabId());
             if (uiComponent instanceof UIApplicationList) {
-                uiPortalApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
-//                if (portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE) {
-//                    Util.showComponentEditInViewMode(UIPortlet.class);
-//                } else {
-//                    uiPortalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-//                    Util.showComponentLayoutMode(UIPortlet.class);
-//                }
+                uiPortalApp.setDefaultEditMode(ComponentTab.APPLICATIONS, uiPortalApp.getEditLevel());
             } else if (uiComponent instanceof UIContainerList) {
-                uiPortalApp.setDefaultEditMode(ComponentTab.CONTAINERS);
-//                if (portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE) {
-//                    Util.showComponentEditInViewMode(org.exoplatform.portal.webui.container.UIContainer.class);
-//                } else {
-//                    uiPortalApp.setModeState(UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE);
-//                    Util.showComponentLayoutMode(org.exoplatform.portal.webui.container.UIContainer.class);
-//                }
+                uiPortalApp.setDefaultEditMode(ComponentTab.CONTAINERS, uiPortalApp.getEditLevel());
             }
-            switch (uiPortalApp.getDefaultEditMode()) {
+            switch (UIPortalApplication.getDefaultEditMode()) {
                 case PREVIEW:
                     Util.showComponentEditInViewMode();
                     break;
@@ -371,20 +356,22 @@ public class UIPortalComposer extends UIContainer {
     }
 
     public static class AbortSiteEditionActionListener extends EventListener<UIPortalComposer> {
-        public void execute(Event<UIPortalComposer> event) throws Exception {
-            PortalRequestContext prContext = Util.getPortalRequestContext();
-            UIPortalApplication uiPortalApp = (UIPortalApplication) prContext.getUIApplication();
+
+        protected void closeComposer(UIPortalApplication uiPortalApp, UIWorkingWorkspace uiWorkingWS) {
+
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            prContext.ignoreAJAXUpdateOnPortlets(true);
+
             UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
             uiEditWS.getComposer().setEditted(false);
             uiEditWS.setRendered(false);
-            uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-            prContext.ignoreAJAXUpdateOnPortlets(true);
-            UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
 
-            UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
-            siteBody.setUIComponent(uiPortal);
+        }
+
+        protected void fireChangeNode(WebuiRequestContext prContext, UIPortalApplication uiPortalApp, UIPortal uiPortal) throws Exception {
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
 
             UserNode currentNode = uiPortal.getSelectedUserNode();
             SiteKey siteKey = currentNode.getNavigation().getKey();
@@ -392,10 +379,23 @@ public class UIPortalComposer extends UIContainer {
                     PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
             uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
+
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            JavascriptManager jsManager = prContext.getJavascriptManager();
-            jsManager.require("SHARED/portal", "portal").addScripts(
-                    "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            Util.updatePortalMode();
+        }
+
+        public void execute(Event<UIPortalComposer> event) throws Exception {
+
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            UIPortalApplication uiPortalApp = (UIPortalApplication) prContext.getUIApplication();
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+
+            closeComposer(uiPortalApp, uiWorkingWS);
+
+            UIPortal uiPortal = uiWorkingWS.restoreUIPortal();
+
+            fireChangeNode(prContext, uiPortalApp, uiPortal);
+
         }
 
     }
@@ -460,9 +460,7 @@ public class UIPortalComposer extends UIContainer {
                 uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
                 prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-                JavascriptManager jsManager = prContext.getJavascriptManager();
-                jsManager.require("SHARED/portal", "portal").addScripts(
-                        "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+                Util.updatePortalMode();
             } else {
                 if (editPortal.getName().equals(prContext.getPortalOwner())) {
                     HttpServletRequest request = prContext.getRequest();
@@ -528,6 +526,15 @@ public class UIPortalComposer extends UIContainer {
                     return;
             }
 
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+
+            UIComponent editComponent = uiEditWS.getUIComponent();
+            if (editComponent instanceof UIPortal) {
+                UIPortal editPortal = (UIPortal) uiEditWS.getUIComponent();
+                editPortal.setHeaderAndFooterRendered(UIPage.isFullPreviewInPageEditor() || uiPortalApp.getEditLevel() == EditLevel.EDIT_SITE);
+            }
+
             event.getSource().updateWorkspaceComponent();
             Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
         }
@@ -581,35 +588,28 @@ public class UIPortalComposer extends UIContainer {
         }
     }
 
-    public static class AbortPageEditionActionListener extends EventListener<UIPortalComposer> {
+    public static class AbortPageEditionActionListener extends AbortSiteEditionActionListener {
         public void execute(Event<UIPortalComposer> event) throws Exception {
-            UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
-            UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            UIPortalApplication uiPortalApp = (UIPortalApplication) prContext.getUIApplication();
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+
+            try {
+                uiWorkingWS.restoreUIPortal();
+            } catch (IllegalStateException e) {
+                /* It is expected that in some cases, there will be nothing to restore. */
+            }
+
             UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             uiToolPanel.setUIComponent(null);
-            UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-            uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-            uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-            PortalRequestContext prContext = Util.getPortalRequestContext();
-            prContext.ignoreAJAXUpdateOnPortlets(true);
-
             UIPortal uiPortal = uiPortalApp.getCurrentSite();
             uiPortal.setRenderSibling(UIPortal.class);
-            UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
-            composer.setEditted(false);
+
+            closeComposer(uiPortalApp, uiWorkingWS);
 
             uiPortal.refreshUIPage();
 
-            UserNode currentNode = uiPortal.getSelectedUserNode();
-            SiteKey siteKey = currentNode.getNavigation().getKey();
-            PageNodeEvent<UIPortalApplication> pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp,
-                    PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
-            uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
-            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-            jsManager.require("SHARED/portal", "portal").addScripts(
-                    "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
-            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", null);
+            fireChangeNode(prContext, uiPortalApp, uiPortal);
         }
     }
 
@@ -622,9 +622,10 @@ public class UIPortalComposer extends UIContainer {
     public static class FinishPageEditionActionListener extends EventListener<UIPortalComposer> {
         public void execute(Event<UIPortalComposer> event) throws Exception {
             UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-            UIPortal uiPortal = uiPortalApp.getCurrentSite();
             UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
             UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
+
+            UIPortal uiPortal = uiPortalApp.getCurrentSite();
             UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
 
@@ -634,7 +635,16 @@ public class UIPortalComposer extends UIContainer {
 
             UserPortalConfigService portalConfigService = uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
 
-            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", null);
+            /* Put the portal back in place as we have removed it in
+             * org.exoplatform.portal.webui.workspace.UIMainActionListener.EditInlineActionListener.execute(Event<UIWorkingWorkspace>) */
+            UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
+            UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+            UIComponent editComponent = uiEditWS.getUIComponent();
+            if (editComponent instanceof UIPortal) {
+                UIPortal editPortal = (UIPortal) editComponent;
+                editPortal.setHeaderAndFooterRendered(true);
+                siteBody.setUIComponent(editPortal);
+            }
 
             /*
              * if it is a edition of the current page and it is not available to current remote user anymore.
@@ -654,10 +664,7 @@ public class UIPortalComposer extends UIContainer {
                         PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
                 uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
-                JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-                jsManager.require("SHARED/portal", "portal").addScripts(
-                        "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
-
+                Util.updatePortalMode();
                 return;
             }
             UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
@@ -678,9 +685,7 @@ public class UIPortalComposer extends UIContainer {
             DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
             PageService pageService = uiWorkingWS.getApplicationComponent(PageService.class);
             try {
-                PageState pageState = new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(),
-                        page.getFactoryId(), page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions())
-                                : null, page.getEditPermission());
+                PageState pageState = PageUtils.toPageState(page);
                 pageService.savePage(new PageContext(pageKey, pageState));
                 dataService.save(page);
             } catch (StaleModelException ex) {
@@ -715,9 +720,7 @@ public class UIPortalComposer extends UIContainer {
                     PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
             uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
-            JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-            jsManager.require("SHARED/portal", "portal").addScripts(
-                    "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            Util.updatePortalMode();
         }
     }
 
@@ -733,7 +736,6 @@ public class UIPortalComposer extends UIContainer {
                 Event<UIComponent> uiEvent = wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
                 uiEvent.broadcast();
             }
-            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", null);
         }
     }
 }

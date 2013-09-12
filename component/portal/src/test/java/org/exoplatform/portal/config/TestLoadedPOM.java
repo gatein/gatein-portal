@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.config;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -148,7 +150,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
 
         assertEquals("test", portal.getName());
         assertEquals("en", portal.getLocale());
-        assertTrue(Arrays.equals(new String[] { "test_access_permissions" }, portal.getAccessPermissions()));
+        assertArrayEquals(new String[] { "test_portal_access_permissions" }, portal.getAccessPermissions());
         assertEquals("test_edit_permission", portal.getEditPermission());
         assertEquals("test_skin", portal.getSkin());
         assertEquals("test_prop_value", portal.getProperty("prop_key"));

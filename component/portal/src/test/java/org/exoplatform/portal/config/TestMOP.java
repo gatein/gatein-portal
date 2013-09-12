@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.config;
 
+import static org.junit.Assert.assertArrayEquals;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,6 +36,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
@@ -63,9 +66,6 @@ import org.gatein.mop.api.workspace.ui.UIWindow;
 public class TestMOP extends AbstractConfigTest {
 
     /** . */
-    private UserPortalConfigService portalConfigService;
-
-    /** . */
     private DataStorage storage;
 
     /** . */
@@ -88,7 +88,6 @@ public class TestMOP extends AbstractConfigTest {
         super.setUp();
         begin();
         PortalContainer container = getContainer();
-        portalConfigService = (UserPortalConfigService) container.getComponentInstanceOfType(UserPortalConfigService.class);
         storage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
         pageService = (PageService) container.getComponentInstanceOfType(PageService.class);
         mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
@@ -158,17 +157,19 @@ public class TestMOP extends AbstractConfigTest {
     }
 
     public void testLoadPortal() throws Exception {
-        PortalConfig portal = storage.getPortalConfig("test");
-        assertNotNull(portal);
+        PortalConfig testPortal = storage.getPortalConfig("test");
+        assertNotNull(testPortal);
 
-        assertEquals("test", portal.getName());
-        assertEquals("en", portal.getLocale());
-        assertTrue(Arrays.equals(new String[] { "test_access_permissions" }, portal.getAccessPermissions()));
-        assertEquals("test_edit_permission", portal.getEditPermission());
-        assertEquals("test_skin", portal.getSkin());
-        assertEquals("test_prop_value", portal.getProperty("prop_key"));
-        assertNull(portal.getLabel());
-        assertNull(portal.getDescription());
+        assertEquals("test", testPortal.getName());
+        assertEquals("en", testPortal.getLocale());
+        assertArrayEquals(new String[] { "test_portal_access_permissions" }, testPortal.getAccessPermissions());
+        assertEquals("test_edit_permission", testPortal.getEditPermission());
+        assertEquals("test_skin", testPortal.getSkin());
+        assertEquals("test_prop_value", testPortal.getProperty("prop_key"));
+        assertNull(testPortal.getLabel());
+        assertNull(testPortal.getDescription());
+
+
     }
 
     public void testLoadPageWithoutPageId() throws Exception {
@@ -204,17 +205,17 @@ public class TestMOP extends AbstractConfigTest {
         assertEquals("container_1_title", container1.getTitle());
         assertEquals("container_1_icon", container1.getIcon());
         assertEquals("container_1_template", container1.getTemplate());
-        assertTrue(Arrays.equals(new String[] { "container_1_access_permissions" }, container1.getAccessPermissions()));
+        assertArrayEquals(new String[] { "container_1_access_permissions" }, container1.getAccessPermissions());
         assertEquals("container_1_factory_id", container1.getFactoryId());
         assertEquals("container_1_description", container1.getDescription());
         assertEquals("container_1_width", container1.getWidth());
         assertEquals("container_1_height", container1.getHeight());
 
         //
-        Application application1 = (Application) children.get(1);
+        Application<?> application1 = (Application<?>) children.get(1);
         assertEquals("application_1_theme", application1.getTheme());
         assertEquals("application_1_title", application1.getTitle());
-        assertTrue(Arrays.equals(new String[] { "application_1_access_permissions" }, application1.getAccessPermissions()));
+        assertArrayEquals(new String[] { "application_1_access_permissions" }, application1.getAccessPermissions());
         assertEquals(true, application1.getShowInfoBar());
         assertEquals(true, application1.getShowApplicationState());
         assertEquals(true, application1.getShowApplicationMode());
@@ -274,26 +275,26 @@ public class TestMOP extends AbstractConfigTest {
     }
 
     public void testSavePortal() throws Exception {
-        Site portal = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "test");
-        assertNotNull(portal);
+        Site testSite = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "test");
+        assertNotNull(testSite);
 
         //
-        assertTrue(portal.isAdapted(ProtectedResource.class));
-        ProtectedResource pr = portal.adapt(ProtectedResource.class);
-        assertEquals(Arrays.asList("test_access_permissions"), pr.getAccessPermissions());
+        assertTrue(testSite.isAdapted(ProtectedResource.class));
+        ProtectedResource pr = testSite.adapt(ProtectedResource.class);
+        assertEquals(Collections.singletonList("test_portal_access_permissions"), pr.getAccessPermissions());
         assertEquals("test_edit_permission", pr.getEditPermission());
 
         //
-        assertEquals("test", portal.getName());
-        Attributes attrs = portal.getAttributes();
+        assertEquals("test", testSite.getName());
+        Attributes attrs = testSite.getAttributes();
         assertEquals("en", attrs.getString("locale"));
         assertEquals("test_skin", attrs.getString("skin"));
         assertEquals("test_prop_value", attrs.getString("prop_key"));
 
         //
-        org.gatein.mop.api.workspace.Page layout = portal.getRootNavigation().getTemplatized().getTemplate();
+        org.gatein.mop.api.workspace.Page layout = testSite.getRootNavigation().getTemplatized().getTemplate();
         assertNotNull(layout);
-        assertSame(portal.getRootPage().getChild("templates").getChild("default"), layout);
+        assertSame(testSite.getRootPage().getChild("templates").getChild("default"), layout);
     }
 
     public void testSavePageWithoutPageId() throws Exception {
@@ -314,7 +315,7 @@ public class TestMOP extends AbstractConfigTest {
         //
         assertTrue(testPage.isAdapted(ProtectedResource.class));
         ProtectedResource pr = testPage.adapt(ProtectedResource.class);
-        assertEquals(Arrays.asList("test_access_permissions"), pr.getAccessPermissions());
+        assertEquals(Collections.singletonList("test_access_permissions"), pr.getAccessPermissions());
         assertEquals("test_edit_permission", pr.getEditPermission());
 
         //
@@ -372,5 +373,122 @@ public class TestMOP extends AbstractConfigTest {
         assertEquals("application/portlet", customization.getType().getMimeType());
         assertEquals("web/BannerPortlet", customization.getContentId());
         // assertEquals("banner", customization.getName());
+    }
+
+    public void testRestrictedPortal() throws Exception {
+        /* Portal */
+        PortalConfig testPortal = storage.getPortalConfig("test");
+        assertNotNull(testPortal);
+
+        Container testLayout = testPortal.getPortalLayout();
+        /* There are no move-apps-permissions or move-containers-permissions in the underlying portal.xml file
+         * therefore the defaults defined in binding.xml should made effective on import */
+        assertArrayEquals(new String[] {UserACL.EVERYONE}, testLayout.getMoveAppsPermissions());
+        assertArrayEquals(new String[] {UserACL.EVERYONE}, testLayout.getMoveContainersPermissions());
+
+        /* In classic/portal.xml, we have set explicit <move-apps-permissions>
+         * and <move-containers-permissions> */
+        PortalConfig classicPortal = storage.getPortalConfig("classic");
+        assertNotNull(classicPortal);
+        Container classicLayout = classicPortal.getPortalLayout();
+        assertArrayEquals(new String[] {"classic-portal-move-apps-permissions"}, classicLayout.getMoveAppsPermissions());
+        assertArrayEquals(new String[] {"classic-portal-move-containers-permissions"}, classicLayout.getMoveContainersPermissions());
+
+
+        Site testSite = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "test");
+        assertNotNull(testSite);
+        org.gatein.mop.api.workspace.Page layout = testSite.getRootNavigation().getTemplatized().getTemplate();
+        /* layoutRoot corresponds to <portal-layout> in test/portal.xml */
+        UIContainer layoutRoot = layout.getRootComponent();
+        /* There are no move-apps-permissions or move-containers-permissions in the underlying portal.xml file
+         * therefore the defaults defined in binding.xml should made effective on import */
+        assertTrue(layoutRoot.isAdapted(ProtectedContainer.class));
+        ProtectedContainer pc = layoutRoot.adapt(ProtectedContainer.class);
+        assertEquals(Collections.singletonList(UserACL.EVERYONE), pc.getMoveAppsPermissions());
+        assertEquals(Collections.singletonList(UserACL.EVERYONE), pc.getMoveContainersPermissions());
+
+        /* In classic/portal.xml, we have set explicit <move-apps-permissions>
+         * and <move-containers-permissions> */
+        Site classicSite = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "classic");
+        assertNotNull(classicSite);
+        UIContainer classicLayoutRoot = classicSite.getRootNavigation().getTemplatized().getTemplate().getRootComponent();
+        assertTrue(classicLayoutRoot.isAdapted(ProtectedContainer.class));
+        pc = classicLayoutRoot.adapt(ProtectedContainer.class);
+        assertEquals(Collections.singletonList("classic-portal-move-apps-permissions"), pc.getMoveAppsPermissions());
+        assertEquals(Collections.singletonList("classic-portal-move-containers-permissions"), pc.getMoveContainersPermissions());
+
+    }
+
+    public void testRestrictedPage() throws Exception {
+        Page page = storage.getPage("portal::test::test1");
+        assertNotNull(page);
+
+        PageContext pageContext = pageService.loadPage(page.getPageKey());
+        assertNotNull(pageContext);
+
+        /* There are no move-apps-permissions or move-containers-permissions in the underlying pages.xml file
+         * for test1 page. Therefore, the defaults defined in binding.xml should made effective on import */
+        assertEquals(Collections.singletonList(UserACL.EVERYONE), pageContext.getState().getMoveAppsPermissions());
+        assertEquals(Collections.singletonList(UserACL.EVERYONE), pageContext.getState().getMoveContainersPermissions());
+
+        /* In classic/pages.xml, we have set explicit <move-apps-permissions>
+         * and <move-containers-permissions> for add-component-test-page and some of its subcomponents */
+        Page addComponentTestPage = storage.getPage("portal::classic::add-component-test-page");
+        assertNotNull(addComponentTestPage);
+        PageContext addComponentTestPageContext = pageService.loadPage(addComponentTestPage.getPageKey());
+        assertEquals(
+                Arrays.asList("*:/platform/page-move-apps-permissions-1", "*:/platform/page-move-apps-permissions-2"),
+                addComponentTestPageContext.getState().getMoveAppsPermissions());
+        assertEquals(
+                Arrays.asList("*:/platform/page-move-containers-permissions-1", "*:/platform/page-move-containers-permissions-2"),
+                addComponentTestPageContext.getState().getMoveContainersPermissions());
+
+        ModelObject addComponentTestContainer = addComponentTestPage.getChildren().get(0);
+
+        assertTrue(addComponentTestContainer instanceof Container);
+        assertArrayEquals(
+                new String[] {"*:/platform/container-move-apps-permissions-1", "*:/platform/container-move-apps-permissions-2"},
+                ((Container) addComponentTestContainer).getMoveAppsPermissions());
+        assertArrayEquals(
+                new String[] {"*:/platform/container-move-containers-permissions-1", "*:/platform/container-move-containers-permissions-2"},
+                ((Container) addComponentTestContainer).getMoveContainersPermissions());
+
+        Site testPortal = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "test");
+        org.gatein.mop.api.workspace.Page testRootPage = testPortal.getRootPage();
+        org.gatein.mop.api.workspace.Page pages = testRootPage.getChild("pages");
+        org.gatein.mop.api.workspace.Page testPage = pages.getChild("test1");
+        assertNotNull(testPage);
+
+        //
+        assertTrue(testPage.isAdapted(ProtectedResource.class));
+        ProtectedResource pr = testPage.adapt(ProtectedResource.class);
+        assertEquals(Collections.singletonList("test_access_permissions"), pr.getAccessPermissions());
+        assertEquals("test_edit_permission", pr.getEditPermission());
+
+        assertTrue(testPage.isAdapted(ProtectedContainer.class));
+        ProtectedContainer pc = testPage.adapt(ProtectedContainer.class);
+        assertEquals(Collections.singletonList(UserACL.EVERYONE), pc.getMoveAppsPermissions());
+        assertEquals(Collections.singletonList(UserACL.EVERYONE), pc.getMoveContainersPermissions());
+
+
+        Site classicPortal = session.getWorkspace().getSite(ObjectType.PORTAL_SITE, "classic");
+        org.gatein.mop.api.workspace.Page addComponentTestPageMop = classicPortal.getRootPage().getChild("pages").getChild("add-component-test-page");
+        assertNotNull(addComponentTestPageMop);
+
+        assertTrue(addComponentTestPageMop.isAdapted(ProtectedContainer.class));
+        pc = addComponentTestPageMop.adapt(ProtectedContainer.class);
+        assertEquals(Arrays.asList("*:/platform/page-move-apps-permissions-1",
+                "*:/platform/page-move-apps-permissions-2"), pc.getMoveAppsPermissions());
+        assertEquals(Arrays.asList("*:/platform/page-move-containers-permissions-1",
+                "*:/platform/page-move-containers-permissions-2"), pc.getMoveContainersPermissions());
+
+        UIComponent addComponentTestContainerMop = addComponentTestPageMop.getRootComponent().getComponents().get(0);
+        assertTrue(addComponentTestContainerMop.isAdapted(ProtectedContainer.class));
+        pc = addComponentTestContainerMop.adapt(ProtectedContainer.class);
+        assertEquals(Arrays.asList("*:/platform/container-move-apps-permissions-1",
+                "*:/platform/container-move-apps-permissions-2"), pc.getMoveAppsPermissions());
+        assertEquals(Arrays.asList("*:/platform/container-move-containers-permissions-1",
+                "*:/platform/container-move-containers-permissions-2"), pc.getMoveContainersPermissions());
+
     }
 }

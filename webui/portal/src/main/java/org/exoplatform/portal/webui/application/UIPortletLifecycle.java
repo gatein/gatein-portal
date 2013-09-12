@@ -186,7 +186,7 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                 // Check mode of portal, portlet and permission for viewable
                 if ((portalMode == UIPortalApplication.NORMAL_MODE || portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE
                         || portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE || uicomponent.getCurrentPortletMode()
-                        .equals(PortletMode.EDIT)) && uicomponent.hasPermission()) {
+                        .equals(PortletMode.EDIT)) && uicomponent.hasAccessPermission()) {
                     PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
                     markup = uicomponent.generateRenderMarkup(response, prcontext);
                 } else {

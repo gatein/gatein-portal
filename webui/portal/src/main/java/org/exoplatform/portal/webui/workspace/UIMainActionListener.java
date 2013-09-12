@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -41,6 +42,7 @@ import org.exoplatform.portal.webui.portal.UIPortalForm;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -82,7 +84,7 @@ public class UIMainActionListener {
                 return;
             }
 
-            uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
+            uiApp.setDefaultEditMode(ComponentTab.APPLICATIONS, EditLevel.EDIT_PAGE);
             uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
 
             UIPortalComposer portalComposer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class);
@@ -122,46 +124,134 @@ public class UIMainActionListener {
     }
 
     public static class EditInlineActionListener extends EventListener<UIWorkingWorkspace> {
+
+        protected boolean authorizeEditSite(UIPortal currentPortal, UIPortalApplication portalApp) {
+            UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
+            if (userACL.hasEditPermissionOnPortal(currentPortal.getSiteType().getName(), currentPortal.getName(),
+                    currentPortal.getEditPermission())) {
+                return true;
+            } else {
+                portalApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
+                        new String[] { currentPortal.getName() }));
+                return false;
+            }
+        }
+
+
+        protected boolean authorizeEditPage(UIPortal currentPortal, UIPortalApplication portalApp) {
+            return true;
+        }
+
+        protected void configureComposer(UIPortalComposer uiComposer) {
+            uiComposer.setComponentConfig(UIPortalComposer.class, null);
+            uiComposer.setId(UIPortalComposer.UIPORTAL_COMPOSER);
+        }
+
         public void execute(Event<UIWorkingWorkspace> event) throws Exception {
             PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
             UIPortalApplication portalApp = (UIPortalApplication) pcontext.getUIApplication();
             UIPortal currentPortal = portalApp.getCurrentSite();
             UIWorkingWorkspace uiWorkingWS = event.getSource();
 
-            UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-            if (!userACL.hasEditPermissionOnPortal(currentPortal.getSiteType().getName(), currentPortal.getName(),
-                    currentPortal.getEditPermission())) {
-                portalApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
-                        new String[] { currentPortal.getName() }));
-                return;
+            if (authorizeEditSite(currentPortal, portalApp)) {
+                DataStorage dataStorage = portalApp.getApplicationComponent(DataStorage.class);
+                PortalConfig portalConfig = dataStorage.getPortalConfig(pcontext.getSiteType().getName(), pcontext.getSiteName());
+                UIPortal transientPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
+                PortalDataMapper.toUIPortal(transientPortal, portalConfig);
+                transientPortal.setNavPath(currentPortal.getNavPath());
+                transientPortal.refreshUIPage();
+                authorizeEditPage(currentPortal, portalApp);
+
+                if (authorizeEditPage(currentPortal, portalApp)) {
+                    uiWorkingWS.setBackupUIPortal(currentPortal);
+                    portalApp.setDefaultEditMode(ComponentTab.APPLICATIONS, getEditLevel());
+
+                    configurePortal(portalApp, transientPortal);
+
+                    UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+                    uiEditWS.setUIComponent(transientPortal);
+                    UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
+                    siteBody.setUIComponent(null);
+
+                    UIPortalComposer uiComposer = uiEditWS.getComposer().setRendered(true);
+                    configureComposer(uiComposer);
+                    uiComposer.setShowControl(true);
+                    uiComposer.setEditted(false);
+                    uiComposer.setCollapse(false);
+
+                    uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
+                    pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
+                    pcontext.ignoreAJAXUpdateOnPortlets(true);
+                }
             }
-
-            DataStorage dataStorage = portalApp.getApplicationComponent(DataStorage.class);
-            PortalConfig portalConfig = dataStorage.getPortalConfig(pcontext.getSiteType().getName(), pcontext.getSiteName());
-            UIPortal transientPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-            PortalDataMapper.toUIPortal(transientPortal, portalConfig);
-            transientPortal.setNavPath(currentPortal.getNavPath());
-            transientPortal.refreshUIPage();
-
-            uiWorkingWS.setBackupUIPortal(currentPortal);
-            portalApp.setDefaultEditMode(ComponentTab.APPLICATIONS);
-
-            UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
-            uiEditWS.setUIComponent(transientPortal);
-            UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
-            siteBody.setUIComponent(null);
-
-            UIPortalComposer uiComposer = uiEditWS.getComposer().setRendered(true);
-            uiComposer.setComponentConfig(UIPortalComposer.class, null);
-            uiComposer.setShowControl(true);
-            uiComposer.setEditted(false);
-            uiComposer.setCollapse(false);
-            uiComposer.setId(UIPortalComposer.UIPORTAL_COMPOSER);
-
-            uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
-            pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            pcontext.ignoreAJAXUpdateOnPortlets(true);
         }
+
+
+        /**
+         * @param transientPortal
+         */
+        protected void configurePortal(UIPortalApplication portalApp, UIPortal transientPortal) {
+        }
+
+
+        protected EditLevel getEditLevel() {
+            return EditLevel.EDIT_SITE;
+        }
+    }
+
+    public static class EditPageInFullPreviewActionListener extends EditInlineActionListener {
+
+        /**
+         * @see org.exoplatform.portal.webui.workspace.UIMainActionListener.EditInlineActionListener#authorizeEdit(org.exoplatform.portal.webui.portal.UIPortal, org.exoplatform.portal.webui.workspace.UIPortalApplication)
+         */
+        @Override
+        public boolean authorizeEditSite(UIPortal currentPortal, UIPortalApplication portalApp) {
+            return true;
+        }
+
+        /**
+         * @see org.exoplatform.portal.webui.workspace.UIMainActionListener.EditInlineActionListener#authorizeEditPage(org.exoplatform.portal.webui.portal.UIPortal, org.exoplatform.portal.webui.workspace.UIPortalApplication)
+         */
+        @Override
+        public boolean authorizeEditPage(UIPortal currentPortal, UIPortalApplication portalApp) {
+            // check edit permission for page
+            UserACL userACL = currentPortal.getApplicationComponent(UserACL.class);
+            UIPage uiPage = currentPortal.findFirstComponentOfType(UIPage.class);
+            Page page = PortalDataMapper.toPageModel(uiPage);
+            if (userACL.hasEditPermission(page)) {
+                return true;
+            } else {
+                portalApp.addMessage(
+                        new ApplicationMessage("UIPortalManagement.msg.Invalid-EditPage-Permission", null));
+                return false;
+            }
+        }
+
+        protected void configureComposer(UIPortalComposer uiComposer) {
+            uiComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
+            uiComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
+        }
+
+        /**
+         * @see org.exoplatform.portal.webui.workspace.UIMainActionListener.EditInlineActionListener#getEditLevel()
+         */
+        @Override
+        protected EditLevel getEditLevel() {
+            return EditLevel.EDIT_PAGE;
+        }
+
+        /* (non-Javadoc)
+         * @see org.exoplatform.portal.webui.workspace.UIMainActionListener.EditInlineActionListener#adjustPortal(org.exoplatform.portal.webui.portal.UIPortal)
+         */
+        @Override
+        protected void configurePortal(UIPortalApplication portalApp, UIPortal transientPortal) {
+            int modeState = portalApp.getModeState();
+            if (modeState == UIPortalApplication.APP_BLOCK_EDIT_MODE
+                    || modeState == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {
+                transientPortal.setHeaderAndFooterRendered(false);
+            }
+        }
+
     }
 
     public static class CreatePortalActionListener extends EventListener<UIWorkingWorkspace> {

@@ -6,51 +6,15 @@ import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.util.Util;
 
-int portalMode = _ctx.getRequestContext().getUIApplication().getModeState();
-boolean editFromSiteEditor = Util.getPortalRequestContext().getRequest().getSession().getAttribute("editFromSiteEditor") != null;
-boolean fullPreviewEnabled = org.exoplatform.portal.webui.page.UIPage.isFullPreview();
-if (portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE && editFromSiteEditor && fullPreviewEnabled) {
-	UIPortal uiPortal = _ctx.getRequestContext().getUIApplication().getCurrentSite();
+def rcontext = _ctx.getRequestContext();
+UIPortalApplication uiPortalApp = rcontext.getUIApplication();
+
+String permissionClasses = "";
+if (uiPortalApp.isEditing()) {
+	permissionClasses = uicomponent.getPermissionClasses();
+}
 %>
-<div class="UIPortal" id="UIPortal-<%= uiPortal.getId() %>">
-	<div class="UIComponentBlock">
-		<div class="VIEW-PORTAL VIEW-BLOCK">
-		<%
-		for (UIComponent uiComponent : uiPortal.getChildren()) {
-			if (!(uiComponent instanceof UIPageBody)) {
-		%>
-			<div id="<%= uiComponent.getId() %>" class="NON-EDITABLE">
-				<div class="UIRowContainer">
-				<%
-					uiPortal.renderChild(uiComponent);
-				%>
-				</div>
-			</div>
-		<%
-			} else {
-		%>
-			<div class="UIPageBody" id="UIPageBody">
-				<div class="UIComponent UIComponentBlock">
-					<div class="VIEW-PAGEBODY VIEW-BLOCK" id="PAGEBODY-VIEW-BLOCK">
-						<div id="UIPage-${uicomponent.id}">
-							<div class="UIRowContainer">
-								<%uicomponent.renderChildren()%>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		<%
-			}
-		}
-		%>
-		</div>
-	</div>
-</div>
-<%
-} else {
-%>
-<div class="UIPage" id="UIPage-${uicomponent.id}">
+<div class="UIPage<%=permissionClasses%>" id="UIPage-${uicomponent.id}">
 	<div class="UIComponentBlock">
 		<div class="VIEW-PAGE">
 			<div id="UIPage">
@@ -61,6 +25,3 @@ if (portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE && editFromSiteEditor &
 		</div>
 	</div>
 </div>
-<%
-}
-%>
