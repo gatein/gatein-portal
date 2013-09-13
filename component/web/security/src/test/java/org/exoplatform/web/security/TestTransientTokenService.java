@@ -85,15 +85,15 @@ public class TestTransientTokenService extends AbstractTokenServiceTest<Transien
     }
 
     public void testCleanExpiredTokens() throws Exception {
-        assertEquals(service.getValidityTime(), 2);
+        assertEquals(2, service.getValidityTime());
         service.createToken(new Credentials("user1", "gtn"));
         Thread.sleep(1000);
         service.createToken(new Credentials("user2", "gtn"));
-        assertEquals(service.size(), 2);
-        Thread.sleep(1500);
+        assertEquals(2, service.size());
+        Thread.sleep(1000);
         service.cleanExpiredTokens();
-        /* one of the two tokens should have been cleaned after cca 2.5 seconds */
-        assertEquals(service.size(), 1);
+        /* one of the two tokens should have been cleaned after cca 2 seconds */
+        assertEquals(1, service.size());
     }
 
 }

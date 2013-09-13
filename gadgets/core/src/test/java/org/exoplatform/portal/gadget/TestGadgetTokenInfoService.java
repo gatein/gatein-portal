@@ -128,7 +128,7 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
     }
 
     public void testCleanExpiredTokens() throws Exception {
-        assertEquals(service.getValidityTime(), 2);
+        assertEquals(2, service.getValidityTime());
 
         int i = 0;
         TokenInfo tokenInfo = new TokenInfo("accessToken" + i, "tokenSecret" + i, "sessionHandle" + i, 1);
@@ -149,14 +149,14 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
         tokenIndex.setUserId("root" + i);
         service.createToken(tokenIndex, tokenInfo);
 
-        assertEquals(service.size(), 2);
-        Thread.sleep(1500);
+        assertEquals(2, service.size());
+        Thread.sleep(1000);
         service.cleanExpiredTokens();
         /*
-         * one of the two tokens should have been cleaned at this point, i.e. cca 2.5 seconds after the creation of the first
+         * one of the two tokens should have been cleaned at this point, i.e. cca 2 seconds after the creation of the first
          * one
          */
-        assertEquals(service.size(), 1);
+        assertEquals(1, service.size());
     }
 
 }
