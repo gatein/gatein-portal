@@ -39,7 +39,7 @@
 										<div class="FilterSelect">
 											<%uiform.renderField(uiform.FIELD_FILTER)%>
 										</div>	
-										<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=uiform.getLabel(uiform.FIELD_KEYWORD)%>"><span></span></a>
+										<a class="SearchIcon" href="<%=uicomponent.event('Search')%>" title="<%=_ctx.appRes("UIUserSelector.label.quickSearch")%>"><span></span></a>
 										<% } %>
 									</div>
 									
