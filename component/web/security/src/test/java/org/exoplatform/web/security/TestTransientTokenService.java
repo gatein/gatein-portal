@@ -90,7 +90,7 @@ public class TestTransientTokenService extends AbstractTokenServiceTest<Transien
         Thread.sleep(1000);
         String tokenId2 = service.createToken(new Credentials("user2", "gtn"));
         assertEquals(service.size(), 2);
-        Thread.sleep(1500);
+        Thread.sleep(1000);
         service.cleanExpiredTokens();
         /* one of the two tokens should have been cleaned after cca 2.5 seconds */
         assertEquals(service.size(), 1);
