@@ -18,17 +18,29 @@
  */
 package org.gatein.portal.page;
 
-import org.gatein.qunit.GateInQUnitRunner;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.qunit.junit.QUnitRunner;
 import org.jboss.arquillian.qunit.junit.annotations.QUnitResources;
 import org.jboss.arquillian.qunit.junit.annotations.QUnitTest;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.GenericArchive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.runner.RunWith;
 
-@RunWith(GateInQUnitRunner.class)
-@QUnitResources("src/test/resources/assets, src/main/resources")
+@RunWith(QUnitRunner.class)
+@QUnitResources("src/test/resources/assets")
 @RunAsClient
 public class EditorJSTestCase {
-        
+    
+   @Deployment
+   public static Archive<?> createDeployment() {
+       return ShrinkWrap.create(WebArchive.class, "test.war")
+                .as(ExplodedImporter.class).importDirectory("src/main/resources").as(GenericArchive.class);
+   }
+   
     @QUnitTest("testJS/editorTest.html")
     public void moveAppTest() {
         // empty body - only the annotations are used

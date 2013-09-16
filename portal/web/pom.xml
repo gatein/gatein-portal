@@ -311,9 +311,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.jboss.arquillian.qunit</groupId>
-      <artifactId>arquillian-qunit-impl</artifactId>
-      <version>1.0.0.Alpha1-SNAPSHOT</version>
+      <groupId>org.jboss.arquillian.extension</groupId>
+      <artifactId>arquillian-qunit</artifactId>
+      <version>1.0.0.Alpha1</version>
       <scope>test</scope>
     </dependency>    
 
