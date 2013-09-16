@@ -150,10 +150,10 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
         service.createToken(tokenIndex, tokenInfo);
 
         assertEquals(2, service.size());
-        Thread.sleep(1000);
+        Thread.sleep(1100);
         service.cleanExpiredTokens();
         /*
-         * one of the two tokens should have been cleaned at this point, i.e. cca 2 seconds after the creation of the first
+         * one of the two tokens should have been cleaned at this point, i.e. cca 2.1 seconds after the creation of the first
          * one
          */
         assertEquals(1, service.size());

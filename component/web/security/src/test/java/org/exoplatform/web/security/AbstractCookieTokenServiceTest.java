@@ -77,7 +77,7 @@ public abstract class AbstractCookieTokenServiceTest extends AbstractTokenServic
         service.cleanExpiredTokens();
         assertEquals(2, service.size());
 
-        Thread.sleep(1000);
+        Thread.sleep(1100);
         service.cleanExpiredTokens();
         assertEquals(1, service.size());
 
