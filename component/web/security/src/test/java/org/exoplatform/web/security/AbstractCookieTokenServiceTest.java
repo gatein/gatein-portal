@@ -71,18 +71,13 @@ public abstract class AbstractCookieTokenServiceTest extends AbstractTokenServic
     public void testCleanExpiredTokens() throws Exception {
         assertEquals(2, service.getValidityTime());
         String tokenId1 = service.createToken(new Credentials("user1", "gtn"));
-
-        Thread.sleep(1000);
-        String tokenId2 = service.createToken(new Credentials("user2", "gtn"));
-        service.cleanExpiredTokens();
-        assertEquals(2, service.size());
-
-        Thread.sleep(1100);
-        service.cleanExpiredTokens();
         assertEquals(1, service.size());
 
+        Thread.sleep(2100);
+        service.cleanExpiredTokens();
+        assertEquals(0, service.size());
+
         service.deleteToken(tokenId1);
-        service.deleteToken(tokenId2);
 
     }
 

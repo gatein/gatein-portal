@@ -138,25 +138,11 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
         tokenIndex.setTokenName("gadgetToken" + i);
         tokenIndex.setUserId("root" + i);
         service.createToken(tokenIndex, tokenInfo);
-
-        Thread.sleep(1000);
-        i++;
-        tokenInfo = new TokenInfo("accessToken" + i, "tokenSecret" + i, "sessionHandle" + i, 1);
-        tokenIndex = new BasicOAuthStoreTokenIndex();
-        tokenIndex.setGadgetUri("http://localhost:9090/gadgets" + i);
-        tokenIndex.setServiceName("gadgets" + i);
-        tokenIndex.setTokenName("gadgetToken" + i);
-        tokenIndex.setUserId("root" + i);
-        service.createToken(tokenIndex, tokenInfo);
-
-        assertEquals(2, service.size());
-        Thread.sleep(1100);
-        service.cleanExpiredTokens();
-        /*
-         * one of the two tokens should have been cleaned at this point, i.e. cca 2.1 seconds after the creation of the first
-         * one
-         */
         assertEquals(1, service.size());
+
+        Thread.sleep(2100);
+        service.cleanExpiredTokens();
+        assertEquals(0, service.size());
     }
 
 }
