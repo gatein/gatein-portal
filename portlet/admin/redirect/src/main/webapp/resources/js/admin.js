@@ -178,8 +178,8 @@ function hideAlert(aclass) {
 function configureRedirect() {
 	// FIXME: this is because the validation is not performed and last message still shows, we remove it manually
 	$('.rdr-name-error').hide();
-	$('.rdr-name-group').removeClass('error');
-	$('.rdr-edit-name').blur();
+	$('.rdr-name-prev').removeClass('error-sibling');
+	$('.rdr-edit-name').keyup();
 
 	$('.add-redirect').css("visibility", "hidden");
 

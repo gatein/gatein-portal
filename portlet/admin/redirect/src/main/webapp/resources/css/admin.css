@@ -1164,18 +1164,22 @@ tbody.sortable tr td:nth-child(3) {width: 50px;}*/ /* ammendonca: was 110px */
     display: block;
 }
 
-.RedirectAdmin .error-sibling + .input-medium {
-    color: #953b39;
-    border-color: #953b39;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+.RedirectAdmin .error-sibling ~ .input-medium {
+    color: #953b39 !important;
+    border-color: #953b39 !important;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075) !important;
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075) !important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075) !important;
 }
 
-.RedirectAdmin .error-sibling + .input-medium:focus {
-    color: #953b39;
-    border-color: #953b39;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #d59392;
-    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #d59392;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #d59392;
+.RedirectAdmin .error-sibling + label {
+    color: #AA0000;
+}
+
+.RedirectAdmin .error-sibling ~ .input-medium:focus {
+    color: #953b39 !important;
+    border-color: #953b39 !important;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #d59392 !important;
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #d59392 !important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #d59392 !important;
 }

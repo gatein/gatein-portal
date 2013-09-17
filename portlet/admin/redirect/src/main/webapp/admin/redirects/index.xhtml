@@ -107,14 +107,17 @@
 											<span class="onoffswitch-switch"></span>
 										</h:outputLabel>
 									</div>
-									<h:panelGroup id="rdr-name-group" layout="block" styleClass="control-group rdr-name-group #{name.valid ? '' : 'error'}">
+									<h:panelGroup id="rdr-name-group" layout="block" styleClass="control-group rdr-name-group">
+										<h:panelGroup id="rdr-name-prev" styleClass="rdr-name-prev #{name.valid ? '' : 'error-sibling'}"></h:panelGroup>
 										<h:outputLabel for="name" styleClass="control-label">#{msg['redirect.admin.site.redirect.name']}</h:outputLabel>
-											<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="rdr-edit-name" maxlength="40">
-												<f:ajax event="blur" eventsQueue="rdr" render="name-error edit_save rdr-name-group" />
-												<f:attribute name="vOriginalRedirectName" value="#{rdrEdit.getOriginalName()}" />
-												<f:attribute name="vSiteName" value="#{rdrs.siteName}" />
-											</h:inputText>
-										<h:outputText id="name-error" styleClass="text-error rdr-name-error" value="#{name.valid ? '' : name.validatorMessage}" rendered="#{not name.valid}" />
+										<h:inputText binding="#{name}" id="name" value="#{rdrEdit.name}" validator="rdrNameValidator" styleClass="input-medium rdr-edit-name" maxlength="40">
+											<f:ajax event="keyup" eventsQueue="rdr" render="name-error edit_save rdr-name-prev" />
+											<f:attribute name="vOriginalRedirectName" value="#{rdrEdit.getOriginalName()}" />
+											<f:attribute name="vSiteName" value="#{rdrs.siteName}" />
+										</h:inputText>
+										<h:panelGroup id="name-error">
+											<h:outputText id="name-error-text" styleClass="text-error rdr-name-error" value="#{name.valid ? '' : name.validatorMessage}" rendered="#{not name.valid}" />
+										</h:panelGroup>
 									</h:panelGroup>
 									<div class="control-group">
 										<h:outputLabel for="redirect" styleClass="control-label">#{msg['redirect.admin.site.redirect.to']}</h:outputLabel>
