@@ -362,7 +362,7 @@
                       <string>Root</string>
                     </field>
                     <field name="email">
-                      <string>root@localhost</string>
+                      <string>root@gatein.org</string>
                     </field>
                     <field name="groups">
                       <string>
@@ -387,7 +387,7 @@
                       <string>Anthony</string>
                     </field>
                     <field name="email">
-                      <string>john@localhost</string>
+                      <string>john@gatein.org</string>
                     </field>
                     <field name="groups">
                       <string>
@@ -412,7 +412,7 @@
                       <string>Kelly</string>
                     </field>
                     <field name="email">
-                      <string>mary@localhost</string>
+                      <string>mary@gatein.org</string>
                     </field>
                     <field name="groups">
                       <string>member:/platform/users</string>
@@ -434,7 +434,7 @@
                       <string>gtn</string>
                     </field>
                     <field name="email">
-                      <string>demo@localhost</string>
+                      <string>demo@gatein.org</string>
                     </field>
                     <field name="groups">
                       <string>member:/platform/guests,member:/platform/users</string>
