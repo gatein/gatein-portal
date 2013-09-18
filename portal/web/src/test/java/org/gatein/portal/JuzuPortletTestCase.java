@@ -86,6 +86,13 @@ public class JuzuPortletTestCase extends AbstractPortalTestCase {
   public void testAsset() throws Exception {
      driver.get(deploymentURL.toString() + "/page1");
      List<WebElement> scripts = driver.findElements(By.tagName("script"));
-     Assert.assertEquals(1, scripts.size());
+     boolean found = false;
+     for (WebElement script : scripts) {
+        String src = script.getAttribute("src");
+        if (src != null && src.endsWith("/portal/assets/org/gatein/portal/ui/assets/test.js")) {
+           found = true;
+        }
+     }
+     Assert.assertTrue(found);
   }
 }
