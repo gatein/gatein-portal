@@ -155,7 +155,7 @@ public class UILanguageSelector extends UIContainer {
             UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
             uiMaskWS.createEvent("Close", Phase.DECODE, rContext).broadcast();
 
-            if (language == null || language.trim().equals(prqCtx.getLocale().getLanguage())) {
+            if (language == null || language.isEmpty() || language.trim().equals(prqCtx.getLocale().getLanguage())) {
                 // LocalizationLifecycle will save userProfile if locale is changed
                 // We need to handle case : locale is not changed, but user's locale setting has not been initialized
                 if (prqCtx.getRemoteUser() != null) {
@@ -163,8 +163,6 @@ public class UILanguageSelector extends UIContainer {
                 }
                 return;
             }
-            // if(!uiPortal.isModifiable()) return;
-
             LocaleConfigService localeConfigService = event.getSource().getApplicationComponent(LocaleConfigService.class);
             LocaleConfig localeConfig = localeConfigService.getLocaleConfig(language);
             if (localeConfig == null)
