@@ -18,8 +18,8 @@
 				<div class="UIRightPopupMenuContainer">
 					<%for(action in uicomponent.getActions()) {%>
 					
-					 	<div class="MenuItem"> 	
-							<a exo:attr="$action" href="javascript:void(0);" onclick="<%= uicomponent.event(action)%>" class="ItemIcon ${action}16x16Icon" >
+					 	<div class="MenuItem">
+                            <a exo:attr="$action" href="<%= uicomponent.event(action)%>" class="ItemIcon ${action}16x16Icon" >
 								<%=_ctx.appRes(uicomponent.getId() + ".event." + action) %>
 							</a>
 					 	</div>						
