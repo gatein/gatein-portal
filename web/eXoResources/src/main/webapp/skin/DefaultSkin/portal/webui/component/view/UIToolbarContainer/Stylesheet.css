@@ -201,8 +201,8 @@
 .UIToolbarContainer .GroupIcon {
 	background: url('background/ToolbarContainer.gif') no-repeat left -128px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -128px; /* orientation=rt */
-	margin-left: 10px; /* orientation=lt */
-	margin-right: 10px; /* orientation=rt */
+	border-left: solid 10px transparent; /* orientation=lt */
+	border-right: solid 10px transparent ; /* orientation=rt */
 }
 
 .UIToolbarContainer .EditorIcon {
