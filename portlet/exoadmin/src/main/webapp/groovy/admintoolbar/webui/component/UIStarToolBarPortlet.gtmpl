@@ -22,7 +22,7 @@
 %>
 <ul class="UIStarToolBarPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab portlet-menu-item" style="width: 62px" title="Portal Actions">
-                <a href="javascript:;"><span class="skipHidden">Portal Actions</span>&nbsp;</a>
+                <a href="javascript:;" style="display: block;"><span class="skipHidden">Portal Actions</span>&nbsp;</a>
 		<ul class="MenuItemContainer portlet-menu-cascade skipHidden" style="display:block;">
 			<li class="MenuItem portlet-menu-cascade-item">
 				<a href="#" onclick="$changeLanguageAction" class="ChangeLanguageIcon" title="Change Language"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
