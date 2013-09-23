@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.container;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -85,24 +86,15 @@ public class UIContainerForm extends UIFormTabPane {
         addChild(infoInputSet);
         setSelectedTab(infoInputSet.getId());
 
-        UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure("ContainerPermissionSelector", "accessPermissions");
-        uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
-        UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "UIContainerPermission", null);
-        uiPermissionSet.addChild(uiListPermissionSelector);
-        addUIFormInput(uiPermissionSet);
-        // addChild(uiSettingSet);
-        // UIFormInputItemSelector uiTemplate = new UIFormInputItemSelector("Template", "template");
-        // uiTemplate.setTypeValue(String.class);
-        // uiTemplate.setRendered(false);
-        // addUIFormInput(uiTemplate);
-
-        // if(initParams == null) return ;
-        // UIFormInputItemSelector itemInput = getChild(UIFormInputItemSelector.class);
-        // RequestContext context = RequestContext.getCurrentInstance() ;
-        // List<SelectItemCategory> categories =
-        // initParams.getParam("ContainerTemplateOption").getMapGroovyObject(context) ;
-        // itemInput.setItemCategories(categories);
+        PortalRequestContext prc = Util.getPortalRequestContext();
+        if (prc.getSiteType() != SiteType.USER) {
+            UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+            uiListPermissionSelector.configure("ContainerPermissionSelector", "accessPermissions");
+            uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
+            UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "UIContainerPermission", null);
+            uiPermissionSet.addChild(uiListPermissionSelector);
+            addUIFormInput(uiPermissionSet);
+        }
     }
 
     public void setValues(final UIContainer uiContainer) throws Exception {

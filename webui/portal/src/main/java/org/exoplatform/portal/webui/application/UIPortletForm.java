@@ -30,6 +30,7 @@ import javax.portlet.PortletMode;
 
 import org.exoplatform.commons.utils.ExceptionUtil;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.exoplatform.portal.resource.SkinService;
@@ -118,12 +119,15 @@ public class UIPortletForm extends UIFormTabPane {
         uiThemeSelector.getChild(UIItemThemeSelector.class).setValues(skinService.getPortletThemes());
         addUIFormInput(uiThemeSelector);
 
-        UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure("PortletPermissionSelector", "accessPermissions");
-        uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
-        UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "PortletPermission", null);
-        uiPermissionSet.addChild(uiListPermissionSelector);
-        addUIFormInput(uiPermissionSet);
+        PortalRequestContext prc = Util.getPortalRequestContext();
+        if (prc.getSiteType() != SiteType.USER) {
+            UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+            uiListPermissionSelector.configure("PortletPermissionSelector", "accessPermissions");
+            uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
+            UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "PortletPermission", null);
+            uiPermissionSet.addChild(uiListPermissionSelector);
+            addUIFormInput(uiPermissionSet);
+        }
     }
 
     public UIComponent getBackComponent() {
