@@ -45,13 +45,13 @@
 
       <node>
         <name>servicesManagement</name>
-        <label>Services Management</label>
+        <label>#{administration.serviceManagement}</label>
         <page-reference>group::/platform/administrators::servicesManagement</page-reference>
       </node>
 
       <node>
         <name>siteRedirects</name>
-        <label>Site Redirects and Import/Export</label>
+        <label>#{administration.siteRedirectAndExportImport}</label>
         <page-reference>group::/platform/administrators::siteRedirects</page-reference>
       </node>
     </node>
