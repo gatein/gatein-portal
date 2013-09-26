@@ -33,7 +33,7 @@ import org.junit.runner.RunWith;
 @RunWith(QUnitRunner.class)
 @QUnitResources("src/test/resources/assets")
 @RunAsClient
-public class EditorJSTestCase {
+public class LayoutEditorTest {
     
    @Deployment
    public static Archive<?> createDeployment() {
@@ -41,7 +41,7 @@ public class EditorJSTestCase {
                 .as(ExplodedImporter.class).importDirectory("src/main/resources").as(GenericArchive.class);
    }
    
-    @QUnitTest("testJS/editorTest.html")
+    @QUnitTest("testJS/LayoutEditorTest.html")
     public void moveAppTest() {
         // empty body - only the annotations are used
     }

@@ -26,8 +26,8 @@
                     @Script(src = "javascripts/jquery-ui-1.10.3.custom.js"),
                     @Script(src = "javascripts/underscore.js"),
                     @Script(src = "javascripts/backbone.js"),
-                    @Script(src = "javascripts/page-model.js"),
-                    @Script(src = "javascripts/page-editor.js")})
+                    @Script(src = "javascripts/layout-model.js"),
+                    @Script(src = "javascripts/layout-view.js")})
 package org.gatein.portal;
 
 import juzu.Application;
