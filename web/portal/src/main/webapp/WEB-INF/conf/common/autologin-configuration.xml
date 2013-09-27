@@ -49,19 +49,6 @@
     </init-params>
   </component>
 
-  <component>
-    <key>org.exoplatform.web.security.security.TicketConfiguration</key>
-    <type>org.exoplatform.web.security.security.TicketConfiguration</type>
-    <init-params>
-      <values-param>
-        <name>service.configuration</name>
-        <value>wci-ticket</value>
-        <value>1</value>
-        <value>MINUTE</value>
-      </values-param>
-    </init-params>
-  </component>
-
   <external-component-plugins>
     <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
     <component-plugin>
