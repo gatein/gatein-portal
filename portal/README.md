@@ -323,3 +323,37 @@ Mongo host and ports can be configured:
   This call back work base REST. But now can not port REST.war from 3.5 to gatein 4. Because it does not work (In REST context can not to get PortalContainer because it's loaded by other classloader).
   So now, when config sso call back with HTTP POST method will not work
 * Need to test SSO with: SPNEGO, SAML2 and Cluster SSO.
+
+
+# Configuration
+
+Since GateIn 4, we integrated Typesafe Config library and follow its standard behavior to organize portal and services configuration. The `GateInConfigurator` component service is currently taking care of the integration, load config and propagates it to `PropertyManager`.
+
+By default, it loads the following in precedence:
+- `system properties`
+- `application.{conf, json, properties}` (all resources on classpath with this name)
+- `reference.conf` (all resources on classpath with this name)
+
+The idea is that libraries and services should ship with a `reference.conf` (default configuration) in their jar. Portal application provides a default `application.conf` (in component.common project), or you can configure to load your own `myconfig.conf` instead.
+
+## Use a custom portal application configuration
+
+First, you can specify the location path of your own `myconfig.conf` via the initial parameter `application.conf.file` of `GateInConfigurator` service. By doing this, it delegates `ConfigurationManager` to looking for the file, then parse/load the custom `config`.
+
+For example:
+
+    <component>
+      <type>org.gatein.common.GateInConfigurator</type>
+      <init-params>
+        <value-param>
+          <name>application.conf.file</name>
+          <value>jar:/conf/myconfig.conf</value>
+        </value-param> 
+      </init-params>
+    </component>
+
+
+If the `application.conf.file` param is not specified, you can use following system properties which are natively supported by `Typesafe Config` to force a different config source:
+- `config.resource` specifies a resource name - not a basename, i.e. application.conf not application
+- `config.file` specifies a filesystem path, again it should include the extension, not be a basename
+- `config.url` specifies a URL

@@ -27,12 +27,12 @@
 
   <component>
     <type>org.gatein.common.GateInConfigurator</type>
-<!--     <init-params>
+    <init-params>
       <value-param>
-        <name>application.conf.file</name>
-        <value>jar:/conf/gatein.conf</value>
+        <name>application.file</name>
+        <value>jar:/org/exoplatform/commons/config/configuration.conf</value>
       </value-param> 
-    </init-params> -->
+    </init-params>
   </component>
 
 </configuration>

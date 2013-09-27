@@ -145,7 +145,11 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
+    <dependency>
+      <groupId>com.typesafe</groupId>
+      <artifactId>config</artifactId>
+      <version>1.0.2</version>
+    </dependency>
       <!-- to move to gatein-dep -->
       <dependency>
         <groupId>com.google.javascript</groupId>

@@ -26,6 +26,7 @@
   <dependencySets>
     <dependencySet>
       <includes>
+        <include>com.typesafe:config</include>
         <include>org.jibx:jibx-bind</include>
         <include>org.jibx:jibx-run</include>
         <include>org.staxnav:staxnav.core</include>

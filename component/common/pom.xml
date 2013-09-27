@@ -30,7 +30,10 @@
   <packaging>jar</packaging>
   <name>GateIn Portal Component Common</name>
   <dependencies>
-
+    <dependency>
+      <groupId>com.typesafe</groupId>
+      <artifactId>config</artifactId>
+    </dependency>
     <dependency>
       <groupId>javax.portlet</groupId>
       <artifactId>portlet-api</artifactId>

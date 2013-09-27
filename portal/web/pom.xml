@@ -36,7 +36,10 @@
   </properties>
 
   <dependencies>
-
+    <dependency>
+      <groupId>com.typesafe</groupId>
+      <artifactId>config</artifactId>
+    </dependency>
     <!-- eXo kernel dependencies -->
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
