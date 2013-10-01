@@ -13,9 +13,6 @@
 		isAllowDropping : function(dragObj) {
 			return false;
 		},
-		getType : function() {
-			return 'LayoutComponent';
-		},
 		getId : function() {
 			return this.get('id') || this.cid;
 		},
@@ -49,8 +46,8 @@
 				draggable : true
 			});
 		},
-		getType : function() {
-			return 'Application';
+		toJSON : function() {
+			return {id : this.getId()};
 		}
 	});
 
@@ -65,9 +62,7 @@
 				droppable : true,
 
 				// Should not access directly to those internal attributes
-				_childrens : new Backbone.Collection(),
-				// Allow type 'Application' and 'Container'to be dropped
-				_childTypes : [ Application.prototype.getType(), 'Container' ]
+				_childrens : new Backbone.Collection()
 			});
 
 			var _this = this;
@@ -79,27 +74,23 @@
 			});
 		},
 
-		isChildSupported : function(dragObj) {
+		isAllowDropping : function(dragObj) {
 			// Check for supported types
-			if (dragObj && $.isFunction(dragObj.getType)) {
-				var type = $.trim(dragObj.getType());
-				return this.get('droppable') && $.inArray(type, this.get('_childTypes')) != -1;
+			if (dragObj && (dragObj.constructor == Container || dragObj.constructor == Application)) {
+				return this.get('droppable');
 			} else {
 				return false;
 			}
-		},
-		getType : function() {
-			return 'Container';
 		},
 
 		/**
 		 * methods on childrens
 		 */
 		//
-		addChild : function(child, idx) {
+		addChild : function(child, options) {
 			child = typeof child == 'string' ? this.getChild(child) : child;
 
-			if (child && this.isChildSupported(child)) {
+			if (child && this.isAllowDropping(child)) {
 				var _this = this;
 				this.listenTo(child, 'addChild.eXo.Container', function(addedChild, container) {
 					_this.trigger('addChild.eXo.Container', addedChild, container);
@@ -108,25 +99,24 @@
 					_this.trigger('removeChild.eXo.Container', addedChild, container);
 				});
 
-				if (child.getParent() != null) {
-					child.getParent().removeChild(child, true);
+				if (child.getParent()) {
+					child.getParent().removeChild(child, {silent : true});
 				}
 				child.set('_parent', this);
-				this.get('_childrens').add(child, {
-					at : idx
-				});
+				options = options || {};
+				this.get('_childrens').add(child, {at : options.at, silent : options.silent});
 			}
 
 			return this;
 		},
 		//
-		removeChild : function(child, silent) {
+		removeChild : function(child, options) {
 			child = typeof child == 'string' ? this.getChild(child) : child;
 
-			if (child && child.getParent() === this) {
+			if (child && child.getParent().getId() === this.getId()) {
 				child.set('_parent', null);
-				this.get('_childrens').remove(child, {'silent' : silent});
 				this.stopListening(child);
+				this.get('_childrens').remove(child, options);
 			}
 			return this;
 		},
@@ -152,29 +142,56 @@
 			}
 			return child;
 		},
-
+		
 		//
-		addChildType : function(childType) {
-			var type = $.trim(childType);
-			var types = this.get('_childTypes');
-
-			if ($.inArray(type, types) == -1) {
-				types.put(type);
-				this.trigger('addChildType.eXo.Container', type);
+		set : function(data, options) {
+			var options = options || {};
+			var merge = !(options.merge === false);
+			var add = !(options.add === false);
+			var remove = !(options.remove === false);
+			
+			var childrens = data.childrens;
+			delete data.childrens;
+			
+			Backbone.Model.prototype.set.call(this, data, options);
+			
+			var _this = this;
+			if (childrens) {
+				$.each(childrens, function(idx, elem) {
+					var tmp;
+					if (tmp = _this.getChild(elem.id)) {
+						merge && tmp.set(elem, options);
+					} else {
+						tmp = elem.childrens ? new Container() : new Application();
+						tmp.set(elem);
+						
+						options.at = idx;
+						add && _this.addChild(tmp, options);
+					}
+				});
+				
+				if (remove && this.get('_childrens')) {
+					var tmp = this.get('_childrens').filter(function(elem) {
+						var found = false;
+						$.each(childrens, function(idx, child) {
+							return !(found = child.id == elem.getId());
+						});
+						return !found;
+					});
+					
+					$.each(tmp, function(idx, elem) {
+						_this.removeChild(elem.id, options);
+					});
+				}				
 			}
-			return this;
 		},
 		//
-		removeChildType : function(childType) {
-			var type = $.trim(childType);
-			var types = this.get('_childTypes');
-			var idx = $.inArray(type, types);
-
-			if (idx != -1) {
-				types.splice(idx, 1);
-				this.trigger('removeChildType.eXo.Container', type);
-			}
-			return this;
+		toJSON : function() {
+			var data = {id : this.getId(), childrens : []};
+			this.get('_childrens').each(function(elem) {
+				data.childrens.push(elem.toJSON());
+			});
+			return data;
 		}
 	});
 

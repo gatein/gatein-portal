@@ -15,7 +15,7 @@
         	    		var prev = $(ui.item).prev('.portlet');
         	    		var idx = prev.length ? $('#' + cont.getId() + ' > .portlet').index(prev.get(0)) + 1 : 0;
         	    		
-        	    		cont.addChild(ui.item.attr('id'), idx);
+        	    		cont.addChild(ui.item.attr('id'), {at : idx});
         	    	}
         		});
         	}
@@ -41,6 +41,7 @@
         }
 	});
 	
+	//Bootstrap view and model of the editor 
 	$(function() {
 		var root = $('.editing');
 		var url = root.attr('data-editURL');

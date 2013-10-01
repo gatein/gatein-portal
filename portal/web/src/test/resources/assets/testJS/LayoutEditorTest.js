@@ -17,7 +17,7 @@ module('test Container model', {
 test("move app in same container test", function() {
 	//move app 1_1 from position 0 to 1
 	var cont1 = container.getDescendant('1');
-	cont1.addChild('1_1', 1);
+	cont1.addChild('1_1', {at : 1});
 	
 	var app1 = container.getDescendant('1_1');
 	ok(app1, 'app1 should be not null');
@@ -36,11 +36,39 @@ test("move app to another container test", function() {
 	
 	//move app 1_1 to container 2 at postion 1
 	var cont2 = container.getDescendant('2');
-	cont2.addChild(app1, 1);
+	cont2.addChild(app1, {at : 1});
 	equal(app1.getParent().getId(), '2');
 	equal(app1.getIndex(), 1);
 	
 	//now app2 is in position 2
 	equal(app2.getParent().getId(), '2');
-	equal(app2.getIndex(), 2);		
+	equal(app2.getIndex(), 2);
+});
+
+test("test create container from JSON", function() {
+	var data = {id : 'root', childrens: [{id : 'cont1'} , {id : '2', childrens : []}]};
+	container.set(data);
+	
+	equal(container.getId(), 'root');
+	equal(container.getChild('cont1').getId(), 'cont1');
+	equal(container.getChild('1'), null);
+	equal(container.getChild('2').getChild('2_2'), null);
+});
+
+
+test("test toJSON", function() {
+	var data = container.toJSON();
+	equal(data.childrens.length, 2);
+	
+	var cont1 = data.childrens[0];
+	equal(cont1.id, 1);
+	equal(cont1['childrens'].length, 2);
+	equal(cont1['childrens'][0].id, '1_1');
+	equal(cont1['childrens'][1].id, '1_2');
+	
+	var cont2 = data.childrens[1];
+	equal(cont2.id, 2);
+	equal(cont2['childrens'].length, 2);
+	equal(cont2['childrens'][0].id, '2_1');
+	equal(cont2['childrens'][1].id, '2_2');
 });
