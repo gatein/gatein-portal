@@ -609,6 +609,7 @@ public class UIPortalComposer extends UIContainer {
             JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
             jsManager.require("SHARED/portal", "portal").addScripts(
                     "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", null);
         }
     }
 
@@ -633,6 +634,8 @@ public class UIPortalComposer extends UIContainer {
 
             UserPortalConfigService portalConfigService = uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
 
+            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", null);
+
             /*
              * if it is a edition of the current page and it is not available to current remote user anymore.
              */
@@ -654,6 +657,7 @@ public class UIPortalComposer extends UIContainer {
                 JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
                 jsManager.require("SHARED/portal", "portal").addScripts(
                         "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+
                 return;
             }
             UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
@@ -729,6 +733,7 @@ public class UIPortalComposer extends UIContainer {
                 Event<UIComponent> uiEvent = wizard.createEvent("ViewStep" + step, Phase.PROCESS, event.getRequestContext());
                 uiEvent.broadcast();
             }
+            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", null);
         }
     }
 }

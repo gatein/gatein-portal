@@ -105,6 +105,9 @@ eXo.portal.UIPortal = {
 	  if (!comp.length) return;
 	  comp[0].onmouseover = function(event) {eXo.portal.UIPortal.blockOnMouseOver(event, this, true);};
 	  comp[0].onmouseout = function(event) {eXo.portal.UIPortal.blockOnMouseOver(event, this, false);};
+      $(".NON-EDITABLE").find("*").each( function(index) {
+        $(this).unbind();
+      });
   },
 
   blockOnMouseOver : function(event, block, isOver) {
@@ -268,6 +271,9 @@ eXo.portal.UIPortal = {
     {
       mask.css("top", -pageBodyBlock[0].offsetHeight + "px").css("height", pageBodyBlock[0].offsetHeight + "px").css("width", pageBodyBlock[0].offsetWidth + "px");
     }
+    $(".NON-EDITABLE").find(".CONTROL-BLOCK").each( function(index) {
+        $(this).remove();
+    });
   },
 
   /**

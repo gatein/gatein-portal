@@ -176,6 +176,7 @@ public class UIPage extends UIContainer {
         @Override
         public void execute(Event<UIPage> event) throws Exception {
             event.getSource().switchToEditMode();
+            Util.getPortalRequestContext().getRequest().getSession().setAttribute("editFromSiteEditor", "true");
         }
     }
 
