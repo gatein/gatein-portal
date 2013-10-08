@@ -125,6 +125,11 @@ public class RamLayoutStore implements LayoutStore, NodeStore<ElementState> {
     public NodeData<ElementState> updateNode(String targetId, ElementState state) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
+        if (state instanceof ElementState.Window<?>) {
+            Node customization = current.getNode(targetId);
+            ElementState.Window windowState = (ElementState.Window) customization.getState();
+            state = ((ElementState.Window) state).builder().state(windowState.state).build();
+        }
         current.update(targetId, state);
         return getNode(current, targetId);
     }
