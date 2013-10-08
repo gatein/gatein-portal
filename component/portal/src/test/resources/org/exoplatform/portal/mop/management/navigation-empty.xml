@@ -25,6 +25,6 @@
 <node-navigation xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_6"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_6 http://www.gatein.org/xml/ns/gatein_objects_1_6">
-  <priority>3</priority>
+                 xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_5 http://www.gatein.org/xml/ns/gatein_objects_1_5">
   <page-nodes/>
 </node-navigation>

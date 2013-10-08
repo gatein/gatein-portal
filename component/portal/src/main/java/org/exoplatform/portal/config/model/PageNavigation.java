@@ -30,8 +30,7 @@ public class PageNavigation {
     /** . */
     private String ownerId;
 
-    /** . */
-    private int priority = 1;
+    private int priority = -1;
 
     /** . */
     private ArrayList<NavigationFragment> fragments;
@@ -88,6 +87,6 @@ public class PageNavigation {
 
     @Override
     public String toString() {
-        return "PageNavigation[ownerType=" + ownerType + ",ownerId=" + ownerId + "]";
+        return "PageNavigation[ownerType=" + ownerType + ",ownerId=" + ownerId + ", priority=" + priority +"]";
     }
 }

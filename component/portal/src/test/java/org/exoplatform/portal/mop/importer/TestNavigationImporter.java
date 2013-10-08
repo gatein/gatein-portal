@@ -78,6 +78,35 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         NavigationContext ctx = service.loadNavigation(SiteKey.portal(name));
         assertEquals(2, (int) ctx.getState().getPriority());
     }
+    
+    public void testMergePriority() {
+        String name = "merge_priority"; 
+
+        //
+        MOPService mop = mgr.getPOMService();
+        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, name);
+        sync(true);
+
+        //
+        assertNull(service.loadNavigation(SiteKey.portal(name)));
+        PageNavigation src = new PageNavigation("portal", name);
+        src.setPriority(1);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
+        importer.perform();
+
+        //
+        NavigationContext ctx = service.loadNavigation(SiteKey.portal(name));
+        assertEquals(1, (int) ctx.getState().getPriority());
+        
+        //
+        src.setPriority(2);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
+        importer.perform();
+
+        //
+        ctx = service.loadNavigation(SiteKey.portal(name));
+        assertEquals(2, (int) ctx.getState().getPriority());
+    }
 
     public void testInsertNavigation() {
         MOPService mop = mgr.getPOMService();

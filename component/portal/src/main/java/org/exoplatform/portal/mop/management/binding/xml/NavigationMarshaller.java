@@ -24,7 +24,7 @@ package org.exoplatform.portal.mop.management.binding.xml;
 
 import static org.gatein.common.xml.stax.navigator.Exceptions.*;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.createNavigator;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseRequiredContent;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseContent;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
 
@@ -168,41 +168,17 @@ public class NavigationMarshaller implements Marshaller<PageNavigation> {
 
         if (navigator.getName() == Element.NODE_NAVIGATION) {
             Element next = navigator.child();
-            if (next != Element.PRIORITY) {
-                throw expectedElement(navigator, Element.PRIORITY);
+            if (next == Element.PRIORITY) {
+                Integer priority = parseContent(navigator, ValueType.INTEGER, -1);
+                navigation.setPriority(priority < 1 ? -1 : priority);
+            } else if (next == Element.PAGE_NODES) {
+                unmarshalPageNode(navigation, navigator, next);
+                return navigation;
             }
-            Integer priority = parseRequiredContent(navigator, ValueType.INTEGER);
-            navigation.setPriority(priority);
 
             next = navigator.sibling();
             if (next == Element.PAGE_NODES) {
-                for (StaxNavigator<Element> fork : navigator.fork(Element.PAGE_NODES)) {
-                    NavigationFragment fragment = new NavigationFragment();
-                    navigation.addFragment(fragment);
-
-                    next = fork.child();
-                    if (next == Element.PARENT_URI) {
-                        String parentUri = fork.getContent();
-                        if (parentUri == null) {
-                            parentUri = "";
-                        } else if (parentUri.charAt(0) == '/') {
-                            parentUri = parentUri.substring(1, parentUri.length());
-                        }
-                        fragment.setParentURI(parentUri);
-
-                        next = fork.sibling();
-                    }
-
-                    if (next == Element.NODE) {
-                        ArrayList<PageNode> nodes = new ArrayList<PageNode>();
-                        for (StaxNavigator<Element> nodeFork : fork.fork(Element.NODE)) {
-                            nodes.add(unmarshalNode(nodeFork));
-                        }
-                        fragment.setNodes(nodes);
-                    } else if (next != null) {
-                        throw unknownElement(fork);
-                    }
-                }
+                unmarshalPageNode(navigation, navigator, next);
             } else if (next != null) {
                 throw expectedElement(navigator, Element.PAGE_NODES);
             }
@@ -210,6 +186,36 @@ public class NavigationMarshaller implements Marshaller<PageNavigation> {
             return navigation;
         } else {
             throw unknownElement(navigator);
+        }
+    }
+
+    private void unmarshalPageNode(PageNavigation navigation, StaxNavigator<Element> navigator, Element element) throws StaxNavException {
+        for (StaxNavigator<Element> fork : navigator.fork(Element.PAGE_NODES)) {
+            NavigationFragment fragment = new NavigationFragment();
+            navigation.addFragment(fragment);
+
+            element = fork.child();
+            if (element == Element.PARENT_URI) {
+                String parentUri = fork.getContent();
+                if (parentUri == null) {
+                    parentUri = "";
+                } else if (parentUri.charAt(0) == '/') {
+                    parentUri = parentUri.substring(1, parentUri.length());
+                }
+                fragment.setParentURI(parentUri);
+
+                element = fork.sibling();
+            }
+
+            if (element == Element.NODE) {
+                ArrayList<PageNode> nodes = new ArrayList<PageNode>();
+                for (StaxNavigator<Element> nodeFork : fork.fork(Element.NODE)) {
+                    nodes.add(unmarshalNode(nodeFork));
+                }
+                fragment.setNodes(nodes);
+            } else if (element != null) {
+                throw unknownElement(fork);
+            }
         }
     }
 

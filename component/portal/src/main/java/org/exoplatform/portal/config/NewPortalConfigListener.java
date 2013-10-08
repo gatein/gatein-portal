@@ -662,6 +662,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             PageNavigation nav = (PageNavigation) o;
             nav.setOwnerType(ownerType);
             nav.setOwnerId(owner);
+            if (nav.getPriority() < 1) {
+                nav.setPriority(-1);
+            }
             fixOwnerName((PageNavigation) o);
         } else if (o instanceof PortalConfig) {
             PortalConfig portalConfig = (PortalConfig) o;

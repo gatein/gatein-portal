@@ -86,6 +86,12 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         PageNavigation pageNavigation = obj.getObject();
         assertEquals("portal::classic::homepage", pageNavigation.getFragment().getNode("home").getPageReference());
 
+        input = new FileInputStream(
+                "src/test/resources/org/exoplatform/portal/mop/management/navigation-empty.xml");
+        obj = ModelUnmarshaller.unmarshall(PageNavigation.class, input);
+        pageNavigation = obj.getObject();
+        assertEquals(-1, pageNavigation.getPriority());
+
         /*
          * IMarshallingContext mctx = bfact.createMarshallingContext(); mctx.setIndent(2); mctx.marshalDocument(obj, "UTF-8",
          * null, new FileOutputStream("target/navigation.xml"));

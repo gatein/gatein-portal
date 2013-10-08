@@ -146,6 +146,11 @@ public class UserPortalImpl implements UserPortal {
                 // Sort the list finally
                 Collections.sort(navigations, new Comparator<UserNavigation>() {
                     public int compare(UserNavigation nav1, UserNavigation nav2) {
+                        if (nav1.getPriority() == -1) {
+                            return 1;
+                        } else if (nav2.getPriority() == -1) {
+                            return -1;
+                        }
                         return nav1.getPriority() - nav2.getPriority();
                     }
                 });

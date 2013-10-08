@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.navigation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
@@ -74,9 +75,19 @@ public class UIPageNavigationForm extends UIForm {
 
     public void addFormInput() {
         List<SelectItemOption<String>> priorties = new ArrayList<SelectItemOption<String>>();
+        int priority = Integer.parseInt(getPriority());
+        if (priority == -1) {
+            ResourceBundle resourceBundle = WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
+            String undefined = resourceBundle.getString("UIPageNavigationForm.priority.undefined");
+            priorties.add(new SelectItemOption<String>(undefined, getPriority()));
+        }
         for (int i = 1; i < 11; i++) {
             priorties.add(new SelectItemOption<String>(String.valueOf(i), String.valueOf(i)));
         }
+        if (priority > 10) {
+            priorties.add(new SelectItemOption<String>(getPriority(), getPriority()));
+        }
+
         addUIFormInput(new UIFormStringInput("ownerType", "ownerType", getOwnerType()).setReadOnly(true)).addUIFormInput(
                 new UIFormStringInput("ownerId", "ownerId", ownerId).setReadOnly(true)).addUIFormInput(
                 new UIFormSelectBox("priority", null, priorties).setValue(getPriority()));

@@ -55,7 +55,7 @@
   <!-- The type of a top navigation node -->
   <xs:complexType name="nodeNavigationType">
     <xs:sequence>
-      <xs:element name="priority" type="xs:positiveInteger"/>
+      <xs:element name="priority" type="xs:positiveInteger" minOccurs="0" maxOccurs="1"/>
       <xs:element name="page-nodes" minOccurs="0" maxOccurs="unbounded">
         <xs:complexType>
           <xs:sequence>
