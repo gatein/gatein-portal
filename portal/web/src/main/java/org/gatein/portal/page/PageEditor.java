@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import juzu.Param;
@@ -37,6 +37,12 @@ import juzu.impl.common.JSON;
 import juzu.impl.common.Tools;
 import juzu.request.ResourceContext;
 
+import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.pom.data.ApplicationData;
+import org.exoplatform.portal.pom.data.ComponentData;
+import org.exoplatform.portal.pom.data.ContainerAdapter;
+import org.exoplatform.portal.pom.data.ContainerData;
+import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -69,9 +75,8 @@ public class PageEditor {
 
     @Resource
     @Route(value = "/{javax.portlet.path}", priority = 2)
-    public Response edit(ResourceContext context, @Param(name = "javax.portlet.path", pattern = ".*") String path)
-            throws Exception {
-        NodeContext<org.gatein.portal.page.NodeState, ElementState> pageStructure = null;
+    public Response edit(ResourceContext context, @Param(name = "javax.portlet.path", pattern = ".*") String path) {
+        NodeContext<ComponentData, ElementState> pageStructure = null;
 
         // Parse path
         List<String> names = new ArrayList<String>();
@@ -104,75 +109,92 @@ public class PageEditor {
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
                 org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
-                pageStructure = layoutService.loadLayout(pageBuilder, page.getLayoutId(), null);
+                pageStructure = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(),
+                        page.getLayoutId(), null);
             }
         }
 
-        String body = null;
+        JSON result = new JSON();
         if (pageStructure != null) {
-            JSON action = getAction(context);
+            try {
+                JSON action = getAction(context);
+                ContainerData rootContainer = this.build(pageStructure, null);
 
-            NodeContext<org.gatein.portal.page.NodeState, ElementState> window = find(action.getString("id"),
-                    ElementState.Window.class, pageStructure);
+                JSON[] childrens = action.getArray("childrens", JSON.class);
+                for (JSON j : childrens) {
+                    this.build(pageStructure, j, rootContainer);
+                }
 
-            String targetParent = action.getString("containerID");
-            NodeContext parent = window.getParent();
-            if (!parent.getName().equals(targetParent)) {
-                parent = find(targetParent, ElementState.Container.class, pageStructure);
+                layoutService.saveLayout(new ContainerAdapter(rootContainer), rootContainer, pageStructure, null);
+
+                result.set("code", 200);
+                result.set("status", "success");
+                result.set("message", "OK");
+            } catch (Exception ex) {
+                result.set("code", 400);
+                result.set("status", "error");
+                result.set("message", "can not edit");
+                result.set("data", Collections.EMPTY_MAP);
             }
+        }
 
+        return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
+                .withMimeType("application/json");
+    }
+
+    private void build(NodeContext<ComponentData, ElementState> context, JSON json, ContainerData parent) {
+        String id = json.getString("id");
+        NodeContext<ComponentData, ElementState> ctx = this.find(id, context);
+        if (ctx == null) {
+            return;
+        }
+        ComponentData componentData = this.build(ctx, parent);
+        JSON[] childrens = json.getArray("childrens", JSON.class);
+        for (JSON j : childrens) {
+            this.build(context, j, (ContainerData) componentData);
+        }
+    }
+
+    private <T extends ComponentData> T build(NodeContext<ComponentData, ElementState> context, ContainerData parent) {
+        ElementState state = context.getState();
+        if (state instanceof ElementState.Container) {
+            ElementState.Container containerState = (ElementState.Container) state;
+            Properties properties = containerState.properties;
+            ContainerData containerData = new ContainerData(context.getId(), context.getName(), context.getId(),
+                    properties.get(ElementState.Container.NAME), properties.get(ElementState.Container.ICON),
+                    properties.get(ElementState.Container.TEMPLATE), properties.get(ElementState.Container.FACTORY_ID),
+                    properties.get(ElementState.Container.TITLE), properties.get(ElementState.Container.DESCRIPTION),
+                    properties.get(ElementState.Container.WIDTH), properties.get(ElementState.Container.HEIGHT),
+                    containerState.getAccessPermissions(), new ArrayList<ComponentData>());
             if (parent != null) {
-                NodeContext prev = find(action.getString("prev"), ElementState.Window.class, parent);
-                if (prev != null) {
-                    parent.add(prev.getIndex() + 1, window);
-                } else {
-                    parent.add(0, window);
-                }
-                try {
-                    layoutService.saveLayout(pageStructure, null);
-                } catch (Exception ex) {
-                }
-
-                List<JSON> apps = new LinkedList<JSON>();
-                buildResponse(pageStructure, apps);
-                body = apps.toString();
+                parent.getChildren().add(containerData);
             }
+            return (T) containerData;
+        } else if (state instanceof ElementState.Window) {
+            ElementState.Window winState = (ElementState.Window) state;
+            Properties properties = winState.properties;
+            ApplicationState appState = winState.state;
+            ApplicationData appData = new ApplicationData(context.getId(), context.getName(), winState.type, appState,
+                    context.getId(), properties.get(ElementState.Window.TITLE), properties.get(ElementState.Window.ICON),
+                    properties.get(ElementState.Window.DESCRIPTION), properties.get(ElementState.Window.SHOW_INFO_BAR),
+                    properties.get(ElementState.Window.SHOW_APPLICATION_STATE),
+                    properties.get(ElementState.Window.SHOW_APPLICATION_MODE), properties.get(ElementState.Window.THEME),
+                    properties.get(ElementState.Window.WIDTH), properties.get(ElementState.Window.HEIGHT),
+                    Collections.EMPTY_MAP, winState.accessPermissions);
+            if (parent != null) {
+                parent.getChildren().add(appData);
+            }
+            return (T) appData;
         }
-
-        if (body != null) {
-            return Response.status(200).body(body).withCharset(Charset.forName("UTF-8"))
-                    .withMimeType("application/json");
-        } else {
-            return Response.status(400).body("Can't edit");
-        }
+        return null;
     }
 
-    private void buildResponse(NodeContext<org.gatein.portal.page.NodeState, ElementState> node, List<JSON> apps)
-            throws Exception {
-        ElementState state = node.getState();
-        if (state instanceof ElementState.Window) {
-            JSON window = new JSON();
-            window.set("id", node.getName());
-            window.set("containerID", node.getParent().getName());
-            NodeContext prev = node.getPrevious();
-            window.set("prev", prev != null ? prev.getName() : null);
-            apps.add(window);
-        } else if (state instanceof ElementState.Container) {
-            for (NodeContext child : node) {
-                buildResponse(child, apps);
-            }
-        }
-    }
-
-    private NodeContext<org.gatein.portal.page.NodeState, ElementState> find(String id, Class type,
-            NodeContext<org.gatein.portal.page.NodeState, ElementState> target) {
-        ElementState state = target.getState();
-
-        if (type.isAssignableFrom(state.getClass()) && target.getName().equals(id)) {
+    private NodeContext<ComponentData, ElementState> find(String id, NodeContext<ComponentData, ElementState> target) {
+        if (target.getName().equals(id)) {
             return target;
-        } else if (state instanceof ElementState.Container) {
-            for (NodeContext<org.gatein.portal.page.NodeState, ElementState> child : target) {
-                NodeContext<org.gatein.portal.page.NodeState, ElementState> tmp = find(id, type, child);
+        } else {
+            for (NodeContext<ComponentData, ElementState> child : target) {
+                NodeContext<ComponentData, ElementState> tmp = this.find(id, child);
                 if (tmp != null) {
                     return tmp;
                 }

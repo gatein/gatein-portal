@@ -2,12 +2,17 @@
 
 <%
 	def path = "";
+    def isEditing = false;
 	def req = juzu.impl.request.Request.getCurrent();
 	if (req != null) {
 	    def param = req.getParameters().get("javax.portlet.path");
 	    if (param != null) {
 	        path = param.getValue();
 	    }
+        def param1 = req.getParameters().get("javax.portlet.a");
+        if (param1 != null && "edit".equals(param1.getValue())) {
+            isEditing = true;
+        }
 	}
 %>
 
@@ -15,9 +20,19 @@
 <div>
     <div>${fragment.content}</div>
 	 <div style="position: relative; top: -51px; left: 520px">
+        <% if(!isEditing){%>
 		<a href="<%=org.gatein.portal.page.Controller_.index(path, "edit", null, null, null)%>" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
 			Edit Page
 		</a>
+        <% } else {%>
+        <a id="saveLayout" href="javascript:void(0);" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+            Save
+        </a>
+        &nbsp;&nbsp;
+        <a href="<%=org.gatein.portal.page.Controller_.index(path, null, null, null, null)%>" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+           Cancel
+        </a>
+        <%}%>
 	 </div>
 </div>
 <% } %>

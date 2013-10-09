@@ -18,6 +18,18 @@
         	    		cont.addChild(ui.item.attr('id'), {at : idx});
         	    	}
         		});
+                this.$("#saveLayout").click(function(){
+                    view.model.save().done(function($data){
+                        if($data.code == 200) {
+                            window.location.href = view.model.url;
+                        } else {
+                            alert("error: " + data.message);
+                        }
+                    }).error(function($error){
+                        alert("error on connect to server");
+                    });
+                    return false;
+                });
         	}
         	
         	this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
@@ -47,6 +59,8 @@
 		var url = root.attr('data-editURL');
 		
 		var container = new Container();
+        container.url = url;
+        container.id = "layout";
 		$('.sortable').each(function() {
 			var cont = new Container({id : this.id});			
 			
