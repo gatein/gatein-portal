@@ -22,8 +22,9 @@
                 @Stylesheet(id = "social-buttons", src = "social-buttons.css")
             },             
             scripts = {
-                    @Script(src = "javascripts/jquery-1.7.1.min.js"),
+                    @Script(id = "jquery", src = "javascripts/jquery-1.7.1.min.js"),
                     @Script(src = "javascripts/jquery-ui-1.10.3.custom.js"),
+                    @Script(src = "javascripts/bootstrap-dropdown.js"),
                     @Script(src = "javascripts/underscore.js"),
                     @Script(src = "javascripts/backbone.js"),
                     @Script(src = "javascripts/layout-model.js"),

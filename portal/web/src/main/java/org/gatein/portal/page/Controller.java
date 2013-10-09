@@ -28,7 +28,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 
-import juzu.Action;
 import juzu.Param;
 import juzu.Path;
 import juzu.Response;

@@ -1,4 +1,4 @@
-.editing .row {
+.editing .row-fluid {
     border: 1px dashed #A2A2A2;
     padding: 10px;
 }
@@ -19,4 +19,8 @@
    background: #FAFAFA;
    border-radius: 4px;
    margin: 5px;
+}
+
+.sortable {
+	min-height: 100px;
 }

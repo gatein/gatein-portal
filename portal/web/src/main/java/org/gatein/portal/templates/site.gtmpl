@@ -34,6 +34,23 @@
         </a>
         <%}%>
 	 </div>
+     <%
+   	if (req != null) {
+   	    def pmap = req.getParameters();
+   	    def param = pmap.get("javax.portlet.a");
+   	    if (param != null && "edit".equals(param.getValue())) {
+     %>
+          <div class="btn-group" style="position: relative; top: -76px; left: 629px">
+                <button class="btn dropdown-toggle" data-toggle="dropdown">Switch to <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("1")%>">One column</a></li>
+                  <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("2")%>">Two columns 70 30</a></li>
+                </ul>
+           </div>
+     <%
+        }
+   	}
+    %>
 </div>
 <% } %>
 ${body}

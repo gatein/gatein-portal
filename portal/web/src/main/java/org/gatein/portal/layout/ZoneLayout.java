@@ -26,9 +26,11 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import juzu.template.Template;
+
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.page.PageContext;
 import org.gatein.portal.page.Result;
+import org.gatein.portal.page.Result.Fragment;
 
 /**
  * A layout implementing the spec <a href="https://community.jboss.org/wiki/InPlaceEditing">In Place Editing</a>.
@@ -74,6 +76,13 @@ public class ZoneLayout extends Layout {
         if ("1".equals(id)) {
             template = factory.zone_1_column;
             parameters = Collections.<String, Object>singletonMap("l1", getFragments("1", fragments));
+        } else if ("2".equals(id)) {
+            template = factory.zone_2_columns_70_30;
+            Map<String, Fragment> l1 = getFragments("1", fragments);
+            Map<String, Fragment> l2 = getFragments("2", fragments);
+            parameters = new HashMap<String, Object>();
+            parameters.put("l1", l1);
+            parameters.put("l2", l2);
         } else if ("site".equals(id)) {
             template = factory.site;
             juzu.impl.common.Builder.Map<String, Object> builder = juzu.impl.common.Builder.
@@ -91,11 +100,11 @@ public class ZoneLayout extends Layout {
         }
     }
 
-    private Template.Builder render1_column(ArrayList<Result.Fragment> l1) {
+    public Template.Builder render1_column(ArrayList<Result.Fragment> l1) {
         return factory.zone_1_column.with(Collections.<String, Object>singletonMap("l1", l1));
     }
 
-    private Template.Builder render2_columns_30_70(ArrayList<Result.Fragment> l1, ArrayList<Result.Fragment> l2) {
+    public Template.Builder render2_columns_30_70(ArrayList<Result.Fragment> l1, ArrayList<Result.Fragment> l2) {
         return factory.zone_2_columns_70_30.with(juzu.impl.common.Builder.map("l1", l1).map("l2", l2).build());
     }
 

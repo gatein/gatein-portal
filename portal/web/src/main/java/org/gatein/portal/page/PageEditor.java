@@ -42,6 +42,8 @@ import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
+import org.gatein.portal.layout.ZoneLayout;
+import org.gatein.portal.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
@@ -73,6 +75,26 @@ public class PageEditor {
     @Inject
     PortletContentProvider contentProvider;
 
+    @Inject
+    ZoneLayoutFactory layoutFactory;
+
+    @Resource
+    @Route(value = "/switchto/{javax.portlet.z}")
+    public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
+        ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
+        if ("1".equals(id)) {
+            StringBuilder sb = new StringBuilder();
+            layout.render1_column(new ArrayList<Result.Fragment>()).renderTo(sb);
+            return Response.status(200).body(sb.toString());
+        } else if ("2".equals(id)) {
+            StringBuilder sb = new StringBuilder();
+            layout.render2_columns_30_70(new ArrayList<Result.Fragment>(), new ArrayList<Result.Fragment>()).renderTo(sb);
+            return Response.status(200).body(sb.toString());
+        } else {
+            return Response.status(500);
+        }
+    }
+
     @Resource
     @Route(value = "/{javax.portlet.path}", priority = 2)
     public Response edit(ResourceContext context, @Param(name = "javax.portlet.path", pattern = ".*") String path) {
@@ -102,9 +124,6 @@ public class PageEditor {
             }
 
             if (current != null) {
-                // Page builder
-                PageContext.Builder pageBuilder = new PageContext.Builder(contentProvider, customizationService, path);
-
                 // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
