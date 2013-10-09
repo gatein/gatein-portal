@@ -87,7 +87,7 @@
 								newContainer.addChild(cont);
 							});
 							
-							var row = $('.row');
+							var row = $('.row-fluid');
 							row.find('.sortable').each(function() {
 								var id = $(this).attr('id');
 								$(this).attr('id', id + '-old');
