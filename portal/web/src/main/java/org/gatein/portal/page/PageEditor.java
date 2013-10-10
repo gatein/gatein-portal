@@ -82,17 +82,9 @@ public class PageEditor {
     @Route(value = "/switchto/{javax.portlet.z}")
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
         ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
-        if ("1".equals(id)) {
-            StringBuilder sb = new StringBuilder();
-            layout.render1_column(new ArrayList<Result.Fragment>()).renderTo(sb);
-            return Response.status(200).body(sb.toString());
-        } else if ("2".equals(id)) {
-            StringBuilder sb = new StringBuilder();
-            layout.render2_columns_30_70(new ArrayList<Result.Fragment>(), new ArrayList<Result.Fragment>()).renderTo(sb);
-            return Response.status(200).body(sb.toString());
-        } else {
-            return Response.status(500);
-        }
+        StringBuilder sb = new StringBuilder();
+        layout.render(Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
+        return Response.status(200).body(sb.toString());
     }
 
     @Resource

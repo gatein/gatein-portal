@@ -87,13 +87,14 @@
 								newContainer.addChild(cont);
 							});
 							
-							var row = $('.row-fluid');
-							row.find('.sortable').each(function() {
+							var pageBody = $('.pageBody');
+							pageBody.find('.sortable').each(function() {
 								var id = $(this).attr('id');
 								$(this).attr('id', id + '-old');
 							});
-							row.addClass('removeable');
-							$(row).after(data);
+							var oldLayout = $('<div></div>').hide().html(pageBody.html());
+							$(pageBody).html(data);
+							$('.container').append(oldLayout);
 							
 							var container = window.layoutView.model;
 							window.layoutView = new LayoutView({model : newContainer});
@@ -116,7 +117,7 @@
 							});
 							
 							//remove old container
-							$('.removeable').remove();
+							oldLayout.remove();
 						}
 				});
 			});

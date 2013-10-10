@@ -13,7 +13,7 @@
 %>
 
 <div class="row-fluid">
-  <div id="1" class="sortable" >
+  <div id="1" class="span12 sortable" >
     <% l1.each { name, fragment -> %>
     <div id="${name}" class="portlet">
         <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>

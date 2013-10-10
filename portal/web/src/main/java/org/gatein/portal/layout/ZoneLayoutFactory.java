@@ -37,7 +37,19 @@ public class ZoneLayoutFactory extends LayoutFactory {
     @Inject
     @Path("zone_2_columns_70_30.gtmpl")
     Template zone_2_columns_70_30;
+    
+    @Inject
+    @Path("zone_2_columns_1_row.gtmpl")
+    Template zone_2_columns_1_row;
+    
+    @Inject
+    @Path("zone_1_row_2_columns.gtmpl")
+    Template zone_1_row_2_columns;
 
+    @Inject
+    @Path("zone_3_columns.gtmpl")
+    Template zone_3_columns;    
+    
     @Inject
     @Path("site.gtmpl")
     Template site;

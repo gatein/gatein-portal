@@ -94,6 +94,41 @@
       </portlet>
     </zone>
   </page>
+  
+  <page>
+    <name>demo3</name>
+    <display-name>Layout Demo</display-name>
+    <access-permission>Everyone</access-permission>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <layout>3</layout>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>sleep</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>SleepPortlet</portlet-ref>
+      </portlet>
+    </zone>
+    <zone>
+      <id>2</id>  
+      <portlet>
+        <name>param</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>ParametersPortlet</portlet-ref>
+      </portlet>
+    </zone>
+    <zone>
+      <id>3</id>  
+      <portlet>
+        <name>sitemap</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>portal</application-ref>
+        <portlet-ref>SiteMapPortlet</portlet-ref>
+      </portlet>
+    </zone>
+  </page>
 
   <page>
     <name>register</name>

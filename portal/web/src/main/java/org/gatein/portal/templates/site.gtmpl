@@ -19,7 +19,7 @@
 <% header.each { name, fragment -> %>
 <div>
     <div>${fragment.content}</div>
-	 <div style="position: relative; top: -51px; left: 520px">
+	 <div style="position: relative; top: -51px; left: 639px">
         <% if(!isEditing){%>
 		<a href="<%=org.gatein.portal.page.Controller_.index(path, "edit", null, null, null)%>" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
 			Edit Page
@@ -40,11 +40,14 @@
    	    def param = pmap.get("javax.portlet.a");
    	    if (param != null && "edit".equals(param.getValue())) {
      %>
-          <div class="btn-group" style="position: relative; top: -76px; left: 629px">
+          <div class="btn-group" style="position: relative; top: -76px; left: 745px">
                 <button class="btn dropdown-toggle" data-toggle="dropdown">Switch to <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                   <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("1")%>">One column</a></li>
                   <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("2")%>">Two columns 70 30</a></li>
+                  <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("3")%>">Two columns One row</a></li>
+                  <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("4")%>">One row Two colums</a></li>
+                  <li><a class="switch" href="<%=org.gatein.portal.page.PageEditor_.switchLayout("5")%>">Three columns</a></li>
                 </ul>
            </div>
      <%
@@ -53,7 +56,9 @@
     %>
 </div>
 <% } %>
+<div class="pageBody">
 ${body}
+</div>
 
 <% footer.each { name, fragment -> %>
 <div>

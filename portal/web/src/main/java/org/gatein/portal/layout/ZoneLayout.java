@@ -92,6 +92,21 @@ public class ZoneLayout extends Layout {
                 builder = builder.map("body", body);
             }
             parameters = builder.build();
+        } else {
+            if ("3".equals(id)) {
+                template = factory.zone_2_columns_1_row;
+            } else if ("4".equals(id)) {
+                template = factory.zone_1_row_2_columns;
+            } else if ("5".equals(id)) {
+                template = factory.zone_3_columns;
+            }
+            Map<String, Fragment> l1 = getFragments("1", fragments);
+            Map<String, Fragment> l2 = getFragments("2", fragments);
+            Map<String, Fragment> l3 = getFragments("3", fragments);
+            parameters = new HashMap<String, Object>();
+            parameters.put("l1", l1);
+            parameters.put("l2", l2);
+            parameters.put("l3", l3);
         }
         if (template != null) {
             template.renderTo(to, parameters);
@@ -102,10 +117,6 @@ public class ZoneLayout extends Layout {
 
     public Template.Builder render1_column(ArrayList<Result.Fragment> l1) {
         return factory.zone_1_column.with(Collections.<String, Object>singletonMap("l1", l1));
-    }
-
-    public Template.Builder render2_columns_30_70(ArrayList<Result.Fragment> l1, ArrayList<Result.Fragment> l2) {
-        return factory.zone_2_columns_70_30.with(juzu.impl.common.Builder.map("l1", l1).map("l2", l2).build());
     }
 
     private static class WindowLayout {

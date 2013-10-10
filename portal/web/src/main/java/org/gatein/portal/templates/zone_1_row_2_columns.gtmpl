@@ -1,0 +1,41 @@
+<%
+  def tooltip = "", cursor = "", icon = "";
+  def req = juzu.impl.request.Request.getCurrent();
+  if (req != null) {
+      def pmap = req.getParameters();
+      def param = pmap.get("javax.portlet.a");
+      if (param != null && "edit".equals(param.getValue())) {
+          tooltip = "Drag to edit page";
+          cursor = "cursor: move";
+          icon = "&equiv;";
+      }
+  }
+%>
+<div class="row-fluid">
+    <div id="3" class="span12 sortable">
+        <% l1.each { name, fragment -> %>
+        <div id="${name}" class="portlet">
+          <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+          <div>${fragment.content}</div>
+        </div>
+      <% } %>
+    </div>
+</div>
+<div class="row-fluid">
+    <div id="1" class="span6 sortable">
+        <% l1.each { name, fragment -> %>
+        <div id="${name}" class="portlet">
+          <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+          <div>${fragment.content}</div>
+        </div>
+      <% } %>
+    </div>
+    <div id="2" class="span6 sortable">
+        <% l2.each { name, fragment -> %>
+        <div id="${name}" class="portlet">
+         <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+          <div>${fragment.content}</div>
+        </div>
+        <% } %>
+    </div>
+</div>
