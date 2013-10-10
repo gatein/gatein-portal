@@ -21,6 +21,6 @@
    margin: 5px;
 }
 
-.sortable {
+.row-fluid .sortable {
 	min-height: 100px;
 }

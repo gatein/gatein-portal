@@ -109,23 +109,23 @@
         <application-ref>samples</application-ref>
         <portlet-ref>SleepPortlet</portlet-ref>
       </portlet>
-    </zone>
+    </zone>    
     <zone>
       <id>2</id>  
-      <portlet>
-        <name>param</name>
-        <access-permission>Everyone</access-permission>
-        <application-ref>samples</application-ref>
-        <portlet-ref>ParametersPortlet</portlet-ref>
-      </portlet>
-    </zone>
-    <zone>
-      <id>3</id>  
       <portlet>
         <name>sitemap</name>
         <access-permission>Everyone</access-permission>
         <application-ref>portal</application-ref>
         <portlet-ref>SiteMapPortlet</portlet-ref>
+      </portlet>
+    </zone>
+    <zone>
+      <id>3</id>  
+      <portlet>
+        <name>param</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>samples</application-ref>
+        <portlet-ref>ParametersPortlet</portlet-ref>
       </portlet>
     </zone>
   </page>

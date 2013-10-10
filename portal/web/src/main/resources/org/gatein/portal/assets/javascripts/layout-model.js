@@ -88,7 +88,7 @@
 		 */
 		//
 		addChild : function(child, options) {
-			child = typeof child == 'string' ? this.getChild(child) : child;
+			child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
 
 			if (child && this.isAllowDropping(child)) {
 				var _this = this;
