@@ -8,6 +8,7 @@
         	if (editing) {
         		this.$( ".sortable" ).sortable({
         			connectWith: ".sortable",
+        			tolerance: "pointer",
         			placeholder: "portlet-placeholder",
         			revert: true,
         			update : function(event, ui) {
@@ -38,19 +39,25 @@
         },
         
         onAddChild : function(child, container) {
+        	var $cont = $('#' + container.getId());
         	var $app = $('#' + child.getId());
         	var prev = container.at(child.getIndex() - 1);
         	if (prev) {
         		$app.insertAfter($('#' + prev.getId()));
         	} else {
-        		var $cont = $('#' + container.getId());
         		$cont.prepend($app);
         	}
+        	$cont.removeClass('emptyContainer');
         },
         
         onRemoveChild : function(child, container) {
-        	var $app = $('#' + child.getId());
+        	var $cont = $("#" + container.getId());
+        	var $app = $cont.children('#' + child.getId());
         	$app.remove();
+        	
+        	if (container.isEmpty()) {
+        		$cont.addClass('emptyContainer');
+        	}
         }
 	});
 	

@@ -9,6 +9,10 @@
     padding: 5px;
 }
 
+.editing .emptyContainer {
+	border: 1px dashed #A2A2A2;
+}
+
 .portlet + .portlet {
     margin-top: 10px;
 }

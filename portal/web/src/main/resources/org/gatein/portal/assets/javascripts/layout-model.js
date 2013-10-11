@@ -92,6 +92,7 @@
 
 			if (child && this.isAllowDropping(child)) {
 				var _this = this;
+			
 				this.listenTo(child, 'addChild.eXo.Container', function(addedChild, container) {
 					_this.trigger('addChild.eXo.Container', addedChild, container);
 				});
@@ -99,11 +100,15 @@
 					_this.trigger('removeChild.eXo.Container', addedChild, container);
 				});
 
-				if (child.getParent()) {
-					child.getParent().removeChild(child, {silent : true});
+				options = options || {};
+				var oldParent = child.getParent();
+				if (oldParent && oldParent.getId() != this.getId()) {
+					oldParent.removeChild(child, {silent : options.silent});
 				}
 				child.set('_parent', this);
-				options = options || {};
+				//collection in backbone ignore move action in same container
+				//need to remove then re-add
+				this.get('_childrens').remove(child, {silent : true});
 				this.get('_childrens').add(child, {at : options.at, silent : options.silent});
 			}
 
@@ -112,13 +117,20 @@
 		//
 		removeChild : function(child, options) {
 			child = typeof child == 'string' ? this.getChild(child) : child;
-
+			
 			if (child && child.getParent().getId() === this.getId()) {
+				options = options || {};
+				this.get('_childrens').remove(child, {silent: options.silent});
 				child.set('_parent', null);
 				this.stopListening(child);
-				this.get('_childrens').remove(child, options);
 			}
 			return this;
+		},
+		isEmpty: function() {
+			return this.get('_childrens').isEmpty();
+		},
+		getChildrens: function() {
+			return this.get('_childrens').toArray();
 		},
 		getChild : function(id) {
 			return this.get('_childrens').get(id);
