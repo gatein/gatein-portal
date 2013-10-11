@@ -47,19 +47,19 @@
       <name>demo1</name>
       <display-name>Parameter Demo</display-name>
       <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::demo1</page-ref>
+      <page-ref>portal::classic::parameter-demo</page-ref>
     </node>
     <node>
       <name>demo2</name>
       <display-name>Parallel Demo</display-name>
       <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::demo2</page-ref>
+      <page-ref>portal::classic::parallel-demo</page-ref>
     </node>
     <node>
       <name>demo3</name>
       <display-name>Layout Demo</display-name>
       <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::demo3</page-ref>
+      <page-ref>portal::classic::layout-demo</page-ref>
     </node>
     <node>
       <name>sitemap</name>

@@ -42,7 +42,7 @@
   </page>
 
   <page>
-    <name>demo1</name>
+    <name>parameter-demo</name>
     <display-name>Parameter Demo</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
@@ -64,7 +64,7 @@
   </page>
 
   <page>
-    <name>demo2</name>
+    <name>parallel-demo</name>
     <display-name>Parallel Demo</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
@@ -96,7 +96,7 @@
   </page>
   
   <page>
-    <name>demo3</name>
+    <name>layout-demo</name>
     <display-name>Layout Demo</display-name>
     <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
@@ -106,8 +106,8 @@
       <portlet>
         <name>sleep</name>
         <access-permission>Everyone</access-permission>
-        <application-ref>samples</application-ref>
-        <portlet-ref>SleepPortlet</portlet-ref>
+        <application-ref>portal</application-ref>
+        <portlet-ref>HomePortlet</portlet-ref>
       </portlet>
     </zone>    
     <zone>
