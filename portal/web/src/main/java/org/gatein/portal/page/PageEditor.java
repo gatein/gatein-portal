@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import juzu.Param;
@@ -84,13 +85,25 @@ public class PageEditor {
         ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
         StringBuilder sb = new StringBuilder();
         layout.render(Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
-        return Response.status(200).body(sb.toString());
+
+        JSON result = new JSON();
+        result.set("code", 200);
+        result.set("status", "success");
+
+        JSON data = new JSON();
+        data.set("layout_id", id);
+        data.set("html", sb.toString());
+
+        result.set("data", data);
+
+        return Response.status(200).body(result.toString());
     }
 
     @Resource
     @Route(value = "/{javax.portlet.path}", priority = 2)
     public Response edit(ResourceContext context, @Param(name = "javax.portlet.path", pattern = ".*") String path) {
         NodeContext<ComponentData, ElementState> pageStructure = null;
+        org.gatein.portal.mop.page.PageContext page = null;
 
         // Parse path
         List<String> names = new ArrayList<String>();
@@ -119,7 +132,7 @@ public class PageEditor {
                 // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
-                org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
+                page = pageService.loadPage(pageKey);
                 pageStructure = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(),
                         page.getLayoutId(), null);
             }
@@ -129,14 +142,22 @@ public class PageEditor {
         if (pageStructure != null) {
             try {
                 JSON action = getAction(context);
-                ContainerData rootContainer = this.build(pageStructure, null);
+                ContainerData rootContainer = this.buildComponentData(pageStructure);
 
                 JSON[] childrens = action.getArray("childrens", JSON.class);
                 for (JSON j : childrens) {
-                    this.build(pageStructure, j, rootContainer);
+                    this.buildComponentTree(pageStructure, j, rootContainer);
                 }
 
                 layoutService.saveLayout(new ContainerAdapter(rootContainer), rootContainer, pageStructure, null);
+
+                //Update layout
+                String layoutId = action.getString("layout_id");
+                if (layoutId != null && !layoutId.isEmpty()) {
+                    page.setState(page.getState().builder().factoryId(layoutId).build());
+                    pageService.savePage(page);
+                }
+
 
                 result.set("code", 200);
                 result.set("status", "success");
@@ -153,20 +174,39 @@ public class PageEditor {
                 .withMimeType("application/json");
     }
 
-    private void build(NodeContext<ComponentData, ElementState> context, JSON json, ContainerData parent) {
+    private void buildComponentTree(NodeContext<ComponentData, ElementState> context, JSON json, ContainerData parent) {
         String id = json.getString("id");
+        String type = json.getString("type");
+
         NodeContext<ComponentData, ElementState> ctx = this.find(id, context);
+
+        ComponentData componentData = null;
         if (ctx == null) {
+            if ("container".equalsIgnoreCase(type)) {
+                componentData = new ContainerData(null, id, null, null, null, null, null, null, null, null, null, new ArrayList<String>(), new LinkedList<ComponentData>());
+            } else if ("application".equalsIgnoreCase(type)) {
+                //TODO: process when add new portlet
+            }
+        } else {
+            componentData = this.buildComponentData(ctx);
+        }
+
+        if (componentData == null) {
             return;
         }
-        ComponentData componentData = this.build(ctx, parent);
+
+        if (parent != null) {
+            parent.getChildren().add(componentData);
+        }
+
+        //Process children of this node
         JSON[] childrens = json.getArray("childrens", JSON.class);
         for (JSON j : childrens) {
-            this.build(context, j, (ContainerData) componentData);
+            this.buildComponentTree(context, j, (ContainerData) componentData);
         }
     }
 
-    private <T extends ComponentData> T build(NodeContext<ComponentData, ElementState> context, ContainerData parent) {
+    private <T extends ComponentData> T buildComponentData(NodeContext<ComponentData, ElementState> context) {
         ElementState state = context.getState();
         if (state instanceof ElementState.Container) {
             ElementState.Container containerState = (ElementState.Container) state;
@@ -177,9 +217,7 @@ public class PageEditor {
                     properties.get(ElementState.Container.TITLE), properties.get(ElementState.Container.DESCRIPTION),
                     properties.get(ElementState.Container.WIDTH), properties.get(ElementState.Container.HEIGHT),
                     containerState.getAccessPermissions(), new ArrayList<ComponentData>());
-            if (parent != null) {
-                parent.getChildren().add(containerData);
-            }
+
             return (T) containerData;
         } else if (state instanceof ElementState.Window) {
             ElementState.Window winState = (ElementState.Window) state;
@@ -192,9 +230,7 @@ public class PageEditor {
                     properties.get(ElementState.Window.SHOW_APPLICATION_MODE), properties.get(ElementState.Window.THEME),
                     properties.get(ElementState.Window.WIDTH), properties.get(ElementState.Window.HEIGHT),
                     Collections.EMPTY_MAP, winState.accessPermissions);
-            if (parent != null) {
-                parent.getChildren().add(appData);
-            }
+
             return (T) appData;
         }
         return null;

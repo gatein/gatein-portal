@@ -47,7 +47,7 @@
 			});
 		},
 		toJSON : function() {
-			return {id : this.getId()};
+			return {id : this.getId(), "type": "application"};
 		}
 	});
 
@@ -187,13 +187,47 @@
 		},
 		//
 		toJSON : function() {
-			var data = {id : this.getId(), childrens : []};
+			var data = {id : this.getId(), "type": "container", childrens : []};
 			this.get('_childrens').each(function(elem) {
 				data.childrens.push(elem.toJSON());
 			});
 			return data;
 		}
 	});
+
+    /**
+     *
+     */
+    PageContainer = Container.extend({
+        //Work around to force PUT method when call save()
+        id : "layout",
+
+        setLayoutId : function(layoutId) {
+            this.set("layout_id", layoutId)
+        },
+        getLayoutId : function() {
+            return this.get("layout_id");
+        },
+
+        setUrlRoot : function(url) {
+            this.urlRoot = url;
+        },
+
+        /**
+         * @Override
+         */
+        url : function() {
+            return this.urlRoot;
+        },
+
+        toJSON : function() {
+            var data = {id : this.getId(), layout_id: this.getLayoutId(), "type": "container", childrens : []};
+            this.get('_childrens').each(function(elem) {
+                data.childrens.push(elem.toJSON());
+            });
+            return data;
+        }
+    });
 
 	var layoutDef = {
 		'LayoutComponent' : LayoutComponent,

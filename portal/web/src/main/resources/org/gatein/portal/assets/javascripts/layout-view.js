@@ -19,10 +19,11 @@
         	    		cont.addChild(ui.item.attr('id'), {at : idx});
         	    	}
         		});
-                this.$("#saveLayout").click(function(){
+                this.$("#saveLayout").off().click(function(){
                     view.model.save().done(function($data){
                         if($data.code == 200) {
-                            window.location.href = view.model.url;
+                            $url = _.result(view.model, 'url');
+                            window.location.href = $url;
                         } else {
                             alert("error: " + data.message);
                         }
@@ -58,9 +59,8 @@
 		var root = $('.editing');
 		var url = root.attr('data-editURL');
 		
-		var container = new Container();
-        container.url = url;
-        container.id = "layout";
+		var container = new PageContainer();
+        container.setUrlRoot(url);
 		$('.sortable').each(function() {
 			var cont = new Container({id : this.id});			
 			$(this).children('.portlet').each(function() {			
@@ -79,9 +79,23 @@
 				e.preventDefault();
 				$.ajax({
 						url : href,
-						dataType : "html",
-						success: function(data) {
-							var newContainer = new Container();
+						dataType : "json",
+						success: function(result) {
+                            if(result.code != 200) {
+                                alert("change layout failure!");
+                                return false;
+                            }
+
+                            var resultData = result.data;
+
+                            //Init new model
+							var newContainer = new PageContainer();
+                            newContainer.setUrlRoot(url);
+                            if(resultData.layout_id) {
+                                newContainer.setLayoutId(resultData.layout_id);
+                            }
+
+                            var data = resultData.html;
 							$(data).find('.sortable').each(function() {
 								var cont = new Container({id : this.id});
 								newContainer.addChild(cont);
