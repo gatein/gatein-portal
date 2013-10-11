@@ -1,0 +1,67 @@
+#{decorate path=shared.gtmpl/}
+
+<%
+	def path = "";
+    def isEditing = false;
+	def req = juzu.impl.request.Request.getCurrent();
+	if (req != null) {
+	    def param = req.getParameters().get("javax.portlet.path");
+	    if (param != null) {
+	        path = param.getValue();
+	    }
+        def param1 = req.getParameters().get("javax.portlet.a");
+        if (param1 != null && "edit".equals(param1.getValue())) {
+            isEditing = true;
+        }
+	}
+%>
+
+<% header.each { name, fragment -> %>
+<div>
+    <div>${fragment.content}</div>
+	 <div style="position: relative; top: -51px; left: 639px">
+        <% if(!isEditing){%>
+		<a href="@{Controller.index(path=path,phase='edit')}" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+			Edit Page
+		</a>
+        <% } else {%>
+        <a id="saveLayout" href="javascript:void(0);" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+            Save
+        </a>
+        &nbsp;&nbsp;
+        <a href="@{Controller.index(path=path)}" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+           Cancel
+        </a>
+        <%}%>
+	 </div>
+     <%
+   	if (req != null) {
+   	    def pmap = req.getParameters();
+   	    def param = pmap.get("javax.portlet.a");
+   	    if (param != null && "edit".equals(param.getValue())) {
+     %>
+          <div class="btn-group" style="position: relative; top: -76px; left: 745px">
+                <button class="btn dropdown-toggle" data-toggle="dropdown">Switch to <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li><a class="switch" href="@{PageEditor.switchLayout(id='1')}">One column</a></li>
+                  <li><a class="switch" href="@{PageEditor.switchLayout(id='2')}">Two columns 70 30</a></li>
+                  <li><a class="switch" href="@{PageEditor.switchLayout(id='3')}">Two columns One row</a></li>
+                  <li><a class="switch" href="@{PageEditor.switchLayout(id='4')}">One row Two colums</a></li>
+                  <li><a class="switch" href="@{PageEditor.switchLayout(id='5')}">Three columns</a></li>
+                </ul>
+           </div>
+     <%
+        }
+   	}
+    %>
+</div>
+<% } %>
+<div class="pageBody">
+${body}
+</div>
+
+<% footer.each { name, fragment -> %>
+<div>
+    <div>${fragment.content}</div>
+</div>
+<% } %>

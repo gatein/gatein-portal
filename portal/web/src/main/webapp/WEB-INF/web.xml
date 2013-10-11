@@ -32,7 +32,7 @@
 
   <filter>
     <filter-name>ClientRequestFilter</filter-name>
-    <filter-class>org.gatein.portal.servlet.ClientRequestFilter</filter-class>
+    <filter-class>org.gatein.portal.web.servlet.ClientRequestFilter</filter-class>
     <async-supported>true</async-supported>
   </filter>
   <filter-mapping>
@@ -58,7 +58,7 @@
     <servlet-class>juzu.bridge.servlet.JuzuServlet</servlet-class>
     <init-param>
       <param-name>juzu.app_name</param-name>
-      <param-value>org.gatein.portal</param-value>
+      <param-value>org.gatein.portal.web</param-value>
     </init-param>
     <async-supported>true</async-supported>
   </servlet>
@@ -92,7 +92,7 @@
   <!-- for login module -->
   <filter>
     <filter-name>OAuthPreFilter</filter-name>
-    <filter-class>org.gatein.portal.servlet.OAuthPreFilter</filter-class>
+    <filter-class>org.gatein.portal.web.servlet.OAuthPreFilter</filter-class>
     <async-supported>true</async-supported>
   </filter>
   <filter-mapping>

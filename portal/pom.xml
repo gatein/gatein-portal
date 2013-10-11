@@ -32,7 +32,7 @@
   <name>GateIn Portal Module</name>
 
   <properties>
-    <juzu.version>0.7.0-beta15</juzu.version>
+    <juzu.version>0.7.0-beta23</juzu.version>
   </properties>
 
   <modules>

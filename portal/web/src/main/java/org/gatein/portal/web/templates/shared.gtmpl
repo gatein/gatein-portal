@@ -1,0 +1,22 @@
+<%
+	def editing = false;
+	def path = "";
+	def req = juzu.impl.request.Request.getCurrent();
+	if (req != null) {
+	    def pmap = req.getParameters();
+	    def param = pmap.get("javax.portlet.a");
+	    editing = param != null && "edit".equals(param.getValue());
+	    
+	    def pathParam = pmap.get("javax.portlet.path");
+	    path = pathParam != null ? pathParam.getValue() : "";
+	}
+%>
+
+<div class="container <%=editing ? "editing" : ""%>" data-editURL="@{PageEditor.edit(path=path)}">
+
+    #{insert/}
+
+    <div class="footer">
+        <p>Copyright © 2009-2013. All rights reserved, Red Hat, Inc and eXo Platform SAS</p>
+    </div>
+</div>
