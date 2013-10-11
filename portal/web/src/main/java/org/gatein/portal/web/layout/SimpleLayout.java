@@ -88,7 +88,7 @@ public class SimpleLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, Appendable to) throws IOException {
+    public void render(RenderingContext renderingContext, Map<String, Result.Fragment> fragments, String body, PageContext state, Appendable to) throws IOException {
         root.render(fragments, state, to);
     }
 

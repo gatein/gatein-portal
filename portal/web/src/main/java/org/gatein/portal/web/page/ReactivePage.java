@@ -32,7 +32,7 @@ import juzu.io.Chunk;
 import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
 import org.gatein.portal.web.layout.Layout;
-import org.gatein.portal.web.page.spi.RenderTask;
+import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.w3c.dom.Element;
 
@@ -48,6 +48,9 @@ class ReactivePage {
 
     /** . */
     private final Locale locale;
+
+    /** . */
+    private final RenderingContext renderingContext;
 
     /** . */
     private final ArrayList<ReactiveWindow> windows;
@@ -67,7 +70,7 @@ class ReactivePage {
     /** . */
     private final ReentrantLock lock;
 
-    ReactivePage(PageContext context, Locale locale) {
+    ReactivePage(PageContext context, Locale locale, RenderingContext renderingContext) {
 
         ArrayList<ReactiveWindow> windows = new ArrayList<ReactiveWindow>();
         for (Map.Entry<String, WindowContext> entry : context) {
@@ -90,6 +93,7 @@ class ReactivePage {
         this.results = new HashMap<String, Result>();
         this.buffer = new ChunkBuffer(logger);
         this.lock = new ReentrantLock();
+        this.renderingContext = renderingContext;
     }
 
     /**
@@ -170,8 +174,8 @@ class ReactivePage {
         // Compute and send page
         try {
             StringBuilder body = new StringBuilder();
-            pageLayout.render(fragments, null, context, body);
-            siteLayout.render(fragments, body.toString(), context, buffer);
+            pageLayout.render(renderingContext, fragments, null, context, body);
+            siteLayout.render(renderingContext, fragments, body.toString(), context, buffer);
         } catch (IOException e) {
             // Could not render page
             // find something useful to do :-)

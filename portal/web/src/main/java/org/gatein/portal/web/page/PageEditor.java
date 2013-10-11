@@ -43,6 +43,7 @@ import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
+import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.Properties;
@@ -58,8 +59,6 @@ import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
-import org.gatein.portal.web.layout.ZoneLayout;
-import org.gatein.portal.web.layout.ZoneLayoutFactory;
 
 public class PageEditor {
 
@@ -86,7 +85,7 @@ public class PageEditor {
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
         ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
         StringBuilder sb = new StringBuilder();
-        layout.render(Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
+        layout.render(new RenderingContext(null, true), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
         JSON result = new JSON();
         result.set("code", 200);

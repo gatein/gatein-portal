@@ -1,16 +1,3 @@
-<%
-  def tooltip = "", cursor = "", icon = "";
-  def req = juzu.impl.request.Request.getCurrent();
-  if (req != null) {
-      def pmap = req.getParameters();
-      def param = pmap.get("javax.portlet.a");
-      if (param != null && "edit".equals(param.getValue())) {
-          tooltip = "Drag to edit page";
-          cursor = "cursor: move";
-          icon = "&equiv;";
-      }
-  }
-%>
 <div class="row-fluid">
     <div id="3" class="span12 sortable <%=l3==null || l3.isEmpty() ? 'emptyContainer' : '' %>">
         <% l3.each { name, fragment -> %>

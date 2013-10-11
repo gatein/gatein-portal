@@ -70,28 +70,25 @@ public class ZoneLayout extends Layout {
     }
 
     @Override
-    public void render(Map<String, Result.Fragment> fragments, String body, PageContext state, Appendable to) {
+    public void render(RenderingContext renderingContext, Map<String, Fragment> fragments, String body, PageContext state, Appendable to) {
         Template template = null;
-        Map<String, Object> parameters = null;
+        final Map<String, Object> parameters = new HashMap<String, Object>();
         if ("1".equals(id)) {
             template = factory.zone_1_column;
-            parameters = Collections.<String, Object>singletonMap("l1", getFragments("1", fragments));
+            parameters.put("l1", getFragments("1", fragments));
         } else if ("2".equals(id)) {
             template = factory.zone_2_columns_70_30;
             Map<String, Fragment> l1 = getFragments("1", fragments);
             Map<String, Fragment> l2 = getFragments("2", fragments);
-            parameters = new HashMap<String, Object>();
             parameters.put("l1", l1);
             parameters.put("l2", l2);
         } else if ("site".equals(id)) {
             template = factory.site;
-            juzu.impl.common.Builder.Map<String, Object> builder = juzu.impl.common.Builder.
-                    <String, Object>map("header", getFragments("header", fragments)).
-                    map("footer", getFragments("footer", fragments));
+            parameters.put("header", getFragments("header", fragments));
+            parameters.put("footer", getFragments("footer", fragments));
             if (body != null) {
-                builder = builder.map("body", body);
+                parameters.put("body", body);
             }
-            parameters = builder.build();
         } else {
             if ("3".equals(id)) {
                 template = factory.zone_2_columns_1_row;
@@ -103,12 +100,24 @@ public class ZoneLayout extends Layout {
             Map<String, Fragment> l1 = getFragments("1", fragments);
             Map<String, Fragment> l2 = getFragments("2", fragments);
             Map<String, Fragment> l3 = getFragments("3", fragments);
-            parameters = new HashMap<String, Object>();
             parameters.put("l1", l1);
             parameters.put("l2", l2);
             parameters.put("l3", l3);
         }
         if (template != null) {
+            parameters.put("path", renderingContext.path != null ? renderingContext.path : "");
+            if (renderingContext.editing) {
+                parameters.put("tooltip", "Drag to edit page");
+                parameters.put("cursor", "cursor: move");
+                parameters.put("icon", "&equiv;");
+                parameters.put("editing", true);
+                parameters.put("editing", true);
+            } else {
+                parameters.put("tooltip", "");
+                parameters.put("cursor", "");
+                parameters.put("icon", "");
+                parameters.put("editing", false);
+            }
             template.renderTo(to, parameters);
         } else {
             throw new UnsupportedOperationException("Layout not found");

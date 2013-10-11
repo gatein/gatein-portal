@@ -38,6 +38,7 @@ import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
 import juzu.template.Template;
 import org.gatein.portal.web.layout.Layout;
+import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
@@ -252,7 +253,10 @@ public class Controller {
                     Layout siteLayout = layoutFactory.build("site", siteStructure);
 
                     //
-                    ReactivePage rp = new ReactivePage(pageContext, context.getUserContext().getLocale());
+                    ReactivePage rp = new ReactivePage(
+                            pageContext,
+                            context.getUserContext().getLocale(),
+                            new RenderingContext(path, "edit".equals(phase)));
 
                     //
                     return rp.execute(siteLayout, pageLayout, context);

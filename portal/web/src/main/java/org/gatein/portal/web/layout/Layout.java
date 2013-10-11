@@ -25,8 +25,6 @@ import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.web.page.PageContext;
 import org.gatein.portal.web.page.Result;
-import org.gatein.portal.web.page.PageContext;
-import org.gatein.portal.web.page.Result;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -37,7 +35,7 @@ public abstract class Layout {
      * Renders the layout.
      *
      *
-     *
+     * @param renderingContext
      * @param fragments the fragments
      * @param body the optional body
      * @param state the page state
@@ -45,6 +43,7 @@ public abstract class Layout {
      * @throws IOException
      */
     public abstract void render(
+            RenderingContext renderingContext,
             Map<String, Result.Fragment> fragments,
             String body, PageContext state,
             Appendable to) throws IOException;
