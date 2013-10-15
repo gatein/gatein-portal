@@ -24,7 +24,7 @@
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='1')}">One column</a></li>
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='2')}">Two columns 70 30</a></li>
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='3')}">Two columns One row</a></li>
-                  <li><a class="switch" href="@{PageEditor.switchLayout(id='4')}">One row Two colums</a></li>
+                  <li><a class="switch" href="@{PageEditor.switchLayout(id='4')}">One row Two columns</a></li>
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='5')}">Three columns</a></li>
               </ul>
            </div>

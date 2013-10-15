@@ -1,6 +1,10 @@
 (function() {
 	var  LayoutView = Backbone.View.extend({
 		el : '.editing',
+		
+		events : {
+			"click a.switch" : "switchLayout"
+		},
 
         initialize : function() {
         	var editing = this.$el.hasClass("editing");
@@ -60,6 +64,54 @@
         	if (container.isEmpty()) {
         		$cont.addClass('emptyContainer');
         	}
+        },
+        
+        switchLayout : function(e) {
+        	var anchor = e.target;
+        	var href = $(anchor).attr('href');
+        	e.preventDefault();
+        	var url = this.$el.attr('data-editURL');
+  				$.ajax({
+  						url : href,
+  						dataType : "json",
+  						success: function(result) {
+                if(result.code != 200) {
+                    alert("change layout failure!");
+                    return false;
+                }
+
+                var resultData = result.data;
+
+                //Init new model
+  							var newContainer = new PageContainer();
+                newContainer.setUrlRoot(url);
+                if(resultData.layout_id) {
+                    newContainer.setLayoutId(resultData.layout_id);
+                }
+
+                var data = resultData.html;
+  							$(data).find('.sortable').each(function() {
+  								var cont = new Container({id : this.id});
+  								newContainer.addChild(cont);
+  							});
+
+  							var pageBody = $('.pageBody');
+  							pageBody.find('.sortable').each(function() {
+  								var id = $(this).attr('id');
+  								$(this).attr('id', id + '-old');
+  							});
+  							var oldLayout = $('<div></div>').hide().html(pageBody.html());
+  							$(pageBody).html(data);
+  							$('.container').append(oldLayout);
+
+                var container = window.snapshotModel;
+  							window.layoutView = new LayoutView({model : newContainer});
+  							container.switchLayout(newContainer);
+
+  							//remove old container
+  							oldLayout.remove();
+  						}
+  				});
         }
 	});
 
@@ -79,75 +131,7 @@
 			container.addChild(cont);
 		});
 		
-        window.snapshotModel = container;
+    window.snapshotModel = container;
 		window.layoutView = new LayoutView({model : container});
-
-		//switch layout
-		$('.switch').each(function() {
-			var href = $(this).attr('href');
-			$(this).on('click', function(e) {
-				e.preventDefault();
-				$.ajax({
-						url : href,
-						dataType : "json",
-						success: function(result) {
-                            if(result.code != 200) {
-                                alert("change layout failure!");
-                                return false;
-                            }
-
-                            var resultData = result.data;
-
-                            //Init new model
-							var newContainer = new PageContainer();
-                            newContainer.setUrlRoot(url);
-                            if(resultData.layout_id) {
-                                newContainer.setLayoutId(resultData.layout_id);
-                            }
-
-                            var data = resultData.html;
-							$(data).find('.sortable').each(function() {
-								var cont = new Container({id : this.id});
-								newContainer.addChild(cont);
-							});
-
-							var pageBody = $('.pageBody');
-							pageBody.find('.sortable').each(function() {
-								var id = $(this).attr('id');
-								$(this).attr('id', id + '-old');
-							});
-							var oldLayout = $('<div></div>').hide().html(pageBody.html());
-							$(pageBody).html(data);
-							$('.container').append(oldLayout);
-
-                            var container = window.snapshotModel;
-							window.layoutView = new LayoutView({model : newContainer});
-
-							$(container.get("_childrens").models).each(function() {
-									var apps = this.get("_childrens").models;
-									var id = this.id;
-									var cont = this;
-									$(apps).each(function() {
-										var newCont = newContainer.getChild(id);
-                                        var newApp = new Application(this);
-										if (newCont) {
-											newCont.addChild(newApp);
-										} else {
-											//Add applications into last container
-											var lastId = newContainer.get("_childrens").length;
-											newCont = newContainer.getChild(lastId);
-											newCont.addChild(newApp);
-										}
-									});
-							});
-
-							//remove old container
-							oldLayout.remove();
-						}
-				});
-			});
-		});
-		//end switch layout
-
 	});
 })();

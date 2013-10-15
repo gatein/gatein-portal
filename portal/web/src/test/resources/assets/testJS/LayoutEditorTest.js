@@ -72,3 +72,38 @@ test("test toJSON", function() {
 	equal(cont2['childrens'][0].id, '2_1');
 	equal(cont2['childrens'][1].id, '2_2');
 });
+
+test("test switchLayout", function() {
+	var oneZone = new Container();
+	oneZone.addChild(new Container({id : "1"}));
+	equal(1, oneZone.get("_childrens").length);
+	container.switchLayout(oneZone);
+	
+	equal(4, oneZone.getChild("1").getChildrens().length);
+	equal('1_1', oneZone.getChild('1').at(0).getId());
+	equal('1_2', oneZone.getChild('1').at(1).getId());
+	equal('2_1', oneZone.getChild('1').at(2).getId());
+	equal('2_2', oneZone.getChild('1').at(3).getId());
+	
+	var twoZone = new Container();
+	twoZone.addChild(new Container({id : "1"}));
+	twoZone.addChild(new Container({id : "2"}));
+	container.switchLayout(twoZone);
+	
+	equal('1_1', twoZone.getChild('1').at(0).getId());
+	equal('1_2', twoZone.getChild('1').at(1).getId());
+	equal('2_1', twoZone.getChild('2').at(0).getId());
+	equal('2_2', twoZone.getChild('2').at(1).getId());
+	
+	var threeZone = new Container();
+	threeZone.addChild(new Container({id : "1"}))
+	threeZone.addChild(new Container({id : "2"}))
+	threeZone.addChild(new Container({id : "3"}))
+	container.switchLayout(threeZone);
+	
+	equal('1_1', threeZone.getChild('1').at(0).getId());
+	equal('1_2', threeZone.getChild('1').at(1).getId());
+	equal('2_1', threeZone.getChild('2').at(0).getId());
+	equal('2_2', threeZone.getChild('2').at(1).getId());
+	equal(true, threeZone.getChild('3').isEmpty());
+});

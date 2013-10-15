@@ -204,7 +204,27 @@
 				data.childrens.push(elem.toJSON());
 			});
 			return data;
-		}
+		},
+		
+		switchLayout : function(newContainer) {
+    	$(this.get("_childrens").models).each(function() {
+				var apps = this.get("_childrens").models;
+				var id = this.id;
+				var cont = this;
+				$(apps).each(function() {
+					var newCont = newContainer.getChild(id);
+                              var newApp = new Application(this);
+					if (newCont) {
+						newCont.addChild(newApp);
+					} else {
+						//Add applications into last container
+						var lastId = newContainer.get("_childrens").length;
+						newCont = newContainer.getChild(lastId);
+						newCont.addChild(newApp);
+					}
+				});
+    	});
+    }
 	});
 
     /**
