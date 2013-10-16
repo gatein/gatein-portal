@@ -3,7 +3,8 @@
 		el : '.editing',
 		
 		events : {
-			"click a.switch" : "switchLayout"
+			"click a.switch" : "switchLayout",
+			"click button.close" : "deleteApp"
 		},
 
         initialize : function() {
@@ -64,6 +65,13 @@
         	if (container.isEmpty()) {
         		$cont.addClass('emptyContainer');
         	}
+        },
+        
+        deleteApp : function(e) {
+        	var appId = $(e.target).closest('div.portlet').attr('id');
+        	var containerId = $(e.target).closest('div.sortable').attr('id')
+        	var container = this.model.getDescendant(containerId);
+        	container.removeChild(appId);
         },
         
         switchLayout : function(e) {

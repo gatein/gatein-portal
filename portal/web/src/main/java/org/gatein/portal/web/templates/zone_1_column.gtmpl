@@ -2,7 +2,9 @@
   <div id="1" class="span12 sortable <%=l1==null || l1.isEmpty() ? 'emptyContainer' : '' %>" >
     <% l1.each { name, fragment -> %>
     <div id="${name}" class="portlet">
-        <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+        <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}
+            <% if (editing) { %><button class="close" type="button">x</button> <% } %>
+        </h3>
         <div>${fragment.content}</div>
     </div>
     <% } %>

@@ -2,7 +2,9 @@
     <div id="3" class="span12 sortable <%=l3==null || l3.isEmpty() ? 'emptyContainer' : '' %>">
         <% l3.each { name, fragment -> %>
         <div id="${name}" class="portlet">
-          <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+          <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}
+          <% if (editing) { %><button class="close" type="button">x</button> <% } %>
+          </h3>
           <div>${fragment.content}</div>
         </div>
       <% } %>
@@ -12,7 +14,9 @@
     <div id="1" class="span6 sortable <%=l1==null || l1.isEmpty() ? 'emptyContainer' : '' %>">
         <% l1.each { name, fragment -> %>
         <div id="${name}" class="portlet">
-          <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+          <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}
+          <% if (editing) { %><button class="close" type="button">x</button> <% } %>
+          </h3>
           <div>${fragment.content}</div>
         </div>
       <% } %>
@@ -20,7 +24,9 @@
     <div id="2" class="span6 sortable <%=l2==null || l2.isEmpty() ? 'emptyContainer' : '' %>">
         <% l2.each { name, fragment -> %>
         <div id="${name}" class="portlet">
-         <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}</h3>
+         <h3 style="${cursor}" title="${tooltip}">${icon} ${fragment.title}
+          <% if (editing) { %><button class="close" type="button">x</button> <% } %>
+          </h3>
           <div>${fragment.content}</div>
         </div>
         <% } %>
