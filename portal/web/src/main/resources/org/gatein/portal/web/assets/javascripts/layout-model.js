@@ -46,8 +46,20 @@
 				draggable : true
 			});
 		},
+
+		//Need name and logo
+		getName: function(){
+			return this.get('name') || this.name;
+		},
+		getLogo: function(){
+			return this.get("logo") || this.logo || "/portal/assets/org/gatein/portal/assets/images/DefaultPortlet.png";
+		},
+
 		toJSON : function() {
-			return {id : this.getId(), "type": "application"};
+			return {id : this.getId(), "type": "application", name: this.getName()};
+		},
+		toJSONForRenderer: function() {
+			return {id : this.getId(), "type": "application", name: this.getName(), logo: this.getLogo()};
 		}
 	});
 
@@ -230,7 +242,7 @@
     /**
      *
      */
-    PageContainer = Container.extend({
+    var PageContainer = Container.extend({
         //Work around to force PUT method when call save()
         id : "layout",
 
@@ -261,10 +273,35 @@
         }
     });
 
+	var ComposerContainer = Container.extend({
+		fetch: function() {
+			var url = this.url;
+			var _this = this;
+			$.ajax({
+				url : url,
+				dataType : "json",
+				success: function(result) {
+					if(result.code != 200) {
+						alert("error on fetch portlets");
+						return;
+					}
+
+					var portlets = result.data.portlets;
+					$(portlets).each(function(i, portlet){
+						console.log(portlet);
+						_this.addChild(new Application({name: portlet.name}));
+					});
+				}
+			});
+		}
+	});
+
 	var layoutDef = {
 		'LayoutComponent' : LayoutComponent,
 		'Application' : Application,
-		'Container' : Container
+		'Container' : Container,
+		'PageContainer': PageContainer,
+		'ComposerContainer': ComposerContainer
 	};
 	if (typeof window.require === "function" && window.require.amd) {
 		return layoutDef;

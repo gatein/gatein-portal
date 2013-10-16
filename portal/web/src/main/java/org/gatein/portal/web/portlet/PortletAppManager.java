@@ -19,11 +19,15 @@
 
 package org.gatein.portal.web.portlet;
 
+import java.util.Set;
+
 import javax.servlet.ServletContext;
 
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletInvoker;
+import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
 import org.gatein.pc.portlet.aspects.ConsumerCacheInterceptor;
 import org.gatein.pc.portlet.aspects.PortletCustomizationInterceptor;
@@ -89,6 +93,10 @@ public class PortletAppManager implements WebAppListener, Startable {
     public PortletInvoker getInvoker() {
         return invoker;
     }
+
+	public Set<Portlet> getAllPortlets() throws PortletInvokerException {
+		return invoker.getPortlets();
+	}
 
     @Override
     public void onEvent(WebAppEvent event) {

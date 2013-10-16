@@ -31,6 +31,23 @@
      <% } %>
 </div>
 <% } %>
+<!--Composer-->
+<% if(editing){%>
+<div id="composers" class="composers" data-url="@{PageEditor.getAllPortlets()}">
+	<ul id="portlet-list" class="portlet-list"></ul>
+	<div style="clear: both;"></div>
+
+	<!-- Template of portlet in composer -->
+	<script type="text/template" id="portlet-template">
+		<div class="portlet">
+			<img src="${"<%- logo %>"}"/>
+			<p>${"<%- name %>"}</p>
+		</div>
+	</script>
+</div>
+<%}%>
+<!-- end composer -->
+
 <div class="pageBody">
 ${body}
 </div>

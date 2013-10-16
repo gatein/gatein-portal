@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import juzu.Param;
 import juzu.Resource;
@@ -43,9 +44,8 @@ import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
-import org.gatein.portal.web.layout.RenderingContext;
-import org.gatein.portal.web.layout.ZoneLayout;
-import org.gatein.portal.web.layout.ZoneLayoutFactory;
+import org.gatein.pc.api.Portlet;
+import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
@@ -58,7 +58,11 @@ import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.web.layout.RenderingContext;
+import org.gatein.portal.web.layout.ZoneLayout;
+import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
+import org.gatein.portal.web.portlet.PortletAppManager;
 
 public class PageEditor {
 
@@ -80,6 +84,9 @@ public class PageEditor {
     @Inject
     ZoneLayoutFactory layoutFactory;
 
+	@Inject
+	PortletAppManager portletAppManager;
+
     @Resource
     @Route(value = "/switchto/{javax.portlet.z}")
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
@@ -99,6 +106,30 @@ public class PageEditor {
 
         return Response.status(200).body(result.toString());
     }
+
+	@Resource
+	@Route(value = "/portlets")
+	public Response getAllPortlets() throws Exception {
+		List<JSON> items = new LinkedList<JSON>();
+		Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
+		for(Portlet portlet : portlets) {
+			PortletInfo info = portlet.getInfo();
+
+			JSON item = new JSON();
+			item.set("name", info.getName());
+			item.set("applicationName", info.getApplicationName());
+
+			items.add(item);
+		}
+
+		JSON data = new JSON();
+		data.set("portlets", items.toArray(new JSON[0]));
+		JSON result = new JSON();
+		result.set("code", 200);
+		result.set("status", "success");
+		result.set("data", data);
+		return Response.status(200).body(result.toString());
+	}
 
     @Resource
     @Route(value = "/{javax.portlet.path}", priority = 2)

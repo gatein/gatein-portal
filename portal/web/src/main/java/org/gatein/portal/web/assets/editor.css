@@ -28,3 +28,18 @@
 .row-fluid .sortable {
 	min-height: 100px;
 }
+
+.composers {
+	border: solid 1px red;
+	border-radius: 4px;
+}
+.composers ul, .composers ul li {
+	list-style: none;
+}
+.composers ul li {
+	float: left;
+	margin-left: 5px;
+}
+.composers ul li .portlet {
+	border: none;
+}

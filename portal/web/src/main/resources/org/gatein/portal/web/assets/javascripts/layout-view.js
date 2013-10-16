@@ -123,8 +123,42 @@
         }
 	});
 
+	var ApplicationView = Backbone.View.extend({
+		tagName:  "li",
+		initialize: function() {
+		},
+		render: function() {
+			this.template = _.template($("#portlet-template").html());
+			this.$el.html(this.template(this.model.toJSONForRenderer()));
+			return this;
+		}
+	});
+	var ComposerView = Backbone.View.extend({
+		el: $("#composers"),
+		initialize: function() {
+			this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
+		},
+
+		onAddChild: function(child) {
+			var container = $('#portlet-list');
+			var view = new ApplicationView({model: child}).render();
+			container.append(view.$el);
+		}
+	});
+
 	//Bootstrap view and model of the editor 
 	$(function() {
+		//Composer
+		var composerRoot = $("#composers");
+		var fetchPortletURL = composerRoot.attr("data-url");
+
+		var composer = new ComposerContainer();
+		composer.url = fetchPortletURL;
+		var composerView = new ComposerView({model: composer});
+
+		composer.fetch();
+		//End composer
+
 		var root = $('.editing');
 		var url = root.attr('data-editURL');
 
