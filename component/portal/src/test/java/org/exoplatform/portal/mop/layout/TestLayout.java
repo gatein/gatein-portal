@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.layout;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -33,6 +34,7 @@ import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
 import org.gatein.mop.core.util.Tools;
+import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationContext;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -166,6 +168,97 @@ public class TestLayout extends AbstractMopServiceTest {
         testAll(layoutId);
         context.getPageService().destroyPage(page.key);
         assertEmptyLayout(layoutId);
+    }
+    
+    public void testSwitchLayout() {
+        PageData page = createPage(createSite(SiteType.PORTAL, "test_layout_page"), "page", new PageState.Builder().build());
+        NodeData<ElementState>[] containers = createElements(page, Element.container(), Element.container(), Element.container());
+        createElements(context.getLayoutStore().begin(page.layoutId, true), containers[0], FOO_PORTLET);
+        createElements(context.getLayoutStore().begin(page.layoutId, true), containers[1], BAR_PORTLET);
+        createElements(context.getLayoutStore().begin(page.layoutId, true), containers[2], FOO_PORTLET);
+
+        String layoutId = page.layoutId;
+
+        NodeContext<ComponentData, ElementState> pageStruct = (NodeContext<ComponentData, ElementState>) layoutService
+                .loadLayout(ElementState.model(), layoutId, null);        
+        
+        Iterator<NodeContext<ComponentData, ElementState>> iterator = pageStruct.iterator();        
+        NodeContext<ComponentData, ElementState> cont1 = iterator.next();
+        String cont1Name = cont1.getName();
+        NodeContext<ComponentData, ElementState> cont2 = iterator.next();
+        NodeContext<ComponentData, ElementState> cont3 = iterator.next();
+        NodeContext<ComponentData, ElementState> app1 = cont1.iterator().next();
+        NodeContext<ComponentData, ElementState> app2 = cont2.iterator().next();
+        NodeContext<ComponentData, ElementState> app3 = cont3.iterator().next();
+        
+        pageStruct.add(0, cont3);
+        layoutService.saveLayout(pageStruct, null); 
+        
+        pageStruct = (NodeContext<ComponentData, ElementState>) layoutService
+                .loadLayout(ElementState.model(), layoutId, null);
+        ComponentData app1D = buildComponentData(find(app1.getName(), pageStruct));
+        ComponentData app2D = buildComponentData(find(app2.getName(), pageStruct));
+        ComponentData app3D = buildComponentData(find(app3.getName(), pageStruct));
+        
+        //Switch from 3 zones layout to 1 zone layout
+        ComponentData con1Data = buildComponentData(find(cont1Name, pageStruct), app1D, app2D, app3D);
+        ComponentData pageData = buildComponentData(pageStruct, con1Data);
+        layoutService.saveLayout(new ContainerAdapter((ContainerData)pageData), pageData, pageStruct, null);
+        
+        pageStruct = (NodeContext<ComponentData, ElementState>) layoutService
+                .loadLayout(ElementState.model(), layoutId, null);
+        CustomizationService cusService = context.getCustomizationService();
+        assertNotNull(cusService.loadCustomization(find(app3.getName(), pageStruct).getId()));
+    }
+    
+    private <T extends ComponentData> T buildComponentData(NodeContext<ComponentData, ElementState> context, ComponentData ...childs) {
+        ElementState state = context.getState();
+        if (state instanceof ElementState.Container) {
+            List<ComponentData> children = new ArrayList<ComponentData>();
+            if (childs != null) {
+                for (ComponentData c : childs) {
+                    children.add(c);
+                }
+            }
+            ElementState.Container containerState = (ElementState.Container) state;
+            Properties properties = containerState.properties;
+            ContainerData containerData = new ContainerData(context.getId(), context.getName(), context.getId(),
+                    properties.get(ElementState.Container.NAME), properties.get(ElementState.Container.ICON),
+                    properties.get(ElementState.Container.TEMPLATE), properties.get(ElementState.Container.FACTORY_ID),
+                    properties.get(ElementState.Container.TITLE), properties.get(ElementState.Container.DESCRIPTION),
+                    properties.get(ElementState.Container.WIDTH), properties.get(ElementState.Container.HEIGHT),
+                    containerState.getAccessPermissions(), children);
+
+            return (T) containerData;
+        } else if (state instanceof ElementState.Window) {
+            ElementState.Window winState = (ElementState.Window) state;
+            Properties properties = winState.properties;
+            ApplicationState appState = winState.state;
+            ApplicationData appData = new ApplicationData(context.getId(), context.getName(), winState.type, appState,
+                    context.getId(), properties.get(ElementState.Window.TITLE), properties.get(ElementState.Window.ICON),
+                    properties.get(ElementState.Window.DESCRIPTION), false,
+                    false,
+                    false, properties.get(ElementState.Window.THEME),
+                    properties.get(ElementState.Window.WIDTH), properties.get(ElementState.Window.HEIGHT),
+                    Collections.EMPTY_MAP, winState.accessPermissions);
+
+            return (T) appData;
+        }
+        return null;
+    }
+
+    private NodeContext<ComponentData, ElementState> find(String id, NodeContext<ComponentData, ElementState> target) {
+        if (target.getName().equals(id)) {
+            return target;
+        } else {
+            for (NodeContext<ComponentData, ElementState> child : target) {
+                NodeContext<ComponentData, ElementState> tmp = this.find(id, child);
+                if (tmp != null) {
+                    return tmp;
+                }
+            }
+        }
+        return null;
     }
 
     /**
