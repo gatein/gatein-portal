@@ -19,6 +19,12 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.portlet.WindowState;
+
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
@@ -31,9 +37,9 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -42,11 +48,6 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import javax.portlet.WindowState;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * May 19, 2006
  */
@@ -54,6 +55,32 @@ import java.util.List;
         @EventConfig(listeners = MoveChildActionListener.class),
         @EventConfig(name = "EditCurrentPage", listeners = UIPage.EditCurrentPageActionListener.class) })
 public class UIPage extends UIContainer {
+
+    /**
+     * Property settable in the portal'S configuration.properties file. See also {@link #isFullPreview()}.
+     * {@link #getDefaultEditMode()}.
+     */
+    private static final String FULL_PREVIEW_PROPERTY = "gatein.portal.pageEditor.fullPreview";
+
+    private static Boolean fullPreview = null;
+
+    /**
+     * Returns a locally cached value of {@value #FULL_PREVIEW_PROPERTY} property from configuration.properties.
+     *
+     * @return
+     */
+    public static boolean isFullPreview() {
+        if (fullPreview == null) {
+            /*
+             * Lazy initialization: For performance reasons, we have chosen to prefer to ignore the potential concurrent updates on
+             * app startup to some kind of locking. The concurrent updates should be harmless as they all produce the same
+             * result.
+             */
+            fullPreview = Boolean.valueOf(PropertyManager.getProperty(FULL_PREVIEW_PROPERTY));
+        }
+        return fullPreview.booleanValue();
+    }
+
     /** . */
     private String pageId;
 
@@ -204,4 +231,5 @@ public class UIPage extends UIContainer {
             }
         }
     }
+
 }
