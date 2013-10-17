@@ -52,7 +52,7 @@
 			return this.get('name') || this.name;
 		},
 		getLogo: function(){
-			return this.get("logo") || this.logo || "/portal/assets/org/gatein/portal/assets/images/DefaultPortlet.png";
+			return this.get("logo") || this.logo || "/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png";
 		},
 
 		toJSON : function() {
