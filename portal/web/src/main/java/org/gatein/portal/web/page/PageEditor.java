@@ -20,10 +20,13 @@
 package org.gatein.portal.web.page;
 
 import javax.inject.Inject;
+import javax.servlet.http.Cookie;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +40,8 @@ import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
 import juzu.impl.common.Tools;
+import juzu.impl.request.ContextLifeCycle;
+import juzu.impl.request.Request;
 import juzu.request.ResourceContext;
 
 import org.exoplatform.portal.config.model.ApplicationState;
@@ -44,8 +49,28 @@ import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
+import org.gatein.common.net.media.MediaType;
+import org.gatein.common.util.MultiValuedPropertyMap;
+import org.gatein.common.util.SimpleMultiValuedPropertyMap;
+import org.gatein.pc.api.ContainerURL;
+import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.Portlet;
+import org.gatein.pc.api.PortletContext;
+import org.gatein.pc.api.PortletInvoker;
+import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.info.PortletInfo;
+import org.gatein.pc.api.invocation.RenderInvocation;
+import org.gatein.pc.api.invocation.response.FragmentResponse;
+import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.gatein.pc.api.spi.ClientContext;
+import org.gatein.pc.api.spi.PortletInvocationContext;
+import org.gatein.pc.api.state.AccessMode;
+import org.gatein.pc.portlet.impl.spi.AbstractInstanceContext;
+import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
+import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
+import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
+import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
@@ -63,6 +88,7 @@ import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
+import org.gatein.portal.web.servlet.Context;
 
 public class PageEditor {
 
@@ -202,6 +228,112 @@ public class PageEditor {
             }
         }
 
+        return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
+                .withMimeType("application/json");
+    }
+    
+    /**
+     * Temporary implement to render portlet content without full page context
+     */
+    @Resource
+    @Route(value = "/getContent")
+    public Response getContent(@Param(name = "javax.portlet.content") String contentId) {
+        JSON result = new JSON();
+        
+        ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
+        PortletInvocationResponse response = null;
+        PortletInvokerException failure = null;
+        try {
+
+            //            
+            RenderInvocation invocation = new RenderInvocation(new PortletInvocationContext() {                
+                @Override
+                public void renderURL(Writer arg0, ContainerURL arg1, URLFormat arg2) throws IOException {                    
+                }
+                
+                @Override
+                public String renderURL(ContainerURL containerURL, URLFormat format) {
+                    return "";
+                }
+                
+                @Override
+                public MediaType getResponseContentType() {
+                    return MediaType.TEXT_HTML;
+                }
+                
+                @Override
+                public String encodeResourceURL(String arg0) throws IllegalArgumentException {
+                    return null;
+                }
+            });
+            
+            invocation.setClientContext(new ClientContext() {
+                
+                @Override
+                public MultiValuedPropertyMap<String> getProperties() {
+                    return new SimpleMultiValuedPropertyMap<String>();
+                }
+                
+                @Override
+                public String getMethod() {
+                    return "GET";
+                }
+                
+                @Override
+                public List<Cookie> getCookies() {
+                    return Collections.emptyList();
+                }
+            });
+            
+            org.gatein.pc.api.Portlet portlet;
+            PortletInvoker invoker = portletAppManager.getInvoker();
+            try {
+                String[] id = contentId.split("/");
+                if (id.length == 2) {
+                    portlet = invoker.getPortlet(PortletContext.createPortletContext(id[0], id[1]));
+                } else {
+                    throw new Exception("Could not handle " + contentId);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                portlet = null;
+            }
+            
+            invocation.setPortalContext(new AbstractPortalContext());
+            invocation.setInstanceContext(new AbstractInstanceContext(contentId, AccessMode.READ_ONLY));
+            invocation.setWindowContext(new AbstractWindowContext(contentId));
+            invocation.setUserContext(new AbstractUserContext());
+            invocation.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
+            invocation.setRequest(Context.getCurrentRequest());
+            invocation.setResponse(Context.getCurrentResponse());
+            invocation.setTarget(portlet.getContext());
+            invocation.setMode(Mode.VIEW);
+            invocation.setWindowState(org.gatein.pc.api.WindowState.NORMAL);
+            invocation.setNavigationalState(null);
+            invocation.setPublicNavigationalState(null);
+
+            //
+            response = invoker.invoke(invocation);
+        } catch (PortletInvokerException e) {
+            failure = e;
+        } finally {
+            lifeCycle.resume();
+        }
+        
+        if (failure != null) {
+            failure.printStackTrace();
+            result.set("error", "Can't render portlet");
+        } else {
+            if (response instanceof FragmentResponse) {
+                FragmentResponse fragment = (FragmentResponse) response;    
+                String title = fragment.getTitle();
+                result.set("title", title);
+                result.set("content", fragment.getContent());
+            } else {
+                throw new UnsupportedOperationException("Not yet handled " + response);
+            }
+        }
+        
         return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
                 .withMimeType("application/json");
     }
