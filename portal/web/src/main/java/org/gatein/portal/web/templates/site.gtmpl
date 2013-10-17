@@ -33,18 +33,30 @@
 <% } %>
 <!--Composer-->
 <% if(editing){%>
-<div id="composers" class="composers" data-url="@{PageEditor.getAllPortlets()}">
-	<ul id="portlet-list" class="portlet-list"></ul>
-	<div style="clear: both;"></div>
-
-	<!-- Template of portlet in composer -->
-	<script type="text/template" id="portlet-template">
-		<div class="portlet">
-			<img src="${"<%- logo %>"}"/>
-			<p>${"<%- name %>"}</p>
+<div class="panel-group" id="composers" data-url="@{PageEditor.getAllPortlets()}">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h5 class="panel-title">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#composers" href="#portlets" title="Drag and drop to add new portlet">
+					Composer
+				</a>
+			</h5>
 		</div>
-	</script>
+		<div id="portlets" class="panel-collapse collapse">
+			<div class="panel-body">
+				<div class="composer-tooltip">Drag and drop to add new portlet!</div>
+				<ul id="portlet-list" class="portlet-list"></ul>
+				<div style="clear:both"></div>
+			</div>
+		</div>
+	</div>
 </div>
+<script type="text/template" id="portlet-template">
+	<div>
+		<img alt="${"<%- name %>"}" src="${"<%- logo %>"}"/>
+		<p>${"<%- name %>"}</p>
+	</div>
+</script>
 <%}%>
 <!-- end composer -->
 

@@ -29,17 +29,34 @@
 	min-height: 100px;
 }
 
-.composers {
-	border: solid 1px red;
+#composers {
+	margin: -70px 0 20px;
+}
+#composers .panel{
+	border: solid 1px #ccc;
 	border-radius: 4px;
 }
-.composers ul, .composers ul li {
+#composers .panel a{
+	color: #666;
+	padding-left: 7px;
+	text-decoration: none;
+}
+#composers .panel a:hover {
+	color: #333;
+}
+#composers .panel-body .composer-tooltip {
+	font-style: italic;
+	font-size: 12px;
+}
+#composers .in {
+	border-top: solid 1px #ccc;
+}
+#composers ul, .composers ul li {
 	list-style: none;
 }
-.composers ul li {
+#composers ul li {
 	float: left;
 	margin-left: 5px;
-}
-.composers ul li .portlet {
-	border: none;
+	width: 130px;
+	text-align: center;
 }
