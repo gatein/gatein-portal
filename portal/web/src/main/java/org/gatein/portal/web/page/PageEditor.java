@@ -45,6 +45,8 @@ import juzu.impl.request.Request;
 import juzu.request.ResourceContext;
 
 import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
@@ -59,6 +61,7 @@ import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.api.URLFormat;
+import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
@@ -140,9 +143,11 @@ public class PageEditor {
 		Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
 		for(Portlet portlet : portlets) {
 			PortletInfo info = portlet.getInfo();
+			MetaInfo meta = info.getMeta();
 
 			JSON item = new JSON();
 			item.set("name", info.getName());
+			item.set("title", meta.getMetaValue("title").getDefaultString());
 			item.set("applicationName", info.getApplicationName());
 
 			items.add(item);
@@ -349,7 +354,11 @@ public class PageEditor {
             if ("container".equalsIgnoreCase(type)) {
                 componentData = new ContainerData(null, id, null, null, null, null, null, null, null, null, null, new ArrayList<String>(), new LinkedList<ComponentData>());
             } else if ("application".equalsIgnoreCase(type)) {
-                //TODO: process when add new portlet
+                String name = json.getString("name");
+                String applicationName = json.getString("applicationName");
+                String contentId = applicationName + "/" + name;
+                TransientApplicationState state = new TransientApplicationState(contentId);
+                componentData = new ApplicationData(null, id, ApplicationType.PORTLET, state, null, null, null, null, false, false, false, null, null, null, null, null);
             }
         } else {
             componentData = this.buildComponentData(ctx);

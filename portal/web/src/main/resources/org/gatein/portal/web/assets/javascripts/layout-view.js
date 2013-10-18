@@ -1,7 +1,7 @@
 (function() {
 
   // An item in composer
-  var ApplicationView = Backbone.View.extend({
+  var ComposerApplicationView = Backbone.View.extend({
     tagName : "li",
 
     // TODO: Can this be removed, an empty method ?
@@ -11,6 +11,8 @@
     render : function() {
       this.template = _.template($("#portlet-template").html());
       this.$el.html(this.template(this.model.toJSONForRenderer()));
+      this.$el.attr("id", "");
+      this.$el.attr("data-name", this.model.getName());
       return this;
     }
   });
@@ -30,20 +32,50 @@
       this.model.fetch();
     },
 
+    getModel: function() {
+      return this.model;
+    },
+
     onAddChild : function(child) {
       var container = $('#portlet-list');
-      var view = new ApplicationView({model : child});
+      var view = new ComposerApplicationView({model : child});
       container.append(view.render().$el);
+
+      //Enable draggable
+      $(view.$el).draggable({
+        connectToSortable: ".sortable",
+        revert: "invalid",
+        helper: "clone"
+      });
     }
   });
 
+  var ApplicationView = Backbone.View.extend({
+    tagName: "div",
+    className: "portlet",
+    initialize: function() {
+      this.model.on('change', this.updateContent, this);
+      this.model.fetchContent();
+    },
+    render: function() {
+      this.template = _.template($("#application-template").html());
+      this.$el.html(this.template(this.model.toJSONForRenderer()));
+      this.$el.attr("id", this.model.getId());
+      return this;
+    },
+    updateContent: function() {
+      var id = this.model.getId();
+      var selector = "#" + id + " div";
+      $(selector).html(this.model.getContent());
+    }
+  });
 
   // 
   var LayoutView = Backbone.View.extend({
     el : '.pageBody',
 
     events : {
-      "click .close" : "deleteApp",
+      "click .close" : "deleteApp"
     },
 
     initialize : function(options) {
@@ -97,6 +129,14 @@
       var $cont = $('#' + container.getId());
       var $app = $('#' + child.getId());
       var prev = container.at(child.getIndex() - 1);
+
+      if(!$app.html()) {
+        //Create new view of application
+        var appView = new ApplicationView({model: child});
+        appView = appView.render();
+        $app = $(appView.$el);
+      }
+
       if (prev) {
         $app.insertAfter($('#' + prev.getId()));
       } else {
@@ -130,9 +170,23 @@
       }
 
       // Modify the model
-      cont.addChild(ui.item.attr('id'), {
-        at : idx
-      });
+      if(!dragObj.attr("id")) {
+        //Add new application
+        var composerView = window.editorView.getComposerView();
+        var application = composerView.getModel().findChildByName(dragObj.attr("data-name"))[0];
+
+        //Clone and generate id for new application
+        var newChild = application.clone();
+        newChild.setId(newChild.getName() + new Date().getTime());
+        cont.addChild(newChild, {at: idx});
+
+        //Remove dropped item
+        $(ui.item).remove();
+      } else {
+        cont.addChild(ui.item.attr('id'), {
+          at : idx
+        });
+      }
 
       // Update snapshot
       this.snapshotModel = this.model;
@@ -253,6 +307,10 @@
         });
         // End composer
       }
+    },
+
+    getComposerView: function() {
+      return this.composerView;
     },
 
     // Delegate to the LayoutView save

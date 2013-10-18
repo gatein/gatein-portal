@@ -44,24 +44,67 @@
       this.set({
         draggable : true,
         name : options.name || '',
+        applicationName : options.applicationName || '',
+        title : options.title || '',
+        content: options.content || "loading....",
         logo : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
       });
+      if(options.id) {
+        this.set('id', options.id);
+      }
     },
 
+    setId: function(id) {
+      this.set('id', id);
+    },
     getName : function() {
       return this.get('name');
     },
-
+    getApplicationName: function() {
+      return this.get("applicationName");
+    },
+    getTitle: function() {
+      return this.get("title");
+    },
     getLogo : function() {
       return this.get('logo');
     },
-
+    setContent: function(content) {
+      this.set("content", content);
+    },
+    getContent: function(){
+      return this.get("content");
+    },
+    fetchContent: function() {
+      //TODO: need to refactor
+      var contentId = this.getApplicationName() + "/" + this.getName();
+      var url = "/portal/getContent?javax.portlet.content=" + contentId;
+      var _this = this;
+      $.ajax({
+        url : url,
+        dataType : "json",
+        success: function(result) {
+          _this.setContent(result.content);
+        }
+      });
+    },
+    clone: function() {
+      return new Application({
+        id: this.getId(),
+        name : this.getName(),
+        applicationName : this.getApplicationName(),
+        title : this.getTitle(),
+        logo : this.getLogo(),
+        content: this.getContent()
+      });
+    },
     // Return the JSON object that contains metadata information
     toJSON : function() {
       return {
         id : this.getId(),
-        "type" : "application",
-        name : this.getName()
+        type : "application",
+        name : this.getName(),
+        applicationName: this.getApplicationName()
       };
     },
 
@@ -70,8 +113,10 @@
     toJSONForRenderer : function() {
       return {
         id : this.getId(),
-        "type" : "application",
+        type : "application",
         name : this.getName(),
+        title : this.getTitle(),
+        content : this.getContent(),
         logo : this.getLogo()
       };
     }
@@ -234,7 +279,7 @@
     toJSON : function() {
       var data = {
         id : this.getId(),
-        "type" : "container",
+        type : "container",
         childrens : []
       };
       this.get('_childrens').each(function(elem) {
@@ -251,7 +296,7 @@
         var cont = this;
         $(apps).each(function() {
           var newCont = newContainer.getChild(id);
-          var newApp = new Application(this);
+          var newApp = this.clone();
           if (newCont) {
             newCont.addChild(newApp);
           } else {
@@ -287,7 +332,7 @@
       var data = {
         id : this.getId(),
         layout_id : this.getLayoutId(),
-        'type' : 'container',
+        type : 'container',
         childrens : []
       };
       this.get('_childrens').each(function(elem) {
@@ -304,6 +349,9 @@
     initialize : function() {
       Container.prototype.initialize.call(this);
     },
+    findChildByName : function(name) {
+      return this.get('_childrens').where({name: name});
+    },
 
     fetch : function() {
       var _this = this;
@@ -319,7 +367,9 @@
           var portlets = result.data.portlets;
           $(portlets).each(function(i, portlet) {
             _this.addChild(new Application({
-              name : portlet.name
+              name : portlet.name,
+              applicationName: portlet.applicationName,
+              title: portlet.title
             }));
           });
         }

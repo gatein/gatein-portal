@@ -42,7 +42,7 @@
 				</a>
 			</h5>
 		</div>
-		<div id="portlets" class="panel-collapse collapse">
+		<div id="portlets" class="panel-collapse collapse in">
 			<div class="panel-body">
 				<div class="composer-tooltip">Drag and drop to add new portlet!</div>
 				<ul id="portlet-list" class="portlet-list"></ul>
@@ -51,11 +51,20 @@
 		</div>
 	</div>
 </div>
+<!-- Templat for portlet in composer -->
 <script type="text/template" id="portlet-template">
-	<div>
+	<div class="draggable">
 		<img alt="${"<%- name %>"}" src="${"<%- logo %>"}"/>
-		<p>${"<%- name %>"}</p>
+		<p>${"<%- title %>"}</p>
 	</div>
+</script>
+<!-- Templat for portlet in page -->
+<script type="text/template" id="application-template">
+	<h3 style="${cursor}" title="${tooltip}">
+		${icon} ${"<%- title %>"}
+		<% if (editing) { %><button class="close" type="button">x</button> <% } %>
+	</h3>
+	<div>${"<%= content %>"}</div>
 </script>
 <%}%>
 <!-- end composer -->
