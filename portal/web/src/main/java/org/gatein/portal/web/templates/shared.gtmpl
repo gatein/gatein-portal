@@ -1,4 +1,4 @@
-<div class="container <%=editing ? "editing" : ""%>" data-editURL="@{PageEditor.edit(path=path)}">
+<div class="container <%=editing ? "LAYOUT-EDITION" : ""%>" data-editURL="@{PageEditor.edit(path=path)}">
 
     #{insert/}
 

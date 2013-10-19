@@ -3,7 +3,7 @@
    * 
    */
   var EditorView = Backbone.View.extend({
-    el : '.editing',
+    el : '.LAYOUT-EDITION',
 
     events : {
       "click .switch" : "switchLayout",
@@ -11,7 +11,7 @@
     },
 
     initialize : function() {
-      if (this.$el.hasClass("editing")) {
+      if (this.$el.hasClass("LAYOUT-EDITION")) {
         //
         this.layoutView = new LayoutView({
           editUrl : this.$el.attr('data-editURL')

@@ -1,15 +1,15 @@
-.editing .row-fluid {
+.LAYOUT-EDITION .row-fluid {
     border: 1px dashed #A2A2A2;
     padding: 10px;
 }
 
-.editing .portlet {
+.LAYOUT-EDITION .portlet {
     border: 1px solid #AAAAAA;
     border-radius: 4px 4px 4px 4px;
     padding: 5px;
 }
 
-.editing .emptyContainer {
+.LAYOUT-EDITION .emptyContainer {
 	border: 1px dashed #A2A2A2;
 }
 
@@ -25,7 +25,7 @@
    margin: 5px;
 }
 
-.editing .row-fluid .sortable {
+.LAYOUT-EDITION .row-fluid .sortable {
 	min-height: 100px;
 }
 

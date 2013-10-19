@@ -2,7 +2,7 @@
 <% header.each { name, fragment -> %>
 <div>
     <div>${fragment.content}</div>
-	 <div style="position: relative; top: -51px; left: 639px">
+	 <div style="position: relative; top: -51px; left: 639px; width: 100px;">
         <% if(!editing){%>
 		<a href="@{Controller.index(path=path,phase='edit')}" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
 			Edit Page

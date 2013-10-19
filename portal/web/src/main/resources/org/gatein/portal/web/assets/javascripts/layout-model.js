@@ -1,6 +1,6 @@
 (function() {
   /**
-   * 
+   * An abstract model for Application and Container (Zone) in a layout
    */
   var LayoutComponent = Backbone.Model.extend({
     initialize : function() {
@@ -37,7 +37,7 @@
   });
 
   /**
-   * 
+   * The Application model presents a component (window) in the layout which is be able to drag & drop
    */
   var Application = LayoutComponent.extend({
     initialize : function(options) {
@@ -77,7 +77,7 @@
   });
 
   /**
-   * 
+   * The Container model presents a Zone in the layout which contains the Application
    */
   var Container = LayoutComponent.extend({
     initialize : function() {
