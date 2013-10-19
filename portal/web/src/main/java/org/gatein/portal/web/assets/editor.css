@@ -25,7 +25,7 @@
    margin: 5px;
 }
 
-.row-fluid .sortable {
+.editing .row-fluid .sortable {
 	min-height: 100px;
 }
 
