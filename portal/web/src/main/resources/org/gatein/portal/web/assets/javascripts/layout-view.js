@@ -1,61 +1,44 @@
 (function() {
-  /**
-   * 
-   */
-  var EditorView = Backbone.View.extend({
-    el : '.LAYOUT-EDITION',
 
-    events : {
-      "click .switch" : "switchLayout",
-      "click #saveLayout" : "saveLayout"
-    },
+  // An item in composer
+  var ApplicationView = Backbone.View.extend({
+    tagName : "li",
 
+    // TODO: Can this be removed, an empty method ?
     initialize : function() {
-      if (this.$el.hasClass("LAYOUT-EDITION")) {
-        //
-        this.layoutView = new LayoutView({
-          editUrl : this.$el.attr('data-editURL')
-        });
-
-        // Composer
-        var composerRoot = this.$("#composers");
-        this.composerView = new ComposerView({
-          fetchPortletURL : composerRoot.attr("data-url")
-        });
-        // End composer
-      }
     },
 
-    saveLayout : function() {
-      this.layoutView.save();
-    },
-
-    // Clicked on Swich layout button
-    switchLayout : function(e) {
-      var anchor = e.target;
-      var href = $(anchor).attr('href');
-      e.preventDefault();
-
-      $.ajax({
-        url : href,
-        dataType : "json",
-        success : function(result) {
-          if (result.code != 200) {
-            alert("change layout failure!");
-            return false;
-          }
-
-          // Delegate to LayoutView
-          var layoutView = window.editorView.layoutView;
-          layoutView.switchLayout(result.data);
-        }
-      });
+    render : function() {
+      this.template = _.template($("#portlet-template").html());
+      this.$el.html(this.template(this.model.toJSONForRenderer()));
+      return this;
     }
   });
 
-  /**
-   * 
-   */
+
+  // Composer
+  var ComposerView = Backbone.View.extend({
+    el : $("#composers"),
+
+    initialize : function(options) {
+      var options = options || {};
+
+      this.model = new ComposerContainer(null, {
+        url : options.fetchPortletURL
+      });
+      this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
+      this.model.fetch();
+    },
+
+    onAddChild : function(child) {
+      var container = $('#portlet-list');
+      var view = new ApplicationView({model : child});
+      container.append(view.render().$el);
+    }
+  });
+
+
+  // 
   var LayoutView = Backbone.View.extend({
     el : '.pageBody',
 
@@ -64,6 +47,7 @@
     },
 
     initialize : function(options) {
+      // Trigger adding D&D ability to Zone and Application elements
       this.setupDnD();
 
       var options = options || {};
@@ -71,23 +55,27 @@
 
       // Build model from current DOM
       var model = this.buildModel();
+
       // Setup model
       this.setModel(model);
       this.snapshotModel = this.model;
     },
 
     setModel : function(model) {
-      // Stop listening on old model
+
+      // Stop listening to events on the old model
       this.stopListening();
 
+      // Assign to new model
       this.model = model;
-      // Listen on model changes
+
+      // Listen to add/remove events on the new model
       this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
       this.listenTo(this.model, 'removeChild.eXo.Container', this.onRemoveChild);
       return this;
     },
 
-    // Setup dragDrop
+    // Using JQuery UI - Sortable to initialize Draggable & Droppable elements
     setupDnD : function() {
       this.$(".sortable").sortable({
         connectWith : ".sortable",
@@ -152,6 +140,7 @@
 
     // Listen to clicking on SAVE button
     save : function() {
+
       // Delegate to MODEL#save
       var view = this;
       this.model.save().done(function($data) {
@@ -169,7 +158,9 @@
       return this;
     },
 
-    // Clicked on delete button of window
+    // An event handler for deleting a window.
+    // Find the target window ID and container ID
+    // then use them to modify corresponding models
     deleteApp : function(e) {
       var appId = $(e.target).closest('div.portlet').attr('id');
       var containerId = $(e.target).closest('div.sortable').attr('id');
@@ -180,11 +171,9 @@
       this.snapshotModel = this.model;
     },
 
-    /*
-     * 
-     */
     switchLayout : function(layoutData) {
-      // temporary hide the old layout
+
+      // Temporarily hide the old layout
       this.$el.each(function() {
         var id = $(this).attr('id');
         $(this).attr('id', id + '-old');
@@ -195,7 +184,7 @@
       // Apply the new layout template
       this.$el.html(layoutData.html);
 
-      // retrieve this before building the new model
+      // Retrieve this before building the new model
       var snapshot = this.snapshotModel;
 
       // Build new model according to new layout
@@ -238,45 +227,63 @@
     }
   });
 
-  /**
-   * 
-   */
-  var ApplicationView = Backbone.View.extend({
-    tagName : "li",
+  // The root container view of Layout Edition mode
+  var EditorView = Backbone.View.extend({
+    el : '.LAYOUT-EDITION',
+
+    events : {
+      "click .switch" : "switchLayout",
+      "click #saveLayout" : "saveLayout"
+    },
+
     initialize : function() {
+
+      // Be sure that the element LAYOUT-EDITION has already been available in DOM
+      if (this.$el.hasClass("LAYOUT-EDITION")) {
+
+        // Initialize LayoutView 
+        this.layoutView = new LayoutView({
+          editUrl : this.$el.attr('data-editURL')
+        });
+
+        // Composer
+        var composerRoot = this.$("#composers");
+        this.composerView = new ComposerView({
+          fetchPortletURL : composerRoot.attr("data-url")
+        });
+        // End composer
+      }
     },
-    render : function() {
-      this.template = _.template($("#portlet-template").html());
-      this.$el.html(this.template(this.model.toJSONForRenderer()));
-      return this;
-    }
-  });
 
-  /**
-   * 
-   */
-  var ComposerView = Backbone.View.extend({
-    el : $("#composers"),
-    initialize : function(options) {
-      var options = options || {};
+    // Delegate to the LayoutView save
+    saveLayout : function() {
+      this.layoutView.save();
+    },
 
-      this.model = new ComposerContainer(null, {
-        url : options.fetchPortletURL
+    // Clicked on Swich layout button
+    switchLayout : function(e) {
+      var anchor = e.target;
+      var href = $(anchor).attr('href');
+      e.preventDefault();
+
+      $.ajax({
+        url : href,
+        dataType : "json",
+        success : function(result) {
+          if (result.code != 200) {
+            alert("change layout failure!");
+            return false;
+          }
+
+          // Delegate to LayoutView
+          var layoutView = window.editorView.layoutView;
+          layoutView.switchLayout(result.data);
+        }
       });
-      this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
-      this.model.fetch();
-    },
-
-    onAddChild : function(child) {
-      var container = $('#portlet-list');
-      var view = new ApplicationView({
-        model : child
-      }).render();
-      container.append(view.$el);
     }
   });
 
-  // Bootstrap view and model of the editor
+  // Trigger to initialize the LAYOUT EDITION mode
   $(function() {
     window.editorView = new EditorView();
   });

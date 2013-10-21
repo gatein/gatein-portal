@@ -1,7 +1,6 @@
 (function() {
-  /**
-   * An abstract model for Application and Container (Zone) in a layout
-   */
+
+  // An abstract model for Application and Container (Zone) in a layout
   var LayoutComponent = Backbone.Model.extend({
     initialize : function() {
       this.set({
@@ -36,9 +35,7 @@
     }
   });
 
-  /**
-   * The Application model presents a component (window) in the layout which is be able to drag & drop
-   */
+  // The Application model presents a component (window) in the layout which is be able to drag & drop
   var Application = LayoutComponent.extend({
     initialize : function(options) {
       LayoutComponent.prototype.initialize.call(this);
@@ -51,14 +48,15 @@
       });
     },
 
-    // Need name and logo
     getName : function() {
       return this.get('name');
     },
+
     getLogo : function() {
       return this.get('logo');
     },
 
+    // Return the JSON object that contains metadata information
     toJSON : function() {
       return {
         id : this.getId(),
@@ -66,6 +64,9 @@
         name : this.getName()
       };
     },
+
+    // Return a JSON object for rendering phase
+    // TODO: should it be merged with #toJSON() method ?
     toJSONForRenderer : function() {
       return {
         id : this.getId(),
@@ -76,9 +77,7 @@
     }
   });
 
-  /**
-   * The Container model presents a Zone in the layout which contains the Application
-   */
+  // The Container model presents a Zone in the layout which contains the Application
   var Container = LayoutComponent.extend({
     initialize : function() {
       LayoutComponent.prototype.initialize.call(this);
@@ -231,7 +230,7 @@
       }
     },
 
-    //
+    // Return the JSON object that contains metadata information
     toJSON : function() {
       var data = {
         id : this.getId(),
@@ -244,6 +243,7 @@
       return data;
     },
 
+    //
     switchLayout : function(newContainer) {
       $(this.get("_childrens").models).each(function() {
         var apps = this.get("_childrens").models;
@@ -265,9 +265,7 @@
     }
   });
 
-  /**
-   * 
-   */
+  // 
   var PageContainer = Container.extend({
     initialize : function() {
       Container.prototype.initialize.call(this);
@@ -284,6 +282,7 @@
       return this.get('layout_id');
     },
 
+    // Return the JSON object that contains metadata information
     toJSON : function() {
       var data = {
         id : this.getId(),
