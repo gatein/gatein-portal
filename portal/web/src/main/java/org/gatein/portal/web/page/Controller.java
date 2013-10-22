@@ -34,8 +34,8 @@ import juzu.Response;
 import juzu.Route;
 import juzu.View;
 import juzu.impl.common.Tools;
-import juzu.request.RenderContext;
 import juzu.request.RequestParameter;
+import juzu.request.ViewContext;
 import juzu.template.Template;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
@@ -93,7 +93,7 @@ public class Controller {
     @View()
     @Route(value = "/{javax.portlet.path}", priority = 2)
     public Response index(
-            RenderContext context,
+            ViewContext context,
             @Param(name = "javax.portlet.path", pattern = ".*")
             String path,
             @Param(name = "javax.portlet.a")

@@ -88,6 +88,8 @@ class PortletRenderTask extends RenderTask {
     @Override
     public Result execute(Locale locale) {
 
+        System.out.println("STARTING PORTLET " + windowContext.name);
+
         //
         ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
         PortletInvocationResponse response = null;
@@ -117,6 +119,7 @@ class PortletRenderTask extends RenderTask {
         } catch (PortletInvokerException e) {
             failure = e;
         } finally {
+            System.out.println("DONE WITH PORTLET " + windowContext.name);
             lifeCycle.resume();
         }
         Result result;
