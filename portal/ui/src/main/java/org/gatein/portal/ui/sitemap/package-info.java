@@ -7,7 +7,7 @@
         @Binding(DescriptionService.class)
 })
 @Portlet(name = "SiteMapPortlet")
-@Assets({@Asset("sitemap.css"), @Asset("jquery-1.7.1.min.js"), @Asset("sitemap.js")})
+@Assets({@Asset("sitemap.css"), @Asset("sitemap.js")})
 @WithAssets
 package org.gatein.portal.ui.sitemap;
 
