@@ -74,16 +74,37 @@ test("test toJSON", function() {
 });
 
 test("test switchLayout", function() {
-	var oneZone = new Container();
-	oneZone.addChild(new Container({id : "1"}));
-	equal(1, oneZone.get("_childrens").length);
-	container.switchLayout(oneZone);
-	
-	equal(4, oneZone.getChild("1").getChildrens().length);
-	equal('1_1', oneZone.getChild('1').at(0).getId());
-	equal('1_2', oneZone.getChild('1').at(1).getId());
-	equal('2_1', oneZone.getChild('1').at(2).getId());
-	equal('2_2', oneZone.getChild('1').at(3).getId());
+  //container order: #1 #2
+  equal(container.getChild('1').getIndex(), 0);
+  equal(container.getChild('2').getIndex(), 1);
+  
+  //new layout with reverted container order
+  var rLayout = new Container();
+  rLayout.addChild(new Container({id: '2'}));
+  rLayout.addChild(new Container({id: '1'}));
+  
+  container.switchLayout(rLayout);
+  //
+  equal(rLayout.getChild('1').getIndex(), 1);
+  equal('1_1', rLayout.getChild('1').at(0).getId());
+  equal('1_2', rLayout.getChild('1').at(1).getId());
+  //
+  equal(rLayout.getChild('2').getIndex(), 0);
+  equal('2_1', rLayout.getChild('2').at(0).getId());
+  equal('2_2', rLayout.getChild('2').at(1).getId());
+  
+  //new layout with 1 zone
+  var oneZone = new Container();
+  oneZone.addChild(new Container({id : "1"}));
+  equal(1, oneZone.get("_childrens").length);
+  //switch from reverted layout to 1 zone layout
+  rLayout.switchLayout(oneZone);
+  
+  equal(4, oneZone.getChild("1").getChildrens().length);
+  equal('1_1', oneZone.getChild('1').at(0).getId());
+  equal('1_2', oneZone.getChild('1').at(1).getId());
+  equal('2_1', oneZone.getChild('1').at(2).getId());
+  equal('2_2', oneZone.getChild('1').at(3).getId());
 	
 	var twoZone = new Container();
 	twoZone.addChild(new Container({id : "1"}));

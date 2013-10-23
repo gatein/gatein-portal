@@ -290,8 +290,18 @@
 
     //
     switchLayout : function(newContainer) {
-      $(this.get("_childrens").models).each(function() {
-        var apps = this.get("_childrens").models;
+      var conts = this.getChildrens();
+      conts.sort(function(m1, m2) {
+        var i1 = parseInt(m1.getId());
+        var i2 = parseInt(m2.getId());
+        if ($.isNumeric(i1) && $.isNumeric(i2)) {
+          return i1 - i2;
+        } else {
+          return 0;
+        }
+      });
+      $.each(conts, function() {
+        var apps = this.getChildrens();
         var id = this.id;
         var cont = this;
         $(apps).each(function() {
