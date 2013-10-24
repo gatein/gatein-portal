@@ -292,10 +292,10 @@
   var PageContainer = AbstractContainer.extend({
     initialize : function() {
       AbstractContainer.prototype.initialize.call(this);
-
       this.set({
         layout_id : ''
       });
+      this._snapshot = this;
     },
 
     isAllowDropping : function(dragObj) {
@@ -307,6 +307,33 @@
       }
     },
 
+    /*
+     * methods on childrens
+     */
+    addChild : function(child, options) {
+      child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
+      AbstractContainer.prototype.addChild.call(this, child, options);
+
+      //We need listen to child to update this._snapshot model
+      if(child.getParent().getId() === this.getId()) {
+        this.listenTo(child, 'addChild.eXo.Container', this.updateSnapshot);
+        this.listenTo(child, 'removeChild.eXo.Container', this.updateSnapshot);
+      }
+    },
+    removeChild : function(child, options) {
+      child = typeof child == 'string' ? this.getChild(child) : child;
+      AbstractContainer.prototype.removeChild.call(this, child, options);
+
+      //After remove child success, need to stop listening it
+      if(child.getParent().getId() !== this.getId()) {
+        this.stopListening(child);
+      }
+    },
+
+    updateSnapshot: function() {
+      this._snapshot = this;
+    },
+
     setLayoutId : function(layoutId) {
       this.set('layout_id', layoutId);
     },
@@ -315,7 +342,8 @@
     },
 
     switchLayout : function(newContainer) {
-      var conts = this.getChildrens();
+      var _oldModel = this._snapshot;
+      var conts = _oldModel.getChildrens();
       conts.sort(function(m1, m2) {
         var i1 = parseInt(m1.getId());
         var i2 = parseInt(m2.getId());
@@ -342,6 +370,7 @@
           }
         });
       });
+      newContainer._snapshot = _oldModel;
     },
 
     // Return the JSON object that contains metadata information

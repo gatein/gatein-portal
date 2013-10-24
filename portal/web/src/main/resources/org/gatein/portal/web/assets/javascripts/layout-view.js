@@ -107,8 +107,12 @@
     dropApp : function(event, ui) {
       var $dragObj = $(ui.item);
       var targetContainerId = $dragObj.closest('.sortable').attr('id');
-      var layoutView = editorView.layoutView;
-      var targetContainer = layoutView.getModel().getChild(targetContainerId);
+      var targetContainer = null;
+      if(targetContainerId == this.model.getId()) {
+        targetContainer = this.model;
+      } else {
+        var targetContainer = this.model.getParent().getChild(targetContainerId);
+      }
 
       var prev = $dragObj.prev('.portlet');
       var idx = 0;
@@ -134,11 +138,6 @@
           at : idx
         });
       }
-
-      // Update snapshot
-      var pageView = window.editorView.getPageView();
-      pageView.resetModelSnapshot();
-      //this.snapshotModel = this.model;
     },
     // An event handler for deleting a window.
     // Find the target window ID and container ID
@@ -149,11 +148,6 @@
       var layoutView = editorView.layoutView;
       var container = layoutView.getModel().getChild(containerId);
       container.removeChild(appId);
-
-      // Update snapshot
-      var pageView = window.editorView.getPageView();
-      pageView.resetModelSnapshot();
-      //this.snapshotModel = this.model;
     },
     /*
      * Listen to model changes
@@ -198,7 +192,6 @@
       // Build model from current DOM
       var model = this.buildModel();
       this.setModel(model);
-      this.snapshotModel = this.model;
     },
 
     setModel : function(model) {
@@ -245,7 +238,7 @@
       this.$el.html(layoutData.html);
 
       // Retrieve this before building the new model
-      var snapshot = this.snapshotModel;
+      var _model = this.model;
 
       // Build new model according to new layout
       var model = this.buildModel();
@@ -255,7 +248,7 @@
       }
 
       // Start switching layout
-      snapshot.switchLayout(this.model);
+      _model.switchLayout(this.model);
 
       // remove old layout
       tmp.remove();
@@ -286,9 +279,6 @@
     },
     getModel: function() {
       return this.model;
-    },
-    resetModelSnapshot: function() {
-      this.snapshotModel = this.model;
     }
   });
 
