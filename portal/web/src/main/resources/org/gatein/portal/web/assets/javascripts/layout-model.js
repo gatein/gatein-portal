@@ -122,8 +122,7 @@
     }
   });
 
-  // The Container model presents a Zone in the layout which contains the Application
-  var Container = LayoutComponent.extend({
+  var AbstractContainer = LayoutComponent.extend({
     initialize : function() {
       LayoutComponent.prototype.initialize.call(this);
       this.set({
@@ -143,13 +142,17 @@
       });
     },
 
-    isAllowDropping : function(dragObj) {
-      // Check for supported types
-      if (dragObj && (dragObj.constructor == Container || dragObj.constructor == Application)) {
-        return this.get('droppable');
-      } else {
-        return false;
+    getDescendant : function(id) {
+      var child = this.getChild(id);
+      if (!child) {
+        var cont = this.get('_childrens').find(function(elem) {
+          if ($.isFunction(elem.getDescendant)) {
+            return elem.getDescendant.call(elem, id);
+          }
+        });
+        cont != null && (child = cont.getChild(id));
       }
+      return child;
     },
 
     /*
@@ -195,6 +198,7 @@
       }
       return this;
     },
+
     isEmpty : function() {
       return this.get('_childrens').isEmpty();
     },
@@ -211,19 +215,6 @@
     at : function(idx) {
       return this.get('_childrens').at(idx);
     },
-    getDescendant : function(id) {
-      var child = this.getChild(id);
-      if (!child) {
-        var cont = this.get('_childrens').find(function(elem) {
-          if ($.isFunction(elem.getDescendant)) {
-            return elem.getDescendant.call(elem, id);
-          }
-        });
-        cont != null && (child = cont.getChild(id));
-      }
-      return child;
-    },
-
     //
     set : function(data, options) {
       var options = options || {};
@@ -265,6 +256,22 @@
           });
         }
       }
+    }
+  });
+
+  // The Container model presents a Zone in the layout which contains the Application
+  var Container = AbstractContainer.extend({
+    initialize : function() {
+      AbstractContainer.prototype.initialize.call(this);
+    },
+
+    isAllowDropping : function(dragObj) {
+      // Check for supported types
+      if (dragObj && dragObj.constructor == Application) {
+        return this.get('droppable');
+      } else {
+        return false;
+      }
     },
 
     // Return the JSON object that contains metadata information
@@ -278,9 +285,35 @@
         data.childrens.push(elem.toJSON());
       });
       return data;
+    }
+  });
+
+  // 
+  var PageContainer = AbstractContainer.extend({
+    initialize : function() {
+      AbstractContainer.prototype.initialize.call(this);
+
+      this.set({
+        layout_id : ''
+      });
     },
 
-    //
+    isAllowDropping : function(dragObj) {
+      // Check for supported types
+      if (dragObj && dragObj.constructor == Container) {
+        return this.get('droppable');
+      } else {
+        return false;
+      }
+    },
+
+    setLayoutId : function(layoutId) {
+      this.set('layout_id', layoutId);
+    },
+    getLayoutId : function() {
+      return this.get('layout_id');
+    },
+
     switchLayout : function(newContainer) {
       var conts = this.getChildrens();
       conts.sort(function(m1, m2) {
@@ -309,24 +342,6 @@
           }
         });
       });
-    }
-  });
-
-  // 
-  var PageContainer = Container.extend({
-    initialize : function() {
-      Container.prototype.initialize.call(this);
-
-      this.set({
-        layout_id : ''
-      });
-    },
-
-    setLayoutId : function(layoutId) {
-      this.set('layout_id', layoutId);
-    },
-    getLayoutId : function() {
-      return this.get('layout_id');
     },
 
     // Return the JSON object that contains metadata information
