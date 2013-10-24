@@ -26,7 +26,6 @@ package org.exoplatform.services.organization;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.exoplatform.commons.utils.PageList;
@@ -333,14 +332,6 @@ public class AbstractTestOrganizationService {
         groupHandler_.removeGroup(groupParent, true);
         assertEquals("Expect ParentGroup is removed:", null, groupHandler_.findGroupById(groupParent.getId()));
         assertEquals("Expect all child group is removed: ", 0, groupHandler_.findGroups(groupParent).size());
-        
-        Collection<Group> groups = groupHandler_.findGroupByMembership("demo", "member");
-        assertNotNull(groups);
-        assertEquals(1, groups.size());
-        
-        groups = groupHandler_.resolveGroupByMembership("demo", "member");
-        assertNotNull(groups);
-        assertEquals(2, groups.size());
     }
 
     @Test
@@ -367,21 +358,20 @@ public class AbstractTestOrganizationService {
         mtHandler_.createMembershipType(mt, true);
 
         /*
-         * find all membership type Expect result: 4 membershipType: "testmembership", "anothertype", "member" and "*" (default
+         * find all membership type Expect result: 3 membershipType: "testmembership", "anothertype" and "member"(default
          * membership type, it is created at startup time)
          */
-        assertEquals("Expect 4 membership in collection: ", 4, mtHandler_.findMembershipTypes().size());
-        assertEquals("The * should be the first one in collection: ", MembershipTypeHandler.ANY_MEMBERSHIP_TYPE, mtHandler_.findMembershipTypes().iterator().next().getName());
+        assertEquals("Expect 3 membership in collection: ", 3, mtHandler_.findMembershipTypes().size());
 
         /* remove "testmembership" */
         mtHandler_.removeMembershipType(testType, true);
         assertEquals("Membership type has been removed:", null, mtHandler_.findMembershipType(testType));
-        assertEquals("Expect 2 membership in collection(1 is default): ", 3, mtHandler_.findMembershipTypes().size());
+        assertEquals("Expect 2 membership in collection(1 is default): ", 2, mtHandler_.findMembershipTypes().size());
 
         /* remove "anothertype" */
         mtHandler_.removeMembershipType("anothertype", true);
         assertEquals("Membership type has been removed:", null, mtHandler_.findMembershipType("anothertype"));
-        assertEquals("Expect 1 membership in collection(default type): ", 2, mtHandler_.findMembershipTypes().size());
+        assertEquals("Expect 1 membership in collection(default type): ", 1, mtHandler_.findMembershipTypes().size());
         /* All membershipType was removed(except default membership) */
     }
 

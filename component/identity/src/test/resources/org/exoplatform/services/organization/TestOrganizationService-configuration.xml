@@ -192,16 +192,6 @@
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
                     <field name="type">
-                      <string>*</string>
-                    </field>
-                    <field name="description">
-                      <string>Any membership type</string>
-                    </field>
-                  </object>
-                </value>
-                <value>
-                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
-                    <field name="type">
                       <string>member</string>
                     </field>
                     <field name="description">
@@ -222,21 +212,9 @@
                     <field name="parentId">
                       <string></string>
                     </field>
+                    <!--<field  name="type"><string>hierachy</string></field>-->
                     <field name="description">
                       <string>the /users group</string>
-                    </field>
-                  </object>
-                </value>
-                <value>
-                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                    <field name="name">
-                      <string>administrators</string>
-                    </field>
-                    <field name="parentId">
-                      <string></string>
-                    </field>
-                    <field name="description">
-                      <string>the /administrators group</string>
                     </field>
                   </object>
                 </value>
@@ -263,7 +241,7 @@
                       <string>demo@localhost</string>
                     </field>
                     <field name="groups">
-                      <string>member:/users, *:/administrators</string>
+                      <string>member:/users</string>
                     </field>
                   </object>
                 </value>

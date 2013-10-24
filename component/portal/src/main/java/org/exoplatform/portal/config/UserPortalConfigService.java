@@ -241,7 +241,7 @@ public class UserPortalConfigService implements Startable {
         if (remoteUser.equals(userACL_.getSuperUser())) {
             groups = orgService_.getGroupHandler().getAllGroups();
         } else {
-            groups = orgService_.getGroupHandler().resolveGroupByMembership(remoteUser, userACL_.getMakableMT());
+            groups = orgService_.getGroupHandler().findGroupByMembership(remoteUser, userACL_.getMakableMT());
         }
 
         //

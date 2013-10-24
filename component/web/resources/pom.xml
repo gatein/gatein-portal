@@ -80,6 +80,7 @@
     <dependency>
       <groupId>org.exoplatform.tool</groupId>
       <artifactId>exo.tool.framework.junit</artifactId>
+      <version>1.2.2-GA</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
