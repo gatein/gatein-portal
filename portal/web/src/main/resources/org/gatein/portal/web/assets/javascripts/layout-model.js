@@ -160,14 +160,6 @@
 
       if (child && this.isAllowDropping(child)) {
         var _this = this;
-
-        this.listenTo(child, 'addChild.eXo.Container', function(addedChild, container) {
-          _this.trigger('addChild.eXo.Container', addedChild, container);
-        });
-        this.listenTo(child, 'removeChild.eXo.Container', function(addedChild, container) {
-          _this.trigger('removeChild.eXo.Container', addedChild, container);
-        });
-
         options = options || {};
         var oldParent = child.getParent();
         if (oldParent && oldParent.getId() != this.getId()) {
@@ -342,7 +334,7 @@
       var data = {
         id : this.getId(),
         layout_id : this.getLayoutId(),
-        type : 'container',
+        type : 'pagecontainer',
         childrens : []
       };
       this.get('_childrens').each(function(elem) {

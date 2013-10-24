@@ -70,46 +70,25 @@
     }
   });
 
-  // 
-  var LayoutView = Backbone.View.extend({
-    el : '.pageBody',
-
+  var ContainerView = Backbone.View.extend({
     events : {
       "click .close" : "deleteApp"
     },
-
     initialize : function(options) {
-      // Trigger adding D&D ability to Zone and Application elements
-      this.setupDnD();
-
       var options = options || {};
-      this.editUrl = options.editUrl;
-
-      // Build model from current DOM
-      var model = this.buildModel();
-
-      // Setup model
-      this.setModel(model);
-      this.snapshotModel = this.model;
-    },
-
-    setModel : function(model) {
-
-      // Stop listening to events on the old model
-      this.stopListening();
-
-      // Assign to new model
-      this.model = model;
 
       // Listen to add/remove events on the new model
       this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
       this.listenTo(this.model, 'removeChild.eXo.Container', this.onRemoveChild);
-      return this;
-    },
 
-    // Using JQuery UI - Sortable to initialize Draggable & Droppable elements
+      var domId = "#" + this.model.getId();
+      this.$el = $(domId);
+
+      // Trigger adding D&D ability to Zone and Application elements
+      this.setupDnD();
+    },
     setupDnD : function() {
-      this.$(".sortable").sortable({
+      this.$el.sortable({
         connectWith : ".sortable",
         tolerance : "pointer",
         placeholder : "portlet-placeholder",
@@ -121,7 +100,61 @@
         })(this)
       });
     },
+    /*
+     * Listen to DOM event
+     */
+    // Drag and drop
+    dropApp : function(event, ui) {
+      var $dragObj = $(ui.item);
+      var targetContainerId = $dragObj.closest('.sortable').attr('id');
+      var layoutView = editorView.layoutView;
+      var targetContainer = layoutView.getModel().getChild(targetContainerId);
 
+      var prev = $dragObj.prev('.portlet');
+      var idx = 0;
+      if (prev.length) {
+        idx = $('#' + targetContainer.getId() + ' > .portlet').index(prev.get(0)) + 1;
+      }
+
+      // Modify the model
+      if(!$dragObj.attr("id")) {
+        //Add new application
+        var composerView = window.editorView.getComposerView();
+        var application = composerView.getModel().findChildByName($dragObj.attr("data-name"))[0];
+
+        //Clone and generate id for new application
+        var newChild = application.clone();
+        newChild.setId(newChild.getName() + new Date().getTime());
+        targetContainer.addChild(newChild, {at: idx});
+
+        //Remove dropped item
+        $(ui.item).remove();
+      } else {
+        targetContainer.addChild(ui.item.attr('id'), {
+          at : idx
+        });
+      }
+
+      // Update snapshot
+      var pageView = window.editorView.getPageView();
+      pageView.resetModelSnapshot();
+      //this.snapshotModel = this.model;
+    },
+    // An event handler for deleting a window.
+    // Find the target window ID and container ID
+    // then use them to modify corresponding models
+    deleteApp : function(e) {
+      var appId = $(e.target).closest('div.portlet').attr('id');
+      var containerId = $(e.target).closest('div.sortable').attr('id');
+      var layoutView = editorView.layoutView;
+      var container = layoutView.getModel().getChild(containerId);
+      container.removeChild(appId);
+
+      // Update snapshot
+      var pageView = window.editorView.getPageView();
+      pageView.resetModelSnapshot();
+      //this.snapshotModel = this.model;
+    },
     /*
      * Listen to model changes
      */
@@ -144,7 +177,6 @@
       }
       $cont.removeClass('emptyContainer');
     },
-
     onRemoveChild : function(child, container) {
       var $cont = $("#" + container.getId());
       var $app = $cont.children('#' + child.getId());
@@ -153,43 +185,30 @@
       if (container.isEmpty()) {
         $cont.addClass('emptyContainer');
       }
+    }
+  });
+  //
+  var LayoutView = Backbone.View.extend({
+    el : '.pageBody',
+
+    initialize : function(options) {
+      var options = options || {};
+      this.editUrl = options.editUrl;
+
+      // Build model from current DOM
+      var model = this.buildModel();
+      this.setModel(model);
+      this.snapshotModel = this.model;
     },
 
-    /*
-     * Listen to DOM event
-     */
-    // Drag and drop
-    dropApp : function(event, ui) {
-      var dragObj = $(ui.item);
-      var cont = this.model.getDescendant(dragObj.closest('.sortable').attr('id'));
+    setModel : function(model) {
 
-      var prev = dragObj.prev('.portlet');
-      var idx = 0;
-      if (prev.length) {
-        idx = $('#' + cont.getId() + ' > .portlet').index(prev.get(0)) + 1;
-      }
+      // Stop listening to events on the old model
+      //this.stopListening();
 
-      // Modify the model
-      if(!dragObj.attr("id")) {
-        //Add new application
-        var composerView = window.editorView.getComposerView();
-        var application = composerView.getModel().findChildByName(dragObj.attr("data-name"))[0];
-
-        //Clone and generate id for new application
-        var newChild = application.clone();
-        newChild.setId(newChild.getName() + new Date().getTime());
-        cont.addChild(newChild, {at: idx});
-
-        //Remove dropped item
-        $(ui.item).remove();
-      } else {
-        cont.addChild(ui.item.attr('id'), {
-          at : idx
-        });
-      }
-
-      // Update snapshot
-      this.snapshotModel = this.model;
+      // Assign to new model
+      this.model = model;
+      return this;
     },
 
     // Listen to clicking on SAVE button
@@ -210,19 +229,6 @@
         alert("error on connect to server");
       });
       return this;
-    },
-
-    // An event handler for deleting a window.
-    // Find the target window ID and container ID
-    // then use them to modify corresponding models
-    deleteApp : function(e) {
-      var appId = $(e.target).closest('div.portlet').attr('id');
-      var containerId = $(e.target).closest('div.sortable').attr('id');
-      var container = this.model.getDescendant(containerId);
-      container.removeChild(appId);
-
-      // Update snapshot
-      this.snapshotModel = this.model;
     },
 
     switchLayout : function(layoutData) {
@@ -247,7 +253,6 @@
       if (layoutData.layout_id) {
         this.model.setLayoutId(layoutData.layout_id);
       }
-      this.setupDnD();
 
       // Start switching layout
       snapshot.switchLayout(this.model);
@@ -259,12 +264,11 @@
 
     // Build model from DOM
     buildModel : function() {
-      var model = new PageContainer({
+      var _model = new PageContainer({
         id : 'layoutId'
       }, {
         url : this.editUrl
       });
-
       this.$el.find('.sortable').each(function() {
         var cont = new Container({
           id : this.id
@@ -275,9 +279,16 @@
           });
           cont.addChild(app);
         });
-        model.addChild(cont);
+        new ContainerView({model: cont});
+        _model.addChild(cont);
       });
-      return model;
+      return _model;
+    },
+    getModel: function() {
+      return this.model;
+    },
+    resetModelSnapshot: function() {
+      this.snapshotModel = this.model;
     }
   });
 
@@ -311,6 +322,9 @@
 
     getComposerView: function() {
       return this.composerView;
+    },
+    getPageView: function() {
+      return this.layoutView;
     },
 
     // Delegate to the LayoutView save
