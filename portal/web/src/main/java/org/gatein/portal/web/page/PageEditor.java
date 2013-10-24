@@ -113,8 +113,8 @@ public class PageEditor {
     @Inject
     ZoneLayoutFactory layoutFactory;
 
-	@Inject
-	PortletAppManager portletAppManager;
+    @Inject
+    PortletAppManager portletAppManager;
 
     @Resource
     @Route(value = "/switchto/{javax.portlet.z}")
@@ -136,31 +136,31 @@ public class PageEditor {
         return Response.status(200).body(result.toString());
     }
 
-	@Resource
-	@Route(value = "/portlets")
-	public Response getAllPortlets() throws Exception {
-		List<JSON> items = new LinkedList<JSON>();
-		Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
-		for(Portlet portlet : portlets) {
-			PortletInfo info = portlet.getInfo();
-			MetaInfo meta = info.getMeta();
+    @Resource
+    @Route(value = "/portlets")
+    public Response getAllPortlets() throws Exception {
+        List<JSON> items = new LinkedList<JSON>();
+        Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
+        for(Portlet portlet : portlets) {
+            PortletInfo info = portlet.getInfo();
+            MetaInfo meta = info.getMeta();
 
-			JSON item = new JSON();
-			item.set("name", info.getName());
-			item.set("title", meta.getMetaValue("title").getDefaultString());
-			item.set("applicationName", info.getApplicationName());
+            JSON item = new JSON();
+            item.set("name", info.getName());
+            item.set("title", meta.getMetaValue("title").getDefaultString());
+            item.set("applicationName", info.getApplicationName());
 
-			items.add(item);
-		}
+            items.add(item);
+        }
 
-		JSON data = new JSON();
-		data.set("portlets", items.toArray(new JSON[0]));
-		JSON result = new JSON();
-		result.set("code", 200);
-		result.set("status", "success");
-		result.set("data", data);
-		return Response.status(200).body(result.toString());
-	}
+        JSON data = new JSON();
+        data.set("portlets", items.toArray(new JSON[0]));
+        JSON result = new JSON();
+        result.set("code", 200);
+        result.set("status", "success");
+        result.set("data", data);
+        return Response.status(200).body(result.toString());
+    }
 
     @Resource
     @Route(value = "/{javax.portlet.path}", priority = 2)
@@ -179,7 +179,7 @@ public class PageEditor {
         //
         NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
         NodeContext<?, NodeState> root = navigationService.loadNode(NodeState.model(), navigation,
-                GenericScope.branchShape(names), null);
+            GenericScope.branchShape(names), null);
         if (root != null) {
 
             // Get our node from the navigation
@@ -197,7 +197,7 @@ public class PageEditor {
                 PageKey pageKey = state.getPageRef();
                 page = pageService.loadPage(pageKey);
                 pageStructure = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(),
-                        page.getLayoutId(), null);
+                    page.getLayoutId(), null);
             }
         }
 
@@ -208,6 +208,10 @@ public class PageEditor {
                 ContainerData rootContainer = this.buildComponentData(pageStructure);
 
                 JSON[] childrens = action.getArray("childrens", JSON.class);
+                for (NodeContext<ComponentData, ElementState> sel : pageStructure) {
+                    NodeContext<ComponentData, ElementState> ctx = this.find(sel.getName(), pageStructure);
+                    rootContainer.getChildren().add(this.buildComponentData(ctx));
+                }
                 for (JSON j : childrens) {
                     this.buildComponentTree(pageStructure, j, rootContainer);
                 }
@@ -234,9 +238,9 @@ public class PageEditor {
         }
 
         return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
-                .withMimeType("application/json");
+                    .withMimeType("application/json");
     }
-    
+
     /**
      * Temporary implement to render portlet content without full page context
      */
@@ -244,7 +248,7 @@ public class PageEditor {
     @Route(value = "/getContent")
     public Response getContent(@Param(name = "javax.portlet.content") String contentId) {
         JSON result = new JSON();
-        
+
         ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
         PortletInvocationResponse response = null;
         PortletInvokerException failure = null;
@@ -255,41 +259,41 @@ public class PageEditor {
                 @Override
                 public void renderURL(Writer arg0, ContainerURL arg1, URLFormat arg2) throws IOException {                    
                 }
-                
+
                 @Override
                 public String renderURL(ContainerURL containerURL, URLFormat format) {
                     return "";
                 }
-                
+
                 @Override
                 public MediaType getResponseContentType() {
                     return MediaType.TEXT_HTML;
                 }
-                
+
                 @Override
                 public String encodeResourceURL(String arg0) throws IllegalArgumentException {
                     return null;
                 }
             });
-            
+
             invocation.setClientContext(new ClientContext() {
-                
+
                 @Override
                 public MultiValuedPropertyMap<String> getProperties() {
                     return new SimpleMultiValuedPropertyMap<String>();
                 }
-                
+
                 @Override
                 public String getMethod() {
                     return "GET";
                 }
-                
+
                 @Override
                 public List<Cookie> getCookies() {
                     return Collections.emptyList();
                 }
             });
-            
+
             org.gatein.pc.api.Portlet portlet;
             PortletInvoker invoker = portletAppManager.getInvoker();
             try {
@@ -303,7 +307,7 @@ public class PageEditor {
                 e.printStackTrace();
                 portlet = null;
             }
-            
+
             invocation.setPortalContext(new AbstractPortalContext());
             invocation.setInstanceContext(new AbstractInstanceContext(contentId, AccessMode.READ_ONLY));
             invocation.setWindowContext(new AbstractWindowContext(contentId));
@@ -324,7 +328,7 @@ public class PageEditor {
         } finally {
             lifeCycle.resume();
         }
-        
+
         if (failure != null) {
             failure.printStackTrace();
             result.set("error", "Can't render portlet");
@@ -338,9 +342,9 @@ public class PageEditor {
                 throw new UnsupportedOperationException("Not yet handled " + response);
             }
         }
-        
+
         return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
-                .withMimeType("application/json");
+                    .withMimeType("application/json");
     }
 
     private void buildComponentTree(NodeContext<ComponentData, ElementState> context, JSON json, ContainerData parent) {
@@ -360,8 +364,20 @@ public class PageEditor {
                 TransientApplicationState state = new TransientApplicationState(contentId);
                 componentData = new ApplicationData(null, id, ApplicationType.PORTLET, state, null, null, null, null, false, false, false, null, null, null, null, null);
             }
+            if (parent != null) {
+                parent.getChildren().add(componentData);
+            }
         } else {
-            componentData = this.buildComponentData(ctx);
+            if ("container".equalsIgnoreCase(type)) {
+                for (ComponentData child : parent.getChildren()) {
+                    if (child.getStorageName().equals(id)) {
+                        componentData = child;
+                        break;
+                    }
+                }
+            } else if ("application".equalsIgnoreCase(type)) {
+                componentData = this.buildComponentData(ctx);
+            }
         }
 
         if (componentData == null) {
@@ -369,7 +385,10 @@ public class PageEditor {
         }
 
         if (parent != null) {
-            parent.getChildren().add(componentData);
+            if (componentData instanceof ApplicationData) {
+                parent.getChildren().add(componentData);
+            }
+
         }
 
         //Process children of this node
@@ -385,11 +404,11 @@ public class PageEditor {
             ElementState.Container containerState = (ElementState.Container) state;
             Properties properties = containerState.properties;
             ContainerData containerData = new ContainerData(context.getId(), context.getName(), context.getId(),
-                    properties.get(ElementState.Container.NAME), properties.get(ElementState.Container.ICON),
-                    properties.get(ElementState.Container.TEMPLATE), properties.get(ElementState.Container.FACTORY_ID),
-                    properties.get(ElementState.Container.TITLE), properties.get(ElementState.Container.DESCRIPTION),
-                    properties.get(ElementState.Container.WIDTH), properties.get(ElementState.Container.HEIGHT),
-                    containerState.getAccessPermissions(), new ArrayList<ComponentData>());
+                properties.get(ElementState.Container.NAME), properties.get(ElementState.Container.ICON),
+                properties.get(ElementState.Container.TEMPLATE), properties.get(ElementState.Container.FACTORY_ID),
+                properties.get(ElementState.Container.TITLE), properties.get(ElementState.Container.DESCRIPTION),
+                properties.get(ElementState.Container.WIDTH), properties.get(ElementState.Container.HEIGHT),
+                containerState.getAccessPermissions(), new ArrayList<ComponentData>());
 
             return (T) containerData;
         } else if (state instanceof ElementState.Window) {
@@ -397,12 +416,12 @@ public class PageEditor {
             Properties properties = winState.properties;
             ApplicationState appState = winState.state;
             ApplicationData appData = new ApplicationData(context.getId(), context.getName(), winState.type, appState,
-                    context.getId(), properties.get(ElementState.Window.TITLE), properties.get(ElementState.Window.ICON),
-                    properties.get(ElementState.Window.DESCRIPTION), properties.get(ElementState.Window.SHOW_INFO_BAR),
-                    properties.get(ElementState.Window.SHOW_APPLICATION_STATE),
-                    properties.get(ElementState.Window.SHOW_APPLICATION_MODE), properties.get(ElementState.Window.THEME),
-                    properties.get(ElementState.Window.WIDTH), properties.get(ElementState.Window.HEIGHT),
-                    Collections.EMPTY_MAP, winState.accessPermissions);
+                context.getId(), properties.get(ElementState.Window.TITLE), properties.get(ElementState.Window.ICON),
+                properties.get(ElementState.Window.DESCRIPTION), properties.get(ElementState.Window.SHOW_INFO_BAR),
+                properties.get(ElementState.Window.SHOW_APPLICATION_STATE),
+                properties.get(ElementState.Window.SHOW_APPLICATION_MODE), properties.get(ElementState.Window.THEME),
+                properties.get(ElementState.Window.WIDTH), properties.get(ElementState.Window.HEIGHT),
+                Collections.EMPTY_MAP, winState.accessPermissions);
 
             return (T) appData;
         }
