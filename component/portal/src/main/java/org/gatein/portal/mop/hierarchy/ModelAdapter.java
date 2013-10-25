@@ -22,9 +22,6 @@ package org.gatein.portal.mop.hierarchy;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import org.exoplatform.portal.tree.diff.HierarchyAdapter;
-import org.exoplatform.portal.tree.diff.ListAdapter;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
