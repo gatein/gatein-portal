@@ -230,6 +230,7 @@ public class PageEditor {
                 result.set("status", "success");
                 result.set("message", "OK");
             } catch (Exception ex) {
+                ex.printStackTrace();
                 result.set("code", 400);
                 result.set("status", "error");
                 result.set("message", "can not edit");
@@ -377,18 +378,14 @@ public class PageEditor {
                 }
             } else if ("application".equalsIgnoreCase(type)) {
                 componentData = this.buildComponentData(ctx);
+                if (parent != null) {
+                    parent.getChildren().add(componentData);
+                }
             }
         }
 
         if (componentData == null) {
             return;
-        }
-
-        if (parent != null) {
-            if (componentData instanceof ApplicationData) {
-                parent.getChildren().add(componentData);
-            }
-
         }
 
         //Process children of this node
