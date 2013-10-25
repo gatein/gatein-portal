@@ -15,9 +15,13 @@
     getId : function() {
       return this.get('id') || this.cid;
     },
+
+    // Return the parent object
     getParent : function() {
       return this.get('_parent');
     },
+
+    // Return the root object
     getRoot : function() {
       var parent = this, root;
       do {
@@ -26,6 +30,8 @@
       } while (parent);
       return root;
     },
+
+    // Return the index of the object in its parent
     getIndex : function() {
       if (this.getParent()) {
         return this.getParent().indexOf(this);
@@ -37,20 +43,20 @@
 
   // The Application model presents a component (window) in the layout which is be able to drag & drop
   var Application = LayoutComponent.extend({
-    initialize : function(options) {
-      LayoutComponent.prototype.initialize.call(this);
+    initialize : function(attributes) {
+      LayoutComponent.prototype.initialize.apply(this, arguments);
 
-      var options = options || {};
+      var attributes = attributes || {};
       this.set({
         draggable : true,
-        name : options.name || '',
-        applicationName : options.applicationName || '',
-        title : options.title || '',
-        content: options.content || "loading....",
+        name : attributes.name || '',
+        applicationName : attributes.applicationName || '',
+        title : attributes.title || '',
+        content: attributes.content || "loading....",
         logo : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
       });
-      if(options.id) {
-        this.set('id', options.id);
+      if(attributes.id) {
+        this.set('id', attributes.id);
       }
     },
 
@@ -122,30 +128,36 @@
     }
   });
 
+  // The abstract model of a container
+  // In a container, we have special/reserved attributes following:
+  // 'children' : is a Backbone.Collection which contains its children
   var AbstractContainer = LayoutComponent.extend({
     initialize : function() {
-      LayoutComponent.prototype.initialize.call(this);
+      LayoutComponent.prototype.initialize.apply(this, arguments);
+
       this.set({
         draggable : true,
         droppable : true,
 
         // Should not access directly to those internal attributes
-        _childrens : new Backbone.Collection()
+        // TODO: The children collection should contain a specific model
+        // and it would be able to pass collection object at initializing
+        _children : new Backbone.Collection()
       });
 
-      var _this = this;
-      this.get('_childrens').on('add', function(child) {
-        _this.trigger('addChild.eXo.Container', child, _this);
-      });
-      this.get('_childrens').on('remove', function(child) {
-        _this.trigger('removeChild.eXo.Container', child, _this);
-      });
+      this.get('_children').on('add', function(child) {
+        this.trigger('container.addChild', child, this);
+      }, this);
+
+      this.get('_children').on('remove', function(child) {
+        this.trigger('container.removeChild', child, this);
+      }, this);
     },
 
     getDescendant : function(id) {
       var child = this.getChild(id);
       if (!child) {
-        var cont = this.get('_childrens').find(function(elem) {
+        var cont = this.get('_children').find(function(elem) {
           if ($.isFunction(elem.getDescendant)) {
             return elem.getDescendant.call(elem, id);
           }
@@ -173,10 +185,10 @@
         child.set('_parent', this);
         // collection in backbone ignore move action in same container
         // need to remove then re-add
-        this.get('_childrens').remove(child, {
+        this.get('_children').remove(child, {
           silent : true
         });
-        this.get('_childrens').add(child, {
+        this.get('_children').add(child, {
           at : options.at,
           silent : options.silent
         });
@@ -184,13 +196,14 @@
 
       return this;
     },
+
     //
     removeChild : function(child, options) {
       child = typeof child == 'string' ? this.getChild(child) : child;
 
       if (child && child.getParent().getId() === this.getId()) {
         options = options || {};
-        this.get('_childrens').remove(child, {
+        this.get('_children').remove(child, {
           silent : options.silent
         });
         child.set('_parent', null);
@@ -199,31 +212,32 @@
     },
 
     isEmpty : function() {
-      return this.get('_childrens').isEmpty();
+      return this.get('_children').isEmpty();
     },
     getChildrens : function() {
-      return this.get('_childrens').toArray();
+      return this.get('_children').toArray();
     },
     getChild : function(id) {
-      return this.get('_childrens').get(id);
+      return this.get('_children').get(id);
     },
     indexOf : function(child) {
       child = typeof child == 'string' ? this.getChild(child) : child;
-      return this.get('_childrens').indexOf(child);
+      return this.get('_children').indexOf(child);
     },
     at : function(idx) {
-      return this.get('_childrens').at(idx);
+      return this.get('_children').at(idx);
     }
   });
 
   // The Container model presents a Zone in the layout which contains the Application
   var Container = AbstractContainer.extend({
     initialize : function() {
-      AbstractContainer.prototype.initialize.call(this);
+      AbstractContainer.prototype.initialize.apply(this, arguments);
     },
 
     isAllowDropping : function(dragObj) {
       // Check for supported types
+      // TODO: Instead of hardcoding "Application". The type should be checked from children collection's model
       if (dragObj && dragObj.constructor == Application) {
         return this.get('droppable');
       } else {
@@ -231,6 +245,8 @@
       }
     },
 
+    // Override the set method from Backbone.Model
+    // to handle the special/reserved 'children' attributes in the container
     set : function(data, options) {
       var options = options || {};
       var merge = !(options.merge === false);
@@ -240,9 +256,10 @@
       var childrens = data.childrens;
       delete data.childrens;
 
-      Backbone.Model.prototype.set.call(this, data, options);
+      Backbone.Model.prototype.set.apply(this, arguments);
 
       var _this = this;
+
       if (childrens) {
         $.each(childrens, function(idx, elem) {
           //Because child of Container is Application and it must have no-child
@@ -262,8 +279,8 @@
           }
         });
 
-        if (remove && this.get('_childrens')) {
-          var tmp = this.get('_childrens').filter(function(elem) {
+        if (remove && this.get('_children')) {
+          var tmp = this.get('_children').filter(function(elem) {
             var found = false;
             $.each(childrens, function(idx, child) {
               return !(found = child.id == elem.getId());
@@ -285,7 +302,7 @@
         type : "container",
         childrens : []
       };
-      this.get('_childrens').each(function(elem) {
+      this.get('_children').each(function(elem) {
         data.childrens.push(elem.toJSON());
       });
       return data;
@@ -295,7 +312,7 @@
   // 
   var PageContainer = AbstractContainer.extend({
     initialize : function() {
-      AbstractContainer.prototype.initialize.call(this);
+      AbstractContainer.prototype.initialize.apply(this, arguments);
       this.set({
         layout_id : ''
       });
@@ -304,6 +321,7 @@
 
     isAllowDropping : function(dragObj) {
       // Check for supported types
+      // TODO: Instead of hardcoding "Container". The type may be checked from children collection's model
       if (dragObj && dragObj.constructor == Container) {
         return this.get('droppable');
       } else {
@@ -321,7 +339,7 @@
       var childrens = data.childrens;
       delete data.childrens;
 
-      Backbone.Model.prototype.set.call(this, data, options);
+      Backbone.Model.prototype.set.apply(this, arguments);
 
       var _this = this;
       if (childrens) {
@@ -338,8 +356,8 @@
           }
         });
 
-        if (remove && this.get('_childrens')) {
-          var tmp = this.get('_childrens').filter(function(elem) {
+        if (remove && this.get('_children')) {
+          var tmp = this.get('_children').filter(function(elem) {
             var found = false;
             $.each(childrens, function(idx, child) {
               return !(found = child.id == elem.getId());
@@ -359,17 +377,18 @@
      */
     addChild : function(child, options) {
       child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
-      AbstractContainer.prototype.addChild.call(this, child, options);
+      AbstractContainer.prototype.addChild.apply(this, arguments);
 
       //We need listen to child to update this._snapshot model
       if(child && child.getParent().getId && child.getParent().getId() === this.getId()) {
-        this.listenTo(child, 'addChild.eXo.Container', this.updateSnapshot);
-        this.listenTo(child, 'removeChild.eXo.Container', this.updateSnapshot);
+        this.listenTo(child, 'container.addChild', this.updateSnapshot);
+        this.listenTo(child, 'container.removeChild', this.updateSnapshot);
       }
     },
+
     removeChild : function(child, options) {
       child = typeof child == 'string' ? this.getChild(child) : child;
-      AbstractContainer.prototype.removeChild.call(this, child, options);
+      AbstractContainer.prototype.removeChild.apply(this, arguments);
 
       //After remove child success, need to stop listening it
       if(child) {
@@ -386,6 +405,7 @@
     setLayoutId : function(layoutId) {
       this.set('layout_id', layoutId);
     },
+
     getLayoutId : function() {
       return this.get('layout_id');
     },
@@ -412,7 +432,7 @@
             newCont.addChild(newApp);
           } else {
             // Add applications into last container
-            var lastId = newContainer.get("_childrens").length;
+            var lastId = newContainer.get("_children").length;
             newCont = newContainer.getChild(lastId);
             newCont.addChild(newApp);
           }
@@ -429,7 +449,7 @@
         type : 'pagecontainer',
         childrens : []
       };
-      this.get('_childrens').each(function(elem) {
+      this.get('_children').each(function(elem) {
         data.childrens.push(elem.toJSON());
       });
       return data;
@@ -441,10 +461,10 @@
    */
   var ComposerContainer = Container.extend({
     initialize : function() {
-      Container.prototype.initialize.call(this);
+      Container.prototype.initialize.apply(this, arguments);
     },
     findChildByName : function(name) {
-      return this.get('_childrens').where({name: name});
+      return this.get('_children').where({name: name});
     },
 
     fetch : function() {

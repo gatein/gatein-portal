@@ -1,7 +1,7 @@
 (function() {
 
   // An item in composer
-  var ComposerApplicationView = Backbone.View.extend({
+  var ApplicationFactoryView = Backbone.View.extend({
     tagName : "li",
 
     // TODO: Can this be removed, an empty method ?
@@ -20,15 +20,13 @@
 
   // Composer
   var ComposerView = Backbone.View.extend({
-    el : $("#composers"),
-
     initialize : function(options) {
       var options = options || {};
 
       this.model = new ComposerContainer(null, {
         url : options.fetchPortletURL
       });
-      this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
+      this.listenTo(this.model, 'container.addChild', this.onAddChild);
       this.model.fetch();
     },
 
@@ -37,8 +35,11 @@
     },
 
     onAddChild : function(child) {
+
+      // TODO: rename to application-list
       var container = $('#portlet-list');
-      var view = new ComposerApplicationView({model : child});
+
+      var view = new ApplicationFactoryView({model : child});
       container.append(view.render().$el);
 
       //Enable draggable
@@ -52,6 +53,8 @@
 
   var ApplicationView = Backbone.View.extend({
     tagName: "div",
+
+    // TODO: rename to "window"
     className: "portlet",
     initialize: function() {
       this.model.on('change', this.updateContent, this);
@@ -74,12 +77,12 @@
     events : {
       "click .close" : "deleteApp"
     },
+
     initialize : function(options) {
-      var options = options || {};
 
       // Listen to add/remove events on the new model
-      this.listenTo(this.model, 'addChild.eXo.Container', this.onAddChild);
-      this.listenTo(this.model, 'removeChild.eXo.Container', this.onRemoveChild);
+      this.listenTo(this.model, 'container.addChild', this.onAddChild);
+      this.listenTo(this.model, 'container.removeChild', this.onRemoveChild);
 
       var domId = "#" + this.model.getId();
       this.$el = $(domId);
@@ -87,6 +90,7 @@
       // Trigger adding D&D ability to Zone and Application elements
       this.setupDnD();
     },
+
     setupDnD : function() {
       this.$el.sortable({
         connectWith : ".sortable",
@@ -100,6 +104,7 @@
         })(this)
       });
     },
+
     /*
      * Listen to DOM event
      */
@@ -183,8 +188,6 @@
   });
   //
   var LayoutView = Backbone.View.extend({
-    el : '.pageBody',
-
     initialize : function(options) {
       var options = options || {};
       this.editUrl = options.editUrl;
@@ -257,14 +260,11 @@
 
     // Build model from DOM
     buildModel : function() {
-      var _model = new PageContainer({
-        id : 'layoutId'
-      }, {
-        url : this.editUrl
-      });
+      var _model = new PageContainer({id : 'layoutId'}, {url : this.editUrl});
       this.$el.find('.sortable').each(function() {
         var cont = new Container({
-          id : this.id
+          id : this.id,
+          children : new Backbone.Collection([Application])
         });
         $(this).children('.portlet').each(function() {
           var app = new Application({
@@ -284,8 +284,6 @@
 
   // The root container view of Layout Edition mode
   var EditorView = Backbone.View.extend({
-    el : '.LAYOUT-EDITION',
-
     events : {
       "click .switch" : "switchLayout",
       "click #saveLayout" : "saveLayout"
@@ -294,16 +292,18 @@
     initialize : function() {
 
       // Be sure that the element LAYOUT-EDITION has already been available in DOM
-      if (this.$el.hasClass("LAYOUT-EDITION")) {
+      if (this.el) {
 
         // Initialize LayoutView 
         this.layoutView = new LayoutView({
+          el : '.pageBody',
           editUrl : this.$el.attr('data-editURL')
         });
 
         // Composer
         var composerRoot = this.$("#composers");
         this.composerView = new ComposerView({
+          el : '#composers',
           fetchPortletURL : composerRoot.attr("data-url")
         });
         // End composer
@@ -347,6 +347,6 @@
 
   // Trigger to initialize the LAYOUT EDITION mode
   $(function() {
-    window.editorView = new EditorView();
+    window.editorView = new EditorView({el : '.LAYOUT-EDITION'});
   });
 })();
