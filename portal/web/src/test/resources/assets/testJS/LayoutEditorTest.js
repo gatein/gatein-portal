@@ -15,9 +15,17 @@ module('test Container model', {
 });
 
 test("move app in same container test", function() {
-	//move app 1_1 from position 0 to 1
 	var cont1 = container.getDescendant('1');
+	var listener = listenTo(cont1);
+	
+	//move app 1_1 from position 0 to 1  
 	cont1.addChild('1_1', {at : 1});
+	//
+	equal(listener.aCalled.length, 1);
+	var args = listener.aCalled[0];
+	equal(args[0].getId(), '1_1');
+	equal(args[1].getId(), '1');
+	equal(listener.rCalled.length, 0);
 	
 	var app1 = container.getDescendant('1_1');
 	ok(app1, 'app1 should be not null');
@@ -26,6 +34,9 @@ test("move app in same container test", function() {
 });
 
 test("move app to another container test", function() {
+  var cont1 = container.getDescendant('1');
+  var cont2 = container.getDescendant('2');
+  
 	var app1 = container.getDescendant('1_1');
 	equal(app1.getParent().getId(), '1');
 	equal(app1.getIndex(), 0);
@@ -34,15 +45,45 @@ test("move app to another container test", function() {
 	equal(app2.getParent().getId(), '2');
 	equal(app2.getIndex(), 1);
 	
-	//move app 1_1 to container 2 at postion 1
-	var cont2 = container.getDescendant('2');
-	cont2.addChild(app1, {at : 1});
+	//
+	var listener1 = listenTo(cont1);
+	var listener2 = listenTo(cont2);
+	
+	//move app 1_1 to container 2 at postion 1	
+	cont2.addChild('1_1', {at : 1});
 	equal(app1.getParent().getId(), '2');
 	equal(app1.getIndex(), 1);
+	
+	//onRemoveChild event on cont1
+	equal(listener1.rCalled.length, 1);
+	equal(listener1.rCalled[0][0].getId(), '1_1');
+	equal(listener1.aCalled.length, 0);
+	//onAddChild event on cont2
+	equal(listener2.aCalled.length, 1);
+	equal(listener2.aCalled[0][0].getId(), '1_1');
+	equal(listener2.rCalled.length, 0);
 	
 	//now app2 is in position 2
 	equal(app2.getParent().getId(), '2');
 	equal(app2.getIndex(), 2);
+});
+
+test("remove application test", function() {
+  var cont1 = container.getDescendant('1');
+  var listener = listenTo(cont1);
+    
+  cont1.removeChild('1_1');
+  cont1.removeChild('1_2');
+  ok(cont1.isEmpty());
+  
+  //
+  equal(listener.rCalled.length, 2);
+  var args = listener.rCalled[0];
+  equal(args[0].getId(), '1_1');
+  equal(args[1].getId(), '1');
+  equal(listener.rCalled[1][0].getId(), '1_2');
+  //
+  equal(listener.aCalled.length, 0);  
 });
 
 test("test create container from JSON", function() {
@@ -54,7 +95,6 @@ test("test create container from JSON", function() {
 	equal(container.getChild('1'), null);
 	equal(container.getChild('2').getChild('2_2'), null);
 });
-
 
 test("test toJSON", function() {
 	var data = container.toJSON();
@@ -96,7 +136,7 @@ test("test switchLayout", function() {
   //new layout with 1 zone
   var oneZone = new PageContainer();
   oneZone.addChild(new Container({id : "1"}));
-  equal(1, oneZone.get("_childrens").length);
+  equal(1, oneZone.getChildrens().length);
   //switch from reverted layout to 1 zone layout
   rLayout.switchLayout(oneZone);
   
@@ -128,3 +168,20 @@ test("test switchLayout", function() {
 	equal('2_2', threeZone.getChild('2').at(1).getId());
 	equal(true, threeZone.getChild('3').isEmpty());
 });
+
+function listenTo(model) {
+  var listener = {
+    aCalled: [],
+    rCalled: [],
+    
+    onAddChild: function() {
+      listener.aCalled.push(arguments);
+    },
+    onRemoveChild: function() {
+      listener.rCalled.push(arguments);
+    }
+  };
+  model.on('container.addChild', listener.onAddChild);
+  model.on('container.removeChild', listener.onRemoveChild);
+  return listener;
+}
