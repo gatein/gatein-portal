@@ -1,6 +1,6 @@
 module('test Container model', {
 	setup: function() {
-		window.container = new Container();
+		window.container = new PageContainer();
 		
 		//setup 2 nested containers with 2 apps
 		for (var i = 1; i <= 2; i++) {
@@ -48,7 +48,7 @@ test("move app to another container test", function() {
 test("test create container from JSON", function() {
 	var data = {id : 'root', childrens: [{id : 'cont1'} , {id : '2', childrens : []}]};
 	container.set(data);
-	
+
 	equal(container.getId(), 'root');
 	equal(container.getChild('cont1').getId(), 'cont1');
 	equal(container.getChild('1'), null);
@@ -79,7 +79,7 @@ test("test switchLayout", function() {
   equal(container.getChild('2').getIndex(), 1);
   
   //new layout with reverted container order
-  var rLayout = new Container();
+  var rLayout = new PageContainer();
   rLayout.addChild(new Container({id: '2'}));
   rLayout.addChild(new Container({id: '1'}));
   
@@ -94,7 +94,7 @@ test("test switchLayout", function() {
   equal('2_2', rLayout.getChild('2').at(1).getId());
   
   //new layout with 1 zone
-  var oneZone = new Container();
+  var oneZone = new PageContainer();
   oneZone.addChild(new Container({id : "1"}));
   equal(1, oneZone.get("_childrens").length);
   //switch from reverted layout to 1 zone layout
@@ -106,7 +106,7 @@ test("test switchLayout", function() {
   equal('2_1', oneZone.getChild('1').at(2).getId());
   equal('2_2', oneZone.getChild('1').at(3).getId());
 	
-	var twoZone = new Container();
+	var twoZone = new PageContainer();
 	twoZone.addChild(new Container({id : "1"}));
 	twoZone.addChild(new Container({id : "2"}));
 	container.switchLayout(twoZone);
@@ -116,7 +116,7 @@ test("test switchLayout", function() {
 	equal('2_1', twoZone.getChild('2').at(0).getId());
 	equal('2_2', twoZone.getChild('2').at(1).getId());
 	
-	var threeZone = new Container();
+	var threeZone = new PageContainer();
 	threeZone.addChild(new Container({id : "1"}))
 	threeZone.addChild(new Container({id : "2"}))
 	threeZone.addChild(new Container({id : "3"}))

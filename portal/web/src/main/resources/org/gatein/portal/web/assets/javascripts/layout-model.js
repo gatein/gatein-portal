@@ -194,7 +194,6 @@
           silent : options.silent
         });
         child.set('_parent', null);
-        this.stopListening(child);
       }
       return this;
     },
@@ -214,8 +213,24 @@
     },
     at : function(idx) {
       return this.get('_childrens').at(idx);
+    }
+  });
+
+  // The Container model presents a Zone in the layout which contains the Application
+  var Container = AbstractContainer.extend({
+    initialize : function() {
+      AbstractContainer.prototype.initialize.call(this);
     },
-    //
+
+    isAllowDropping : function(dragObj) {
+      // Check for supported types
+      if (dragObj && dragObj.constructor == Application) {
+        return this.get('droppable');
+      } else {
+        return false;
+      }
+    },
+
     set : function(data, options) {
       var options = options || {};
       var merge = !(options.merge === false);
@@ -230,11 +245,16 @@
       var _this = this;
       if (childrens) {
         $.each(childrens, function(idx, elem) {
+          //Because child of Container is Application and it must have no-child
+          if(elem.childrens) {
+            delete elem.childrens;
+          }
+
           var tmp;
           if (tmp = _this.getChild(elem.id)) {
             merge && tmp.set(elem, options);
           } else {
-            tmp = elem.childrens ? new Container() : new Application();
+            tmp = new Application();
             tmp.set(elem);
 
             options.at = idx;
@@ -255,22 +275,6 @@
             _this.removeChild(elem.id, options);
           });
         }
-      }
-    }
-  });
-
-  // The Container model presents a Zone in the layout which contains the Application
-  var Container = AbstractContainer.extend({
-    initialize : function() {
-      AbstractContainer.prototype.initialize.call(this);
-    },
-
-    isAllowDropping : function(dragObj) {
-      // Check for supported types
-      if (dragObj && dragObj.constructor == Application) {
-        return this.get('droppable');
-      } else {
-        return false;
       }
     },
 
@@ -307,6 +311,49 @@
       }
     },
 
+    //Need to move to each concrete
+    set : function(data, options) {
+      var options = options || {};
+      var merge = !(options.merge === false);
+      var add = !(options.add === false);
+      var remove = !(options.remove === false);
+
+      var childrens = data.childrens;
+      delete data.childrens;
+
+      Backbone.Model.prototype.set.call(this, data, options);
+
+      var _this = this;
+      if (childrens) {
+        $.each(childrens, function(idx, elem) {
+          var tmp;
+          if (tmp = _this.getChild(elem.id)) {
+            merge && tmp.set(elem, options);
+          } else {
+            tmp = new Container();
+            tmp.set(elem);
+
+            options.at = idx;
+            add && _this.addChild(tmp, options);
+          }
+        });
+
+        if (remove && this.get('_childrens')) {
+          var tmp = this.get('_childrens').filter(function(elem) {
+            var found = false;
+            $.each(childrens, function(idx, child) {
+              return !(found = child.id == elem.getId());
+            });
+            return !found;
+          });
+
+          $.each(tmp, function(idx, elem) {
+            _this.removeChild(elem.id, options);
+          });
+        }
+      }
+    },
+
     /*
      * methods on childrens
      */
@@ -315,7 +362,7 @@
       AbstractContainer.prototype.addChild.call(this, child, options);
 
       //We need listen to child to update this._snapshot model
-      if(child.getParent().getId() === this.getId()) {
+      if(child && child.getParent().getId && child.getParent().getId() === this.getId()) {
         this.listenTo(child, 'addChild.eXo.Container', this.updateSnapshot);
         this.listenTo(child, 'removeChild.eXo.Container', this.updateSnapshot);
       }
@@ -325,8 +372,10 @@
       AbstractContainer.prototype.removeChild.call(this, child, options);
 
       //After remove child success, need to stop listening it
-      if(child.getParent().getId() !== this.getId()) {
-        this.stopListening(child);
+      if(child) {
+        if(!child.getParent().getId || (child.getParent().getId() !== this.getId())) {
+          this.stopListening(child);
+        }
       }
     },
 
@@ -356,7 +405,6 @@
       $.each(conts, function() {
         var apps = this.getChildrens();
         var id = this.id;
-        var cont = this;
         $(apps).each(function() {
           var newCont = newContainer.getChild(id);
           var newApp = this.clone();
