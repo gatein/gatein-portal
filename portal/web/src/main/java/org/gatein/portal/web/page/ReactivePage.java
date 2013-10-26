@@ -181,7 +181,6 @@ class ReactivePage {
             // find something useful to do :-)
             e.printStackTrace();
         } finally {
-            System.out.println("CLOSED BUFFER");
             buffer.close();
         }
     }
