@@ -2,7 +2,11 @@
 
   // An abstract model for Application and Container (Zone) in a layout
   var LayoutComponent = Backbone.Model.extend({
+
     initialize : function() {
+
+      // TODO: We should rely on Backbone.Model.defaults property instead
+      // TODO: Should we remove these default attributes ?
       this.set({
         _parent : null,
         draggable : false,
@@ -13,6 +17,8 @@
     isDroppable : function(dragObj) {
       return false;
     },
+
+    // TODO: we should rely on the Model.id property somehow
     getId : function() {
       return this.get('id') || this.cid;
     },
@@ -50,26 +56,18 @@
    * - 'title': The application title
    */
   var Application = LayoutComponent.extend({
-    initialize : function(attributes) {
-      LayoutComponent.prototype.initialize.apply(this, arguments);
-
-      var attributes = attributes || {};
-      this.set({
-        draggable : true,
-        name : attributes.name || '',
-        applicationName : attributes.applicationName || '',
-        title : attributes.title || '',
-        content: attributes.content || "loading....",
-        logo : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
-      });
-      if(attributes.id) {
-        this.set('id', attributes.id);
-      }
+    defaults : {
+      'type' : 'application',
+      'draggable' : true,
+      'content' : 'Loading the application...',
+      'logo' : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
     },
 
+    // TODO: Why don't we rely on the Model.id property instead ?
     setId: function(id) {
       this.set('id', id);
     },
+
     getName : function() {
       return this.get('name');
     },
@@ -243,9 +241,6 @@
 
   // The Container model presents a Zone in the layout which contains the Application
   var Container = AbstractContainer.extend({
-    initialize : function() {
-      AbstractContainer.prototype.initialize.apply(this, arguments);
-    },
 
     isDroppable : function(dragObj) {
       // Check for supported types
@@ -273,14 +268,6 @@
 
   // 
   var PageContainer = AbstractContainer.extend({
-    initialize : function() {
-      AbstractContainer.prototype.initialize.apply(this, arguments);
-
-      // TODO: Seems we don't need this setting
-      this.set({
-        layout_id : ''
-      });
-    },
 
     isDroppable : function(dragObj) {
       // Check for supported types
@@ -349,9 +336,7 @@
    * 
    */
   var ComposerContainer = Container.extend({
-    initialize : function() {
-      Container.prototype.initialize.apply(this, arguments);
-    },
+
     findChildByName : function(name) {
       return this._children.where({name: name});
     },
