@@ -71,7 +71,7 @@
 <%}%>
 <!-- end composer -->
 
-<div class="pageBody">
+<div class="pageBody" data-editURL="@{PageEditor.edit(path=path)}">
 ${body}
 </div>
 

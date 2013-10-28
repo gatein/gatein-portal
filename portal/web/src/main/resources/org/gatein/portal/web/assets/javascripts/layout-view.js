@@ -5,14 +5,11 @@
       var options = options || {};
 
       this.model = new ComposerContainer(null, {
-        url : options.fetchPortletURL
+        url : this.$el.attr("data-url")
       });
+
       this.listenTo(this.model, 'container.addChild', this.onAddChild);
       this.model.fetch();
-    },
-
-    getModel: function() {
-      return this.model;
     },
 
     onAddChild : function(child) {
@@ -108,7 +105,7 @@
       if(!$dragObj.attr("id")) {
         //Add new application
         var composerView = window.editorView.getComposerView();
-        var application = composerView.getModel().findChildByName($dragObj.attr("data-name"))[0];
+        var application = composerView.model.findChildByName($dragObj.attr("data-name"))[0];
 
         //Clone and generate id for new application
         var newChild = application.clone();
@@ -134,7 +131,7 @@
       var appId = $(e.target).closest('div.portlet').attr('id');
       var containerId = $(e.target).closest('div.sortable').attr('id');
       var layoutView = editorView.layoutView;
-      var container = layoutView.getModel().getChild(containerId);
+      var container = layoutView.model.getChild(containerId);
       container.removeChild(appId);
       
       // Update snapshot
@@ -173,26 +170,16 @@
       }
     }
   });
+
   //
   var LayoutView = Backbone.View.extend({
     initialize : function(options) {
       var options = options || {};
-      this.editUrl = options.editUrl;
+      this.editUrl = this.$el.attr('data-editURL');
 
       // Build model from current DOM
-      var model = this.buildModel();
-      this.setModel(model);
+      this.model = this.buildModel();
       this.snapshotModel = this.model;
-    },
-
-    setModel : function(model) {
-
-      // Stop listening to events on the old model
-      //this.stopListening();
-
-      // Assign to new model
-      this.model = model;
-      return this;
     },
 
     // Listen to clicking on SAVE button
@@ -215,9 +202,10 @@
       return this;
     },
 
+    // Switch layout with data structure passed as the layoutData argument
     switchLayout : function(layoutData) {
 
-      // Temporarily hide the old layout
+      // Backup the current layout html for doing switch layout later
       this.$el.each(function() {
         var id = $(this).attr('id');
         $(this).attr('id', id + '-old');
@@ -229,8 +217,7 @@
       this.$el.html(layoutData.html);
 
       // Build new model according to new layout
-      var model = this.buildModel();
-      this.setModel(model);
+      this.model = this.buildModel();
       if (layoutData.layout_id) {
         this.model.setLayoutId(layoutData.layout_id);
       }
@@ -246,18 +233,16 @@
 
     // Build model from DOM
     buildModel : function() {
+
+      // TODO: Consider to initialize PageContainer model's url properly following Backbone standard
       var _model = new PageContainer({id : 'layoutId'}, {url : this.editUrl});
       this.$el.find('.sortable').each(function() {
-        var cont = new Container({
-          id : this.id,
-          children : new Backbone.Collection([Application])
-        });
+        var cont = new Container({id : this.id});
         $(this).children('.portlet').each(function() {
-          var app = new Application({
-            'id' : this.id
-          });
+          var app = new Application({'id' : this.id});
           cont.addChild(app);
         });
+
         new ContainerView({model: cont});
         _model.addChild(cont);
       });
@@ -265,16 +250,13 @@
     },
     resetModelSnapshot: function() {
       this.snapshotModel = this.model;
-    },
-    getModel: function() {
-      return this.model;
     }
   });
 
   // The root container view of Layout Edition mode
   var EditorView = Backbone.View.extend({
     events : {
-      "click .switch" : "switchLayout",
+      "click .switch" : "changeLayout",
       "click #saveLayout" : "saveLayout"
     },
 
@@ -285,17 +267,11 @@
 
         // Initialize LayoutView 
         this.layoutView = new LayoutView({
-          el : '.pageBody',
-          editUrl : this.$el.attr('data-editURL')
+          el : '.pageBody'
         });
 
-        // Composer
-        var composerRoot = this.$("#composers");
-        this.composerView = new ComposerView({
-          el : '#composers',
-          fetchPortletURL : composerRoot.attr("data-url")
-        });
-        // End composer
+        // Initialize ComposerView
+        this.composerView = new ComposerView({el : '#composers'});
       }
     },
 
@@ -312,11 +288,12 @@
     },
 
     // Clicked on Swich layout button
-    switchLayout : function(e) {
+    changeLayout : function(e) {
       var anchor = e.target;
       var href = $(anchor).attr('href');
       e.preventDefault();
 
+      // Make an ajax request to fetch the new layout data [layout_id, html_template]
       $.ajax({
         url : href,
         dataType : "json",
@@ -326,7 +303,7 @@
             return false;
           }
 
-          // Delegate to LayoutView
+          // Ask the layout view to switch layout with passed layout data
           var layoutView = window.editorView.layoutView;
           layoutView.switchLayout(result.data);
         }

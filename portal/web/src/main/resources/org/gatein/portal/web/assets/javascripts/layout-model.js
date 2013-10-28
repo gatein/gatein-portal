@@ -9,7 +9,8 @@
         droppable : false
       });
     },
-    isAllowDropping : function(dragObj) {
+
+    isDroppable : function(dragObj) {
       return false;
     },
     getId : function() {
@@ -41,7 +42,13 @@
     }
   });
 
-  // The Application model presents a component (window) in the layout which is be able to drag & drop
+  /**
+   * The Application model presents a component (window) in the layout which is be able to drag & drop
+   * The following are built-in/pre-defined attributes:
+   * - 'name': The name of application
+   * - 'applicationName':
+   * - 'title': The application title
+   */
   var Application = LayoutComponent.extend({
     initialize : function(attributes) {
       LayoutComponent.prototype.initialize.apply(this, arguments);
@@ -94,6 +101,9 @@
         }
       });
     },
+
+    // TODO: Why do we need to overwrite the clone method from Backbone.Model ?
+    // It should be tested
     clone: function() {
       return new Application({
         id: this.getId(),
@@ -104,7 +114,9 @@
         content: this.getContent()
       });
     },
+    
     // Return the JSON object that contains metadata information
+    // TODO: Should we rely on the default #toJSON method from Backbone.Model ?
     toJSON : function() {
       return {
         id : this.getId(),
@@ -130,25 +142,26 @@
 
   // The abstract model of a container
   // In a container, we have special/reserved attributes following:
-  // 'children' : is a Backbone.Collection which contains its children
+  // - 'children' : is a Backbone.Collection which contains its children
   var AbstractContainer = LayoutComponent.extend({
-    initialize : function() {
+    initialize : function(attributes, options) {
       LayoutComponent.prototype.initialize.apply(this, arguments);
+
+      // A Backbone.Collection object which contains its children
+      // TODO: The children collection should contain a specific model
+      // and it would be able to pass collection object at initializing
+      this._children = new Backbone.Collection();
 
       this.set({
         draggable : true,
         droppable : true,
-        // Should not access directly to those internal attributes
-        // TODO: The children collection should contain a specific model
-        // and it would be able to pass collection object at initializing
-        _children: new Backbone.Collection()
       });
 
-      this.get('_children').on('add', function(child) {
+      this._children.on('add', function(child) {
         this.trigger('container.addChild', child, this);
       }, this);
 
-      this.get('_children').on('remove', function(child) {
+      this._children.on('remove', function(child) {
         this.trigger('container.removeChild', child, this);
       }, this);
     },
@@ -156,7 +169,7 @@
     getDescendant : function(id) {
       var child = this.getChild(id);
       if (!child) {
-        var cont = this.get('_children').find(function(elem) {
+        var cont = this._children.find(function(elem) {
           if ($.isFunction(elem.getDescendant)) {
             return elem.getDescendant.call(elem, id);
           }
@@ -172,7 +185,7 @@
     addChild : function(child, options) {
       child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
 
-      if (child && this.isAllowDropping(child)) {
+      if (child && this.isDroppable(child)) {
         var _this = this;
         options = options || {};
         var oldParent = child.getParent();
@@ -184,10 +197,10 @@
         child.set('_parent', this);
         // collection in backbone ignore move action in same container
         // need to remove then re-add
-        this.get('_children').remove(child, {
+        this._children.remove(child, {
           silent : true
         });
-        this.get('_children').add(child, {
+        this._children.add(child, {
           at : options.at,
           silent : options.silent
         });
@@ -202,7 +215,7 @@
 
       if (child && child.getParent().getId() === this.getId()) {
         options = options || {};
-        this.get('_children').remove(child, {
+        this._children.remove(child, {
           silent : options.silent
         });
         child.set('_parent', null);
@@ -211,20 +224,20 @@
     },
 
     isEmpty : function() {
-      return this.get('_children').isEmpty();
+      return this._children.isEmpty();
     },
     getChildren : function() {
-      return this.get('_children').toArray();
+      return this._children.toArray();
     },
     getChild : function(id) {
-      return this.get('_children').get(id);
+      return this._children.get(id);
     },
     indexOf : function(child) {
       child = typeof child == 'string' ? this.getChild(child) : child;
-      return this.get('_children').indexOf(child);
+      return this._children.indexOf(child);
     },
     at : function(idx) {
-      return this.get('_children').at(idx);
+      return this._children.at(idx);
     }
   });
 
@@ -234,7 +247,7 @@
       AbstractContainer.prototype.initialize.apply(this, arguments);
     },
 
-    isAllowDropping : function(dragObj) {
+    isDroppable : function(dragObj) {
       // Check for supported types
       // TODO: Instead of hardcoding "Application". The type should be checked from children collection's model
       if (dragObj && dragObj.constructor == Application) {
@@ -243,7 +256,7 @@
         return false;
       }
     },
-    
+
     // Return the JSON object that contains metadata information
     toJSON : function() {
       var data = {
@@ -251,7 +264,7 @@
         type : "container",
         childrens : []
       };
-      this.get('_children').each(function(elem) {
+      this._children.each(function(elem) {
         data.childrens.push(elem.toJSON());
       });
       return data;
@@ -262,12 +275,14 @@
   var PageContainer = AbstractContainer.extend({
     initialize : function() {
       AbstractContainer.prototype.initialize.apply(this, arguments);
+
+      // TODO: Seems we don't need this setting
       this.set({
         layout_id : ''
       });
     },
 
-    isAllowDropping : function(dragObj) {
+    isDroppable : function(dragObj) {
       // Check for supported types
       // TODO: Instead of hardcoding "Container". The type may be checked from children collection's model
       if (dragObj && dragObj.constructor == Container) {
@@ -285,6 +300,7 @@
       return this.get('layout_id');
     },
 
+    // newContainer: is the new PageContainer object
     switchLayout : function(newContainer) {
       var conts = this.getChildren();
       conts.sort(function(m1, m2) {
@@ -306,7 +322,7 @@
             newCont.addChild(newApp);
           } else {
             // Add applications into last container
-            var lastId = newContainer.get("_children").length;
+            var lastId = newContainer._children.length;
             newCont = newContainer.getChild(lastId);
             newCont.addChild(newApp);
           }
@@ -322,7 +338,7 @@
         type : 'pagecontainer',
         childrens : []
       };
-      this.get('_children').each(function(elem) {
+      this._children.each(function(elem) {
         data.childrens.push(elem.toJSON());
       });
       return data;
@@ -337,7 +353,7 @@
       Container.prototype.initialize.apply(this, arguments);
     },
     findChildByName : function(name) {
-      return this.get('_children').where({name: name});
+      return this._children.where({name: name});
     },
 
     fetch : function() {
