@@ -45,7 +45,7 @@
 		<div id="portlets" class="panel-collapse collapse in">
 			<div class="panel-body">
 				<div class="composer-tooltip">Drag and drop to add new portlet!</div>
-				<ul id="portlet-list" class="portlet-list"></ul>
+				<ul id="application-list" class="application-list"></ul>
 				<div style="clear:both"></div>
 			</div>
 		</div>
@@ -53,10 +53,12 @@
 </div>
 <!-- Templat for portlet in composer -->
 <script type="text/template" id="portlet-template">
-	<div class="draggable">
-		<img alt="${"<%- name %>"}" src="${"<%- logo %>"}"/>
-		<p>${"<%- title %>"}</p>
-	</div>
+    <li data-name="${"<%- name %>"}">
+        <div class="draggable">
+            <img alt="${"<%- name %>"}" src="${"<%- logo %>"}"/>
+            <p>${"<%- title %>"}</p>
+        </div>
+    </li>
 </script>
 <!-- Templat for portlet in page -->
 <script type="text/template" id="application-template">

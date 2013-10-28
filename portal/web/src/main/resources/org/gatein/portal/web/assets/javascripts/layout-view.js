@@ -1,23 +1,4 @@
 (function() {
-
-  // An item in composer
-  var ApplicationFactoryView = Backbone.View.extend({
-    tagName : "li",
-
-    // TODO: Can this be removed, an empty method ?
-    initialize : function() {
-    },
-
-    render : function() {
-      this.template = _.template($("#portlet-template").html());
-      this.$el.html(this.template(this.model.toJSONForRenderer()));
-      this.$el.attr("id", "");
-      this.$el.attr("data-name", this.model.getName());
-      return this;
-    }
-  });
-
-
   // Composer
   var ComposerView = Backbone.View.extend({
     initialize : function(options) {
@@ -35,15 +16,14 @@
     },
 
     onAddChild : function(child) {
+      var $container = $('#application-list');
 
-      // TODO: rename to application-list
-      var container = $('#portlet-list');
-
-      var view = new ApplicationFactoryView({model : child});
-      container.append(view.render().$el);
+      var html = _.template($("#portlet-template").html(), child.toJSONForRenderer());
+      var $html = $(html);
+      $container.append($html);
 
       //Enable draggable
-      $(view.$el).draggable({
+      $($html).draggable({
         connectToSortable: ".sortable",
         revert: "invalid",
         helper: "clone"
@@ -54,10 +34,9 @@
   var ApplicationView = Backbone.View.extend({
     tagName: "div",
 
-    // TODO: rename to "window"
-    className: "portlet",
+    className: "window",
     initialize: function() {
-      this.model.on('change', this.updateContent, this);
+      this.model.on('change:content', this.updateContent, this);
       this.model.fetchContent();
     },
     render: function() {
