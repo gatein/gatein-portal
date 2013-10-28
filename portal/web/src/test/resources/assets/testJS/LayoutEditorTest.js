@@ -86,16 +86,6 @@ test("remove application test", function() {
   equal(listener.aCalled.length, 0);  
 });
 
-test("test create container from JSON", function() {
-	var data = {id : 'root', childrens: [{id : 'cont1'} , {id : '2', childrens : []}]};
-	container.set(data);
-
-	equal(container.getId(), 'root');
-	equal(container.getChild('cont1').getId(), 'cont1');
-	equal(container.getChild('1'), null);
-	equal(container.getChild('2').getChild('2_2'), null);
-});
-
 test("test toJSON", function() {
 	var data = container.toJSON();
 	equal(data.childrens.length, 2);
@@ -136,11 +126,11 @@ test("test switchLayout", function() {
   //new layout with 1 zone
   var oneZone = new PageContainer();
   oneZone.addChild(new Container({id : "1"}));
-  equal(1, oneZone.getChildrens().length);
+  equal(1, oneZone.getChildren().length);
   //switch from reverted layout to 1 zone layout
   rLayout.switchLayout(oneZone);
   
-  equal(4, oneZone.getChild("1").getChildrens().length);
+  equal(4, oneZone.getChild("1").getChildren().length);
   equal('1_1', oneZone.getChild('1').at(0).getId());
   equal('1_2', oneZone.getChild('1').at(1).getId());
   equal('2_1', oneZone.getChild('1').at(2).getId());

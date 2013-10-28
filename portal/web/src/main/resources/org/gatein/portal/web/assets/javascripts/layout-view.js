@@ -122,6 +122,10 @@
           at : idx
         });
       }
+      
+      // Update snapshot
+      var pageView = window.editorView.getPageView();
+      pageView.resetModelSnapshot();
     },
     // An event handler for deleting a window.
     // Find the target window ID and container ID
@@ -132,6 +136,10 @@
       var layoutView = editorView.layoutView;
       var container = layoutView.getModel().getChild(containerId);
       container.removeChild(appId);
+      
+      // Update snapshot
+      var pageView = window.editorView.getPageView();
+      pageView.resetModelSnapshot();
     },
     /*
      * Listen to model changes
@@ -174,6 +182,7 @@
       // Build model from current DOM
       var model = this.buildModel();
       this.setModel(model);
+      this.snapshotModel = this.model;
     },
 
     setModel : function(model) {
@@ -219,9 +228,6 @@
       // Apply the new layout template
       this.$el.html(layoutData.html);
 
-      // Retrieve this before building the new model
-      var _model = this.model;
-
       // Build new model according to new layout
       var model = this.buildModel();
       this.setModel(model);
@@ -230,7 +236,8 @@
       }
 
       // Start switching layout
-      _model.switchLayout(this.model);
+      var snapshot = this.snapshotModel;
+      snapshot.switchLayout(this.model);
 
       // remove old layout
       tmp.remove();
@@ -255,6 +262,9 @@
         _model.addChild(cont);
       });
       return _model;
+    },
+    resetModelSnapshot: function() {
+      this.snapshotModel = this.model;
     },
     getModel: function() {
       return this.model;

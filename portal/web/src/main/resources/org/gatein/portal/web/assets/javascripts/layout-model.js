@@ -138,11 +138,10 @@
       this.set({
         draggable : true,
         droppable : true,
-
         // Should not access directly to those internal attributes
         // TODO: The children collection should contain a specific model
         // and it would be able to pass collection object at initializing
-        _children : new Backbone.Collection()
+        _children: new Backbone.Collection()
       });
 
       this.get('_children').on('add', function(child) {
@@ -214,7 +213,7 @@
     isEmpty : function() {
       return this.get('_children').isEmpty();
     },
-    getChildrens : function() {
+    getChildren : function() {
       return this.get('_children').toArray();
     },
     getChild : function(id) {
@@ -244,57 +243,7 @@
         return false;
       }
     },
-
-    // Override the set method from Backbone.Model
-    // to handle the special/reserved 'children' attributes in the container
-    set : function(data, options) {
-      var options = options || {};
-      var merge = !(options.merge === false);
-      var add = !(options.add === false);
-      var remove = !(options.remove === false);
-
-      var childrens = data.childrens;
-      delete data.childrens;
-
-      Backbone.Model.prototype.set.apply(this, arguments);
-
-      var _this = this;
-
-      if (childrens) {
-        $.each(childrens, function(idx, elem) {
-          //Because child of Container is Application and it must have no-child
-          if(elem.childrens) {
-            delete elem.childrens;
-          }
-
-          var tmp;
-          if (tmp = _this.getChild(elem.id)) {
-            merge && tmp.set(elem, options);
-          } else {
-            tmp = new Application();
-            tmp.set(elem);
-
-            options.at = idx;
-            add && _this.addChild(tmp, options);
-          }
-        });
-
-        if (remove && this.get('_children')) {
-          var tmp = this.get('_children').filter(function(elem) {
-            var found = false;
-            $.each(childrens, function(idx, child) {
-              return !(found = child.id == elem.getId());
-            });
-            return !found;
-          });
-
-          $.each(tmp, function(idx, elem) {
-            _this.removeChild(elem.id, options);
-          });
-        }
-      }
-    },
-
+    
     // Return the JSON object that contains metadata information
     toJSON : function() {
       var data = {
@@ -316,7 +265,6 @@
       this.set({
         layout_id : ''
       });
-      this._snapshot = this;
     },
 
     isAllowDropping : function(dragObj) {
@@ -329,79 +277,6 @@
       }
     },
 
-    //Need to move to each concrete
-    set : function(data, options) {
-      var options = options || {};
-      var merge = !(options.merge === false);
-      var add = !(options.add === false);
-      var remove = !(options.remove === false);
-
-      var childrens = data.childrens;
-      delete data.childrens;
-
-      Backbone.Model.prototype.set.apply(this, arguments);
-
-      var _this = this;
-      if (childrens) {
-        $.each(childrens, function(idx, elem) {
-          var tmp;
-          if (tmp = _this.getChild(elem.id)) {
-            merge && tmp.set(elem, options);
-          } else {
-            tmp = new Container();
-            tmp.set(elem);
-
-            options.at = idx;
-            add && _this.addChild(tmp, options);
-          }
-        });
-
-        if (remove && this.get('_children')) {
-          var tmp = this.get('_children').filter(function(elem) {
-            var found = false;
-            $.each(childrens, function(idx, child) {
-              return !(found = child.id == elem.getId());
-            });
-            return !found;
-          });
-
-          $.each(tmp, function(idx, elem) {
-            _this.removeChild(elem.id, options);
-          });
-        }
-      }
-    },
-
-    /*
-     * methods on childrens
-     */
-    addChild : function(child, options) {
-      child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
-      AbstractContainer.prototype.addChild.apply(this, arguments);
-
-      //We need listen to child to update this._snapshot model
-      if(child && child.getParent().getId && child.getParent().getId() === this.getId()) {
-        this.listenTo(child, 'container.addChild', this.updateSnapshot);
-        this.listenTo(child, 'container.removeChild', this.updateSnapshot);
-      }
-    },
-
-    removeChild : function(child, options) {
-      child = typeof child == 'string' ? this.getChild(child) : child;
-      AbstractContainer.prototype.removeChild.apply(this, arguments);
-
-      //After remove child success, need to stop listening it
-      if(child) {
-        if(!child.getParent().getId || (child.getParent().getId() !== this.getId())) {
-          this.stopListening(child);
-        }
-      }
-    },
-
-    updateSnapshot: function() {
-      this._snapshot = this;
-    },
-
     setLayoutId : function(layoutId) {
       this.set('layout_id', layoutId);
     },
@@ -411,8 +286,7 @@
     },
 
     switchLayout : function(newContainer) {
-      var _oldModel = this._snapshot;
-      var conts = _oldModel.getChildrens();
+      var conts = this.getChildren();
       conts.sort(function(m1, m2) {
         var i1 = parseInt(m1.getId());
         var i2 = parseInt(m2.getId());
@@ -423,7 +297,7 @@
         }
       });
       $.each(conts, function() {
-        var apps = this.getChildrens();
+        var apps = this.getChildren();
         var id = this.id;
         $(apps).each(function() {
           var newCont = newContainer.getChild(id);
@@ -438,7 +312,6 @@
           }
         });
       });
-      newContainer._snapshot = _oldModel;
     },
 
     // Return the JSON object that contains metadata information
