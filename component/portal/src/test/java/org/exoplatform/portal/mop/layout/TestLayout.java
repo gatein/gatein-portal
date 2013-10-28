@@ -39,6 +39,7 @@ import org.gatein.portal.mop.customization.CustomizationContext;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.hierarchy.NodeStore;
 import org.gatein.portal.mop.layout.Element;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
@@ -173,9 +174,13 @@ public class TestLayout extends AbstractMopServiceTest {
     public void testSwitchLayout() {
         PageData page = createPage(createSite(SiteType.PORTAL, "test_layout_page"), "page", new PageState.Builder().build());
         NodeData<ElementState>[] containers = createElements(page, Element.container(), Element.container(), Element.container());
-        createElements(context.getLayoutStore().begin(page.layoutId, true), containers[0], FOO_PORTLET);
-        createElements(context.getLayoutStore().begin(page.layoutId, true), containers[1], BAR_PORTLET);
-        createElements(context.getLayoutStore().begin(page.layoutId, true), containers[2], FOO_PORTLET);
+
+        //Create portlet 1 on container 1
+        NodeStore<ElementState> store = context.getLayoutStore().begin(page.layoutId, true);
+        createElements(store, containers[0], FOO_PORTLET);
+        createElements(store, containers[1], BAR_PORTLET);
+        createElements(store, containers[2], FOO_PORTLET);
+        context.getLayoutStore().end(store);
 
         String layoutId = page.layoutId;
 

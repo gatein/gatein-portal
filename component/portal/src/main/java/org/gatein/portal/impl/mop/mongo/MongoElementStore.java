@@ -294,7 +294,7 @@ class MongoElementStore implements NodeStore<ElementState> {
             toChildren.add(index, targetId);
             nodes.put(targetId, target = target.withParent(toId));
             nodes.put(fromId, from = from.withChildren(fromChildren));
-            nodes.put(toId, to = to.withChildren(fromChildren));
+            nodes.put(toId, to = to.withChildren(toChildren));
         }
         return new NodeData[]{target,from,to};
     }
