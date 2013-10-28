@@ -65,7 +65,9 @@ public class JSONContainerAdapter implements ModelAdapter<JSON, ElementState>{
 
     @Override
     public String getName(JSON node) {
-        String name = node.getString("storageName");
+        String type = node.getString("type");
+        JSON data = "container".equalsIgnoreCase(type) ? node.getJSON("container") : node.getJSON("application");
+        String name = data.getString("storageName");
         if (name == null) {
             // For now we generate a name
             // however the name should be fully provided by the node (possibly randomly generated)
