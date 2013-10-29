@@ -95,10 +95,10 @@
         var targetContainer = this.model.getParent().getChild(targetContainerId);
       }
 
-      var prev = $dragObj.prev('.portlet');
+      var prev = $dragObj.prev('.window');
       var idx = 0;
       if (prev.length) {
-        idx = $('#' + targetContainer.getId() + ' > .portlet').index(prev.get(0)) + 1;
+        idx = $('#' + targetContainer.getId() + ' > .window').index(prev.get(0)) + 1;
       }
 
       // Modify the model
@@ -128,7 +128,7 @@
     // Find the target window ID and container ID
     // then use them to modify corresponding models
     deleteApp : function(e) {
-      var appId = $(e.target).closest('div.portlet').attr('id');
+      var appId = $(e.target).closest('div.window').attr('id');
       var containerId = $(e.target).closest('div.sortable').attr('id');
       var layoutView = editorView.layoutView;
       var container = layoutView.model.getChild(containerId);
@@ -238,7 +238,7 @@
       var _model = new PageLayout({id : 'layoutId'}, {url : this.editUrl});
       this.$el.find('.sortable').each(function() {
         var cont = new Container({id : this.id});
-        $(this).children('.portlet').each(function() {
+        $(this).children('.window').each(function() {
           var app = new Application({'id' : this.id});
           cont.addChild(app);
         });

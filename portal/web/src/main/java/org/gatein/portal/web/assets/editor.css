@@ -3,7 +3,7 @@
     padding: 10px;
 }
 
-.LAYOUT-EDITION .portlet {
+.LAYOUT-EDITION .window {
     border: 1px solid #AAAAAA;
     border-radius: 4px 4px 4px 4px;
     padding: 5px;
@@ -13,7 +13,7 @@
 	border: 1px dashed #A2A2A2;
 }
 
-.portlet + .portlet {
+.window + .window {
     margin-top: 10px;
 }
 
