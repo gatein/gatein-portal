@@ -2,9 +2,6 @@
 
   // An abstract model for Application and Container (Zone) in a layout
   var LayoutComponent = Backbone.Model.extend({
-    isDroppable : function(dragObj) {
-      return false;
-    },
 
     // TODO: we should rely on the Model.id property somehow
     getId : function() {
@@ -95,7 +92,8 @@
   var Container = LayoutComponent.extend({
 
     defaults : {
-      type : 'container'
+      type : 'container',
+      droppable : true
     },
 
     initialize : function(attributes, options) {
@@ -106,11 +104,6 @@
       // and it would be able to pass collection object at initializing
       this._children = new Backbone.Collection();
 
-      this.set({
-        draggable : true,
-        droppable : true,
-      });
-
       this._children.on('add', function(child) {
         this.trigger('container.addChild', child, this);
       }, this);
@@ -120,6 +113,10 @@
       }, this);
     },
 
+    /**
+     * Return true if the dragObj is allowed to drop into the container.
+     * Otherwise, return false
+     */
     isDroppable : function(dragObj) {
       // Check for supported types
       // TODO: Instead of hardcoding "Application". The type should be checked from children collection's model
@@ -138,6 +135,8 @@
             return elem.getDescendant.call(elem, id);
           }
         });
+
+        // TODO: What is this statement for ?
         cont != null && (child = cont.getChild(id));
       }
       return child;
@@ -146,6 +145,7 @@
     /*
      * methods on children
      */
+    // TODO: Add documentation comment for this function
     addChild : function(child, options) {
       child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
 
@@ -208,17 +208,19 @@
     toJSON : function() {
       var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
 
-      // Serialize its children to returned JSON object
-      data.children = [];
-      this._children.each(function(elem) {
-        data.children.push(elem.toJSON());
-      });
+      // Serialize its children collection to the returned JSON object
+      data.children = this._children.toJSON();
       return data;
     }
   });
 
   // 
   var PageLayout = Container.extend({
+
+    defaults : {
+      type : 'layout',
+      droppable : true
+    },
 
     isDroppable : function(dragObj) {
       // Check for supported types
