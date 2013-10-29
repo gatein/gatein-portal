@@ -93,6 +93,11 @@
   // In a container, we have special/reserved attributes following:
   // - 'children' : is a Backbone.Collection which contains its children
   var Container = LayoutComponent.extend({
+
+    defaults : {
+      type : 'container'
+    },
+
     initialize : function(attributes, options) {
       LayoutComponent.prototype.initialize.apply(this, arguments);
 
@@ -139,7 +144,7 @@
     },
 
     /*
-     * methods on childrens
+     * methods on children
      */
     addChild : function(child, options) {
       child = typeof child == 'string' ? this.getRoot().getDescendant(child) : child;
@@ -198,15 +203,15 @@
     at : function(idx) {
       return this._children.at(idx);
     },
+
     // Return the JSON object that contains metadata information
     toJSON : function() {
-      var data = {
-        id : this.getId(),
-        type : "container",
-        childrens : []
-      };
+      var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
+
+      // Serialize its children to returned JSON object
+      data.children = [];
       this._children.each(function(elem) {
-        data.childrens.push(elem.toJSON());
+        data.children.push(elem.toJSON());
       });
       return data;
     }
@@ -261,20 +266,6 @@
           }
         });
       });
-    },
-
-    // Return the JSON object that contains metadata information
-    toJSON : function() {
-      var data = {
-        id : this.getId(),
-        layout_id : this.getLayoutId(),
-        type : 'pagecontainer',
-        childrens : []
-      };
-      this._children.each(function(elem) {
-        data.childrens.push(elem.toJSON());
-      });
-      return data;
     }
   });
 

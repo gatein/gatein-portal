@@ -203,7 +203,7 @@ public class PageEditor {
                 List<JSON> rootChildren = (List<JSON>)rootContainer.getJSON("container").getList("children");
 
                 //
-                JSON[] childrens = action.getArray("childrens", JSON.class);
+                JSON[] children = action.getArray("children", JSON.class);
                 for (NodeContext<JSON, ElementState> sel : pageStructure) {
                     NodeContext<JSON, ElementState> ctx = this.find(sel.getName(), pageStructure);
                     rootChildren.add(this.buildComponentData(ctx));
@@ -211,7 +211,7 @@ public class PageEditor {
                 rootContainer.getJSON("container").set("children", rootChildren);
                 
                 //
-                for (JSON j : childrens) {
+                for (JSON j : children) {
                     this.buildComponentTree(pageStructure, j, rootContainer);
                 }
 
@@ -407,8 +407,8 @@ public class PageEditor {
         }
 
         //Process children of this node
-        JSON[] childrens = json.getArray("childrens", JSON.class);
-        for (JSON j : childrens) {
+        JSON[] children = json.getArray("children", JSON.class);
+        for (JSON j : children) {
             this.buildComponentTree(context, j, componentData);
         }
     }
