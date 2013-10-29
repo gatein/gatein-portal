@@ -15,7 +15,7 @@
     onAddChild : function(child) {
       var $container = $('#application-list');
 
-      var html = _.template($("#portlet-template").html(), child.toJSONForRenderer());
+      var html = _.template($("#portlet-template").html(), child.toJSON());
       var $html = $(html);
       $container.append($html);
 
@@ -38,7 +38,7 @@
     },
     render: function() {
       this.template = _.template($("#application-template").html());
-      this.$el.html(this.template(this.model.toJSONForRenderer()));
+      this.$el.html(this.template(this.model.toJSON()));
       this.$el.attr("id", this.model.getId());
       return this;
     },
@@ -234,8 +234,8 @@
     // Build model from DOM
     buildModel : function() {
 
-      // TODO: Consider to initialize PageContainer model's url properly following Backbone standard
-      var _model = new PageContainer({id : 'layoutId'}, {url : this.editUrl});
+      // TODO: Consider to initialize PageLayout model's url properly following Backbone standard
+      var _model = new PageLayout({id : 'layoutId'}, {url : this.editUrl});
       this.$el.find('.sortable').each(function() {
         var cont = new Container({id : this.id});
         $(this).children('.portlet').each(function() {

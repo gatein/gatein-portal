@@ -2,18 +2,6 @@
 
   // An abstract model for Application and Container (Zone) in a layout
   var LayoutComponent = Backbone.Model.extend({
-
-    initialize : function() {
-
-      // TODO: We should rely on Backbone.Model.defaults property instead
-      // TODO: Should we remove these default attributes ?
-      this.set({
-        _parent : null,
-        draggable : false,
-        droppable : false
-      });
-    },
-
     isDroppable : function(dragObj) {
       return false;
     },
@@ -25,7 +13,7 @@
 
     // Return the parent object
     getParent : function() {
-      return this.get('_parent');
+      return this._parent;
     },
 
     // Return the root object
@@ -98,43 +86,6 @@
           _this.setContent(result.content);
         }
       });
-    },
-
-    // TODO: Why do we need to overwrite the clone method from Backbone.Model ?
-    // It should be tested
-    clone: function() {
-      return new Application({
-        id: this.getId(),
-        name : this.getName(),
-        applicationName : this.getApplicationName(),
-        title : this.getTitle(),
-        logo : this.getLogo(),
-        content: this.getContent()
-      });
-    },
-    
-    // Return the JSON object that contains metadata information
-    // TODO: Should we rely on the default #toJSON method from Backbone.Model ?
-    toJSON : function() {
-      return {
-        id : this.getId(),
-        type : "application",
-        name : this.getName(),
-        applicationName: this.getApplicationName()
-      };
-    },
-
-    // Return a JSON object for rendering phase
-    // TODO: should it be merged with #toJSON() method ?
-    toJSONForRenderer : function() {
-      return {
-        id : this.getId(),
-        type : "application",
-        name : this.getName(),
-        title : this.getTitle(),
-        content : this.getContent(),
-        logo : this.getLogo()
-      };
     }
   });
 
@@ -192,7 +143,7 @@
             silent : options.silent
           });
         }
-        child.set('_parent', this);
+        child._parent = this;
         // collection in backbone ignore move action in same container
         // need to remove then re-add
         this._children.remove(child, {
@@ -216,7 +167,7 @@
         this._children.remove(child, {
           silent : options.silent
         });
-        child.set('_parent', null);
+        child._parent = null;
       }
       return this;
     },
@@ -267,7 +218,7 @@
   });
 
   // 
-  var PageContainer = AbstractContainer.extend({
+  var PageLayout = AbstractContainer.extend({
 
     isDroppable : function(dragObj) {
       // Check for supported types
@@ -287,7 +238,7 @@
       return this.get('layout_id');
     },
 
-    // newContainer: is the new PageContainer object
+    // newContainer: is the new PageLayout object
     switchLayout : function(newContainer) {
       var conts = this.getChildren();
       conts.sort(function(m1, m2) {
@@ -369,7 +320,7 @@
     'LayoutComponent' : LayoutComponent,
     'Application' : Application,
     'Container' : Container,
-    'PageContainer' : PageContainer,
+    'PageLayout' : PageLayout,
     'ComposerContainer' : ComposerContainer
   };
   if (typeof window.require === "function" && window.require.amd) {
