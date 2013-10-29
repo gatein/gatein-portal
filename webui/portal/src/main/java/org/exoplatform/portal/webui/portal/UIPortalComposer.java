@@ -44,14 +44,15 @@ import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.page.UIPage;
+import org.exoplatform.portal.webui.page.UIPageCreationWizard;
 import org.exoplatform.portal.webui.page.UIPageForm;
+import org.exoplatform.portal.webui.page.UIPagePreview;
 import org.exoplatform.portal.webui.page.UISiteBody;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -301,18 +302,33 @@ public class UIPortalComposer extends UIContainer {
         UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
         int portalMode = uiPortalApp.getModeState();
         if (portalMode != UIPortalApplication.NORMAL_MODE) {
-            UITabPane uiTabPane = this.getChild(UITabPane.class);
-            UIComponent uiComponent = uiTabPane.getChildById(uiTabPane.getSelectedTabId());
-            if (uiComponent instanceof UIApplicationList) {
-                uiPortalApp.setDefaultEditMode(ComponentTab.APPLICATIONS, uiPortalApp.getEditLevel());
-            } else if (uiComponent instanceof UIContainerList) {
-                uiPortalApp.setDefaultEditMode(ComponentTab.CONTAINERS, uiPortalApp.getEditLevel());
-            }
-            switch (UIPortalApplication.getDefaultEditMode()) {
-                case PREVIEW:
+            /* ppalaga is quite sure that changing UIPortalApplication.modeState during render is
+             * not a good idea because there might have happened other state changes in event
+             * handlers that those handlers rely on as not changing again during the same request.
+             * Moreover, ppalaga could not find an execution path where this piece of code was
+             * important, therefore, he bravely commented it out.
+             *
+             * If you decide that this code is missing, please test New Page Wizard with distinct
+             * gatein.portal.pageEditor.defaultEditMode and gatein.portal.pageEditor.fullPreview values
+             * and do not forget to check going back and forward in the wizard.
+             *
+             * The original code:
+             *
+             * UITabPane uiTabPane = this.getChild(UITabPane.class);
+             * UIComponent uiComponent = uiTabPane.getChildById(uiTabPane.getSelectedTabId());
+             * if (uiComponent instanceof UIApplicationList) {
+             *     uiPortalApp.setDefaultEditMode(ComponentTab.APPLICATIONS, uiPortalApp.getEditLevel());
+             * } else if (uiComponent instanceof UIContainerList) {
+             *     uiPortalApp.setDefaultEditMode(ComponentTab.CONTAINERS, uiPortalApp.getEditLevel());
+             * }
+             */
+            switch (portalMode) {
+                case UIPortalApplication.APP_VIEW_EDIT_MODE:
+                case UIPortalApplication.CONTAINER_VIEW_EDIT_MODE:
                     Util.showComponentEditInViewMode();
                     break;
-                case BLOCK:
+                case UIPortalApplication.APP_BLOCK_EDIT_MODE:
+                case UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE:
                     Util.showComponentEditInBlockMode();
                     break;
                 default:
@@ -530,8 +546,18 @@ public class UIPortalComposer extends UIContainer {
             UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
 
             UIComponent editComponent = uiEditWS.getUIComponent();
+            UIPortal editPortal = null;
             if (editComponent instanceof UIPortal) {
-                UIPortal editPortal = (UIPortal) uiEditWS.getUIComponent();
+                editPortal = (UIPortal) uiEditWS.getUIComponent();
+            } else if (editComponent instanceof UIPageCreationWizard) {
+                UIPageCreationWizard uiWizard = (UIPageCreationWizard) uiEditWS.getUIComponent();
+                UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
+                UIComponent uiPreviewComponent = uiPagePreview.getUIComponent();
+                if (uiPreviewComponent instanceof UIPortal) {
+                    editPortal = (UIPortal) uiPreviewComponent;
+                }
+            }
+            if (editPortal != null) {
                 editPortal.setHeaderAndFooterRendered(UIPage.isFullPreviewInPageEditor() || uiPortalApp.getEditLevel() == EditLevel.EDIT_SITE);
             }
 

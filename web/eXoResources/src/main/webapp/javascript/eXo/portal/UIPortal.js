@@ -108,7 +108,7 @@ eXo.portal.UIPortal = {
     if (eXo.portal.UIPortal.isFullPreviewInPageEditor()) {
       /* When in full page preview edit mode,
        * disable all components in site header and footer areas. */
-      if (comp.closest(".UIPageBody").length == 0 && comp.closest("#UIPageCreationWizard") == 0) {
+      if (comp.closest(".UIPageBody").length == 0) {
         /* Header and Footer is everything not under UIPageBody */
         eXo.portal.UIPortal.maskWithNewLayer(comp).addClass("Disabled")
             .closest(".EDITION-BLOCK").find(".CONTROL-BLOCK:first").remove();

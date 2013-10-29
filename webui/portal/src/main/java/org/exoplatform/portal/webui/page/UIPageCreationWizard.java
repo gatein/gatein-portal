@@ -29,6 +29,7 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -56,6 +57,7 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
+import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormStringInput;
@@ -96,7 +98,14 @@ public class UIPageCreationWizard extends UIPageWizard {
 
     private UserNode saveData() throws Exception {
         UIPagePreview uiPagePreview = getChild(UIPagePreview.class);
-        UIPage uiPage = (UIPage) uiPagePreview.getUIComponent();
+        UIComponent uiPreviewComponent = uiPagePreview.getUIComponent();
+        UIPage uiPage = null;
+        if (uiPreviewComponent instanceof UIPage) {
+            uiPage = (UIPage) uiPreviewComponent;
+        } else if (uiPreviewComponent instanceof UIPortal) {
+            UIPageBody uiPageBody = uiPreviewComponent.findFirstComponentOfType(UIPageBody.class);
+            uiPage = (UIPage) uiPageBody.getUIComponent();
+        }
 
         UIWizardPageSetInfo uiPageInfo = getChild(UIWizardPageSetInfo.class);
         UIPageNodeSelector uiNodeSelector = uiPageInfo.getChild(UIPageNodeSelector.class);
@@ -325,13 +334,54 @@ public class UIPageCreationWizard extends UIPageWizard {
 
             UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
 
+            UIComponent uiPreviewComponent = UIPage.isFullPreview()
+                    ? prepareUIPortal(uiPortalApp, (PortalRequestContext) context, uiWorkingWS, page)
+                    : prepareUIPage(page, context);
+            uiPagePreview.setUIComponent(uiPreviewComponent);
+
+            uiWizard.updateWizardComponent();
+        }
+
+        /**
+         * @param uiPortalApp
+         * @param uiWorkingWS
+         * @param page
+         * @return
+         * @throws Exception
+         */
+        private UIPortal prepareUIPortal(UIPortalApplication uiPortalApp, PortalRequestContext pcontext, UIWorkingWorkspace uiWorkingWS, Page page) throws Exception {
+
+//            UIPortal currentPortal = uiPortalApp.getCurrentSite();
+            DataStorage dataStorage = uiPortalApp.getApplicationComponent(DataStorage.class);
+            PortalConfig portalConfig = dataStorage.getPortalConfig(pcontext.getSiteType().getName(), pcontext.getSiteName());
+            UIPortal transientPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
+            PortalDataMapper.toUIPortal(transientPortal, portalConfig);
+            UIPageBody uiPageBody = transientPortal.findFirstComponentOfType(UIPageBody.class);
+            uiPageBody.setUIComponent(prepareUIPage(page, pcontext));
+
+//            uiWorkingWS.setBackupUIPortal(currentPortal);
+//            uiPortalApp.setDefaultEditMode(ComponentTab.APPLICATIONS, EditLevel.EDIT_PAGE);
+
+            configurePortal(uiPortalApp, transientPortal);
+
+//            UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
+//            uiEditWS.setUIComponent(transientPortal);
+//            UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
+//            siteBody.setUIComponent(null);
+            return transientPortal;
+        }
+        protected void configurePortal(UIPortalApplication portalApp, UIPortal transientPortal) {
+            int modeState = portalApp.getModeState();
+            transientPortal.setHeaderAndFooterRendered(modeState == UIPortalApplication.APP_VIEW_EDIT_MODE
+                    || modeState == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE);
+        }
+
+        private UIPage prepareUIPage(Page page, WebuiRequestContext context) throws Exception {
             UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
             UIPage uiPage = clazz.createUIPage(context);
 
             PortalDataMapper.toUIPage(uiPage, page);
-            uiPagePreview.setUIComponent(uiPage);
-
-            uiWizard.updateWizardComponent();
+            return uiPage;
         }
     }
 

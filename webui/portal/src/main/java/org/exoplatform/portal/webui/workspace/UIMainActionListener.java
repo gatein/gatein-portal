@@ -160,7 +160,6 @@ public class UIMainActionListener {
                 PortalDataMapper.toUIPortal(transientPortal, portalConfig);
                 transientPortal.setNavPath(currentPortal.getNavPath());
                 transientPortal.refreshUIPage();
-                authorizeEditPage(currentPortal, portalApp);
 
                 if (authorizeEditPage(currentPortal, portalApp)) {
                     uiWorkingWS.setBackupUIPortal(currentPortal);
