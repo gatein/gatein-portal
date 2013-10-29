@@ -89,10 +89,10 @@
     }
   });
 
-  // The abstract model of a container
+  // The Container model presents a Zone in the layout which contains the Application
   // In a container, we have special/reserved attributes following:
   // - 'children' : is a Backbone.Collection which contains its children
-  var AbstractContainer = LayoutComponent.extend({
+  var Container = LayoutComponent.extend({
     initialize : function(attributes, options) {
       LayoutComponent.prototype.initialize.apply(this, arguments);
 
@@ -113,6 +113,16 @@
       this._children.on('remove', function(child) {
         this.trigger('container.removeChild', child, this);
       }, this);
+    },
+
+    isDroppable : function(dragObj) {
+      // Check for supported types
+      // TODO: Instead of hardcoding "Application". The type should be checked from children collection's model
+      if (dragObj && dragObj.constructor == Application) {
+        return this.get('droppable');
+      } else {
+        return false;
+      }
     },
 
     getDescendant : function(id) {
@@ -187,22 +197,7 @@
     },
     at : function(idx) {
       return this._children.at(idx);
-    }
-  });
-
-  // The Container model presents a Zone in the layout which contains the Application
-  var Container = AbstractContainer.extend({
-
-    isDroppable : function(dragObj) {
-      // Check for supported types
-      // TODO: Instead of hardcoding "Application". The type should be checked from children collection's model
-      if (dragObj && dragObj.constructor == Application) {
-        return this.get('droppable');
-      } else {
-        return false;
-      }
     },
-
     // Return the JSON object that contains metadata information
     toJSON : function() {
       var data = {
@@ -218,7 +213,7 @@
   });
 
   // 
-  var PageLayout = AbstractContainer.extend({
+  var PageLayout = Container.extend({
 
     isDroppable : function(dragObj) {
       // Check for supported types
