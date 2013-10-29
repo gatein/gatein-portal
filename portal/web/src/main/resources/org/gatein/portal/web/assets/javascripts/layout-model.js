@@ -79,12 +79,12 @@
       var contentId = this.getApplicationName() + "/" + this.getName();
       var url = "/portal/getContent?javax.portlet.content=" + contentId;
       var _this = this;
-      $.ajax({
-        url : url,
-        dataType : "json",
-        success: function(result) {
-          _this.setContent(result.content);
-        }
+      Backbone.sync("read", this, {
+    	  url : url,
+    	  dataType : "json",
+    	  success : function(result) {
+    		  _this.setContent(result.content);  
+    	  }
       });
     }
   });
@@ -280,24 +280,24 @@
 
     fetch : function() {
       var _this = this;
-      $.ajax({
-        url : this.url,
-        dataType : "json",
-        success : function(result) {
-          if (result.code != 200) {
-            alert("error on fetch portlets");
-            return;
-          }
+      Backbone.sync("read", this, {
+    	  url : this.url,
+    	  dataType : "json",
+    	  success : function(result) {
+    		  if (result.code != 200) {
+	            alert("error on fetch portlets");
+	            return;
+	          }
 
-          var portlets = result.data.portlets;
-          $(portlets).each(function(i, portlet) {
-            _this.addChild(new Application({
-              name : portlet.name,
-              applicationName: portlet.applicationName,
-              title: portlet.title
-            }));
-          });
-        }
+	          var portlets = result.data.portlets;
+	          $(portlets).each(function(i, portlet) {
+	            _this.addChild(new Application({
+	              name : portlet.name,
+	              applicationName: portlet.applicationName,
+	              title: portlet.title
+	            }));
+	          });
+    	  }
       });
     }
   });
