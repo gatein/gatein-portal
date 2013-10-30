@@ -71,6 +71,7 @@
     getContent: function(){
       return this.get("content");
     },
+
     fetchContent: function() {
       //TODO: need to refactor
       var contentId = this.getApplicationName() + "/" + this.getName();
@@ -274,33 +275,11 @@
   /**
    * 
    */
+  // TODO: Let see if we can avoid to introduce this Model and use directly Backbone.Collection instead
   var ComposerContainer = Container.extend({
 
     findChildByName : function(name) {
       return this._children.where({name: name});
-    },
-
-    fetch : function() {
-      var _this = this;
-      Backbone.sync("read", this, {
-    	  url : this.url,
-    	  dataType : "json",
-    	  success : function(result) {
-    		  if (result.code != 200) {
-	            alert("error on fetch portlets");
-	            return;
-	          }
-
-	          var portlets = result.data.portlets;
-	          $(portlets).each(function(i, portlet) {
-	            _this.addChild(new Application({
-	              name : portlet.name,
-	              applicationName: portlet.applicationName,
-	              title: portlet.title
-	            }));
-	          });
-    	  }
-      });
     }
   });
 

@@ -1,5 +1,6 @@
 (function() {
-  // Composer
+
+  // TODO: We should change to use Backbone.Collection somehow
   var ComposerView = Backbone.View.extend({
     initialize : function(options) {
       var options = options || {};
@@ -8,8 +9,27 @@
         url : this.$el.attr("data-url")
       });
 
+      // TODO: When changing to use collection, we don't need to rely on the container.addChild event
       this.listenTo(this.model, 'container.addChild', this.onAddChild);
-      this.model.fetch();
+
+      this.model.fetch({
+        success : function(model, response, options) {
+          if (response.code != 200) {
+            alert("error on fetch portlets");
+            return;
+          }
+  
+          // TODO: We could directly render whole composer here
+          var portlets = response.data.portlets;
+          $(portlets).each(function(i, portlet) {
+            model.addChild(new Application({
+              name : portlet.name,
+              applicationName: portlet.applicationName,
+              title: portlet.title
+            }));
+          });
+        }
+      });
     },
 
     onAddChild : function(child) {
@@ -34,14 +54,18 @@
     className: "window",
     initialize: function() {
       this.model.on('change:content', this.updateContent, this);
+
+      // TODO: fetching data should be done in render phase
       this.model.fetchContent();
     },
+
     render: function() {
       this.template = _.template($("#application-template").html());
       this.$el.html(this.template(this.model.toJSON()));
       this.$el.attr("id", this.model.getId());
       return this;
     },
+
     updateContent: function() {
       var id = this.model.getId();
       var selector = "#" + id + " div";
