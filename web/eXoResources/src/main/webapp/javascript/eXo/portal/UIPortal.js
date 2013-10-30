@@ -320,16 +320,17 @@ eXo.portal.UIPortal = {
     var editBlock = uiComponentBlock.children(".EDITION-BLOCK");
     var newLayer = editBlock.find("div.NewLayer").eq(0);
 
+    editBlock.css("display", "block");
     var height = 0;
     var width = 0;
     if (layoutBlock.length && layoutBlock.css("display") != "none")
     {
-      height = layoutBlock[0].offsetHeight;
+      height = editBlock.offset().top - layoutBlock.offset().top;
       width = layoutBlock[0].offsetWidth;
     }
     else if (viewBlock.length && viewBlock.css("display") != "none")
     {
-      height = viewBlock[0].offsetHeight;
+      height = editBlock.offset().top - viewBlock.offset().top;
       width = viewBlock[0].offsetWidth;
     }
 
@@ -348,7 +349,6 @@ eXo.portal.UIPortal = {
       }
     }
     newLayer.parent().css("top", -height + "px");
-    editBlock.css("display", "block");
     return newLayer;
   }
 };
