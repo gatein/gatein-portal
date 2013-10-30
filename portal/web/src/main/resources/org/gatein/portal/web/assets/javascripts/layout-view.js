@@ -3,26 +3,25 @@
   // TODO: We should change to use Backbone.Collection somehow
   var ComposerView = Backbone.View.extend({
     initialize : function(options) {
-      var options = options || {};
 
-      this.model = new ComposerContainer(null, {
+      this.apps = new Backbone.Collection([], {
+        model: Application,
         url : this.$el.attr("data-url")
       });
 
-      // TODO: When changing to use collection, we don't need to rely on the container.addChild event
-      this.listenTo(this.model, 'container.addChild', this.onAddChild);
+      this.listenTo(this.apps, 'add', this.onAddChild);
 
-      this.model.fetch({
-        success : function(model, response, options) {
+      this.apps.fetch({
+        reset: true,
+        success : function(collection, response, options) {
           if (response.code != 200) {
             alert("error on fetch portlets");
             return;
           }
   
-          // TODO: We could directly render whole composer here
           var portlets = response.data.portlets;
           $(portlets).each(function(i, portlet) {
-            model.addChild(new Application({
+            collection.add(new Application({
               name : portlet.name,
               applicationName: portlet.applicationName,
               title: portlet.title
@@ -129,7 +128,7 @@
       if(!$dragObj.attr("id")) {
         //Add new application
         var composerView = window.editorView.getComposerView();
-        var application = composerView.model.findChildByName($dragObj.attr("data-name"))[0];
+        var application = composerView.apps.findWhere({ 'name' : $dragObj.attr("data-name")});
 
         //Clone and generate id for new application
         var newChild = application.clone();

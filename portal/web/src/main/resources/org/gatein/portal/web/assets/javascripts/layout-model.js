@@ -266,23 +266,11 @@
     }
   });
 
-  /**
-   * 
-   */
-  // TODO: Let see if we can avoid to introduce this Model and use directly Backbone.Collection instead
-  var ComposerContainer = Container.extend({
-
-    findChildByName : function(name) {
-      return this._children.where({name: name});
-    }
-  });
-
   var layoutDef = {
     'LayoutComponent' : LayoutComponent,
     'Application' : Application,
     'Container' : Container,
-    'PageLayout' : PageLayout,
-    'ComposerContainer' : ComposerContainer
+    'PageLayout' : PageLayout
   };
   if (typeof window.require === "function" && window.require.amd) {
     return layoutDef;
