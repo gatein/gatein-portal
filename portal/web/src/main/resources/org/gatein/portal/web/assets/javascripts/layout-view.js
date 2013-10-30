@@ -4,15 +4,15 @@
   var ComposerView = Backbone.View.extend({
     initialize : function(options) {
 
-      this.apps = new Backbone.Collection([], {
-        model: Application,
+    	this.apps = new Backbone.Collection([], {
+        model : Application,
         url : this.$el.attr("data-url")
       });
 
       this.listenTo(this.apps, 'add', this.onAddChild);
 
       this.apps.fetch({
-        reset: true,
+      	reset : true,
         success : function(collection, response, options) {
           if (response.code != 200) {
             alert("error on fetch portlets");
@@ -53,9 +53,6 @@
     className: "window",
     initialize: function() {
       this.model.on('change:content', this.updateContent, this);
-
-      // TODO: fetching data should be done in render phase
-      this.model.fetchContent();
     },
 
     render: function() {
@@ -134,7 +131,8 @@
         var newChild = application.clone();
         newChild.setId(newChild.getName() + new Date().getTime());
         targetContainer.addChild(newChild, {at: idx});
-
+        newChild.fetchContent();
+        
         //Remove dropped item
         $(ui.item).remove();
       } else {
@@ -234,30 +232,45 @@
     // Switch layout with data structure passed as the layoutData argument
     switchLayout : function(layoutData) {
 
-      // Backup the current layout html for doing switch layout later
-      this.$el.each(function() {
-        var id = $(this).attr('id');
-        $(this).attr('id', id + '-old');
-      });
-      var tmp = $('<div ></div>').html(this.$el.html());
-      $('body').append(tmp.hide());
-
-      // Apply the new layout template
-      this.$el.html(layoutData.html);
-
-      // Build new model according to new layout
-      this.model = this.buildModel();
-      if (layoutData.factoryId) {
-        this.model.set('factoryId', layoutData.factoryId);
-      }
-
+    	var layout = new Object();
+    	layout.id = layoutData.factoryId;
+    	layout.html = layoutData.html;
+    	var containers = [];
+    	$(layout.html).find('.sortable').each(function() {
+    		containers.push(this.id);
+    	});
+    	layout.containers = containers;
+    	
       // Start switching layout
       var snapshot = this.snapshotModel;
-      snapshot.switchLayout(this.model);
-
-      // remove old layout
-      tmp.remove();
+      snapshot.switchLayout(layout);
+      
+      // Update current DOM by layout template
+      this.$el.html(layoutData.html);
+      this.render();
+      
+      // Update ContainerView
+      $(this.model.getChildren()).each(function() {
+      	new ContainerView({model : this});
+      })
+      
       return this;
+    },
+        
+    render : function() {
+      var containers = this.model.getChildren();
+      $(containers).each(function() {
+        var id = this.id;
+        var apps = this.getChildren();
+        $(apps).each(function() {
+          var appView = new ApplicationView({
+            model : this
+          });
+          appView = appView.render();
+          $app = $(appView.$el);
+          $('#' + id).append($app);
+        });
+      });
     },
 
     // Build model from DOM
@@ -268,7 +281,13 @@
       this.$el.find('.sortable').each(function() {
         var cont = new Container({id : this.id});
         $(this).children('.window').each(function() {
-          var app = new Application({'id' : this.id});
+          var content = $(this).find('.content').html();
+          var title = $(this).find('.title').text();
+          var app = new Application({
+            'id' : this.id,
+            'content' : content,
+            'title' : title
+          });
           cont.addChild(app);
         });
 
@@ -316,7 +335,7 @@
       this.layoutView.save();
     },
 
-    // Clicked on Swich layout button
+    // Clicked on Switch layout button
     changeLayout : function(e) {
       var anchor = e.target;
       var href = $(anchor).attr('href');

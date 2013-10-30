@@ -59,7 +59,7 @@
     getApplicationName: function() {
       return this.get("applicationName");
     },
-    getTitle: function() {
+    getTitle : function() {
       return this.get("title");
     },
     getLogo : function() {
@@ -113,7 +113,7 @@
         this.trigger('container.removeChild', child, this);
       }, this);
     },
-
+    
     /**
      * Return true if the dragObj is allowed to drop into the container.
      * Otherwise, return false
@@ -235,8 +235,8 @@
       }
     },
 
-    // newContainer: is the new PageLayout object
-    switchLayout : function(newContainer) {
+    // layout: is a metadata object pass from view
+    switchLayout : function(layout) {
       var conts = this.getChildren();
       conts.sort(function(m1, m2) {
         var i1 = parseInt(m1.getId());
@@ -247,22 +247,34 @@
           return 0;
         }
       });
+
+      var pageLayout = this;
+      pageLayout.set('factoryId', layout.id);
+      var newContainers = new Backbone.Collection();
+      $(layout.containers).each(function() {
+        var containerId = this[0];
+        var container = new Container({
+          id : containerId
+        });
+        container._parent = pageLayout;
+        newContainers.add(container);
+      });
+
       $.each(conts, function() {
+        var container = newContainers.get(this.id);
         var apps = this.getChildren();
-        var id = this.id;
         $(apps).each(function() {
-          var newCont = newContainer.getChild(id);
-          var newApp = this.clone();
-          if (newCont) {
-            newCont.addChild(newApp);
+          if (container) {
+            container.addChild(this);
           } else {
             // Add applications into last container
-            var lastId = newContainer._children.length;
-            newCont = newContainer.getChild(lastId);
-            newCont.addChild(newApp);
+            var lastId = newContainers.length;
+            container = newContainers.get(lastId);
+            container.addChild(this);
           }
         });
       });
+      this._children = newContainers;
     }
   });
 

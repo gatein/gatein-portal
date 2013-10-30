@@ -1,6 +1,6 @@
 module('test Container model', {
 	setup: function() {
-		window.container = new PageContainer();
+		window.container = new PageLayout();
 		
 		//setup 2 nested containers with 2 apps
 		for (var i = 1; i <= 2; i++) {
@@ -88,19 +88,19 @@ test("remove application test", function() {
 
 test("test toJSON", function() {
 	var data = container.toJSON();
-	equal(data.childrens.length, 2);
+	equal(data.children.length, 2);
 	
-	var cont1 = data.childrens[0];
+	var cont1 = data.children[0];
 	equal(cont1.id, 1);
-	equal(cont1['childrens'].length, 2);
-	equal(cont1['childrens'][0].id, '1_1');
-	equal(cont1['childrens'][1].id, '1_2');
+	equal(cont1['children'].length, 2);
+	equal(cont1['children'][0].id, '1_1');
+	equal(cont1['children'][1].id, '1_2');
 	
-	var cont2 = data.childrens[1];
+	var cont2 = data.children[1];
 	equal(cont2.id, 2);
-	equal(cont2['childrens'].length, 2);
-	equal(cont2['childrens'][0].id, '2_1');
-	equal(cont2['childrens'][1].id, '2_2');
+	equal(cont2['children'].length, 2);
+	equal(cont2['children'][0].id, '2_1');
+	equal(cont2['children'][1].id, '2_2');
 });
 
 test("test switchLayout", function() {
@@ -108,55 +108,45 @@ test("test switchLayout", function() {
   equal(container.getChild('1').getIndex(), 0);
   equal(container.getChild('2').getIndex(), 1);
   
-  //new layout with reverted container order
-  var rLayout = new PageContainer();
-  rLayout.addChild(new Container({id: '2'}));
-  rLayout.addChild(new Container({id: '1'}));
+  //new layout metadata with reverted container order
+  var rLayout = new Object();
+  rLayout.containers = ['2', '1'];
   
   container.switchLayout(rLayout);
   //
-  equal(rLayout.getChild('1').getIndex(), 1);
-  equal('1_1', rLayout.getChild('1').at(0).getId());
-  equal('1_2', rLayout.getChild('1').at(1).getId());
+  equal(container.getChild('1').getIndex(), 1);
+  equal('1_1', container.getChild('1').at(0).getId());
+  equal('1_2', container.getChild('1').at(1).getId());
   //
-  equal(rLayout.getChild('2').getIndex(), 0);
-  equal('2_1', rLayout.getChild('2').at(0).getId());
-  equal('2_2', rLayout.getChild('2').at(1).getId());
+  equal(container.getChild('2').getIndex(), 0);
+  equal('2_1', container.getChild('2').at(0).getId());
+  equal('2_2', container.getChild('2').at(1).getId());
   
   //new layout with 1 zone
-  var oneZone = new PageContainer();
-  oneZone.addChild(new Container({id : "1"}));
-  equal(1, oneZone.getChildren().length);
-  //switch from reverted layout to 1 zone layout
-  rLayout.switchLayout(oneZone);
+  var oneZone = new Object();
+  oneZone.containers = ['1'];
   
-  equal(4, oneZone.getChild("1").getChildren().length);
-  equal('1_1', oneZone.getChild('1').at(0).getId());
-  equal('1_2', oneZone.getChild('1').at(1).getId());
-  equal('2_1', oneZone.getChild('1').at(2).getId());
-  equal('2_2', oneZone.getChild('1').at(3).getId());
+  //switch from reverted layout to 1 zone layout
+  container.switchLayout(oneZone);
+
+  equal(1, container.getChildren().length);
+  equal(4, container.getChild("1").getChildren().length);
+  equal('1_1', container.getChild('1').at(0).getId());
+  equal('1_2', container.getChild('1').at(1).getId());
+  equal('2_1', container.getChild('1').at(2).getId());
+  equal('2_2', container.getChild('1').at(3).getId());
 	
-	var twoZone = new PageContainer();
-	twoZone.addChild(new Container({id : "1"}));
-	twoZone.addChild(new Container({id : "2"}));
-	container.switchLayout(twoZone);
-	
-	equal('1_1', twoZone.getChild('1').at(0).getId());
-	equal('1_2', twoZone.getChild('1').at(1).getId());
-	equal('2_1', twoZone.getChild('2').at(0).getId());
-	equal('2_2', twoZone.getChild('2').at(1).getId());
-	
-	var threeZone = new PageContainer();
-	threeZone.addChild(new Container({id : "1"}))
-	threeZone.addChild(new Container({id : "2"}))
-	threeZone.addChild(new Container({id : "3"}))
+	var threeZone = new Object();
+	threeZone.containers = ['1', '2', '3'];
 	container.switchLayout(threeZone);
 	
-	equal('1_1', threeZone.getChild('1').at(0).getId());
-	equal('1_2', threeZone.getChild('1').at(1).getId());
-	equal('2_1', threeZone.getChild('2').at(0).getId());
-	equal('2_2', threeZone.getChild('2').at(1).getId());
-	equal(true, threeZone.getChild('3').isEmpty());
+	equal(3, container.getChildren().length);
+	equal('1_1', container.getChild('1').at(0).getId());
+	equal('1_2', container.getChild('1').at(1).getId());
+	equal('2_1', container.getChild('1').at(2).getId());
+	equal('2_2', container.getChild('1').at(3).getId());
+	equal(true, container.getChild('2').isEmpty());
+	equal(true, container.getChild('3').isEmpty());
 });
 
 function listenTo(model) {

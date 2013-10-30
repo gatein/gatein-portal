@@ -60,13 +60,13 @@
         </div>
     </li>
 </script>
-<!-- Templat for portlet in page -->
+<!-- Template for portlet in page -->
 <script type="text/template" id="application-template">
 	<h3 style="${cursor}" title="${tooltip}">
-		${icon} ${"<%- title %>"}
+		${icon}<span class="title">${"<%- title %>"}<span>
 		<% if (editing) { %><button class="close" type="button">x</button> <% } %>
 	</h3>
-	<div>${"<%= content %>"}</div>
+	<div class="content">${"<%= content %>"}</div>
 </script>
 <%}%>
 <!-- end composer -->
@@ -76,7 +76,7 @@
      data-layoutId="${layoutId}"
      data-pageKey="${pageKey}"
      data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}"
-     data-pageURL="@{PageEditor.edit(path=path)}">
+     data-pageURL="@{Controller.index(path=path)}">
 ${body}
 </div>
 
