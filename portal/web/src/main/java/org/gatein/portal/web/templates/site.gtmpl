@@ -71,7 +71,12 @@
 <%}%>
 <!-- end composer -->
 
-<div class="pageBody" data-editURL="@{PageEditor.edit(path=path)}">
+<!-- TODO: need to review how to use PageEditor.saveLayout(layoutId='null') -->
+<div class="pageBody"
+     data-layoutId="${layoutId}"
+     data-pageKey="${pageKey}"
+     data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}"
+     data-pageURL="@{PageEditor.edit(path=path)}">
 ${body}
 </div>
 

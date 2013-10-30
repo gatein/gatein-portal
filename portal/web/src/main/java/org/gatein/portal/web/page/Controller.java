@@ -256,7 +256,7 @@ public class Controller {
                     ReactivePage rp = new ReactivePage(
                             pageContext,
                             context.getUserContext().getLocale(),
-                            new RenderingContext(path, "edit".equals(phase)));
+                            new RenderingContext(path, page.getLayoutId(), page.getKey().format(), "edit".equals(phase)));
 
                     //
                     return rp.execute(siteLayout, pageLayout, context);

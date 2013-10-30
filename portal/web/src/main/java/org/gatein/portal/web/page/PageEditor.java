@@ -115,14 +115,14 @@ public class PageEditor {
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
         ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
         StringBuilder sb = new StringBuilder();
-        layout.render(new RenderingContext(null, true), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
+        layout.render(new RenderingContext(null, null, null, true), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
         JSON result = new JSON();
         result.set("code", 200);
         result.set("status", "success");
 
         JSON data = new JSON();
-        data.set("layout_id", id);
+        data.set("factoryId", id);
         data.set("html", sb.toString());
 
         result.set("data", data);
@@ -198,7 +198,7 @@ public class PageEditor {
         if (pageStructure != null) {
             try {
                 //
-                JSON action = getAction(context);
+                JSON action = getRequestData(context);
                 JSON rootContainer = this.buildComponentData(pageStructure);
                 List<JSON> rootChildren = (List<JSON>)rootContainer.getJSON("container").getList("children");
 
@@ -239,6 +239,55 @@ public class PageEditor {
 
         return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
                     .withMimeType("application/json");
+    }
+
+    @Resource
+    @Route(value = "/savelayout/{javax.portlet.layoutid}")
+    public Response saveLayout(ResourceContext context, @Param(name = "javax.portlet.layoutid") String layoutId) throws Exception {
+        NodeContext<JSON, ElementState> pageStructure = null;
+        JSON requestData = null;
+
+        pageStructure = (NodeContext<JSON, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
+        requestData = getRequestData(context);
+
+        JSON result = new JSON();
+        if(requestData != null && pageStructure != null) {
+            JSON rootContainer = this.buildComponentData(pageStructure);
+            List<JSON> rootChildren = (List<JSON>)rootContainer.getJSON("container").getList("children");
+
+            //
+            JSON[] children = requestData.getArray("children", JSON.class);
+            for (NodeContext<JSON, ElementState> sel : pageStructure) {
+                NodeContext<JSON, ElementState> ctx = this.find(sel.getName(), pageStructure);
+                rootChildren.add(this.buildComponentData(ctx));
+            }
+            rootContainer.getJSON("container").set("children", rootChildren);
+
+            //
+            for (JSON j : children) {
+                this.buildComponentTree(pageStructure, j, rootContainer);
+            }
+
+            layoutService.saveLayout(new JSONContainerAdapter(rootContainer, pageStructure), rootContainer, pageStructure, null);
+
+            //Update layout
+            String factoryId = requestData.getString("factoryId");
+            String pageKey = requestData.getString("pageKey");
+            if (factoryId != null && pageKey != null && !factoryId.isEmpty() && !pageKey.isEmpty()) {
+                PageKey key = PageKey.parse(pageKey);
+                org.gatein.portal.mop.page.PageContext page = pageService.loadPage(key);
+                page.setState(page.getState().builder().factoryId(factoryId).build());
+                pageService.savePage(page);
+            }
+
+            result.set("code", 200);
+            result.set("status", "success");
+            result.set("message", "OK");
+            return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8")).withMimeType("application/json");
+
+        } else {
+            return Response.notFound("Can not edit because data is empty or can not load layout with id " + layoutId);
+        }
     }
 
     /**
@@ -471,7 +520,7 @@ public class PageEditor {
         return null;
     }
 
-    private JSON getAction(ResourceContext context) throws Exception {
+    private JSON getRequestData(ResourceContext context) throws Exception {
         InputStream content = context.getClientContext().getInputStream();
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -490,7 +539,6 @@ public class PageEditor {
                 bufferedReader.close();
             }
         }
-        String body = stringBuilder.toString();
-        return (JSON) JSON.parse(body);
+        return stringBuilder.length() > 0 ? (JSON) JSON.parse(stringBuilder.toString()) : null;
     }
 }

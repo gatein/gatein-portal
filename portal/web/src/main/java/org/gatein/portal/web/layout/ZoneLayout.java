@@ -118,6 +118,10 @@ public class ZoneLayout extends Layout {
                 parameters.put("icon", "");
                 parameters.put("editing", false);
             }
+
+            parameters.put("layoutId", renderingContext.layoutId != null ? renderingContext.layoutId : "");
+            parameters.put("pageKey", renderingContext.pageKey != null ? renderingContext.pageKey : "");
+
             template.renderTo(to, parameters);
         } else {
             throw new UnsupportedOperationException("Layout not found");

@@ -219,6 +219,8 @@
   var PageLayout = Container.extend({
 
     defaults : {
+      pageKey: '',
+      factoryId: '',
       type : 'layout',
       droppable : true
     },
@@ -231,14 +233,6 @@
       } else {
         return false;
       }
-    },
-
-    setLayoutId : function(layoutId) {
-      this.set('layout_id', layoutId);
-    },
-
-    getLayoutId : function() {
-      return this.get('layout_id');
     },
 
     // newContainer: is the new PageLayout object

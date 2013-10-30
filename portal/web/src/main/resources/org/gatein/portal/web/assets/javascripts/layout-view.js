@@ -199,7 +199,13 @@
   var LayoutView = Backbone.View.extend({
     initialize : function(options) {
       var options = options || {};
-      this.editUrl = this.$el.attr('data-editURL');
+      this.pageURL = this.$el.attr('data-pageURL');
+      this.urlRoot = this.$el.attr("data-urlRoot");
+      this.layoutId = this.$el.attr('data-layoutId');
+      this.pageKey = this.$el.attr('data-pageKey');
+
+      //TODO: remove /null at the end of url - this should be refactor later
+      this.urlRoot = this.urlRoot.substring(0, this.urlRoot.length - 4);
 
       // Build model from current DOM
       this.model = this.buildModel();
@@ -214,7 +220,7 @@
       this.model.save().done(function($data) {
         if ($data.code == 200) {
           // model saving success
-          window.location.href = view.model.url;
+          window.location.href = view.pageURL;
         } else {
           // model saving error
           alert("error: " + data.message);
@@ -242,8 +248,8 @@
 
       // Build new model according to new layout
       this.model = this.buildModel();
-      if (layoutData.layout_id) {
-        this.model.setLayoutId(layoutData.layout_id);
+      if (layoutData.factoryId) {
+        this.model.set('factoryId', layoutData.factoryId);
       }
 
       // Start switching layout
@@ -259,7 +265,7 @@
     buildModel : function() {
 
       // TODO: Consider to initialize PageLayout model's url properly following Backbone standard
-      var _model = new PageLayout({id : 'layoutId'}, {url : this.editUrl});
+      var _model = new PageLayout({id : this.layoutId, pageKey: this.pageKey}, {urlRoot : this.urlRoot});
       this.$el.find('.sortable').each(function() {
         var cont = new Container({id : this.id});
         $(this).children('.window').each(function() {
