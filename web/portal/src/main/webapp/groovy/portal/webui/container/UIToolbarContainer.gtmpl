@@ -1,59 +1,57 @@
-<%	
+<%
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-        import org.exoplatform.portal.webui.portal.UIPortal;
-        import org.exoplatform.container.ExoContainer;
-        import org.exoplatform.container.ExoContainerContext        
-        import org.exoplatform.portal.config.UserACL;
-	
+	import org.exoplatform.portal.webui.portal.UIPortal;
+	import org.exoplatform.container.ExoContainer;
+	import org.exoplatform.container.ExoContainerContext
+	import org.exoplatform.portal.config.UserACL;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
+
 	def rcontext = _ctx.getRequestContext();
 
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-        UIPortal uiPortal = uiPortalApp.getCurrentSite();
-        String sharedLayout = uiPortal.getProperty("sharedLayout");
-        boolean hasPermission = false;
-        if (sharedLayout != null && sharedLayout.equals("adminsOnly")) {
-            ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
-            UserACL acl = (UserACL) exoContainer.getComponentInstanceOfType(UserACL.class); 
-        
-            if (acl.hasPermission("*:/platform/administrators")){
-               hasPermission = true;
-            }
+	UIPortal uiPortal = uiPortalApp.getCurrentSite();
+	String sharedLayout = uiPortal.getProperty("sharedLayout");
+	boolean hasPermission = false;
+	if (sharedLayout != null && sharedLayout.equals("adminsOnly")) {
+		ExoContainer exoContainer = ExoContainerContext.getCurrentContainer();
+		UserACL acl = (UserACL) exoContainer.getComponentInstanceOfType(UserACL.class);
 
-        } else {
-          hasPermission = uicomponent.hasPermission();
-        }
+		if (acl.hasPermission("*:/platform/administrators")){
+			 hasPermission = true;
+		}
+
+	} else {
+		hasPermission = uicomponent.hasPermission();
+	}
 
 	if(!uiPortalApp.isEditing() && !hasPermission) return;
+	EditMode editMode = uiPortalApp.getEditMode();
 
-  if (uiPortalApp.isEditing())
-  {
-     def reqJS = rcontext.getJavascriptManager().require("SHARED/portal", "portal");
-     reqJS.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
+	if (uiPortalApp.isEditing()) {
+		def reqJS = rcontext.getJavascriptManager().require("SHARED/portal", "portal");
+		reqJS.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
 %>
-<div class="UIContainer UIToolbarContainer EdittingContainer <%=hasPermission?"": "ProtectedContainer"%>" 
+<div class="UIContainer UIToolbarContainer EdittingContainer <%=hasPermission?"": "ProtectedContainer"%>"
 				id="${uicomponent.id}">
 <%
-  }
-  else
-  {   
+	} else {
 %>
 <div class="UIContainer UIToolbarContainer <%=hasPermission?"": "ProtectedContainer"%>" id="${uicomponent.id}">
 <%
-  }
+	}
 %>
 	<div class="NormalContainerBlock">
 		<div class="LeftContainerBlock">
 			<div class="RightContainerBlock UIComponentBlock">
-			
+
 			<%
-				int portalMode = uiPortalApp.getModeState();
 				String style = "";
-				String width	= uicomponent.getWidth();
-				String height	= uicomponent.getHeight();
-				if(width != null) style += "width:"+width+";";
-				if(height != null) style += "height:"+height+";";
-				if(portalMode == uiPortalApp.CONTAINER_BLOCK_EDIT_MODE || portalMode == uiPortalApp.APP_BLOCK_EDIT_MODE){
+				String width = uicomponent.getWidth();
+				String height = uicomponent.getHeight();
+				if (width != null) style += "width:"+width+";";
+				if (height != null) style += "height:"+height+";";
+				if (editMode == EditMode.BLOCK) {
 			%>
 				<div class="LAYOUT-CONTAINER LAYOUT-BLOCK">
 			<%} else {%>
@@ -69,11 +67,11 @@
 						 </div>
 						</div>
 						<%}%>
-					</div>		
+					</div>
 				</div>
 				<%/*Debug On IE	-----For DND */%>
-				
-			<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
+
+			<%if (editMode != EditMode.NO_EDIT) {%>
 				<div class="EDITION-BLOCK EDITION-CONTAINER" style="display: none;position: relative;">
 					<div style="position: absolute; top: -86px;">
 						<div class="NewLayer" style="display: none; visibility: hidden;"><span></span></div>
@@ -81,7 +79,7 @@
 							<%/*Begin InfoBar*/%>
 							<div class="BlueRoundedStyle">
 								<div class="DragControlArea" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>"><span></span></div>
-								<% 
+								<%
 									String strTitle = uicomponent.getTitle() != null ?
 												ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :
 												_ctx.appRes("UIContainer.title.Container");
@@ -97,10 +95,10 @@
 					</div>
 				</div>
 			<%} %>
-				
+
 			</div>
 		</div>
-	</div>	
-	
+	</div>
+
 </div>
 

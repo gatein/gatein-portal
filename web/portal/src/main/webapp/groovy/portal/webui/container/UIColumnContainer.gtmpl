@@ -3,6 +3,7 @@
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 	import org.exoplatform.webui.core.UIComponent;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 
 	def rcontext = _ctx.getRequestContext();
 	ResourceBundle res = rcontext.getApplicationResourceBundle();
@@ -10,6 +11,8 @@
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
 	boolean hasAccessPermission = uicomponent.hasAccessPermission();
 	if(!uiPortalApp.isEditing() && !hasAccessPermission) return;
+
+	EditMode editMode = uiPortalApp.getEditMode();
 
 	String cssStyle = "";
 	String uiComponentWidth = uicomponent.getWidth();
@@ -43,8 +46,7 @@
 %>	<div class="NormalContainerBlock UIComponentBlock">
 
 			<%
-				int portalMode = uiPortalApp.getModeState();
-				if(portalMode == uiPortalApp.CONTAINER_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE){
+				if (editMode == EditMode.BLOCK){
 			%>
 				<div class="LAYOUT-CONTAINER LAYOUT-BLOCK">
 			<%} else {%>
@@ -52,14 +54,14 @@
 			<%} %>
 					<%if(hasAccessPermission) {%>
  						<div>
-							<div class="UIRowContainer <%=(portalMode != UIPortalApplication.NORMAL_MODE && uicomponent.getChildren().size() == 0) ? "EmptyContainer" : ""%>">
+							<div class="UIRowContainer <%=(editMode != EditMode.NO_EDIT && uicomponent.getChildren().size() == 0) ? "EmptyContainer" : ""%>">
 								<%uicomponent.renderChildren();%>
 							</div>
 						</div>
 						<%} else out.print("<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>");%>
 				</div>
 
-			<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
+			<%if (editMode != EditMode.NO_EDIT) {%>
 				<div class="EDITION-BLOCK EDITION-CONTAINER" style="position: relative; display: none;">
 
 						<div style="position: absolute; top: -86px;">
@@ -87,7 +89,7 @@
 												<div style="position: relative; width: 100%">
 													<div class="UIPopupCategory" style="display: none;">
 														<div class="PopupCategoryDecorator">
-		
+
 															<a class="CategoryItem" href="javascript:void(0);" onclick="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertLeft") %></div>
 															</a>
@@ -102,7 +104,7 @@
 											</div>
 											<a href="javascript:void(0);" onclick="<%=uicomponent.event("EditContainer")%>" class="EditIcon" title="<%=_ctx.appRes("UIColumnContainer.tooltip.editContainer")%>"><span></span></a>
 											<a href="javascript:void(0);" onclick="<%=uicomponent.event("DeleteComponent")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIColumnContainer.tooltip.closeContainer")%>"><span></span></a>
-											
+
 										<%}%>
 
 									</div>

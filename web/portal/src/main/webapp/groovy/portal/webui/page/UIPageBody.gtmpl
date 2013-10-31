@@ -2,24 +2,25 @@
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 
 	def rcontext = _ctx.getRequestContext();
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-	int portalMode = uiPortalApp.getModeState();
+
+	EditMode editMode = uiPortalApp.getEditMode();
+	EditLevel editLevel = uiPortalApp.getEditLevel();
 
 	JavascriptManager jsManager = rcontext.getJavascriptManager();
-	if (portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE ||
-			portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE) {
+	if (uiPortalApp.getComponentTab() == ComponentTab.APPLICATIONS) {
 		jsManager.require("SHARED/portalDragDrop", "portalDragDrop").addScripts("portalDragDrop.init(['UIPageBody']);");
 	}
-	boolean isBlockEditMode = portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE ||
-						portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE;
 %>
 <a name="skipContent" id="skipContent" tabindex="-1"></a>
 <div class="UIPageBody" id="${uicomponent.id}">
 	<div class="UIComponent UIComponentBlock">
 	<%
-		if (uiPortalApp.getEditLevel() == EditLevel.EDIT_SITE && isBlockEditMode) {
+		if (editLevel == EditLevel.EDIT_SITE && editMode == EditMode.BLOCK) {
 			%>
 			<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea PageLayoutDecorator">
 					<%/*Begin Top Decorator*/%>
@@ -32,14 +33,15 @@
 					</div>
 			</div>
 			<%
-		} else if (uiPortalApp.getEditLevel() == EditLevel.EDIT_PAGE && isBlockEditMode) {
+		} else if (editLevel == EditLevel.EDIT_PAGE && editMode == EditMode.BLOCK) {
 			/* no frills for page edit in layout mode */
 			uicomponent.renderChildren();
 		} else {
-			/* No move cursor in preview page edit */
-			boolean isEditSite = uiPortalApp.getEditLevel() == EditLevel.EDIT_SITE;
+			/* No move cursor in preview or layout page edit */
+			String dragControlArea = editLevel == EditLevel.EDIT_SITE ? " DragControlArea" : "";
+			String selfDisabledChildrenEnabled = editLevel == EditLevel.EDIT_PAGE && editMode == EditMode.PREVIEW ? " SelfDisabledChildrenEnabled" : "";
 			%>
-				<div class="VIEW-PAGEBODY VIEW-BLOCK<%= isEditSite ? " DragControlArea" : "" %>" id="PAGEBODY-VIEW-BLOCK">
+				<div class="VIEW-PAGEBODY VIEW-BLOCK${dragControlArea}${selfDisabledChildrenEnabled}" id="PAGEBODY-VIEW-BLOCK">
 					<%
 						if (uicomponent.getUIComponent() == null) {
 							%>
@@ -55,7 +57,7 @@
 						} else {
 							uicomponent.renderChildren();
 						}
-						if (isEditSite) {
+						if (editLevel == EditLevel.EDIT_SITE) {
 							/* No move cursor in preview or layout page edit */
 							%>
 								<div class="MaskParent" style="height: 0px;position:relative;">
@@ -68,7 +70,7 @@
 			<%
 		}
 
-		if(portalMode != UIPortalApplication.NORMAL_MODE) {
+		if (editMode != EditMode.NO_EDIT) {
 			%>
 				<div class="EDITION-BLOCK EDITION-PAGEBODY" style="position:relative">
 					<div class="CONTROL-PAGEBODY CONTROL-BLOCK" style="display: none"><span></span></div>

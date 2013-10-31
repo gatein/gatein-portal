@@ -51,6 +51,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -371,9 +372,7 @@ public class UIPageCreationWizard extends UIPageWizard {
             return transientPortal;
         }
         protected void configurePortal(UIPortalApplication portalApp, UIPortal transientPortal) {
-            int modeState = portalApp.getModeState();
-            transientPortal.setHeaderAndFooterRendered(modeState == UIPortalApplication.APP_VIEW_EDIT_MODE
-                    || modeState == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE);
+            transientPortal.setHeaderAndFooterRendered(portalApp.getEditMode() == EditMode.PREVIEW);
         }
 
         private UIPage prepareUIPage(Page page, WebuiRequestContext context) throws Exception {

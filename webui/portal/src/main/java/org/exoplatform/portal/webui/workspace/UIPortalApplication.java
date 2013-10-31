@@ -110,7 +110,9 @@ public class UIPortalApplication extends UIApplication {
         /**
          * Edit mode with portlets rendered.
          */
-        PREVIEW
+        PREVIEW,
+
+        NO_EDIT
     }
 
     public enum ComponentTab {
@@ -121,7 +123,9 @@ public class UIPortalApplication extends UIApplication {
         /**
          * For situations when Containers Tab of Page Editor dialog is selected.
          */
-        CONTAINERS
+        CONTAINERS,
+
+        NO_EDIT
     }
 
     public enum EditLevel {
@@ -985,5 +989,35 @@ public class UIPortalApplication extends UIApplication {
      */
     public void setEditLevel(EditLevel editLevel) {
         this.editLevel = editLevel;
+    }
+
+    public EditMode getEditMode() {
+        switch (modeState) {
+            case NORMAL_MODE:
+                return EditMode.NO_EDIT;
+            case APP_BLOCK_EDIT_MODE:
+            case CONTAINER_BLOCK_EDIT_MODE:
+                return EditMode.BLOCK;
+            case APP_VIEW_EDIT_MODE:
+            case CONTAINER_VIEW_EDIT_MODE:
+                return EditMode.PREVIEW;
+            default:
+                throw new IllegalStateException("Unexpected "+ UIPortalApplication.class.getName() +".modeState value "+ modeState +".");
+        }
+    }
+
+    public ComponentTab getComponentTab() {
+        switch (modeState) {
+            case NORMAL_MODE:
+                return ComponentTab.NO_EDIT;
+            case APP_VIEW_EDIT_MODE:
+            case APP_BLOCK_EDIT_MODE:
+                return ComponentTab.APPLICATIONS;
+            case CONTAINER_BLOCK_EDIT_MODE:
+            case CONTAINER_VIEW_EDIT_MODE:
+                return ComponentTab.CONTAINERS;
+            default:
+                throw new IllegalStateException("Unexpected "+ UIPortalApplication.class.getName() +".modeState value "+ modeState +".");
+        }
     }
 }

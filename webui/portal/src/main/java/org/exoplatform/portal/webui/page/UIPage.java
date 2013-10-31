@@ -39,6 +39,7 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -87,9 +88,7 @@ public class UIPage extends UIContainer {
             return false;
         } else {
             UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
-            int state = uiPortalApp.getModeState();
-            return (state == UIPortalApplication.APP_VIEW_EDIT_MODE
-                        || state == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE)
+            return uiPortalApp.getEditMode() == EditMode.PREVIEW
                     && uiPortalApp.getEditLevel() == EditLevel.EDIT_PAGE;
         }
     }

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -20,7 +20,7 @@
 
 .UIWorkingWorkspace {
 	margin: 0px;
-	
+
 /*
  * minh.js.exo
  * bug : right click with IE7 in ECM
@@ -37,14 +37,18 @@
 	background: #DEDFDF;
 }
 
-.UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY{
+.UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY {
 	background: #b5b6b6;
 	-moz-border-radius:0px 0px 9px 9px;
 	-webkit-border-radius:0px 0px 9px 9px;
 	border-radius:0px 0px 9px 9px;
 	padding: 0px 8px 8px;
 }
-  
+
+.UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY.SelfDisabledChildrenEnabled {
+	background: rgba(181, 182, 182, 0.4);
+}
+
 .MaskLayer {
 	background: black;
 	text-align: center;
@@ -54,7 +58,7 @@
 
 .WarningLayer {
 	width: 300px;	height: 100px;
-	line-height: 100px;	
+	line-height: 100px;
 	text-align: center;
 	position: absolute;
 	opacity: 0.5 !important;

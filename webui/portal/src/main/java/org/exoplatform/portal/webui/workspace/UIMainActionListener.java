@@ -43,6 +43,7 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.ComponentTab;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditLevel;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -244,9 +245,7 @@ public class UIMainActionListener {
          */
         @Override
         protected void configurePortal(UIPortalApplication portalApp, UIPortal transientPortal) {
-            int modeState = portalApp.getModeState();
-            if (modeState == UIPortalApplication.APP_BLOCK_EDIT_MODE
-                    || modeState == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {
+            if (portalApp.getEditMode() == EditMode.BLOCK) {
                 transientPortal.setHeaderAndFooterRendered(false);
             }
         }

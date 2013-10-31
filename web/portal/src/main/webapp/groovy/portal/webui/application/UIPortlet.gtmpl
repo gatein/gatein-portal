@@ -3,6 +3,7 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 
 	import javax.portlet.WindowState;
 
@@ -11,7 +12,7 @@
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
 	boolean hasAccessPermission = uicomponent.hasAccessPermission();
 	if(!uiPortalApp.isEditing() && !hasAccessPermission) return;
-	int portalMode = uiPortalApp.getModeState();
+	EditMode editMode = uiPortalApp.getEditMode();
 
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 
@@ -27,7 +28,7 @@
 	<div class="UIPortlet <%=hasAccessPermission?"":"ProtectedPortlet"%>" id="$id" style="top: 0px; left:0px;">
 		<div class="UIComponentBlock">
 
-		<%if(portalMode == uiPortalApp.CONTAINER_BLOCK_EDIT_MODE || portalMode == uiPortalApp.APP_BLOCK_EDIT_MODE) { %>
+		<%if (editMode == EditMode.BLOCK) { %>
 			<div class="LAYOUT-BLOCK LAYOUT-PORTLET">
 				<div class="PortletLayoutDecorator">
 					<%/*Begin Middle Portlet Layout Decorator*/%>
@@ -51,7 +52,7 @@
 <%
 	}
 
-	if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
+	if (editMode != EditMode.BLOCK) {
 		if(uicomponent.getShowInfoBar()) {
 			if(title == null || title.trim().length() < 1)
 				title = portletId;
@@ -136,7 +137,7 @@
 					<div class="MiddleDecoratorLeft">
 						<div class="MiddleDecoratorRight">
 							<div class="MiddleDecoratorCenter">
-								<div id="<%=portalMode == UIPortalApplication.NORMAL_MODE ? portletId : "EditMode-"+ portletId%>" style="width: 100%">
+								<div id="<%=editMode == EditMode.NO_EDIT ? portletId : "EditMode-"+ portletId%>" style="width: 100%">
 									<div class="PORTLET-FRAGMENT UIResizableBlock UIApplication" style="width: 100%; height: $windowHeight;">
 										<%
 											if(windowState != WindowState.MINIMIZED) {
@@ -176,7 +177,7 @@
 				cssStyle += "height: "+ windowHeight +";";
 			}
  %>
- 				<div id="<%=portalMode == UIPortalApplication.NORMAL_MODE ? portletId : "EditMode-"+ portletId%>">
+ 				<div id="<%=editMode == EditMode.NO_EDIT ? portletId : "EditMode-"+ portletId%>">
 					<div class="PORTLET-FRAGMENT" style="${cssStyle}">
  						<%
 							if(hasAccessPermission)
@@ -195,7 +196,7 @@
 	}
 }
 	if(uiPortalApp.isEditing()) {
-		if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
+		if (editMode != EditMode.BLOCK) {
 %>
 			</div>
 		<%} %>

@@ -3,6 +3,7 @@
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 
 	def rcontext = _ctx.getRequestContext();
 	ResourceBundle res = rcontext.getApplicationResourceBundle();
@@ -10,6 +11,7 @@
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
 	boolean hasAccessPermission = uicomponent.hasAccessPermission();
 	if(!uiPortalApp.isEditing() && !hasAccessPermission) return;
+	EditMode editMode = uiPortalApp.getEditMode();
 
 	/** Trim the prefix UIContainer- if any, this hardcoded part is needed to update nested container via Ajax */
 	String componentId = uicomponent.getId();
@@ -37,13 +39,12 @@
 %>
 	<div class="NormalContainerBlock UIComponentBlock">
 		<%
-			int portalMode = uiPortalApp.getModeState();
 			String style = "";
-			String width	= uicomponent.getWidth();
-			String height	= uicomponent.getHeight();
-			if(width != null) style += "width:"+width+";";
-			if(height != null) style += "height:"+height+";";
-			if(portalMode == uiPortalApp.CONTAINER_BLOCK_EDIT_MODE || portalMode == uiPortalApp.APP_BLOCK_EDIT_MODE){
+			String width = uicomponent.getWidth();
+			String height = uicomponent.getHeight();
+			if (width != null) style += "width:"+width+";";
+			if (height != null) style += "height:"+height+";";
+			if (editMode == EditMode.BLOCK) {
 		%>
 		<div class="LAYOUT-CONTAINER LAYOUT-BLOCK">
 		<%} else {%>
@@ -63,7 +64,7 @@
 		</div>
 		<%/*Debug On IE	-----For DND */%>
 
-		<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
+		<%if (editMode != EditMode.NO_EDIT) {%>
 		<div class="EDITION-BLOCK EDITION-CONTAINER" style="display: none;position: relative;">
 			<div style="position: absolute; top: -86px;">
 				<div class="NewLayer" style="display: none; visibility: hidden;"><span></span></div>

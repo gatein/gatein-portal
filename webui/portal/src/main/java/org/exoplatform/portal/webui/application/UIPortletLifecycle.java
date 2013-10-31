@@ -33,6 +33,7 @@ import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -181,11 +182,8 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             if ("Window".equals(uicomponent.getPortletStyle()) && !("SHOW".equals(appStatus) || "HIDE".equals(appStatus))) {
                 markup = Text.create("<span></span>");
             } else {
-                int portalMode = Util.getUIPortalApplication().getModeState();
-
                 // Check mode of portal, portlet and permission for viewable
-                if ((portalMode == UIPortalApplication.NORMAL_MODE || portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE
-                        || portalMode == UIPortalApplication.CONTAINER_VIEW_EDIT_MODE || uicomponent.getCurrentPortletMode()
+                if ((Util.getUIPortalApplication().getEditMode() != EditMode.BLOCK || uicomponent.getCurrentPortletMode()
                         .equals(PortletMode.EDIT)) && uicomponent.hasAccessPermission()) {
                     PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
                     markup = uicomponent.generateRenderMarkup(response, prcontext);

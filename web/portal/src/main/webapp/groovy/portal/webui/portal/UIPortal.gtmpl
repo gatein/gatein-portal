@@ -1,9 +1,10 @@
 <%
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+	import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 
 	def rcontext = _ctx.getRequestContext();
 	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
-	int portalMode = uiPortalApp.getModeState();
+	EditMode editMode = uiPortalApp.getEditMode();
 	String permissionClasses = "";
 	if (uiPortalApp.isEditing())
 	{
@@ -14,7 +15,7 @@
 <div class="UIPortal<%=permissionClasses%>" id="UIPortal-$uicomponent.id">
 	<div class="UIComponentBlock">
 
-	<%if(portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE) { %>
+	<%if (editMode == EditMode.BLOCK) { %>
 		<div class="LAYOUT-PORTAL LAYOUT-BLOCK">
 	<%} else {%>
 		<div class="VIEW-PORTAL VIEW-BLOCK">
@@ -26,7 +27,7 @@
 			</div>
 		</div>
 
-	<%if(portalMode != UIPortalApplication.NORMAL_MODE){%>
+	<%if (editMode != EditMode.NO_EDIT) {%>
 		<div class="EDITION-BLOCK EDITION-PORTAL" style="display: none;">
 			<div class="CONTROL-PORTAL CONTROL-BLOCK"><span></span></div>
 		</div>
