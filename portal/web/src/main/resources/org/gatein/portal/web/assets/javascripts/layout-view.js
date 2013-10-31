@@ -1,16 +1,17 @@
 (function() {
 
-  // TODO: We should change to use Backbone.Collection somehow
   var ComposerView = Backbone.View.extend({
     initialize : function(options) {
 
-    	this.apps = new Backbone.Collection([], {
-        model : Application,
+      // Initialize a Backbone.Collection to hold a list of Application models
+      this.apps = new Backbone.Collection([], {
+        model: Application,
         url : this.$el.attr("data-url")
       });
 
       this.listenTo(this.apps, 'add', this.onAddChild);
 
+      // Fetch data from server side to insert into the collection
       this.apps.fetch({
       	reset : true,
         success : function(collection, response, options) {
@@ -19,13 +20,15 @@
             return;
           }
   
+          // TODO: Let's see if we can return right JSON data structure from server
+          // to make Collection automatically mapping its Models
           var portlets = response.data.portlets;
           $(portlets).each(function(i, portlet) {
-            collection.add(new Application({
+            collection.add({
               name : portlet.name,
               applicationName: portlet.applicationName,
               title: portlet.title
-            }));
+            });
           });
         }
       });
@@ -51,25 +54,33 @@
     tagName: "div",
 
     className: "window",
+
     initialize: function() {
+
+      // Bind the callback 'updateContent' to the 'change' event of the Application model
+      // The callback will be executed in this ApplicationView object context
       this.model.on('change:content', this.updateContent, this);
     },
 
+    // Render the application frame from template
     render: function() {
-      this.template = _.template($("#application-template").html());
-      this.$el.html(this.template(this.model.toJSON()));
-      this.$el.attr("id", this.model.getId());
+      var template = _.template($("#application-template").html());
+      this.$el.html(template(this.model.toJSON()));
+      this.$el.attr("id", this.model.id);
       return this;
     },
 
+    // Update the content from Application model to DOM
     updateContent: function() {
-      var id = this.model.getId();
+      var id = this.model.id;
       var selector = "#" + id + " div";
       $(selector).html(this.model.getContent());
     }
   });
 
   var ContainerView = Backbone.View.extend({
+
+    // TODO: This application deletion event should belong to ApplicationView somehow
     events : {
       "click .close" : "deleteApp"
     },
@@ -83,10 +94,10 @@
       var domId = "#" + this.model.getId();
       this.$el = $(domId);
 
-      // Trigger adding D&D ability to Zone and Application elements
       this.setupDnD();
     },
 
+    // Adding DnD ability to Zone and Application
     setupDnD : function() {
       this.$el.sortable({
         connectWith : ".sortable",
@@ -121,19 +132,21 @@
         idx = $('#' + targetContainer.getId() + ' > .window').index(prev.get(0)) + 1;
       }
 
-      // Modify the model
+      // If this is a new application dragged from Composer
       if(!$dragObj.attr("id")) {
+
         //Add new application
         var composerView = window.editorView.getComposerView();
         var application = composerView.apps.findWhere({ 'name' : $dragObj.attr("data-name")});
 
-        //Clone and generate id for new application
+        // Clone and generate id for new application
+        // TODO: It should NOT force assigning an ID value for a transient model 
         var newChild = application.clone();
         newChild.setId(newChild.getName() + new Date().getTime());
         targetContainer.addChild(newChild, {at: idx});
         newChild.fetchContent();
-        
-        //Remove dropped item
+
+        // Remove dropped item
         $(ui.item).remove();
       } else {
         targetContainer.addChild(ui.item.attr('id'), {
@@ -145,6 +158,7 @@
       var pageView = window.editorView.getPageView();
       pageView.resetModelSnapshot();
     },
+
     // An event handler for deleting a window.
     // Find the target window ID and container ID
     // then use them to modify corresponding models
@@ -159,28 +173,33 @@
       var pageView = window.editorView.getPageView();
       pageView.resetModelSnapshot();
     },
-    /*
-     * Listen to model changes
-     */
+
+    // A callback for the 'container.addChild' event of Container model
     onAddChild : function(child, container) {
       var $cont = $('#' + container.getId());
       var $app = $('#' + child.getId());
       var prev = container.at(child.getIndex() - 1);
 
+      // If it is an existing application
       if(!$app.html()) {
-        //Create new view of application
+
+        // Create new view of application
         var appView = new ApplicationView({model: child});
-        appView = appView.render();
-        $app = $(appView.$el);
+        $app = appView.render().$el;
       }
 
       if (prev) {
         $app.insertAfter($('#' + prev.getId()));
       } else {
+
+        // Insert at beginning of container element
         $cont.prepend($app);
       }
       $cont.removeClass('emptyContainer');
     },
+
+    // A callback for the 'container.removeChild' event of Container model.
+    // It removes the child element from DOM
     onRemoveChild : function(child, container) {
       var $cont = $("#" + container.getId());
       var $app = $cont.children('#' + child.getId());
@@ -263,23 +282,23 @@
         var id = this.id;
         var apps = this.getChildren();
         $(apps).each(function() {
-          var appView = new ApplicationView({
-            model : this
-          });
-          appView = appView.render();
-          $app = $(appView.$el);
+          var appView = new ApplicationView({model : this});
+          var $app = appView.render().$el;
           $('#' + id).append($app);
         });
       });
     },
 
-    // Build model from DOM
+    // Build model from existing DOM
     buildModel : function() {
 
       // TODO: Consider to initialize PageLayout model's url properly following Backbone standard
-      var _model = new PageLayout({id : this.layoutId, pageKey: this.pageKey}, {urlRoot : this.urlRoot});
+      var model = new PageLayout({id : this.layoutId, pageKey: this.pageKey}, {urlRoot : this.urlRoot});
+
+      // Loop through all Zone and Application
       this.$el.find('.sortable').each(function() {
-        var cont = new Container({id : this.id});
+        var container = new Container({id : this.id});
+
         $(this).children('.window').each(function() {
           var content = $(this).find('.content').html();
           var title = $(this).find('.title').text();
@@ -288,13 +307,14 @@
             'content' : content,
             'title' : title
           });
-          cont.addChild(app);
+
+          container.addChild(app);
         });
 
-        new ContainerView({model: cont});
-        _model.addChild(cont);
+        new ContainerView({model: container});
+        model.addChild(container);
       });
-      return _model;
+      return model;
     },
     resetModelSnapshot: function() {
       this.snapshotModel = this.model;
@@ -326,6 +346,7 @@
     getComposerView: function() {
       return this.composerView;
     },
+
     getPageView: function() {
       return this.layoutView;
     },

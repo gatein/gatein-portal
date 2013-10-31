@@ -72,6 +72,8 @@
       return this.get("content");
     },
 
+    // Fetch application content and update the 'content' attribute in the success callback
+    // TODO: It should be moved to View component, specifically in render view
     fetchContent: function() {
       //TODO: need to refactor
       var contentId = this.getApplicationName() + "/" + this.getName();
@@ -105,6 +107,7 @@
       // and it would be able to pass collection object at initializing
       this._children = new Backbone.Collection();
 
+      // TODO: it seems to me that using listenTo makes this code more clear
       this._children.on('add', function(child) {
         this.trigger('container.addChild', child, this);
       }, this);
@@ -174,7 +177,7 @@
       return this;
     },
 
-    //
+    // TODO: Add documentation comment for this method
     removeChild : function(child, options) {
       child = typeof child == 'string' ? this.getChild(child) : child;
 
@@ -209,7 +212,8 @@
     toJSON : function() {
       var data = Backbone.Model.prototype.toJSON.apply(this, arguments);
 
-      // Serialize its children collection to the returned JSON object
+      // Serialize its children collection
+      // then bind it to the returned JSON object
       data.children = this._children.toJSON();
       return data;
     }
@@ -236,6 +240,7 @@
     },
 
     // layout: is a metadata object pass from view
+    // TODO: Add documentaiton comment for this method
     switchLayout : function(layout) {
       var conts = this.getChildren();
       conts.sort(function(m1, m2) {
