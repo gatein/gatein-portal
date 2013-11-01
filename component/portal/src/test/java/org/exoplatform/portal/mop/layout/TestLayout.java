@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
@@ -33,6 +32,7 @@ import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
+import org.exoplatform.portal.pom.data.JSONContainerAdapter;
 import org.gatein.mop.core.util.Tools;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationContext;
@@ -47,6 +47,9 @@ import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteType;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -169,6 +172,122 @@ public class TestLayout extends AbstractMopServiceTest {
         testAll(layoutId);
         context.getPageService().destroyPage(page.key);
         assertEmptyLayout(layoutId);
+    }
+
+    public void testSwitchLayoutWithJson() throws JSONException {
+        PageData page = createPage(createSite(SiteType.PORTAL, "test_layout_page"), "page", new PageState.Builder().build());
+        NodeData<ElementState>[] containers = createElements(page, Element.container(), Element.container(), Element.container());
+
+        //Create portlet on container
+        NodeStore<ElementState> store = context.getLayoutStore().begin(page.layoutId, true);
+        createElements(store, containers[0], FOO_PORTLET);
+        createElements(store, containers[1], BAR_PORTLET);
+        createElements(store, containers[2], FOO_PORTLET);
+        context.getLayoutStore().end(store);
+
+        String layoutId = page.layoutId;
+
+        NodeContext<JSONObject, ElementState> pageStruct = (NodeContext<JSONObject, ElementState>) layoutService
+                .loadLayout(ElementState.model(), layoutId, null);
+
+        JSONObject root = buildComponent(pageStruct, null);
+        JSONArray jsonContainers = root.getJSONArray("children");
+        JSONObject container0 = jsonContainers.getJSONObject(0);
+        JSONObject container1 = jsonContainers.getJSONObject(1);
+        JSONObject container2 = jsonContainers.getJSONObject(2);
+        JSONObject app0 = container0.getJSONArray("children").getJSONObject(0);
+        JSONObject app1 = container1.getJSONArray("children").getJSONObject(0);
+        JSONObject app2 = container2.getJSONArray("children").getJSONObject(0);
+
+        //Switch from 3 zone to 1 zone
+        container0.getJSONArray("children").put(app1).put(app2);
+        root.put("children", new JSONArray().put(container0));
+        JSONContainerAdapter adapter = new JSONContainerAdapter(root, pageStruct);
+        layoutService.saveLayout(adapter, root, pageStruct, null);
+
+        pageStruct = (NodeContext<JSONObject, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
+        JSONObject newRoot = buildComponent(pageStruct, null);
+        JSONArray newContainers = newRoot.getJSONArray("children");
+
+        //After save: it still has 3 container
+        assertEquals(3, newContainers.length());
+        assertEquals(container0.getString("id"), newContainers.getJSONObject(0).getString("id"));
+        assertEquals(container1.getString("id"), newContainers.getJSONObject(1).getString("id"));
+        assertEquals(container2.getString("id"), newContainers.getJSONObject(2).getString("id"));
+
+        //Assert all app is in container0
+        assertEquals(3, newContainers.getJSONObject(0).getJSONArray("children").length());
+        assertEquals(0, newContainers.getJSONObject(1).getJSONArray("children").length());
+        assertEquals(0, newContainers.getJSONObject(2).getJSONArray("children").length());
+
+        //Switch from 1 zone to 3 zone but introduce new zone
+        JSONObject container3 = new JSONObject();
+        container3.put("id", "container3");
+        container3.put("type", "container");
+        container3.put("children", new JSONArray().put(app2));
+
+        container0.put("children", new JSONArray().put(app0));
+        container1.put("children", new JSONArray().put(app1));
+
+        root.put("children", new JSONArray().put(container0).put(container1).put(container3));
+
+        adapter = new JSONContainerAdapter(root, pageStruct);
+        layoutService.saveLayout(adapter, root, pageStruct, null);
+
+        pageStruct = (NodeContext<JSONObject, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
+        newRoot = buildComponent(pageStruct, null);
+        newContainers = newRoot.getJSONArray("children");
+
+        //After save: it will has 4 container
+        assertEquals(4, newContainers.length());
+        assertEquals(container0.getString("id"), newContainers.getJSONObject(0).getString("id"));
+        assertEquals(container1.getString("id"), newContainers.getJSONObject(1).getString("id"));
+        assertEquals(container2.getString("id"), newContainers.getJSONObject(2).getString("id"));
+        assertEquals(container3.getString("id"), newContainers.getJSONObject(3).getString("id"));
+
+        //Assert app is in container0, container1 and container3
+        assertEquals(1, newContainers.getJSONObject(0).getJSONArray("children").length());
+        assertEquals(1, newContainers.getJSONObject(1).getJSONArray("children").length());
+        assertEquals(0, newContainers.getJSONObject(2).getJSONArray("children").length());
+        assertEquals(1, newContainers.getJSONObject(3).getJSONArray("children").length());
+
+
+        //Verify all save is ok
+        NodeContext<ComponentData, ElementState> pageStruct1 = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
+        CustomizationService cusService = context.getCustomizationService();
+        assertNotNull(cusService.loadCustomization(find(app2.getString("id"), pageStruct1).getId()));
+    }
+
+    private JSONObject buildComponent(NodeContext<JSONObject, ElementState> nodeContext, JSONObject parent) {
+        try {
+            JSONObject node = new JSONObject();
+            node.put("id", nodeContext.getName());
+
+            ElementState state = nodeContext.getState();
+            if(state instanceof ElementState.Container) {
+                node.put("type", "container");
+                //root.put("pageKey", "");
+                //root.put("factoryId", "");
+
+                //Children
+                node.put("children", new JSONArray());
+                for(NodeContext<JSONObject, ElementState> child : nodeContext) {
+                    buildComponent(child, node);
+                }
+            } else if(state instanceof ElementState.Window) {
+                node.put("type", "application");
+            }
+
+            if(parent != null && "container".equalsIgnoreCase(parent.getString("type"))) {
+                JSONArray children = parent.getJSONArray("children");
+                children.put(node);
+            }
+
+            return node;
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     public void testSwitchLayout() {
