@@ -102,12 +102,13 @@
     initialize : function(attributes, options) {
       LayoutComponent.prototype.initialize.apply(this, arguments);
 
-      // A Backbone.Collection object which contains its children
-      // TODO: The children collection should contain a specific model
-      // and it would be able to pass collection object at initializing
-      this._children = new Backbone.Collection();
-
-      // TODO: it seems to me that using listenTo makes this code more clear
+      if (!options || !options._children) {
+        this._children = new Backbone.Collection(null, {model : Application});
+      } else if (options._children){
+        this._children = options._children;
+      }
+      
+      //TODO: it seems to me that using listenTo makes this code more clear
       this._children.on('add', function(child) {
         this.trigger('container.addChild', child, this);
       }, this);
@@ -122,9 +123,7 @@
      * Otherwise, return false
      */
     isDroppable : function(dragObj) {
-      // Check for supported types
-      // TODO: Instead of hardcoding "Application". The type should be checked from children collection's model
-      if (dragObj && dragObj.constructor == Application) {
+      if (dragObj && dragObj.constructor == this._children.model) {
         return this.get('droppable');
       } else {
         return false;
@@ -228,11 +227,20 @@
       type : 'layout',
       droppable : true
     },
+    
+    initialize : function(attributes, options) {
+
+      Container.prototype.initialize.apply(this, arguments);
+      
+      if (!options || !options._children) {
+        this._children = new Backbone.Collection(null, {model : Container});
+      } else if (options._children){
+        this._children = options._children;
+      }
+    },
 
     isDroppable : function(dragObj) {
-      // Check for supported types
-      // TODO: Instead of hardcoding "Container". The type may be checked from children collection's model
-      if (dragObj && dragObj.constructor == Container) {
+      if (dragObj && dragObj.constructor == this._children.model) {
         return this.get('droppable');
       } else {
         return false;
