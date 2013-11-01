@@ -25,26 +25,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
-
 import juzu.Param;
 import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
-import juzu.impl.common.Tools;
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
 import juzu.request.ResourceContext;
-
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.common.util.SimpleMultiValuedPropertyMap;
@@ -68,24 +62,20 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
-import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.customization.CustomizationService;
-import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
-import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationService;
-import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
-import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
+import org.json.JSONObject;
 
 public class PageEditor {
 
@@ -160,31 +150,17 @@ public class PageEditor {
     @Resource
     @Route(value = "/savelayout/{javax.portlet.layoutid}")
     public Response saveLayout(ResourceContext context, @Param(name = "javax.portlet.layoutid") String layoutId) throws Exception {
-        NodeContext<JSON, ElementState> pageStructure = null;
-        JSON requestData = null;
+        NodeContext<JSONObject, ElementState> pageStructure = null;
+        JSONObject requestData = null;
 
-        pageStructure = (NodeContext<JSON, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
+        pageStructure = (NodeContext<JSONObject, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
         requestData = getRequestData(context);
 
         JSON result = new JSON();
         if(requestData != null && pageStructure != null) {
-            JSON rootContainer = this.buildComponentData(pageStructure);
-            List<JSON> rootChildren = (List<JSON>)rootContainer.getJSON("container").getList("children");
+            org.exoplatform.portal.pom.data.JSONContainerAdapter adapter = new org.exoplatform.portal.pom.data.JSONContainerAdapter(requestData, pageStructure);
 
-            //
-            JSON[] children = requestData.getArray("children", JSON.class);
-            for (NodeContext<JSON, ElementState> sel : pageStructure) {
-                NodeContext<JSON, ElementState> ctx = this.find(sel.getName(), pageStructure);
-                rootChildren.add(this.buildComponentData(ctx));
-            }
-            rootContainer.getJSON("container").set("children", rootChildren);
-
-            //
-            for (JSON j : children) {
-                this.buildComponentTree(pageStructure, j, rootContainer);
-            }
-
-            layoutService.saveLayout(new JSONContainerAdapter(rootContainer, pageStructure), rootContainer, pageStructure, null);
+            layoutService.saveLayout(adapter, requestData, pageStructure, null);
 
             //Update layout
             String factoryId = requestData.getString("factoryId");
@@ -312,131 +288,7 @@ public class PageEditor {
                     .withMimeType("application/json");
     }
 
-    private void buildComponentTree(NodeContext<JSON, ElementState> context, JSON json, JSON parent) {
-        String id = json.getString("id");
-        String type = json.getString("type");
-
-        NodeContext<JSON, ElementState> ctx = this.find(id, context);
-
-        JSON componentData = null;
-        if (ctx == null) {
-            if ("container".equalsIgnoreCase(type)) {
-                JSON data = new JSON().set("storageName", id)
-                            .set("accessPermission", new ArrayList<String>())
-                            .set("children", new ArrayList<JSON>());
-                componentData = new JSON().set("id", id).set("type", "container").set("container", data);
-                
-                if (parent != null) {
-                    List<JSON> children = (List<JSON>)parent.getJSON("container").getList("children");
-                    children.add(componentData);
-                    parent.getJSON("container").set("children", children);
-                }
-            } else if ("application".equalsIgnoreCase(type)) {
-                String name = json.getString("name");
-                String applicationName = json.getString("applicationName");
-                String contentId = applicationName + "/" + name;
-                JSON data = new JSON();
-                data.set("storageName", id);
-                data.set("type", ApplicationType.PORTLET.getName());
-                data.set(ElementState.Window.SHOW_INFO_BAR.getName(), new Boolean(false));
-                data.set(ElementState.Window.SHOW_APPLICATION_STATE.getName(), new Boolean(false));
-                data.set(ElementState.Window.SHOW_APPLICATION_MODE.getName(), new Boolean(false));
-                componentData = new JSON().set("id", id).set("type", "application").set("contentId", contentId).set("application", data);
-                
-                if (parent != null) {
-                    List<JSON> children = (List<JSON>)parent.getJSON("container").getList("children");
-                    children.add(componentData);
-                    parent.getJSON("container").set("children", children);
-                }
-            }
-        } else {
-            if ("container".equalsIgnoreCase(type)) {
-                for (JSON child : (List<JSON>)parent.getJSON("container").getList("children")) {
-                    if (child.getJSON("container").getString("storageName").equals(id)) {
-                        componentData = child;
-                        break;
-                    }
-                }
-            } else if ("application".equalsIgnoreCase(type)) {
-                componentData = this.buildComponentData(ctx);
-                if (parent != null) {
-                    List<JSON> children = (List<JSON>)parent.getJSON("container").getList("children");
-                    children.add(componentData);
-                    parent.getJSON("container").set("children", children);
-                }
-            }
-        }
-
-        if (componentData == null) {
-            return;
-        }
-
-        //Process children of this node
-        JSON[] children = json.getArray("children", JSON.class);
-        for (JSON j : children) {
-            this.buildComponentTree(context, j, componentData);
-        }
-    }
-    
-    private JSON buildComponentData(NodeContext<JSON, ElementState> context) {
-        ElementState state = context.getState();
-        if (state instanceof ElementState.Container) {
-            ElementState.Container containerState = (ElementState.Container) state;
-            Properties properties = containerState.properties;
-            JSON data = new JSON().set("storageId", context.getId())
-                        .set("storageName", context.getName())
-                        .set("id", context.getId())
-                        .set(ElementState.Container.NAME.getName(), properties.get(ElementState.Container.NAME))
-                        .set(ElementState.Container.ICON.getName(), properties.get(ElementState.Container.ICON))
-                        .set(ElementState.Container.TEMPLATE.getName(), properties.get(ElementState.Container.TEMPLATE))
-                        .set(ElementState.Container.FACTORY_ID.getName(), properties.get(ElementState.Container.FACTORY_ID))
-                        .set(ElementState.Container.TITLE.getName(), properties.get(ElementState.Container.TITLE))
-                        .set(ElementState.Container.DESCRIPTION.getName(), properties.get(ElementState.Container.DESCRIPTION))
-                        .set(ElementState.Container.WIDTH.getName(), properties.get(ElementState.Container.WIDTH))
-                        .set(ElementState.Container.HEIGHT.getName(), properties.get(ElementState.Container.HEIGHT))
-                        .set("accessPermissions", containerState.getAccessPermissions())
-                        .set("children", new ArrayList<JSON>());
-            
-            return new JSON().set("id", context.getName()).set("type", "container").set("container", data);
-        } else if (state instanceof ElementState.Window) {
-            ElementState.Window winState = (ElementState.Window) state;
-            Properties properties = winState.properties;
-            
-            JSON data = new JSON().set("storageId", context.getId())
-                        .set("storageName", context.getName())
-                        .set("type", winState.type.getName())
-                        .set("id", context.getId())
-                        .set(ElementState.Window.TITLE.getName(), properties.get(ElementState.Window.TITLE))
-                        .set(ElementState.Window.ICON.getName(), properties.get(ElementState.Window.ICON))
-                        .set(ElementState.Window.DESCRIPTION.getName(), properties.get(ElementState.Window.DESCRIPTION))
-                        .set(ElementState.Window.SHOW_INFO_BAR.getName(), properties.get(ElementState.Window.SHOW_INFO_BAR))
-                        .set(ElementState.Window.SHOW_APPLICATION_STATE.getName(), properties.get(ElementState.Window.SHOW_APPLICATION_STATE))
-                        .set(ElementState.Window.SHOW_APPLICATION_MODE.getName(), properties.get(ElementState.Window.SHOW_APPLICATION_MODE))
-                        .set(ElementState.Window.THEME.getName(), properties.get(ElementState.Window.THEME))
-                        .set(ElementState.Window.WIDTH.getName(), properties.get(ElementState.Window.WIDTH))
-                        .set(ElementState.Window.HEIGHT.getName(), properties.get(ElementState.Window.HEIGHT))
-                        .set("properties", new JSON())
-                        .set("accessPermissions", new ArrayList<String>());
-            return new JSON().set("id", context.getName()).set("type", "application").set("application", data);
-        }
-        return null;
-    }
-
-    private NodeContext<JSON, ElementState> find(String id, NodeContext<JSON, ElementState> target) {
-        if (target.getName().equals(id)) {
-            return target;
-        } else {
-            for (NodeContext<JSON, ElementState> child : target) {
-                NodeContext<JSON, ElementState> tmp = this.find(id, child);
-                if (tmp != null) {
-                    return tmp;
-                }
-            }
-        }
-        return null;
-    }
-
-    private JSON getRequestData(ResourceContext context) throws Exception {
+    private JSONObject getRequestData(ResourceContext context) throws Exception {
         InputStream content = context.getClientContext().getInputStream();
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -455,6 +307,6 @@ public class PageEditor {
                 bufferedReader.close();
             }
         }
-        return stringBuilder.length() > 0 ? (JSON) JSON.parse(stringBuilder.toString()) : null;
+        return stringBuilder.length() > 0 ? new JSONObject(stringBuilder.toString()) : null;
     }
 }
