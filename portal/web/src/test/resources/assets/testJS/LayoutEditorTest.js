@@ -135,6 +135,14 @@ test("test switchLayout", function() {
   equal('1_2', container.getChild('1').at(1).getId());
   equal('2_1', container.getChild('1').at(2).getId());
   equal('2_2', container.getChild('1').at(3).getId());
+  
+  var twoZone = new Object();
+  twoZone.containers = ['1', '2'];
+  container.switchLayout(twoZone);
+  equal('1_1', container.getChild('1').at(0).getId());
+  equal('1_2', container.getChild('1').at(1).getId());
+  equal('2_1', container.getChild('2').at(0).getId());
+  equal('2_2', container.getChild('2').at(1).getId());
 	
 	var threeZone = new Object();
 	threeZone.containers = ['1', '2', '3'];
@@ -143,9 +151,8 @@ test("test switchLayout", function() {
 	equal(3, container.getChildren().length);
 	equal('1_1', container.getChild('1').at(0).getId());
 	equal('1_2', container.getChild('1').at(1).getId());
-	equal('2_1', container.getChild('1').at(2).getId());
-	equal('2_2', container.getChild('1').at(3).getId());
-	equal(true, container.getChild('2').isEmpty());
+	equal('2_1', container.getChild('2').at(0).getId());
+	equal('2_2', container.getChild('2').at(1).getId());
 	equal(true, container.getChild('3').isEmpty());
 });
 
