@@ -75,6 +75,7 @@ import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PageEditor {
@@ -123,26 +124,19 @@ public class PageEditor {
     @Resource
     @Route(value = "/portlets")
     public Response getAllPortlets() throws Exception {
-        List<JSON> items = new LinkedList<JSON>();
+        JSONArray result = new JSONArray();
         Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
         for(Portlet portlet : portlets) {
             PortletInfo info = portlet.getInfo();
             MetaInfo meta = info.getMeta();
 
-            JSON item = new JSON();
-            item.set("name", info.getName());
-            item.set("title", meta.getMetaValue("title").getDefaultString());
-            item.set("applicationName", info.getApplicationName());
+            JSONObject item = new JSONObject();
+            item.put("name", info.getName());
+            item.put("title", meta.getMetaValue("title").getDefaultString());
+            item.put("applicationName", info.getApplicationName());
 
-            items.add(item);
+            result.put(item);
         }
-
-        JSON data = new JSON();
-        data.set("portlets", items.toArray(new JSON[0]));
-        JSON result = new JSON();
-        result.set("code", 200);
-        result.set("status", "success");
-        result.set("data", data);
         return Response.status(200).body(result.toString());
     }
 

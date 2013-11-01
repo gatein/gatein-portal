@@ -9,43 +9,27 @@
         url : this.$el.attr("data-url")
       });
 
-      this.listenTo(this.apps, 'add', this.onAddChild);
-
-      // Fetch data from server side to insert into the collection
-      this.apps.fetch({
-      	reset : true,
-        success : function(collection, response, options) {
-          if (response.code != 200) {
-            alert("error on fetch portlets");
-            return;
-          }
-  
-          // TODO: Let's see if we can return right JSON data structure from server
-          // to make Collection automatically mapping its Models
-          var portlets = response.data.portlets;
-          $(portlets).each(function(i, portlet) {
-            collection.add({
-              name : portlet.name,
-              applicationName: portlet.applicationName,
-              title: portlet.title
-            });
-          });
-        }
-      });
+      this.listenTo(this.apps, 'reset', this.render);
+      this.apps.fetch({reset: true});
     },
 
-    onAddChild : function(child) {
+    render: function() {
       var $container = $('#application-list');
+      $container.html();
 
-      var html = _.template($("#portlet-template").html(), child.toJSON());
-      var $html = $(html);
-      $container.append($html);
+      //For each to render app
+      //This should be done in template but currently underscore-template conflict with juzu-template
+      _.each(this.apps.toJSON(), function(app){
+        var html = _.template($("#portlet-template").html(), app);
+        var $html = $(html);
+        $container.append($html);
 
-      //Enable draggable
-      $($html).draggable({
-        connectToSortable: ".sortable",
-        revert: "invalid",
-        helper: "clone"
+        //Enable draggable
+        $html.draggable({
+          connectToSortable: ".sortable",
+          revert: "invalid",
+          helper: "clone"
+        });
       });
     }
   });
