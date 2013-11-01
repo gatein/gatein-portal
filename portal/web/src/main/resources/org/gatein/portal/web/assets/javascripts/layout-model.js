@@ -237,6 +237,8 @@
       } else if (options._children){
         this._children = options._children;
       }
+      
+      this.snapshot = this._children;
     },
 
     isDroppable : function(dragObj) {
@@ -247,9 +249,17 @@
       }
     },
 
-    // layout: is a metadata object pass from view
-    // TODO: Add documentaiton comment for this method
+    // The method represents to change structure of tree children by a layout metadata. 
+    // The layout metadata is an object javascript which contains "id", "containers" attributes.
+    // The "id" attribute is "factoryId" of new layout which need to switch
+    // The "containers" is array what is set of zone id of layout
+    //
+    // @layout: is a metadata object pass from view
     switchLayout : function(layout) {
+      //Restore container children by snapshot
+      this._children = this.snapshot;
+      
+      //Sort containers by id
       var conts = this.getChildren();
       conts.sort(function(m1, m2) {
         var i1 = parseInt(m1.getId());
@@ -263,6 +273,8 @@
 
       var pageLayout = this;
       pageLayout.set('factoryId', layout.id);
+      
+      //Create a set of container by layout metadata
       var newContainers = new Backbone.Collection();
       $(layout.containers).each(function() {
         var containerId = this[0];
@@ -273,20 +285,24 @@
         newContainers.add(container);
       });
 
+      //Add current applications into new containers
       $.each(conts, function() {
         var container = newContainers.get(this.id);
         var apps = this.getChildren();
         $(apps).each(function() {
+          var app = this.clone();
           if (container) {
-            container.addChild(this);
+            container.addChild(app);
           } else {
             // Add applications into last container
             var lastId = newContainers.length;
             container = newContainers.get(lastId);
-            container.addChild(this);
+            container.addChild(app);
           }
         });
       });
+      
+      //Update page's children container
       this._children = newContainers;
     }
   });

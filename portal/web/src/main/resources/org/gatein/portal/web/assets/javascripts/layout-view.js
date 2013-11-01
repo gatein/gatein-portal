@@ -156,7 +156,7 @@
       
       // Update snapshot
       var pageView = window.editorView.getPageView();
-      pageView.resetModelSnapshot();
+      pageView.resetPageSnapshot();
     },
 
     // An event handler for deleting a window.
@@ -171,7 +171,7 @@
       
       // Update snapshot
       var pageView = window.editorView.getPageView();
-      pageView.resetModelSnapshot();
+      pageView.resetPageSnapshot();
     },
 
     // A callback for the 'container.addChild' event of Container model
@@ -225,7 +225,7 @@
 
       // Build model from current DOM
       this.model = this.buildModel();
-      this.snapshotModel = this.model;
+      this.model.snapshot = this.model._children;
     },
 
     // Listen to clicking on SAVE button
@@ -261,8 +261,7 @@
     	layout.containers = containers;
     	
       // Start switching layout
-      var snapshot = this.snapshotModel;
-      snapshot.switchLayout(layout);
+      this.model.switchLayout(layout);
       
       // Update current DOM by layout template
       this.$el.html(layoutData.html);
@@ -316,8 +315,9 @@
       });
       return model;
     },
-    resetModelSnapshot: function() {
-      this.snapshotModel = this.model;
+    
+    resetPageSnapshot: function() {
+      this.model.snapshot = this.model._children;
     }
   });
 
