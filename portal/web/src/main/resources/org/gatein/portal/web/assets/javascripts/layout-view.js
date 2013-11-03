@@ -50,13 +50,13 @@
     render: function() {
       var template = _.template($("#application-template").html());
       this.$el.html(template(this.model.toJSON()));
-      this.$el.attr("id", this.model.id);
+      this.$el.attr("id", this.model.getId());
       return this;
     },
 
     // Update the content from Application model to DOM
     updateContent: function() {
-      var id = this.model.id;
+      var id = this.model.getId();
       var selector = "#" + id + " div";
       $(selector).html(this.model.getContent());
     }
@@ -126,7 +126,6 @@
         // Clone and generate id for new application
         // TODO: It should NOT force assigning an ID value for a transient model 
         var newChild = application.clone();
-        newChild.setId(newChild.getName() + new Date().getTime());
         targetContainer.addChild(newChild, {at: idx});
         newChild.fetchContent();
 

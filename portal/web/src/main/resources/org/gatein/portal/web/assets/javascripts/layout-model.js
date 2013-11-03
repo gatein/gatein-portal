@@ -3,9 +3,10 @@
   // An abstract model for Application and Container (Zone) in a layout
   var LayoutComponent = Backbone.Model.extend({
 
-    // TODO: we should rely on the Model.id property somehow
+    //Return available model's ID
+    //if it's transient, return cid
     getId : function() {
-      return this.get('id') || this.cid;
+      return this.id || this.cid;
     },
 
     // Return the parent object
@@ -46,11 +47,6 @@
       'draggable' : true,
       'content' : 'Loading the application...',
       'logo' : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
-    },
-
-    // TODO: Why don't we rely on the Model.id property instead ?
-    setId: function(id) {
-      this.set('id', id);
     },
 
     getName : function() {
