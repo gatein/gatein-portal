@@ -80,7 +80,7 @@
       LayoutComponent.prototype.initialize.apply(this, arguments);
 
       if (!options || !options._children) {
-        this._children = new Backbone.Collection(null, {model : Application});
+        this._children = new Backbone.Collection();
       } else if (options._children){
         this._children = options._children;
       }
@@ -100,7 +100,7 @@
      * Otherwise, return false
      */
     isDroppable : function(dragObj) {
-      if (dragObj && dragObj.constructor == this._children.model) {
+      if (dragObj && dragObj instanceof this._children.model) {
         return this.get('droppable');
       } else {
         return false;
@@ -210,7 +210,7 @@
       Container.prototype.initialize.apply(this, arguments);
       
       if (!options || !options._children) {
-        this._children = new Backbone.Collection(null, {model : Container});
+        this._children = new Backbone.Collection();
       } else if (options._children){
         this._children = options._children;
       }
@@ -219,7 +219,7 @@
     },
 
     isDroppable : function(dragObj) {
-      if (dragObj && dragObj.constructor == this._children.model) {
+      if (dragObj && dragObj instanceof this._children.model) {
         return this.get('droppable');
       } else {
         return false;
@@ -283,7 +283,7 @@
       
       //Update page's children container
       this._children = newContainers;
-    }
+    },
     
     updateSnapshot: function() {
       this.snapshot = this._children;

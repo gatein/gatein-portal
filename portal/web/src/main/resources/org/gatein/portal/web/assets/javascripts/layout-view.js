@@ -270,11 +270,13 @@
     buildModel : function() {
 
       // TODO: Consider to initialize PageLayout model's url properly following Backbone standard
-      var model = new PageLayout({id : this.layoutId, pageKey: this.pageKey}, {urlRoot : this.urlRoot});
+      var model = new PageLayout(
+          {id : this.layoutId, pageKey: this.pageKey}, 
+          {urlRoot : this.urlRoot, _children : new Backbone.Collection([], {model : Container})});
 
       // Loop through all Zone and Application
       this.$el.find('.sortable').each(function() {
-        var container = new Container({id : this.id});
+        var container = new Container({id : this.id}, {_children : new Backbone.Collection([], {mode : Application})});
 
         $(this).children('.window').each(function() {
           var content = $(this).find('.content').html();
