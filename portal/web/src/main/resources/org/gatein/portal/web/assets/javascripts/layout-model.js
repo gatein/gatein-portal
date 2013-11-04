@@ -226,12 +226,14 @@
       }
     },
 
-    // The method represents to change structure of tree children by a layout metadata. 
-    // The layout metadata is an object javascript which contains "id", "containers" attributes.
-    // The "id" attribute is "factoryId" of new layout which need to switch
-    // The "containers" is array what is set of zone id of layout
-    //
-    // @layout: is a metadata object pass from view
+    /** 
+      * The method represents to change structure of tree children by a layout metadata. 
+      * The layout metadata is an object javascript which contains "id", "containers" attributes.
+      * The "id" attribute is "factoryId" of new layout which need to switch
+      * The "containers" is array what is set of zone id of layout
+      *
+      * @layout: is a metadata object pass from view
+      */
     switchLayout : function(layout) {
       //Restore container children by snapshot
       this._children = this.snapshot;
@@ -252,8 +254,7 @@
       pageLayout.set('factoryId', layout.id);
       
       //Create a set of container by layout metadata
-      //TODO: pass model type to collection
-      var newContainers = new Backbone.Collection();
+      var newContainers = new Backbone.Collection(null, {model : Container});
       $(layout.containers).each(function() {
         var containerId = this[0];
         var container = new Container({
@@ -282,6 +283,10 @@
       
       //Update page's children container
       this._children = newContainers;
+    }
+    
+    updateSnapshot: function() {
+      this.snapshot = this._children;
     }
   });
 

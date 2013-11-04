@@ -70,7 +70,7 @@
 
       // Update snapshot
       var pageView = window.editorView.getPageView();
-      pageView.resetPageSnapshot();
+      pageView.model.updateSnapshot();
     }
   });
 
@@ -146,7 +146,7 @@
       
       // Update snapshot
       var pageView = window.editorView.getPageView();
-      pageView.resetPageSnapshot();
+      pageView.model.updateSnapshot();
     },
 
     // A callback for the 'container.addChild' event of Container model
@@ -293,10 +293,6 @@
       });
       return model;
     },
-    
-    resetPageSnapshot: function() {
-      this.model.snapshot = this.model._children;
-    }
   });
 
   // The root container view of Layout Edition mode
