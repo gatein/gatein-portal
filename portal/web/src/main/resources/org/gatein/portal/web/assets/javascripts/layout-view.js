@@ -200,9 +200,6 @@
 
       // Build model from current DOM
       this.model = this.buildModel();
-
-      //TODO: should take model manage snapshot inside
-      this.model.snapshot = this.model._children;
     },
 
     // Listen to clicking on SAVE button
@@ -293,6 +290,9 @@
         new ContainerView({model: container});
         model.addChild(container);
       });
+      
+      model.updateSnapshot();
+      
       return model;
     },
   });
