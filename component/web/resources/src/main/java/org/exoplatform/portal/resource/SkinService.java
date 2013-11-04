@@ -102,9 +102,6 @@ public class SkinService extends AbstractResourceService implements Startable {
     /** The deployer. */
     private final WebAppListener deployer;
 
-    /** The removal. */
-    private final WebAppListener removal;
-
     private final Map<SkinKey, SkinConfig> portalSkins_;
 
     private final Map<SkinKey, SkinConfig> skinConfigs_;
@@ -188,7 +185,6 @@ public class SkinService extends AbstractResourceService implements Startable {
         portletThemes_ = new HashMap<String, Set<String>>();
         portalContainerName = context.getPortalContainerName();
         deployer = new GateInSkinConfigDeployer(portalContainerName, this);
-        removal = new GateInSkinConfigRemoval(this);
 
         addResourceResolver(new CompositeResourceResolver(portalContainerName, skinConfigs_));
     }
@@ -886,7 +882,6 @@ public class SkinService extends AbstractResourceService implements Startable {
      */
     public void start() {
         ServletContainerFactory.getServletContainer().addWebAppListener(deployer);
-        ServletContainerFactory.getServletContainer().addWebAppListener(removal);
     }
 
     /**
@@ -897,6 +892,5 @@ public class SkinService extends AbstractResourceService implements Startable {
      */
     public void stop() {
         ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
-        ServletContainerFactory.getServletContainer().removeWebAppListener(removal);
     }
 }

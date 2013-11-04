@@ -20,18 +20,17 @@
 package org.exoplatform.web.application.javascript;
 
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.servlet.ServletContext;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
+import org.exoplatform.portal.resource.AbstractResourceDeployer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.gatein.wci.WebApp;
-import org.gatein.wci.WebAppEvent;
-import org.gatein.wci.WebAppLifeCycleEvent;
-import org.gatein.wci.WebAppListener;
 
 /**
  * An listener for listening the ADDED and REMOVED events of the webapp to deploy/undeploy Javascript configured in
@@ -40,9 +39,7 @@ import org.gatein.wci.WebAppListener;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class JavascriptConfigDeployer implements WebAppListener {
-
-    public static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
+public class JavascriptConfigDeployer extends AbstractResourceDeployer {
 
     /**
      * Logger
@@ -62,38 +59,15 @@ public class JavascriptConfigDeployer implements WebAppListener {
         this.portalContainerName = portalContainerName;
     }
 
-    public void onEvent(WebAppEvent event) {
-        if (event instanceof WebAppLifeCycleEvent) {
-            WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent) event;
-            ServletContext servletContext = lifeCycleEvent.getWebApp().getServletContext();
-            switch (lifeCycleEvent.getType()) {
-                case WebAppLifeCycleEvent.ADDED:
-                    add(event.getWebApp());
-                    break;
-                case WebAppLifeCycleEvent.REMOVED:
-                    remove(event.getWebApp());
-                    break;
-            }
-        }
-    }
-
-    private void add(final WebApp webApp) {
+    protected void add(final WebApp webApp, URL url) {
         try {
-            InputStream is = webApp.getServletContext().getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-            if (is == null) {
-                return;
-            }
-
-            Safe.close(is);
-
-            final PortalContainerPostInitTask task = new PortalContainerPostInitTask() {
-
-                public void execute(ServletContext scontext, PortalContainer portalContainer) {
-                    register(scontext, portalContainer);
-                    javascriptService.registerContext(webApp);
-                }
-            };
-            PortalContainer.addInitTask(webApp.getServletContext(), task, portalContainerName);
+                final PortalContainerPostInitTask task = new PortalContainerPostInitTask() {
+                    public void execute(ServletContext scontext, PortalContainer portalContainer) {
+                        register(scontext, portalContainer);
+                        javascriptService.registerContext(webApp);
+                    }
+                };
+                PortalContainer.addInitTask(webApp.getServletContext(), task, portalContainerName);
         } catch (Exception ex) {
             LOG.error(
                     "An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
@@ -102,7 +76,7 @@ public class JavascriptConfigDeployer implements WebAppListener {
         }
     }
 
-    private void remove(WebApp webApp) {
+    protected void remove(WebApp webApp) {
         javascriptService.unregisterServletContext(webApp);
         try {
             JavascriptConfigParser.unregisterResources(javascriptService, webApp.getServletContext());
@@ -116,7 +90,7 @@ public class JavascriptConfigDeployer implements WebAppListener {
     private void register(ServletContext scontext, PortalContainer container) {
         InputStream is = null;
         try {
-            is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+            is = scontext.getResourceAsStream(AbstractResourceDeployer.GATEIN_CONFIG_RESOURCE);
             JavascriptConfigParser.processConfigResource(is, javascriptService, scontext);
         } catch (Exception ex) {
             LOG.error(

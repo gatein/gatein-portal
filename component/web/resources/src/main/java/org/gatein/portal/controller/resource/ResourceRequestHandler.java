@@ -36,10 +36,10 @@ import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.application.ResourceRequestFilter;
+import org.exoplatform.portal.resource.AbstractResourceDeployer;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
-import org.exoplatform.web.application.javascript.JavascriptConfigDeployer;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
@@ -254,7 +254,7 @@ public class ResourceRequestHandler extends WebRequestHandler implements WebAppL
             ServletContext servletContext = lifeCycleEvent.getWebApp().getServletContext();
 
             if (WebAppLifeCycleEvent.ADDED == lifeCycleEvent.getType()) {
-                InputStream is = servletContext.getResourceAsStream(JavascriptConfigDeployer.GATEIN_CONFIG_RESOURCE);
+                InputStream is = servletContext.getResourceAsStream(AbstractResourceDeployer.GATEIN_CONFIG_RESOURCE);
                 if (is != null) {
                     servletContext.setAttribute(SUPPORT_GATEIN_RESOURCES, true);
                 }
