@@ -39,6 +39,10 @@
 
     className: "window",
 
+    events : {
+      "click .close" : "delete"
+    },
+
     initialize: function() {
 
       // Bind the callback 'updateContent' to the 'change' event of the Application model
@@ -59,15 +63,18 @@
       var id = this.model.getId();
       var selector = "#" + id + " div";
       $(selector).html(this.model.getContent());
+    },
+
+    delete: function() {
+      this.model.getParent().removeChild(this.model);
+
+      // Update snapshot
+      var pageView = window.editorView.getPageView();
+      pageView.resetPageSnapshot();
     }
   });
 
   var ContainerView = Backbone.View.extend({
-
-    // TODO: This application deletion event should belong to ApplicationView somehow
-    events : {
-      "click .close" : "deleteApp"
-    },
 
     initialize : function(options) {
 
@@ -142,21 +149,6 @@
       pageView.resetPageSnapshot();
     },
 
-    // An event handler for deleting a window.
-    // Find the target window ID and container ID
-    // then use them to modify corresponding models
-    deleteApp : function(e) {
-      var appId = $(e.target).closest('div.window').attr('id');
-      var containerId = $(e.target).closest('div.sortable').attr('id');
-      var layoutView = editorView.layoutView;
-      var container = layoutView.model.getChild(containerId);
-      container.removeChild(appId);
-      
-      // Update snapshot
-      var pageView = window.editorView.getPageView();
-      pageView.resetPageSnapshot();
-    },
-
     // A callback for the 'container.addChild' event of Container model
     onAddChild : function(child, container) {
       var $cont = $('#' + container.getId());
@@ -208,6 +200,8 @@
 
       // Build model from current DOM
       this.model = this.buildModel();
+
+      //TODO: should take model manage snapshot inside
       this.model.snapshot = this.model._children;
     },
 
@@ -216,6 +210,7 @@
 
       // Delegate to MODEL#save
       var view = this;
+      //TODO: should change to use Backbone.Model#save() as standard of backbone
       this.model.save().done(function($data) {
         if ($data.code == 200) {
           // model saving success

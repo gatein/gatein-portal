@@ -271,6 +271,7 @@
       pageLayout.set('factoryId', layout.id);
       
       //Create a set of container by layout metadata
+      //TODO: pass model type to collection
       var newContainers = new Backbone.Collection();
       $(layout.containers).each(function() {
         var containerId = this[0];
