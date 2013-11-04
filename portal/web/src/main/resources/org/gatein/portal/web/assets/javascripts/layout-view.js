@@ -62,7 +62,7 @@
     updateContent: function() {
       var id = this.model.getId();
       var selector = "#" + id + " div";
-      $(selector).html(this.model.getContent());
+      $(selector).html(this.model.get("content"));
     },
 
     delete: function() {

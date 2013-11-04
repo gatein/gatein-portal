@@ -49,37 +49,18 @@
       'logo' : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
     },
 
-    getName : function() {
-      return this.get('name');
-    },
-    getApplicationName: function() {
-      return this.get("applicationName");
-    },
-    getTitle : function() {
-      return this.get("title");
-    },
-    getLogo : function() {
-      return this.get('logo');
-    },
-    setContent: function(content) {
-      this.set("content", content);
-    },
-    getContent: function(){
-      return this.get("content");
-    },
-
     // Fetch application content and update the 'content' attribute in the success callback
     // TODO: It should be moved to View component, specifically in render view
     fetchContent: function() {
       //TODO: need to refactor
-      var contentId = this.getApplicationName() + "/" + this.getName();
+      var contentId = this.get("applicationName") + "/" + this.get("name");
       var url = "/portal/getContent?javax.portlet.content=" + contentId;
       var _this = this;
       Backbone.sync("read", this, {
     	  url : url,
     	  dataType : "json",
     	  success : function(result) {
-    		  _this.setContent(result.content);  
+    		  _this.set('content', result.content);  
     	  }
       });
     }
