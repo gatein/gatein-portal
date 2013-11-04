@@ -19,21 +19,18 @@
 
 package org.exoplatform.portal.resource;
 
-import java.io.InputStream;
 import java.net.URL;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.wci.WebAppEvent;
-import org.gatein.wci.WebAppLifeCycleEvent;
-import org.gatein.wci.WebAppListener;
+import org.gatein.wci.WebApp;
 
 /**
  *
@@ -43,16 +40,13 @@ import org.gatein.wci.WebAppListener;
  *
  * Sep 16, 2009
  */
-public class GateInSkinConfigDeployer implements WebAppListener {
+public class GateInSkinConfigDeployer extends AbstractResourceDeployer {
 
     /** . */
     private static final Logger log = LoggerFactory.getLogger(GateInSkinConfigDeployer.class);
 
     /** . */
     private final SkinService skinService;
-
-    /** . */
-    private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
 
     /**
      * The name of the portal container
@@ -64,46 +58,60 @@ public class GateInSkinConfigDeployer implements WebAppListener {
         this.portalContainerName = portalContainerName;
     }
 
-    public void onEvent(final WebAppEvent event) {
-        if (event instanceof WebAppLifeCycleEvent) {
-            WebAppLifeCycleEvent waEvent = (WebAppLifeCycleEvent) event;
-            if (waEvent.getType() == WebAppLifeCycleEvent.ADDED) {
-                ServletContext scontext = null;
-                InputStream is = null;
-                try {
-                    scontext = event.getWebApp().getServletContext();
-                    is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-                    if (is != null) {
-                        final PortalContainerPostInitTask task = new PortalContainerPostInitTask() {
-                            public void execute(ServletContext scontext, PortalContainer portalContainer) {
-                                register(scontext, portalContainer);
-                                skinService.registerContext(event.getWebApp());
-                            }
-                        };
-                        PortalContainer.addInitTask(scontext, task, portalContainerName);
-                    }
-                } catch (Exception ex) {
-                    log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
-                            + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
-                } finally {
-                    Safe.close(is);
-                }
-            }
-        }
-    }
-
-    private void register(ServletContext scontext, PortalContainer container) {
-        URL url;
+    /**
+     * @see org.exoplatform.portal.resource.AbstractResourceDeployer#add(org.gatein.wci.WebApp)
+     */
+    @Override
+    protected void add(final WebApp webApp, final URL url) {
+        ServletContext scontext = null;
         try {
-            url = scontext.getResource(GATEIN_CONFIG_RESOURCE);
-            if (url != null) {
-                SkinConfigParser.processConfigResource(DocumentSource.create(url), skinService, scontext);
-            } else {
-                log.debug("No " + GATEIN_CONFIG_RESOURCE + " found in web application " + scontext.getContextPath());
-            }
+            scontext = webApp.getServletContext();
+            final PortalContainerPostInitTask task = new PortalContainerPostInitTask() {
+                public void execute(ServletContext scontext, PortalContainer portalContainer) {
+                    try {
+                        SkinConfigParser.processConfigResource(DocumentSource.create(url), skinService, scontext);
+                    } catch (Exception ex) {
+                        log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
+                                + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+                    }
+                    skinService.registerContext(webApp);
+                }
+            };
+            PortalContainer.addInitTask(scontext, task, portalContainerName);
         } catch (Exception ex) {
             log.error("An error occurs while registering '" + GATEIN_CONFIG_RESOURCE + "' from the context '"
                     + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
         }
     }
+
+    /**
+     * @see org.exoplatform.portal.resource.AbstractResourceDeployer#remove(org.gatein.wci.WebApp)
+     */
+    @Override
+    protected void remove(WebApp webApp) {
+        String contextPath = webApp.getServletContext().getContextPath();
+        try {
+            skinService.removeSkins(SkinDependentManager.getPortalSkins(contextPath));
+            skinService.removeSkins(SkinDependentManager.getPortletSkins(contextPath));
+
+            /*
+             * Remove skinName defined by the webApp, if no other webApps supports the skinName
+             */
+            Set<String> supportedSkins = SkinDependentManager.getSkinNames(contextPath);
+            if (supportedSkins != null) {
+                for (String skin : supportedSkins) {
+                    if (SkinDependentManager.skinNameIsRemovable(skin, contextPath)) {
+                        skinService.removeSupportedSkin(skin);
+                    }
+                }
+            }
+
+            // Update the 'skinDependentManager'
+            SkinDependentManager.clearAssociatedSkins(contextPath);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        skinService.unregisterServletContext(webApp);
+    }
+
 }
