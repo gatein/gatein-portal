@@ -32,9 +32,10 @@ import java.util.Set;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.GroupEventListener;
 import org.exoplatform.services.organization.GroupHandler;
+import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.gatein.common.logging.LogLevel;
 import org.picketlink.idm.api.Attribute;
-import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.Role;
 import org.picketlink.idm.impl.api.SimpleAttribute;
 
 /*
@@ -90,8 +91,6 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         }
 
         org.picketlink.idm.api.Group parentGroup = null;
-
-        String childPLGroupName = getPLIDMGroupName(child.getGroupName());
 
         if (parent != null) {
 
@@ -201,7 +200,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
                     .findAssociatedGroups(jbidGroup, null, false, false);
 
             // not possible to disassociate only one child...
-            Set dummySet = new HashSet();
+            Set<org.picketlink.idm.api.Group> dummySet = new HashSet<org.picketlink.idm.api.Group>();
             dummySet.add(jbidGroup);
 
             for (org.picketlink.idm.api.Group parent : parents) {
@@ -225,12 +224,12 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         return group;
     }
 
-    public Collection findGroupByMembership(String userName, String membershipType) throws Exception {
+    public Collection<Group> findGroupByMembership(String userName, String membershipType) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findGroupsByMembership", new Object[] { "userName", membershipType });
         }
 
-        Collection<org.picketlink.idm.api.Role> allRoles = new HashSet();
+        Collection<Role> allRoles = new HashSet<Role>();
 
         try {
             orgService.flush();
@@ -252,7 +251,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         }
 
         if (mmm.isAssociationMapped() && mmm.getAssociationMapping().equals(membershipType)) {
-            Collection<org.picketlink.idm.api.Group> groups = new HashSet();
+            Collection<org.picketlink.idm.api.Group> groups = new HashSet<org.picketlink.idm.api.Group>();
 
             try {
                 orgService.flush();
@@ -269,7 +268,64 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         }
 
         // UI has hardcoded casts to List
-        Collection result = new LinkedList<Group>(exoGroups);
+        Collection<Group> result = new LinkedList<Group>(exoGroups);
+
+        if (log.isTraceEnabled()) {
+            Tools.logMethodOut(log, LogLevel.TRACE, "findGroupByMembership", result);
+        }
+
+        return result;
+    }
+
+
+    @Override
+    public Collection<Group> resolveGroupByMembership(String userName, String membershipType) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "findGroupsByMembership", new Object[] { "userName", membershipType });
+        }
+
+        Collection<Role> roles = new HashSet<Role>();
+
+        try {
+            orgService.flush();
+
+            roles.addAll(getIdentitySession().getRoleManager().findRoles(userName, membershipType));
+
+            roles.addAll(getIdentitySession().getRoleManager().findRoles(userName, MembershipTypeHandler.ANY_MEMBERSHIP_TYPE));
+        } catch (Exception e) {
+            handleException("Identity operation error: ", e);
+        }
+
+        Set<Group> exoGroups = new HashSet<Group>();
+
+        MembershipDAOImpl mmm = (MembershipDAOImpl) orgService.getMembershipHandler();
+
+        for (org.picketlink.idm.api.Role role : roles) {
+            Group exoGroup = convertGroup(role.getGroup());
+            if (mmm.isCreateMembership(role.getRoleType().getName(), exoGroup.getId())) {
+                exoGroups.add(exoGroup);
+            }
+        }
+
+        if (mmm.isAssociationMapped() && mmm.getAssociationMapping().equals(membershipType)) {
+            Collection<org.picketlink.idm.api.Group> groups = new HashSet<org.picketlink.idm.api.Group>();
+
+            try {
+                orgService.flush();
+
+                groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+            } catch (Exception e) {
+                handleException("Identity operation error: ", e);
+            }
+
+            for (org.picketlink.idm.api.Group group : groups) {
+                exoGroups.add(convertGroup(group));
+            }
+
+        }
+
+        // UI has hardcoded casts to List
+        Collection<Group> result = new LinkedList<Group>(exoGroups);
 
         if (log.isTraceEnabled()) {
             Tools.logMethodOut(log, LogLevel.TRACE, "findGroupByMembership", result);
@@ -304,7 +360,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
 
     }
 
-    public Collection findGroups(Group parent) throws Exception {
+    public Collection<Group> findGroups(Group parent) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findGroups", new Object[] { "parent", parent });
         }
@@ -329,8 +385,6 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         if (jbidGroup == null) {
             return Collections.emptyList();
         }
-
-        String parentId = parent == null ? null : parent.getParentId();
 
         Set<org.picketlink.idm.api.Group> plGroups = new HashSet<org.picketlink.idm.api.Group>();
 
@@ -396,7 +450,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
 
     }
 
-    public Collection findGroupsOfUser(String user) throws Exception {
+    public Collection<Group> findGroupsOfUser(String user) throws Exception {
 
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findGroupsOfUser", new Object[] { "user", user });
@@ -422,7 +476,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
             return Collections.emptyList();
         }
 
-        Collection<org.picketlink.idm.api.Group> allGroups = new HashSet();
+        Collection<org.picketlink.idm.api.Group> allGroups = new HashSet<org.picketlink.idm.api.Group>();
 
         try {
             orgService.flush();
@@ -448,7 +502,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         return exoGroups;
     }
 
-    public Collection getAllGroups() throws Exception {
+    public Collection<Group> getAllGroups() throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "getAllGroups", null);
         }
@@ -490,7 +544,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         }
 
         // UI has hardcoded casts to List
-        Collection result = new LinkedList<Group>(exoGroups);
+        Collection<Group> result = new LinkedList<Group>(exoGroups);
 
         if (log.isTraceEnabled()) {
             Tools.logMethodOut(log, LogLevel.TRACE, "getAllGroups", result);
@@ -529,7 +583,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
             Tools.logMethodIn(log, LogLevel.TRACE, "convertGroup", new Object[] { "jbidGroup", jbidGroup });
         }
 
-        Map<String, Attribute> attrs = new HashMap();
+        Map<String, Attribute> attrs = new HashMap<String, Attribute>();
 
         try {
             orgService.flush();
@@ -616,7 +670,7 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
             processed = new LinkedList<org.picketlink.idm.api.Group>();
         }
 
-        Collection<org.picketlink.idm.api.Group> parents = new HashSet();
+        Collection<org.picketlink.idm.api.Group> parents = new HashSet<org.picketlink.idm.api.Group>();
 
         String gtnGroupName = getGtnGroupName(jbidGroup.getName());
 
@@ -844,5 +898,4 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
     public String getGtnGroupName(String plidmGroupName) {
         return orgService.getConfiguration().getGtnGroupName(plidmGroupName);
     }
-
 }

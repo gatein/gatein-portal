@@ -34,7 +34,6 @@ import org.exoplatform.services.organization.MembershipTypeEventListener;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.impl.MembershipTypeImpl;
 import org.gatein.common.logging.LogLevel;
-import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.RoleType;
 
 /*
@@ -183,7 +182,7 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
 
     }
 
-    public Collection findMembershipTypes() throws Exception {
+    public Collection<MembershipType> findMembershipTypes() throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipTypes", null);
         }
@@ -201,7 +200,11 @@ public class MembershipTypeDAOImpl extends AbstractDAOImpl implements Membership
         for (RoleType rt : rts) {
             MembershipType mt = new MembershipTypeImpl(rt.getName(), null, null);
             populateMembershipType(mt);
-            mts.add(mt);
+            if (mt.getName().equals("*")) {
+                mts.add(0, mt);
+            } else {
+                mts.add(mt);
+            }
         }
 
         if (log.isTraceEnabled()) {

@@ -37,10 +37,11 @@
   <name>GateIn - Portal</name>
 
   <properties>
-    <org.exoplatform.kernel.version>2.5.0-Alpha1</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.6.0-Alpha1</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.4.0-Alpha1</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.16.0-Alpha1</org.exoplatform.jcr.version>
+    <org.exoplatform.kernel.version>2.5.0-Alpha3</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.6.0-Alpha3</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.4.0-Alpha3</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.16.0-Alpha3</org.exoplatform.jcr.version>
+    <org.exoplatform.framework.junit.version>1.2.4-GA</org.exoplatform.framework.junit.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-4</nl.captcha.simplecaptcha.version>
     <org.gatein.api.version>1.0.1.Final</org.gatein.api.version>
@@ -153,6 +154,12 @@
         <groupId>org.twitter4j</groupId>
         <artifactId>twitter4j-core</artifactId>
         <version>${version.twitter4j}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.exoplatform.tool</groupId>
+        <artifactId>exo.tool.framework.junit</artifactId>
+        <version>${org.exoplatform.framework.junit.version}</version>
       </dependency>
 
       <!-- eXo JCR stack -->
@@ -1116,6 +1123,11 @@
     <dependency>
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
