@@ -108,17 +108,11 @@ public class PageEditor {
         StringBuilder sb = new StringBuilder();
         layout.render(new RenderingContext(null, null, null, true), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
-        JSON result = new JSON();
-        result.set("code", 200);
-        result.set("status", "success");
-
         JSON data = new JSON();
         data.set("factoryId", id);
         data.set("html", sb.toString());
 
-        result.set("data", data);
-
-        return Response.status(200).body(result.toString());
+        return Response.status(200).body(data.toString());
     }
 
     @Resource
@@ -166,13 +160,13 @@ public class PageEditor {
                 pageService.savePage(page);
             }
 
-            result.set("code", 200);
-            result.set("status", "success");
-            result.set("message", "OK");
             return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8")).withMimeType("application/json");
 
+        } else if(pageStructure== null) {
+            return Response.notFound("Can not edit because can not load layout with id " + layoutId);
+
         } else {
-            return Response.notFound("Can not edit because data is empty or can not load layout with id " + layoutId);
+            return Response.status(400).body("Data is null");
         }
     }
 
@@ -267,19 +261,28 @@ public class PageEditor {
         if (failure != null) {
             failure.printStackTrace();
             result.set("error", "Can't render portlet");
+
+            //500 Internal Server Error
+            return Response.status(500).body(result.toString()).withCharset(Charset.forName("UTF-8"))
+                    .withMimeType("application/json");
         } else {
             if (response instanceof FragmentResponse) {
                 FragmentResponse fragment = (FragmentResponse) response;    
                 String title = fragment.getTitle();
                 result.set("title", title);
                 result.set("content", fragment.getContent());
+
+                //200 OK
+                return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
+                        .withMimeType("application/json");
             } else {
-                throw new UnsupportedOperationException("Not yet handled " + response);
+                //throw new UnsupportedOperationException("Not yet handled " + response);
+
+                //501 Not Implemented
+                return Response.status(501).body("Not yet handled " + response).withCharset(Charset.forName("UTF-8"))
+                        .withMimeType("application/json");
             }
         }
-
-        return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
-                    .withMimeType("application/json");
     }
 
     private JSONObject getRequestData(ResourceContext context) throws Exception {

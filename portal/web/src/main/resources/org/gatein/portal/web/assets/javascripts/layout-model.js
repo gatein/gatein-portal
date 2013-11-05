@@ -52,17 +52,12 @@
     // Fetch application content and update the 'content' attribute in the success callback
     // TODO: It should be moved to View component, specifically in render view
     fetchContent: function() {
-      //TODO: need to refactor
+      //TODO: fetchContentURL should be set on init
       var contentId = this.get("applicationName") + "/" + this.get("name");
       var url = "/portal/getContent?javax.portlet.content=" + contentId;
-      var _this = this;
-      Backbone.sync("read", this, {
-    	  url : url,
-    	  dataType : "json",
-    	  success : function(result) {
-    		  _this.set('content', result.content);  
-    	  }
-      });
+
+      //Delegate to Model#fetch
+      this.fetch({url: url});
     }
   });
 

@@ -207,18 +207,15 @@
 
       // Delegate to MODEL#save
       var view = this;
-      //TODO: should change to use Backbone.Model#save() as standard of backbone
-      this.model.save().done(function($data) {
-        if ($data.code == 200) {
-          // model saving success
+      this.model.save({}, {
+        parse: false,
+        success: function(model, resp, options) {
           window.location.href = view.pageURL;
-        } else {
-          // model saving error
-          alert("error: " + data.message);
+        },
+        error: function(model, xhr, options) {
+          //TODO: need to define a unified error handler on UI
+          alert("error when save");
         }
-      }).error(function($error) {
-        // network error
-        alert("error on connect to server");
       });
       return this;
     },
@@ -343,14 +340,9 @@
         url : href,
         dataType : "json",
         success : function(result) {
-          if (result.code != 200) {
-            alert("change layout failure!");
-            return false;
-          }
-
           // Ask the layout view to switch layout with passed layout data
           var layoutView = window.editorView.layoutView;
-          layoutView.switchLayout(result.data);
+          layoutView.switchLayout(result);
         }
       });
     }
