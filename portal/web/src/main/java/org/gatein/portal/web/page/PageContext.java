@@ -94,7 +94,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
                 CustomizationContext<Portlet> portletCustomization = customizationService.loadCustomization(context.getId());
                 String contentId = portletCustomization.getContentId();
                 NodeState window = new NodeState(context);
-                WindowContent windowState = contentProvider.getContent(contentId, window);
+                WindowContent windowState = contentProvider.getContent(contentId);
                 windows.put(window.context.getName(), windowState);
                 return window;
             } else {

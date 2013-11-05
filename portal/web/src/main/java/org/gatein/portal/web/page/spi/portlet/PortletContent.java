@@ -54,9 +54,6 @@ class PortletContent extends WindowContent {
     /** . */
     static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
-    /** The window id. */
-    public final String id;
-
     /** The portlet window parameters. */
     public Map<String, String[]> parameters;
 
@@ -69,8 +66,7 @@ class PortletContent extends WindowContent {
     /** The related portlet or null if it cannot be located. */
     public final Portlet portlet;
 
-    PortletContent(NodeState node, Portlet portlet) {
-        this.id = node.context.getId();
+    PortletContent(Portlet portlet) {
         this.parameters = null;
         this.windowState = null;
         this.mode = null;
@@ -92,7 +88,6 @@ class PortletContent extends WindowContent {
         }
 
         //
-        this.id = that.id;
         this.parameters = parameters;
         this.windowState = that.windowState;
         this.mode = that.mode;

@@ -50,16 +50,9 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
-import org.gatein.portal.web.page.NodeState;
 import org.gatein.portal.web.page.PageContext;
 import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.ContentProvider;
-import org.gatein.portal.web.page.spi.RenderTask;
-import org.gatein.portal.web.portlet.PortletAppManager;
-import org.gatein.portal.web.servlet.Context;
-import org.gatein.portal.web.page.NodeState;
-import org.gatein.portal.web.page.PageContext;
-import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
@@ -79,7 +72,7 @@ public class PortletContentProvider implements ContentProvider {
     }
 
     @Override
-    public PortletContent getContent(String id, NodeState nodeState) {
+    public PortletContent getContent(String id) {
 
         //
         org.gatein.pc.api.Portlet portlet;
@@ -97,7 +90,7 @@ public class PortletContentProvider implements ContentProvider {
         }
 
         //
-        return new PortletContent(nodeState, portlet);
+        return new PortletContent(portlet);
     }
 
     @Override

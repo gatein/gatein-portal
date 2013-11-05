@@ -21,9 +21,7 @@ package org.gatein.portal.web.page.spi;
 import java.util.Map;
 
 import juzu.Response;
-import org.gatein.portal.web.page.NodeState;
-import org.gatein.portal.web.page.WindowContext;
-import org.gatein.portal.web.page.NodeState;
+import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.web.page.WindowContext;
 
 /**
@@ -32,13 +30,12 @@ import org.gatein.portal.web.page.WindowContext;
 public interface ContentProvider {
 
     /**
-     * Create a relationship between the window and the specified content
+     * Create the content of a window.
      *
      * @param id the content id
-     * @param nodeState the node state
      * @return the window content
      */
-    WindowContent getContent(String id, NodeState nodeState);
+    WindowContent getContent(String id);
 
     Response processAction(
             WindowContext window,
