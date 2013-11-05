@@ -43,6 +43,7 @@ import org.gatein.security.oauth.spi.OAuthCodec;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.social.FacebookPrincipal;
 import org.gatein.security.oauth.social.FacebookProcessor;
+import org.gatein.security.oauth.utils.OAuthPersistenceUtils;
 
 /**
  * {@inheritDoc}
@@ -59,6 +60,7 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
     private final String redirectURL;
     private final FacebookProcessor facebookProcessor;
     private final SecureRandomService secureRandomService;
+    private final int chunkLength;
 
     public GateInFacebookProcessorImpl(ExoContainerContext context, InitParams params, SecureRandomService secureRandomService) {
         this.clientId = params.getValueParam("clientId").getValue();
@@ -84,10 +86,15 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
             this.redirectURL = redirectURL.replaceAll("@@portal.container.name@@", context.getName());
         }
 
-        log.debug("configuration: clientId=" + this.clientId +
-                ", clientSecret=" + clientSecret +
-                ", scope=" + this.scope +
-                ", redirectURL=" + this.redirectURL);
+        this.chunkLength = OAuthPersistenceUtils.getChunkLength(params);
+
+        if (log.isDebugEnabled()) {
+            log.debug("configuration: clientId=" + this.clientId +
+                    ", clientSecret=" + clientSecret +
+                    ", scope=" + this.scope +
+                    ", redirectURL=" + this.redirectURL +
+                    ", chunkLength=" + this.chunkLength);
+        }
 
         // Use empty rolesList because we don't need rolesList for GateIn integration
         this.facebookProcessor = new FacebookProcessor(this.clientId , this.clientSecret, this.scope, this.redirectURL);
@@ -159,31 +166,19 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
         String encodedAccessToken = codec.encodeString(realAccessToken);
 
         // Encoded accessToken could be longer than 255 characters. So we need to split it
-        if (encodedAccessToken.length() > 255) {
-            String encodedAccessToken1 = encodedAccessToken.substring(0, 250);
-            String encodedAccessToken2 = encodedAccessToken.substring(250);
-            userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1, encodedAccessToken1);
-            userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_2, encodedAccessToken2);
-        } else {
-            userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1, encodedAccessToken);
-            userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_2, null);
-        }
+        OAuthPersistenceUtils.saveLongAttribute(encodedAccessToken, userProfile, OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN,
+                true, chunkLength);
+
         userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_SCOPE, accessTokenContext.getScopesAsString());
     }
 
     @Override
     public FacebookAccessTokenContext getAccessTokenFromUserProfile(UserProfile userProfile, OAuthCodec codec) {
-        String encodedAccessToken1 = userProfile.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1);
-        String encodedAccessToken2 = userProfile.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_2);
+        String encodedAccessToken = OAuthPersistenceUtils.getLongAttribute(userProfile, OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN, true);
 
         // We don't have token in userProfile
-        if (encodedAccessToken1 == null) {
+        if (encodedAccessToken == null) {
             return null;
-        }
-
-        String encodedAccessToken = encodedAccessToken1;
-        if (encodedAccessToken2 != null) {
-            encodedAccessToken = encodedAccessToken + encodedAccessToken2;
         }
 
         String accessToken = codec.decodeString(encodedAccessToken);
@@ -193,9 +188,7 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
 
     @Override
     public void removeAccessTokenFromUserProfile(UserProfile userProfile) {
-        userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1, null);
-        userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_2, null);
-        userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_SCOPE, null);
+        OAuthPersistenceUtils.removeLongAttribute(userProfile, OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN, true);
     }
 
     @Override
@@ -212,7 +205,9 @@ public class GateInFacebookProcessorImpl implements GateInFacebookProcessor {
 
     @Override
     public <C> C getAuthorizedSocialApiObject(FacebookAccessTokenContext accessToken, Class<C> socialApiObjectType) {
-        log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+        if (log.isDebugEnabled()) {
+            log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+        }
         return null;
     }
 }

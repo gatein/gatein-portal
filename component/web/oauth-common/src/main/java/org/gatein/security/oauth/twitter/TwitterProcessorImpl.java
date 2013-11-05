@@ -40,6 +40,7 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.spi.OAuthCodec;
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.utils.OAuthPersistenceUtils;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -58,6 +59,7 @@ public class TwitterProcessorImpl implements TwitterProcessor {
     private final String clientID;
     private final String clientSecret;
     private final TwitterFactory twitterFactory;
+    private final int chunkLength;
 
     public TwitterProcessorImpl(ExoContainerContext context, InitParams params) {
         this.clientID = params.getValueParam("clientId").getValue();
@@ -80,10 +82,14 @@ public class TwitterProcessorImpl implements TwitterProcessor {
             this.redirectURL = redirectURLParam.replaceAll("@@portal.container.name@@", context.getName());
         }
 
-        log.debug("configuration: clientId=" + clientID +
-                ", clientSecret=" + clientSecret +
-                ", redirectURL=" + redirectURL);
+        this.chunkLength = OAuthPersistenceUtils.getChunkLength(params);
 
+        if (log.isDebugEnabled()) {
+            log.debug("configuration: clientId=" + clientID +
+                    ", clientSecret=" + clientSecret +
+                    ", redirectURL=" + redirectURL +
+                    ", chunkLength=" + chunkLength);
+        }
         // Create 'generic' twitterFactory for user authentication to GateIn
         ConfigurationBuilder builder = new ConfigurationBuilder();
         builder.setOAuthConsumerKey(clientID).setOAuthConsumerSecret(clientSecret);
@@ -149,9 +155,11 @@ public class TwitterProcessorImpl implements TwitterProcessor {
     @Override
     public <C> C getAuthorizedSocialApiObject(TwitterAccessTokenContext accessToken, Class<C> socialApiObjectType) {
         if (Twitter.class.equals(socialApiObjectType)) {
-            return (C)getAuthorizedTwitterInstance(accessToken);
+            return socialApiObjectType.cast(getAuthorizedTwitterInstance(accessToken));
         } else {
-            log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+            if (log.isDebugEnabled()) {
+                log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+            }
             return null;
         }
     }
@@ -173,14 +181,18 @@ public class TwitterProcessorImpl implements TwitterProcessor {
     public void saveAccessTokenAttributesToUserProfile(UserProfile userProfile, OAuthCodec codec, TwitterAccessTokenContext accessToken) {
         String encodedAccessToken = codec.encodeString(accessToken.getAccessToken());
         String encodedAccessTokenSecret = codec.encodeString(accessToken.getAccessTokenSecret());
-        userProfile.setAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN, encodedAccessToken);
-        userProfile.setAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN_SECRET, encodedAccessTokenSecret);
+        OAuthPersistenceUtils.saveLongAttribute(encodedAccessToken, userProfile, OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN,
+                false, chunkLength);
+        OAuthPersistenceUtils.saveLongAttribute(encodedAccessTokenSecret, userProfile, OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN_SECRET,
+                false, chunkLength);
     }
 
     @Override
     public TwitterAccessTokenContext getAccessTokenFromUserProfile(UserProfile userProfile, OAuthCodec codec) {
-        String decodedAccessToken = codec.decodeString(userProfile.getAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN));
-        String decodedAccessTokenSecret = codec.decodeString(userProfile.getAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN_SECRET));
+        String encodedAccessToken = OAuthPersistenceUtils.getLongAttribute(userProfile, OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN, false);
+        String encodedAccessTokenSecret = OAuthPersistenceUtils.getLongAttribute(userProfile, OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN_SECRET, false);
+        String decodedAccessToken = codec.decodeString(encodedAccessToken);
+        String decodedAccessTokenSecret = codec.decodeString(encodedAccessTokenSecret);
 
         if (decodedAccessToken == null || decodedAccessTokenSecret == null) {
             return null;
@@ -210,8 +222,8 @@ public class TwitterProcessorImpl implements TwitterProcessor {
 
     @Override
     public void removeAccessTokenFromUserProfile(UserProfile userProfile) {
-        userProfile.setAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN, null);
-        userProfile.setAttribute(OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN_SECRET, null);
+        OAuthPersistenceUtils.removeLongAttribute(userProfile, OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN, false);
+        OAuthPersistenceUtils.removeLongAttribute(userProfile, OAuthConstants.PROFILE_TWITTER_ACCESS_TOKEN_SECRET, false);
     }
 
     @Override

@@ -98,8 +98,7 @@ public class OAuthConstants {
     public static final String PROFILE_TWITTER_USERNAME = "user.social-info.twitter.userName";
 
     // Facebook accessToken could be very long, so we need to split to two attributes
-    public static final String PROFILE_FACEBOOK_ACCESS_TOKEN_1 = "user.social-info.facebook.accessToken.1";
-    public static final String PROFILE_FACEBOOK_ACCESS_TOKEN_2 = "user.social-info.facebook.accessToken.2";
+    public static final String PROFILE_FACEBOOK_ACCESS_TOKEN = "user.social-info.facebook.accessToken";
 
     public static final String PROFILE_FACEBOOK_SCOPE = "user.social-info.facebook.scope";
 
