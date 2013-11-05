@@ -181,6 +181,7 @@
       $app.remove();
 
       if (container.isEmpty()) {
+        console.log("onRemoveChild.......");
         $cont.addClass('emptyContainer');
       }
     }
@@ -251,12 +252,16 @@
       var containers = this.model.getChildren();
       $(containers).each(function() {
         var id = this.id;
-        var apps = this.getChildren();
-        $(apps).each(function() {
-          var appView = new ApplicationView({model : this});
-          var $app = appView.render().$el;
-          $('#' + id).append($app);
-        });
+        if (!this.isEmpty()) {
+          var apps = this.getChildren();
+          $(apps).each(function() {
+            var appView = new ApplicationView({model : this});
+            var $app = appView.render().$el;
+            $('#' + id).append($app);
+          });
+          $container = $('#' + id);
+          $container.removeClass('emptyContainer');
+        }
       });
     },
 
