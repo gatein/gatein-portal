@@ -57,6 +57,7 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.spi.OAuthCodec;
 import org.gatein.security.oauth.common.OAuthConstants;
+import org.gatein.security.oauth.utils.OAuthPersistenceUtils;
 
 /**
  * {@inheritDoc}
@@ -73,6 +74,7 @@ public class GoogleProcessorImpl implements GoogleProcessor {
     private final Set<String> scopes = new HashSet<String>();
     private final String accessType;
     private final String applicationName;
+    private final int chunkLength;
 
     private final SecureRandomService secureRandomService;
 
@@ -118,12 +120,17 @@ public class GoogleProcessorImpl implements GoogleProcessor {
 
         addScopesFromString(scope, this.scopes);
 
-        log.debug("configuration: clientId=" + clientID +
-                ", clientSecret=" + clientSecret +
-                ", redirectURL=" + redirectURL +
-                ", scope=" + scopes +
-                ", accessType=" + accessType +
-                ", applicationName=" + applicationName);
+        this.chunkLength = OAuthPersistenceUtils.getChunkLength(params);
+
+        if (log.isDebugEnabled()) {
+            log.debug("configuration: clientId=" + clientID +
+                    ", clientSecret=" + clientSecret +
+                    ", redirectURL=" + redirectURL +
+                    ", scope=" + scopes +
+                    ", accessType=" + accessType +
+                    ", applicationName=" + applicationName +
+                    ", chunkLength=" + chunkLength);
+        }
 
         this.secureRandomService = secureRandomService;
     }
@@ -259,11 +266,13 @@ public class GoogleProcessorImpl implements GoogleProcessor {
     @Override
     public <C> C getAuthorizedSocialApiObject(GoogleAccessTokenContext accessToken, Class<C> socialApiObjectType) {
         if (Oauth2.class.equals(socialApiObjectType)) {
-            return (C)getOAuth2Instance(accessToken);
+            return socialApiObjectType.cast(getOAuth2Instance(accessToken));
         } else if (Plus.class.equals(socialApiObjectType)) {
-            return (C)getPlusService(accessToken);
+            return socialApiObjectType.cast(getPlusService(accessToken));
         } else {
-            log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+            if (log.isDebugEnabled()) {
+                log.debug("Class '" + socialApiObjectType + "' not supported by this processor");
+            }
             return null;
         }
     }
@@ -338,25 +347,30 @@ public class GoogleProcessorImpl implements GoogleProcessor {
         String encodedAccessToken = codec.encodeString(tokenData.getAccessToken());
         String encodedRefreshToken = codec.encodeString(tokenData.getRefreshToken());
         String encodedScope = codec.encodeString(accessToken.getScopesAsString());
-        userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN, encodedAccessToken);
+
+        OAuthPersistenceUtils.saveLongAttribute(encodedAccessToken, userProfile, OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN,
+                false, chunkLength);
         userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_SCOPE, encodedScope);
 
         // Don't overwrite existing refresh token because it's not present in every accessToken response (only in very first one)
         if (encodedRefreshToken != null) {
-            userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_REFRESH_TOKEN, encodedRefreshToken);
+            OAuthPersistenceUtils.saveLongAttribute(encodedRefreshToken, userProfile, OAuthConstants.PROFILE_GOOGLE_REFRESH_TOKEN,
+                    false, chunkLength);
         }
     }
 
     @Override
     public GoogleAccessTokenContext getAccessTokenFromUserProfile(UserProfile userProfile, OAuthCodec codec) {
-        String decodedAccessToken = codec.decodeString(userProfile.getAttribute(OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN));
+        String encodedAccessToken = OAuthPersistenceUtils.getLongAttribute(userProfile, OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN, false);
+        String decodedAccessToken = codec.decodeString(encodedAccessToken);
 
         // We don't have token in userProfile
         if (decodedAccessToken == null) {
             return null;
         }
 
-        String decodedRefreshToken = codec.decodeString(userProfile.getAttribute(OAuthConstants.PROFILE_GOOGLE_REFRESH_TOKEN));
+        String encodedRefreshToken = OAuthPersistenceUtils.getLongAttribute(userProfile, OAuthConstants.PROFILE_GOOGLE_REFRESH_TOKEN, false);
+        String decodedRefreshToken = codec.decodeString(encodedRefreshToken);
         String decodedScope = codec.decodeString(userProfile.getAttribute(OAuthConstants.PROFILE_GOOGLE_SCOPE));
         GoogleTokenResponse grc = new GoogleTokenResponse();
         grc.setAccessToken(decodedAccessToken);
@@ -369,8 +383,8 @@ public class GoogleProcessorImpl implements GoogleProcessor {
 
     @Override
     public void removeAccessTokenFromUserProfile(UserProfile userProfile) {
-        userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN, null);
-        userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_REFRESH_TOKEN, null);
+        OAuthPersistenceUtils.removeLongAttribute(userProfile, OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN, false);
+        OAuthPersistenceUtils.removeLongAttribute(userProfile, OAuthConstants.PROFILE_GOOGLE_REFRESH_TOKEN, false);
         userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_SCOPE, null);
     }
 

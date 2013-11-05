@@ -164,8 +164,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         // Directly obtain accessTokens from userProfile and verify that they are encoded
         UserProfile userProfile1 = orgService.getUserProfileHandler().findUserProfileByName("testUser1");
         UserProfile userProfile2 = orgService.getUserProfileHandler().findUserProfileByName("testUser2");
-        String encodedAccessToken1 = userProfile1.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1);
-        String encodedAccessToken2 = userProfile2.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN_1);
+        String encodedAccessToken1 = userProfile1.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN + ".1");
+        String encodedAccessToken2 = userProfile2.getAttribute(OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN + ".1");
         assertFalse("aaa123".equals(encodedAccessToken1));
         assertFalse("bbb456".equals(encodedAccessToken2));
         assertTrue(codec.encode("aaa123").equals(encodedAccessToken1));
@@ -229,20 +229,38 @@ public class TestSocialNetworkService extends AbstractKernelTest {
     }
 
     public void testLongAccessToken() throws Exception {
-        // Create some example token of length 320
-        String longAccessToken = "1234567890";
-        for (int i=0 ; i<5 ; i++) {
-            longAccessToken = longAccessToken + longAccessToken;
-        }
-
+        // Create some example token of length 800
         User user1 = new UserImpl("testUser1");
         orgService.getUserHandler().createUser(user1, false);
 
-        // Update some accessToken and verify that it's available
-        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", createFacebookAccessToken(longAccessToken));
+        String longAccessToken = createLongString();
 
-        // Assert that obtained long access token is equal to original access token
+        // FACEBOOK
+        // Update long accessToken and verify that it's available
+        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", createFacebookAccessToken(longAccessToken));
         assertEquals(longAccessToken, socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
+
+        // Update with some short token now
+        String shortAccessToken = "someToken1";
+        socialNetworkService.updateOAuthInfo(getFacebookProvider(), user1.getUserName(), "fbUsername1", createFacebookAccessToken(shortAccessToken));
+        assertEquals(shortAccessToken, socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()).getAccessToken());
+
+        // GOOGLE
+        GoogleAccessTokenContext grc = createGoogleAccessToken(longAccessToken, longAccessToken, "http://someScope");
+        socialNetworkService.updateOAuthInfo(getGoogleProvider(), user1.getUserName(), "googleUsername1", grc);
+        assertEquals(grc, socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
+
+        socialNetworkService.removeOAuthAccessToken(getGoogleProvider(), user1.getUserName());
+        assertNull(socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
+
+        // TWITTER
+        TwitterAccessTokenContext twitterToken = new TwitterAccessTokenContext(longAccessToken, longAccessToken);
+        socialNetworkService.updateOAuthAccessToken(getTwitterProvider(), user1.getUserName(), twitterToken);
+        assertEquals(twitterToken, socialNetworkService.getOAuthAccessToken(getTwitterProvider(), user1.getUserName()));
+
+        twitterToken = new TwitterAccessTokenContext(shortAccessToken, shortAccessToken);
+        socialNetworkService.updateOAuthAccessToken(getTwitterProvider(), user1.getUserName(), twitterToken);
+        assertEquals(twitterToken, socialNetworkService.getOAuthAccessToken(getTwitterProvider(), user1.getUserName()));
     }
 
     public void testAccessTokensWithMoreScopes() throws Exception {
@@ -291,6 +309,18 @@ public class TestSocialNetworkService extends AbstractKernelTest {
             scope = new String[] { "email" };
         }
         return new FacebookAccessTokenContext(accessToken, scope);
+    }
+
+    /**
+     * Get string of length 800
+     * @return
+     */
+    private String createLongString() {
+        StringBuilder builder = new StringBuilder("1324567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+        for (int i=0 ; i<3 ; i++) {
+            builder.append(builder);
+        }
+        return builder.toString();
     }
 
 }
