@@ -134,7 +134,8 @@
         // TODO: It should NOT force assigning an ID value for a transient model 
         var newChild = application.clone();
         targetContainer.addChild(newChild, {at: idx});
-        newChild.fetchContent();
+        var pagePath = $('.pageBody').attr('data-pagePath');
+        newChild.fetchContent(pagePath);
 
         // Remove dropped item
         $(ui.item).remove();

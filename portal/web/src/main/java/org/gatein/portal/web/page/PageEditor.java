@@ -39,6 +39,8 @@ import juzu.impl.common.JSON;
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
 import juzu.request.ResourceContext;
+import juzu.request.ViewContext;
+
 import org.gatein.common.net.media.MediaType;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.common.util.SimpleMultiValuedPropertyMap;
@@ -72,6 +74,8 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
+import org.gatein.portal.web.page.spi.RenderTask;
+import org.gatein.portal.web.page.spi.WindowContent;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
@@ -116,8 +120,8 @@ public class PageEditor {
     }
 
     @Resource
-    @Route(value = "/portlets")
-    public Response getAllPortlets() throws Exception {
+    @Route(value = "/contents")
+    public Response getAllContents() throws Exception {
         JSONArray result = new JSONArray();
         Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
         for(Portlet portlet : portlets) {
@@ -175,113 +179,21 @@ public class PageEditor {
      */
     @Resource
     @Route(value = "/getContent")
-    public Response getContent(@Param(name = "javax.portlet.content") String contentId) {
-        JSON result = new JSON();
+    public Response getContent(@Param(name = "javax.portlet.content") String contentId, @Param(name = "javax.portlet.path") String path) {
+        WindowContent content = contentProvider.getContent(contentId);
+        PageContext.Builder pageBuilder = new PageContext.Builder(contentProvider, customizationService, path);
+        RenderTask task = contentProvider.createRender(new WindowContext("", content , pageBuilder.build()));
+        Result result = task.execute(Request.getCurrent().getUserContext().getLocale());
+        if (result instanceof Result.Fragment) {
+            Result.Fragment fragment = (Result.Fragment) result;
 
-        ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
-        PortletInvocationResponse response = null;
-        PortletInvokerException failure = null;
-        try {
-
-            //            
-            RenderInvocation invocation = new RenderInvocation(new PortletInvocationContext() {                
-                @Override
-                public void renderURL(Writer arg0, ContainerURL arg1, URLFormat arg2) throws IOException {                    
-                }
-
-                @Override
-                public String renderURL(ContainerURL containerURL, URLFormat format) {
-                    return "";
-                }
-
-                @Override
-                public MediaType getResponseContentType() {
-                    return MediaType.TEXT_HTML;
-                }
-
-                @Override
-                public String encodeResourceURL(String arg0) throws IllegalArgumentException {
-                    return null;
-                }
-            });
-
-            invocation.setClientContext(new ClientContext() {
-
-                @Override
-                public MultiValuedPropertyMap<String> getProperties() {
-                    return new SimpleMultiValuedPropertyMap<String>();
-                }
-
-                @Override
-                public String getMethod() {
-                    return "GET";
-                }
-
-                @Override
-                public List<Cookie> getCookies() {
-                    return Collections.emptyList();
-                }
-            });
-
-            org.gatein.pc.api.Portlet portlet;
-            PortletInvoker invoker = portletAppManager.getInvoker();
-            try {
-                String[] id = contentId.split("/");
-                if (id.length == 2) {
-                    portlet = invoker.getPortlet(PortletContext.createPortletContext(id[0], id[1]));
-                } else {
-                    throw new Exception("Could not handle " + contentId);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                portlet = null;
-            }
-
-            invocation.setPortalContext(new AbstractPortalContext());
-            invocation.setInstanceContext(new AbstractInstanceContext(contentId, AccessMode.READ_ONLY));
-            invocation.setWindowContext(new AbstractWindowContext(contentId));
-            invocation.setUserContext(new AbstractUserContext());
-            invocation.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
-            invocation.setRequest(Context.getCurrentRequest());
-            invocation.setResponse(Context.getCurrentResponse());
-            invocation.setTarget(portlet.getContext());
-            invocation.setMode(Mode.VIEW);
-            invocation.setWindowState(org.gatein.pc.api.WindowState.NORMAL);
-            invocation.setNavigationalState(null);
-            invocation.setPublicNavigationalState(null);
-
-            //
-            response = invoker.invoke(invocation);
-        } catch (PortletInvokerException e) {
-            failure = e;
-        } finally {
-            lifeCycle.resume();
-        }
-
-        if (failure != null) {
-            failure.printStackTrace();
-            result.set("error", "Can't render portlet");
-
-            //500 Internal Server Error
-            return Response.status(500).body(result.toString()).withCharset(Charset.forName("UTF-8"))
+            //200 OK
+            return Response.status(200).body(new JSON().set("title", fragment.title).set("content", fragment.content).toString()).withCharset(Charset.forName("UTF-8"))
                     .withMimeType("application/json");
         } else {
-            if (response instanceof FragmentResponse) {
-                FragmentResponse fragment = (FragmentResponse) response;    
-                String title = fragment.getTitle();
-                result.set("title", title);
-                result.set("content", fragment.getContent());
-
-                //200 OK
-                return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8"))
-                        .withMimeType("application/json");
-            } else {
-                //throw new UnsupportedOperationException("Not yet handled " + response);
-
-                //501 Not Implemented
-                return Response.status(501).body("Not yet handled " + response).withCharset(Charset.forName("UTF-8"))
-                        .withMimeType("application/json");
-            }
+            //501 Not Implemented
+            return Response.status(501).body("Not yet handled " + result).withCharset(Charset.forName("UTF-8"))
+                    .withMimeType("application/json");
         }
     }
 

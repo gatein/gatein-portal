@@ -51,10 +51,10 @@
 
     // Fetch application content and update the 'content' attribute in the success callback
     // TODO: It should be moved to View component, specifically in render view
-    fetchContent: function() {
+    fetchContent: function(pagePath) {
       //TODO: fetchContentURL should be set on init
       var contentId = this.get("applicationName") + "/" + this.get("name");
-      var url = "/portal/getContent?javax.portlet.content=" + contentId;
+      var url = "/portal/getContent?javax.portlet.content=" + contentId + "&javax.portlet.path=" + pagePath;
 
       //Delegate to Model#fetch
       this.fetch({url: url});

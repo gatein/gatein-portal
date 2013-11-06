@@ -18,6 +18,7 @@
  */
 package org.gatein.portal.web.page;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class PageData {
 
     public PageData(String path) {
         this.path = path;
-        this.parameters = null;
+        this.parameters = Collections.emptyMap();
     }
 
     public PageData(PageData state) {
