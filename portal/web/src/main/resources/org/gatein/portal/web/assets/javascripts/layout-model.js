@@ -73,10 +73,10 @@
     initialize : function(attributes, options) {
       LayoutComponent.prototype.initialize.apply(this, arguments);
 
-      if (!options || !options._children) {
+      if (!options || !options.model) {
         this._children = new Backbone.Collection();
-      } else if (options._children){
-        this._children = options._children;
+      } else if (options.model){
+        this._children = new Backbone.Collection([], {model : options.model});
       }
       
       //TODO: it seems to me that using listenTo makes this code more clear
@@ -203,10 +203,10 @@
 
       Container.prototype.initialize.apply(this, arguments);
       
-      if (!options || !options._children) {
+      if (!options || !options.model) {
         this._children = new Backbone.Collection();
-      } else if (options._children){
-        this._children = options._children;
+      } else if (options.model){
+        this._children = new Backbone.Collection([], {model : options.model});
       }
       
       this.snapshot = this._children;
