@@ -128,7 +128,7 @@
 
         //Add new application
         var composerView = window.editorView.getComposerView();
-        var application = composerView.apps.findWhere({ 'name' : $dragObj.attr("data-name")});
+        var application = composerView.apps.findWhere({ 'contentId' : $dragObj.attr("data-contentId")});
 
         // Clone and generate id for new application
         // TODO: It should NOT force assigning an ID value for a transient model 
@@ -216,7 +216,7 @@
         },
         error: function(model, xhr, options) {
           //TODO: need to define a unified error handler on UI
-          alert("error when save");
+          $('html').html(xhr.responseText);
         }
       });
       return this;
@@ -286,7 +286,8 @@
             'content' : content,
             'title' : title
           });
-
+          
+          new ApplicationView({model : app});
           container.addChild(app);
         });
 

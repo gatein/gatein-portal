@@ -53,7 +53,7 @@
 </div>
 <!-- Templat for portlet in composer -->
 <script type="text/template" id="portlet-template">
-    <li data-name="${"<%- name %>"}">
+    <li data-contentId="${"<%- contentId %>"}">
         <div class="draggable">
             <img alt="${"<%- name %>"}" src="${"<%- logo %>"}"/>
             <p>${"<%- title %>"}</p>

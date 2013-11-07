@@ -255,9 +255,7 @@ public class JSONContainerAdapter implements ModelAdapter<JSONObject, ElementSta
 
             } else if ("application".equalsIgnoreCase(type)) {
                 //create new window
-                String name = json.getString("name");
-                String applicationName = json.getString("applicationName");
-                String contentId = applicationName + "/" + name;
+                String contentId = json.getString("contentId");
                 TransientApplicationState state = new TransientApplicationState(contentId);
 
                 return new ElementState.Window(ApplicationType.PORTLET, state, null, null, null, false, false, false, null, null, null, null, null);
@@ -266,6 +264,7 @@ public class JSONContainerAdapter implements ModelAdapter<JSONObject, ElementSta
                 throw new UnsupportedOperationException();
             }
         } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         return null;

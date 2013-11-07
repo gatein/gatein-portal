@@ -20,50 +20,22 @@
 package org.gatein.portal.web.page;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
-import javax.servlet.http.Cookie;
 import juzu.Param;
 import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
-import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
 import juzu.request.ResourceContext;
-import juzu.request.ViewContext;
-
-import org.gatein.common.net.media.MediaType;
-import org.gatein.common.util.MultiValuedPropertyMap;
-import org.gatein.common.util.SimpleMultiValuedPropertyMap;
-import org.gatein.pc.api.ContainerURL;
-import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.Portlet;
-import org.gatein.pc.api.PortletContext;
-import org.gatein.pc.api.PortletInvoker;
-import org.gatein.pc.api.PortletInvokerException;
-import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.PortletInfo;
-import org.gatein.pc.api.invocation.RenderInvocation;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
-import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.gatein.pc.api.spi.ClientContext;
-import org.gatein.pc.api.spi.PortletInvocationContext;
-import org.gatein.pc.api.state.AccessMode;
-import org.gatein.pc.portlet.impl.spi.AbstractInstanceContext;
-import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
-import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
-import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
-import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
@@ -78,7 +50,6 @@ import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
-import org.gatein.portal.web.servlet.Context;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -124,14 +95,14 @@ public class PageEditor {
     public Response getAllContents() throws Exception {
         JSONArray result = new JSONArray();
         Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
-        for(Portlet portlet : portlets) {
+        for (Portlet portlet : portlets) {
             PortletInfo info = portlet.getInfo();
             MetaInfo meta = info.getMeta();
 
             JSONObject item = new JSONObject();
-            item.put("name", info.getName());
+            item.put("contentId", info.getApplicationName() + "/" + info.getName());
+            item.put("contentType", "portlet");
             item.put("title", meta.getMetaValue("title").getDefaultString());
-            item.put("applicationName", info.getApplicationName());
 
             result.put(item);
         }
@@ -179,7 +150,8 @@ public class PageEditor {
      */
     @Resource
     @Route(value = "/getContent")
-    public Response getContent(@Param(name = "javax.portlet.content") String contentId, @Param(name = "javax.portlet.path") String path) {
+    //TODO: the contentType is not used for now
+    public Response getContent(@Param(name = "javax.portlet.contentId") String contentId, @Param(name = "javax.portlet.contentType") String contentType, @Param(name = "javax.portlet.path") String path) {
         WindowContent content = contentProvider.getContent(contentId);
         PageContext.Builder pageBuilder = new PageContext.Builder(contentProvider, customizationService, path);
         RenderTask task = contentProvider.createRender(new WindowContext("", content , pageBuilder.build()));
