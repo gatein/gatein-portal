@@ -33,14 +33,9 @@
 })
 @WithAssets({
     "bootstrap",
-    "editor",
     "jquery",
     "jquery-ui",
-	"bootstrapjs",
-    "underscore",
-    "backbone",
-    "layout-model",
-    "layout-view"
+	"bootstrapjs"
 })
 package org.gatein.portal.web;
 
@@ -66,5 +61,3 @@ import org.gatein.portal.web.page.Controller;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;
-import org.gatein.portal.web.kernel.KernelFilter;
-import org.gatein.portal.web.portlet.PortletAppManager;

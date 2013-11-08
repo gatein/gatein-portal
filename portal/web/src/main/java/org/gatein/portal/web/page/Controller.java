@@ -259,7 +259,11 @@ public class Controller {
                             new RenderingContext(path, page.getLayoutId(), page.getKey().format(), "edit".equals(phase)));
 
                     //
-                    return rp.execute(siteLayout, pageLayout, context);
+                    Response.Content content = (Response.Content)rp.execute(siteLayout, pageLayout, context);
+                    if (phase != null && "edit".equals(phase)) {
+                        content.withAssets("editor", "underscore", "backbone", "layout-model", "layout-view");
+                    }
+                    return content;
                 }
             }
         } else {
