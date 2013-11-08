@@ -37,6 +37,7 @@
     "jquery-ui",
 	"bootstrapjs"
 })
+@Tags(@Tag(name = "window", path = "window.gtmpl"))
 package org.gatein.portal.web;
 
 import juzu.Application;
@@ -45,6 +46,8 @@ import juzu.plugin.asset.Assets;
 import juzu.plugin.asset.WithAssets;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
+import juzu.template.Tag;
+import juzu.template.Tags;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.sso.SSOHelper;
