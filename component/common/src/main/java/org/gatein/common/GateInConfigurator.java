@@ -39,19 +39,13 @@ import java.util.Set;
 
 public class GateInConfigurator implements Startable {
 
-    /**
-     * .
-     */
+    /** . */
     private static final Logger log = LoggerFactory.getLogger(GateInConfigurator.class);
 
-    /**
-     * .
-     */
+    /** . */
     public static String JAAS_KEY = "java.security.auth.login.config";
 
-    /**
-     * .
-     */
+    /** . */
     public static String DEFAULT_PATH = "/conf/jaas.conf";
 
     public GateInConfigurator(InitParams params, ConfigurationManager confManager) {

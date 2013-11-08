@@ -327,33 +327,33 @@ Mongo host and ports can be configured:
 
 # Configuration
 
-Since GateIn 4, we integrated Typesafe Config library and follow its standard behavior to organize portal and services configuration. The `GateInConfigurator` component service is currently taking care of the integration, load config and propagates it to `PropertyManager`.
+## Property based configuration
+
+Since GateIn 4, we integrated [Typesafe Config](https://github.com/typesafehub/config) library and follow its standard behavior
+to organize portal and services configuration. The `GateInConfigurator` component service is currently taking care of the
+integration, load config and propagates its content to the `PropertyManager`.
 
 By default, it loads the following in precedence:
 - `system properties`
 - `application.{conf, json, properties}` (all resources on classpath with this name)
 - `reference.conf` (all resources on classpath with this name)
 
-The idea is that libraries and services should ship with a `reference.conf` (default configuration) in their jar. Portal application provides a default `application.conf` (in component.common project), or you can configure to load your own `myconfig.conf` instead.
+The idea is that libraries and services should ship with a `reference.conf` (default configuration) in their jar. Portal
+application provides a default `application.conf` (not yet implemented), or you can configure to load your own configuration
+instead.
 
-## Use a custom portal application configuration
+Since GateIn 4 relies on Typesafe Config, you can learn more about the configuration mechanism in
+the [documentation](https://github.com/typesafehub/config#standard-behavior).
 
-First, you can specify the location path of your own `myconfig.conf` via the initial parameter `application.conf.file` of `GateInConfigurator` service. By doing this, it delegates `ConfigurationManager` to looking for the file, then parse/load the custom `config`.
+todo: study config [merge](https://github.com/typesafehub/config#merging-config-trees)
 
-For example:
+## Tomcat Jaas configuration
 
-    <component>
-      <type>org.gatein.common.GateInConfigurator</type>
-      <init-params>
-        <value-param>
-          <name>application.conf.file</name>
-          <value>jar:/conf/myconfig.conf</value>
-        </value-param> 
-      </init-params>
-    </component>
+Tomcat authentication can be [configured via JAAS](http://tomcat.apache.org/tomcat-7.0-doc/realm-howto.html#JAASRealm). However
+this configuration requires a JVM property to be set for using the correct configuration file.
 
-
-If the `application.conf.file` param is not specified, you can use following system properties which are natively supported by `Typesafe Config` to force a different config source:
-- `config.resource` specifies a resource name - not a basename, i.e. application.conf not application
-- `config.file` specifies a filesystem path, again it should include the extension, not be a basename
-- `config.url` specifies a URL
+To work around this, GateIn 4 autoconfigures a JVM property to a default JAAS configuration:
+- when the system property `java.security.auth.login.config` is not set a default file is autoconfigured
+    - from `conf/jaas.conf` of the server
+    - otherwise from the `conf/jaas.conf` from the classpath (that is provided by default)
+- when the system property is set then this value is used without any extra work
