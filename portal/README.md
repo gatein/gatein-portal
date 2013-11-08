@@ -245,18 +245,6 @@ The XML for site looks like
 - `label` is replaced by `display-name`
 - new zone based layout
 
-# Todo list (close scope)
-
-* Try to change the `javax.portlet.` prefix to a reserved char among the *RFC3986_PCHAR*:
-    * Need to distinguish the origin of the parameter and only consider parameters from the request and not HTTP post. To achieve this,
-      Juzu needs to be modified to add the request parameter origin in the `juzu.request.RequestParameter` object.
-    * The reserved char must be part of *RFC3986_PCHAR* chars for the *path segment* and *query string parameter name*
-* Portlet eventing
-* Group and user navigations
-* Session scoped parameters
-* Http Header support
-* Cookie support
-
 # Model Object for Portal (MOP)
 
 ## Storage
@@ -308,22 +296,6 @@ Mongo host and ports can be configured:
 * OAuth: Enable user login with Facebook, twitter and google
 * SSO: only tested with CAS, JOSSO and OpenAM server
 
-## Todo
-
-* Now, we hard-code login and logout link: should get these link programmaticaly
-* How to build initURL when login and logout (the page should redirect to when login and logout success)
-* Should use resource bundle in all of text (now is hard-code)
-* In login module: `requestContext.getSecurityContext().getRemoteUser()` alway return null when user logged in or not
-* In login module: have `ServletAccessValve` class, this class need in jar in lib folder of tomcat. But with current packaging, we not put any jar into lib folder.
-  I put a new Filter `OAuthPreFilter` to do as `ServletAccessValve` class.
-* When config SSO with JOSSO, have a config refer to configuration.properties file:
-  `gatein.sso.josso.properties.file=file:${jboss.home.dir}/standalone/configuration/gatein/configuration.properties`
-  Should not use this config
-* In SSO: have some auth callback to gatein (for verify username/password with user/password at gatein database)
-  This call back work base REST. But now can not port REST.war from 3.5 to gatein 4. Because it does not work (In REST context can not to get PortalContainer because it's loaded by other classloader).
-  So now, when config sso call back with HTTP POST method will not work
-* Need to test SSO with: SPNEGO, SAML2 and Cluster SSO.
-
 
 # Configuration
 
@@ -345,8 +317,6 @@ instead.
 Since GateIn 4 relies on Typesafe Config, you can learn more about the configuration mechanism in
 the [documentation](https://github.com/typesafehub/config#standard-behavior).
 
-todo: study config [merge](https://github.com/typesafehub/config#merging-config-trees)
-
 ## Tomcat Jaas configuration
 
 Tomcat authentication can be [configured via JAAS](http://tomcat.apache.org/tomcat-7.0-doc/realm-howto.html#JAASRealm). However
@@ -357,3 +327,37 @@ To work around this, GateIn 4 autoconfigures a JVM property to a default JAAS co
     - from `conf/jaas.conf` of the server
     - otherwise from the `conf/jaas.conf` from the classpath (that is provided by default)
 - when the system property is set then this value is used without any extra work
+
+# Todo
+
+## General todo
+
+* Try to change the `javax.portlet.` prefix to a reserved char among the *RFC3986_PCHAR*:
+    * Need to distinguish the origin of the parameter and only consider parameters from the request and not HTTP post. To achieve this,
+      Juzu needs to be modified to add the request parameter origin in the `juzu.request.RequestParameter` object.
+    * The reserved char must be part of *RFC3986_PCHAR* chars for the *path segment* and *query string parameter name*
+* Portlet eventing
+* Group and user navigations
+* Session scoped parameters
+* Http Header support
+* Cookie support
+
+## Config todo
+
+* study config [merge](https://github.com/typesafehub/config#merging-config-trees)
+
+## Security todo
+
+* Now, we hard-code login and logout link: should get these link programmaticaly
+* How to build initURL when login and logout (the page should redirect to when login and logout success)
+* Should use resource bundle in all of text (now is hard-code)
+* In login module: `requestContext.getSecurityContext().getRemoteUser()` alway return null when user logged in or not
+* In login module: have `ServletAccessValve` class, this class need in jar in lib folder of tomcat. But with current packaging, we not put any jar into lib folder.
+  I put a new Filter `OAuthPreFilter` to do as `ServletAccessValve` class.
+* When config SSO with JOSSO, have a config refer to configuration.properties file:
+  `gatein.sso.josso.properties.file=file:${jboss.home.dir}/standalone/configuration/gatein/configuration.properties`
+  Should not use this config
+* In SSO: have some auth callback to gatein (for verify username/password with user/password at gatein database)
+  This call back work base REST. But now can not port REST.war from 3.5 to gatein 4. Because it does not work (In REST context can not to get PortalContainer because it's loaded by other classloader).
+  So now, when config sso call back with HTTP POST method will not work
+* Need to test SSO with: SPNEGO, SAML2 and Cluster SSO.
