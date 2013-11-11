@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.HashSet;
 
 import junit.framework.AssertionFailedError;
 
@@ -48,6 +49,9 @@ import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
+import org.exoplatform.services.security.Identity;
+import org.exoplatform.services.security.IdentityRegistry;
+import org.exoplatform.services.security.MembershipEntry;
 import org.gatein.api.navigation.NodePath;
 import org.gatein.api.oauth.OAuthProviderAccessor;
 import org.gatein.api.page.PageId;
@@ -78,6 +82,8 @@ public class AbstractApiTest {
     protected Portal portal;
 
     protected SiteId defaultSiteId;
+    
+    protected IdentityRegistry identityRegistry;
 
     @After
     public void after() throws Exception {
@@ -95,8 +101,13 @@ public class AbstractApiTest {
         container = kernelLifeCycle.getContainer();
         portal = (Portal) container.getComponentInstanceOfType(Portal.class);
         assertNotNull("Portal component not found in container", portal);
+        identityRegistry = (IdentityRegistry) container.getComponentInstanceOfType(IdentityRegistry.class);
 
         RequestLifeCycle.begin(container);
+        HashSet<MembershipEntry> memberships = new HashSet<MembershipEntry>();
+        memberships.add(new MembershipEntry("/platform/users", "member"));
+        Identity john = new Identity("john", memberships);
+        identityRegistry.register(john);
 
         BasicPortalRequest.setInstance(new BasicPortalRequest(new User("john"), defaultSiteId, NodePath.root(), Locale.ENGLISH,
                 portal, new BasicPortalRequest.BasicURIResolver("/portal")));

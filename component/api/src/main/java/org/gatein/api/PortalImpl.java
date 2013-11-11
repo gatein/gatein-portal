@@ -57,6 +57,7 @@ import org.gatein.api.page.Page;
 import org.gatein.api.page.PageId;
 import org.gatein.api.page.PageImpl;
 import org.gatein.api.page.PageQuery;
+import org.gatein.api.security.Membership;
 import org.gatein.api.security.Permission;
 import org.gatein.api.security.User;
 import org.gatein.api.site.Site;
@@ -359,7 +360,9 @@ public class PortalImpl implements Portal {
 
     @Override
     public boolean hasPermission(User user, Permission permission) {
-        String expPerm = StringJoiner.joiner(",").join(Util.from(permission));
+        if(permission.isAccessibleToEveryone()) {
+            return true;
+        }
 
         Identity identity;
         if (user == User.anonymous()) {
@@ -391,7 +394,13 @@ public class PortalImpl implements Portal {
         }
 
         try {
-            return acl.hasPermission(identity, expPerm);
+            for(Membership membership : permission.getMemberships()) {
+                if(acl.hasPermission(identity, membership.toString())) {
+                    return true;
+                }
+            }
+            return false;
+
         } catch (Throwable t) {
             throw new ApiException("Failed to check permissions", t);
         }
