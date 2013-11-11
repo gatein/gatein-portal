@@ -29,8 +29,10 @@ import static org.gatein.api.Assert.assertNull;
 import static org.gatein.api.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.gatein.api.common.Attributes;
@@ -40,6 +42,7 @@ import org.gatein.api.page.Page;
 import org.gatein.api.page.PageId;
 import org.gatein.api.page.PageQuery;
 import org.gatein.api.security.Group;
+import org.gatein.api.security.Membership;
 import org.gatein.api.security.Permission;
 import org.gatein.api.security.User;
 import org.gatein.api.site.Site;
@@ -557,6 +560,31 @@ public class PortalImplTest extends AbstractApiTest {
         assertTrue(portal.hasPermission(User.anonymous(), page.getAccessPermission()));
         assertFalse(portal.hasPermission(User.anonymous(), page.getEditPermission()));
     }
+
+    @Test
+    public void hasMultiplePermission() {
+        createSite(new SiteId("permissions"));
+
+        Page page = portal.createPage(new PageId("permissions", "page1"));
+        Set<Membership> memberships = new LinkedHashSet<Membership>(2);
+        memberships.add(new Membership("*", new Group("/platform/administrators")));
+        memberships.add(new Membership("*", new Group("/platform/users")));
+        page.setAccessPermission(new Permission(memberships));
+        page.setEditPermission(new Permission("*", new Group("/platform/administrators")));
+        portal.savePage(page);
+
+        page = portal.getPage(page.getId());
+
+        assertTrue(portal.hasPermission(new User("root"), page.getAccessPermission()));
+        assertTrue(portal.hasPermission(new User("root"), page.getEditPermission()));
+
+        assertFalse(portal.hasPermission(User.anonymous(), page.getAccessPermission()));
+        assertFalse(portal.hasPermission(User.anonymous(), page.getEditPermission()));
+        
+        assertTrue(portal.hasPermission(new User("john"), page.getAccessPermission()));
+        assertFalse(portal.hasPermission(new User("john"), page.getEditPermission()));
+        
+    }    
 
     @Test
     public void hasPermission_User() {
