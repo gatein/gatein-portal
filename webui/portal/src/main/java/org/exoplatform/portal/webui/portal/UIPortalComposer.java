@@ -371,6 +371,7 @@ public class UIPortalComposer extends UIContainer {
             UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
 
             UIPortal uiPortal = uiWorkingWS.getBackupUIPortal();
+            uiPortal.refreshUIPage();
             siteBody.setUIComponent(uiPortal);
 
             UserNode currentNode = uiPortal.getSelectedUserNode();
@@ -428,17 +429,9 @@ public class UIPortalComposer extends UIContainer {
                 if (pConfig != null) {
                     prContext.getUserPortalConfig().setPortalConfig(pConfig);
                 }
-                uiPortal.getChildren().clear();
-                PortalDataMapper.toUIPortal(uiPortal, prContext.getUserPortalConfig().getPortalConfig());
 
                 // Update the cache of UIPortal from UIPortalApplication
-                uiPortalApp.putCachedUIPortal(uiPortal);
-                uiPortalApp.setCurrentSite(uiPortal);
-
-                // To init the UIPage, that fixed a bug on AdminToolbarPortlet when edit the layout. Here is only a
-                // temporal solution. Complete solution is to avoid mapping UIPortal -- model, that requires
-                // multiple UIPortal (already available) and concept of SiteConfig
-                uiPortal.refreshUIPage();
+                uiPortalApp.refreshCachedUI();
 
                 UserNode currentNode = uiPortal.getSelectedUserNode();
                 SiteKey siteKey = currentNode.getNavigation().getKey();
@@ -582,10 +575,11 @@ public class UIPortalComposer extends UIContainer {
 
             UIPortal uiPortal = uiPortalApp.getCurrentSite();
             uiPortal.setRenderSibling(UIPortal.class);
+
+            uiPortalApp.refreshCachedUI();
+
             UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
             composer.setEditted(false);
-
-            uiPortal.refreshUIPage();
 
             UserNode currentNode = uiPortal.getSelectedUserNode();
             SiteKey siteKey = currentNode.getNavigation().getKey();
@@ -623,7 +617,6 @@ public class UIPortalComposer extends UIContainer {
             /*
              * if it is a edition of the current page and it is not available to current remote user anymore.
              */
-            PortalRequestContext pContext = Util.getPortalRequestContext();
             PageKey pageKey = PageKey.parse(pageId);
             if (page.getStorageId() != null && portalConfigService.getPageService().loadPage(pageKey) == null) {
                 uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[] { pageId },
@@ -657,7 +650,6 @@ public class UIPortalComposer extends UIContainer {
             }
 
             // Perform model update
-            UserPortalConfigService configService = uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
             DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
             PageService pageService = uiWorkingWS.getApplicationComponent(PageService.class);
             try {
@@ -672,16 +664,8 @@ public class UIPortalComposer extends UIContainer {
             }
             uiToolPanel.setUIComponent(null);
 
-            // Synchronize model object with UIPage object, that seems redundant but in fact
-            // mandatory to have consequent edit actions (on the same page) work properly
-            uiPage.getChildren().clear();
-            page = dataService.getPage(page.getPageId());
-            PageContext pageContext = configService.getPage(pageKey);
-            pageContext.update(page);
-            PortalDataMapper.toUIPage(uiPage, page);
-
-            // Invalidate UIPage cache on UIPortal
-            uiPortalApp.invalidateUIPage(pageId);
+            // Invalidate UI cached
+            uiPortalApp.refreshCachedUI();
 
             if (PortalProperties.SESSION_ALWAYS.equals(uiPortal.getSessionAlive())) {
                 uiPortalApp.setSessionOpen(true);
@@ -693,9 +677,8 @@ public class UIPortalComposer extends UIContainer {
             Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
 
             UserNode currentNode = uiPortal.getSelectedUserNode();
-            SiteKey siteKey = currentNode.getNavigation().getKey();
             PageNodeEvent<UIPortalApplication> pnevent = new PageNodeEvent<UIPortalApplication>(uiPortalApp,
-                    PageNodeEvent.CHANGE_NODE, siteKey, currentNode.getURI());
+                    PageNodeEvent.CHANGE_NODE, currentNode.getNavigation().getKey(), currentNode.getURI());
             uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
             JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();

@@ -29,6 +29,7 @@ import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.Text;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -141,6 +142,12 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             }
 
             context.addUIComponentToUpdateByAjax(uicomponent);
+        } catch (NoSuchDataException e) {
+            UIPortalApplication uiApp = Util.getUIPortalApplication();
+            uiApp.refreshCachedUI();
+            ApplicationMessage msg = new ApplicationMessage("UIPortlet.message.staleData", null,
+                    ApplicationMessage.WARNING);
+            uiApp.addMessage(msg);
         } catch (Exception e) {
             String message = e.getLocalizedMessage();
             log.error("Error processing the action: " + message, e);
@@ -201,11 +208,17 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                 portletExceptionService.handle(pcException);
             }
 
-            // Log the error
-            log.error("Portlet render threw an exception", pcException);
+            if (e instanceof NoSuchDataException) {
+                UIPortalApplication uiApp = Util.getUIPortalApplication();
+                uiApp.refreshCachedUI();
+                markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.staleData"));
+            } else {
+                // Log the error
+                log.error("Portlet render threw an exception", pcException);
 
-            //
-            markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
+                //
+                markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
+            }
         }
 
         //

@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import javax.servlet.http.HttpServletResponse;
+
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
@@ -35,8 +37,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
@@ -45,7 +45,9 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
@@ -267,6 +269,35 @@ public class UIPortalApplication extends UIApplication {
     public void invalidateUIPage(String pageRef) {
         for (UIPortal tmp : all_UIPortals.values()) {
             tmp.clearUIPage(pageRef);
+        }
+    }
+
+    public void refreshCachedUI() throws Exception {
+        DataStorage storage = this.getApplicationComponent(DataStorage.class);
+        all_UIPortals.clear();
+
+        UIPortal uiPortal = getCurrentSite();
+        if (uiPortal != null) {
+            SiteKey siteKey = uiPortal.getSiteKey();
+
+            UIPortal tmp = null;
+            PortalConfig portalConfig = storage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
+            if (portalConfig != null) {
+                tmp = this.createUIComponent(UIPortal.class, null, null);
+                PortalDataMapper.toUIPortal(tmp, portalConfig);
+                this.putCachedUIPortal(tmp);
+                tmp.setNavPath(uiPortal.getNavPath());
+                tmp.refreshUIPage();
+
+                setCurrentSite(tmp);
+                if (SiteType.PORTAL.equals(siteKey.getType())) {
+                    PortalRequestContext pcontext = Util.getPortalRequestContext();
+                    if (pcontext != null) {
+                        UserPortalConfig userPortalConfig = pcontext.getUserPortalConfig();
+                        userPortalConfig.setPortalConfig(portalConfig);
+                    }
+                }
+            }
         }
     }
 
