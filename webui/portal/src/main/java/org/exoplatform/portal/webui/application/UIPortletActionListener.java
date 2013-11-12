@@ -27,6 +27,7 @@ import org.exoplatform.commons.utils.Safe;
 
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -390,7 +391,7 @@ public class UIPortletActionListener {
 
                     //
                     log.trace("Try to get a resource of type: " + contentType + " for the portlet: "
-                            + uiPortlet.getPortletContext());
+                            + uiPortlet.getId());
                     if (piResponse.getChars() != null) {
                         content = piResponse.getChars();
                     } else if (piResponse.getBytes() != null) {
@@ -434,6 +435,10 @@ public class UIPortletActionListener {
 
                 //
                 response.flushBuffer();
+            } catch (NoSuchDataException e) {
+                UIPortalApplication uiApp = Util.getUIPortalApplication();
+                uiApp.refreshCachedUI();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
             } catch (Exception e) {
                 if (!e.getClass().toString().contains("ClientAbortException")) {
                     log.error("Problem while serving resource " + (resourceId != null ? resourceId : "") + " for the portlet: "

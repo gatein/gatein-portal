@@ -26,6 +26,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -217,8 +218,8 @@ public class UIMainActionListener {
             // check edit permission for page
             UserACL userACL = currentPortal.getApplicationComponent(UserACL.class);
             UIPage uiPage = currentPortal.findFirstComponentOfType(UIPage.class);
-            Page page = PortalDataMapper.toPageModel(uiPage);
-            if (userACL.hasEditPermission(page)) {
+            SiteKey siteKey = uiPage.getSiteKey();
+            if (userACL.hasEditPermissionOnPage(siteKey.getTypeName(), siteKey.getName(), uiPage.getEditPermission())) {
                 return true;
             } else {
                 portalApp.addMessage(

@@ -36,6 +36,7 @@ import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -441,7 +442,9 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
             // Save
             try {
                 service.saveDashboard(dashboard);
-            } catch (StaleModelException e) {
+            } catch (Exception e) {
+                UIPortalApplication uiApp = Util.getUIPortalApplication();
+                uiApp.refreshCachedUI();
                 WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
                 context.getUIApplication().addMessage(
                         new ApplicationMessage("UIDashboard.msg.StaleData", null, ApplicationMessage.ERROR));
