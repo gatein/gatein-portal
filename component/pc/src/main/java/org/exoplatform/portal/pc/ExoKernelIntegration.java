@@ -69,6 +69,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
     private final ExoContainer container;
 
     /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
+    @SuppressWarnings("unused")
     private final ResourceBundleService resourceBundleService;
 
     /**
@@ -119,14 +120,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
         // Container Stack
         ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
 
-        // Check if we already have a federating portlet invoker
-        final ExoContainer topContainer = ExoContainerContext.getTopContainer();
-        FederatingPortletInvoker federatingPortletInvoker = (FederatingPortletInvoker) topContainer
-                .getComponentInstanceOfType(FederatingPortletInvoker.class);
-        if (federatingPortletInvoker == null) {
-            federatingPortletInvoker = new FederatingPortletInvokerService();
-            topContainer.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
-        }
+        FederatingPortletInvoker federatingPortletInvoker = new FederatingPortletInvokerService();
 
         EventPayloadInterceptor eventPayloadInterceptor = new EventPayloadInterceptor();
         eventPayloadInterceptor.setNext(portletContainerDispatcher);
