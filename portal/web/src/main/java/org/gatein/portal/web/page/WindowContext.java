@@ -30,8 +30,6 @@ import juzu.io.Encoding;
 import juzu.request.Phase;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
-import org.gatein.portal.web.page.spi.RenderTask;
-import org.gatein.portal.web.page.spi.WindowContent;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -94,7 +92,7 @@ public class WindowContext {
      * @return the callable for rendering a portlet
      */
     public RenderTask createRenderTask() {
-        return page.portletManager.createRender(this);
+        return state.createRender(this);
     }
 
     public Response serveResource(String id, Map<String, String[]> resourceState) {

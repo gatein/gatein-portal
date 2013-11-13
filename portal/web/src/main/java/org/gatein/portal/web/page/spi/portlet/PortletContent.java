@@ -37,6 +37,8 @@ import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.portal.web.page.Decoder;
 import org.gatein.portal.web.page.Encoder;
 import org.gatein.portal.web.page.NodeState;
+import org.gatein.portal.web.page.WindowContext;
+import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
 import org.gatein.portal.web.page.Decoder;
 
@@ -54,6 +56,9 @@ class PortletContent extends WindowContent {
     /** . */
     static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
+    /** . */
+    public final PortletContentProvider provider;
+
     /** The portlet window parameters. */
     public Map<String, String[]> parameters;
 
@@ -66,7 +71,11 @@ class PortletContent extends WindowContent {
     /** The related portlet or null if it cannot be located. */
     public final Portlet portlet;
 
-    PortletContent(Portlet portlet) {
+    PortletContent(PortletContentProvider provider, Portlet portlet) {
+        if (portlet == null) {
+            throw new NullPointerException("Portlet cannot be null");
+        }
+        this.provider = provider;
         this.parameters = null;
         this.windowState = null;
         this.mode = null;
@@ -88,10 +97,16 @@ class PortletContent extends WindowContent {
         }
 
         //
+        this.provider = that.provider;
         this.parameters = parameters;
         this.windowState = that.windowState;
         this.mode = that.mode;
         this.portlet = that.portlet;
+    }
+
+    @Override
+    public RenderTask createRender(WindowContext window) {
+        return new PortletRenderTask(this, window);
     }
 
     @Override

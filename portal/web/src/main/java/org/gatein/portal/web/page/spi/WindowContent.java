@@ -23,12 +23,22 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import org.gatein.portal.web.page.WindowContext;
+
 /**
  * The relationship between a content and a window.
  *
  * @author Julien Viet
  */
 public abstract class WindowContent {
+
+    /**
+     * Create a render task for the specified window.
+     *
+     * @param window the window
+     * @return the render task
+     */
+    public abstract RenderTask createRender(WindowContext window);
 
     /**
      * Resolve the title for the specified locale.

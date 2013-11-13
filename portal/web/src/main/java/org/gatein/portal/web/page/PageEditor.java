@@ -154,7 +154,7 @@ public class PageEditor {
     public Response getContent(@Param(name = "javax.portlet.contentId") String contentId, @Param(name = "javax.portlet.contentType") String contentType, @Param(name = "javax.portlet.path") String path) {
         WindowContent content = contentProvider.getContent(contentId);
         PageContext.Builder pageBuilder = new PageContext.Builder(contentProvider, customizationService, path);
-        RenderTask task = contentProvider.createRender(new WindowContext("", content , pageBuilder.build()));
+        RenderTask task = new WindowContext("", content , pageBuilder.build()).createRenderTask();
         Result result = task.execute(Request.getCurrent().getUserContext().getLocale());
         if (result instanceof Result.Fragment) {
             Result.Fragment fragment = (Result.Fragment) result;

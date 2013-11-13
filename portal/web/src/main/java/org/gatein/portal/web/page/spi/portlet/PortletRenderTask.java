@@ -49,17 +49,12 @@ import org.gatein.portal.web.page.Result;
 import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.servlet.Context;
-import org.gatein.portal.web.page.spi.RenderTask;
-import org.gatein.portal.web.servlet.Context;
 import org.w3c.dom.Element;
 
 /**
  * @author Julien Viet
  */
 class PortletRenderTask extends RenderTask {
-
-    /** . */
-    private final PortletContentProvider provider;
 
     /** . */
     private final WindowContext windowContext;
@@ -71,16 +66,15 @@ class PortletRenderTask extends RenderTask {
     private final PortletContent content;
 
     /** . */
-    private final  HttpServletRequest servletReq;
+    private final HttpServletRequest servletReq;
 
     /** . */
-    private final  HttpServletResponse servletResp;
+    private final HttpServletResponse servletResp;
 
-    PortletRenderTask(PortletContentProvider provider, WindowContext windowContext) {
+    PortletRenderTask(PortletContent content, WindowContext windowContext) {
         this.windowContext = windowContext;
-        this.invoker = provider.portletManager.getInvoker();
-        this.provider = provider;
-        this.content = (PortletContent) windowContext.state;
+        this.invoker = content.provider.portletManager.getInvoker();
+        this.content = content;
         this.servletReq = Context.getCurrentRequest();
         this.servletResp = Context.getCurrentResponse();
     }
@@ -95,7 +89,7 @@ class PortletRenderTask extends RenderTask {
         try {
 
             //
-            GateInPortletInvocationContext context = new GateInPortletInvocationContext(provider, windowContext, lifeCycle);
+            GateInPortletInvocationContext context = new GateInPortletInvocationContext(content.provider, windowContext, lifeCycle);
             RenderInvocation invocation = new RenderInvocation(context);
             invocation.setClientContext(new GateInClientContext());
             invocation.setPortalContext(new AbstractPortalContext());

@@ -21,7 +21,6 @@ package org.gatein.portal.web.page.spi;
 import java.util.Map;
 
 import juzu.Response;
-import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.web.page.WindowContext;
 
 /**
@@ -47,13 +46,5 @@ public interface ContentProvider {
             WindowContext window,
             String id,
             Map<String, String[]> resourceState);
-
-    /**
-     * Create a render task for the specified window.
-     *
-     * @param window the window
-     * @return the render task
-     */
-    RenderTask createRender(WindowContext window);
 
 }

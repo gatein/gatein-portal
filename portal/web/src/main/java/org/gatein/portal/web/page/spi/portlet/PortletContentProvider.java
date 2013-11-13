@@ -53,7 +53,6 @@ import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.web.page.PageContext;
 import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.ContentProvider;
-import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
 
@@ -90,12 +89,7 @@ public class PortletContentProvider implements ContentProvider {
         }
 
         //
-        return new PortletContent(portlet);
-    }
-
-    @Override
-    public RenderTask createRender(WindowContext window) {
-        return new PortletRenderTask(this, window);
+        return new PortletContent(this, portlet);
     }
 
     @Override
