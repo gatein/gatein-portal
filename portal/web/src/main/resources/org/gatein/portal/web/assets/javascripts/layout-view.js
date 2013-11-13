@@ -1,6 +1,9 @@
 (function() {
 
   var ComposerView = Backbone.View.extend({
+    events : {
+      "keyup .composer-filter" : "filterApp"
+    },
     initialize : function(options) {
 
       // Initialize a Backbone.Collection to hold a list of Application models
@@ -30,6 +33,29 @@
           revert: "invalid",
           helper: "clone"
         });
+      });
+    },
+
+    filterApp: function(e) {
+      console.log(e);
+      var keyCode = e.keyCode || e.which;
+      if(keyCode == 27) {
+        //Escape key
+        $(e.srcElement).val("");
+      }
+
+      var filter = $(e.srcElement).val();
+      var regex = new RegExp(filter, 'i');
+      var $container = $('#application-list');
+      _.each(this.apps.toJSON(), function(app) {
+        var $element = $container.find('li[data-contentId="'+app.contentId+'"]');
+        if($element.length > 0) {
+          if(regex.test(app.title)) {
+            $element.show();
+          } else {
+            $element.hide();
+          }
+        }
       });
     }
   });

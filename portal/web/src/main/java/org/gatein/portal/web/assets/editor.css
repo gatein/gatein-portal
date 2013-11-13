@@ -44,6 +44,17 @@
 #composers .panel a:hover {
 	color: #333;
 }
+#composers .panel a.collapsed + .composer-filter{
+    display: none;
+}
+#composers .panel .composer-filter {
+    float: right;
+    margin-top: -5px;
+    margin-right: 5px;
+}
+#composers .panel .composer-filter:after {
+    clear: both;
+}
 #composers .panel-body .composer-tooltip {
 	font-style: italic;
 	font-size: 12px;

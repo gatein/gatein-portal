@@ -40,6 +40,7 @@
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#composers" href="#portlets" title="Drag and drop to add new portlet">
 					Composer
 				</a>
+                <input type="text" placeholder="Find application" class="composer-filter"/>
 			</h5>
 		</div>
 		<div id="portlets" class="panel-collapse collapse in">
