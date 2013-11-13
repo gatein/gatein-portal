@@ -45,7 +45,7 @@ import org.gatein.portal.web.page.Decoder;
 /**
  * @author Julien Viet
  */
-class PortletContent extends WindowContent {
+public class PortletContent extends WindowContent {
 
     /** . */
     public static final Pattern PORTLET_PATTERN = Pattern.compile("^([^/]+)/([^/]+)$");
@@ -54,7 +54,7 @@ class PortletContent extends WindowContent {
     private static final String[] TITLE_KEYS = { MetaInfo.TITLE, MetaInfo.SHORT_TITLE, MetaInfo.DISPLAY_NAME };
 
     /** . */
-    static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
+    public static final Map<String, String[]> NO_PARAMETERS = Collections.emptyMap();
 
     /** . */
     public final PortletContentProvider provider;

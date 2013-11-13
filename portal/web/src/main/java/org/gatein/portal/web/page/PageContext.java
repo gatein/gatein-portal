@@ -75,6 +75,10 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
             return windows.get(name);
         }
 
+        public void setWindow(String name, WindowContent window) {
+            windows.put(name, window);
+        }
+
         @Override
         public NodeContext<NodeState, ElementState> getContext(NodeState node) {
             return node.context;

@@ -24,7 +24,6 @@ import java.util.Map;
 
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
-import juzu.request.Phase;
 import org.gatein.common.net.media.MediaType;
 import org.gatein.pc.api.ActionURL;
 import org.gatein.pc.api.ContainerURL;
@@ -35,9 +34,6 @@ import org.gatein.pc.api.ResourceURL;
 import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.api.spi.PortletInvocationContext;
-import org.gatein.portal.web.page.Controller_;
-import org.gatein.portal.web.page.Encoder;
-import org.gatein.portal.web.page.PageContext;
 import org.gatein.portal.web.page.WindowContext;
 
 /**
@@ -52,15 +48,11 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
     private final WindowContext window;
 
     /** . */
-    private final PortletContent state;
-
-    /** . */
     private final ContextLifeCycle lifeCycle;
 
     GateInPortletInvocationContext(PortletContentProvider portletManager, WindowContext window, ContextLifeCycle lifeCycle) {
         this.portletManager = portletManager;
         this.window = window;
-        this.state = (PortletContent) window.state;
         this.lifeCycle = lifeCycle;
     }
 
@@ -98,101 +90,41 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
         }
     }
 
-    private Phase.View.Dispatch getDispatch(ContainerURL containerURL) {
-        Phase.View.Dispatch dispatch;
+    private String getDispatch(ContainerURL containerURL) {
         if (containerURL instanceof RenderURL) {
             RenderURL renderURL = (RenderURL) containerURL;
-            PageContext.Builder a = window.page.builder();
-
-            // Remove this nasty cast
-            PortletContent copy = (PortletContent) a.getWindow(window.name);
-
             ParametersStateString ns = (ParametersStateString) renderURL.getNavigationalState();
+            PortletContent copy = null;
             if (ns != null) {
+                copy = new PortletContent((PortletContent) window.state);
                 copy.parameters = ns.getParameters();
             }
             if (renderURL.getWindowState() != null) {
+                if (copy == null) {
+                    copy = new PortletContent((PortletContent) window.state);
+                }
                 copy.windowState = renderURL.getWindowState();
             }
             if (renderURL.getMode() != null) {
+                if (copy == null) {
+                    copy = new PortletContent((PortletContent) window.state);
+                }
                 copy.mode = renderURL.getMode();
             }
-            Map<String, String[]> changes = renderURL.getPublicNavigationalStateChanges();
-            if (changes.size() > 0) {
-                a.apply(window.getPublicParametersChanges(changes));
-            }
-            dispatch = a.build().getDispatch();
+            return window.createRenderURL(copy, renderURL.getPublicNavigationalStateChanges());
         } else if (containerURL instanceof ActionURL) {
             ActionURL actionURL = (ActionURL) containerURL;
             ParametersStateString is = (ParametersStateString) actionURL.getInteractionState();
-            PageContext page = window.page;
             String targetWindowState = containerURL.getWindowState() != null && !org.gatein.pc.api.WindowState.NORMAL.equals(containerURL.getWindowState()) ? containerURL.getWindowState().toString() : null;
             String targetMode = containerURL.getMode() != null && !Mode.VIEW.equals(containerURL.getMode()) ? containerURL.getMode().toString() : null;
-            dispatch = Controller_.index(page.state.path, "action", window.name, targetWindowState, targetMode);
-
-            // Encode all windows
-            for (WindowContext w : page.windows) {
-                w.encode(dispatch);
-            }
-
-            // Encode page parameters
-            page.encodeParameters(dispatch);
-
-            //
-            if (is != null) {
-                for (Map.Entry<String, String[]> parameter : is.getParameters().entrySet()) {
-                    dispatch.setParameter(parameter.getKey(), parameter.getValue());
-                }
-            }
+            return window.createActionURL(is != null ? is.getParameters() : null, targetWindowState, targetMode);
         } else {
             ResourceURL resourceURL = (ResourceURL) containerURL;
             CacheLevel level = resourceURL.getCacheability();
             ParametersStateString rs = (ParametersStateString) resourceURL.getResourceState();
             Map<String, String[]> parameters = rs != null ? rs.getParameters() : null;
-            PageContext page = window.page;
-
-            //
-            dispatch = Controller_.index(page.state.path, "resource", window.name, state.getWindowState(), state.getMode());
-
-            //
-            if (level == CacheLevel.PORTLET || level == CacheLevel.PAGE) {
-
-                // Encode this window
-                String ww = window.state.getParameters();
-                if (ww == null) {
-                    ww = new Encoder(PortletContent.NO_PARAMETERS).encode();
-                }
-                window.encode(dispatch, ww, window.state.getWindowState(), window.state.getMode());
-
-                //
-                if (level == CacheLevel.PAGE) {
-
-                    // Encode all windows
-                    for (WindowContext w : page.windows) {
-                        if (w != window) {
-                            w.encode(dispatch);
-                        }
-                    }
-
-                    // Encode page parameters
-                    page.encodeParameters(dispatch);
-                }
-            }
-
-            // Append provided parameters
-            if (parameters != null) {
-                for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
-                    dispatch.setParameter(parameter.getKey(), parameter.getValue());
-                }
-            }
-
-            //
-            String id = resourceURL.getResourceId();
-            if (id != null) {
-                dispatch.setParameter("javax.portlet.r", id);
-            }
+            return window.creatResourceURL(level, parameters, resourceURL.getResourceId());
         }
-        return dispatch;
     }
 
     @Override

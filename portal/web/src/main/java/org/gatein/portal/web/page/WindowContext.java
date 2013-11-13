@@ -28,8 +28,10 @@ import juzu.Response;
 import juzu.impl.common.PercentCodec;
 import juzu.io.Encoding;
 import juzu.request.Phase;
+import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
+import org.gatein.portal.web.page.spi.portlet.PortletContent;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -151,5 +153,88 @@ public class WindowContext {
     @Override
     public String toString() {
         return "WindowState[name=" + name + ",parameters=" + state.getParameters() + "]";
+    }
+
+    public String createRenderURL(
+            WindowContent content,
+            Map<String, String[]> changes) {
+        PageContext.Builder a = page.builder();
+        if (content != null) {
+            a.setWindow(name, content);
+        }
+        if (changes.size() > 0) {
+            a.apply(getPublicParametersChanges(changes));
+        }
+        return a.build().getDispatch().toString();
+    }
+
+    public String createActionURL(
+            Map<String, String[]> parameters,
+            String targetWindowState, String targetMode) {
+
+        Phase.View.Dispatch dispatch = Controller_.index(page.state.path, "action", name, targetWindowState, targetMode);
+
+        // Encode all windows
+        for (WindowContext w : page.windows) {
+            w.encode(dispatch);
+        }
+
+        // Encode page parameters
+        page.encodeParameters(dispatch);
+
+        //
+        if (parameters != null) {
+            for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                dispatch.setParameter(parameter.getKey(), parameter.getValue());
+            }
+        }
+
+        //
+        return dispatch.toString();
+    }
+
+    public String creatResourceURL(CacheLevel cacheLevel, Map<String, String[]> parameters, String id) {
+
+        Phase.View.Dispatch dispatch = Controller_.index(page.state.path, "resource", name, state.getWindowState(), state.getMode());
+
+        //
+        if (cacheLevel == CacheLevel.PORTLET || cacheLevel == CacheLevel.PAGE) {
+
+            // Encode this window
+            String ww = state.getParameters();
+            if (ww == null) {
+                ww = new Encoder(PortletContent.NO_PARAMETERS).encode();
+            }
+            encode(dispatch, ww, state.getWindowState(), state.getMode());
+
+            //
+            if (cacheLevel == CacheLevel.PAGE) {
+
+                // Encode all windows
+                for (WindowContext w : page.windows) {
+                    if (w != this) {
+                        w.encode(dispatch);
+                    }
+                }
+
+                // Encode page parameters
+                page.encodeParameters(dispatch);
+            }
+        }
+
+        // Append provided parameters
+        if (parameters != null) {
+            for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                dispatch.setParameter(parameter.getKey(), parameter.getValue());
+            }
+        }
+
+        //
+        if (id != null) {
+            dispatch.setParameter("javax.portlet.r", id);
+        }
+
+        //
+        return dispatch.toString();
     }
 }
