@@ -97,7 +97,15 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
             state.apply(changes);
         }
 
-        public void setParameters(Map<QName, String[]> parameters) {
+        public void setParameters(Map<String, String[]> parameters) {
+            HashMap<QName, String[]> prp = new HashMap<QName, String[]>(parameters.size());
+            for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
+                prp.put(new QName(parameter.getKey()), parameter.getValue());
+            }
+            state.setParameters(prp);
+        }
+
+        public void setQNameParameters(Map<QName, String[]> parameters) {
             state.setParameters(parameters);
         }
 

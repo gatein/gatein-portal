@@ -29,7 +29,7 @@ import org.gatein.portal.web.page.WindowContext;
 public interface ContentProvider {
 
     /**
-     * Create the content of a window.
+     * Retrieve the content of a window, null is returned when the content does not exists.
      *
      * @param id the content id
      * @return the window content

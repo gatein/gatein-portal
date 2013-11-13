@@ -19,22 +19,34 @@
 
 package org.gatein.portal.web.page;
 
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 
 import juzu.Param;
 import juzu.Path;
+import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
 import juzu.View;
+import juzu.impl.common.JSON;
+import juzu.impl.common.Lexers;
 import juzu.impl.common.Tools;
+import juzu.impl.request.Request;
 import juzu.request.RequestParameter;
+import juzu.request.ResourceContext;
 import juzu.request.ViewContext;
 import juzu.template.Template;
 import org.gatein.portal.web.layout.Layout;
@@ -53,6 +65,8 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
+import org.gatein.portal.web.page.spi.ContentProvider;
+import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
 import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
 
@@ -157,7 +171,7 @@ public class Controller {
                             for (Map.Entry<String, String[]> p : decoder.decode().getParameters().entrySet()) {
                                 prp.put(new QName(p.getKey()), p.getValue());
                             }
-                            pageBuilder.setParameters(prp);
+                            pageBuilder.setQNameParameters(prp);
                         } else if (name.startsWith("javax.portlet.p.")) {
                             String id = name.substring("javax.portlet.p.".length());
                             WindowContent window = pageBuilder.getWindow(id);
@@ -235,11 +249,7 @@ public class Controller {
                 } else {
 
                     // Set page parameters
-                    HashMap<QName, String[]> prp = new HashMap<QName, String[]>(parameters.size());
-                    for (Map.Entry<String, String[]> parameter : parameters.entrySet()) {
-                        prp.put(new QName(parameter.getKey()), parameter.getValue());
-                    }
-                    pageBuilder.setParameters(prp);
+                    pageBuilder.setParameters(parameters);
 
                     // Build page
                     PageContext pageContext = pageBuilder.build();
@@ -268,6 +278,118 @@ public class Controller {
             }
         } else {
             return Response.notFound("Page for navigation " + path + " could not be located");
+        }
+    }
+
+    /**
+     * Renders a single window in a specific page context.
+     *
+     * @param contentType the window content type
+     * @param contentId the window content id
+     * @param url the url
+     */
+    @Resource
+    @Route("/window/{contentType}/{contentId}")
+    public Response window(
+            String contentType,
+            @Param(pattern = ".*") String contentId,
+            @Param(name = "javax.portlet.url") String url) throws Exception {
+
+        // We need
+        if (url == null) {
+            return Response.status(400);
+        }
+
+        //
+        String baseURL = Controller_.index("", null, null, null, null).toString();
+        String prefix = new URL(baseURL).getPath();
+        Pattern p = Pattern.compile("^https?://[^/]+(/.*)$");
+        Matcher m = p.matcher(url);
+        String path;
+        if (m.matches()) {
+            path = m.group(1);
+            if (path.startsWith(prefix)) {
+                path = path.substring(prefix.length());
+            } else {
+                return Response.status(400);
+            }
+        } else {
+            return Response.status(400);
+        }
+
+        // Locate content first
+        ContentProvider contentProvider;
+        if (contentType.equals("portlet")) {
+            contentProvider = this.contentProvider;
+        } else {
+            return Response.notFound("Invalid content type " + contentType);
+        }
+
+        // Locate the content
+        WindowContent content = contentProvider.getContent(contentId);
+        if (content == null) {
+            return Response.notFound("Invalid content id " + contentId);
+        }
+
+        // Parse path
+        PageContext.Builder pageBuilder;
+        int a = path.indexOf('?');
+        Map<String, String[]> parameters = NO_PARAMETERS;
+        if (a >= 0) {
+            String query = path.substring(a + 1);
+            path = path.substring(0, a);
+            pageBuilder = new PageContext.Builder(path);
+            for (Iterator<RequestParameter> i = Lexers.queryParser(query);i.hasNext();) {
+                RequestParameter parameter = i.next();
+                String name = parameter.getName();
+                if (name.startsWith("javax.portlet.")) {
+                    if (name.startsWith("javax.portlet.p.")) {
+                        String id = name.substring("javax.portlet.p.".length());
+                        WindowContent window = pageBuilder.getWindow(id);
+                        if (window != null) {
+                            window.setParameters(parameter.getRaw(0));
+                        }
+                    }
+                } else {
+                    if (parameters == NO_PARAMETERS) {
+                        parameters = new HashMap<String, String[]>();
+                    }
+                    parameters.put(name, parameter.toArray());
+                }
+            }
+        } else {
+            pageBuilder = new PageContext.Builder(path);
+        }
+        pageBuilder.setParameters(parameters);
+
+        // Set our window
+        String name = UUID.randomUUID().toString();
+        pageBuilder.setWindow(name, content);
+
+        // Build page
+        PageContext page = pageBuilder.build();
+
+        // Create render task
+        WindowContext window = page.get(name);
+        RenderTask task = content.createRender(window);
+
+        //
+        Result result = task.execute(Request.getCurrent().getUserContext().getLocale());
+        if (result instanceof Result.Fragment) {
+            Result.Fragment fragment = (Result.Fragment) result;
+            //200 OK
+            return Response.status(200).
+                    body(new JSON().
+                            set("title", fragment.title).
+                            set("content", fragment.content).
+                            set("name", name).toString()
+                    ).
+                    withCharset(Charset.forName("UTF-8")).
+                    withMimeType("application/json");
+        } else {
+            //501 Not Implemented
+            return Response.status(501).body("Not yet handled " + result).withCharset(Charset.forName("UTF-8"))
+                    .withMimeType("application/json");
         }
     }
 }

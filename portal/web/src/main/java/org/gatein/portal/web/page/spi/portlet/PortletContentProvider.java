@@ -53,6 +53,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.web.page.PageContext;
 import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.ContentProvider;
+import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
 
@@ -72,24 +73,22 @@ public class PortletContentProvider implements ContentProvider {
 
     @Override
     public PortletContent getContent(String id) {
-
-        //
-        org.gatein.pc.api.Portlet portlet;
         PortletInvoker invoker = portletManager.getInvoker();
         try {
             Matcher matcher = PortletContent.PORTLET_PATTERN.matcher(id);
             if (matcher.matches()) {
-                portlet = invoker.getPortlet(PortletContext.createPortletContext(matcher.group(1), matcher.group(2)));
+                org.gatein.pc.api.Portlet portlet = invoker.getPortlet(PortletContext.createPortletContext(matcher.group(1), matcher.group(2)));
+                return new PortletContent(this, portlet);
             } else {
-                throw new Exception("Could not handle " + id);
+                return null;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            portlet = null;
+            throw new UnsupportedOperationException("Handle me gracefully", e);
         }
+    }
 
-        //
-        return new PortletContent(this, portlet);
+    public RenderTask createRender(WindowContext window) {
+        return window.createRenderTask();
     }
 
     @Override

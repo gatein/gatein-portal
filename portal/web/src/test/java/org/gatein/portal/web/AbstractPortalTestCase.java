@@ -19,6 +19,9 @@
 package org.gatein.portal.web;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.portlet.Portlet;
 
@@ -27,6 +30,8 @@ import juzu.impl.common.RunMode;
 import juzu.impl.common.Tools;
 import juzu.impl.inject.spi.InjectorProvider;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URIBuilder;
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -83,10 +88,22 @@ public class AbstractPortalTestCase {
     }
 
     public static PortletDescriptor descriptor(Class<? extends Portlet> portlet) {
-        return descriptor(portletXML(), portlet).up();
+        return descriptor(new Class[]{portlet});
     }
 
-    public static PortletDescriptor descriptor(Class<? extends Portlet> portlet1, Class<? extends Portlet> portlet2) {
-        return descriptor(descriptor(portletXML(), portlet1).up(), portlet2).up();
+    public static PortletDescriptor descriptor(Class<? extends Portlet>... portlets) {
+        PortletDescriptor desc = portletXML();
+        for (Class<? extends Portlet> portlet : portlets) {
+            desc = descriptor(desc, portlet).up();
+        }
+        return desc;
+    }
+
+    public static Map<String, String> parameterMap(URIBuilder uri) {
+        HashMap<String, String> parameters = new HashMap<String, String>();
+        for (NameValuePair pair : uri.getQueryParams()) {
+            parameters.put(pair.getName(), pair.getValue());
+        }
+        return parameters;
     }
 }
