@@ -37,7 +37,7 @@ public class PageData {
 
     public PageData(String path) {
         this.path = path;
-        this.parameters = Collections.emptyMap();
+        this.parameters = null;
     }
 
     public PageData(PageData state) {
