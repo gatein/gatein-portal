@@ -40,7 +40,7 @@
     className: "window",
 
     events : {
-      "click .close" : "delete"
+      "click .close" : "deleteApp"
     },
 
     initialize: function() {
@@ -65,7 +65,7 @@
       $(selector).html(this.model.get("content"));
     },
 
-    delete: function() {
+    deleteApp: function() {
       this.model.getParent().removeChild(this.model);
 
       // Update snapshot
@@ -287,7 +287,7 @@
             'title' : title
           });
           
-          new ApplicationView({model : app});
+          new ApplicationView({model : app, el : "#" + app.getId()});
           container.addChild(app);
         });
 
