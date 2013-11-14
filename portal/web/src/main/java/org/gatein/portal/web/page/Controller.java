@@ -134,17 +134,17 @@ public class Controller {
             } else {
 
                 // Page builder
-                PageContext.Builder pageBuilder = new PageContext.Builder(contentProvider, customizationService, path);
+                PageContext.Builder pageBuilder = new PageContext.Builder(path);
 
                 // Load site windows
                 SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
-                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> siteStructure = layoutService.loadLayout(pageBuilder, site.getLayoutId(), null);
+                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> siteStructure = layoutService.loadLayout(pageBuilder.asModel(contentProvider, customizationService), site.getLayoutId(), null);
 
                 // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
                 org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
-                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder, page.getLayoutId(), null);
+                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder.asModel(contentProvider, customizationService), page.getLayoutId(), null);
 
                 // Decode from request
                 Map<String, String[]> parameters = NO_PARAMETERS;

@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 
+import juzu.Response;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.Portlet;
@@ -36,6 +37,7 @@ import org.gatein.pc.api.info.ParameterInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.portal.web.page.Decoder;
 import org.gatein.portal.web.page.Encoder;
+import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
 import org.gatein.portal.web.page.spi.WindowContentContext;
@@ -105,6 +107,16 @@ public class PortletContent extends WindowContent {
     @Override
     public RenderTask createRender(WindowContentContext window) {
         return new PortletRenderTask(this, window);
+    }
+
+    @Override
+    public Response processAction(WindowContext window, String windowState, String mode, Map<String, String[]> interactionState) {
+        return provider.processAction(window, windowState, mode, interactionState);
+    }
+
+    @Override
+    public Response serveResource(WindowContext window, String id, Map<String, String[]> resourceState) {
+        return provider.serveResource(window, id, resourceState);
     }
 
     @Override

@@ -91,7 +91,7 @@ public class WindowContext implements WindowContentContext {
             String windowState,
             String mode,
             Map<String, String[]> interactionState) {
-        return page.portletManager.processAction(this, windowState, mode, interactionState);
+        return state.processAction(this, windowState, mode, interactionState);
     }
 
     /**
@@ -104,7 +104,7 @@ public class WindowContext implements WindowContentContext {
     }
 
     public Response serveResource(String id, Map<String, String[]> resourceState) {
-        return page.portletManager.serveResource(this, id, resourceState);
+        return state.serveResource(this, id, resourceState);
     }
 
     public Map<String, String[]> computePublicParameters() {

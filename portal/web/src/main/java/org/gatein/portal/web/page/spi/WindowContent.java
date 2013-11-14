@@ -23,6 +23,9 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import juzu.Response;
+import org.gatein.portal.web.page.WindowContext;
+
 /**
  * The relationship between a content and a window.
  *
@@ -37,6 +40,19 @@ public abstract class WindowContent {
      * @return the render task
      */
     public abstract RenderTask createRender(WindowContentContext window);
+
+    // todo : use WindowContentContext instead of WindowContext
+    public abstract Response processAction(
+            WindowContext window,
+            String windowState,
+            String mode,
+            Map<String, String[]> interactionState);
+
+    // todo : use WindowContentContext instead of WindowContext
+    public abstract Response serveResource(
+            WindowContext window,
+            String id,
+            Map<String, String[]> resourceState);
 
     /**
      * Resolve the title for the specified locale.
