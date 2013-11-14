@@ -19,7 +19,6 @@
 package org.gatein.portal.web.page;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -31,12 +30,13 @@ import juzu.request.Phase;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
+import org.gatein.portal.web.page.spi.WindowContentContext;
 import org.gatein.portal.web.page.spi.portlet.PortletContent;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class WindowContext {
+public class WindowContext implements WindowContentContext {
 
     /**
      * Custom encoding.
@@ -73,8 +73,14 @@ public class WindowContext {
         this.state = state;
     }
 
-    public String resolveTitle(Locale locale) {
-        return state.resolveTitle(locale);
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Map<String, String[]> getPublicRenderParameters() {
+        return computePublicParameters();
     }
 
     public Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes) {

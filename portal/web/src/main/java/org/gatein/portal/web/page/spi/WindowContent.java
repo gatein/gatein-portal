@@ -23,8 +23,6 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
-import org.gatein.portal.web.page.WindowContext;
-
 /**
  * The relationship between a content and a window.
  *
@@ -38,7 +36,7 @@ public abstract class WindowContent {
      * @param window the window
      * @return the render task
      */
-    public abstract RenderTask createRender(WindowContext window);
+    public abstract RenderTask createRender(WindowContentContext window);
 
     /**
      * Resolve the title for the specified locale.

@@ -46,8 +46,8 @@ import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.web.page.Result;
-import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.RenderTask;
+import org.gatein.portal.web.page.spi.WindowContentContext;
 import org.gatein.portal.web.servlet.Context;
 import org.w3c.dom.Element;
 
@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
 class PortletRenderTask extends RenderTask {
 
     /** . */
-    private final WindowContext windowContext;
+    private final WindowContentContext windowContext;
 
     /** . */
     private final PortletInvoker invoker;
@@ -71,7 +71,7 @@ class PortletRenderTask extends RenderTask {
     /** . */
     private final HttpServletResponse servletResp;
 
-    PortletRenderTask(PortletContent content, WindowContext windowContext) {
+    PortletRenderTask(PortletContent content, WindowContentContext windowContext) {
         this.windowContext = windowContext;
         this.invoker = content.provider.portletManager.getInvoker();
         this.content = content;
@@ -89,12 +89,12 @@ class PortletRenderTask extends RenderTask {
         try {
 
             //
-            GateInPortletInvocationContext context = new GateInPortletInvocationContext(content.provider, windowContext, lifeCycle);
+            GateInPortletInvocationContext context = new GateInPortletInvocationContext(content.provider, content, windowContext, lifeCycle);
             RenderInvocation invocation = new RenderInvocation(context);
             invocation.setClientContext(new GateInClientContext());
             invocation.setPortalContext(new AbstractPortalContext());
-            invocation.setInstanceContext(new AbstractInstanceContext(windowContext.name, AccessMode.READ_ONLY));
-            invocation.setWindowContext(new AbstractWindowContext(windowContext.name));
+            invocation.setInstanceContext(new AbstractInstanceContext(windowContext.getName(), AccessMode.READ_ONLY));
+            invocation.setWindowContext(new AbstractWindowContext(windowContext.getName()));
             invocation.setUserContext(new AbstractUserContext());
             invocation.setSecurityContext(new AbstractSecurityContext(servletReq));
             invocation.setRequest(servletReq);
@@ -103,7 +103,7 @@ class PortletRenderTask extends RenderTask {
             invocation.setMode(content.mode != null ? content.mode : Mode.VIEW);
             invocation.setWindowState(content.windowState != null ? content.windowState : org.gatein.pc.api.WindowState.NORMAL);
             invocation.setNavigationalState(content.parameters != null ? ParametersStateString.create(content.parameters) : null);
-            invocation.setPublicNavigationalState(windowContext.computePublicParameters());
+            invocation.setPublicNavigationalState(windowContext.getPublicRenderParameters());
 
             //
             response = invoker.invoke(invocation);
@@ -144,7 +144,7 @@ class PortletRenderTask extends RenderTask {
                 }
                 String title = fragment.getTitle();
                 if (title == null) {
-                    title = windowContext.resolveTitle(locale);
+                    title = content.resolveTitle(locale);
                 }
                 result = new Result.Fragment(headers, headerTags, title, fragment.getContent());
             } else {

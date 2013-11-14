@@ -36,11 +36,9 @@ import org.gatein.pc.api.info.ParameterInfo;
 import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.portal.web.page.Decoder;
 import org.gatein.portal.web.page.Encoder;
-import org.gatein.portal.web.page.NodeState;
-import org.gatein.portal.web.page.WindowContext;
 import org.gatein.portal.web.page.spi.RenderTask;
 import org.gatein.portal.web.page.spi.WindowContent;
-import org.gatein.portal.web.page.Decoder;
+import org.gatein.portal.web.page.spi.WindowContentContext;
 
 /**
  * @author Julien Viet
@@ -105,7 +103,7 @@ public class PortletContent extends WindowContent {
     }
 
     @Override
-    public RenderTask createRender(WindowContext window) {
+    public RenderTask createRender(WindowContentContext window) {
         return new PortletRenderTask(this, window);
     }
 

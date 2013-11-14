@@ -108,7 +108,7 @@ public class PortletContentProvider implements ContentProvider {
         try {
 
             //
-            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, window, lifeCycle));
+            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.state, window, lifeCycle));
             PortletContent state = (PortletContent) window.state;
             action.setClientContext(new GateInClientContext());
             action.setPortalContext(new AbstractPortalContext());
@@ -195,7 +195,7 @@ public class PortletContentProvider implements ContentProvider {
         try {
 
             //
-            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, window, lifeCycle));
+            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.state, window, lifeCycle));
             resource.setResourceId(id);
             resource.setCacheLevel(cacheability);
             resource.setClientContext(new GateInClientContext());

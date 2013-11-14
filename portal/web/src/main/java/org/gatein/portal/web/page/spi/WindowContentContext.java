@@ -20,33 +20,21 @@ package org.gatein.portal.web.page.spi;
 
 import java.util.Map;
 
-import juzu.Response;
-import org.gatein.portal.web.page.WindowContext;
+import org.gatein.pc.api.cache.CacheLevel;
 
 /**
  * @author Julien Viet
  */
-public interface ContentProvider {
+public interface WindowContentContext {
 
-    /**
-     * Create the content of a window.
-     *
-     * @param id the content id
-     * @return the window content
-     */
-    WindowContent getContent(String id);
+    String getName();
 
-    // todo : use WindowContentContext instead of WindowContext
-    Response processAction(
-            WindowContext window,
-            String windowState,
-            String mode,
-            Map<String, String[]> interactionState);
+    Map<String, String[]> getPublicRenderParameters();
 
-    // todo : use WindowContentContext instead of WindowContext
-    Response serveResource(
-            WindowContext window,
-            String id,
-            Map<String, String[]> resourceState);
+    String createRenderURL(WindowContent content, Map<String, String[]> changes);
+
+    String createActionURL(Map<String, String[]> parameters, String targetWindowState, String targetMode);
+
+    String creatResourceURL(CacheLevel cacheLevel, Map<String, String[]> parameters, String id);
 
 }

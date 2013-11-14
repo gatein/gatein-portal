@@ -34,7 +34,7 @@ import org.gatein.pc.api.ResourceURL;
 import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.api.spi.PortletInvocationContext;
-import org.gatein.portal.web.page.WindowContext;
+import org.gatein.portal.web.page.spi.WindowContentContext;
 
 /**
  * @author Julien Viet
@@ -45,15 +45,19 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
     final PortletContentProvider portletManager;
 
     /** . */
-    private final WindowContext window;
+    private final WindowContentContext window;
 
     /** . */
     private final ContextLifeCycle lifeCycle;
 
-    GateInPortletInvocationContext(PortletContentProvider portletManager, WindowContext window, ContextLifeCycle lifeCycle) {
+    /** . */
+    private final PortletContent state;
+
+    GateInPortletInvocationContext(PortletContentProvider portletManager, PortletContent state, WindowContentContext window, ContextLifeCycle lifeCycle) {
         this.portletManager = portletManager;
         this.window = window;
         this.lifeCycle = lifeCycle;
+        this.state = state;
     }
 
     @Override
@@ -96,18 +100,18 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
             ParametersStateString ns = (ParametersStateString) renderURL.getNavigationalState();
             PortletContent copy = null;
             if (ns != null) {
-                copy = new PortletContent((PortletContent) window.state);
+                copy = new PortletContent(state);
                 copy.parameters = ns.getParameters();
             }
             if (renderURL.getWindowState() != null) {
                 if (copy == null) {
-                    copy = new PortletContent((PortletContent) window.state);
+                    copy = new PortletContent(state);
                 }
                 copy.windowState = renderURL.getWindowState();
             }
             if (renderURL.getMode() != null) {
                 if (copy == null) {
-                    copy = new PortletContent((PortletContent) window.state);
+                    copy = new PortletContent(state);
                 }
                 copy.mode = renderURL.getMode();
             }
