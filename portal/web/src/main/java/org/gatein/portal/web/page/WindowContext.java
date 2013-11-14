@@ -185,8 +185,10 @@ public class WindowContext implements WindowContentContext {
             w.encode(dispatch);
         }
 
-        // Encode page parameters
-        page.encodeParameters(dispatch);
+        // Encode page parameters only if we have some
+        if (page.getParameters() != null && page.getParameters().size() > 0) {
+            page.encodeParameters(dispatch);
+        }
 
         //
         if (parameters != null) {
@@ -223,7 +225,7 @@ public class WindowContext implements WindowContentContext {
                     }
                 }
 
-                // Encode page parameters
+                // Encode page parameters (even if it's empty)
                 page.encodeParameters(dispatch);
             }
         }
