@@ -367,11 +367,11 @@ public class UIPortalComponentActionListener {
                 }
             } else {
                 boolean hadParent = uiSource.getParent() != null;
-                uiSource.setParent(uiTarget);
                 children.add(position, uiSource);
                 if (hadParent) {
                     tidyUp(pcontext, uiSource);
                 }
+                uiSource.setParent(uiTarget);
             }
         }
     }
