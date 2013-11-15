@@ -38,14 +38,13 @@
     },
 
     filterApp: function(e) {
-      console.log(e);
       var keyCode = e.keyCode || e.which;
       if(keyCode == 27) {
         //Escape key
-        $(e.srcElement).val("");
+        $(e.target).val("");
       }
 
-      var filter = $(e.srcElement).val();
+      var filter = $(e.target).val();
       var regex = new RegExp(filter, 'i');
       var $container = $('#application-list');
       _.each(this.apps.toJSON(), function(app) {
