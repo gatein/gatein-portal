@@ -27,7 +27,11 @@
     xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
-  <component>
+    <container-lifecycle-plugin>
+        <type>org.gatein.integration.wsrp.WSRPContainerLifecyclePlugin</type>
+    </container-lifecycle-plugin>
+
+    <component>
     <key>org.gatein.integration.wsrp.WSRPServiceIntegration</key>
     <type>org.gatein.integration.wsrp.WSRPServiceIntegration</type>
     <init-params>

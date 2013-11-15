@@ -366,12 +366,28 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
         log.info("WSRP Consumers started");
     }
 
+    /**
+     * Stops the component if the event is related to the main portal context.
+     */
     public void stop() {
         if (!bypass) {
             // stop listening to web app events
             ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
             servletContainer.removeWebAppListener(this);
+        }
+    }
 
+    /**
+     * Stops the producers and consumers if the event is related to the main portal context, before the component itself
+     * gets stopped.
+     *
+     * @see org.gatein.integration.wsrp.WSRPServiceIntegration#stop()
+     */
+    public void stopContainer() {
+        // this code was originally on the stop() method, but it seems that it's called "too late" in the process,
+        // as we don't have access to the RepositoryContainer anymore, so, we are unable to properly get a fresh
+        // list of consumers, for instance.
+        if (!bypass) {
             stopProducer();
             stopConsumers();
         }
