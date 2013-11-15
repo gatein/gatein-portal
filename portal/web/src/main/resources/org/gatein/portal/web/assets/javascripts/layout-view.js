@@ -114,6 +114,107 @@
 
       this.setupDnD();
     },
+    
+    events : {
+      "dragenter" : "dragEnter",
+      "dragover"  : "dragOver",
+      "dragleave" : "dragLeave",
+      "drop"      : "drop"
+    },
+
+    dragEnter : function ( event ) {
+      console.log('enter');
+      event.preventDefault();
+      $('.portlet-placeholder').remove();
+      
+      if (this.model.isEmpty()) {
+        $('#' + this.model.id).append("<li class='portlet-placeholder'></li>");
+        return;
+      }
+      var Position = Backbone.Model;
+      var list = new Backbone.Collection;
+      list.comparator = 'top';
+      
+      $.each(this.model.getChildren(), function() {
+        var top = $('#' + this.getId()).offset().top;
+        list.add(new Position({id : this.getId(), top: top}));
+      });
+      list.add(new Position({id : 'placeholder', top : event.originalEvent.pageY}));
+      var placeHolder = list.get('placeholder');
+      var index = list.indexOf(placeHolder);
+      if (list.at(index - 1)) {
+        var id = list.at(index - 1).id;
+        $("<li class='portlet-placeholder'></li>").insertAfter('#' + id);
+      }
+    },
+
+    dragOver : function ( event ) {
+      event.preventDefault();
+    },
+
+    dragLeave : function ( event ) {
+      console.log('leave');
+      event.preventDefault();
+      if (!this.isInside(event)) {
+        this.$el.find('.portlet-placeholder').remove();
+      }
+    },
+
+    drop : function ( event ) {
+      event.preventDefault();
+      
+      var files = event.originalEvent.dataTransfer.files;
+      var formData = new FormData();
+      formData.append('file', files[0]);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/portal/upload');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('all done: ' + xhr.status);
+        } else {
+          console.log('Something went terribly wrong...');
+        }
+      };
+      
+      var file = files[0];
+      var acceptedTypes = {
+          'image/png': true,
+          'image/jpeg': true,
+          'image/gif': true
+        };
+
+      if (acceptedTypes[file.type] === true) {
+        var reader = new FileReader();
+        var el = this.$el;
+        reader.onload = function (event) {
+          var image = new Image();
+          image.src = event.target.result;
+          image.width = 100; // a fake resize
+          el.append(image);
+        };
+
+        console.log(file);
+        reader.readAsDataURL(file);
+      }
+      xhr.send(formData);
+      $('.portlet-placeholder').remove()
+    },
+    
+    isInside : function ( event ) {
+      var top    = this.$el.offset().top;
+      var left   = this.$el.offset().left;
+      var right  = left + this.$el.outerWidth();
+      var bottom = top + this.$el.outerHeight();
+      if ((event.originalEvent.pageX > right) || (event.originalEvent.pageX < left)) {
+        return false;
+      }
+
+      if ((event.originalEvent.pageY >= bottom) || (event.originalEvent.pageY <= top)) {
+        return false;
+      }
+
+      return true;
+    },
 
     // Adding DnD ability to Zone and Application
     setupDnD : function() {
