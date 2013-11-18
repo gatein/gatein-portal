@@ -1,91 +1,85 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <page-set
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_2_0 http://www.gatein.org/xml/ns/gatein_objects_2_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_2_0">
 
   <page>
     <name>page1</name>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>Portlet1</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>p1</name>
+        <access-permission>Everyone</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet1</portlet-ref>
+      </portlet>
+    </zone>
   </page>
   <page>
     <name>page2</name>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>Portlet1</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>p1</name>
+        <access-permission>Everyone</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>Portlet2</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet1</portlet-ref>
+      </portlet>
+      <portlet>
+        <name>p2</name>
+        <access-permission>Everyone</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet2</portlet-ref>
+      </portlet>
+    </zone>
   </page>
   <page>
     <name>page3</name>
-    <access-permissions>Everyone</access-permissions>
+    <access-permission>Everyone</access-permission>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <container>
-      <name>1</name>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>Portlet1</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>p1</name>
+        <access-permission>Everyone</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>Portlet2</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet1</portlet-ref>
+      </portlet>
+      <portlet>
+        <name>p2</name>
+        <access-permission>Everyone</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-      <portlet-application>
-        <portlet>
-          <application-ref>portal</application-ref>
-          <portlet-ref>Portlet3</portlet-ref>
-        </portlet>
-        <access-permissions>Everyone</access-permissions>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet2</portlet-ref>
+      </portlet>
+      <portlet>
+        <name>p3</name>
+        <access-permission>Everyone</access-permission>
         <show-info-bar>false</show-info-bar>
         <show-application-state>false</show-application-state>
         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-    </container>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet3</portlet-ref>
+      </portlet>
+    </zone>
   </page>
 </page-set>
