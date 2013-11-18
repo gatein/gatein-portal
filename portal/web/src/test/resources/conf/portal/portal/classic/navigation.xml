@@ -16,5 +16,9 @@
       <name>page3</name>
       <page-ref>portal::classic::page3</page-ref>
     </node>
+    <node>
+      <name>page4</name>
+      <page-ref>portal::classic::page4</page-ref>
+    </node>
   </node>
 </navigation>

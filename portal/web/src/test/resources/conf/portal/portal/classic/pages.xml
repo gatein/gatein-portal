@@ -82,4 +82,17 @@
       </portlet>
     </zone>
   </page>
+  <page>
+    <name>page4</name>
+    <access-permission>Everyone</access-permission>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <zone>
+      <id>1</id>
+      <simple>
+        <name>simple</name>
+        <access-permission>Everyone</access-permission>
+        <id>the_id</id>
+      </simple>
+    </zone>
+  </page>
 </page-set>

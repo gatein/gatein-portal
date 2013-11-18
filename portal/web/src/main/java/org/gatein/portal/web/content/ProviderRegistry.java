@@ -21,7 +21,9 @@ package org.gatein.portal.web.content;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -55,12 +57,29 @@ public class ProviderRegistry {
 
     @PostConstruct
     public void start() {
+
+        // Get from IOC
         Tools.addAll(lifeCycles, context.resolve(ContentProvider.class));
         for (BeanLifeCycle<ContentProvider> lifeCycle : lifeCycles) {
             try {
                 ContentProvider provider = lifeCycle.get();
                 providers.add(provider);
             } catch (InvocationTargetException e) {
+                System.out.println("Could not obtain content provider");
+                e.printStackTrace();
+            }
+        }
+
+        // Load provides with service loader
+        Iterator<ContentProvider> loaded = ServiceLoader.load(ContentProvider.class).iterator();
+        while (true) {
+            try {
+                if (loaded.hasNext()) {
+                    providers.add(loaded.next());
+                } else {
+                    break;
+                }
+            } catch (Exception e) {
                 System.out.println("Could not obtain content provider");
                 e.printStackTrace();
             }

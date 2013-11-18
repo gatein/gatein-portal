@@ -67,7 +67,6 @@ import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.web.content.ContentProvider;
 import org.gatein.portal.web.content.RenderTask;
 import org.gatein.portal.web.content.WindowContent;
-import org.gatein.portal.web.content.portlet.PortletContentProvider;
 
 /**
  * The controller for aggregation.
@@ -149,18 +148,15 @@ public class Controller {
                 // Page builder
                 PageContext.Builder pageBuilder = new PageContext.Builder(path);
 
-                // Resolve provider
-                ContentProvider contentProvider = providers.resolveProvider("portlet");
-
                 // Load site windows
                 SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
-                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> siteStructure = layoutService.loadLayout(pageBuilder.asModel(contentProvider, customizationService), site.getLayoutId(), null);
+                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> siteStructure = layoutService.loadLayout(pageBuilder.asModel(providers, customizationService), site.getLayoutId(), null);
 
                 // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
                 org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
-                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder.asModel(contentProvider, customizationService), page.getLayoutId(), null);
+                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder.asModel(providers, customizationService), page.getLayoutId(), null);
 
                 // Decode from request
                 Map<String, String[]> parameters = NO_PARAMETERS;
@@ -287,13 +283,15 @@ public class Controller {
      * Renders a single window in a specific page context.
      *
      * @param contentType the window content type
+     * @param contentSubtype the window content subtype
      * @param contentId the window content id
      * @param url the url
      */
     @Resource
-    @Route("/window/{contentType}/{contentId}")
+    @Route("/window/{contentType}/{contentSubtype}/{contentId}")
     public Response window(
             String contentType,
+            String contentSubtype,
             @Param(pattern = ".*") String contentId,
             @Param(name = "javax.portlet.url") String url) throws Exception {
 
@@ -320,7 +318,7 @@ public class Controller {
         }
 
         // Resolve provider
-        ContentProvider contentProvider = providers.resolveProvider("portlet");
+        ContentProvider contentProvider = providers.resolveProvider(contentType + "/" + contentSubtype);
         if (contentProvider == null) {
             return Response.notFound("Invalid content type " + contentType);
         }

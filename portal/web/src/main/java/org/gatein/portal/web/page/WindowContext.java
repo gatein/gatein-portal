@@ -68,6 +68,17 @@ public class WindowContext implements WindowContentContext {
     public final WindowContent state;
 
     WindowContext(String name, WindowContent state, PageContext page) {
+        if (name == null) {
+            throw new NullPointerException("No null name accepted");
+        }
+        if (state == null) {
+            throw new NullPointerException("No null state accepted");
+        }
+        if (page == null) {
+            throw new NullPointerException("No null page accepted");
+        }
+
+        //
         this.name = name;
         this.page = page;
         this.state = state;

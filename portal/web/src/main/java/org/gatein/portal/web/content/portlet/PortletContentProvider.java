@@ -73,7 +73,7 @@ public class PortletContentProvider implements ContentProvider {
 
     @Override
     public String getContentType() {
-        return "portlet";
+        return "application/portlet";
     }
 
     @Override
@@ -92,12 +92,7 @@ public class PortletContentProvider implements ContentProvider {
         }
     }
 
-    public RenderTask createRender(WindowContext window) {
-        return window.createRenderTask();
-    }
-
-    @Override
-    public Response processAction(
+    Response processAction(
             WindowContext window,
             String windowState,
             String mode,
@@ -164,8 +159,7 @@ public class PortletContentProvider implements ContentProvider {
         }
     }
 
-    @Override
-    public Response serveResource(WindowContext window, String id, Map<String, String[]> resourceState) {
+    Response serveResource(WindowContext window, String id, Map<String, String[]> resourceState) {
         PortletContent state = (PortletContent) window.state;
         // Determine cacheability
         CacheLevel cacheability;

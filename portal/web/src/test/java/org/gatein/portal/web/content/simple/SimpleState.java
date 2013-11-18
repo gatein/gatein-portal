@@ -16,26 +16,12 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.content;
+package org.gatein.portal.web.content.simple;
+
+import java.io.Serializable;
 
 /**
  * @author Julien Viet
  */
-public interface ContentProvider {
-
-    /**
-     * Return the provider supported content type.
-     *
-     * @return the content type
-     */
-    String getContentType();
-
-    /**
-     * Retrieve the content of a window, null is returned when the content does not exists.
-     *
-     * @param id the content id
-     * @return the window content
-     */
-    WindowContent getContent(String id);
-
+public class SimpleState implements Serializable {
 }

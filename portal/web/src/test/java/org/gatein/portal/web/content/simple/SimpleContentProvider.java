@@ -16,26 +16,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.content;
+package org.gatein.portal.web.content.simple;
+
+import org.gatein.portal.web.content.ContentProvider;
+import org.gatein.portal.web.content.WindowContent;
 
 /**
  * @author Julien Viet
  */
-public interface ContentProvider {
+public class SimpleContentProvider implements ContentProvider {
 
-    /**
-     * Return the provider supported content type.
-     *
-     * @return the content type
-     */
-    String getContentType();
+    @Override
+    public String getContentType() {
+        return "simple/content";
+    }
 
-    /**
-     * Retrieve the content of a window, null is returned when the content does not exists.
-     *
-     * @param id the content id
-     * @return the window content
-     */
-    WindowContent getContent(String id);
-
+    @Override
+    public WindowContent getContent(String id) {
+        return new SimpleContent(id, "normal", "view");
+    }
 }

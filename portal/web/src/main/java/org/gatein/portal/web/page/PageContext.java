@@ -33,6 +33,7 @@ import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.web.content.ContentProvider;
+import org.gatein.portal.web.content.ProviderRegistry;
 import org.gatein.portal.web.content.WindowContent;
 
 /**
@@ -66,7 +67,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         }
 
         public NodeModel<NodeState, ElementState> asModel(
-                final ContentProvider contentProvider,
+                final ProviderRegistry providerRegistry,
                 final CustomizationService customizationService) {
             return new NodeModel<NodeState, ElementState>() {
                 @Override
@@ -76,9 +77,10 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
                 @Override
                 public NodeState create(NodeContext<NodeState, ElementState> context) {
                     if (context.getState() instanceof ElementState.Window) {
-                        CustomizationContext<Portlet> portletCustomization = customizationService.loadCustomization(context.getId());
-                        String contentId = portletCustomization.getContentId();
+                        CustomizationContext<?> customization = customizationService.loadCustomization(context.getId());
+                        String contentId = customization.getContentId();
                         NodeState window = new NodeState(context);
+                        ContentProvider contentProvider = providerRegistry.resolveProvider(customization.getContentType().getValue());
                         WindowContent windowState = contentProvider.getContent(contentId);
                         windows.put(window.context.getName(), windowState);
                         return window;

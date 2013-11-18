@@ -78,7 +78,7 @@ public class WindowTestCase extends AbstractPortalTestCase {
 
     @Test
     public void testRender() throws Exception {
-        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/portlet/portal/Portlet1").
+        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/application/portlet/portal/Portlet1").
                 addParameter("javax.portlet.url", deploymentURL + "mypage");
         JSON json = assertRender(uri.toString());
         assertEquals("Hello", json.get("title"));
@@ -86,7 +86,7 @@ public class WindowTestCase extends AbstractPortalTestCase {
         assertNotNull(json.get("name"));
 
         //
-        uri = new URIBuilder(deploymentURL.toString() + "window/portlet/portal/Portlet1").
+        uri = new URIBuilder(deploymentURL.toString() + "window/application/portlet/portal/Portlet1").
                 addParameter("javax.portlet.url", deploymentURL + "mypage?color=red");
         json = assertRender(uri.toString());
         assertEquals("Hello", json.get("title"));
@@ -96,7 +96,7 @@ public class WindowTestCase extends AbstractPortalTestCase {
 
     @Test
     public void testRenderURL() throws Exception {
-        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/portlet/portal/Portlet2").
+        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/application/portlet/portal/Portlet2").
                 addParameter("javax.portlet.url", deploymentURL + "mypage?color=blue");
         JSON json = assertRender(uri.toString());
         assertEquals("Hello", json.get("title"));
@@ -109,7 +109,7 @@ public class WindowTestCase extends AbstractPortalTestCase {
 
     @Test
     public void testActionURL() throws Exception {
-        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/portlet/portal/Portlet3").
+        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/application/portlet/portal/Portlet3").
                 addParameter("javax.portlet.url", deploymentURL + "mypage");
         JSON json = assertRender(uri.toString());
         assertEquals("Hello", json.get("title"));
@@ -126,7 +126,7 @@ public class WindowTestCase extends AbstractPortalTestCase {
 
     @Test
     public void testResourceURL() throws Exception {
-        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/portlet/portal/Portlet4").
+        URIBuilder uri = new URIBuilder(deploymentURL.toString() + "window/application/portlet/portal/Portlet4").
                 addParameter("javax.portlet.url", deploymentURL + "mypage");
         JSON json = assertRender(uri.toString());
         assertEquals("Hello", json.get("title"));
