@@ -16,68 +16,44 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.page.spi;
+package org.gatein.portal.web.content;
 
-import java.util.Locale;
 import java.util.Map;
-
-import javax.xml.namespace.QName;
 
 import juzu.Response;
 import org.gatein.portal.web.page.WindowContext;
 
 /**
- * The relationship between a content and a window.
- *
  * @author Julien Viet
  */
-public abstract class WindowContent {
+public interface ContentProvider {
 
     /**
-     * Create a render task for the specified window.
+     * Return the provider supported content type.
      *
-     * @param window the window
-     * @return the render task
+     * @return the content type
      */
-    public abstract RenderTask createRender(WindowContentContext window);
+    String getContentType();
+
+    /**
+     * Retrieve the content of a window, null is returned when the content does not exists.
+     *
+     * @param id the content id
+     * @return the window content
+     */
+    WindowContent getContent(String id);
 
     // todo : use WindowContentContext instead of WindowContext
-    public abstract Response processAction(
+    Response processAction(
             WindowContext window,
             String windowState,
             String mode,
             Map<String, String[]> interactionState);
 
     // todo : use WindowContentContext instead of WindowContext
-    public abstract Response serveResource(
+    Response serveResource(
             WindowContext window,
             String id,
             Map<String, String[]> resourceState);
-
-    /**
-     * Resolve the title for the specified locale.
-     *
-     * @param locale the locale
-     * @return the title or null
-     */
-    public abstract String resolveTitle(Locale locale);
-
-    public abstract String getParameters();
-
-    public abstract void setParameters(String s);
-
-    public abstract String getWindowState();
-
-    public abstract void setWindowState(String ws);
-
-    public abstract String getMode();
-
-    public abstract void setMode(String m);
-
-    public abstract Map<String, String[]> computePublicParameters(Map<QName, String[]> parameters);
-
-    public abstract Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes);
-
-    public abstract WindowContent copy();
 
 }

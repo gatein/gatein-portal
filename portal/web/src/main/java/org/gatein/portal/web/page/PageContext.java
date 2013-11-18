@@ -32,8 +32,8 @@ import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.web.page.spi.ContentProvider;
-import org.gatein.portal.web.page.spi.WindowContent;
+import org.gatein.portal.web.content.ContentProvider;
+import org.gatein.portal.web.content.WindowContent;
 
 /**
  * Encapsulate state and operations on a page.

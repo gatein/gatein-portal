@@ -29,13 +29,12 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.util.Tools;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.Property;
 import org.gatein.portal.mop.ValueType;
@@ -106,15 +105,13 @@ class MongoElementStore implements NodeStore<ElementState> {
                         }
                     }
                     DBObject content = (DBObject) element.get("content");
-                    String contentType = (String) content.get("type");
-                    ApplicationType<Portlet> applicationType;
-                    if (ApplicationType.PORTLET.getContentType().getMimeType().equals(contentType)) {
-                        applicationType = ApplicationType.PORTLET;
-                    } else {
-                        throw new UnsupportedOperationException("Implement me " + contentType);
+                    String _type = (String) content.get("type");
+                    ContentType contentType = ContentType.forValue(_type);
+                    if (contentType == null) {
+                        contentType = ContentType.UNKNOWN;
                     }
                     state = new ElementState.Window(
-                            applicationType,
+                            contentType,
                             new PersistentApplicationState(id),
                             props.build(),
                             (List<String>) element.get("access-permissions"));
@@ -201,7 +198,7 @@ class MongoElementStore implements NodeStore<ElementState> {
             if (instanceState instanceof TransientApplicationState) {
                 TransientApplicationState transientState = (TransientApplicationState) instanceState;
                 content = new BasicDBObject();
-                content.put("type", windowState.type.getContentType().getMimeType());
+                content.put("type", windowState.type.getValue());
                 content.put("id", transientState.getContentId());
                 Serializable state_ = ((TransientApplicationState) instanceState).getContentState();
                 if (state_ != null) {

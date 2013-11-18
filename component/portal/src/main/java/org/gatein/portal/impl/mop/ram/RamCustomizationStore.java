@@ -22,7 +22,7 @@ package org.gatein.portal.impl.mop.ram;
 import java.io.Serializable;
 
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.gatein.portal.mop.customization.ContentType;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.customization.CustomizationData;
 import org.gatein.portal.mop.customization.CustomizationStore;
 import org.gatein.portal.mop.layout.ElementState;
@@ -46,7 +46,7 @@ public class RamCustomizationStore implements CustomizationStore {
         Node customization = current.getNode(id);
         ElementState.Window windowState = (ElementState.Window) customization.getState();
         TransientApplicationState appState = (TransientApplicationState) windowState.state;
-        return new CustomizationData<S>(id, (ContentType<S>) ContentType.PORTLET, appState.getContentId(), (S) appState.getContentState());
+        return new CustomizationData(id, windowState.type, appState.getContentId(), appState.getContentState());
     }
 
     @Override

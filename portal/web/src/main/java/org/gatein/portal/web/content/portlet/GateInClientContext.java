@@ -17,49 +17,40 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.mop.customization;
+package org.gatein.portal.web.content.portlet;
 
-import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
-import org.gatein.portal.content.ContentType;
+import javax.servlet.http.Cookie;
+
+import org.gatein.common.util.MultiValuedPropertyMap;
+import org.gatein.common.util.SimpleMultiValuedPropertyMap;
+import org.gatein.pc.api.spi.ClientContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class CustomizationContext<S extends Serializable> {
+class GateInClientContext implements ClientContext {
 
     /** . */
-    final String id;
+    private final SimpleMultiValuedPropertyMap<String> properties = new SimpleMultiValuedPropertyMap<String>();
 
-    /** . */
-    CustomizationData<S> data;
-
-    /** . */
-    S update;
-
-    CustomizationContext(String id, CustomizationData<S> data) {
-        this.id = id;
-        this.data = data;
-        this.update = null;
+    GateInClientContext() {
     }
 
-    public String getId() {
-        return id;
+    @Override
+    public String getMethod() {
+        return "GET";
     }
 
-    public ContentType<S> getContentType() {
-        return data.contentType;
+    @Override
+    public MultiValuedPropertyMap<String> getProperties() {
+        return properties;
     }
 
-    public String getContentId() {
-        return data.contentId;
-    }
-
-    public S getState() {
-        return update != null ? update : data.state;
-    }
-
-    public void setState(S state) {
-        this.update = state;
+    @Override
+    public List<Cookie> getCookies() {
+        return Collections.emptyList();
     }
 }

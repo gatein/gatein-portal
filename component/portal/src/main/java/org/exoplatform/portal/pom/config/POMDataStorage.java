@@ -334,7 +334,7 @@ public class POMDataStorage implements ModelDataStorage {
             return new ApplicationData(
                     context.getId(),
                     context.getName(),
-                    window.type,
+                    window.type.getApplicationType(),
                     window.state,
                     null,
                     window.properties.get(ElementState.Window.TITLE),

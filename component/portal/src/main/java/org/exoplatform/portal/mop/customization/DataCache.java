@@ -77,7 +77,7 @@ abstract class DataCache {
 //            }
 
             //
-            org.gatein.portal.mop.customization.ContentType<S> adapted = org.gatein.portal.mop.customization.ContentType.forValue(contentType.getMimeType());
+            org.gatein.portal.content.ContentType<S> adapted = org.gatein.portal.content.ContentType.forValue(contentType.getMimeType());
             return new CustomizationData<S>(key, adapted, customization.getContentId(), adaptedState);
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,23 +16,21 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.page.spi;
-
-import java.util.Locale;
-
-import org.gatein.portal.web.page.Result;
+package org.gatein.portal.content;
 
 /**
  * @author Julien Viet
  */
-public abstract class RenderTask {
+public class Content<S> {
 
-    /**
-     * Execute the task and returns a result.
-     *
-     * @param locale the locale
-     * @return the result
-     */
-    public abstract Result execute(Locale locale);
+    /** . */
+    public final String id;
 
+    /** . */
+    public final S state;
+
+    public Content(String id, S state) {
+        this.id = id;
+        this.state = state;
+    }
 }

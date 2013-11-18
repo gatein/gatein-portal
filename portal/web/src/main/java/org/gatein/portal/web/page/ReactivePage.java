@@ -33,7 +33,7 @@ import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
-import org.gatein.portal.web.page.spi.RenderTask;
+import org.gatein.portal.web.content.RenderTask;
 import org.w3c.dom.Element;
 
 /**

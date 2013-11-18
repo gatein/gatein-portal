@@ -28,10 +28,10 @@ import juzu.impl.common.PercentCodec;
 import juzu.io.Encoding;
 import juzu.request.Phase;
 import org.gatein.pc.api.cache.CacheLevel;
-import org.gatein.portal.web.page.spi.RenderTask;
-import org.gatein.portal.web.page.spi.WindowContent;
-import org.gatein.portal.web.page.spi.WindowContentContext;
-import org.gatein.portal.web.page.spi.portlet.PortletContent;
+import org.gatein.portal.web.content.RenderTask;
+import org.gatein.portal.web.content.WindowContent;
+import org.gatein.portal.web.content.WindowContentContext;
+import org.gatein.portal.web.content.portlet.PortletContent;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

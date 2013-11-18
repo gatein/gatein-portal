@@ -3,6 +3,7 @@
  */
 @Application(defaultController = Controller.class)
 @Bindings({
+    @Binding(ProviderRegistry.class),
     @Binding(PortletAppManager.class),
     @Binding(PortalContainer.class),
     @Binding(LayoutService.class),
@@ -51,6 +52,7 @@ import juzu.template.Tags;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.sso.SSOHelper;
+import org.gatein.portal.web.content.ProviderRegistry;
 import org.gatein.portal.web.kernel.KernelFilter;
 import org.gatein.portal.web.layout.SimpleLayoutFactory;
 import org.gatein.portal.web.login.LoginFailureMessage;
@@ -61,6 +63,6 @@ import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.web.page.Controller;
-import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
+import org.gatein.portal.web.content.portlet.PortletContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;

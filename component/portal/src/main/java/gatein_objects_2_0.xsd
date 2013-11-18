@@ -131,7 +131,7 @@
     <xs:sequence>
       <xs:element name="id" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="portlet" type="portletType"/>
+        <xs:any processContents="lax"/>
       </xs:choice>
     </xs:sequence>
   </xs:complexType>
@@ -148,6 +148,10 @@
     </xs:sequence>
   </xs:complexType>
 
+  <!-- Portlet elements -->
+  <xs:element name="portlet" type="portletType"/>
+
+  <!-- Portlet type -->
   <xs:complexType name="portletType">
     <xs:complexContent>
       <xs:extension base="windowType">

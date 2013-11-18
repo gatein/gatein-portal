@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.page.spi.portlet;
+package org.gatein.portal.web.content.portlet;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,9 +38,9 @@ import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.portal.web.page.Decoder;
 import org.gatein.portal.web.page.Encoder;
 import org.gatein.portal.web.page.WindowContext;
-import org.gatein.portal.web.page.spi.RenderTask;
-import org.gatein.portal.web.page.spi.WindowContent;
-import org.gatein.portal.web.page.spi.WindowContentContext;
+import org.gatein.portal.web.content.RenderTask;
+import org.gatein.portal.web.content.WindowContent;
+import org.gatein.portal.web.content.WindowContentContext;
 
 /**
  * @author Julien Viet

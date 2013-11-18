@@ -24,8 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.hierarchy.ModelAdapter;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
@@ -258,7 +258,7 @@ public class JSONContainerAdapter implements ModelAdapter<JSONObject, ElementSta
                 String contentId = json.getString("contentId");
                 TransientApplicationState state = new TransientApplicationState(contentId);
 
-                return new ElementState.Window(ApplicationType.PORTLET, state, null, null, null, false, false, false, null, null, null, null, null);
+                return new ElementState.Window(ContentType.PORTLET, state, null, null, null, false, false, false, null, null, null, null, null);
 
             } else {
                 throw new UnsupportedOperationException();

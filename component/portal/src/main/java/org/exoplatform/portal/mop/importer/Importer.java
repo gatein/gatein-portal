@@ -118,6 +118,9 @@ public class Importer extends BaseComponentPlugin {
     /** . */
     private boolean isFirstStartup;
 
+    /** . */
+    private final ModelUnmarshaller unmarshaller;
+
     public Importer(
             PageService pageService,
             ConfigurationManager cmanager,
@@ -133,6 +136,7 @@ public class Importer extends BaseComponentPlugin {
         this.layoutService = layoutService;
         this.siteService = siteService;
         this.isFirstStartup = false;
+        this.unmarshaller = new ModelUnmarshaller();
 
         //
         ValueParam defaultImportModeParam = params == null ? null : params.getValueParam("default.import.mode");
@@ -601,7 +605,7 @@ public class Importer extends BaseComponentPlugin {
     // Deserializing code
 
     private <T> UnmarshalledObject<T> fromXML(String ownerType, String owner, String xml, Class<T> clazz) throws Exception {
-        UnmarshalledObject<T> obj = ModelUnmarshaller.unmarshall(clazz, xml.getBytes("UTF-8"));
+        UnmarshalledObject<T> obj = unmarshaller.unmarshall(clazz, xml.getBytes("UTF-8"));
         T o = obj.getObject();
         if (o instanceof PageNavigation) {
             PageNavigation nav = (PageNavigation) o;

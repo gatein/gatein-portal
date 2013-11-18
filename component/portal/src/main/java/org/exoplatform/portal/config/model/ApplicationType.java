@@ -34,7 +34,7 @@ import org.gatein.mop.api.content.ContentType;
  * @version $Revision$
  * @param <S> the content state type of the application
  */
-public class ApplicationType<S> implements Serializable {
+public abstract class ApplicationType<S> implements Serializable {
 
     public static ApplicationType<?> getType(String name) {
         if (PORTLET.getName().equals(name)) {
@@ -61,13 +61,19 @@ public class ApplicationType<S> implements Serializable {
     }
 
     /** . */
-    public static final ApplicationType<Portlet> PORTLET = new ApplicationType<Portlet>(Portlet.CONTENT_TYPE, "portlet");
+    public static final ContentType<Serializable> UNKNOWN_CONTENT_TYPE = new ContentType<Serializable>("unknown", Serializable.class);
 
     /** . */
-    public static final ApplicationType<Gadget> GADGET = new ApplicationType<Gadget>(Gadget.CONTENT_TYPE, "gadget");
+    public static final ApplicationType<Serializable> UNKNOWN = new ApplicationType<Serializable>(UNKNOWN_CONTENT_TYPE, "unknown") {};
 
     /** . */
-    public static final ApplicationType<WSRP> WSRP_PORTLET = new ApplicationType<WSRP>(WSRP.CONTENT_TYPE, "wsrp");
+    public static final ApplicationType<Portlet> PORTLET = new ApplicationType<Portlet>(Portlet.CONTENT_TYPE, "portlet") {};
+
+    /** . */
+    public static final ApplicationType<Gadget> GADGET = new ApplicationType<Gadget>(Gadget.CONTENT_TYPE, "gadget") {};
+
+    /** . */
+    public static final ApplicationType<WSRP> WSRP_PORTLET = new ApplicationType<WSRP>(WSRP.CONTENT_TYPE, "wsrp") {};
 
     /** . */
     private final transient ContentType<S> contentType;
@@ -75,7 +81,7 @@ public class ApplicationType<S> implements Serializable {
     /** . */
     private final String name;
 
-    private ApplicationType(ContentType<S> contentType, String name) {
+    protected ApplicationType(ContentType<S> contentType, String name) {
         this.contentType = contentType;
         this.name = name;
     }

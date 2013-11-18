@@ -24,7 +24,7 @@ import java.io.Serializable;
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
-import org.gatein.portal.mop.customization.ContentType;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.customization.CustomizationContext;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeData;
@@ -63,7 +63,7 @@ public class TestCustomizationService extends AbstractMopServiceTest {
         //
         CustomizationContext<Portlet> customizationContext = customizationService.loadCustomization(nodes[0].id);
         Serializable customizationState = customizationContext.getState();
-        assertEquals(ContentType.PORTLET, customizationContext.getContentType());
+        assertEquals("application/portlet", customizationContext.getContentType().getValue());
         assertEquals("app/foo", customizationContext.getContentId());
         Portlet state = assertInstanceOf(customizationState, Portlet.class);
         Preference weather = state.getPreference("weather");

@@ -62,6 +62,9 @@ import org.jibx.runtime.IUnmarshallingContext;
  */
 public class TestJIBXXmlMapping extends AbstractGateInTest {
 
+    /** . */
+    private static final ModelUnmarshaller unmarshaller = new ModelUnmarshaller();
+    
     public TestJIBXXmlMapping(String name) {
         super(name);
     }
@@ -73,7 +76,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     public void testPageSetMapping() throws Exception {
         InputStream input = new FileInputStream(
                 "src/test/resources/org/exoplatform/portal/config/conf/portal/classic/pages.xml");
-        UnmarshalledObject<PageSet> obj = ModelUnmarshaller.unmarshall(PageSet.class, input);
+        UnmarshalledObject<PageSet> obj = unmarshaller.unmarshall(PageSet.class, input);
         PageSet pages = obj.getObject();
         assertNotNull(pages);
         assertEquals(2, pages.getPages().size());
@@ -82,7 +85,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     public void testPortalConfigMapping() throws Exception {
         InputStream input = new FileInputStream(
                 "src/test/resources/org/exoplatform/portal/config/conf/portal/classic/portal.xml");
-        UnmarshalledObject<PortalConfig> obj = ModelUnmarshaller.unmarshall(PortalConfig.class, input);
+        UnmarshalledObject<PortalConfig> obj = unmarshaller.unmarshall(PortalConfig.class, input);
         PortalConfig portalConfig = obj.getObject();
         assertNotNull(portalConfig);
         assertEquals("classic", portalConfig.getName());
@@ -91,7 +94,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     public void testNavigationMapping() throws Exception {
         InputStream input = new FileInputStream(
                 "src/test/resources/org/exoplatform/portal/config/conf/portal/classic/navigation.xml");
-        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, input);
+        UnmarshalledObject<PageNavigation> obj = unmarshaller.unmarshall(PageNavigation.class, input);
         PageNavigation pageNavigation = obj.getObject();
         assertEquals("portal::classic::homepage", pageNavigation.getFragment().getNode("home").getPageReference());
 
@@ -117,7 +120,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     }
 
     public void testSimpleNavigationMapping() throws Exception {
-        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
+        UnmarshalledObject<PageNavigation> obj = unmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
                 "src/test/resources/jibx/simple-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
@@ -135,7 +138,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     }
 
     public void testExtendedNavigationMapping() throws Exception {
-        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
+        UnmarshalledObject<PageNavigation> obj = unmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
                 "src/test/resources/jibx/extended-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
@@ -182,7 +185,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     }
 
     public void testNavigationFragment() throws Exception {
-        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
+        UnmarshalledObject<PageNavigation> obj = unmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
                 "src/test/resources/jibx/fragment-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
@@ -200,7 +203,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     }
 
     public void testNavigation2_0() throws Exception {
-        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
+        UnmarshalledObject<PageNavigation> obj = unmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
                 "src/test/resources/xml/navigation.xml"));
         PageNavigation nav = obj.getObject();
         assertEquals(Version.V_2_0, obj.getVersion());
@@ -262,7 +265,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     }
 
     public void testPage2_0() throws Exception {
-        UnmarshalledObject<PageSet> obj = ModelUnmarshaller.unmarshall(PageSet.class, new FileInputStream(
+        UnmarshalledObject<PageSet> obj = unmarshaller.unmarshall(PageSet.class, new FileInputStream(
                 "src/test/resources/xml/pages.xml"));
         PageSet set = obj.getObject();
         assertEquals(Version.V_2_0, obj.getVersion());
@@ -307,7 +310,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
     }
 
     public void testSite2_0() throws Exception {
-        UnmarshalledObject<PortalConfig> obj = ModelUnmarshaller.unmarshall(PortalConfig.class, new FileInputStream(
+        UnmarshalledObject<PortalConfig> obj = unmarshaller.unmarshall(PortalConfig.class, new FileInputStream(
                 "src/test/resources/xml/site.xml"));
         PortalConfig site = obj.getObject();
         assertEquals(Version.V_2_0, obj.getVersion());

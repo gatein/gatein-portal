@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.hierarchy.ModelAdapter;
 import org.gatein.portal.mop.layout.ElementState;
 
@@ -132,7 +133,7 @@ public class ContainerAdapter implements ModelAdapter<ComponentData, ElementStat
         if (data instanceof ApplicationData) {
             ApplicationData application = (ApplicationData) data;
             return new ElementState.Window(
-                    application.getType(),
+                    ContentType.forApplicationType(application.getType()),
                     application.getState(),
                     application.getTitle(),
                     application.getIcon(),

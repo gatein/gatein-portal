@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerData;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.hierarchy.ModelAdapter;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
@@ -185,7 +186,7 @@ public class JSONContainerAdapter implements ModelAdapter<JSON, ElementState>{
             }
             
             return new ElementState.Window(
-                    ApplicationType.getType(application.getString("type")),
+                    ContentType.forValue(application.getString("type")),
                     state,
                     application.getString(ElementState.Window.TITLE.getName()),
                     application.getString(ElementState.Window.ICON.getName()),

@@ -19,7 +19,6 @@
 
 package org.gatein.portal.web.page;
 
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -46,9 +45,9 @@ import juzu.impl.common.Lexers;
 import juzu.impl.common.Tools;
 import juzu.impl.request.Request;
 import juzu.request.RequestParameter;
-import juzu.request.ResourceContext;
 import juzu.request.ViewContext;
 import juzu.template.Template;
+import org.gatein.portal.web.content.ProviderRegistry;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
@@ -65,10 +64,10 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
-import org.gatein.portal.web.page.spi.ContentProvider;
-import org.gatein.portal.web.page.spi.RenderTask;
-import org.gatein.portal.web.page.spi.WindowContent;
-import org.gatein.portal.web.page.spi.portlet.PortletContentProvider;
+import org.gatein.portal.web.content.ContentProvider;
+import org.gatein.portal.web.content.RenderTask;
+import org.gatein.portal.web.content.WindowContent;
+import org.gatein.portal.web.content.portlet.PortletContentProvider;
 
 /**
  * The controller for aggregation.
@@ -98,7 +97,7 @@ public class Controller {
     ZoneLayoutFactory layoutFactory;
 
     @Inject
-    PortletContentProvider contentProvider;
+    ProviderRegistry providers;
 
     @Inject
     @Path("not_found.gtmpl")
@@ -149,6 +148,9 @@ public class Controller {
 
                 // Page builder
                 PageContext.Builder pageBuilder = new PageContext.Builder(path);
+
+                // Resolve provider
+                ContentProvider contentProvider = providers.resolveProvider("portlet");
 
                 // Load site windows
                 SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
@@ -317,11 +319,9 @@ public class Controller {
             return Response.status(400);
         }
 
-        // Locate content first
-        ContentProvider contentProvider;
-        if (contentType.equals("portlet")) {
-            contentProvider = this.contentProvider;
-        } else {
+        // Resolve provider
+        ContentProvider contentProvider = providers.resolveProvider("portlet");
+        if (contentProvider == null) {
             return Response.notFound("Invalid content type " + contentType);
         }
 

@@ -26,8 +26,8 @@ import java.util.Map;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.model.ApplicationState;
-import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.Utils;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.Properties;
 import org.gatein.portal.mop.PropertyType;
 import org.gatein.portal.mop.ValueType;
@@ -104,7 +104,7 @@ public abstract class ElementState implements Serializable {
         public static final PropertyType<String> HEIGHT = new PropertyType<String>("height", ValueType.STRING){};
 
         /** . */
-        public final ApplicationType<S> type;
+        public final ContentType<S> type;
 
         /** . */
         public final ApplicationState<S> state;
@@ -116,10 +116,15 @@ public abstract class ElementState implements Serializable {
         public final List<String> accessPermissions;
 
         public Window(
-                ApplicationType<S> type,
+                ContentType<S> type,
                 ApplicationState<S> state,
                 Properties properties,
                 List<String> accessPermissions) {
+
+            //
+            if (type == null) {
+                throw new NullPointerException("No null type allowed");
+            }
 
             //
             this.type = type;
@@ -129,7 +134,7 @@ public abstract class ElementState implements Serializable {
         }
 
         public Window(
-                ApplicationType<S> type,
+                ContentType<S> type,
                 ApplicationState<S> state,
                 String title,
                 String icon,
@@ -142,6 +147,11 @@ public abstract class ElementState implements Serializable {
                 String height,
                 Map<String, String> properties,
                 List<String> accessPermissions) {
+
+            //
+            if (type == null) {
+                throw new NullPointerException("No null type allowed");
+            }
 
             //
             Properties.Builder builder = Properties.EMPTY.builder();
@@ -201,7 +211,7 @@ public abstract class ElementState implements Serializable {
     public static class WindowBuilder extends Builder<Window> {
 
         /** . */
-        private ApplicationType type;
+        private ContentType type;
 
         /** . */
         private ApplicationState state;
@@ -213,7 +223,7 @@ public abstract class ElementState implements Serializable {
         private String[] accessPermissions;
 
         public WindowBuilder(
-                ApplicationType type,
+                ContentType type,
                 ApplicationState state,
                 Properties properties,
                 String[] accessPermissions) {
@@ -223,7 +233,7 @@ public abstract class ElementState implements Serializable {
             this.accessPermissions = accessPermissions;
         }
 
-        public WindowBuilder type(ApplicationType<?> type) {
+        public WindowBuilder type(ContentType<?> type) {
             this.type = type;
             return this;
         }

@@ -16,25 +16,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.page.spi;
+package org.gatein.portal.web.content;
 
-import java.util.Map;
+import java.util.Locale;
 
-import org.gatein.pc.api.cache.CacheLevel;
+import org.gatein.portal.web.page.Result;
 
 /**
  * @author Julien Viet
  */
-public interface WindowContentContext {
+public abstract class RenderTask {
 
-    String getName();
-
-    Map<String, String[]> getPublicRenderParameters();
-
-    String createRenderURL(WindowContent content, Map<String, String[]> changes);
-
-    String createActionURL(Map<String, String[]> parameters, String targetWindowState, String targetMode);
-
-    String creatResourceURL(CacheLevel cacheLevel, Map<String, String[]> parameters, String id);
+    /**
+     * Execute the task and returns a result.
+     *
+     * @param locale the locale
+     * @return the result
+     */
+    public abstract Result execute(Locale locale);
 
 }

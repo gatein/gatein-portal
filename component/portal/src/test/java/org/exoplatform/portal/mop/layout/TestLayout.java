@@ -113,12 +113,12 @@ public class TestLayout extends AbstractMopServiceTest {
         //Window 1
         NodeContext<ComponentData, ElementState> win1 = iterator.next();
         ElementState.Window win1State = (ElementState.Window) win1.getState();
-        ApplicationData app1 = new ApplicationData(win1.getId(), win1.getName(), win1State.type, win1State.state, win1.getId(), win1State.properties.get(ElementState.Window.TITLE), win1State.properties.get(ElementState.Window.ICON), win1State.properties.get(ElementState.Window.DESCRIPTION), win1State.properties.get(ElementState.Window.SHOW_INFO_BAR), win1State.properties.get(ElementState.Window.SHOW_APPLICATION_STATE), win1State.properties.get(ElementState.Window.SHOW_APPLICATION_MODE), win1State.properties.get(ElementState.Window.THEME), win1State.properties.get(ElementState.Window.WIDTH), win1State.properties.get(ElementState.Window.HEIGHT), Collections.EMPTY_MAP, win1State.accessPermissions);
+        ApplicationData app1 = new ApplicationData(win1.getId(), win1.getName(), win1State.type.getApplicationType(), win1State.state, win1.getId(), win1State.properties.get(ElementState.Window.TITLE), win1State.properties.get(ElementState.Window.ICON), win1State.properties.get(ElementState.Window.DESCRIPTION), win1State.properties.get(ElementState.Window.SHOW_INFO_BAR), win1State.properties.get(ElementState.Window.SHOW_APPLICATION_STATE), win1State.properties.get(ElementState.Window.SHOW_APPLICATION_MODE), win1State.properties.get(ElementState.Window.THEME), win1State.properties.get(ElementState.Window.WIDTH), win1State.properties.get(ElementState.Window.HEIGHT), Collections.EMPTY_MAP, win1State.accessPermissions);
 
         //Window 2
         NodeContext<ComponentData, ElementState> win2 = iterator.next();
         ElementState.Window win2State = (ElementState.Window) win2.getState();
-        ApplicationData app2 = new ApplicationData( win2.getId(), win2.getName(), win2State.type, win2State.state, win2.getId(), win2State.properties.get(ElementState.Window.TITLE), win2State.properties.get(ElementState.Window.ICON), win2State.properties.get(ElementState.Window.DESCRIPTION), false, false, false, win2State.properties.get(ElementState.Window.THEME), win2State.properties.get(ElementState.Window.WIDTH), win2State.properties.get(ElementState.Window.HEIGHT), Collections.EMPTY_MAP, win2State.accessPermissions);
+        ApplicationData app2 = new ApplicationData( win2.getId(), win2.getName(), win2State.type.getApplicationType(), win2State.state, win2.getId(), win2State.properties.get(ElementState.Window.TITLE), win2State.properties.get(ElementState.Window.ICON), win2State.properties.get(ElementState.Window.DESCRIPTION), false, false, false, win2State.properties.get(ElementState.Window.THEME), win2State.properties.get(ElementState.Window.WIDTH), win2State.properties.get(ElementState.Window.HEIGHT), Collections.EMPTY_MAP, win2State.accessPermissions);
 
         //Rebuild children with barPortlet before fooPortlet
         List<ComponentData> childrens = new LinkedList<ComponentData>();
@@ -361,7 +361,7 @@ public class TestLayout extends AbstractMopServiceTest {
             ElementState.Window winState = (ElementState.Window) state;
             Properties properties = winState.properties;
             ApplicationState appState = winState.state;
-            ApplicationData appData = new ApplicationData(context.getId(), context.getName(), winState.type, appState,
+            ApplicationData appData = new ApplicationData(context.getId(), context.getName(), winState.type.getApplicationType(), appState,
                 context.getId(), properties.get(ElementState.Window.TITLE), properties.get(ElementState.Window.ICON),
                 properties.get(ElementState.Window.DESCRIPTION), false,
                 false,

@@ -153,7 +153,7 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
             boolean showMode = attrs.getValue(MappedAttributes.SHOW_MODE, false);
             String theme = attrs.getValue(MappedAttributes.THEME, null);
             state = new ElementState.Window(
-                    applicationType,
+                    org.gatein.portal.content.ContentType.forApplicationType(applicationType),
                     instanceState,
                     described.getName(),
                     attrs.getValue(MappedAttributes.ICON),
@@ -256,7 +256,7 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
                     window.getCustomization().destroy();
                 }
                 TransientApplicationState transientState = (TransientApplicationState) instanceState;
-                Customization dstCustomization = window.customize(windowState.type.getContentType(), transientState.getContentId(), null);
+                Customization dstCustomization = window.customize(windowState.type.getApplicationType().getContentType(), transientState.getContentId(), null);
                 Object state_ = ((TransientApplicationState) instanceState).getContentState();
                 if (state_ != null) {
                     dstCustomization.setState(state_);

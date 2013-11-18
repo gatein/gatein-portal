@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,41 +16,40 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.gatein.portal.content;
 
-package org.gatein.portal.web.page.spi.portlet;
-
-import java.util.Collections;
-import java.util.List;
-
-import javax.servlet.http.Cookie;
-
-import org.gatein.common.util.MultiValuedPropertyMap;
-import org.gatein.common.util.SimpleMultiValuedPropertyMap;
-import org.gatein.pc.api.spi.ClientContext;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.staxnav.StaxNavigator;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @author Julien Viet
  */
-class GateInClientContext implements ClientContext {
+class WSRPContentType extends ContentType<WSRP> {
 
     /** . */
-    private final SimpleMultiValuedPropertyMap<String> properties = new SimpleMultiValuedPropertyMap<String>();
+    static final ContentType<WSRP> INSTANCE = new WSRPContentType();
 
-    GateInClientContext() {
+    private WSRPContentType() {
     }
 
     @Override
-    public String getMethod() {
-        return "GET";
+    public String getValue() {
+        return "application/wsrp";
     }
 
     @Override
-    public MultiValuedPropertyMap<String> getProperties() {
-        return properties;
+    public ApplicationType<WSRP> getApplicationType() {
+        return ApplicationType.WSRP_PORTLET;
     }
 
     @Override
-    public List<Cookie> getCookies() {
-        return Collections.emptyList();
+    public String getTagName() {
+        return "wsrp";
+    }
+
+    @Override
+    public Content<WSRP> readState(StaxNavigator<String> xml) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 }

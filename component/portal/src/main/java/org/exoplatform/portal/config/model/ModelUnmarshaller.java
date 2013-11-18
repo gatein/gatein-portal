@@ -21,10 +21,10 @@ package org.exoplatform.portal.config.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -36,9 +36,9 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.pom.spi.portlet.Portlet;
-import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.gatein.common.io.IOTools;
+import org.gatein.portal.content.Content;
+import org.gatein.portal.content.ContentType;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
@@ -224,13 +224,13 @@ public class ModelUnmarshaller {
         return parsePageSet(nav);
     }
 
-    private static void validate(boolean b) {
+    public static void validate(boolean b) {
         if (!b) {
             throw new RuntimeException("Parse exception");
         }
     }
 
-    public static Page.PageSet parsePageSet(StaxNavigator<PageElement> nav) {
+    static Page.PageSet parsePageSet(StaxNavigator<PageElement> nav) {
         Page.PageSet set = new Page.PageSet();
         validate(PageElement.page_set == nav.getName());
         if (nav.child(PageElement.page)) {
@@ -317,23 +317,29 @@ public class ModelUnmarshaller {
             layout = null;
         }
         while (pageNav.sibling(LayoutElement.zone)) {
-            StaxNavigator<LayoutElement> zoneNav = pageNav.fork();
-            validate(zoneNav.child(LayoutElement.id));
+            StaxNavigator<String> zoneNav = pageNav.fork(new Naming.Local());
+            validate(zoneNav.child("id"));
             String id = zoneNav.getContent();
             Container zone = new Container();
             zone.setStorageName(id);
-            for (LayoutElement p = zoneNav.sibling();p != null;p = zoneNav.sibling()) {
-                StaxNavigator<LayoutElement> windowNav = zoneNav.fork();
-                validate(windowNav.child(LayoutElement.name));
+            for (String p = zoneNav.sibling();p != null;p = zoneNav.sibling()) {
+                StaxNavigator<String> windowNav = zoneNav.fork(new Naming.Local());
+                validate(windowNav.child("name"));
                 String windowName = windowNav.getContent();
-                String windowTitle = windowNav.sibling(LayoutElement.display_name) ? windowNav.getContent() : null;
-                String windowDescription = windowNav.sibling(LayoutElement.description) ? windowNav.getContent() : null;
-                String windowAccessPermission = windowNav.sibling(LayoutElement.access_permission) ? windowNav.getContent() : null;
-                String windowEditPermission = windowNav.sibling(LayoutElement.edit_permission) ? windowNav.getContent() : null;
-                String windowShowInfoBar = windowNav.sibling(LayoutElement.show_info_bar) ? windowNav.getContent() : null;
-                String windowShowApplicationState = windowNav.sibling(LayoutElement.show_application_state) ? windowNav.getContent() : null;
-                String windowShowApplicationMode = windowNav.sibling(LayoutElement.show_application_mode) ? windowNav.getContent() : null;
-                Application<Portlet> application = Application.createPortletApplication();
+                String windowTitle = windowNav.sibling("display-name") ? windowNav.getContent() : null;
+                String windowDescription = windowNav.sibling("description") ? windowNav.getContent() : null;
+                String windowAccessPermission = windowNav.sibling("access-permission") ? windowNav.getContent() : null;
+                String windowEditPermission = windowNav.sibling("edit-permission") ? windowNav.getContent() : null;
+                String windowShowInfoBar = windowNav.sibling("show-info-bar") ? windowNav.getContent() : null;
+                String windowShowApplicationState = windowNav.sibling("show-application-state") ? windowNav.getContent() : null;
+                String windowShowApplicationMode = windowNav.sibling("show-application-mode") ? windowNav.getContent() : null;
+                Application<?> application;
+                ContentType<?> provider = ContentType.forTag(p);
+                if (provider == null) {
+                    throw new UnsupportedOperationException("Unregistered content type " + p);
+                } else {
+                    application = createApplication(windowNav, provider);
+                }
                 application.setStorageName(windowName);
                 application.setTitle(windowTitle);
                 application.setDescription(windowDescription);
@@ -341,35 +347,6 @@ public class ModelUnmarshaller {
                 application.setShowInfoBar("true".equals(windowShowInfoBar));
                 application.setShowApplicationMode("true".equals(windowShowApplicationMode));
                 application.setShowApplicationState("true".equals(windowShowApplicationState));
-                switch (p) {
-                    case portlet: {
-                        validate(windowNav.sibling(LayoutElement.application_ref));
-                        String applicationRef = windowNav.getContent();
-                        validate(windowNav.sibling(LayoutElement.portlet_ref));
-                        String portletRef = windowNav.getContent();
-                        String contentId = applicationRef + "/" + portletRef;
-                        Portlet portlet = null;
-                        if (windowNav.sibling(LayoutElement.preferences)) {
-                            PortletBuilder builder = new PortletBuilder();
-                            for (boolean b = windowNav.child(LayoutElement.preference);b;b = windowNav.sibling(LayoutElement.preference)) {
-                                validate(windowNav.child(LayoutElement.name));
-                                String preferenceName = windowNav.getContent();
-                                ArrayList<String> values = new ArrayList<String>();
-                                while (windowNav.sibling(LayoutElement.value)) {
-                                    values.add(windowNav.getContent());
-                                }
-                                boolean readOnly;
-                                readOnly = windowNav.sibling(LayoutElement.read_only) && "true".equals(windowNav.getContent());
-                                builder.add(preferenceName, values, readOnly);
-                            }
-                            portlet = builder.build();
-                        }
-                        application.setState(new TransientApplicationState(contentId, portlet));
-                        break;
-                    }
-                    default:
-                        throw new UnsupportedOperationException();
-                }
                 zone.getChildren().add(application);
             }
             zones.add(zone);
@@ -377,4 +354,11 @@ public class ModelUnmarshaller {
         return layout;
     }
 
+    private static  <S extends Serializable> Application<S> createApplication(StaxNavigator<String> xml, ContentType<S> provider) {
+        Content<S> content = provider.readState(xml);
+        Application<S> application = new Application<S>(provider.getApplicationType());
+        TransientApplicationState<S> state = new TransientApplicationState<S>(content.id, content.state);
+        application.setState(state);
+        return application;
+    }
 }

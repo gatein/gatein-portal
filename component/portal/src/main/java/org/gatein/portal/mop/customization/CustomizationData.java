@@ -21,6 +21,8 @@ package org.gatein.portal.mop.customization;
 
 import java.io.Serializable;
 
+import org.gatein.portal.content.ContentType;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */

@@ -25,7 +25,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import org.gatein.common.io.IOTools;
-import org.gatein.portal.mop.customization.ContentType;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.mop.customization.CustomizationData;
 import org.gatein.portal.mop.customization.CustomizationError;
 import org.gatein.portal.mop.customization.CustomizationServiceException;

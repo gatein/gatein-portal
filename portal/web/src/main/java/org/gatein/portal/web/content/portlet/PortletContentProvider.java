@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.page.spi.portlet;
+package org.gatein.portal.web.content.portlet;
 
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -52,8 +52,8 @@ import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.web.page.PageContext;
 import org.gatein.portal.web.page.WindowContext;
-import org.gatein.portal.web.page.spi.ContentProvider;
-import org.gatein.portal.web.page.spi.RenderTask;
+import org.gatein.portal.web.content.ContentProvider;
+import org.gatein.portal.web.content.RenderTask;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
 
@@ -69,6 +69,11 @@ public class PortletContentProvider implements ContentProvider {
     @Inject
     public PortletContentProvider(PortletAppManager portletManager) {
         this.portletManager = portletManager;
+    }
+
+    @Override
+    public String getContentType() {
+        return "portlet";
     }
 
     @Override
