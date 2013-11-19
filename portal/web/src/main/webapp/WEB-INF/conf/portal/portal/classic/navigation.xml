@@ -44,28 +44,33 @@
     <display-name xml:lang="zh-TW">首頁</display-name>
     <page-ref>portal::classic::homepage</page-ref>
     <node>
-      <name>demo1</name>
-      <display-name>Parameter Demo</display-name>
+      <name>demos</name>
+      <display-name>Demos</display-name>
       <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::parameter-demo</page-ref>
-    </node>
-    <node>
-      <name>demo2</name>
-      <display-name>Parallel Demo</display-name>
-      <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::parallel-demo</page-ref>
-    </node>
-    <node>
-      <name>demo3</name>
-      <display-name>Layout Demo</display-name>
-      <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::layout-demo</page-ref>
-    </node>
-    <node>
-      <name>demo4</name>
-      <display-name>Markdown Demo</display-name>
-      <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::markdown-demo</page-ref>
+      <node>
+        <name>demo1</name>
+        <display-name>Parameter Demo</display-name>
+        <visibility>DISPLAYED</visibility>
+        <page-ref>portal::classic::parameter-demo</page-ref>
+      </node>
+      <node>
+        <name>demo2</name>
+        <display-name>Parallel Demo</display-name>
+        <visibility>DISPLAYED</visibility>
+        <page-ref>portal::classic::parallel-demo</page-ref>
+      </node>
+      <node>
+        <name>demo3</name>
+        <display-name>Layout Demo</display-name>
+        <visibility>DISPLAYED</visibility>
+        <page-ref>portal::classic::layout-demo</page-ref>
+      </node>
+      <node>
+        <name>demo4</name>
+        <display-name>Markdown Demo</display-name>
+        <visibility>DISPLAYED</visibility>
+        <page-ref>portal::classic::markdown-demo</page-ref>
+      </node>
     </node>
     <node>
       <name>sitemap</name>
@@ -87,60 +92,6 @@
       <display-name xml:lang="zh-TW">網站導覽</display-name>
       <visibility>DISPLAYED</visibility>
       <page-ref>portal::classic::sitemap</page-ref>
-      	<node>
-	      	<name>sitemap_1</name>
-	      	<display-name xml:lang="en">SiteMap1</display-name>
-	      	<visibility>DISPLAYED</visibility>
-	      	<page-ref>portal::classic::sitemap</page-ref>
-	      	<node>
-		      	<name>sitemap_1.1</name>
-		      	<display-name xml:lang="en">SiteMap1.1</display-name>
-		      	<visibility>DISPLAYED</visibility>
-		      	<page-ref>portal::classic::sitemap</page-ref>
-		      	<node>
-			      	<name>sitemap_1.1.1</name>
-			      	<display-name xml:lang="en">SiteMap1.1.1</display-name>
-			      	<visibility>DISPLAYED</visibility>
-			      	<page-ref>portal::classic::sitemap</page-ref>
-			      	<node>
-			      		<name>sitemap_1.1.1.1</name>
-			      		<display-name xml:lang="en">SiteMap1.1.1.1</display-name>
-			      		<visibility>DISPLAYED</visibility>
-			      		<page-ref>portal::classic::sitemap</page-ref>
-	      			</node>
-	      		</node>
-	      		<node>
-			      	<name>sitemap_1.1.2</name>
-			      	<display-name xml:lang="en">SiteMap1.1.2</display-name>
-			      	<visibility>DISPLAYED</visibility>
-			      	<page-ref>portal::classic::sitemap</page-ref>
-	      		</node>
-      		</node>
-      		<node>
-		      	<name>sitemap_1.2</name>
-		      	<display-name xml:lang="en">SiteMap1.2</display-name>
-		      	<visibility>DISPLAYED</visibility>
-		      	<page-ref>portal::classic::sitemap</page-ref>
-	      	</node>
-	      	<node>
-		      	<name>sitemap_1.3</name>
-		      	<display-name xml:lang="en">SiteMap1.3</display-name>
-		      	<visibility>DISPLAYED</visibility>
-		      	<page-ref>portal::classic::sitemap</page-ref>
-	      	</node>
-      	</node>
-      	<node>
-	      	<name>sitemap_2</name>
-	      	<display-name xml:lang="en">SiteMap2</display-name>
-	      	<visibility>DISPLAYED</visibility>
-	      	<page-ref>portal::classic::sitemap</page-ref>
-      	</node>
-      	<node>
-	      	<name>sitemap_3</name>
-	      	<display-name xml:lang="en">SiteMap3</display-name>
-	      	<visibility>DISPLAYED</visibility>
-	      	<page-ref>portal::classic::sitemap</page-ref>
-      	</node>
     </node>
     <node>
       <name>register</name>
@@ -159,24 +110,6 @@
       <display-name xml:lang="zh-TW">註冊</display-name>
       <visibility>SYSTEM</visibility>
       <page-ref>portal::classic::register</page-ref>
-      	<node>
-	      <name>register_1</name>
-	      <display-name xml:lang="en">Register1</display-name>
-	      <visibility>SYSTEM</visibility>
-	      <page-ref>portal::classic::register</page-ref>
-    	</node>
-    	<node>
-	      <name>register_2</name>
-	      <display-name xml:lang="en">Register2</display-name>
-	      <visibility>SYSTEM</visibility>
-	      <page-ref>portal::classic::register</page-ref>
-    	</node>
-    	<node>
-	      <name>register_3</name>
-	      <display-name xml:lang="en">Register3</display-name>
-	      <visibility>SYSTEM</visibility>
-	      <page-ref>portal::classic::register</page-ref>
-    	</node>
     </node>
   </node>
 </navigation>

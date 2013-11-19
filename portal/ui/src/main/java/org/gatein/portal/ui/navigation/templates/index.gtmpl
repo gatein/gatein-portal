@@ -2,10 +2,24 @@
     <div class="navbar-inner">
         <div class="container">
             <div class="nav-collapse collapse navbar-responsive-collapse">
-                <ul class="nav">
+                <ul class="nav" role="navigation">
                     <li><a href="/portal/">Home</a></li>
-                    <% root.children.each { node -> %>
-                    <li><a href="${node.link}">${node.label}</a></li>
+                    <% root.children.eachWithIndex { node, i -> %>
+                    <li>
+                        <% if (node.children.size() == 0) { %>
+                        <a href="${node.link}">${node.label}</a>
+                        <% } else { %>
+                        <li class="dropdown">
+                            <a id="drop${i}" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">${node.label}</a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="drop${i}">
+                                <% node.children.each { nodeChild -> %>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="${nodeChild.link}">${nodeChild.label}</a>
+                                </li>
+                                <% } %>
+                            </ul>
+                        <% } %>
+                    </li>
                     <% } %>
                 </ul>
                 <ul class="nav pull-right">

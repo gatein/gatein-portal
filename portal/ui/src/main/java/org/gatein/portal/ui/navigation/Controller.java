@@ -63,7 +63,7 @@ public class Controller {
         UserNode.Model model = new UserNode.Model(descriptionService, userContext.getLocale());
 
         //
-        NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.CHILDREN, null);
+        NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.GRANDCHILDREN, null);
 
         String username = requestContext.getSecurityContext().getRemoteUser();
         if(username == null) username = "";
@@ -72,12 +72,8 @@ public class Controller {
         //TODO: how to init portalURL for login and logout (it's not portletURL)
         //TODO: initURL = ??
         String contextPath = requestContext.getHttpContext().getContextPath();
-        String loginURL = new StringBuilder(contextPath)
-                                .append(ssoHelper.isSSOEnabled() ? ssoHelper.getSSORedirectURLSuffix() : "")
-                                .append("/dologin").toString();
-        String logoutURL = new StringBuilder(contextPath)
-                                .append("/dologout")
-                                .append(ssoHelper.isSSOEnabled() ? "?portal:action=Logout" : "").toString();
+        String loginURL = contextPath + (ssoHelper.isSSOEnabled() ? ssoHelper.getSSORedirectURLSuffix() : "") + "/dologin";
+        String logoutURL = contextPath + "/dologout" + (ssoHelper.isSSOEnabled() ? "?portal:action=Logout" : "");
 
         return index.with()
                 .set("root", root.getNode())
