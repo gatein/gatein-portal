@@ -23,14 +23,16 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import juzu.PropertyType;
 import juzu.Response;
 import juzu.impl.common.PercentCodec;
 import juzu.io.Encoding;
 import juzu.request.Phase;
 import org.gatein.pc.api.cache.CacheLevel;
-import org.gatein.portal.web.content.RenderTask;
-import org.gatein.portal.web.content.WindowContent;
-import org.gatein.portal.web.content.WindowContentContext;
+import org.gatein.portal.content.RenderTask;
+import org.gatein.portal.content.Result;
+import org.gatein.portal.content.WindowContent;
+import org.gatein.portal.content.WindowContentContext;
 import org.gatein.portal.web.content.portlet.PortletContent;
 
 /**
@@ -90,6 +92,11 @@ public class WindowContext implements WindowContentContext {
     }
 
     @Override
+    public WindowContent getState() {
+        return state;
+    }
+
+    @Override
     public Map<String, String[]> getPublicRenderParameters() {
         return computePublicParameters();
     }
@@ -102,7 +109,25 @@ public class WindowContext implements WindowContentContext {
             String windowState,
             String mode,
             Map<String, String[]> interactionState) {
-        return state.processAction(this, windowState, mode, interactionState);
+        Result result = state.processAction(this, windowState, mode, interactionState);
+        if (result instanceof Result.Update) {
+            Result.Update update = (Result.Update) result;
+            PageContext.Builder clone = page.builder();
+            WindowContent windowClone = clone.getWindow(name);
+            windowClone.setParameters(update.parameters);
+            if (update.windowState != null) {
+                windowClone.setWindowState(update.windowState);
+            }
+            if (update.mode != null) {
+                windowClone.setMode(update.mode);
+            }
+            if (update.changes != null && update.changes.size() > 0) {
+                clone.apply(getPublicParametersChanges(update.changes));
+            }
+            return clone.build().getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
+        } else {
+            throw new UnsupportedOperationException("Not yet implemented");
+        }
     }
 
     /**

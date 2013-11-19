@@ -24,7 +24,7 @@ import java.util.Map;
 
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.web.page.PageContext;
-import org.gatein.portal.web.page.Result;
+import org.gatein.portal.content.Result;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

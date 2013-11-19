@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.content;
+package org.gatein.portal.content;
 
 import java.util.Locale;
 import java.util.Map;
@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import juzu.Response;
-import org.gatein.portal.web.page.WindowContext;
 
 /**
  * The relationship between a content and a window.
@@ -41,16 +40,14 @@ public abstract class WindowContent {
      */
     public abstract RenderTask createRender(WindowContentContext window);
 
-    // todo : use WindowContentContext instead of WindowContext
-    public abstract Response processAction(
-            WindowContext window,
+    public abstract Result processAction(
+            WindowContentContext window,
             String windowState,
             String mode,
             Map<String, String[]> interactionState);
 
-    // todo : use WindowContentContext instead of WindowContext
     public abstract Response serveResource(
-            WindowContext window,
+            WindowContentContext window,
             String id,
             Map<String, String[]> resourceState);
 

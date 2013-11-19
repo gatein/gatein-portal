@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.content;
+package org.gatein.portal.content;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

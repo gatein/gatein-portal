@@ -47,7 +47,8 @@ import juzu.impl.request.Request;
 import juzu.request.RequestParameter;
 import juzu.request.ViewContext;
 import juzu.template.Template;
-import org.gatein.portal.web.content.ProviderRegistry;
+import org.gatein.portal.content.ProviderRegistry;
+import org.gatein.portal.content.Result;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
@@ -64,9 +65,9 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
-import org.gatein.portal.web.content.ContentProvider;
-import org.gatein.portal.web.content.RenderTask;
-import org.gatein.portal.web.content.WindowContent;
+import org.gatein.portal.content.ContentProvider;
+import org.gatein.portal.content.RenderTask;
+import org.gatein.portal.content.WindowContent;
 
 /**
  * The controller for aggregation.

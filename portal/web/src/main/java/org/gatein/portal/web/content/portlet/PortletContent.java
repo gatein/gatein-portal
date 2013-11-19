@@ -35,12 +35,12 @@ import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.NavigationInfo;
 import org.gatein.pc.api.info.ParameterInfo;
 import org.gatein.pc.api.info.PortletInfo;
+import org.gatein.portal.content.Result;
 import org.gatein.portal.web.page.Decoder;
 import org.gatein.portal.web.page.Encoder;
-import org.gatein.portal.web.page.WindowContext;
-import org.gatein.portal.web.content.RenderTask;
-import org.gatein.portal.web.content.WindowContent;
-import org.gatein.portal.web.content.WindowContentContext;
+import org.gatein.portal.content.RenderTask;
+import org.gatein.portal.content.WindowContent;
+import org.gatein.portal.content.WindowContentContext;
 
 /**
  * @author Julien Viet
@@ -110,12 +110,12 @@ public class PortletContent extends WindowContent {
     }
 
     @Override
-    public Response processAction(WindowContext window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result processAction(WindowContentContext window, String windowState, String mode, Map<String, String[]> interactionState) {
         return provider.processAction(window, windowState, mode, interactionState);
     }
 
     @Override
-    public Response serveResource(WindowContext window, String id, Map<String, String[]> resourceState) {
+    public Response serveResource(WindowContentContext window, String id, Map<String, String[]> resourceState) {
         return provider.serveResource(window, id, resourceState);
     }
 
@@ -161,8 +161,12 @@ public class PortletContent extends WindowContent {
 
     @Override
     public void setParameters(String s) {
-        Decoder decoder = new Decoder(s);
-        parameters = decoder.decode().getParameters();
+        if (s != null) {
+            Decoder decoder = new Decoder(s);
+            parameters = decoder.decode().getParameters();
+        } else {
+            parameters = null;
+        }
     }
 
     @Override

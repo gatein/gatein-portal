@@ -52,7 +52,7 @@ import juzu.template.Tags;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.sso.SSOHelper;
-import org.gatein.portal.web.content.ProviderRegistry;
+import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.web.kernel.KernelFilter;
 import org.gatein.portal.web.layout.SimpleLayoutFactory;
 import org.gatein.portal.web.login.LoginFailureMessage;

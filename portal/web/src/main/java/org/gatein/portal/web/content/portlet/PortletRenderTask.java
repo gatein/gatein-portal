@@ -45,9 +45,9 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
-import org.gatein.portal.web.page.Result;
-import org.gatein.portal.web.content.RenderTask;
-import org.gatein.portal.web.content.WindowContentContext;
+import org.gatein.portal.content.Result;
+import org.gatein.portal.content.RenderTask;
+import org.gatein.portal.content.WindowContentContext;
 import org.gatein.portal.web.servlet.Context;
 import org.w3c.dom.Element;
 

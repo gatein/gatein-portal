@@ -34,7 +34,7 @@ import org.gatein.pc.api.ResourceURL;
 import org.gatein.pc.api.URLFormat;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.api.spi.PortletInvocationContext;
-import org.gatein.portal.web.content.WindowContentContext;
+import org.gatein.portal.content.WindowContentContext;
 
 /**
  * @author Julien Viet

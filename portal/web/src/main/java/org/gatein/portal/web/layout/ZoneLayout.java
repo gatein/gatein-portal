@@ -29,8 +29,8 @@ import juzu.template.Template;
 
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.web.page.PageContext;
-import org.gatein.portal.web.page.Result;
-import org.gatein.portal.web.page.Result.Fragment;
+import org.gatein.portal.content.Result;
+import org.gatein.portal.content.Result.Fragment;
 
 /**
  * A layout implementing the spec <a href="https://community.jboss.org/wiki/InPlaceEditing">In Place Editing</a>.

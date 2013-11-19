@@ -18,8 +18,8 @@
  */
 package org.gatein.portal.web.content.simple;
 
-import org.gatein.portal.web.content.ContentProvider;
-import org.gatein.portal.web.content.WindowContent;
+import org.gatein.portal.content.ContentProvider;
+import org.gatein.portal.content.WindowContent;
 
 /**
  * @author Julien Viet

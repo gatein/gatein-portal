@@ -26,15 +26,14 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import juzu.request.Phase;
-import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.portal.mop.customization.CustomizationContext;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.web.content.ContentProvider;
-import org.gatein.portal.web.content.ProviderRegistry;
-import org.gatein.portal.web.content.WindowContent;
+import org.gatein.portal.content.ContentProvider;
+import org.gatein.portal.content.ProviderRegistry;
+import org.gatein.portal.content.WindowContent;
 
 /**
  * Encapsulate state and operations on a page.

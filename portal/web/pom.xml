@@ -104,6 +104,10 @@
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
+      <artifactId>portal.content</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
       <artifactId>portal.ui</artifactId>
     </dependency>
 

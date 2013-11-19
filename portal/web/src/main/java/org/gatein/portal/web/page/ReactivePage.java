@@ -31,9 +31,10 @@ import juzu.Response;
 import juzu.io.Chunk;
 import juzu.io.ChunkBuffer;
 import juzu.request.RequestContext;
+import org.gatein.portal.content.Result;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
-import org.gatein.portal.web.content.RenderTask;
+import org.gatein.portal.content.RenderTask;
 import org.w3c.dom.Element;
 
 /**

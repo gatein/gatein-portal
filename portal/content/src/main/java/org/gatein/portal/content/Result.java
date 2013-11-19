@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.page;
+package org.gatein.portal.content;
 
 import java.util.List;
 import java.util.Map;
@@ -65,6 +65,24 @@ public class Result {
             this.headerTags = headerTags;
             this.title = title;
             this.content = content;
+        }
+    }
+
+    public static class Update extends Result {
+
+        public final String parameters;
+
+        public final String windowState;
+
+        public final String mode;
+
+        public final Map<String, String[]> changes;
+
+        public Update(String parameters, String windowState, String mode, Map<String, String[]> changes) {
+            this.parameters = parameters;
+            this.windowState = windowState;
+            this.mode = mode;
+            this.changes = changes;
         }
     }
 }

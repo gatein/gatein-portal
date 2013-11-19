@@ -25,11 +25,10 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import juzu.Response;
-import org.gatein.portal.web.content.RenderTask;
-import org.gatein.portal.web.content.WindowContent;
-import org.gatein.portal.web.content.WindowContentContext;
-import org.gatein.portal.web.page.Result;
-import org.gatein.portal.web.page.WindowContext;
+import org.gatein.portal.content.RenderTask;
+import org.gatein.portal.content.WindowContent;
+import org.gatein.portal.content.WindowContentContext;
+import org.gatein.portal.content.Result;
 import org.w3c.dom.Element;
 
 /**
@@ -67,12 +66,12 @@ class SimpleContent extends WindowContent {
     }
 
     @Override
-    public Response processAction(WindowContext window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result processAction(WindowContentContext window, String windowState, String mode, Map<String, String[]> interactionState) {
         throw new UnsupportedOperationException("todo");
     }
 
     @Override
-    public Response serveResource(WindowContext window, String id, Map<String, String[]> resourceState) {
+    public Response serveResource(WindowContentContext window, String id, Map<String, String[]> resourceState) {
         throw new UnsupportedOperationException("todo");
     }
 

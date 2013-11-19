@@ -50,10 +50,10 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
-import org.gatein.portal.web.page.PageContext;
-import org.gatein.portal.web.page.WindowContext;
-import org.gatein.portal.web.content.ContentProvider;
-import org.gatein.portal.web.content.RenderTask;
+import org.gatein.portal.content.Result;
+import org.gatein.portal.content.WindowContentContext;
+import org.gatein.portal.web.page.Encoder;
+import org.gatein.portal.content.ContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
 
@@ -92,8 +92,8 @@ public class PortletContentProvider implements ContentProvider {
         }
     }
 
-    Response processAction(
-            WindowContext window,
+    Result processAction(
+            WindowContentContext window,
             String windowState,
             String mode,
             Map<String, String[]> interactionState) {
@@ -107,12 +107,12 @@ public class PortletContentProvider implements ContentProvider {
         try {
 
             //
-            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.state, window, lifeCycle));
-            PortletContent state = (PortletContent) window.state;
+            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getState(), window, lifeCycle));
+            PortletContent state = (PortletContent) window.getState();
             action.setClientContext(new GateInClientContext());
             action.setPortalContext(new AbstractPortalContext());
-            action.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
-            action.setWindowContext(new AbstractWindowContext(window.name));
+            action.setInstanceContext(new AbstractInstanceContext(window.getName(), AccessMode.READ_ONLY));
+            action.setWindowContext(new AbstractWindowContext(window.getName()));
             action.setUserContext(new AbstractUserContext());
             action.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
             action.setRequest(Context.getCurrentRequest());
@@ -122,13 +122,13 @@ public class PortletContentProvider implements ContentProvider {
             action.setWindowState(windowState_);
             action.setNavigationalState(ParametersStateString.create());
             action.setInteractionState(interactionState != null ? ParametersStateString.create(interactionState) : null);
-            action.setPublicNavigationalState(window.computePublicParameters());
+            action.setPublicNavigationalState(window.getPublicRenderParameters());
 
             //
             PortletInvoker invoker = portletManager.getInvoker();
             pir = invoker.invoke(action);
         } catch (PortletInvokerException e) {
-            return Response.error(e);
+            return new Result.Error(true, e);
         } finally {
             lifeCycle.resume();
         }
@@ -136,31 +136,36 @@ public class PortletContentProvider implements ContentProvider {
         //
         if (pir instanceof UpdateNavigationalStateResponse) {
             UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse)pir;
-            PageContext.Builder clone = window.page.builder();
-
-            // Remove this nasty cast
-            PortletContent windowClone = (PortletContent) clone.getWindow(window.name);
-
             ParametersStateString s = (ParametersStateString) update.getNavigationalState();
-            windowClone.parameters = s.getParameters();
+            String updateParameters;
+            if (s.getParameters() != null && s.getParameters().size() > 0) {
+                Encoder encoder = new Encoder(s.getParameters());
+                updateParameters = encoder.encode();
+            } else {
+                updateParameters = null;
+            }
+            String updateWindowState;
             if (update.getWindowState() != null) {
-                windowClone.windowState = update.getWindowState();
+                updateWindowState = update.getWindowState().toString();
+            } else {
+                updateWindowState = null;
             }
+            String updateMode;
             if (update.getMode() != null) {
-                windowClone.mode = update.getMode();
+                updateMode = update.getMode().toString();
+            } else {
+                updateMode = null;
             }
-            Map<String, String[]> changes = update.getPublicNavigationalStateUpdates();
-            if (changes != null && changes.size() > 0) {
-                clone.apply(window.getPublicParametersChanges(changes));
-            }
-            return clone.build().getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
+            return new Result.Update(updateParameters, updateWindowState, updateMode, update.getPublicNavigationalStateUpdates());
         } else {
             throw new UnsupportedOperationException("Not yet handled " + pir);
         }
     }
 
-    Response serveResource(WindowContext window, String id, Map<String, String[]> resourceState) {
-        PortletContent state = (PortletContent) window.state;
+    Response serveResource(WindowContentContext window, String id, Map<String, String[]> resourceState) {
+
+        //
+        PortletContent state = (PortletContent) window.getState();
         // Determine cacheability
         CacheLevel cacheability;
         Mode mode;
@@ -180,7 +185,8 @@ public class PortletContentProvider implements ContentProvider {
             mode = state.mode != null ? state.mode : Mode.VIEW;
             windowState = state.windowState != null ? state.windowState : org.gatein.pc.api.WindowState.NORMAL;
             navigationalState = ParametersStateString.create(state.parameters);
-            if (window.page.hasParameters()) {
+
+            if (window.getPublicRenderParameters() != null) {
                 cacheability = CacheLevel.PAGE;
             } else {
                 cacheability = CacheLevel.PORTLET;
@@ -193,13 +199,13 @@ public class PortletContentProvider implements ContentProvider {
         try {
 
             //
-            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.state, window, lifeCycle));
+            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getState(), window, lifeCycle));
             resource.setResourceId(id);
             resource.setCacheLevel(cacheability);
             resource.setClientContext(new GateInClientContext());
             resource.setPortalContext(new AbstractPortalContext());
-            resource.setInstanceContext(new AbstractInstanceContext(window.name, AccessMode.READ_ONLY));
-            resource.setWindowContext(new AbstractWindowContext(window.name));
+            resource.setInstanceContext(new AbstractInstanceContext(window.getName(), AccessMode.READ_ONLY));
+            resource.setWindowContext(new AbstractWindowContext(window.getName()));
             resource.setUserContext(new AbstractUserContext());
             resource.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
             resource.setRequest(Context.getCurrentRequest());
@@ -209,7 +215,7 @@ public class PortletContentProvider implements ContentProvider {
             resource.setWindowState(windowState);
             resource.setNavigationalState(navigationalState);
             resource.setResourceState(resourceState != null ? ParametersStateString.create(resourceState) : null);
-            resource.setPublicNavigationalState(window.computePublicParameters());
+            resource.setPublicNavigationalState(window.getPublicRenderParameters());
 
             //
             pir = portletManager.getInvoker().invoke(resource);

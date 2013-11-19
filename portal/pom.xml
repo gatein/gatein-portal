@@ -38,6 +38,7 @@
   <modules>
     <module>root</module>
     <module>common</module>
+    <module>content</module>
     <module>ui</module>
     <module>web</module>
   </modules>
