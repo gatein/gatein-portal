@@ -13,9 +13,11 @@
 	String portletId = uicomponent.getId() ;
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 	String navTitle = HTMLEntityEncoder.getInstance().encode(uicomponent.getNavigationTitle());
+	String appMode = _ctx.getRequestContext().getApplicationMode();
+
 %>
 
-<div class="UILogoPortlet ClearFix" id="$uicomponent.id" >
+<div class="UILogoPortlet ClearFix <%=appMode%>" id="$uicomponent.id" >
 	<%if( _ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW) {%>
 		<!-- LOGO IMAGE -->
 		<a href="#" class="Img">
