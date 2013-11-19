@@ -51,6 +51,10 @@
     float: right;
     margin-top: -5px;
     margin-right: 5px;
+    padding-right: 20px;
+}
+#composers .panel input.loading {
+    background: transparent url('images/loading.gif') right center no-repeat;
 }
 #composers .panel .composer-filter:after {
     clear: both;

@@ -2,7 +2,7 @@
 
   var ComposerView = Backbone.View.extend({
     events : {
-      "keyup .composer-filter" : "filterApp"
+      "keyup .composer-filter" : "onKeyUp"
     },
     initialize : function(options) {
 
@@ -14,6 +14,8 @@
 
       this.listenTo(this.apps, 'reset', this.render);
       this.apps.fetch({reset: true});
+
+      this.filterValue = '';
     },
 
     render: function() {
@@ -37,14 +39,7 @@
       });
     },
 
-    filterApp: function(e) {
-      var keyCode = e.keyCode || e.which;
-      if(keyCode == 27) {
-        //Escape key
-        $(e.target).val("");
-      }
-
-      var filter = $(e.target).val();
+    filterApp: function(filter) {
       var regex = new RegExp(filter, 'i');
       var $container = $('#application-list');
       _.each(this.apps.toJSON(), function(app) {
@@ -57,6 +52,38 @@
           }
         }
       });
+    },
+
+    onKeyUp: function(e) {
+      var keyCode = e.keyCode || e.which;
+      var timeToWait = 500;
+      var $target = $(e.target);
+
+      if(keyCode == 27) {
+        //Escape key
+        $(e.target).val("");
+        timeToWait = 0;
+      }
+
+      if(this.filterValue == $.trim($target.val())) {
+        return;
+      } else {
+        this.filterValue = $.trim($target.val());
+      }
+
+      if(!$target.hasClass("loading")) {
+        $target.addClass("loading");
+      }
+
+      if(this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      var _this = this;
+      this.timeout =  setTimeout(function() {
+        _this.filterApp(_this.filterValue);
+        $target.removeClass("loading");
+      }, timeToWait);
     }
   });
 
