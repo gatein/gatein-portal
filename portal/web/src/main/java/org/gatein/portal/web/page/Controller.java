@@ -157,123 +157,127 @@ public class Controller {
                 // Load page windows
                 NodeState state = current.getState();
                 PageKey pageKey = state.getPageRef();
-                org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
-                NodeContext<org.gatein.portal.web.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder.asModel(providers, customizationService), page.getLayoutId(), null);
+                if (pageKey == null) {
+                    return notFound.with().set("path", path).notFound();
+                } else {
+                    org.gatein.portal.mop.page.PageContext page = pageService.loadPage(pageKey);
+                    NodeContext<org.gatein.portal.web.page.NodeState, ElementState> pageStructure = layoutService.loadLayout(pageBuilder.asModel(providers, customizationService), page.getLayoutId(), null);
 
-                // Decode from request
-                Map<String, String[]> parameters = NO_PARAMETERS;
-                for (RequestParameter parameter : requestParameters.values()) {
-                    String name = parameter.getName();
-                    if (name.startsWith("javax.portlet.")) {
-                        if (name.equals("javax.portlet.p")) {
-                            Decoder decoder = new Decoder(parameter.getRaw(0));
-                            HashMap<QName, String[]> prp = new HashMap<QName, String[]>();
-                            for (Map.Entry<String, String[]> p : decoder.decode().getParameters().entrySet()) {
-                                prp.put(new QName(p.getKey()), p.getValue());
-                            }
-                            pageBuilder.setQNameParameters(prp);
-                        } else if (name.startsWith("javax.portlet.p.")) {
-                            String id = name.substring("javax.portlet.p.".length());
-                            WindowContent<?> window = pageBuilder.getWindow(id);
-                            if (window != null) {
-                                window.setParameters(parameter.getRaw(0));
-                            }
-                        } else if (name.startsWith("javax.portlet.w.")) {
-                            String id = name.substring("javax.portlet.w.".length());
-                            WindowContent<?> window = pageBuilder.getWindow(id);
-                            if (window != null) {
-                                window.setWindowState(parameter.getValue());
-                            }
-                        } else if (name.startsWith("javax.portlet.m.")) {
-                            String id = name.substring("javax.portlet.m.".length());
-                            WindowContent<?> window = pageBuilder.getWindow(id);
-                            if (window != null) {
-                                window.setMode(parameter.getValue());
-                            }
-                        }
-                    } else {
-                        if (parameters == NO_PARAMETERS) {
-                            parameters = new HashMap<String, String[]>();
-                        }
-                        parameters.put(name, parameter.toArray());
-                    }
-                }
-
-                //
-                if (phase != null && !"edit".equals(phase)) {
-
-                    //
-                    PageContext pageContext = pageBuilder.build();
-
-                    // Going to invoke process action
-                    if (target != null) {
-                        WindowContext window = pageContext.get(target);
-                        if (window != null) {
-
-                            if ("action".equals(phase)) {
-
-                                //
-                                String windowState = window.content.getWindowState();
-                                if (targetWindowState != null) {
-                                    windowState = targetWindowState;
+                    // Decode from request
+                    Map<String, String[]> parameters = NO_PARAMETERS;
+                    for (RequestParameter parameter : requestParameters.values()) {
+                        String name = parameter.getName();
+                        if (name.startsWith("javax.portlet.")) {
+                            if (name.equals("javax.portlet.p")) {
+                                Decoder decoder = new Decoder(parameter.getRaw(0));
+                                HashMap<QName, String[]> prp = new HashMap<QName, String[]>();
+                                for (Map.Entry<String, String[]> p : decoder.decode().getParameters().entrySet()) {
+                                    prp.put(new QName(p.getKey()), p.getValue());
                                 }
-                                String mode = window.content.getMode();
-                                if (targetMode != null) {
-                                    mode = targetMode;
+                                pageBuilder.setQNameParameters(prp);
+                            } else if (name.startsWith("javax.portlet.p.")) {
+                                String id = name.substring("javax.portlet.p.".length());
+                                WindowContent<?> window = pageBuilder.getWindow(id);
+                                if (window != null) {
+                                    window.setParameters(parameter.getRaw(0));
                                 }
-
-                                //
-                                return window.processAction(windowState, mode, parameters);
-                            } else if ("resource".equals(phase)) {
-
-                                //
-                                String id;
-                                RequestParameter resourceId = requestParameters.get("javax.portlet.r");
-                                if (resourceId != null) {
-                                    id = resourceId.getValue();
-                                } else {
-                                    id = null;
+                            } else if (name.startsWith("javax.portlet.w.")) {
+                                String id = name.substring("javax.portlet.w.".length());
+                                WindowContent<?> window = pageBuilder.getWindow(id);
+                                if (window != null) {
+                                    window.setWindowState(parameter.getValue());
                                 }
-
-                                //
-                                return window.serveResource(id, parameters);
-                            } else {
-                                throw new AssertionError("should not be here");
+                            } else if (name.startsWith("javax.portlet.m.")) {
+                                String id = name.substring("javax.portlet.m.".length());
+                                WindowContent<?> window = pageBuilder.getWindow(id);
+                                if (window != null) {
+                                    window.setMode(parameter.getValue());
+                                }
                             }
                         } else {
-                            return Response.error("Target " + target + " not found");
+                            if (parameters == NO_PARAMETERS) {
+                                parameters = new HashMap<String, String[]>();
+                            }
+                            parameters.put(name, parameter.toArray());
+                        }
+                    }
+
+                    //
+                    if (phase != null && !"edit".equals(phase)) {
+
+                        //
+                        PageContext pageContext = pageBuilder.build();
+
+                        // Going to invoke process action
+                        if (target != null) {
+                            WindowContext window = pageContext.get(target);
+                            if (window != null) {
+
+                                if ("action".equals(phase)) {
+
+                                    //
+                                    String windowState = window.content.getWindowState();
+                                    if (targetWindowState != null) {
+                                        windowState = targetWindowState;
+                                    }
+                                    String mode = window.content.getMode();
+                                    if (targetMode != null) {
+                                        mode = targetMode;
+                                    }
+
+                                    //
+                                    return window.processAction(windowState, mode, parameters);
+                                } else if ("resource".equals(phase)) {
+
+                                    //
+                                    String id;
+                                    RequestParameter resourceId = requestParameters.get("javax.portlet.r");
+                                    if (resourceId != null) {
+                                        id = resourceId.getValue();
+                                    } else {
+                                        id = null;
+                                    }
+
+                                    //
+                                    return window.serveResource(id, parameters);
+                                } else {
+                                    throw new AssertionError("should not be here");
+                                }
+                            } else {
+                                return Response.error("Target " + target + " not found");
+                            }
+                        } else {
+                            return Response.error("No target");
                         }
                     } else {
-                        return Response.error("No target");
+
+                        // Set page parameters
+                        pageBuilder.setParameters(parameters);
+
+                        // Build page
+                        PageContext pageContext = pageBuilder.build();
+
+                        // Render page
+                        String layoutId = page.getState().getFactoryId();
+                        if (layoutId == null) {
+                            layoutId = "1";
+                        }
+                        Layout pageLayout = layoutFactory.build(layoutId, pageStructure);
+                        Layout siteLayout = layoutFactory.build("site", siteStructure);
+
+                        //
+                        ReactivePage rp = new ReactivePage(
+                                pageContext,
+                                context.getUserContext().getLocale(),
+                                new RenderingContext(path, page.getLayoutId(), page.getKey().format(), "edit".equals(phase)));
+
+                        //
+                        Response.Content content = (Response.Content)rp.execute(siteLayout, pageLayout, context);
+                        if (phase != null && "edit".equals(phase)) {
+                            content.withAssets("editor", "underscore", "backbone", "layout-model", "layout-view");
+                        }
+                        return content;
                     }
-                } else {
-
-                    // Set page parameters
-                    pageBuilder.setParameters(parameters);
-
-                    // Build page
-                    PageContext pageContext = pageBuilder.build();
-
-                    // Render page
-                    String layoutId = page.getState().getFactoryId();
-                    if (layoutId == null) {
-                        layoutId = "1";
-                    }
-                    Layout pageLayout = layoutFactory.build(layoutId, pageStructure);
-                    Layout siteLayout = layoutFactory.build("site", siteStructure);
-
-                    //
-                    ReactivePage rp = new ReactivePage(
-                            pageContext,
-                            context.getUserContext().getLocale(),
-                            new RenderingContext(path, page.getLayoutId(), page.getKey().format(), "edit".equals(phase)));
-
-                    //
-                    Response.Content content = (Response.Content)rp.execute(siteLayout, pageLayout, context);
-                    if (phase != null && "edit".equals(phase)) {
-                        content.withAssets("editor", "underscore", "backbone", "layout-model", "layout-view");
-                    }
-                    return content;
                 }
             }
         } else {

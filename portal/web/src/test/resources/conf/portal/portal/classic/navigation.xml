@@ -24,5 +24,9 @@
       <name>page5</name>
       <page-ref>portal::classic::page5</page-ref>
     </node>
+    <node>
+      <name>page6</name>
+      <!-- Empty on purpose -->
+    </node>
   </node>
 </navigation>
