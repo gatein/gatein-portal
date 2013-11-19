@@ -28,6 +28,7 @@ import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -57,6 +58,8 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
 
     private boolean printInfo_ = true;
 
+    private boolean updateUsers = false;
+
     public SetupOrganizationDatabaseInitializer(InitParams params) throws Exception {
         String checkConfig = params.getValueParam("checkDatabaseAlgorithm").getValue();
         if (checkConfig.trim().equalsIgnoreCase("entry")) {
@@ -69,6 +72,14 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
             printInfo_ = true;
         else
             printInfo_ = false;
+
+        ValueParam usParam = params.getValueParam("updateUsers");
+        if (usParam != null) {
+            String updateUsersParam = usParam.getValue();
+            if (updateUsersParam != null && updateUsersParam.trim().equalsIgnoreCase("true")) {
+                updateUsers = true;
+            }
+        }
         config_ = (OrganizationConfig) params.getObjectParamValues(OrganizationConfig.class).get(0);
     }
 
@@ -163,6 +174,9 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
             if (service.getUserHandler().findUserByName(data.getUserName()) == null) {
                 service.getUserHandler().createUser(user, true);
                 printInfo("    Created user " + data.getUserName());
+            } else if (updateUsers) {
+                service.getUserHandler().saveUser(user, true);
+                printInfo("    User " + data.getUserName() + " updated");
             } else {
                 printInfo("    User " + data.getUserName() + " already exists, ignoring the entry");
             }

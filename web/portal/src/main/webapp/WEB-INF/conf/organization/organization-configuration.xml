@@ -43,6 +43,11 @@
           <description>Print information init database</description>
           <value>false</value>
         </value-param>
+        <value-param>
+          <name>updateUsers</name>
+          <description>Update users if they already exists</description>
+          <value>false</value>
+        </value-param>
         <object-param>
           <name>configuration</name>
           <description>description</description>
