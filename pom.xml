@@ -626,6 +626,11 @@
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
+        <artifactId>portal.markdown</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>portal.ui</artifactId>
         <version>4.0.0-SNAPSHOT</version>
       </dependency>
@@ -834,6 +839,13 @@
             <artifactId>xercesImpl</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+
+      <!-- Markdown processor -->
+      <dependency>
+        <groupId>org.tautua.markdownpapers</groupId>
+        <artifactId>markdownpapers-core</artifactId>
+        <version>1.4.2</version>
       </dependency>
 
       <!-- Portlet Bridge -->

@@ -62,6 +62,12 @@
       <page-ref>portal::classic::layout-demo</page-ref>
     </node>
     <node>
+      <name>demo4</name>
+      <display-name>Markdown Demo</display-name>
+      <visibility>DISPLAYED</visibility>
+      <page-ref>portal::classic::markdown-demo</page-ref>
+    </node>
+    <node>
       <name>sitemap</name>
       <display-name xml:lang="en">SiteMap</display-name>
       <display-name xml:lang="cs">Mapa stránek</display-name>
