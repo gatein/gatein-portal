@@ -31,10 +31,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
+import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
-import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
@@ -45,6 +48,8 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.pc.portlet.state.SimplePropertyMap;
+import org.gatein.pc.portlet.state.producer.PortletState;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.content.RenderTask;
 import org.gatein.portal.content.WindowContentContext;
@@ -57,7 +62,7 @@ import org.w3c.dom.Element;
 class PortletRenderTask extends RenderTask {
 
     /** . */
-    private final WindowContentContext windowContext;
+    private final WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> windowContext;
 
     /** . */
     private final PortletInvoker invoker;
@@ -71,7 +76,7 @@ class PortletRenderTask extends RenderTask {
     /** . */
     private final HttpServletResponse servletResp;
 
-    PortletRenderTask(PortletContent content, WindowContentContext windowContext) {
+    PortletRenderTask(PortletContent content, WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> windowContext) {
         this.windowContext = windowContext;
         this.invoker = content.provider.portletManager.getInvoker();
         this.content = content;
@@ -83,9 +88,23 @@ class PortletRenderTask extends RenderTask {
     public Result execute(Locale locale) {
 
         //
+        PortletContext target = content.portlet.getContext();
+        Portlet state = windowContext.getState();
+        if (state != null) {
+            SimplePropertyMap properties = new SimplePropertyMap();
+            for (Preference pref : state) {
+                properties.put(pref.getName(), pref.getValues());
+            }
+            target = StatefulPortletContext.create(
+                    target.getId(),
+                    PortletStateType.INSTANCE,
+                    new PortletState(target.getId(), properties));
+        }
+
+        //
         ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
         PortletInvocationResponse response = null;
-        PortletInvokerException failure = null;
+        Exception failure = null;
         try {
 
             //
@@ -99,7 +118,7 @@ class PortletRenderTask extends RenderTask {
             invocation.setSecurityContext(new AbstractSecurityContext(servletReq));
             invocation.setRequest(servletReq);
             invocation.setResponse(servletResp);
-            invocation.setTarget(content.portlet.getContext());
+            invocation.setTarget(target);
             invocation.setMode(content.mode != null ? content.mode : Mode.VIEW);
             invocation.setWindowState(content.windowState != null ? content.windowState : org.gatein.pc.api.WindowState.NORMAL);
             invocation.setNavigationalState(content.parameters != null ? ParametersStateString.create(content.parameters) : null);
@@ -108,7 +127,8 @@ class PortletRenderTask extends RenderTask {
             //
             response = invoker.invoke(invocation);
 
-        } catch (PortletInvokerException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             failure = e;
         } finally {
             lifeCycle.resume();

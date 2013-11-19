@@ -30,6 +30,7 @@ import juzu.PropertyType;
 import juzu.Response;
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
@@ -50,6 +51,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.content.WindowContentContext;
 import org.gatein.portal.web.page.Encoder;
@@ -61,7 +63,7 @@ import org.gatein.portal.web.servlet.Context;
  * @author Julien Viet
  */
 @Singleton
-public class PortletContentProvider implements ContentProvider {
+public class PortletContentProvider implements ContentProvider<Portlet> {
 
     /** . */
     final PortletAppManager portletManager;
@@ -72,8 +74,8 @@ public class PortletContentProvider implements ContentProvider {
     }
 
     @Override
-    public String getContentType() {
-        return "application/portlet";
+    public ContentType<Portlet> getContentType() {
+        return ContentType.PORTLET;
     }
 
     @Override
@@ -93,7 +95,7 @@ public class PortletContentProvider implements ContentProvider {
     }
 
     Result processAction(
-            WindowContentContext window,
+            WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window,
             String windowState,
             String mode,
             Map<String, String[]> interactionState) {
@@ -107,8 +109,8 @@ public class PortletContentProvider implements ContentProvider {
         try {
 
             //
-            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getState(), window, lifeCycle));
-            PortletContent state = (PortletContent) window.getState();
+            ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getContent(), window, lifeCycle));
+            PortletContent state = (PortletContent) window.getContent();
             action.setClientContext(new GateInClientContext());
             action.setPortalContext(new AbstractPortalContext());
             action.setInstanceContext(new AbstractInstanceContext(window.getName(), AccessMode.READ_ONLY));
@@ -162,10 +164,10 @@ public class PortletContentProvider implements ContentProvider {
         }
     }
 
-    Response serveResource(WindowContentContext window, String id, Map<String, String[]> resourceState) {
+    Response serveResource(WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window, String id, Map<String, String[]> resourceState) {
 
         //
-        PortletContent state = (PortletContent) window.getState();
+        PortletContent state = (PortletContent) window.getContent();
         // Determine cacheability
         CacheLevel cacheability;
         Mode mode;
@@ -199,7 +201,7 @@ public class PortletContentProvider implements ContentProvider {
         try {
 
             //
-            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getState(), window, lifeCycle));
+            ResourceInvocation resource = new ResourceInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getContent(), window, lifeCycle));
             resource.setResourceId(id);
             resource.setCacheLevel(cacheability);
             resource.setClientContext(new GateInClientContext());

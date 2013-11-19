@@ -16,38 +16,35 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.content;
+package org.gatein.portal.web.content.portlet;
 
-import java.io.Serializable;
-import java.util.Map;
-
-import org.gatein.pc.api.cache.CacheLevel;
+import org.gatein.pc.portlet.state.producer.PortletState;
 
 /**
- * The relationship between the window viewport and the content.
- *
  * @author Julien Viet
  */
-public interface WindowContentContext<S extends Serializable> {
+class PortletStateType extends org.gatein.pc.api.PortletStateType<PortletState> {
 
+    /** . */
+    static final PortletStateType INSTANCE = new PortletStateType();
 
-    /**
-     * Returns the current contextual state associated with the window
-     *
-     * @return the state or null when no such state exist
-     */
-    S getState();
+    @Override
+    public Class<PortletState> getJavaType() {
+        return PortletState.class;
+    }
 
-    WindowContent<S> getContent();
+    @Override
+    public boolean equals(PortletState state1, PortletState state2) {
+        return state1.getProperties().equals(state2.getProperties());
+    }
 
-    String getName();
+    @Override
+    public int hashCode(PortletState state) {
+        return state.getProperties().hashCode();
+    }
 
-    Map<String, String[]> getPublicRenderParameters();
-
-    String createRenderURL(WindowContent<S> content, Map<String, String[]> changes);
-
-    String createActionURL(Map<String, String[]> parameters, String targetWindowState, String targetMode);
-
-    String creatResourceURL(CacheLevel cacheLevel, Map<String, String[]> parameters, String id);
-
+    @Override
+    public String toString(PortletState state) {
+        return state.getProperties().toString();
+    }
 }

@@ -45,7 +45,7 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
     final PortletContentProvider portletManager;
 
     /** . */
-    private final WindowContentContext window;
+    private final WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window;
 
     /** . */
     private final ContextLifeCycle lifeCycle;
@@ -53,7 +53,7 @@ class GateInPortletInvocationContext implements PortletInvocationContext {
     /** . */
     private final PortletContent state;
 
-    GateInPortletInvocationContext(PortletContentProvider portletManager, PortletContent state, WindowContentContext window, ContextLifeCycle lifeCycle) {
+    GateInPortletInvocationContext(PortletContentProvider portletManager, PortletContent state, WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window, ContextLifeCycle lifeCycle) {
         this.portletManager = portletManager;
         this.window = window;
         this.lifeCycle = lifeCycle;

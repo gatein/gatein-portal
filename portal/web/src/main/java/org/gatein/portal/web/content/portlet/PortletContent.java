@@ -45,7 +45,7 @@ import org.gatein.portal.content.WindowContentContext;
 /**
  * @author Julien Viet
  */
-public class PortletContent extends WindowContent {
+public class PortletContent extends WindowContent<org.exoplatform.portal.pom.spi.portlet.Portlet> {
 
     /** . */
     public static final Pattern PORTLET_PATTERN = Pattern.compile("^([^/]+)/([^/]+)$");
@@ -105,17 +105,17 @@ public class PortletContent extends WindowContent {
     }
 
     @Override
-    public RenderTask createRender(WindowContentContext window) {
+    public RenderTask createRender(WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window) {
         return new PortletRenderTask(this, window);
     }
 
     @Override
-    public Result processAction(WindowContentContext window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result processAction(WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window, String windowState, String mode, Map<String, String[]> interactionState) {
         return provider.processAction(window, windowState, mode, interactionState);
     }
 
     @Override
-    public Response serveResource(WindowContentContext window, String id, Map<String, String[]> resourceState) {
+    public Response serveResource(WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window, String id, Map<String, String[]> resourceState) {
         return provider.serveResource(window, id, resourceState);
     }
 
@@ -225,7 +225,7 @@ public class PortletContent extends WindowContent {
     }
 
     @Override
-    public WindowContent copy() {
+    public WindowContent<org.exoplatform.portal.pom.spi.portlet.Portlet> copy() {
         return new PortletContent(this);
     }
 }

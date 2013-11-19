@@ -18,17 +18,20 @@
  */
 package org.gatein.portal.content;
 
+import java.io.Serializable;
+
 /**
  * @author Julien Viet
+ * @param <S> the content state
  */
-public interface ContentProvider {
+public interface ContentProvider<S extends Serializable> {
 
     /**
      * Return the provider supported content type.
      *
      * @return the content type
      */
-    String getContentType();
+    ContentType<S> getContentType();
 
     /**
      * Retrieve the content of a window, null is returned when the content does not exists.
@@ -36,6 +39,6 @@ public interface ContentProvider {
      * @param id the content id
      * @return the window content
      */
-    WindowContent getContent(String id);
+    WindowContent<S> getContent(String id);
 
 }

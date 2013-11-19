@@ -95,4 +95,27 @@
       </simple>
     </zone>
   </page>
+  <page>
+    <name>page5</name>
+    <access-permission>Everyone</access-permission>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>p1</name>
+        <access-permission>Everyone</access-permission>
+        <show-info-bar>false</show-info-bar>
+        <show-application-state>false</show-application-state>
+        <show-application-mode>false</show-application-mode>
+        <application-ref>portal</application-ref>
+        <portlet-ref>Portlet1</portlet-ref>
+        <preferences>
+          <preference>
+            <name>pref_name</name>
+            <value>pref_value</value>
+          </preference>
+        </preferences>
+      </portlet>
+    </zone>
+  </page>
 </page-set>

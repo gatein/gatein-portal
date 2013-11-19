@@ -46,13 +46,13 @@ public class ProviderRegistry {
     private List<BeanLifeCycle<ContentProvider>> lifeCycles;
 
     /** . */
-    private List<ContentProvider> providers;
+    private List<ContentProvider<?>> providers;
 
     @Inject
     public ProviderRegistry(InjectionContext context) {
         this.context = context;
         this.lifeCycles = Collections.synchronizedList(new ArrayList<BeanLifeCycle<ContentProvider>>());
-        this.providers = Collections.synchronizedList(new ArrayList<ContentProvider>());
+        this.providers = Collections.synchronizedList(new ArrayList<ContentProvider<?>>());
     }
 
     @PostConstruct
@@ -62,7 +62,7 @@ public class ProviderRegistry {
         Tools.addAll(lifeCycles, context.resolve(ContentProvider.class));
         for (BeanLifeCycle<ContentProvider> lifeCycle : lifeCycles) {
             try {
-                ContentProvider provider = lifeCycle.get();
+                ContentProvider<?> provider = lifeCycle.get();
                 providers.add(provider);
             } catch (InvocationTargetException e) {
                 System.out.println("Could not obtain content provider");
@@ -97,9 +97,9 @@ public class ProviderRegistry {
         }
     }
 
-    public ContentProvider resolveProvider(String contentType) {
-        for (ContentProvider provider : providers) {
-            if (provider.getContentType().equals(contentType)) {
+    public ContentProvider<?> resolveProvider(String contentType) {
+        for (ContentProvider<?> provider : providers) {
+            if (provider.getContentType().getValue().equals(contentType)) {
                 return provider;
             }
         }

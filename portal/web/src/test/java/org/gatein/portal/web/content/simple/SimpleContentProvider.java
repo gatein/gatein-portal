@@ -24,15 +24,15 @@ import org.gatein.portal.content.WindowContent;
 /**
  * @author Julien Viet
  */
-public class SimpleContentProvider implements ContentProvider {
+public class SimpleContentProvider implements ContentProvider<SimpleState> {
 
     @Override
-    public String getContentType() {
-        return "simple/content";
+    public SimpleContentType getContentType() {
+        return new SimpleContentType();
     }
 
     @Override
-    public WindowContent getContent(String id) {
+    public WindowContent<SimpleState> getContent(String id) {
         return new SimpleContent(id, "normal", "view");
     }
 }

@@ -18,6 +18,7 @@
  */
 package org.gatein.portal.web.content.simple;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
@@ -34,7 +35,7 @@ import org.w3c.dom.Element;
 /**
  * @author Julien Viet
  */
-class SimpleContent extends WindowContent {
+class SimpleContent extends WindowContent<SimpleState> {
 
     /** . */
     private final String id;
@@ -52,7 +53,7 @@ class SimpleContent extends WindowContent {
     }
 
     @Override
-    public RenderTask createRender(WindowContentContext window) {
+    public RenderTask createRender(WindowContentContext<SimpleState> window) {
         return new RenderTask() {
             @Override
             public Result execute(Locale locale) {
@@ -66,12 +67,12 @@ class SimpleContent extends WindowContent {
     }
 
     @Override
-    public Result processAction(WindowContentContext window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result processAction(WindowContentContext<SimpleState> window, String windowState, String mode, Map<String, String[]> interactionState) {
         throw new UnsupportedOperationException("todo");
     }
 
     @Override
-    public Response serveResource(WindowContentContext window, String id, Map<String, String[]> resourceState) {
+    public Response serveResource(WindowContentContext<SimpleState> window, String id, Map<String, String[]> resourceState) {
         throw new UnsupportedOperationException("todo");
     }
 
@@ -121,7 +122,7 @@ class SimpleContent extends WindowContent {
     }
 
     @Override
-    public WindowContent copy() {
+    public WindowContent<SimpleState> copy() {
         return new SimpleContent(id, windowState, mode);
     }
 }

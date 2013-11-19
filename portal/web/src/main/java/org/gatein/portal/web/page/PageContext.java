@@ -18,6 +18,7 @@
  */
 package org.gatein.portal.web.page;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -59,9 +60,12 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         private PageData state;
 
         /** A map of name -> window. */
-        private final HashMap<String, WindowContent> windows = new LinkedHashMap<String, WindowContent>();
+        private final HashMap<String, WindowContent<?>> windows = new LinkedHashMap<String, WindowContent<?>>();
 
-        public WindowContent getWindow(String name) {
+        /** A map of name -> state. */
+        private final HashMap<String, Serializable> windowStates = new LinkedHashMap<String, Serializable>();
+
+        public WindowContent<?> getWindow(String name) {
             return windows.get(name);
         }
 
@@ -79,9 +83,10 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
                         CustomizationContext<?> customization = customizationService.loadCustomization(context.getId());
                         String contentId = customization.getContentId();
                         NodeState window = new NodeState(context);
-                        ContentProvider contentProvider = providerRegistry.resolveProvider(customization.getContentType().getValue());
-                        WindowContent windowState = contentProvider.getContent(contentId);
+                        ContentProvider<?> contentProvider = providerRegistry.resolveProvider(customization.getContentType().getValue());
+                        WindowContent<?> windowState = contentProvider.getContent(contentId);
                         windows.put(window.context.getName(), windowState);
+                        windowStates.put(window.context.getName(), customization.getState());
                         return window;
                     } else {
                         return new NodeState(context);
@@ -90,7 +95,7 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
             };
         }
 
-        public void setWindow(String name, WindowContent window) {
+        public void setWindow(String name, WindowContent<?> window) {
             windows.put(name, window);
         }
 
@@ -128,8 +133,9 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
 
         //
         LinkedHashMap<String, WindowContext> a = new LinkedHashMap<String, WindowContext>(builder.windows.size());
-        for (Map.Entry<String, WindowContent> window : builder.windows.entrySet()) {
-            a.put(window.getKey(), new WindowContext(window.getKey(), window.getValue(), this));
+        for (Map.Entry<String, WindowContent<?>> window : builder.windows.entrySet()) {
+            Serializable state = builder.windowStates.get(window.getKey());
+            a.put(window.getKey(), new WindowContext(window.getKey(), window.getValue(), state, this));
         }
 
         //
@@ -145,7 +151,8 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         // Clone the windows
         for (Map.Entry<String, WindowContext> entry : windowMap.entrySet()) {
             WindowContext window = entry.getValue();
-            builder.windows.put(window.name, window.state.copy());
+            builder.windows.put(window.name, window.content.copy());
+            builder.windowStates.put(window.name, window.state);
         }
 
         //

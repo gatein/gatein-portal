@@ -19,6 +19,7 @@
 package org.gatein.portal.web.page;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -38,7 +39,7 @@ import org.gatein.portal.web.content.portlet.PortletContent;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class WindowContext implements WindowContentContext {
+public class WindowContext<S extends Serializable> implements WindowContentContext<S> {
 
     /**
      * Custom encoding.
@@ -63,18 +64,21 @@ public class WindowContext implements WindowContentContext {
     /** The related page. */
     public final PageContext page;
 
-    /** . */
+    /** The window name. */
     public final String name;
 
-    /** The intrisic state. */
-    public final WindowContent state;
+    /** The window content. */
+    public final WindowContent<S> content;
 
-    WindowContext(String name, WindowContent state, PageContext page) {
+    /** The content state. */
+    public final S state;
+
+    WindowContext(String name, WindowContent<S> content, S state, PageContext page) {
         if (name == null) {
             throw new NullPointerException("No null name accepted");
         }
-        if (state == null) {
-            throw new NullPointerException("No null state accepted");
+        if (content == null) {
+            throw new NullPointerException("No null content accepted");
         }
         if (page == null) {
             throw new NullPointerException("No null page accepted");
@@ -83,6 +87,7 @@ public class WindowContext implements WindowContentContext {
         //
         this.name = name;
         this.page = page;
+        this.content = content;
         this.state = state;
     }
 
@@ -92,8 +97,8 @@ public class WindowContext implements WindowContentContext {
     }
 
     @Override
-    public WindowContent getState() {
-        return state;
+    public WindowContent<S> getContent() {
+        return content;
     }
 
     @Override
@@ -101,19 +106,24 @@ public class WindowContext implements WindowContentContext {
         return computePublicParameters();
     }
 
+    @Override
+    public S getState() {
+        return state;
+    }
+
     public Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes) {
-        return state.getPublicParametersChanges(changes);
+        return content.getPublicParametersChanges(changes);
     }
 
     public Response processAction(
             String windowState,
             String mode,
             Map<String, String[]> interactionState) {
-        Result result = state.processAction(this, windowState, mode, interactionState);
+        Result result = content.processAction(this, windowState, mode, interactionState);
         if (result instanceof Result.Update) {
             Result.Update update = (Result.Update) result;
             PageContext.Builder clone = page.builder();
-            WindowContent windowClone = clone.getWindow(name);
+            WindowContent<S> windowClone = (WindowContent<S>) clone.getWindow(name);
             windowClone.setParameters(update.parameters);
             if (update.windowState != null) {
                 windowClone.setWindowState(update.windowState);
@@ -136,17 +146,17 @@ public class WindowContext implements WindowContentContext {
      * @return the callable for rendering a portlet
      */
     public RenderTask createRenderTask() {
-        return state.createRender(this);
+        return content.createRender(this);
     }
 
     public Response serveResource(String id, Map<String, String[]> resourceState) {
-        return state.serveResource(this, id, resourceState);
+        return content.serveResource(this, id, resourceState);
     }
 
     public Map<String, String[]> computePublicParameters() {
         Map<String, String[]> publicParameters;
         if (page.hasParameters()) {
-            publicParameters = state.computePublicParameters(page.getParameters());
+            publicParameters = content.computePublicParameters(page.getParameters());
         } else {
             publicParameters = null;
         }
@@ -159,17 +169,17 @@ public class WindowContext implements WindowContentContext {
      * @param dispatch the dispatch
      */
     public void encode(Phase.View.Dispatch dispatch) {
-        encode(dispatch, state);
+        encode(dispatch, content);
     }
 
     /**
      * Encode the provided state in the dispatch object for the current window
      *
      * @param dispatch the dispatch
-     * @param state the state to encode
+     * @param content the content to encode
      */
-    public void encode(Phase.View.Dispatch dispatch, WindowContent state) {
-        encode(dispatch, state.getParameters(), state.getWindowState(), state.getMode());
+    public void encode(Phase.View.Dispatch dispatch, WindowContent<S> content) {
+        encode(dispatch, content.getParameters(), content.getWindowState(), content.getMode());
     }
 
     /**
@@ -194,11 +204,11 @@ public class WindowContext implements WindowContentContext {
 
     @Override
     public String toString() {
-        return "WindowState[name=" + name + ",parameters=" + state.getParameters() + "]";
+        return "WindowState[name=" + name + ",parameters=" + content.getParameters() + "]";
     }
 
     public String createRenderURL(
-            WindowContent content,
+            WindowContent<S> content,
             Map<String, String[]> changes) {
         PageContext.Builder a = page.builder();
         if (content != null) {
@@ -239,17 +249,17 @@ public class WindowContext implements WindowContentContext {
 
     public String creatResourceURL(CacheLevel cacheLevel, Map<String, String[]> parameters, String id) {
 
-        Phase.View.Dispatch dispatch = Controller_.index(page.state.path, "resource", name, state.getWindowState(), state.getMode());
+        Phase.View.Dispatch dispatch = Controller_.index(page.state.path, "resource", name, content.getWindowState(), content.getMode());
 
         //
         if (cacheLevel == CacheLevel.PORTLET || cacheLevel == CacheLevel.PAGE) {
 
             // Encode this window
-            String ww = state.getParameters();
+            String ww = content.getParameters();
             if (ww == null) {
                 ww = new Encoder(PortletContent.NO_PARAMETERS).encode();
             }
-            encode(dispatch, ww, state.getWindowState(), state.getMode());
+            encode(dispatch, ww, content.getWindowState(), content.getMode());
 
             //
             if (cacheLevel == CacheLevel.PAGE) {

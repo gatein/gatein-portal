@@ -18,6 +18,7 @@
  */
 package org.gatein.portal.content;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ import juzu.Response;
  *
  * @author Julien Viet
  */
-public abstract class WindowContent {
+public abstract class WindowContent<S extends Serializable> {
 
     /**
      * Create a render task for the specified window.
@@ -38,16 +39,16 @@ public abstract class WindowContent {
      * @param window the window
      * @return the render task
      */
-    public abstract RenderTask createRender(WindowContentContext window);
+    public abstract RenderTask createRender(WindowContentContext<S> window);
 
     public abstract Result processAction(
-            WindowContentContext window,
+            WindowContentContext<S> window,
             String windowState,
             String mode,
             Map<String, String[]> interactionState);
 
     public abstract Response serveResource(
-            WindowContentContext window,
+            WindowContentContext<S> window,
             String id,
             Map<String, String[]> resourceState);
 
@@ -75,6 +76,6 @@ public abstract class WindowContent {
 
     public abstract Iterable<Map.Entry<QName, String[]>> getPublicParametersChanges(Map<String, String[]> changes);
 
-    public abstract WindowContent copy();
+    public abstract WindowContent<S> copy();
 
 }

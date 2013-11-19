@@ -22,6 +22,7 @@ package org.gatein.portal.web.page;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Set;
@@ -153,9 +154,9 @@ public class PageEditor {
     @Route(value = "/getContent")
     //TODO: the contentType is not used for now
     public Response getContent(@Param(name = "javax.portlet.contentId") String contentId, @Param(name = "javax.portlet.contentType") String contentType, @Param(name = "javax.portlet.path") String path) {
-        WindowContent content = contentProvider.getContent(contentId);
+        WindowContent<org.exoplatform.portal.pom.spi.portlet.Portlet> content = contentProvider.getContent(contentId);
         PageContext.Builder pageBuilder = new PageContext.Builder(path);
-        RenderTask task = new WindowContext("", content , pageBuilder.build()).createRenderTask();
+        RenderTask task = new WindowContext("", content , null, pageBuilder.build()).createRenderTask();
         Result result = task.execute(Request.getCurrent().getUserContext().getLocale());
         if (result instanceof Result.Fragment) {
             Result.Fragment fragment = (Result.Fragment) result;

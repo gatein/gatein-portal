@@ -38,10 +38,10 @@ import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.deployment.DeploymentException;
 import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
-import org.gatein.pc.portlet.impl.state.StateConverterV0;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
+import org.gatein.portal.web.content.portlet.PortletStateConverter;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
@@ -73,7 +73,7 @@ public class PortletAppManager implements WebAppListener, Startable {
         consumerPortletInvoker.
             append(new ConsumerCacheInterceptor()).
             append(new PortletCustomizationInterceptor()).
-            append(new ProducerPortletInvoker(new PortletStatePersistenceManagerService(), new StateManagementPolicyService(true), new StateConverterV0())).
+            append(new ProducerPortletInvoker(new PortletStatePersistenceManagerService(), new StateManagementPolicyService(true), new PortletStateConverter())).
             append(containerPortletInvoker).
             append(new ValveInterceptor(deployer)).
             append(new SecureTransportInterceptor()).

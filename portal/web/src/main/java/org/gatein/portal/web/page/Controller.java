@@ -19,6 +19,7 @@
 
 package org.gatein.portal.web.page;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -173,19 +174,19 @@ public class Controller {
                             pageBuilder.setQNameParameters(prp);
                         } else if (name.startsWith("javax.portlet.p.")) {
                             String id = name.substring("javax.portlet.p.".length());
-                            WindowContent window = pageBuilder.getWindow(id);
+                            WindowContent<?> window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.setParameters(parameter.getRaw(0));
                             }
                         } else if (name.startsWith("javax.portlet.w.")) {
                             String id = name.substring("javax.portlet.w.".length());
-                            WindowContent window = pageBuilder.getWindow(id);
+                            WindowContent<?> window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.setWindowState(parameter.getValue());
                             }
                         } else if (name.startsWith("javax.portlet.m.")) {
                             String id = name.substring("javax.portlet.m.".length());
-                            WindowContent window = pageBuilder.getWindow(id);
+                            WindowContent<?> window = pageBuilder.getWindow(id);
                             if (window != null) {
                                 window.setMode(parameter.getValue());
                             }
@@ -212,11 +213,11 @@ public class Controller {
                             if ("action".equals(phase)) {
 
                                 //
-                                String windowState = window.state.getWindowState();
+                                String windowState = window.content.getWindowState();
                                 if (targetWindowState != null) {
                                     windowState = targetWindowState;
                                 }
-                                String mode = window.state.getMode();
+                                String mode = window.content.getMode();
                                 if (targetMode != null) {
                                     mode = targetMode;
                                 }
@@ -325,7 +326,7 @@ public class Controller {
         }
 
         // Locate the content
-        WindowContent content = contentProvider.getContent(contentId);
+        WindowContent<Serializable> content = contentProvider.getContent(contentId);
         if (content == null) {
             return Response.notFound("Invalid content id " + contentId);
         }
@@ -344,7 +345,7 @@ public class Controller {
                 if (name.startsWith("javax.portlet.")) {
                     if (name.startsWith("javax.portlet.p.")) {
                         String id = name.substring("javax.portlet.p.".length());
-                        WindowContent window = pageBuilder.getWindow(id);
+                        WindowContent<?> window = pageBuilder.getWindow(id);
                         if (window != null) {
                             window.setParameters(parameter.getRaw(0));
                         }
