@@ -257,8 +257,9 @@ public class JSONContainerAdapter implements ModelAdapter<JSONObject, ElementSta
                 //create new window
                 String contentId = json.getString("contentId");
                 TransientApplicationState state = new TransientApplicationState(contentId);
-
-                return new ElementState.Window(ContentType.PORTLET, state, null, null, null, false, false, false, null, null, null, null, null);
+                String contentTypeValue = json.getString("contentType");
+                ContentType<?> contentType = ContentType.forValue(contentTypeValue);
+                return new ElementState.Window(contentType, state, null, null, null, false, false, false, null, null, null, null, null);
 
             } else {
                 throw new UnsupportedOperationException();

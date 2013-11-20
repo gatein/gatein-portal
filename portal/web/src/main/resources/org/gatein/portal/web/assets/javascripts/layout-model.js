@@ -46,7 +46,6 @@
       'type' : 'application',
       'draggable' : true,
       'content' : 'Loading the application...',
-      'logo' : '/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png'
     },
 
     // Fetch application content and update the 'content' attribute in the success callback

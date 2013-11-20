@@ -19,7 +19,10 @@
 package org.gatein.portal.web.content.portlet;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import javax.inject.Inject;
@@ -39,6 +42,8 @@ import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
 import org.gatein.pc.api.WindowState;
 import org.gatein.pc.api.cache.CacheLevel;
+import org.gatein.pc.api.info.MetaInfo;
+import org.gatein.pc.api.info.PortletInfo;
 import org.gatein.pc.api.invocation.ActionInvocation;
 import org.gatein.pc.api.invocation.ResourceInvocation;
 import org.gatein.pc.api.invocation.response.ContentResponse;
@@ -51,6 +56,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentType;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.content.WindowContentContext;
@@ -58,6 +64,8 @@ import org.gatein.portal.web.page.Encoder;
 import org.gatein.portal.content.ContentProvider;
 import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Julien Viet
@@ -293,6 +301,33 @@ public class PortletContentProvider implements ContentProvider<Portlet> {
                     resp.withHeader(headerName, httpHeaders.getValue(headerName));
                 }
             }
+        }
+    }
+
+    @Override
+    public Iterable<ContentDescription> findContents(String filter, int offset, int limit) {
+        try {
+            Set<org.gatein.pc.api.Portlet> portlets = portletManager.getAllPortlets();
+            ArrayList<ContentDescription> all = new ArrayList<ContentDescription>();
+            for (org.gatein.pc.api.Portlet portlet : portlets) {
+                PortletInfo info = portlet.getInfo();
+                MetaInfo meta = info.getMeta();
+                String title = meta.getMetaValue("title").getDefaultString();
+                all.add(new ContentDescription(
+                        info.getApplicationName() + "/" + info.getName(),
+                        title,
+                        "<img alt=\"\" src=\"/portal/assets/org/gatein/portal/web/assets/images/DefaultPortlet.png\"/>\n" +
+                        "<p>" + title + "</p>"
+                ));
+            }
+            if (offset > all.size()) {
+                return Collections.emptyList();
+            } else {
+                int to = Math.min(all.size(), offset + limit);
+                return all.subList(offset, to);
+            }
+        } catch (PortletInvokerException e) {
+            return Collections.emptyList();
         }
     }
 }

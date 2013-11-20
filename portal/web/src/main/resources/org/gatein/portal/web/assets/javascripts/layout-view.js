@@ -23,7 +23,8 @@
       //For each to render app
       //This should be done in template but currently underscore-template conflict with juzu-template
       _.each(this.apps.toJSON(), function(app){
-        var html = _.template($("#portlet-template").html(), app);
+        var template = $("#portlet-template").html();
+        var html = _.template(template, app);
         var $html = $(html);
         $container.append($html);
 

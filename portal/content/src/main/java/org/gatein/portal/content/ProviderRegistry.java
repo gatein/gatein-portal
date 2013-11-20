@@ -97,6 +97,21 @@ public class ProviderRegistry {
         }
     }
 
+    /**
+     * Return the known providers.
+     *
+     * @return the providers
+     */
+    public List<ContentProvider<?>> getProviders() {
+        return providers;
+    }
+
+    /**
+     * Return a provider for the specified content type.
+     *
+     * @param contentType the content type
+     * @return the provider that matches the content type or null
+     */
     public ContentProvider<?> resolveProvider(String contentType) {
         for (ContentProvider<?> provider : providers) {
             if (provider.getContentType().getValue().equals(contentType)) {

@@ -16,31 +16,25 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.web.content.simple;
-
-import java.util.Collections;
-
-import org.gatein.portal.content.ContentDescription;
-import org.gatein.portal.content.ContentProvider;
-import org.gatein.portal.content.WindowContent;
+package org.gatein.portal.content;
 
 /**
  * @author Julien Viet
  */
-public class SimpleContentProvider implements ContentProvider<SimpleState> {
+public class ContentDescription {
 
-    @Override
-    public SimpleContentType getContentType() {
-        return new SimpleContentType();
-    }
+    /** . */
+    public final String id;
 
-    @Override
-    public WindowContent<SimpleState> getContent(String id) {
-        return new SimpleContent(id, "normal", "view");
-    }
+    /** . */
+    public final String displayName;
 
-    @Override
-    public Iterable<ContentDescription> findContents(String filter, int offset, int limit) {
-        return Collections.emptyList();
+    /** . */
+    public final String markup;
+
+    public ContentDescription(String id, String displayName, String markup) {
+        this.id = id;
+        this.displayName = displayName;
+        this.markup = markup;
     }
 }

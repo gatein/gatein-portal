@@ -18,8 +18,11 @@
  */
 package org.gatein.portal.markdown;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
@@ -27,6 +30,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import juzu.Response;
+import org.gatein.common.io.IOTools;
 import org.gatein.portal.content.RenderTask;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.content.WindowContent;
@@ -38,6 +42,21 @@ import org.w3c.dom.Element;
  * @author Julien Viet
  */
 class MarkdownContent extends WindowContent<Markdown> {
+
+    private static final String SAMPLE;
+
+    static {
+        String s = "";
+        InputStream in = MarkdownContent.class.getResourceAsStream("sample.md");
+        if (in != null) {
+            try {
+                s = new String(IOTools.getBytes(in));
+            } catch (IOException ignore) {
+                // Should not happen...
+            }
+        }
+        SAMPLE = s;
+    }
 
     /** . */
     private final String id;
@@ -61,25 +80,28 @@ class MarkdownContent extends WindowContent<Markdown> {
             public Result execute(Locale locale) {
                 String html;
                 Markdown md = window.getState();
-                if (md != null) {
-                    org.tautua.markdownpapers.Markdown processor = new org.tautua.markdownpapers.Markdown();
-                    StringWriter buffer = new StringWriter();
-                    try {
-                        processor.transform(new StringReader(md.value), buffer);
-                    } catch (ParseException e) {
-                        return new Result.Error(false, e);
+                try {
+                    if (md != null) {
+                        html = render(md.value);
+                    } else {
+                        html = render(SAMPLE);
                     }
-                    html = buffer.toString();
-                } else {
-                    html = "";
+                    return new Result.Fragment(
+                            Collections.<Map.Entry<String, String>>emptyList(),
+                            Collections.<Element>emptyList(),
+                            "Mardown Content",
+                            html);
+                } catch (ParseException e) {
+                    return new Result.Error(false, e);
                 }
-                return new Result.Fragment(
-                        Collections.<Map.Entry<String, String>>emptyList(),
-                        Collections.<Element>emptyList(),
-                        "Mardown Content",
-                        html);
             }
         };
+    }
+
+    private String render(String md) throws ParseException {
+        StringWriter buffer = new StringWriter();
+        new org.tautua.markdownpapers.Markdown().transform(new StringReader(md), buffer);
+        return buffer.toString();
     }
 
     @Override

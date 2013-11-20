@@ -25,7 +25,6 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Collections;
-import java.util.Set;
 import javax.inject.Inject;
 import juzu.Param;
 import juzu.Resource;
@@ -34,15 +33,13 @@ import juzu.Route;
 import juzu.impl.common.JSON;
 import juzu.impl.request.Request;
 import juzu.request.ResourceContext;
-import org.gatein.pc.api.Portlet;
-import org.gatein.pc.api.info.MetaInfo;
-import org.gatein.pc.api.info.PortletInfo;
+import org.gatein.portal.content.ContentDescription;
+import org.gatein.portal.content.ContentProvider;
+import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
-import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
-import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.web.layout.RenderingContext;
@@ -51,14 +48,10 @@ import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.content.RenderTask;
 import org.gatein.portal.content.WindowContent;
 import org.gatein.portal.web.content.portlet.PortletContentProvider;
-import org.gatein.portal.web.portlet.PortletAppManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class PageEditor {
-
-    @Inject
-    NavigationService navigationService;
 
     @Inject
     PageService pageService;
@@ -67,16 +60,13 @@ public class PageEditor {
     LayoutService layoutService;
 
     @Inject
-    CustomizationService customizationService;
-
-    @Inject
     PortletContentProvider contentProvider;
 
     @Inject
     ZoneLayoutFactory layoutFactory;
 
     @Inject
-    PortletAppManager portletAppManager;
+    ProviderRegistry providers;
 
     @Resource
     @Route(value = "/switchto/{javax.portlet.z}")
@@ -96,17 +86,16 @@ public class PageEditor {
     @Route(value = "/contents")
     public Response getAllContents() throws Exception {
         JSONArray result = new JSONArray();
-        Set<Portlet> portlets = this.portletAppManager.getAllPortlets();
-        for (Portlet portlet : portlets) {
-            PortletInfo info = portlet.getInfo();
-            MetaInfo meta = info.getMeta();
-
-            JSONObject item = new JSONObject();
-            item.put("contentId", info.getApplicationName() + "/" + info.getName());
-            item.put("contentType", "portlet");
-            item.put("title", meta.getMetaValue("title").getDefaultString());
-
-            result.put(item);
+        for (ContentProvider<?> provider : providers.getProviders()) {
+            Iterable<ContentDescription> descriptions = provider.findContents("", 0, 30);
+            for (ContentDescription description : descriptions) {
+                JSONObject item = new JSONObject();
+                item.put("contentId", description.id);
+                item.put("contentType", provider.getContentType().getValue());
+                item.put("title", description.displayName);
+                item.put("description", description.markup);
+                result.put(item);
+            }
         }
         return Response.status(200).body(result.toString());
     }
@@ -154,13 +143,17 @@ public class PageEditor {
     @Route(value = "/getContent")
     //TODO: the contentType is not used for now
     public Response getContent(@Param(name = "javax.portlet.contentId") String contentId, @Param(name = "javax.portlet.contentType") String contentType, @Param(name = "javax.portlet.path") String path) {
-        WindowContent<org.exoplatform.portal.pom.spi.portlet.Portlet> content = contentProvider.getContent(contentId);
+        ContentProvider<?> provider = providers.resolveProvider(contentType);
+        WindowContent<?> content = provider.getContent(contentId);
+        return render(content, path);
+    }
+
+    private <S extends Serializable> Response render(WindowContent<S> content, String path) {
         PageContext.Builder pageBuilder = new PageContext.Builder(path);
-        RenderTask task = new WindowContext("", content , null, pageBuilder.build()).createRenderTask();
+        RenderTask task = new WindowContext<S>("", content , null, pageBuilder.build()).createRenderTask();
         Result result = task.execute(Request.getCurrent().getUserContext().getLocale());
         if (result instanceof Result.Fragment) {
             Result.Fragment fragment = (Result.Fragment) result;
-
             //200 OK
             return Response.status(200).body(new JSON().set("title", fragment.title).set("content", fragment.content).toString()).withCharset(Charset.forName("UTF-8"))
                     .withMimeType("application/json");

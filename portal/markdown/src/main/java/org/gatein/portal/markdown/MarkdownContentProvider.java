@@ -19,7 +19,9 @@
 package org.gatein.portal.markdown;
 
 import java.io.Serializable;
+import java.util.Collections;
 
+import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
 import org.gatein.portal.content.WindowContent;
 
@@ -36,5 +38,15 @@ public class MarkdownContentProvider implements ContentProvider<Markdown> {
     @Override
     public WindowContent<Markdown> getContent(String id) {
         return new MarkdownContent(id, "normal", "view");
+    }
+
+    @Override
+    public Iterable<ContentDescription> findContents(String filter, int offset, int limit) {
+        ContentDescription desc = new ContentDescription(
+                "",
+                "Markdown Document",
+                "<img alt=\"\" src=\"/portal/markdown-icon.png\"/>\n" +
+                "<p>Markdown Document</p>");
+        return Collections.singleton(desc);
     }
 }

@@ -41,4 +41,14 @@ public interface ContentProvider<S extends Serializable> {
      */
     WindowContent<S> getContent(String id);
 
+    /**
+     * Returns the available contents.
+     *
+     * @param filter the query filter
+     * @param offset the offset
+     * @param limit the limit
+     * @return the available contents
+     */
+    Iterable<ContentDescription> findContents(String filter, int offset, int limit);
+
 }
