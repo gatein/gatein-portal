@@ -149,6 +149,8 @@ public class PageEditor {
     }
 
     private <S extends Serializable> Response render(WindowContent<S> content, String path) {
+        content.setMode("preview");
+        content.setWindowState("normal");
         PageContext.Builder pageBuilder = new PageContext.Builder(path);
         RenderTask task = new WindowContext<S>("", content , null, pageBuilder.build()).createRenderTask();
         Result result = task.execute(Request.getCurrent().getUserContext().getLocale());

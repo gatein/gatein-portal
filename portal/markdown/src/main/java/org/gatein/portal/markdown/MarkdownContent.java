@@ -78,21 +78,37 @@ class MarkdownContent extends WindowContent<Markdown> {
         return new RenderTask() {
             @Override
             public Result execute(Locale locale) {
-                String html;
-                Markdown md = window.getState();
-                try {
-                    if (md != null) {
-                        html = render(md.value);
-                    } else {
-                        html = render(SAMPLE);
-                    }
+                if ("edit".equals(mode)) {
                     return new Result.Fragment(
                             Collections.<Map.Entry<String, String>>emptyList(),
                             Collections.<Element>emptyList(),
                             "Mardown Content",
-                            html);
-                } catch (ParseException e) {
-                    return new Result.Error(false, e);
+                            "Edit mode");
+                } else {
+                    String header;
+                    if ("preview".equals(mode)) {
+                        header = "";
+                    } else {
+                        MarkdownContent edit = new MarkdownContent(id, null, "edit");
+                        String editURL = window.createRenderURL(edit, Collections.<String, String[]>emptyMap());
+                        header = "<a href=\"" + editURL + "\">edit</a><br/>\n";
+                    }
+                    String markup;
+                    Markdown md = window.getState();
+                    try {
+                        if (md != null) {
+                            markup = render(md.value);
+                        } else {
+                            markup = render(SAMPLE);
+                        }
+                        return new Result.Fragment(
+                                Collections.<Map.Entry<String, String>>emptyList(),
+                                Collections.<Element>emptyList(),
+                                "Mardown Content",
+                                header + markup);
+                    } catch (ParseException e) {
+                        return new Result.Error(false, e);
+                    }
                 }
             }
         };

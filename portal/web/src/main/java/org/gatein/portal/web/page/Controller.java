@@ -333,6 +333,10 @@ public class Controller {
         WindowContent<Serializable> content = contentProvider.getContent(contentId);
         if (content == null) {
             return Response.notFound("Invalid content id " + contentId);
+        } else {
+            // Should check that "preview" is supported somehow
+            content.setMode("preview");
+            content.setWindowState("normal");
         }
 
         // Parse path
