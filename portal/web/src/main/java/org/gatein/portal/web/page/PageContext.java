@@ -20,6 +20,7 @@ package org.gatein.portal.web.page;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -57,42 +58,13 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         }
 
         /** . */
-        private PageData state;
+        protected final PageData state;
 
         /** A map of name -> window. */
-        private final HashMap<String, WindowContent<?>> windows = new LinkedHashMap<String, WindowContent<?>>();
-
-        /** A map of name -> state. */
-        private final HashMap<String, Serializable> windowStates = new LinkedHashMap<String, Serializable>();
+        protected final HashMap<String, WindowContent<?>> windows = new LinkedHashMap<String, WindowContent<?>>();
 
         public WindowContent<?> getWindow(String name) {
             return windows.get(name);
-        }
-
-        public NodeModel<NodeState, ElementState> asModel(
-                final ProviderRegistry providerRegistry,
-                final CustomizationService customizationService) {
-            return new NodeModel<NodeState, ElementState>() {
-                @Override
-                public NodeContext<NodeState, ElementState> getContext(NodeState node) {
-                    return node.context;
-                }
-                @Override
-                public NodeState create(NodeContext<NodeState, ElementState> context) {
-                    if (context.getState() instanceof ElementState.Window) {
-                        CustomizationContext<?> customization = customizationService.loadCustomization(context.getId());
-                        String contentId = customization.getContentId();
-                        NodeState window = new NodeState(context);
-                        ContentProvider<?> contentProvider = providerRegistry.resolveProvider(customization.getContentType().getValue());
-                        WindowContent<?> windowState = contentProvider.getContent(contentId);
-                        windows.put(window.context.getName(), windowState);
-                        windowStates.put(window.context.getName(), customization.getState());
-                        return window;
-                    } else {
-                        return new NodeState(context);
-                    }
-                }
-            };
         }
 
         public void setWindow(String name, WindowContent<?> window) {
@@ -116,7 +88,68 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         }
 
         public PageContext build() {
-            return new PageContext(this);
+            PageContext context = new PageContext(state);
+            for (Map.Entry<String, WindowContent<?>> window : windows.entrySet()) {
+//                Serializable state = windowStates.get(window.getKey());
+                context.windowMap.put(window.getKey(), new WindowContext(window.getKey(), window.getValue(), null, context));
+            }
+            return context;
+        }
+    }
+
+    public static class ModelBuilder extends Builder {
+
+        /** A map of name -> state. */
+        private final IdentityHashMap<WindowContent<?>, CustomizationContext<?>> windowStates = new IdentityHashMap<WindowContent<?>, CustomizationContext<?>>();
+
+        public ModelBuilder(String path) {
+            super(path);
+        }
+
+        public ModelBuilder(PageData state) {
+            super(state);
+        }
+
+        public NodeModel<NodeState, ElementState> asModel(
+                final ProviderRegistry providerRegistry,
+                final CustomizationService customizationService) {
+            return new NodeModel<NodeState, ElementState>() {
+                @Override
+                public NodeContext<NodeState, ElementState> getContext(NodeState node) {
+                    return node.context;
+                }
+                @Override
+                public NodeState create(NodeContext<NodeState, ElementState> context) {
+                    if (context.getState() instanceof ElementState.Window) {
+                        CustomizationContext<?> customization = customizationService.loadCustomization(context.getId());
+                        String contentId = customization.getContentId();
+                        NodeState window = new NodeState(context);
+                        ContentProvider<?> contentProvider = providerRegistry.resolveProvider(customization.getContentType().getValue());
+                        WindowContent<?> windowState = contentProvider.getContent(contentId);
+                        windows.put(window.context.getName(), windowState);
+                        windowStates.put(windowState, customization);
+                        return window;
+                    } else {
+                        return new NodeState(context);
+                    }
+                }
+            };
+        }
+
+        public CustomizationContext<?> getCustomization(WindowContext<?> window) {
+            return windowStates.get(window.content);
+        }
+
+        public PageContext build() {
+            PageContext context = new PageContext(state);
+            for (Map.Entry<String, WindowContent<?>> entry : windows.entrySet()) {
+                WindowContent<?> window = entry.getValue();
+                String windowName = entry.getKey();
+                CustomizationContext<?> customization = windowStates.get(window);
+                Serializable windowState = customization != null ? customization.getState() : null;
+                context.windowMap.put(windowName, new WindowContext(windowName, window, windowState, context));
+            }
+            return context;
         }
     }
 
@@ -127,21 +160,12 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
     private final HashMap<String, WindowContext> windowMap;
 
     /** Windows iteration. */
-    public final Iterable<WindowContext> windows;
+    protected final Iterable<WindowContext> windows;
 
-    public PageContext(Builder builder) {
-
-        //
-        LinkedHashMap<String, WindowContext> a = new LinkedHashMap<String, WindowContext>(builder.windows.size());
-        for (Map.Entry<String, WindowContent<?>> window : builder.windows.entrySet()) {
-            Serializable state = builder.windowStates.get(window.getKey());
-            a.put(window.getKey(), new WindowContext(window.getKey(), window.getValue(), state, this));
-        }
-
-        //
-        this.state = builder.state;
-        this.windowMap = a;
-        this.windows = a.values();
+    public PageContext(PageData state) {
+        this.state = state;
+        this.windowMap = new LinkedHashMap<String, WindowContext>();
+        this.windows = windowMap.values();
     }
 
     public Builder builder() {
@@ -152,7 +176,6 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         for (Map.Entry<String, WindowContext> entry : windowMap.entrySet()) {
             WindowContext window = entry.getValue();
             builder.windows.put(window.name, window.content.copy());
-            builder.windowStates.put(window.name, window.state);
         }
 
         //

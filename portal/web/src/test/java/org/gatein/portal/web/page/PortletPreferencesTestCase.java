@@ -24,8 +24,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletURL;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
@@ -39,7 +43,9 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -61,13 +67,19 @@ public class PortletPreferencesTestCase extends AbstractPortalTestCase {
     WebDriver driver;
 
     @Test
-    public void testRender() {
+    public void testAction() {
         String url = deploymentURL.toString() + "page5";
         driver.get(url);
         Assert.assertEquals(Collections.singleton("pref_name"), Portlet1.preferences.keySet());
         String[] prefs = Portlet1.preferences.get("pref_name");
         Assert.assertEquals(1, prefs.length);
         Assert.assertEquals("pref_value", prefs[0]);
+        WebElement elt = driver.findElement(By.id("click"));
+        elt.click();
+        Assert.assertEquals(Collections.singleton("pref_name"), Portlet1.preferences.keySet());
+        prefs = Portlet1.preferences.get("pref_name");
+        Assert.assertEquals(1, prefs.length);
+        Assert.assertEquals("pref_bar", prefs[0]);
     }
 
     public static class Portlet1 extends GenericPortlet {
@@ -76,10 +88,18 @@ public class PortletPreferencesTestCase extends AbstractPortalTestCase {
         static HashMap<String, String[]> preferences = null;
 
         @Override
+        public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException {
+            PortletPreferences prefs = request.getPreferences();
+            prefs.setValue("pref_name", "pref_bar");
+            prefs.store();
+        }
+
+        @Override
         protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
             preferences = new HashMap<String, String[]>(request.getPreferences().getMap());
             response.setContentType("text/html");
-            response.getWriter().append("<a>click</a>").close();
+            PortletURL url = response.createActionURL();
+            response.getWriter().append("<a id=\"click\" href=\"").append(url.toString()).append("\">save</a>").close();
         }
     }
 }

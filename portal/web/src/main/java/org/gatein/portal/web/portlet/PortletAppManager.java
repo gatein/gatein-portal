@@ -73,7 +73,7 @@ public class PortletAppManager implements WebAppListener, Startable {
         consumerPortletInvoker.
             append(new ConsumerCacheInterceptor()).
             append(new PortletCustomizationInterceptor()).
-            append(new ProducerPortletInvoker(new PortletStatePersistenceManagerService(), new StateManagementPolicyService(true), new PortletStateConverter())).
+            append(new ProducerPortletInvoker(new PortletStatePersistenceManagerService(), new StateManagementPolicyService(false), new PortletStateConverter())).
             append(containerPortletInvoker).
             append(new ValveInterceptor(deployer)).
             append(new SecureTransportInterceptor()).

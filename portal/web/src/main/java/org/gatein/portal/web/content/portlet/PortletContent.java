@@ -28,13 +28,18 @@ import java.util.regex.Pattern;
 import javax.xml.namespace.QName;
 
 import juzu.Response;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.Portlet;
+import org.gatein.pc.api.PortletContext;
+import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.NavigationInfo;
 import org.gatein.pc.api.info.ParameterInfo;
 import org.gatein.pc.api.info.PortletInfo;
+import org.gatein.pc.portlet.state.SimplePropertyMap;
+import org.gatein.pc.portlet.state.producer.PortletState;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.web.page.Decoder;
 import org.gatein.portal.web.page.Encoder;
@@ -227,5 +232,23 @@ public class PortletContent extends WindowContent<org.exoplatform.portal.pom.spi
     @Override
     public WindowContent<org.exoplatform.portal.pom.spi.portlet.Portlet> copy() {
         return new PortletContent(this);
+    }
+
+    /**
+     * Create a new portlet context based on this content context with the specified portlet state preferences.
+     *
+     * @param state the customization state
+     * @return the portlet context
+     */
+    StatefulPortletContext<PortletState> as(org.exoplatform.portal.pom.spi.portlet.Portlet state) {
+        SimplePropertyMap properties = new SimplePropertyMap();
+        for (Preference pref : state) {
+            properties.put(pref.getName(), pref.getValues());
+        }
+        String id = portlet.getContext().getId();
+        return StatefulPortletContext.create(
+                id,
+                PortletStateType.INSTANCE,
+                new PortletState(id, properties));
     }
 }

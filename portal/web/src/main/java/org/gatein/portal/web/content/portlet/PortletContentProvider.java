@@ -21,6 +21,7 @@ package org.gatein.portal.web.content.portlet;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -34,12 +35,14 @@ import juzu.Response;
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.api.PortletInvokerException;
+import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.WindowState;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.api.info.MetaInfo;
@@ -56,6 +59,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.pc.portlet.state.producer.PortletState;
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentType;
 import org.gatein.portal.content.Result;
@@ -108,8 +112,18 @@ public class PortletContentProvider implements ContentProvider<Portlet> {
             String mode,
             Map<String, String[]> interactionState) {
 
+        //
         WindowState windowState_ = windowState != null ? WindowState.create(windowState) : WindowState.NORMAL;
         Mode mode_ = mode != null ? Mode.create(mode) : Mode.VIEW;
+
+        // Compute portlet context with prefs if there are some
+        PortletContent content = (PortletContent) window.getContent();
+        PortletContext target = content.portlet.getContext();
+        Portlet state = window.getState();
+        if (state != null) {
+            target = content.as(state);
+        }
+        GateInInstanceContext instanceContext = new GateInInstanceContext(window.getName(), AccessMode.READ_WRITE);
 
         //
         ContextLifeCycle lifeCycle = Request.getCurrent().suspend();
@@ -118,16 +132,15 @@ public class PortletContentProvider implements ContentProvider<Portlet> {
 
             //
             ActionInvocation action = new ActionInvocation(new GateInPortletInvocationContext(this, (PortletContent) window.getContent(), window, lifeCycle));
-            PortletContent state = (PortletContent) window.getContent();
             action.setClientContext(new GateInClientContext());
             action.setPortalContext(new AbstractPortalContext());
-            action.setInstanceContext(new AbstractInstanceContext(window.getName(), AccessMode.READ_ONLY));
+            action.setInstanceContext(instanceContext);
             action.setWindowContext(new AbstractWindowContext(window.getName()));
             action.setUserContext(new AbstractUserContext());
             action.setSecurityContext(new AbstractSecurityContext(Context.getCurrentRequest()));
             action.setRequest(Context.getCurrentRequest());
             action.setResponse(Context.getCurrentResponse());
-            action.setTarget(state.portlet.getContext());
+            action.setTarget(target);
             action.setMode(mode_);
             action.setWindowState(windowState_);
             action.setNavigationalState(ParametersStateString.create());
@@ -145,6 +158,8 @@ public class PortletContentProvider implements ContentProvider<Portlet> {
 
         //
         if (pir instanceof UpdateNavigationalStateResponse) {
+
+            //
             UpdateNavigationalStateResponse update = (UpdateNavigationalStateResponse)pir;
             ParametersStateString s = (ParametersStateString) update.getNavigationalState();
             String updateParameters;
@@ -166,7 +181,23 @@ public class PortletContentProvider implements ContentProvider<Portlet> {
             } else {
                 updateMode = null;
             }
-            return new Result.Update(updateParameters, updateWindowState, updateMode, update.getPublicNavigationalStateUpdates());
+
+            //
+            Portlet stateUpdate;
+            PortletContext modifiedContext = instanceContext.getModifiedContext();
+            if (modifiedContext != null) {
+                System.out.println("Should save new context");
+                StatefulPortletContext<PortletState> a = (StatefulPortletContext<PortletState>) modifiedContext;
+                stateUpdate = new Portlet();
+                for (Map.Entry<String, List<String>> pref : a.getState().getProperties().entrySet()) {
+                    stateUpdate.putPreference(new Preference(pref.getKey(), pref.getValue(), false));
+                }
+            } else {
+                stateUpdate = null;
+            }
+
+            //
+            return new Result.Update(updateParameters, updateWindowState, updateMode, update.getPublicNavigationalStateUpdates(), stateUpdate);
         } else {
             throw new UnsupportedOperationException("Not yet handled " + pir);
         }

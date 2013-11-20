@@ -37,6 +37,7 @@ import javax.xml.namespace.QName;
 
 import juzu.Param;
 import juzu.Path;
+import juzu.PropertyType;
 import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
@@ -50,6 +51,7 @@ import juzu.request.ViewContext;
 import juzu.template.Template;
 import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
+import org.gatein.portal.mop.customization.CustomizationContext;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
@@ -148,7 +150,7 @@ public class Controller {
             } else {
 
                 // Page builder
-                PageContext.Builder pageBuilder = new PageContext.Builder(path);
+                PageContext.ModelBuilder pageBuilder = new PageContext.ModelBuilder(path);
 
                 // Load site windows
                 SiteContext site = siteService.loadSite(SiteKey.portal("classic"));
@@ -226,7 +228,38 @@ public class Controller {
                                     }
 
                                     //
-                                    return window.processAction(windowState, mode, parameters);
+                                    Result result = window.processAction(windowState, mode, parameters);
+
+                                    if (result instanceof Result.Update) {
+                                        Result.Update update = (Result.Update) result;
+                                        PageContext.Builder clone = window.page.builder();
+                                        WindowContent<?> windowClone = clone.getWindow(window.name);
+                                        windowClone.setParameters(update.parameters);
+                                        if (update.windowState != null) {
+                                            windowClone.setWindowState(update.windowState);
+                                        }
+                                        if (update.mode != null) {
+                                            windowClone.setMode(update.mode);
+                                        }
+                                        if (update.changes != null && update.changes.size() > 0) {
+                                            clone.apply(window.getPublicParametersChanges(update.changes));
+                                        }
+
+                                        // We need to update the customization state
+                                        if (update.state != null) {
+                                            CustomizationContext customization = pageBuilder.getCustomization(window);
+                                            customization.setState(update.state);
+                                            customizationService.saveCustomization(customization);
+                                        }
+
+                                        //
+                                        return clone.build().getDispatch().with(PropertyType.REDIRECT_AFTER_ACTION);
+                                    } else if (result instanceof Result.Error) {
+                                        Result.Error error =(Result.Error) result;
+                                        return Response.error(error.getCause());
+                                    } else {
+                                        throw new UnsupportedOperationException("Not yet implemented " + result);
+                                    }
                                 } else if ("resource".equals(phase)) {
 
                                     //

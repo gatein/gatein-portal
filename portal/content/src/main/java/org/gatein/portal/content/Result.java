@@ -18,6 +18,7 @@
  */
 package org.gatein.portal.content;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,14 @@ public class Result {
         public Error(boolean internal, Throwable cause) {
             this.internal = internal;
             this.cause = cause;
+        }
+
+        public boolean isInternal() {
+            return internal;
+        }
+
+        public Throwable getCause() {
+            return cause;
         }
     }
 
@@ -68,7 +77,7 @@ public class Result {
         }
     }
 
-    public static class Update extends Result {
+    public static class Update<S extends Serializable> extends Result {
 
         public final String parameters;
 
@@ -78,11 +87,14 @@ public class Result {
 
         public final Map<String, String[]> changes;
 
-        public Update(String parameters, String windowState, String mode, Map<String, String[]> changes) {
+        public final S state;
+
+        public Update(String parameters, String windowState, String mode, Map<String, String[]> changes, S state) {
             this.parameters = parameters;
             this.windowState = windowState;
             this.mode = mode;
             this.changes = changes;
+            this.state = state;
         }
     }
 }

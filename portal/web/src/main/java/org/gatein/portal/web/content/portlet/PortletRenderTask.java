@@ -32,12 +32,10 @@ import javax.servlet.http.HttpServletResponse;
 import juzu.impl.request.ContextLifeCycle;
 import juzu.impl.request.Request;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
-import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.ParametersStateString;
 import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.PortletInvoker;
-import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
@@ -48,8 +46,6 @@ import org.gatein.pc.portlet.impl.spi.AbstractPortalContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractUserContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
-import org.gatein.pc.portlet.state.SimplePropertyMap;
-import org.gatein.pc.portlet.state.producer.PortletState;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.content.RenderTask;
 import org.gatein.portal.content.WindowContentContext;
@@ -91,14 +87,7 @@ class PortletRenderTask extends RenderTask {
         PortletContext target = content.portlet.getContext();
         Portlet state = windowContext.getState();
         if (state != null) {
-            SimplePropertyMap properties = new SimplePropertyMap();
-            for (Preference pref : state) {
-                properties.put(pref.getName(), pref.getValues());
-            }
-            target = StatefulPortletContext.create(
-                    target.getId(),
-                    PortletStateType.INSTANCE,
-                    new PortletState(target.getId(), properties));
+            target = content.as(state);
         }
 
         //
