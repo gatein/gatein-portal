@@ -39,6 +39,15 @@ public class TestJCASymmetricCodec extends TestCase {
 
     public void testDefaultCodec() {
         URL keyFile = Thread.currentThread().getContextClassLoader().getResource("conf/key.txt");
+
+        if (System.getProperty("java.vendor").toLowerCase().contains("ibm")) {
+            // this keystore is generated with the following command
+            // /usr/lib/jvm/ibm-java-x86_64-70/bin/keytool -genseckey \
+            // -keypass gtnKeyPass -storetype JCEKS -storepass gtnStorePass \
+            // -alias gtnKey -keyalg AES -keystore key-ibmjvm.txt -keysize 128
+            keyFile = Thread.currentThread().getContextClassLoader().getResource("conf/key-ibmjvm.txt");
+        }
+
         Map<String, String> config = new HashMap<String, String>();
         config.put("gatein.codec.jca.symmetric.keyalg", "AES");
         config.put("gatein.codec.jca.symmetric.keystore", keyFile.getPath());
@@ -62,19 +71,23 @@ public class TestJCASymmetricCodec extends TestCase {
 
         URL url = Thread.currentThread().getContextClassLoader().getResource("conf");
         File f = new File(new File(url.toURI()), "gen-key.txt");
-        if (!f.exists()) {
-            f.createNewFile();
-            KeyGenerator keyGen = KeyGenerator.getInstance("DES");
-            SecretKey tmpSecretKey = keyGen.generateKey();
-            KeyStore tmpStore = KeyStore.getInstance("JCEKS");
-            tmpStore.load(null, storePass);
-            tmpStore.setEntry(alias, new KeyStore.SecretKeyEntry(tmpSecretKey), new KeyStore.PasswordProtection(keyPass));
-            OutputStream out = new FileOutputStream(f);
-            try {
-                tmpStore.store(out, storePass);
-            } finally {
-                IOTools.safeClose(out);
-            }
+
+        if (f.exists()) {
+            // remove, as it might be that this keystore was created by a different vendor
+            f.delete();
+        }
+
+        f.createNewFile();
+        KeyGenerator keyGen = KeyGenerator.getInstance("DES");
+        SecretKey tmpSecretKey = keyGen.generateKey();
+        KeyStore tmpStore = KeyStore.getInstance("JCEKS");
+        tmpStore.load(null, storePass);
+        tmpStore.setEntry(alias, new KeyStore.SecretKeyEntry(tmpSecretKey), new KeyStore.PasswordProtection(keyPass));
+        OutputStream out = new FileOutputStream(f);
+        try {
+            tmpStore.store(out, storePass);
+        } finally {
+            IOTools.safeClose(out);
         }
 
         Map<String, String> config = new HashMap<String, String>();
