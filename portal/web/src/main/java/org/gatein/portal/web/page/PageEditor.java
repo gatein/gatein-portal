@@ -149,7 +149,9 @@ public class PageEditor {
     }
 
     private <S extends Serializable> Response render(WindowContent<S> content, String path) {
-        content.setMode("preview");
+        if (content.isSupportedMode("preview")) {
+            content.setMode("preview");
+        }
         content.setWindowState("normal");
         PageContext.Builder pageBuilder = new PageContext.Builder(path);
         RenderTask task = new WindowContext<S>("", content , null, pageBuilder.build()).createRenderTask();

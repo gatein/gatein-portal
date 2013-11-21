@@ -146,6 +146,11 @@ class MarkdownContent extends WindowContent<Markdown> {
     }
 
     @Override
+    public boolean isSupportedWindowState(String ws) {
+        return true;
+    }
+
+    @Override
     public String getWindowState() {
         return windowState;
     }
@@ -153,6 +158,11 @@ class MarkdownContent extends WindowContent<Markdown> {
     @Override
     public void setWindowState(String ws) {
         this.windowState = ws;
+    }
+
+    @Override
+    public boolean isSupportedMode(String mode) {
+        return true;
     }
 
     @Override

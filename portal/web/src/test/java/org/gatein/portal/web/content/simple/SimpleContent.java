@@ -92,6 +92,11 @@ class SimpleContent extends WindowContent<SimpleState> {
     }
 
     @Override
+    public boolean isSupportedWindowState(String ws) {
+        return true;
+    }
+
+    @Override
     public String getWindowState() {
         return windowState;
     }
@@ -99,6 +104,11 @@ class SimpleContent extends WindowContent<SimpleState> {
     @Override
     public void setWindowState(String ws) {
         this.windowState = ws;
+    }
+
+    @Override
+    public boolean isSupportedMode(String mode) {
+        return true;
     }
 
     @Override

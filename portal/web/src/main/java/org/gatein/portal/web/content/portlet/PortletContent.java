@@ -175,6 +175,11 @@ public class PortletContent extends WindowContent<org.exoplatform.portal.pom.spi
     }
 
     @Override
+    public boolean isSupportedWindowState(String ws) {
+        return true;
+    }
+
+    @Override
     public String getWindowState() {
         if (windowState != null && !windowState.equals(org.gatein.pc.api.WindowState.NORMAL)) {
             return windowState.toString();
@@ -186,6 +191,11 @@ public class PortletContent extends WindowContent<org.exoplatform.portal.pom.spi
     @Override
     public void setWindowState(String ws) {
         this.windowState = org.gatein.pc.api.WindowState.create(ws);
+    }
+
+    @Override
+    public boolean isSupportedMode(String mode) {
+        return portlet.getInfo().getCapabilities().getMode(Mode.create(mode)) != null;
     }
 
     @Override

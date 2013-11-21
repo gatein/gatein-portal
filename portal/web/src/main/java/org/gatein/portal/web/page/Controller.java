@@ -368,7 +368,9 @@ public class Controller {
             return Response.notFound("Invalid content id " + contentId);
         } else {
             // Should check that "preview" is supported somehow
-            content.setMode("preview");
+            if (content.isSupportedMode("preview")) {
+                content.setMode("preview");
+            }
             content.setWindowState("normal");
         }
 

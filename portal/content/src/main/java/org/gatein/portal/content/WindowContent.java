@@ -64,9 +64,13 @@ public abstract class WindowContent<S extends Serializable> {
 
     public abstract void setParameters(String s);
 
+    public abstract boolean isSupportedWindowState(String ws);
+
     public abstract String getWindowState();
 
     public abstract void setWindowState(String ws);
+
+    public abstract boolean isSupportedMode(String mode);
 
     public abstract String getMode();
 
