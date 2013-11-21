@@ -190,7 +190,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         if (broadcast)
             preSetEnabled(foundUser);
 
-        Attribute[] attrs = new Attribute[] { new SimpleAttribute(USER_ENABLED, enabled) };
+        Attribute[] attrs = new Attribute[] { new SimpleAttribute(USER_ENABLED, String.valueOf(enabled)) };
 
         AttributesManager am = session.getAttributesManager();
         try {
