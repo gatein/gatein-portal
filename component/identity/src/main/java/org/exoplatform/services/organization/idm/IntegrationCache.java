@@ -117,8 +117,8 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
      * @param query
      * @param list
      */
-    void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list) {
-        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
+    void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list, boolean enabledOnly) {
+        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, enabledOnly));
 
         Node ioNode = addNode(nodeFqn);
 
@@ -127,7 +127,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
 
             if (log.isTraceEnabled()) {
 
-                log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query) + ";namespace=" + ns);
+                log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query, enabledOnly) + ";namespace=" + ns);
             }
         }
     }
@@ -139,9 +139,9 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
      * @param query
      * @return LazyPageList
      */
-    IDMUserListAccess getGtnUserLazyPageList(String ns, Query query) {
+    IDMUserListAccess getGtnUserLazyPageList(String ns, Query query, boolean enabledOnly) {
 
-        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
+        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, enabledOnly));
 
         Node node = getNode(nodeFqn);
 
@@ -149,7 +149,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
             IDMUserListAccess list = (IDMUserListAccess) node.get(NODE_OBJECT_KEY);
 
             if (log.isTraceEnabled() && list != null) {
-                log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query)
+                log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query, enabledOnly)
                         + ";namespace=" + ns);
             }
 
@@ -206,13 +206,13 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
 
     }
 
-    String getQueryKey(Query query) {
+    String getQueryKey(Query query, boolean enabledOnly) {
         StringBuilder sb = new StringBuilder();
         String SEP = ":::";
 
         sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
                 .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
-                .append(query.getToLoginDate()).append(SEP);
+                .append(query.getToLoginDate()).append(SEP).append(enabledOnly).append(SEP);
 
         return sb.toString();
     }

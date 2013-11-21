@@ -62,6 +62,8 @@ public class Config {
 
     private boolean countPaginatedUsers = true;
 
+    private boolean filterDisabledUsersInQueries = true;
+
     private boolean skipPaginationInMembershipQuery = false;
 
     private boolean updateLastLoginTimeAfterAuthentication = true;
@@ -309,6 +311,14 @@ public class Config {
 
     public void setCountPaginatedUsers(boolean countPaginatedUsers) {
         this.countPaginatedUsers = countPaginatedUsers;
+    }
+
+    public boolean isFilterDisabledUsersInQueries() {
+        return filterDisabledUsersInQueries;
+    }
+
+    public void setFilterDisabledUsersInQueries(boolean filterDisabledUsersInQueries) {
+        this.filterDisabledUsersInQueries = filterDisabledUsersInQueries;
     }
 
     public boolean isSkipPaginationInMembershipQuery() {

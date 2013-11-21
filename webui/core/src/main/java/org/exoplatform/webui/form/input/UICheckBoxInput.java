@@ -20,6 +20,8 @@
 package org.exoplatform.webui.form.input;
 
 import java.io.Writer;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -112,13 +114,23 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean> {
     }
 
     public void processRender(WebuiRequestContext context) throws Exception {
-        Writer w = context.getWriter();
-        w.write("<input type=\"checkbox\" class=\"checkbox\" name=\"");
-        w.write(name);
-        w.write("\" id=\"");
-        w.write(name);
-        w.write("\" ");
+        ResourceBundle res = context.getApplicationResourceBundle();
+        String label = getId() + ".label";
+        try {
+            label = res.getString(label);
+        } catch (MissingResourceException e) {
+            label = null;
+        }
 
+        Writer w = context.getWriter();
+        if (label != null) {
+            w.write("<label class=\"uiCheckbox\">");
+        } else {
+            w.write("<span class=\"uiCheckbox\">");
+        }
+        w.append("<input id=\"").append(getId()).append("\" type=\"checkbox\" class=\"checkbox\" name=\"");
+        w.write(name);
+        w.write("\"");
         if (onchange_ != null) {
             UIForm uiForm = getAncestorOfType(UIForm.class);
             w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
@@ -130,7 +142,13 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean> {
 
         renderHTMLAttributes(w);
 
-        w.write("/>");
+        w.write("/><span>");
+        if (label != null) {
+            w.write(label);
+            w.write("</span></label>");
+        } else {
+            w.write("</span></span>");
+        }
         if (this.isMandatory())
             w.write(" *");
     }

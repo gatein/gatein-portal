@@ -24,6 +24,7 @@ package org.gatein.portal.installer;
 
 import java.util.List;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.component.ComponentPlugin;
@@ -89,8 +90,8 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
     }
 
     private boolean checkExistDatabase(OrganizationService service) throws Exception {
-        PageList<?> users = service.getUserHandler().getUserPageList(10);
-        if (users != null && users.getAvailable() > 0)
+        ListAccess<User> users = service.getUserHandler().findAllUsers(false);
+        if (users != null && users.getSize() > 0)
             return true;
         return false;
     }
@@ -160,7 +161,7 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
                 user.setPassword(PortalSetupService.rootPassword());
             }
 
-            if (service.getUserHandler().findUserByName(data.getUserName()) == null) {
+            if (service.getUserHandler().findUserByName(data.getUserName(), false) == null) {
                 service.getUserHandler().createUser(user, true);
                 printInfo("    Created user " + data.getUserName());
             } else {

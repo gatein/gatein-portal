@@ -71,7 +71,7 @@ public class PortalSetupServlet extends HttpServlet {
                 try {
                     OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer()
                             .getComponentInstanceOfType(OrganizationService.class);
-                    User root = service.getUserHandler().findUserByName("root");
+                    User root = service.getUserHandler().findUserByName("root", false);
                     // In the case the root user is not present
                     // This case can happens if organization-configuration.xml is not well configured
                     if (root == null) {

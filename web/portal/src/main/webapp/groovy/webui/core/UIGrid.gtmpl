@@ -56,15 +56,23 @@
       <% }
       else
       {
-         def rowClass = null;
+         def rowClass = "";
          boolean even = true;
+         def rowStyle = null;
          for (bean in uicomponent.getBeans())
          {
             if (even) rowClass = "EvenRow";
             else rowClass = "OddRow portlet-table-alternate";
             even = !even;
+            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
+                if(!uicomponent.getFieldValue(bean, "enabled")) {
+                    rowStyle = "font-style: italic; background: darkgray";
+                } else {
+                    rowStyle = null;
+                }
+            }
       %>
-      <tr class="$rowClass">
+      <tr class="$rowClass" style="$rowStyle">
          <%
                EntityEncoder encoder = HTMLEntityEncoder.getInstance();
                for (field in beanFields)
@@ -78,8 +86,8 @@
                         def dateFormat = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
                         cssClass = "Datetime";
                         fieldValue = dateFormat.format(fieldValue);
-                  }
-                  else cssClass = "Text";
+                     }
+                     else cssClass = "Text";
                   } else {
                      fieldValue = "";
                   }
@@ -94,6 +102,7 @@
                <%
                      def beanIdField = uicomponent.getBeanIdField();
                      def beanId = uicomponent.getBeanIdFor(bean);
+                     def classIcon = "";
                      for (action in beanActions)
                      {
                         if (action == null) continue;
@@ -107,9 +116,21 @@
                         {
                            actionLink = uiParent.event(action, beanId);
                         }
+                        classIcon = action + "Icon";
+                        if (action == "DisableEnableUser") {
+                            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
+                                if (uicomponent.getFieldValue(bean, "enabled")) {
+                                    title = "Disabled User";
+                                    classIcon = "CheckDisable";
+                                } else {
+                                    title = "Enabled User";
+                                    classIcon = "Check";
+                                }
+                            }
+                        }
                %>
                <a href="javascript:;" onclick="$actionLink">
-               <img alt="$title" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${action}Icon"/>
+               <img alt="$title" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${classIcon}"/>
                </a>
                <% } %>
             </div>

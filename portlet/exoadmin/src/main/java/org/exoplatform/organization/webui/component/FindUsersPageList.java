@@ -34,14 +34,17 @@ import org.exoplatform.services.organization.User;
  * @version $Revision$
  */
 public class FindUsersPageList extends PageListAccess<User, Query> {
-    public FindUsersPageList(Query state, int pageSize) {
+
+    boolean enabledOnly = false;
+
+    public FindUsersPageList(Query state, int pageSize, boolean enabledOnly) {
         super(state, pageSize);
+        this.enabledOnly = enabledOnly;
     }
 
     protected ListAccess<User> create(Query state) throws Exception {
         ExoContainer container = PortalContainer.getInstance();
         OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
-        PageList<User> pageList = service.getUserHandler().findUsers(state);
-        return Safe.unwrap(pageList);
+        return service.getUserHandler().findUsersByQuery(state, enabledOnly);
     }
 }

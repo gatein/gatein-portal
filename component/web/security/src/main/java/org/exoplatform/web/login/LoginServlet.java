@@ -216,8 +216,14 @@ public class LoginServlet extends AbstractHttpServlet {
 
             // Show login form or redirect to SSO url (/portal/sso) if SSO is enabled
             req.setAttribute("org.gatein.portal.login.initial_uri", initialURI);
-            SSOHelper ssoHelper = (SSOHelper) getContainer().getComponentInstanceOfType(SSOHelper.class);
-            if (ssoHelper.skipJSPRedirection()) {
+            SSOHelper ssoHelper = getContainer().getComponentInstanceOfType(SSOHelper.class);
+
+            String disabledUser = (String)req.getAttribute(FilterDisabledLoginModule.DISABLED_USER_NAME);
+            boolean meetDisabledUser = disabledUser == null ? false : (disabledUser.equals(username));
+            if(ssoHelper.skipJSPRedirection() && meetDisabledUser) {
+                resp.setContentType("text/html; charset=UTF-8");
+                getServletContext().getRequestDispatcher("/login/jsp/disabled.jsp").include(req, resp);
+            } else if (ssoHelper.skipJSPRedirection()) {
                 String ssoRedirectUrl = req.getContextPath() + ssoHelper.getSSORedirectURLSuffix();
                 ssoRedirectUrl = resp.encodeRedirectURL(ssoRedirectUrl);
                 if (log.isTraceEnabled()) {
