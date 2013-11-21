@@ -90,7 +90,6 @@ public class PageContext implements Iterable<Map.Entry<String, WindowContext>> {
         public PageContext build() {
             PageContext context = new PageContext(state);
             for (Map.Entry<String, WindowContent<?>> window : windows.entrySet()) {
-//                Serializable state = windowStates.get(window.getKey());
                 context.windowMap.put(window.getKey(), new WindowContext(window.getKey(), window.getValue(), null, context));
             }
             return context;

@@ -177,10 +177,10 @@ public class WindowContext<S extends Serializable> implements WindowContentConte
         if (parameters != null) {
             dispatch.setParameter(WindowContext.ENCODING, "javax.portlet.p." + name, parameters);
         }
-        if (windowState != null) {
+        if (windowState != null && !windowState.equals("normal")) {
             dispatch.setParameter("javax.portlet.w." + name, windowState);
         }
-        if (mode != null) {
+        if (mode != null && !mode.equals("view")) {
             dispatch.setParameter("javax.portlet.m." + name, mode);
         }
     }
