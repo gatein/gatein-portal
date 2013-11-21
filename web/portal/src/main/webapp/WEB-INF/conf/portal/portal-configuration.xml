@@ -88,6 +88,7 @@
       <values-param>
         <name>mandatory.mstypes</name>
         <description>Membership type that can not be deleted.</description>
+        <value>*</value>
         <value>member</value>
       </values-param>
     </init-params>
