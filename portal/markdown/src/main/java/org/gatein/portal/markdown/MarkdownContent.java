@@ -79,11 +79,27 @@ class MarkdownContent extends WindowContent<Markdown> {
             @Override
             public Result execute(Locale locale) {
                 if ("edit".equals(mode)) {
+                    String saveURL = window.createActionURL(Collections.<String, String[]>emptyMap(), null, null);
+                    String cancelURL = window.createRenderURL(new MarkdownContent(id, null, "view"), Collections.<String, String[]>emptyMap());
+                    String markup = "<form class=\"form-horizontal\" action=\"" + saveURL + "\" method=\"POST\">" +
+                            "<div class=\"control-group\">" +
+                            "<label class=\"control-label\" for=\"markdown\">Markdown</label>" +
+                            "<div class=\"controls\">" +
+                            "<textarea id=\"markdown\" class=\"span8\" rows=\"20\" name=\"content\">" + (window.getState() != null ? window.getState().value : SAMPLE) + "</textarea>" +
+                            "</div>" +
+                            "</div>" +
+                            "<div class=\"control-group\">" +
+                            "<div class=\"controls controls-row\">" +
+                            "<button type=\"submit\" class=\"btn btn-primary span2\">Save</button>" +
+                            "<a href=\"" + cancelURL + "\" class=\"btn span2\">Cancel</a>" +
+                            "</div>" +
+                            "</div>" +
+                            "</form>";
                     return new Result.Fragment(
                             Collections.<Map.Entry<String, String>>emptyList(),
                             Collections.<Element>emptyList(),
-                            "Mardown Content",
-                            "Edit mode");
+                            "Edit Markdown Content",
+                            markup);
                 } else {
                     String header;
                     if ("preview".equals(mode)) {
@@ -94,21 +110,21 @@ class MarkdownContent extends WindowContent<Markdown> {
                         header = "<a href=\"" + editURL + "\">edit</a><br/>\n";
                     }
                     String markup;
-                    Markdown md = window.getState();
                     try {
+                        Markdown md = window.getState();
                         if (md != null) {
                             markup = render(md.value);
                         } else {
                             markup = render(SAMPLE);
                         }
-                        return new Result.Fragment(
-                                Collections.<Map.Entry<String, String>>emptyList(),
-                                Collections.<Element>emptyList(),
-                                "Mardown Content",
-                                header + markup);
                     } catch (ParseException e) {
                         return new Result.Error(false, e);
                     }
+                    return new Result.Fragment(
+                            Collections.<Map.Entry<String, String>>emptyList(),
+                            Collections.<Element>emptyList(),
+                            "Mardown Content",
+                            header + markup);
                 }
             }
         };
@@ -122,7 +138,20 @@ class MarkdownContent extends WindowContent<Markdown> {
 
     @Override
     public Result processAction(WindowContentContext<Markdown> window, String windowState, String mode, Map<String, String[]> interactionState) {
-        throw new UnsupportedOperationException("todo");
+        String[] content = interactionState.get("content");
+        Markdown md;
+        if (content == null) {
+            md = null;
+        } else {
+            md = new Markdown(content[0]);
+        }
+        return new Result.Update<Markdown>(
+                "",
+                null,
+                "view",
+                null,
+                md
+        );
     }
 
     @Override
@@ -142,7 +171,7 @@ class MarkdownContent extends WindowContent<Markdown> {
 
     @Override
     public void setParameters(String s) {
-        throw new UnsupportedOperationException();
+        // No navigational state supported
     }
 
     @Override

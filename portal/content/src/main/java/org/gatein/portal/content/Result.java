@@ -27,7 +27,7 @@ import org.w3c.dom.Element;
 /**
  * @author Julien Viet
  */
-public class Result {
+public abstract class Result {
 
     public static class Error extends Result {
 
