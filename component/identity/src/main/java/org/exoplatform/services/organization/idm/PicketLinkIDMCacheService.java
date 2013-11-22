@@ -86,6 +86,10 @@ public class PicketLinkIDMCacheService {
             cacheProvider.invalidate(namespace);
         }
 
+        for (IntegrationCache cacheProvider  : integrationCache) {
+            cacheProvider.invalidate(namespace);
+        }
+
         for (IdentityStoreCacheProvider cacheProvider : storeCacheProviders) {
             cacheProvider.invalidate(namespace);
         }
