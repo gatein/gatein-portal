@@ -78,6 +78,7 @@
         <include>org.twitter4j:twitter4j-core</include>
         <include>org.gatein.portal:portal.common</include>
         <include>org.gatein.portal:portal.content</include>
+        <include>org.gatein.portal:portal.appzu</include>
         <include>org.gatein.portal:portal.markdown</include>
         <include>org.gatein.portal:portal.ui</include>
         <include>org.exoplatform.kernel:exo.kernel.component.common</include>

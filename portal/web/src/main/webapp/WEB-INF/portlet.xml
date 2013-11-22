@@ -15,6 +15,18 @@
     </portlet-info>
   </portlet>
   <portlet>
+    <portlet-name>AppZuPortlet</portlet-name>
+    <portlet-class>org.gatein.portal.appzu.ui.AppZuPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>AppZu Portlet</title>
+      <short-title>AppZu</short-title>
+    </portlet-info>
+  </portlet>
+  <portlet>
     <portlet-name>NavigationPortlet</portlet-name>
     <portlet-class>org.gatein.portal.ui.navigation.NavigationPortlet</portlet-class>
     <supports>
