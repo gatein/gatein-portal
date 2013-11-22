@@ -210,4 +210,20 @@ Here's a numbered list:
     </zone>
   </page>
 
+  <page>
+    <name>appzu</name>
+    <display-name>Appzu</display-name>
+    <access-permission>Everyone</access-permission>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <zone>
+      <id>1</id>
+      <portlet>
+        <name>p1</name>
+        <access-permission>Everyone</access-permission>
+        <application-ref>portal</application-ref>
+        <portlet-ref>AppZuPortlet</portlet-ref>
+      </portlet>
+    </zone>
+  </page>
+
 </page-set>

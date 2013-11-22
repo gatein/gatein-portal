@@ -1,0 +1,31 @@
+<h4>Applications</h4>
+<ul>
+<% repository.applications.each { app ->
+    def name = "" + app.name;
+    %>
+    <li>Application ${app.name} is ${app.statusMessage} / WebDAV <a href="${app.webdavURL}">${app.webdavURL}</a></li>
+<% } %>
+</ul>
+<h4>Create</h4>
+<form class="form-horizontal" action="@{add()}" method="POST">
+    <div class="control-group">
+        <label class="control-label" for="inputName">Name</label>
+        <div class="controls">
+            <input type="text" id="inputName" name="name" placeholder="">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputTemplate">Template</label>
+        <div class="controls">
+            <select name="templateId" id="inputTemplate">
+                <option value="helloworld">Hello World</option>
+                <option value="inject">@Inject</option>
+            </select>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn">Create</button>
+        </div>
+    </div>
+</form>

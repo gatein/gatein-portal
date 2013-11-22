@@ -1,0 +1,12 @@
+<page>
+  <name>live</name>
+  <access-permission>Everyone</access-permission>
+  <edit-permission>*:/platform/administrators</edit-permission>
+  <zone>
+    <id>1</id>
+      <app>
+        <name>app</name>
+        <app-ref>org.gatein.portal.appzu.live</app-ref>
+      </app>
+  </zone>
+</page>

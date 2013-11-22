@@ -1,0 +1,30 @@
+<web-fragment
+    version="3.0"
+    metadata-complete="true"
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
+  <name>drive</name>
+  <servlet>
+    <servlet-name>webdav</servlet-name>
+    <servlet-class>
+      net.sf.webdav.WebdavServlet
+    </servlet-class>
+    <init-param>
+      <param-name>ResourceHandlerImplementation</param-name>
+      <param-value>org.gatein.portal.appzu.IWebdavStoreImpl</param-value>
+    </init-param>
+    <init-param>
+      <param-name>rootpath</param-name>
+      <param-value>/tmp/webdav</param-value>
+    </init-param>
+    <init-param>
+      <param-name>storeDebug</param-name>
+      <param-value>0</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>webdav</servlet-name>
+    <url-pattern>/repository/*</url-pattern>
+  </servlet-mapping>
+</web-fragment>

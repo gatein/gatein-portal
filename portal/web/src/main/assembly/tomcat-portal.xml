@@ -109,8 +109,6 @@
         <include>commons-lang:commons-lang</include>
         <include>org.apache.axis:axis-jaxrpc</include>
         <include>wsdl4j:wsdl4j</include>
-        <include>org.apache.httpcomponents:httpcore</include>
-        <include>org.apache.httpcomponents:httpclient</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>

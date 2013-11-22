@@ -39,6 +39,7 @@
     <module>root</module>
     <module>common</module>
     <module>content</module>
+    <module>appzu</module>
     <module>markdown</module>
     <module>ui</module>
     <module>web</module>
