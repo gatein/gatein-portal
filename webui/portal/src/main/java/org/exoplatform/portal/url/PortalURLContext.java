@@ -42,6 +42,7 @@ import org.gatein.common.io.UndeclaredIOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class PortalURLContext implements URLContext {
+    private static final char REPLACEMENT_CHAR = '\ufffd';
 
     /** . */
     private final ControllerContext controllerContext;
@@ -151,8 +152,12 @@ public class PortalURLContext implements URLContext {
             }
         }
 
+        int untrustedStart = buffer.length();
+
         // Render url via controller
         controllerContext.renderURL(parameters, writer);
+
+        checkUntrustedData(untrustedStart);
 
         // Now append generic query parameters
         Map<String, String[]> queryParameters = url.getQueryParameters();
@@ -187,5 +192,14 @@ public class PortalURLContext implements URLContext {
 
         //
         return buffer.toString();
+    }
+
+    private void checkUntrustedData(int start) {
+        int len = buffer.length();
+        for (int i = start; i < len; i++) {
+            if (buffer.charAt(i) == '\'') {
+                buffer.setCharAt(i, REPLACEMENT_CHAR);
+            }
+        }
     }
 }
