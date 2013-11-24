@@ -17,53 +17,53 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UILogoPortlet.ViewMode {
+.UILogoPortlet.view {
 	zoom: 100%;
 	padding: 5px;
 	line-height: 38px;
 }
 
-.UILogoPortlet .Img img {
+.UILogoPortlet.view .Img img {
 	height: 38px;
 }
 
-.UILogoPortlet .Img,.UILogoPortlet .BannerTitle {
+.UILogoPortlet.view .Img,.UILogoPortlet.view .BannerTitle {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	color: #3c3c3c;
 	font-size: 17px;
 }
 
-.UILogoPortlet .Signin a,.UILogoPortlet .Signout a,
-.UILogoPortlet .Signout span {
+.UILogoPortlet.view .Signin a,.UILogoPortlet.view .Signout a,
+.UILogoPortlet.view .Signout span {
 	display: block;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 	cursor: pointer;
 }
 
-.UILogoPortlet a {
+.UILogoPortlet.view a {
 	color: white;
 	outline: none;
 	margin: 0 8px;
 	font-weight: bold;
 }
 
-.UILogoPortlet .UIAction a {
+.UILogoPortlet.view .UIAction a {
 	color: black;
 	font-weight: normal;
 }
 
-.UILogoPortlet a.User {
+.UILogoPortlet.view a.User {
 	padding: 0 4px;
 	background: none;
 	color: #e66a1f;;
 }
 
-.UILogoPortlet a:hover {
+.UILogoPortlet.view a:hover {
 	color: #058ee6;
 }
 
-.UILogoPortlet .Name {
+.UILogoPortlet.view .Name {
 	color: #666666;
 }

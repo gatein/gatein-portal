@@ -1,13 +1,14 @@
-<%	
+<%
 	import org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryEditMode;
-	import javax.portlet.PortletMode ;
-	
-	String cssClass; 
+	import javax.portlet.PortletMode;
+
+	String cssClass;
+	PortletMode appMode = _ctx.getRequestContext().getApplicationMode();
 %>
-<div class="UIApplicationRegistryPortlet" id="$uicomponent.id">
-	<%if( _ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW) {%>
+<div class="UIApplicationRegistryPortlet <%=appMode%>" id="$uicomponent.id">
+	<%if (appMode == PortletMode.VIEW) {%>
 		<div style="height:0px"><div style="width: 790px;" ><span style="display: none;"></span></div></div>
-		<div 
+		<div
 			style="!width: expression(this.previousSibling.offsetWidth - 22 + 'px'); min-width: 790px; padding: 10px;">
 			<div class="UIToolbar">
 				<div class="BlueLargeToolbar">
@@ -15,7 +16,7 @@
 						<div class="LeftToolbar">
 							<div class="RightToolbar">
 								<div class="MiddleToolbar">
-								 
+
 									<div class="ManagementIconContainer ClearFix">
 										<%
 										cssClass = "ItemButton";
@@ -27,7 +28,7 @@
 										<%
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(2).isRendered()) cssClass = "ItemButton SelectItemButton";
-										%>																		
+										%>
 										<a href="javascript:;" onclick="<%=uicomponent.event("ViewChild", "UIGadgetManagement")%>" class="$cssClass ItemButton GadgetIcon" style="float: <%= isLT? "right" : "left" %>">
 											<%=_ctx.appRes("UIToolbar.label.gadget")%>
 										</a>
@@ -35,29 +36,29 @@
 										<%
 										cssClass = "ItemButton";
 										if(uicomponent.getChild(1).isRendered()) cssClass = "ItemButton SelectItemButton";
-										%>									
+										%>
 										<a href="javascript:;" onclick="<%=uicomponent.event("ViewChild", "UIPortletManagement")%>" class="$cssClass ItemButton PorletIcon" style="float: <%= isLT? "right" : "left" %>">
 											<%=_ctx.appRes("UIToolbar.label.portlet")%>
 										</a>
 									</div>
-						 
+
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		
+
 		<div class="PortletContainer">
-		<%			
+		<%
 			uicomponent.renderChildren();
-		%>				
+		%>
 		</div>
 		</div>
 	<%} else {
 		for(inputEntry in uicomponent.getChildren()) {
 				if (inputEntry instanceof UIApplicationRegistryEditMode) {
-					 uicomponent.renderUIComponent(inputEntry);	
+					 uicomponent.renderUIComponent(inputEntry);
 				}
 			}
 		}

@@ -22,7 +22,7 @@
 	margin: 0px;
 }
 
-.UIDashboardPortlet {
+.UIDashboardPortlet.view {
 	background: #fff;
 	border: 1px solid #b7b7b7;
 	border-top: none;
