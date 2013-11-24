@@ -1,12 +1,12 @@
-<% 	import javax.portlet.PortletMode ; 
-		import org.exoplatform.gadget.webui.component.UIGadgetViewMode;
-		def rcontext = _ctx.getRequestContext() ;
+<% 	import javax.portlet.PortletMode ;
+	import org.exoplatform.gadget.webui.component.UIGadgetViewMode;
+	def rcontext = _ctx.getRequestContext() ;
 %>
 <div class="UIGadgetPortlet" id="$uicomponent.id">
 <%
 	if( rcontext.getApplicationMode() == PortletMode.VIEW ) {
 		uicomponent.renderChild(UIGadgetViewMode.class) ;
   }
-	
+
 %>
 </div>

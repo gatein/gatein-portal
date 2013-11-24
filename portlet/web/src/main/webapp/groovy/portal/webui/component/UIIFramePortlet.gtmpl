@@ -1,11 +1,11 @@
 <%
-	import javax.portlet.PortletMode ;
+	import javax.portlet.PortletMode;
 	import org.exoplatform.web.application.JavascriptManager;
 
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	String id = jsmanager.generateUUID();
-	String appMode = _ctx.getRequestContext().getApplicationMode();
+	PortletMode appMode = _ctx.getRequestContext().getApplicationMode();
 %>
 
 <div class="UIIFramePortlet <%=appMode%>" id="$id">

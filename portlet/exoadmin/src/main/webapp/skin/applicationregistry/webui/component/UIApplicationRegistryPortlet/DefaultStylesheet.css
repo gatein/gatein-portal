@@ -28,7 +28,7 @@
 	overflow: visible;
 }
 
-.UIApplicationRegistryPortlet {
+.UIApplicationRegistryPortlet.view {
 	overflow: auto;
 	background: white;
 }

@@ -1,18 +1,19 @@
 <%
-  import javax.portlet.PortletMode ;
-  import org.exoplatform.dashboard.webui.component.DashboardParent ;
-  import org.exoplatform.dashboard.webui.component.UIDashboard;
-  import org.exoplatform.dashboard.webui.component.UIDashboardEditForm;
+	import javax.portlet.PortletMode;
+	import org.exoplatform.dashboard.webui.component.DashboardParent ;
+	import org.exoplatform.dashboard.webui.component.UIDashboard;
+	import org.exoplatform.dashboard.webui.component.UIDashboardEditForm;
 
-  def rcontext = _ctx.getRequestContext() ;
+	def rcontext = _ctx.getRequestContext() ;
+	PortletMode appMode = rcontext.getApplicationMode();
 %>
-<div id="$uicomponent.id" class="UIDashboardPortlet">
-	<% if(rcontext.getApplicationMode() == PortletMode.VIEW) {
+<div id="$uicomponent.id" class="UIDashboardPortlet <%=appMode%>">
+	<% if (appMode == PortletMode.VIEW) {
 			uicomponent.renderChild(UIDashboard.class);
-	  } else {
+		} else {
 			UIDashboardEditForm uiEditForm = uicomponent.getChild(UIDashboardEditForm.class);
 			uiEditForm.getUIStringInput(UIDashboardEditForm.TOTAL_COLUMNS).setValue(uicomponent.getNumberOfCols() + "");
 			uicomponent.renderUIComponent(uiEditForm) ;
-	  }
+		}
 	%>
 </div>
