@@ -78,7 +78,6 @@
         <include>org.twitter4j:twitter4j-core</include>
         <include>org.gatein.portal:portal.common</include>
         <include>org.gatein.portal:portal.content</include>
-        <include>org.gatein.portal:portal.markdown</include>
         <include>org.gatein.portal:portal.ui</include>
         <include>org.exoplatform.kernel:exo.kernel.component.common</include>
         <include>org.exoplatform.kernel:exo.kernel.component.cache</include>
@@ -112,7 +111,6 @@
         <include>wsdl4j:wsdl4j</include>
         <include>org.apache.httpcomponents:httpcore</include>
         <include>org.apache.httpcomponents:httpclient</include>
-        <include>org.tautua.markdownpapers:markdownpapers-core</include>
       </includes>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <useProjectArtifact>false</useProjectArtifact>

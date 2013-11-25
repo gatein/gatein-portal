@@ -16,14 +16,17 @@
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>component.portal</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>portal.content</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.juzu</groupId>
       <artifactId>juzu-core</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.tautua.markdownpapers</groupId>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+   http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+  <portlet>
+    <portlet-name>HomePortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.home.HomePortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Home Portlet</title>
+      <short-title>Home</short-title>
+    </portlet-info>
+  </portlet>
+  <portlet>
+    <portlet-name>NavigationPortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.navigation.NavigationPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Navigation Portlet</title>
+      <short-title>Navigation</short-title>
+    </portlet-info>
+  </portlet>
+  <portlet>
+    <portlet-name>SiteMapPortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.sitemap.SiteMapPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Site Map Portlet</title>
+      <short-title>Site Map</short-title>
+    </portlet-info>
+  </portlet>
+  <portlet>
+    <portlet-name>RegisterPortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.register.RegisterPortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>Register Portlet</title>
+      <short-title>Register</short-title>
+    </portlet-info>
+  </portlet>
+</portlet-app>

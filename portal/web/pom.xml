@@ -32,7 +32,7 @@
   <name>GateIn Portal Web Module</name>
 
   <properties>
-    <org.apache.tomcat.version>7.0.40</org.apache.tomcat.version>
+    <org.apache.tomcat.version>7.0.37</org.apache.tomcat.version>
   </properties>
 
   <dependencies>
@@ -105,10 +105,6 @@
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>portal.content</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>portal.markdown</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
@@ -288,11 +284,6 @@
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.tautua.markdownpapers</groupId>
-      <artifactId>markdownpapers-core</artifactId>
     </dependency>
 
     <dependency>
@@ -604,6 +595,7 @@
             </executions>
           </plugin>
 
+          <!-- Executable tomcat -->
           <plugin>
             <groupId>org.apache.tomcat.maven</groupId>
             <artifactId>tomcat7-maven-plugin</artifactId>
