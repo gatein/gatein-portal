@@ -71,7 +71,7 @@ public class AbstractPortalTestCase {
     }
     
     public static WebArchive createPortal() {
-        return createPortal(InjectorProvider.INJECT_GUICE, RunMode.DEV);
+        return createPortal(InjectorProvider.GUICE, RunMode.DEV);
     }
     
     public static PortletDescriptor portletXML() {

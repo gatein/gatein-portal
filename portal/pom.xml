@@ -32,7 +32,7 @@
   <name>GateIn Portal Module</name>
 
   <properties>
-    <juzu.version>0.7.0-beta25</juzu.version>
+    <juzu.version>0.7.0</juzu.version>
   </properties>
 
   <modules>
@@ -58,7 +58,7 @@
       </dependency>
       <dependency>
         <groupId>org.juzu</groupId>
-        <artifactId>juzu-bom-arquillian</artifactId>
+        <artifactId>juzu-depchain-arquillian</artifactId>
         <version>${juzu.version}</version>
         <exclusions>
           <exclusion>
@@ -69,7 +69,7 @@
       </dependency>
       <dependency>
         <groupId>org.juzu</groupId>
-        <artifactId>juzu-bom-arquillian-tomcat7</artifactId>
+        <artifactId>juzu-depchain-arquillian-tomcat7</artifactId>
         <version>${juzu.version}</version>
       </dependency>
       <dependency>

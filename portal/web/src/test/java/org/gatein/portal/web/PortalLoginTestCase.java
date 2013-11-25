@@ -70,7 +70,7 @@ public class PortalLoginTestCase extends AbstractPortalTestCase {
             throw afe;
         }
 
-        servlet = String.format(servlet, InjectorProvider.INJECT_GUICE.getValue(), RunMode.DEV.getValue());
+        servlet = String.format(servlet, InjectorProvider.GUICE.getValue(), RunMode.DEV.getValue());
 
         portal.setWebXML(new StringAsset(servlet));
 

@@ -47,7 +47,7 @@ public class JuzuPortletTestCase extends AbstractPortalTestCase {
 
   @Deployment(testable = false)
   public static WebArchive createPortal() {
-      WebArchive portal = createPortal(InjectorProvider.INJECT_GUICE, RunMode.PROD);
+      WebArchive portal = createPortal(InjectorProvider.GUICE, RunMode.PROD);
       portal.addAsWebInfResource(new StringAsset(descriptor(Portlet1.class).exportAsString()), "portlet.xml");
       return portal;
   }
