@@ -65,7 +65,7 @@ public class AbstractPortalTestCase {
         portal.merge(ShrinkWrap.
                 create(GenericArchive.class).
                 as(ExplodedImporter.class).
-                importDirectory("src/test/resources").
+                importDirectory("src/test/resources/WEB-INF").
                 as(GenericArchive.class), "/WEB-INF", Filters.exclude("web.xml"));
         return portal;
     }
