@@ -94,12 +94,6 @@
       <page-ref>portal::classic::sitemap</page-ref>
     </node>
     <node>
-      <name>appzu</name>
-      <display-name>AppZu</display-name>
-      <visibility>DISPLAYED</visibility>
-      <page-ref>portal::classic::appzu</page-ref>
-    </node>
-    <node>
       <name>register</name>
       <display-name xml:lang="en">Register</display-name>
       <display-name xml:lang="cs">Registrace</display-name>
