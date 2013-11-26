@@ -12,3 +12,4 @@ release.properties
 .settings
 .metadata
 .extract
+transaction.log
