@@ -117,13 +117,21 @@ class ReactivePage {
         //
         Executor executor = context.getExecutor();
 
-        // Schedule
-        for (ReactiveWindow window : windows) {
-            executor.execute(window);
+        //
+        if (windows.size() > 0) {
+            // Schedule
+            for (ReactiveWindow window : windows) {
+                executor.execute(window);
+            }
+            return new Response.Content(200, buffer);
+        } else {
+            // Empty we send a response right now
+            send();
+            return new Response.Content(200, buffer);
         }
 
+
         //
-        return new Response.Content(200, buffer);
     }
 
     private void done(ReactiveWindow window, Result result) {

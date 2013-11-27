@@ -26,6 +26,10 @@
     </node>
     <node>
       <name>page6</name>
+      <page-ref>portal::classic::page6</page-ref>
+    </node>
+    <node>
+      <name>nopage</name>
       <!-- Empty on purpose -->
     </node>
   </node>

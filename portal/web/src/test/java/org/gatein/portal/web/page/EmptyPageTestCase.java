@@ -20,6 +20,7 @@ package org.gatein.portal.web.page;
 
 import java.net.URL;
 
+import junit.framework.AssertionFailedError;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -36,7 +37,7 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 @RunWith(Arquillian.class)
-public class NoPageTestCase extends AbstractPortalTestCase {
+public class EmptyPageTestCase extends AbstractPortalTestCase {
 
     @Deployment(testable = false)
     public static WebArchive createPortal() {
@@ -49,8 +50,15 @@ public class NoPageTestCase extends AbstractPortalTestCase {
     @Test
     public void testRender() throws Exception {
         DefaultHttpClient client = new DefaultHttpClient();
-        HttpGet get = new HttpGet(deploymentURL.toURI().resolve("./nopage"));
+        HttpGet get = new HttpGet(deploymentURL.toURI().resolve("./page6"));
+        long before = System.currentTimeMillis();
         HttpResponse response = client.execute(get);
-        Assert.assertEquals(404, response.getStatusLine().getStatusCode());
+        long after = System.currentTimeMillis();
+        long time = after - before;
+        if (time > 5000) {
+            throw new AssertionFailedError("Page rendering too long " + time + " ms");
+        } else {
+            Assert.assertEquals(200, response.getStatusLine().getStatusCode());
+        }
     }
 }

@@ -118,4 +118,9 @@
       </portlet>
     </zone>
   </page>
+  <page>
+    <name>page6</name>
+    <access-permission>Everyone</access-permission>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
 </page-set>
