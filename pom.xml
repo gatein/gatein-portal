@@ -646,6 +646,11 @@
         <type>war</type>
         <classifier>tomcat-portal</classifier>
       </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>portal.arquillian</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+      </dependency>
 
       <!-- Reflext -->
       <dependency>

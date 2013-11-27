@@ -42,6 +42,7 @@
     <module>markdown</module>
     <module>ui</module>
     <module>web</module>
+    <module>arquillian</module>
     <module>packaging</module>
   </modules>
 
