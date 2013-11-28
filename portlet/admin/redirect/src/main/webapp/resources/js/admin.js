@@ -88,13 +88,6 @@ function changePropertyFields(element, focus) {
 	}
 }
 
-function addMappingEntry() {
-	// Add a new entry
-	$('#mappings-tbody').prepend($('#tt-nm').children().html());
-	// And move focus to it
-	$('#mappings-tbody').find("input").first().focus();
-}
-
 function editMappingEntry(elem) {
 	$(elem).parent().parent().addClass('hidden-element');
 	$(elem).parent().parent().nextAll('tr .hidden-element').first().removeClass('hidden-element');
