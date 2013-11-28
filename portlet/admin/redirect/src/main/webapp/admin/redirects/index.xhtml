@@ -217,7 +217,7 @@
 											<label class="control-label">#{msg['redirect.admin.condition.mapping.h']}</label>
 											<div class="controls">
 												<div class="alert" style="#{empty rdrEdit.mappings.mappings ? '' : 'display: none;'}">#{msg['redirect.admin.condition.mapping.missing']}</div>
-												<a4j:commandButton id="addMappingButton" action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table pull-right" execute="@this" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').first().focus();" disabled="#{not facesContext.postback or facesContext.validationFailed}" value="#{msg['redirect.admin.condition.mapping.add']}" />
+												<a4j:commandButton id="addMappingButton" action="#{rdrEdit.addNodeMapping}" styleClass="btn btn-small inside-table pull-right" execute="@this" render="mappingsWrapper" oncomplete="$('.origin-node-name-input').first().focus().keyup(); $('.redirect-node-name-input').first().keyup();" disabled="#{not facesContext.postback or facesContext.validationFailed}" value="#{msg['redirect.admin.condition.mapping.add']}" />
 												<table class="table table-striped action-button" id="mappings" summary="Redirect mappings">
 													<thead style="#{empty rdrEdit.mappings.mappings ? 'display: none;' : ''}">
 														<tr>
