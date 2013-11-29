@@ -70,7 +70,7 @@
 #composers ul, .composers ul li, .sortable li {
 	list-style: none;
 }
-#composers ul li {
+#composers ul li.content {
 	float: left;
 	margin-left: 30px;
 }

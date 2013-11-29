@@ -38,6 +38,7 @@ import juzu.request.ClientContext;
 import juzu.request.ResourceContext;
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -96,15 +97,25 @@ public class PageEditor {
     public Response getAllContents() throws Exception {
         JSONArray result = new JSONArray();
         for (ContentProvider<?> provider : providers.getProviders()) {
+            JSONObject contentType = new JSONObject();
+            ContentType type = provider.getContentType();
+            contentType.put("value", type.getValue());
+            contentType.put("tagName", type.getTagName());
+            contentType.put("displayName", type.getTagName());
+            JSONArray contents = new JSONArray();
+
             Iterable<ContentDescription> descriptions = provider.findContents("", 0, 30);
             for (ContentDescription description : descriptions) {
                 JSONObject item = new JSONObject();
                 item.put("contentId", description.id);
-                item.put("contentType", provider.getContentType().getValue());
+                item.put("contentType", type.getValue());
                 item.put("title", description.displayName);
                 item.put("description", description.markup);
-                result.put(item);
+                //result.put(item);
+                contents.put(item);
             }
+            contentType.put("contents", contents);
+            result.put(contentType);
         }
         return Response.status(200).body(result.toString());
     }

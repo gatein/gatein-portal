@@ -8,50 +8,71 @@
 
       // Initialize a Backbone.Collection to hold a list of Application models
       this.apps = new Backbone.Collection([], {
-        model: Application,
+        model: ComposerTab,
         url : this.$el.attr("data-url")
       });
 
       this.listenTo(this.apps, 'reset', this.render);
-      this.apps.fetch({reset: true});
+
+      //model attribute in options is modelType in children of ContentType
+      this.apps.fetch({reset: true, model: Application});
 
       this.filterValue = '';
     },
 
     render: function() {
-      var $container = $('#application-list');
-      $container.html();
-
-      //For each to render app
-      //This should be done in template but currently underscore-template conflict with juzu-template
-      _.each(this.apps.toJSON(), function(app){
-        var template = $("#portlet-template").html();
-        var html = _.template(template, app);
-        var $html = $(html);
-        $container.append($html);
-
-        //Enable draggable
-        $html.draggable({
-          connectToSortable: ".sortable",
-          revert: "invalid",
-          helper: "clone"
-        });
+      var $container = $('#composer-apps');
+      var template = $("#composer-apps-template").html();
+      var html = _.template(template, {items: this.apps.toJSON()});
+      $container.html(html);
+      $container.find("li.content").draggable({
+        connectToSortable: ".sortable",
+        revert: "invalid",
+        helper: "clone"
       });
     },
 
     filterApp: function(filter) {
       var regex = new RegExp(filter, 'i');
-      var $container = $('#application-list');
-      _.each(this.apps.toJSON(), function(app) {
-        var $element = $container.find('li[data-contentId="'+app.contentId+'"]');
-        if($element.length > 0) {
-          if(regex.test(app.title)) {
-            $element.show();
+
+      //TODO: Need to refact this code
+      var contentTypes = [];
+      var $container = $("#composer-apps");
+
+      //For each tab
+      _.each(this.apps.toJSON(), function(contentType) {
+        var $tab = $container.find('a[href="#tab-' + contentType.tagName + '"]').parent();
+        var children = contentType.children;
+        contentType.children = [];
+
+        //Foreach app in tab
+        _.each(children, function(app) {
+          var $element = $container.find('li[data-contentId="'+app.contentId+'"]');
+          if($element.length > 0) {
+            if(regex.test(app.title)) {
+              contentType.children.push(app);
+              $element.show();
+            } else {
+              $element.hide();
+            }
+          }
+          /*if(regex.test(app.title)) {
+            contentType.children.push(app);
+          }*/
+        });
+
+        if($tab.length > 0) {
+          if(contentType.children.length == 0) {
+            $tab.hide();
           } else {
-            $element.hide();
+            $tab.show();
           }
         }
       });
+
+      //this.renderApps(contentTypes);
+
+      return;
     },
 
     onKeyUp: function(e) {
@@ -84,6 +105,14 @@
         _this.filterApp(_this.filterValue);
         $target.removeClass("loading");
       }, timeToWait);
+    },
+
+    findContent: function(contentId) {
+      var type = this.apps.find(function(type){
+        return type.findByContentId(contentId) || false;
+      });
+      console.log(type);
+      return type.findByContentId(contentId);
     }
   });
 
@@ -282,7 +311,8 @@
 
         //Add new application
         var composerView = window.editorView.getComposerView();
-        var application = composerView.apps.findWhere({ 'contentId' : $dragObj.attr("data-contentId")});
+        //var application = composerView.apps.findWhere({ 'contentId' : $dragObj.attr("data-contentId")});
+        var application = composerView.findContent($dragObj.attr("data-contentId"));
 
         // Clone and generate id for new application
         // TODO: It should NOT force assigning an ID value for a transient model 
@@ -452,7 +482,7 @@
       model.updateSnapshot();
       
       return model;
-    },
+    }
   });
 
   // The root container view of Layout Edition mode

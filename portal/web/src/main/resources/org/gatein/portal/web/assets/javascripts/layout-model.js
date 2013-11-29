@@ -43,9 +43,14 @@
    */
   var Application = LayoutComponent.extend({
     defaults : {
-      'type' : 'application',
-      'draggable' : true,
-      'content' : 'Loading the application...',
+      type : 'application',
+      draggable : true,
+
+      title: '',
+      contentId: '',
+      contentType: '',
+      description: '',
+      content : 'Loading the application...'
     },
 
     // Fetch application content and update the 'content' attribute in the success callback
@@ -188,6 +193,39 @@
     }
   });
 
+  //TODO: we need to refactor this model
+  var ComposerTab = Container.extend({
+    defaults : {
+      type : 'container',
+      droppable : false,
+
+      displayName: '',
+      tagName: '',
+      value: ''
+    },
+    //This is temporary property for init _children property
+    __children: false,
+
+    initialize : function(attributes, options) {
+      Container.prototype.initialize.apply(this, arguments);
+      if(this.__children) {
+        this._children.reset(this.__children);
+      }
+    },
+
+    //When fetch data from server method #set() is always called before #initialize()
+    set: function(data, options) {
+      this.__children = data.contents;
+      delete data.contents;
+
+      var _this = this;
+      Container.prototype.set.apply(this, arguments);
+    },
+    findByContentId: function(contentId) {
+      return this._children.findWhere({contentId: contentId});
+    }
+  });
+
   // 
   var PageLayout = Container.extend({
 
@@ -287,6 +325,7 @@
     'LayoutComponent' : LayoutComponent,
     'Application' : Application,
     'Container' : Container,
+    'ComposerTab': ComposerTab,
     'PageLayout' : PageLayout
   };
   if (typeof window.require === "function" && window.require.amd) {
