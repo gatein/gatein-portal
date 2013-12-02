@@ -136,9 +136,6 @@
     <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/eXoGadgets.war">
       <fileset refid="org.gatein.portal:exo.portal.eXoGadgets:war"/>
     </copy>
-    <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/gwtGadgets.war">
-      <fileset refid="org.gatein.portal:exo.portal.gwtGadgets:war"/>
-    </copy>
     <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/eXoGadgetServer.war">
       <fileset refid="org.gatein.portal:exo.portal.gadgets-server:war"/>
     </copy>

@@ -16,12 +16,6 @@
     </dependencies>
   </sub-deployment>
 
-  <sub-deployment name="gwtGadgets.war" >
-    <dependencies>
-      <module name="org.gatein.portal.container-dependencies-basic"/>
-    </dependencies>
-  </sub-deployment>
-
   <sub-deployment name="exoadmin.war" >
     <dependencies>
       <module name="org.gatein.portal.container-dependencies-basic"/>

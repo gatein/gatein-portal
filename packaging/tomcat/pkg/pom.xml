@@ -892,12 +892,6 @@
       <type>war</type>
     </dependency>
     <dependency>
-      <?rename gwtGadgets.war?>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.gwtGadgets</artifactId>
-      <type>war</type>
-    </dependency>
-    <dependency>
       <?rename web.war?>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.portlet.web</artifactId>

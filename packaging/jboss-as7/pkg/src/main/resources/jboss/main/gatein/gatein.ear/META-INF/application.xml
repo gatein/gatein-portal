@@ -41,12 +41,6 @@
   </module>
   <module>
     <web>
-      <web-uri>gwtGadgets.war</web-uri>
-      <context-root>gwtGadgets</context-root>
-    </web>
-  </module>
-  <module>
-    <web>
       <web-uri>eXoGadgetServer.war</web-uri>
       <context-root>eXoGadgetServer</context-root>
     </web>

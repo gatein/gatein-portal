@@ -99,7 +99,6 @@
     <!-- -->
     <surefire.exo.profiles>hsqldb</surefire.exo.profiles>
 
-    <version.plugin.gwt>2.1.0</version.plugin.gwt>
     <version.plugin.clean>2.4.1</version.plugin.clean>
     <version.yuicompressor-maven-plugin>0.7.1</version.yuicompressor-maven-plugin>
     <version.plugin.japex>1.2.3</version.plugin.japex>
@@ -693,12 +692,6 @@
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.eXoGadgets</artifactId>
-        <version>3.7.0.Alpha02-SNAPSHOT</version>
-        <type>war</type>
-      </dependency>
-      <dependency>
-        <groupId>org.gatein.portal</groupId>
-        <artifactId>exo.portal.gwtGadgets</artifactId>
         <version>3.7.0.Alpha02-SNAPSHOT</version>
         <type>war</type>
       </dependency>
@@ -1334,11 +1327,6 @@ memory option properties. This should be removed when we can just set the compil
           <groupId>net.sf.alchim</groupId>
           <artifactId>yuicompressor-maven-plugin</artifactId>
           <version>${version.yuicompressor-maven-plugin}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>gwt-maven-plugin</artifactId>
-          <version>${version.plugin.gwt}</version>
         </plugin>
 
         <!-- Checkstyle -->
