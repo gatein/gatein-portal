@@ -62,6 +62,7 @@
 #composers .panel-body .composer-tooltip {
 	font-style: italic;
 	font-size: 12px;
+    padding-left: 5px;
 }
 #composers .in {
 	border-top: solid 1px #ccc;
@@ -69,6 +70,10 @@
 }
 #composers ul, .composers ul li, .sortable li {
 	list-style: none;
+    margin-bottom: 0px;
+}
+#composers ul.nav li:first-child {
+    margin-left: 2px;
 }
 #composers ul li.content {
 	float: left;

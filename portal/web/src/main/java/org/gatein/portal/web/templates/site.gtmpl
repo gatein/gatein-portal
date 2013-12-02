@@ -45,7 +45,6 @@
 		</div>
 		<div id="portlets" class="panel-collapse collapse in">
 			<div class="panel-body">
-				<div class="composer-tooltip">Drag and drop to add new portlet!</div>
                 <div id="composer-apps" >
                     <!-- list of apps -->
                 </div>
@@ -72,6 +71,7 @@
                 ${"%>"}
             </ul>
             <div class="tab-content">
+                <div class="composer-tooltip">Drag and drop to add new portlet!</div>
                 ${"<%"}
                     _.each(items, function(tab, i){
                         tab.class = i == 0 ? "tab-pane active" : "tab-pane";
@@ -94,14 +94,7 @@
         </div>
     ${"<%"} } %>
 </script>
-<!-- Templat for portlet in composer -->
-<script type="text/template" id="portlet-template">
-    <li data-contentId="${"<%- contentId %>"}">
-        <div class="draggable">
-            ${"<%= description %>"}
-        </div>
-    </li>
-</script>
+
 <!-- Template for portlet in page -->
 <script type="text/template" id="application-template">
 	<h3 style="${cursor}" title="${tooltip}">

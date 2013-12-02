@@ -111,7 +111,6 @@
       var type = this.apps.find(function(type){
         return type.findByContentId(contentId) || false;
       });
-      console.log(type);
       return type.findByContentId(contentId);
     }
   });
@@ -144,7 +143,12 @@
     updateContent: function() {
       var id = this.model.getId();
       var selector = "#" + id + " div";
-      $(selector).html(this.model.get("content"));
+      var $dom = $(selector);
+      $dom.html(this.model.get("content"));
+
+      //UpdateID
+      this.model.set('id', this.model.get('name'));
+      $('#'+id).attr('id', this.model.getId());
     },
 
     deleteApp: function() {

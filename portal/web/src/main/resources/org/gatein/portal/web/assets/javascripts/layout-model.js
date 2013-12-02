@@ -57,7 +57,8 @@
     // TODO: It should be moved to View component, specifically in render view
     fetchContent: function(pagePath) {
       //TODO: fetchContentURL should be set on init
-      var url = "/portal/getContent?javax.portlet.contentId=" + this.get('contentId') + "&javax.portlet.contentType=" + this.get('contentType') + "&javax.portlet.path=" + pagePath;
+      //var url = "/portal/getContent?javax.portlet.contentId=" + this.get('contentId') + "&javax.portlet.contentType=" + this.get('contentType') + "&javax.portlet.path=" + pagePath;
+      var url = '/portal/window/' + this.get('contentType') + '/' + this.get('contentId') + '?javax.portlet.url='+window.location.href;
 
       //Delegate to Model#fetch
       this.fetch({url: url});
