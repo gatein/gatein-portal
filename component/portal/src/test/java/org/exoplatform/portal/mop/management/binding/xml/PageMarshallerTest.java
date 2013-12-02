@@ -453,6 +453,29 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
         comparePages(expected, actualPages.getPages().get(0));
     }
 
+    public void testTemplatePagesUnMarshalling() {
+        PageMarshaller marshaller = new PageMarshaller();
+        Page.PageSet pages = marshaller.unmarshal(getClass().getResourceAsStream(
+                "/org/exoplatform/portal/mop/management/pages-template.xml"));
+        assertNotNull(pages);
+        assertNotNull(pages.getPages());
+        assertEquals(1, pages.getPages().size());
+        Page page = pages.getPages().get(0);
+
+        assertEquals("Tab_Default", page.getName());
+        assertEquals("Tab_Default", page.getTitle());
+        assertNotNull(page.getChildren());
+        assertEquals(1, page.getChildren().size());
+        ModelObject child = page.getChildren().get(0);
+        assertTrue(child instanceof Application);
+        @SuppressWarnings("unchecked")
+        Application<Portlet> application = (Application<Portlet>) child;
+        assertTrue(application.getType() == ApplicationType.PORTLET);
+        ApplicationState<Portlet> state = application.getState();
+        assertNotNull(state);
+        assertTrue(state instanceof TransientApplicationState);
+    }
+
     private void comparePages(Page expected, Page actual) {
         assertNull(actual.getStorageId());
         assertNull(actual.getStorageName());

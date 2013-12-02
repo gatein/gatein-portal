@@ -309,8 +309,7 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
 
         // Preferences
         PortletBuilder portletBuilder = null;
-        if (navigator.sibling() == Element.PREFERENCES) {
-            requiresChild(navigator, Element.PREFERENCE);
+        if (navigator.sibling() == Element.PREFERENCES && navigator.child() == Element.PREFERENCE) {
             portletBuilder = new PortletBuilder();
             for (StaxNavigator<Element> fork : navigator.fork(Element.PREFERENCE)) {
                 // Preference name
