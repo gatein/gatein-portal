@@ -32,7 +32,6 @@ import org.exoplatform.portal.pom.spi.portlet.Preference;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.Portlet;
-import org.gatein.pc.api.PortletContext;
 import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.info.MetaInfo;
 import org.gatein.pc.api.info.NavigationInfo;
@@ -115,7 +114,7 @@ public class PortletContent extends WindowContent<org.exoplatform.portal.pom.spi
     }
 
     @Override
-    public Result processAction(WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result.Action processAction(WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window, String windowState, String mode, Map<String, String[]> interactionState) {
         return provider.processAction(window, windowState, mode, interactionState);
     }
 

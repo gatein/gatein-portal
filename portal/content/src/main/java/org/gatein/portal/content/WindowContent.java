@@ -41,7 +41,7 @@ public abstract class WindowContent<S extends Serializable> {
      */
     public abstract RenderTask createRender(WindowContentContext<S> window);
 
-    public abstract Result processAction(
+    public abstract Result.Action processAction(
             WindowContentContext<S> window,
             String windowState,
             String mode,

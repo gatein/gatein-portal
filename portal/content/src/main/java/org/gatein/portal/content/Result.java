@@ -25,11 +25,25 @@ import java.util.Map;
 import org.w3c.dom.Element;
 
 /**
+ * A generic result of an interaction between the aggregator and the content provider.
+ *
  * @author Julien Viet
  */
-public abstract class Result {
+public interface Result {
 
-    public static class Error extends Result {
+    /**
+     * The result of an action.
+     */
+    public interface Action extends Result {
+    }
+
+    /**
+     * The result of a view.
+     */
+    public interface View extends Result {
+    }
+
+    public static class Error implements View, Action {
 
         /** . */
         private final boolean internal;
@@ -51,7 +65,7 @@ public abstract class Result {
         }
     }
 
-    public static class Fragment extends Result {
+    public static class Fragment implements View {
 
         /** . */
         public final String title;
@@ -77,7 +91,7 @@ public abstract class Result {
         }
     }
 
-    public static class Update<S extends Serializable> extends Result {
+    public static class Update<S extends Serializable> implements Action {
 
         public final String parameters;
 

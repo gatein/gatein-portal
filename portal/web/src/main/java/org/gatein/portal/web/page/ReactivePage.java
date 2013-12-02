@@ -19,7 +19,10 @@
 package org.gatein.portal.web.page;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -57,7 +60,7 @@ class ReactivePage {
     private final ArrayList<ReactiveWindow> windows;
 
     /** The collected fragments. */
-    private Map<String, Result> results;
+    private Map<String, Result.View> results;
 
     /** The streamable. */
     private ChunkBuffer buffer;
@@ -91,7 +94,7 @@ class ReactivePage {
         this.context = context;
         this.locale = locale;
         this.windows = windows;
-        this.results = new HashMap<String, Result>();
+        this.results = new HashMap<String, Result.View>();
         this.buffer = new ChunkBuffer(logger);
         this.lock = new ReentrantLock();
         this.renderingContext = renderingContext;
@@ -134,7 +137,7 @@ class ReactivePage {
         //
     }
 
-    private void done(ReactiveWindow window, Result result) {
+    private void done(ReactiveWindow window, Result.View result) {
 
         //
         boolean send;
@@ -157,12 +160,28 @@ class ReactivePage {
         //
         buffer.append(new Chunk.Property<String>("text/html", PropertyType.MIME_TYPE));
 
-        // Get all fragments
+        // Transform everything into fragments
         HashMap<String, Result.Fragment> fragments = new HashMap<String, Result.Fragment>();
-        for (Map.Entry<String, Result> entry : results.entrySet()) {
+        for (Map.Entry<String, Result.View> entry : results.entrySet()) {
             Result result = entry.getValue();
             if (result instanceof Result.Fragment) {
                 fragments.put(entry.getKey(), (Result.Fragment) result);
+            } else if (result instanceof Result.Error) {
+                Result.Error error = (Result.Error) result;
+                Throwable cause = error.getCause();
+                StringWriter writer = new StringWriter();
+                StringBuffer buffer = writer.getBuffer();
+                buffer.append("<pre>");
+                cause.printStackTrace(new PrintWriter(writer));
+                buffer.append("</pre>");
+                String title = (cause.getMessage() != null) ? "Error: " + cause.getMessage() : "Error";
+                Result.Fragment fragment = new Result.Fragment(
+                        Collections.<Map.Entry<String, String>>emptyList(),
+                        Collections.<Element>emptyList(),
+                        title,
+                        buffer.toString()
+                );
+                fragments.put(entry.getKey(), fragment);
             }
         }
 
@@ -217,7 +236,7 @@ class ReactivePage {
 
         @Override
         public void run() {
-            Result result = task.execute(locale);
+            Result.View result = task.execute(locale);
             ReactivePage.this.done(ReactiveWindow.this, result);
         }
     }

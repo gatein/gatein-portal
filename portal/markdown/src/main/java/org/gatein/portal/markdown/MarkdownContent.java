@@ -77,7 +77,7 @@ class MarkdownContent extends WindowContent<Markdown> {
     public RenderTask createRender(final WindowContentContext<Markdown> window) {
         return new RenderTask() {
             @Override
-            public Result execute(Locale locale) {
+            public Result.View execute(Locale locale) {
                 if ("edit".equals(mode)) {
                     String saveURL = window.createActionURL(Collections.<String, String[]>emptyMap(), null, null);
                     String cancelURL = window.createRenderURL(new MarkdownContent(id, null, "view"), Collections.<String, String[]>emptyMap());
@@ -137,7 +137,7 @@ class MarkdownContent extends WindowContent<Markdown> {
     }
 
     @Override
-    public Result processAction(WindowContentContext<Markdown> window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result.Action processAction(WindowContentContext<Markdown> window, String windowState, String mode, Map<String, String[]> interactionState) {
         String[] content = interactionState.get("content");
         Markdown md;
         if (content == null) {

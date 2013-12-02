@@ -18,7 +18,6 @@
  */
 package org.gatein.portal.web.content.simple;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
@@ -30,12 +29,11 @@ import org.gatein.portal.content.RenderTask;
 import org.gatein.portal.content.WindowContent;
 import org.gatein.portal.content.WindowContentContext;
 import org.gatein.portal.content.Result;
-import org.w3c.dom.Element;
 
 /**
  * @author Julien Viet
  */
-class SimpleContent extends WindowContent<SimpleState> {
+public class SimpleContent extends WindowContent<SimpleState> {
 
     /** . */
     private final String id;
@@ -46,28 +44,32 @@ class SimpleContent extends WindowContent<SimpleState> {
     /** . */
     private String mode;
 
-    SimpleContent(String id, String windowState, String mode) {
+    /** . */
+    private final SimpleContentLogic logic;
+
+    SimpleContent(String id, String windowState, String mode, SimpleContentLogic logic) {
         this.id = id;
         this.windowState = windowState;
         this.mode = mode;
+        this.logic = logic;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override
     public RenderTask createRender(WindowContentContext<SimpleState> window) {
         return new RenderTask() {
             @Override
-            public Result execute(Locale locale) {
-                return new Result.Fragment(
-                        Collections.<Map.Entry<String, String>>emptyList(),
-                        Collections.<Element>emptyList(),
-                        "the_title",
-                        "<div id=\"" + id +  "\">the_content</div>");
+            public Result.View execute(Locale locale) {
+                return logic.render(SimpleContent.this);
             }
         };
     }
 
     @Override
-    public Result processAction(WindowContentContext<SimpleState> window, String windowState, String mode, Map<String, String[]> interactionState) {
+    public Result.Action processAction(WindowContentContext<SimpleState> window, String windowState, String mode, Map<String, String[]> interactionState) {
         throw new UnsupportedOperationException("todo");
     }
 
@@ -133,6 +135,6 @@ class SimpleContent extends WindowContent<SimpleState> {
 
     @Override
     public WindowContent<SimpleState> copy() {
-        return new SimpleContent(id, windowState, mode);
+        return new SimpleContent(id, windowState, mode, logic);
     }
 }

@@ -19,6 +19,7 @@
 package org.gatein.portal.web.content.simple;
 
 import java.util.Collections;
+import java.util.HashMap;
 
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
@@ -29,6 +30,17 @@ import org.gatein.portal.content.WindowContent;
  */
 public class SimpleContentProvider implements ContentProvider<SimpleState> {
 
+    /** . */
+    private static final HashMap<String, SimpleContentLogic> contents = new HashMap<String, SimpleContentLogic>();
+
+    public static void deploy(String id, SimpleContentLogic logic) {
+        contents.put(id, logic);
+    }
+
+    public static void undeploy(String id) {
+        contents.remove(id);
+    }
+
     @Override
     public SimpleContentType getContentType() {
         return new SimpleContentType();
@@ -36,7 +48,8 @@ public class SimpleContentProvider implements ContentProvider<SimpleState> {
 
     @Override
     public WindowContent<SimpleState> getContent(String id) {
-        return new SimpleContent(id, "normal", "view");
+        SimpleContentLogic logic = contents.get(id);
+        return logic != null ? new SimpleContent(id, "normal", "view", logic) : null;
     }
 
     @Override

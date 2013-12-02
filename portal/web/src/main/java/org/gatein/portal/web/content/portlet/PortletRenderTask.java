@@ -81,7 +81,7 @@ class PortletRenderTask extends RenderTask {
     }
 
     @Override
-    public Result execute(Locale locale) {
+    public Result.View execute(Locale locale) {
 
         //
         PortletContext target = content.portlet.getContext();
@@ -122,7 +122,7 @@ class PortletRenderTask extends RenderTask {
         } finally {
             lifeCycle.resume();
         }
-        Result result;
+        Result.View result;
         if (failure != null) {
             failure.printStackTrace();
             result = new Result.Error(true, failure);

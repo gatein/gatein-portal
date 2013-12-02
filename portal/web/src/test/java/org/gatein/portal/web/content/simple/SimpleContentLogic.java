@@ -16,21 +16,17 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.portal.content;
+package org.gatein.portal.web.content.simple;
 
-import java.util.Locale;
+import org.gatein.portal.content.Result;
 
 /**
  * @author Julien Viet
  */
-public abstract class RenderTask {
+public class SimpleContentLogic {
 
-    /**
-     * Execute the task and returns a result.
-     *
-     * @param locale the locale
-     * @return the result
-     */
-    public abstract Result.View execute(Locale locale);
+    public Result.View render(SimpleContent content) {
+        throw new UnsupportedOperationException();
+    }
 
 }

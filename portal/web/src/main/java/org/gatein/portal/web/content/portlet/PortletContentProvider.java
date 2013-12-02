@@ -106,7 +106,7 @@ public class PortletContentProvider implements ContentProvider<Portlet> {
         }
     }
 
-    Result processAction(
+    Result.Action processAction(
             WindowContentContext<org.exoplatform.portal.pom.spi.portlet.Portlet> window,
             String windowState,
             String mode,
