@@ -29,7 +29,7 @@
     <type>org.gatein.common.GateInConfigurator</type>
     <init-params>
       <value-param>
-        <name>application.file</name>
+        <name>application.conf.file</name>
         <value>jar:/org/exoplatform/commons/config/configuration.conf</value>
       </value-param> 
     </init-params>
