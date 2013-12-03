@@ -18,7 +18,10 @@
  */
 @Application
 @Portlet(name = "AppZuPortlet")
-@Bindings(@Binding(value = ApplicationRepository.class, scope = Scope.SINGLETON, implementation = RepositoryProvider.class))
+@Bindings({
+        @Binding(value = ApplicationRepository.class, scope = Scope.SINGLETON, implementation = RepositoryProvider.class),
+        @Binding(Flash.class)
+})
 package org.gatein.portal.appzu.ui;
 
 import juzu.Application;

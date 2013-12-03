@@ -99,13 +99,24 @@ public class ApplicationRepository {
      * @param url the application url
      * @return the app
      */
-    public App addApplication(Name name, URL url) throws Exception {
+    public App addApplication(Name name, String displayName, URL url) throws Exception {
         URLFileSystem fs = new URLFileSystem();
         fs.add(url);
-        return addApplication(name, fs);
+        return addApplication(name, displayName, fs);
     }
 
-    public App addApplication(final Name name, final String templateId) throws Exception {
+    public App addApplication(final Name name, String displayName, final String templateId) throws Exception {
+        if (name.length() == 0) {
+            throw new Exception("Name cannot be empty");
+        }
+        for (String atom : name) {
+            for (int i = 0;i < atom.length();i++) {
+                char c = atom.charAt(i);
+                if ((i == 0 && !Character.isJavaIdentifierStart(c)) || (Character.isJavaIdentifierPart(c))) {
+                    throw new Exception("Invalid name " + name);
+                }
+            }
+        }
         URL url = ApplicationRepository.class.getResource("templates/" + templateId + "/");
         if (url == null) {
             throw new Exception("No such template " + templateId);
@@ -149,7 +160,7 @@ public class ApplicationRepository {
                     }
                 }
             });
-            return addApplication(name, target);
+            return addApplication(name, displayName, target);
         }
     }
 
@@ -173,7 +184,7 @@ public class ApplicationRepository {
      * @param name the application name
      * @return the app
      */
-    public App addApplication(Name name) throws Exception {
+    public App addApplication(Name name, String displayName) throws Exception {
         DiskFileSystem fs = createFileSystem(name);
         File root = fs.makePath(name);
         fs.createDir(root);
@@ -192,7 +203,7 @@ public class ApplicationRepository {
 
         //
         System.out.println("Created app " + name + " at " + fs.getRoot().getAbsolutePath());
-        return addApplication(name, fs);
+        return addApplication(name, displayName, fs);
     }
 
     /**
@@ -202,7 +213,7 @@ public class ApplicationRepository {
      * @param fs the application file system
      * @return the app
      */
-    public <T> App addApplication(Name name, ReadFileSystem<T> fs) throws Exception {
+    public <T> App addApplication(Name name, String displayName, ReadFileSystem<T> fs) throws Exception {
 
         // Filter . files (should be done in Juzu Live I think)
         ReadFileSystem<?> wrapper = new FilterFileSystem<T>(fs, new Filter.Default<T>() {
@@ -213,7 +224,7 @@ public class ApplicationRepository {
         });
 
         //
-        App app = new App(name, wrapper);
+        App app = new App(name, displayName, wrapper);
         App phantom = applications.putIfAbsent(name, app);
         if (phantom != null) {
             app = phantom;

@@ -136,7 +136,7 @@ public class AppContent extends WindowContent<AppState> {
 
     @Override
     public String resolveTitle(Locale locale) {
-        return null;
+        return app.displayName;
     }
 
     @Override

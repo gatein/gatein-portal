@@ -1,17 +1,33 @@
+<% if (flash.error != null && flash.error.length() > 0) { %>
+<div class="alert alert-error">
+    <strong>${flash.error}</strong>
+</div>
+<% } else if (flash.success != null && flash.success.length() > 0) { %>
+<div class="alert alert-success">
+    <strong>${flash.success}</strong>
+</div>
+<% } %>
+
 <h4>Applications</h4>
 <ul>
 <% repository.applications.each { app ->
     def name = "" + app.name;
     %>
-    <li>Application ${app.name} is ${app.statusMessage} / WebDAV <a href="${app.webdavURL}">${app.webdavURL}</a></li>
+    <li>Application ${app.displayName} is ${app.statusMessage} / WebDAV <a href="${app.webdavURL}">${app.webdavURL}</a></li>
 <% } %>
 </ul>
 <h4>Create</h4>
 <form class="form-horizontal" action="@{add()}" method="POST">
     <div class="control-group">
-        <label class="control-label" for="inputName">Name</label>
+        <label class="control-label" for="inputName">Application name</label>
         <div class="controls">
-            <input type="text" id="inputName" name="name" placeholder="">
+            <input type="text" id="inputName" name="name" placeholder="org.myapp">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="inputDisplayName">Display name</label>
+        <div class="controls">
+            <input type="text" id="inputDisplayName" name="displayName" placeholder="My application">
         </div>
     </div>
     <div class="control-group">

@@ -106,7 +106,7 @@ public class AppRenderTask extends RenderTask {
                     return new Result.Fragment(
                             Collections.<Map.Entry<String, String>>emptyList(),
                             Collections.<Element>emptyList(),
-                            "Error",
+                            content.resolveTitle(Locale.ENGLISH),
                             buffer.toString()
                     );
                 } else {
@@ -122,13 +122,21 @@ public class AppRenderTask extends RenderTask {
                     StringWriter buffer = new StringWriter();
                     OutputStream stream = OutputStream.create(Tools.UTF_8, buffer);
                     status.streamable.send(stream);
-                    return new Result.Fragment(Collections.<Map.Entry<String, String>>emptyList(), Collections.<Element>emptyList(), "The app", buffer.toString());
+                    return new Result.Fragment(
+                            Collections.<Map.Entry<String, String>>emptyList(),
+                            Collections.<Element>emptyList(),
+                            content.resolveTitle(Locale.ENGLISH),
+                            buffer.toString());
                 }
             } else if (result instanceof juzu.request.Result.Error) {
                 juzu.request.Result.Error appError = (juzu.request.Result.Error) result;
                 return new Result.Error(true, appError.cause);
             } {
-                return new Result.Fragment(Collections.<Map.Entry<String, String>>emptyList(), Collections.<Element>emptyList(), "The app", "Unhandled result " + result);
+                return new Result.Fragment(
+                        Collections.<Map.Entry<String, String>>emptyList(),
+                        Collections.<Element>emptyList(),
+                        content.resolveTitle(Locale.ENGLISH),
+                        "Unhandled result " + result);
             }
         } catch (Exception e) {
             e.printStackTrace();

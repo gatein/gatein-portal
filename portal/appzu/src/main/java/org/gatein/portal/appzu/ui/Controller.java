@@ -41,14 +41,25 @@ public class Controller {
     @Path("index.gtmpl")
     Template index;
 
+    @Inject
+    Flash flash;
+
     @View
     public Response.Content index() {
         return index.with().set("repository", repository).ok();
     }
 
     @Action
-    public Response.View add(String name, String templateId) throws Exception {
-        repository.addApplication(Name.parse(name), templateId);
+    public Response.View add(String name, String displayName, String templateId) throws Exception {
+        if (displayName == null || displayName.length() == 0) {
+            displayName = name;
+        }
+        try {
+            repository.addApplication(Name.parse(name), displayName, templateId);
+            flash.success = "Application " + name + " created";
+        } catch (Exception e) {
+            flash.error = e.getMessage();
+        }
         return Controller_.index();
     }
 

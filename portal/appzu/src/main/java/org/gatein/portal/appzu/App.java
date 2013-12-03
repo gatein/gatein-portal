@@ -49,6 +49,9 @@ public class App {
     final Name name;
 
     /** . */
+    final String displayName;
+
+    /** . */
     Bridge bridge;
 
     /**
@@ -59,7 +62,7 @@ public class App {
      */
     private Completion<Boolean> status;
 
-    public App(Name name, final ReadFileSystem<?> fs) throws Exception {
+    public App(Name name, String displayName, final ReadFileSystem<?> fs) throws Exception {
 
 
         BridgeContext context = new BridgeContext() {
@@ -116,10 +119,15 @@ public class App {
         //
         this.bridge = new ApplicationBridge(module, context, config, new AssetServer(), resolver, injector);
         this.name = name;
+        this.displayName = displayName;
     }
 
     public Name getName() {
         return name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getWebdavURL() {

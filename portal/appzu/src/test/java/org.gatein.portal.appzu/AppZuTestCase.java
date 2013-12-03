@@ -28,7 +28,6 @@ import junit.framework.AssertionFailedError;
 import juzu.impl.common.Completion;
 import juzu.impl.common.Name;
 import juzu.impl.common.Tools;
-import juzu.impl.fs.spi.ReadFileSystem;
 import juzu.impl.fs.spi.disk.DiskFileSystem;
 import org.gatein.common.io.IOTools;
 import org.gatein.portal.arquillian.api.Page;
@@ -126,7 +125,7 @@ public class AppZuTestCase {
             File src = new File(getClass().getResource(name).toURI());
             copy(src, dst);
             ApplicationRepository repo = ApplicationRepository.instance;
-            repo.addApplication(appName, new DiskFileSystem(new File(root.toURI())));
+            repo.addApplication(appName, "", new DiskFileSystem(new File(root.toURI())));
             return dst;
         }
     }
@@ -209,7 +208,7 @@ public class AppZuTestCase {
     @Test
     @RunAsClient
     public void testAddSample() throws Exception {
-        App app = ApplicationRepository.getInstance().addApplication(Name.parse("org.gatein.portal.appzu.sample"), "helloworld");
+        App app = ApplicationRepository.getInstance().addApplication(Name.parse("org.gatein.portal.appzu.sample"), "", "helloworld");
         Completion<Boolean> completion = app.refresh();
         if (completion.isFailed()) {
             AssertionFailedError afe = new AssertionFailedError("Could not compile application");
