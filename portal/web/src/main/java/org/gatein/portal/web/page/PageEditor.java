@@ -22,7 +22,6 @@ package org.gatein.portal.web.page;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import javax.inject.Inject;
@@ -31,10 +30,11 @@ import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
-import juzu.impl.request.Request;
+import juzu.request.ClientContext;
 import juzu.request.ResourceContext;
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
+import org.gatein.portal.content.ContentType;
 import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -45,9 +45,6 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
-import org.gatein.portal.content.RenderTask;
-import org.gatein.portal.content.WindowContent;
-import org.gatein.portal.web.content.portlet.PortletContentProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -58,9 +55,6 @@ public class PageEditor {
 
     @Inject
     LayoutService layoutService;
-
-    @Inject
-    PortletContentProvider contentProvider;
 
     @Inject
     ZoneLayoutFactory layoutFactory;
@@ -81,21 +75,37 @@ public class PageEditor {
 
         return Response.status(200).body(data.toString());
     }
+    
+    @Resource
+    @Route(value = "/upload")
+    public Response upload(ClientContext context) throws Exception {
+        return Response.status(200).body("uploaded");
+    }
 
     @Resource
     @Route(value = "/contents")
     public Response getAllContents() throws Exception {
         JSONArray result = new JSONArray();
         for (ContentProvider<?> provider : providers.getProviders()) {
+            JSONObject contentType = new JSONObject();
+            ContentType type = provider.getContentType();
+            contentType.put("value", type.getValue());
+            contentType.put("tagName", type.getTagName());
+            contentType.put("displayName", type.getTagName());
+            JSONArray contents = new JSONArray();
+
             Iterable<ContentDescription> descriptions = provider.findContents("", 0, 30);
             for (ContentDescription description : descriptions) {
                 JSONObject item = new JSONObject();
                 item.put("contentId", description.id);
-                item.put("contentType", provider.getContentType().getValue());
+                item.put("contentType", type.getValue());
                 item.put("title", description.displayName);
                 item.put("description", description.markup);
-                result.put(item);
+                //result.put(item);
+                contents.put(item);
             }
+            contentType.put("contents", contents);
+            result.put(contentType);
         }
         return Response.status(200).body(result.toString());
     }
@@ -133,38 +143,6 @@ public class PageEditor {
 
         } else {
             return Response.status(400).body("Data is null");
-        }
-    }
-
-    /**
-     * Temporary implement to render portlet content without full page context
-     */
-    @Resource
-    @Route(value = "/getContent")
-    //TODO: the contentType is not used for now
-    public Response getContent(@Param(name = "javax.portlet.contentId") String contentId, @Param(name = "javax.portlet.contentType") String contentType, @Param(name = "javax.portlet.path") String path) {
-        ContentProvider<?> provider = providers.resolveProvider(contentType);
-        WindowContent<?> content = provider.getContent(contentId);
-        return render(content, path);
-    }
-
-    private <S extends Serializable> Response render(WindowContent<S> content, String path) {
-        if (content.isSupportedMode("preview")) {
-            content.setMode("preview");
-        }
-        content.setWindowState("normal");
-        PageContext.Builder pageBuilder = new PageContext.Builder(path);
-        RenderTask task = new WindowContext<S>("", content , null, pageBuilder.build()).createRenderTask();
-        Result result = task.execute(Request.getCurrent().getUserContext().getLocale());
-        if (result instanceof Result.Fragment) {
-            Result.Fragment fragment = (Result.Fragment) result;
-            //200 OK
-            return Response.status(200).body(new JSON().set("title", fragment.title).set("content", fragment.content).toString()).withCharset(Charset.forName("UTF-8"))
-                    .withMimeType("application/json");
-        } else {
-            //501 Not Implemented
-            return Response.status(501).body("Not yet handled " + result).withCharset(Charset.forName("UTF-8"))
-                    .withMimeType("application/json");
         }
     }
 

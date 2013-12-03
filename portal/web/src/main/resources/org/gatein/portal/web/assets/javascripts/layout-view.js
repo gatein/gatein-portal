@@ -2,62 +2,116 @@
 
   var ComposerView = Backbone.View.extend({
     events : {
-      "keyup .composer-filter" : "filterApp"
+      "keyup .composer-filter" : "onKeyUp"
     },
     initialize : function(options) {
 
       // Initialize a Backbone.Collection to hold a list of Application models
       this.apps = new Backbone.Collection([], {
-        model: Application,
+        model: ComposerTab,
         url : this.$el.attr("data-url")
       });
 
       this.listenTo(this.apps, 'reset', this.render);
-      this.apps.fetch({reset: true});
+
+      //model attribute in options is modelType in children of ContentType
+      this.apps.fetch({reset: true, model: Application});
+
+      this.filterValue = '';
     },
 
     render: function() {
-      var $container = $('#application-list');
-      $container.html();
-
-      //For each to render app
-      //This should be done in template but currently underscore-template conflict with juzu-template
-      _.each(this.apps.toJSON(), function(app){
-        var template = $("#portlet-template").html();
-        var html = _.template(template, app);
-        var $html = $(html);
-        $container.append($html);
-
-        //Enable draggable
-        $html.draggable({
-          connectToSortable: ".sortable",
-          revert: "invalid",
-          helper: "clone"
-        });
+      var $container = $('#composer-apps');
+      var template = $("#composer-apps-template").html();
+      var html = _.template(template, {items: this.apps.toJSON()});
+      $container.html(html);
+      $container.find("li.content").draggable({
+        connectToSortable: ".sortable",
+        revert: "invalid",
+        helper: "clone"
       });
     },
 
-    filterApp: function(e) {
-      console.log(e);
-      var keyCode = e.keyCode || e.which;
-      if(keyCode == 27) {
-        //Escape key
-        $(e.srcElement).val("");
-      }
-
-      var filter = $(e.srcElement).val();
+    filterApp: function(filter) {
       var regex = new RegExp(filter, 'i');
-      var $container = $('#application-list');
-      _.each(this.apps.toJSON(), function(app) {
-        var $element = $container.find('li[data-contentId="'+app.contentId+'"]');
-        if($element.length > 0) {
-          if(regex.test(app.title)) {
-            $element.show();
+
+      //TODO: Need to refact this code
+      var contentTypes = [];
+      var $container = $("#composer-apps");
+
+      //For each tab
+      _.each(this.apps.toJSON(), function(contentType) {
+        var $tab = $container.find('a[href="#tab-' + contentType.tagName + '"]').parent();
+        var children = contentType.children;
+        contentType.children = [];
+
+        //Foreach app in tab
+        _.each(children, function(app) {
+          var $element = $container.find('li[data-contentId="'+app.contentId+'"]');
+          if($element.length > 0) {
+            if(regex.test(app.title)) {
+              contentType.children.push(app);
+              $element.show();
+            } else {
+              $element.hide();
+            }
+          }
+          /*if(regex.test(app.title)) {
+            contentType.children.push(app);
+          }*/
+        });
+
+        if($tab.length > 0) {
+          if(contentType.children.length == 0) {
+            $tab.hide();
           } else {
-            $element.hide();
+            $tab.show();
           }
         }
       });
+
+      //this.renderApps(contentTypes);
+
+      return;
+    },
+
+    onKeyUp: function(e) {
+      var keyCode = e.keyCode || e.which;
+      var timeToWait = 500;
+      var $target = $(e.target);
+
+      if(keyCode == 27) {
+        //Escape key
+        $(e.target).val("");
+        timeToWait = 0;
+      }
+
+      if(this.filterValue == $.trim($target.val())) {
+        return;
+      } else {
+        this.filterValue = $.trim($target.val());
+      }
+
+      if(!$target.hasClass("loading")) {
+        $target.addClass("loading");
+      }
+
+      if(this.timeout) {
+        clearTimeout(this.timeout);
+      }
+
+      var _this = this;
+      this.timeout =  setTimeout(function() {
+        _this.filterApp(_this.filterValue);
+        $target.removeClass("loading");
+      }, timeToWait);
+    },
+
+    findContent: function(contentId) {
+      var type = this.apps.find(function(type){
+        return type.findByContentId(contentId) || false;
+      });
+      return type.findByContentId(contentId);
     }
   });
 
@@ -89,7 +143,12 @@
     updateContent: function() {
       var id = this.model.getId();
       var selector = "#" + id + " div";
-      $(selector).html(this.model.get("content"));
+      var $dom = $(selector);
+      $dom.html(this.model.get("content"));
+
+      //UpdateID
+      this.model.set('id', this.model.get('name'));
+      $('#'+id).attr('id', this.model.getId());
     },
 
     deleteApp: function() {
@@ -113,6 +172,107 @@
       this.$el = $(domId);
 
       this.setupDnD();
+    },
+    
+    events : {
+      "dragenter" : "dragEnter",
+      "dragover"  : "dragOver",
+      "dragleave" : "dragLeave",
+      "drop"      : "drop"
+    },
+
+    dragEnter : function ( event ) {
+      console.log('enter');
+      event.preventDefault();
+      $('.portlet-placeholder').remove();
+      
+      if (this.model.isEmpty()) {
+        $('#' + this.model.id).append("<li class='portlet-placeholder'></li>");
+        return;
+      }
+      var Position = Backbone.Model;
+      var list = new Backbone.Collection;
+      list.comparator = 'top';
+      
+      $.each(this.model.getChildren(), function() {
+        var top = $('#' + this.getId()).offset().top;
+        list.add(new Position({id : this.getId(), top: top}));
+      });
+      list.add(new Position({id : 'placeholder', top : event.originalEvent.pageY}));
+      var placeHolder = list.get('placeholder');
+      var index = list.indexOf(placeHolder);
+      if (list.at(index - 1)) {
+        var id = list.at(index - 1).id;
+        $("<li class='portlet-placeholder'></li>").insertAfter('#' + id);
+      }
+    },
+
+    dragOver : function ( event ) {
+      event.preventDefault();
+    },
+
+    dragLeave : function ( event ) {
+      console.log('leave');
+      event.preventDefault();
+      if (!this.isInside(event)) {
+        this.$el.find('.portlet-placeholder').remove();
+      }
+    },
+
+    drop : function ( event ) {
+      event.preventDefault();
+      
+      var files = event.originalEvent.dataTransfer.files;
+      var formData = new FormData();
+      formData.append('file', files[0]);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '/portal/upload');
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          console.log('all done: ' + xhr.status);
+        } else {
+          console.log('Something went terribly wrong...');
+        }
+      };
+      
+      var file = files[0];
+      var acceptedTypes = {
+          'image/png': true,
+          'image/jpeg': true,
+          'image/gif': true
+        };
+
+      if (acceptedTypes[file.type] === true) {
+        var reader = new FileReader();
+        var el = this.$el;
+        reader.onload = function (event) {
+          var image = new Image();
+          image.src = event.target.result;
+          image.width = 100; // a fake resize
+          el.append(image);
+        };
+
+        console.log(file);
+        reader.readAsDataURL(file);
+      }
+      xhr.send(formData);
+      $('.portlet-placeholder').remove()
+    },
+    
+    isInside : function ( event ) {
+      var top    = this.$el.offset().top;
+      var left   = this.$el.offset().left;
+      var right  = left + this.$el.outerWidth();
+      var bottom = top + this.$el.outerHeight();
+      if ((event.originalEvent.pageX > right) || (event.originalEvent.pageX < left)) {
+        return false;
+      }
+
+      if ((event.originalEvent.pageY >= bottom) || (event.originalEvent.pageY <= top)) {
+        return false;
+      }
+
+      return true;
     },
 
     // Adding DnD ability to Zone and Application
@@ -155,7 +315,8 @@
 
         //Add new application
         var composerView = window.editorView.getComposerView();
-        var application = composerView.apps.findWhere({ 'contentId' : $dragObj.attr("data-contentId")});
+        //var application = composerView.apps.findWhere({ 'contentId' : $dragObj.attr("data-contentId")});
+        var application = composerView.findContent($dragObj.attr("data-contentId"));
 
         // Clone and generate id for new application
         // TODO: It should NOT force assigning an ID value for a transient model 
@@ -325,7 +486,7 @@
       model.updateSnapshot();
       
       return model;
-    },
+    }
   });
 
   // The root container view of Layout Edition mode

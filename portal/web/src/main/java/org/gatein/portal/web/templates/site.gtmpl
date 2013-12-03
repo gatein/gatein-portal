@@ -45,21 +45,56 @@
 		</div>
 		<div id="portlets" class="panel-collapse collapse in">
 			<div class="panel-body">
-				<div class="composer-tooltip">Drag and drop to add new portlet!</div>
-				<ul id="application-list" class="application-list"></ul>
-				<div style="clear:both"></div>
+                <div id="composer-apps" >
+                    <!-- list of apps -->
+                </div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- Templat for portlet in composer -->
-<script type="text/template" id="portlet-template">
-    <li data-contentId="${"<%- contentId %>"}">
-        <div class="draggable">
-            ${"<%= description %>"}
+<!-- Template for #composer-apps content: -->
+<script type="text/template" id="composer-apps-template">
+    ${"<%"} if(items.length == 0) { ${"%>"}
+        <div>There is no content matched.</div>
+    ${"<%"} } else { ${"%>"}
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                ${"<%"}
+                    _.each(items, function(tab, i){
+                        tab.class = i == 0 ? "active" : "";
+                        if(tab.children.length > 0) {
+                            ${"%>"}
+                            <li class="${"<%- tab.class %>"}"><a href="#tab-${"<%- tab.tagName%>"}" data-toggle="tab">${"<%- tab.displayName%>"}</a></li>
+                            ${"<%"}
+                        }
+                    });
+                ${"%>"}
+            </ul>
+            <div class="tab-content">
+                <div class="composer-tooltip">Drag and drop to add new portlet!</div>
+                ${"<%"}
+                    _.each(items, function(tab, i){
+                        tab.class = i == 0 ? "tab-pane active" : "tab-pane";
+                        if(tab.children.length > 0) {${"%>"}
+                        <div class="${"<%- tab.class %>"}" id="tab-${"<%- tab.tagName%>"}">
+                            <ul class="application-list">
+                                ${"<%"} _.each(tab.children, function(app){ ${"%>"}
+                                <li class="content" data-contentId="${"<%- app.contentId %>"}">
+                                    <div class="draggable">
+                                        ${"<%= app.description %>"}
+                                    </div>
+                                </li>
+                                ${"<%"} }); ${"%>"}
+                            </ul>
+                        </div>
+                    ${"<%"}}
+                    });
+                ${"%>"}
+            </div>
         </div>
-    </li>
+    ${"<%"} } %>
 </script>
+
 <!-- Template for portlet in page -->
 <script type="text/template" id="application-template">
 	<h3 style="${cursor}" title="${tooltip}">
