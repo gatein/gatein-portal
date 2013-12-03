@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

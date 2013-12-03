@@ -21,7 +21,7 @@ package org.exoplatform.commons.cache.future;
 
 import java.util.concurrent.Callable;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import junit.framework.TestCase;
 
 /**

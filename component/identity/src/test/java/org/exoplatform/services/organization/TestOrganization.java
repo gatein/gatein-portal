@@ -24,7 +24,7 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.component.test.AbstractKernelTest;

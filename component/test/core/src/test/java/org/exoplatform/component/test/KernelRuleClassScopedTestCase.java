@@ -19,7 +19,7 @@
 
 package org.exoplatform.component.test;
 
-import static junit.framework.Assert.assertSame;
+import static org.junit.Assert.assertSame;
 
 import org.exoplatform.container.PortalContainer;
 import org.junit.ClassRule;

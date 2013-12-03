@@ -20,7 +20,7 @@ package org.exoplatform.commons.chromattic;
 
 import java.util.LinkedList;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

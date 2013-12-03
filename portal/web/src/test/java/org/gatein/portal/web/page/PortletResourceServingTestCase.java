@@ -32,7 +32,7 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.ResourceServingPortlet;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import juzu.impl.common.Tools;
 import org.gatein.portal.web.AbstractPortalTestCase;
 import org.jboss.arquillian.container.test.api.Deployment;

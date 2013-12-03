@@ -21,7 +21,7 @@ package org.gatein.portal.web.page;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.gatein.portal.web.page.Encoder;
 import org.junit.Test;
 

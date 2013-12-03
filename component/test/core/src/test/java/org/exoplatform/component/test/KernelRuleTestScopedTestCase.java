@@ -19,7 +19,7 @@
 
 package org.exoplatform.component.test;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 import org.exoplatform.container.PortalContainer;
 import org.junit.Rule;

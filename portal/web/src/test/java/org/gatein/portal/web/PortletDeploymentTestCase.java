@@ -22,7 +22,7 @@ package org.gatein.portal.web;
 import java.io.InputStream;
 import java.util.Set;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.gatein.pc.api.Portlet;

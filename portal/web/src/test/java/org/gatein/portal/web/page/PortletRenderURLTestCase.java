@@ -25,7 +25,7 @@ import java.util.Arrays;
 import javax.portlet.*;
 import javax.portlet.WindowState;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.gatein.portal.web.AbstractPortalTestCase;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
