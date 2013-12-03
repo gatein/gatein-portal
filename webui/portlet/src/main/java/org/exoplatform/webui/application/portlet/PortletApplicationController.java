@@ -40,7 +40,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.resources.PortletConfigRegistry;
 import org.exoplatform.web.WebAppController;
 
 /**
@@ -79,12 +78,6 @@ public class PortletApplicationController extends GenericPortlet {
         PortletContext pcontext = config.getPortletContext();
         String contextName = pcontext.getPortletContextName();
         applicationId_ = contextName + "/" + config.getPortletName();
-
-        // Dirty fix for GTNPORTAL-2700
-        ExoContainer container = ExoContainerContext.getCurrentContainer();
-        PortletConfigRegistry registry = (PortletConfigRegistry) container
-                .getComponentInstanceOfType(PortletConfigRegistry.class);
-        registry.putPortletConfig(config.getPortletName(), config);
     }
 
     /**
@@ -160,7 +153,6 @@ public class PortletApplicationController extends GenericPortlet {
      * When the portlet is destroyed by the portlet container, the onDestroy() method of the PortletApplication is called and
      * then the PortletApplication is removed from the cache inside th WebController
      */
-    @SuppressWarnings("unchecked")
     public void destroy() {
         ExoContainer rootContainer = ExoContainerContext.getTopContainer();
         List<ExoContainer> containers = rootContainer.getComponentInstancesOfType(ExoContainer.class);
@@ -176,12 +168,6 @@ public class PortletApplicationController extends GenericPortlet {
                         application.onDestroy();
                         controller.removeApplication(applicationId_);
                     }
-                }
-
-                PortletConfigRegistry registry = (PortletConfigRegistry) container
-                        .getComponentInstanceOfType(PortletConfigRegistry.class);
-                if (registry != null) {
-                    registry.removePortletConfig(getPortletName());
                 }
             }
 

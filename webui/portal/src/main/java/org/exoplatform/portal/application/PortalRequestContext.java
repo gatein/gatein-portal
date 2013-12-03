@@ -45,10 +45,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -111,8 +109,6 @@ public class PortalRequestContext extends WebuiRequestContext {
 
     /** The path decoded from the request. */
     private final String nodePath_;
-
-    private String resolvedNodePath;
 
     /** . */
     private final String requestURI_;
@@ -312,7 +308,7 @@ public class PortalRequestContext extends WebuiRequestContext {
     }
 
     public void refreshResourceBundle() throws Exception {
-        appRes_ = findApplicationResourceBundle();
+        appRes_ = getApplication().getResourceBundle(getLocale());
     }
 
     public void requestAuthenticationLogin() throws Exception {

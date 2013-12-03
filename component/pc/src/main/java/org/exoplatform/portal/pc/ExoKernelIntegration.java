@@ -23,7 +23,6 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.pc.aspects.PortletLifecyclePhaseInterceptor;
-import org.exoplatform.services.resources.PortletConfigRegistry;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -93,16 +92,6 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
     }
 
     public void start() {
-
-        /*
-         * Dirty fix for GTNPORTAL-2700
-         *
-         * A real fix should somehow retain a reference to producerPortletInvoker (and thus also transitive references to all
-         * its successor Invokers) which is now done only in the first invocation of this start() method. In other words
-         * federatingPortletInvoker should be able to keep one local Invoker per portal and not only one for all portals as it
-         * is now.
-         */
-        container.registerComponentInstance(PortletConfigRegistry.class, new PortletConfigRegistry());
 
         // The portlet container invoker used by producer to dispatch to portlets
         ContainerPortletInvoker containerPortletInvoker = new ContainerPortletInvoker();
