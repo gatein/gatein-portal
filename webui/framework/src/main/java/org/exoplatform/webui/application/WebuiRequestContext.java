@@ -26,14 +26,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.portlet.PortletConfig;
-
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
-import org.exoplatform.services.resources.PortletConfigRegistry;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequestContext;
@@ -94,35 +88,13 @@ public abstract class WebuiRequestContext extends RequestContext {
     public ResourceBundle getApplicationResourceBundle() {
         if (appRes_ == null) {
             try {
-                appRes_ = findApplicationResourceBundle();
+                Locale locale = getLocale();
+                appRes_ = getApplication().getResourceBundle(locale);
             } catch (Exception e) {
                 throw new UndeclaredThrowableException(e);
             }
         }
         return appRes_;
-    }
-
-    /**
-     * Dirty fix for GTNPORTAL-2700. When GTNPORTAL-2700 is solved in {@link ExoKernelIntegration}. This method can be changed
-     * to always return {@code getApplication().getResourceBundle(locale)}
-     *
-     * @return
-     * @throws Exception
-     */
-    protected ResourceBundle findApplicationResourceBundle() throws Exception {
-        ExoContainer container = ExoContainerContext.getCurrentContainer();
-        PortletConfigRegistry registry = (PortletConfigRegistry) container
-                .getComponentInstanceOfType(PortletConfigRegistry.class);
-        String portlet = getApplication().getApplicationName();
-        PortletConfig config = registry.getPortletConfig(portlet);
-        Locale locale = getLocale();
-        if (config != null) {
-            ResourceBundle result = config.getResourceBundle(locale);
-            if (result != null) {
-                return result;
-            }
-        }
-        return getApplication().getResourceBundle(locale);
     }
 
     public String getActionParameterName() {
