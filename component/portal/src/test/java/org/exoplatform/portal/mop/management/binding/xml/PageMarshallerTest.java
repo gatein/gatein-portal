@@ -26,6 +26,8 @@ import static org.junit.Assert.assertArrayEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -58,101 +60,25 @@ import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 public class PageMarshallerTest extends AbstractMarshallerTest {
     public void testHomePageUnMarshalling() {
         PageMarshaller marshaller = new PageMarshaller();
-        Page.PageSet pages = marshaller.unmarshal(getClass().getResourceAsStream(
-                "/org/exoplatform/portal/mop/management/pages-homepage.xml"));
-        assertNotNull(pages);
-        assertNotNull(pages.getPages());
-        assertEquals(1, pages.getPages().size());
-        Page page = pages.getPages().get(0);
+        InputStream in = null;
+        try {
+            in = getClass().getResourceAsStream("/org/exoplatform/portal/mop/management/pages-homepage.xml");
+            Page.PageSet pages = marshaller.unmarshal(in);
+            assertNotNull(pages);
+            assertNotNull(pages.getPages());
+            assertEquals(1, pages.getPages().size());
+            Page page = pages.getPages().get(0);
 
-        assertEquals("homepage", page.getName());
-        assertEquals("Home Page", page.getTitle());
-        assertEquals("Everyone", Utils.join(";", page.getAccessPermissions()));
-        assertEquals("*:/platform/administrators", page.getEditPermission());
-        assertNotNull(page.getChildren());
-        assertEquals(1, page.getChildren().size());
-        ModelObject child = page.getChildren().get(0);
-        assertTrue(child instanceof Application);
-        @SuppressWarnings("unchecked")
-        Application<Portlet> application = (Application<Portlet>) child;
-        assertTrue(application.getType() == ApplicationType.PORTLET);
-        ApplicationState<Portlet> state = application.getState();
-        assertNotNull(state);
-        assertTrue(state instanceof TransientApplicationState);
-        TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
-        assertEquals("web/HomePagePortlet", tas.getContentId());
-        Portlet portlet = tas.getContentState();
-        int count = 0;
-        for (Iterator<Preference> it = portlet.iterator(); it.hasNext(); it.next()) {
-            count++;
-        }
-        assertEquals(1, count);
-        Preference pref = portlet.getPreference("template");
-        assertNotNull(pref);
-        assertEquals("template", pref.getName());
-        assertEquals("system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl", pref.getValue());
-        assertFalse(pref.isReadOnly());
-
-        assertNull(application.getTheme());
-        assertEquals("Home Page portlet", application.getTitle());
-        assertEquals("Everyone", Utils.join(";", application.getAccessPermissions()));
-        assertFalse(application.getShowInfoBar());
-        assertFalse(application.getShowApplicationState());
-        assertFalse(application.getShowApplicationMode());
-        assertNull(application.getDescription());
-        assertNull(application.getIcon());
-        assertNull(application.getWidth());
-        assertNull(application.getHeight());
-    }
-
-    public void testLoadedPageUnmarshalling() {
-        PageMarshaller marshaller = new PageMarshaller();
-        Page.PageSet pages = marshaller.unmarshal(getClass().getResourceAsStream(
-                "/org/exoplatform/portal/mop/management/pages-loaded.xml"));
-        assertNotNull(pages);
-        assertNotNull(pages.getPages());
-        assertEquals(1, pages.getPages().size());
-        Page page = pages.getPages().get(0);
-
-        // Verify page properties
-        assertEquals("loaded-page", page.getName());
-        assertEquals("Loaded Page", page.getTitle());
-        assertEquals("manager:/platform/administrators;manager:/platform/users", Utils.join(";", page.getAccessPermissions()));
-        assertEquals("*:/platform/administrators", page.getEditPermission());
-
-        // Verify page children
-        assertNotNull(page.getChildren());
-        assertEquals(1, page.getChildren().size());
-        ModelObject child = page.getChildren().get(0);
-        assertTrue(child instanceof Container);
-
-        // Verify root container
-        Container rootContainer = (Container) child;
-        assertEquals("rootContainer", rootContainer.getId());
-        assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", rootContainer.getTemplate());
-        assertEquals("Everyone", Utils.join(";", rootContainer.getAccessPermissions()));
-
-        // Verify root container children
-        List<ModelObject> rootChildren = rootContainer.getChildren();
-        assertNotNull(rootChildren);
-        assertEquals(3, rootChildren.size());
-
-        // Verify container 1
-        ModelObject c1 = rootChildren.get(0);
-        assertNotNull(c1);
-        assertTrue(c1 instanceof ModelObject);
-        Container container1 = (Container) c1;
-        assertEquals("c1", container1.getId());
-        assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", container1.getTemplate());
-        assertEquals("*:/platform/users", Utils.join(";", container1.getAccessPermissions()));
-        {
-            // Verify homepage application
-            assertNotNull(container1.getChildren());
-            assertEquals(1, container1.getChildren().size());
-            ModelObject homeComponent = container1.getChildren().get(0);
-            assertTrue(homeComponent instanceof Application);
+            assertEquals("homepage", page.getName());
+            assertEquals("Home Page", page.getTitle());
+            assertEquals("Everyone", Utils.join(";", page.getAccessPermissions()));
+            assertEquals("*:/platform/administrators", page.getEditPermission());
+            assertNotNull(page.getChildren());
+            assertEquals(1, page.getChildren().size());
+            ModelObject child = page.getChildren().get(0);
+            assertTrue(child instanceof Application);
             @SuppressWarnings("unchecked")
-            Application<Portlet> application = (Application<Portlet>) homeComponent;
+            Application<Portlet> application = (Application<Portlet>) child;
             assertTrue(application.getType() == ApplicationType.PORTLET);
             ApplicationState<Portlet> state = application.getState();
             assertNotNull(state);
@@ -164,181 +90,117 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
             for (Iterator<Preference> it = portlet.iterator(); it.hasNext(); it.next()) {
                 count++;
             }
-            assertEquals(3, count);
+            assertEquals(1, count);
             Preference pref = portlet.getPreference("template");
             assertNotNull(pref);
             assertEquals("template", pref.getName());
             assertEquals("system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl", pref.getValue());
-            assertTrue(pref.isReadOnly());
-
-            pref = portlet.getPreference("empty-preference-value");
-            assertNotNull(pref);
-            assertEquals("empty-preference-value", pref.getName());
-            assertNull(pref.getValue());
             assertFalse(pref.isReadOnly());
 
-            pref = portlet.getPreference("no-preference-value");
-            assertNotNull(pref);
-            assertEquals("no-preference-value", pref.getName());
-            assertNull(pref.getValue());
-            assertFalse(pref.isReadOnly());
-
-            assertEquals("Mac:MacTheme::Default:DefaultTheme::Vista:VistaTheme", application.getTheme());
+            assertNull(application.getTheme());
             assertEquals("Home Page portlet", application.getTitle());
             assertEquals("Everyone", Utils.join(";", application.getAccessPermissions()));
-            assertTrue(application.getShowInfoBar());
-            assertTrue(application.getShowApplicationState());
-            assertTrue(application.getShowApplicationMode());
+            assertFalse(application.getShowInfoBar());
+            assertFalse(application.getShowApplicationState());
+            assertFalse(application.getShowApplicationMode());
             assertNull(application.getDescription());
             assertNull(application.getIcon());
             assertNull(application.getWidth());
             assertNull(application.getHeight());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
+    }
 
-        // Verify container 2
-        ModelObject c2 = rootChildren.get(1);
-        assertNotNull(c2);
-        assertTrue(c2 instanceof Container);
-        Container container2 = (Container) c2;
-        assertEquals("c2", container2.getId());
-        assertEquals("system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl", container2.getTemplate());
-        assertEquals("*:/platform/guests", Utils.join(";", container2.getAccessPermissions()));
-        assertEquals("TableColumnContainer", container2.getFactoryId());
-        assertNotNull(container2.getChildren());
-        assertEquals(2, container2.getChildren().size());
+    public void testLoadedPageUnmarshalling() {
+        PageMarshaller marshaller = new PageMarshaller();
+        InputStream in = null;
+        try {
+            in = getClass().getResourceAsStream("/org/exoplatform/portal/mop/management/pages-loaded.xml");
+            Page.PageSet pages = marshaller.unmarshal(in);
+            assertNotNull(pages);
+            assertNotNull(pages.getPages());
+            assertEquals(1, pages.getPages().size());
+            Page page = pages.getPages().get(0);
 
-        {
-            // Verify column 1 of container 2
-            ModelObject appregComp = container2.getChildren().get(0);
-            assertTrue(appregComp instanceof Container);
-            Container appregContainer = (Container) appregComp;
-            assertEquals("c2-1", appregContainer.getId());
-            assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", appregContainer.getTemplate());
-            assertEquals("300px", appregContainer.getWidth());
-            assertEquals("400px", appregContainer.getHeight());
-            assertEquals("Everyone", Utils.join(";", appregContainer.getAccessPermissions()));
+            // Verify page properties
+            assertEquals("loaded-page", page.getName());
+            assertEquals("Loaded Page", page.getTitle());
+            assertEquals("manager:/platform/administrators;manager:/platform/users", Utils.join(";", page.getAccessPermissions()));
+            assertEquals("*:/platform/administrators", page.getEditPermission());
+
+            // Verify page children
+            assertNotNull(page.getChildren());
+            assertEquals(1, page.getChildren().size());
+            ModelObject child = page.getChildren().get(0);
+            assertTrue(child instanceof Container);
+
+            // Verify root container
+            Container rootContainer = (Container) child;
+            assertEquals("rootContainer", rootContainer.getId());
+            assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", rootContainer.getTemplate());
+            assertEquals("Everyone", Utils.join(";", rootContainer.getAccessPermissions()));
+
+            // Verify root container children
+            List<ModelObject> rootChildren = rootContainer.getChildren();
+            assertNotNull(rootChildren);
+            assertEquals(3, rootChildren.size());
+
+            // Verify container 1
+            ModelObject c1 = rootChildren.get(0);
+            assertNotNull(c1);
+            assertTrue(c1 instanceof ModelObject);
+            Container container1 = (Container) c1;
+            assertEquals("c1", container1.getId());
+            assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", container1.getTemplate());
+            assertEquals("*:/platform/users", Utils.join(";", container1.getAccessPermissions()));
             {
-                // Verify app registry application
-                assertNotNull(appregContainer.getChildren());
-                assertEquals(1, appregContainer.getChildren().size());
-                ModelObject appregComponent = appregContainer.getChildren().get(0);
-                assertTrue(appregComponent instanceof Application);
+                // Verify homepage application
+                assertNotNull(container1.getChildren());
+                assertEquals(1, container1.getChildren().size());
+                ModelObject homeComponent = container1.getChildren().get(0);
+                assertTrue(homeComponent instanceof Application);
                 @SuppressWarnings("unchecked")
-                Application<Portlet> application = (Application<Portlet>) appregComponent;
+                Application<Portlet> application = (Application<Portlet>) homeComponent;
                 assertTrue(application.getType() == ApplicationType.PORTLET);
                 ApplicationState<Portlet> state = application.getState();
                 assertNotNull(state);
                 assertTrue(state instanceof TransientApplicationState);
                 TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
-                assertEquals("exoadmin/ApplicationRegistryPortlet", tas.getContentId());
-                assertNull(tas.getContentState());
+                assertEquals("web/HomePagePortlet", tas.getContentId());
+                Portlet portlet = tas.getContentState();
+                int count = 0;
+                for (Iterator<Preference> it = portlet.iterator(); it.hasNext(); it.next()) {
+                    count++;
+                }
+                assertEquals(3, count);
+                Preference pref = portlet.getPreference("template");
+                assertNotNull(pref);
+                assertEquals("template", pref.getName());
+                assertEquals("system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl", pref.getValue());
+                assertTrue(pref.isReadOnly());
 
-                assertEquals("Default:DefaultTheme::Mac:MacTheme::Vista:VistaTheme", application.getTheme());
-                assertEquals("Application Registry", application.getTitle());
-                assertEquals("*:/platform/administrators;*:/organization/management/executive-board",
-                        Utils.join(";", application.getAccessPermissions()));
-                assertFalse(application.getShowInfoBar());
-                assertTrue(application.getShowApplicationState());
-                assertFalse(application.getShowApplicationMode());
-                assertEquals("Application Registry", application.getDescription());
-                assertEquals("PortletIcon", application.getIcon());
-                assertEquals("250px", application.getWidth());
-                assertEquals("350px", application.getHeight());
-            }
+                pref = portlet.getPreference("empty-preference-value");
+                assertNotNull(pref);
+                assertEquals("empty-preference-value", pref.getName());
+                assertNull(pref.getValue());
+                assertFalse(pref.isReadOnly());
 
-            // Verify column 2 of container 2
-            ModelObject orgComp = container2.getChildren().get(1);
-            assertTrue(orgComp instanceof Container);
-            Container orgContainer = (Container) orgComp;
-            assertEquals("c2-2", orgContainer.getId());
-            assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", orgContainer.getTemplate());
-            assertEquals("200px", orgContainer.getWidth());
-            assertEquals("300px", orgContainer.getHeight());
-            assertEquals("/platform/users", Utils.join(";", orgContainer.getAccessPermissions()));
-            {
-                // Verify calendar gadget application
-                assertNotNull(orgContainer.getChildren());
-                assertEquals(1, orgContainer.getChildren().size());
-                ModelObject gadgetComponent = orgContainer.getChildren().get(0);
-                assertTrue(gadgetComponent instanceof Application);
-                @SuppressWarnings("unchecked")
-                Application<Gadget> application = (Application<Gadget>) gadgetComponent;
-                assertTrue(application.getType() == ApplicationType.GADGET);
-                ApplicationState<Gadget> state = application.getState();
-                assertNotNull(state);
-                assertTrue(state instanceof TransientApplicationState);
-                TransientApplicationState<Gadget> tas = (TransientApplicationState<Gadget>) state;
-                assertEquals("Calendar", tas.getContentId());
-                assertNull(tas.getContentState());
+                pref = portlet.getPreference("no-preference-value");
+                assertNotNull(pref);
+                assertEquals("no-preference-value", pref.getName());
+                assertNull(pref.getValue());
+                assertFalse(pref.isReadOnly());
 
-                assertEquals("Vista:VistaTheme::Mac:MacTheme::Default:DefaultTheme", application.getTheme());
-                assertEquals("Calendar Title", application.getTitle());
-                assertEquals("*:/platform/administrators;*:/organization/management/executive-board",
-                        Utils.join(";", application.getAccessPermissions()));
+                assertEquals("Mac:MacTheme::Default:DefaultTheme::Vista:VistaTheme", application.getTheme());
+                assertEquals("Home Page portlet", application.getTitle());
+                assertEquals("Everyone", Utils.join(";", application.getAccessPermissions()));
                 assertTrue(application.getShowInfoBar());
-                assertFalse(application.getShowApplicationState());
-                assertFalse(application.getShowApplicationMode());
-                assertEquals("Calendar Description", application.getDescription());
-                assertEquals("StarAwardIcon", application.getIcon());
-                assertEquals("100px", application.getWidth());
-                assertEquals("200px", application.getHeight());
-            }
-        }
-
-        // Verify container 3
-        ModelObject c3 = rootChildren.get(2);
-        assertNotNull(c3);
-        assertTrue(c3 instanceof Container);
-        Container container3 = (Container) c3;
-        assertEquals("c3", container3.getId());
-        assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", container3.getTemplate());
-        assertEquals(container3.getTemplate(), "system:/groovy/portal/webui/container/UIContainer.gtmpl");
-        assertEquals("Everyone", Utils.join(";", container3.getAccessPermissions()));
-        assertNull(container3.getFactoryId());
-        {
-            // Verify site map & wsrp application
-            assertNotNull(container3.getChildren());
-            assertEquals(2, container3.getChildren().size());
-            {
-                ModelObject sitemapcomponent = container3.getChildren().get(0);
-                assertTrue(sitemapcomponent instanceof Application);
-                @SuppressWarnings("unchecked")
-                Application<Portlet> application = (Application<Portlet>) sitemapcomponent;
-                assertTrue(application.getType() == ApplicationType.PORTLET);
-                ApplicationState<Portlet> state = application.getState();
-                assertNotNull(state);
-                assertTrue(state instanceof TransientApplicationState);
-                TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
-                assertEquals("web/SiteMapPortlet", tas.getContentId());
-                assertNull(tas.getContentState());
-
-                assertEquals("Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme", application.getTheme());
-                assertEquals("SiteMap", application.getTitle());
-                assertEquals("*:/platform/users", Utils.join(";", application.getAccessPermissions()));
-                assertTrue(application.getShowInfoBar());
-                assertTrue(application.getShowApplicationState());
-                assertFalse(application.getShowApplicationMode());
-                assertEquals("SiteMap", application.getDescription());
-                assertNull(application.getIcon());
-                assertNull(application.getWidth());
-                assertNull(application.getHeight());
-            }
-            {
-                ModelObject wsrpcomponent = container3.getChildren().get(1);
-                assertTrue(wsrpcomponent instanceof Application);
-                @SuppressWarnings("unchecked")
-                Application<WSRP> application = (Application<WSRP>) wsrpcomponent;
-                assertTrue(application.getType() == ApplicationType.WSRP_PORTLET);
-                ApplicationState<WSRP> state = application.getState();
-                assertNotNull(state);
-                assertTrue(state instanceof TransientApplicationState);
-                TransientApplicationState<WSRP> tas = (TransientApplicationState<WSRP>) state;
-                assertEquals("selfv2./portletApplicationName.portletName", tas.getContentId());
-                assertNull(tas.getContentState());
-
-                assertEquals("WSRP", application.getTitle());
-                assertEquals("Someone", Utils.join(";", application.getAccessPermissions()));
-                assertFalse(application.getShowInfoBar());
                 assertTrue(application.getShowApplicationState());
                 assertTrue(application.getShowApplicationMode());
                 assertNull(application.getDescription());
@@ -346,26 +208,197 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
                 assertNull(application.getWidth());
                 assertNull(application.getHeight());
             }
+
+            // Verify container 2
+            ModelObject c2 = rootChildren.get(1);
+            assertNotNull(c2);
+            assertTrue(c2 instanceof Container);
+            Container container2 = (Container) c2;
+            assertEquals("c2", container2.getId());
+            assertEquals("system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl", container2.getTemplate());
+            assertEquals("*:/platform/guests", Utils.join(";", container2.getAccessPermissions()));
+            assertEquals("TableColumnContainer", container2.getFactoryId());
+            assertNotNull(container2.getChildren());
+            assertEquals(2, container2.getChildren().size());
+
+            {
+                // Verify column 1 of container 2
+                ModelObject appregComp = container2.getChildren().get(0);
+                assertTrue(appregComp instanceof Container);
+                Container appregContainer = (Container) appregComp;
+                assertEquals("c2-1", appregContainer.getId());
+                assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", appregContainer.getTemplate());
+                assertEquals("300px", appregContainer.getWidth());
+                assertEquals("400px", appregContainer.getHeight());
+                assertEquals("Everyone", Utils.join(";", appregContainer.getAccessPermissions()));
+                {
+                    // Verify app registry application
+                    assertNotNull(appregContainer.getChildren());
+                    assertEquals(1, appregContainer.getChildren().size());
+                    ModelObject appregComponent = appregContainer.getChildren().get(0);
+                    assertTrue(appregComponent instanceof Application);
+                    @SuppressWarnings("unchecked")
+                    Application<Portlet> application = (Application<Portlet>) appregComponent;
+                    assertTrue(application.getType() == ApplicationType.PORTLET);
+                    ApplicationState<Portlet> state = application.getState();
+                    assertNotNull(state);
+                    assertTrue(state instanceof TransientApplicationState);
+                    TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
+                    assertEquals("exoadmin/ApplicationRegistryPortlet", tas.getContentId());
+                    assertNull(tas.getContentState());
+
+                    assertEquals("Default:DefaultTheme::Mac:MacTheme::Vista:VistaTheme", application.getTheme());
+                    assertEquals("Application Registry", application.getTitle());
+                    assertEquals("*:/platform/administrators;*:/organization/management/executive-board",
+                            Utils.join(";", application.getAccessPermissions()));
+                    assertFalse(application.getShowInfoBar());
+                    assertTrue(application.getShowApplicationState());
+                    assertFalse(application.getShowApplicationMode());
+                    assertEquals("Application Registry", application.getDescription());
+                    assertEquals("PortletIcon", application.getIcon());
+                    assertEquals("250px", application.getWidth());
+                    assertEquals("350px", application.getHeight());
+                }
+
+                // Verify column 2 of container 2
+                ModelObject orgComp = container2.getChildren().get(1);
+                assertTrue(orgComp instanceof Container);
+                Container orgContainer = (Container) orgComp;
+                assertEquals("c2-2", orgContainer.getId());
+                assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", orgContainer.getTemplate());
+                assertEquals("200px", orgContainer.getWidth());
+                assertEquals("300px", orgContainer.getHeight());
+                assertEquals("/platform/users", Utils.join(";", orgContainer.getAccessPermissions()));
+                {
+                    // Verify calendar gadget application
+                    assertNotNull(orgContainer.getChildren());
+                    assertEquals(1, orgContainer.getChildren().size());
+                    ModelObject gadgetComponent = orgContainer.getChildren().get(0);
+                    assertTrue(gadgetComponent instanceof Application);
+                    @SuppressWarnings("unchecked")
+                    Application<Gadget> application = (Application<Gadget>) gadgetComponent;
+                    assertTrue(application.getType() == ApplicationType.GADGET);
+                    ApplicationState<Gadget> state = application.getState();
+                    assertNotNull(state);
+                    assertTrue(state instanceof TransientApplicationState);
+                    TransientApplicationState<Gadget> tas = (TransientApplicationState<Gadget>) state;
+                    assertEquals("Calendar", tas.getContentId());
+                    assertNull(tas.getContentState());
+
+                    assertEquals("Vista:VistaTheme::Mac:MacTheme::Default:DefaultTheme", application.getTheme());
+                    assertEquals("Calendar Title", application.getTitle());
+                    assertEquals("*:/platform/administrators;*:/organization/management/executive-board",
+                            Utils.join(";", application.getAccessPermissions()));
+                    assertTrue(application.getShowInfoBar());
+                    assertFalse(application.getShowApplicationState());
+                    assertFalse(application.getShowApplicationMode());
+                    assertEquals("Calendar Description", application.getDescription());
+                    assertEquals("StarAwardIcon", application.getIcon());
+                    assertEquals("100px", application.getWidth());
+                    assertEquals("200px", application.getHeight());
+                }
+            }
+
+            // Verify container 3
+            ModelObject c3 = rootChildren.get(2);
+            assertNotNull(c3);
+            assertTrue(c3 instanceof Container);
+            Container container3 = (Container) c3;
+            assertEquals("c3", container3.getId());
+            assertEquals("system:/groovy/portal/webui/container/UIContainer.gtmpl", container3.getTemplate());
+            assertEquals(container3.getTemplate(), "system:/groovy/portal/webui/container/UIContainer.gtmpl");
+            assertEquals("Everyone", Utils.join(";", container3.getAccessPermissions()));
+            assertNull(container3.getFactoryId());
+            {
+                // Verify site map & wsrp application
+                assertNotNull(container3.getChildren());
+                assertEquals(2, container3.getChildren().size());
+                {
+                    ModelObject sitemapcomponent = container3.getChildren().get(0);
+                    assertTrue(sitemapcomponent instanceof Application);
+                    @SuppressWarnings("unchecked")
+                    Application<Portlet> application = (Application<Portlet>) sitemapcomponent;
+                    assertTrue(application.getType() == ApplicationType.PORTLET);
+                    ApplicationState<Portlet> state = application.getState();
+                    assertNotNull(state);
+                    assertTrue(state instanceof TransientApplicationState);
+                    TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
+                    assertEquals("web/SiteMapPortlet", tas.getContentId());
+                    assertNull(tas.getContentState());
+
+                    assertEquals("Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme", application.getTheme());
+                    assertEquals("SiteMap", application.getTitle());
+                    assertEquals("*:/platform/users", Utils.join(";", application.getAccessPermissions()));
+                    assertTrue(application.getShowInfoBar());
+                    assertTrue(application.getShowApplicationState());
+                    assertFalse(application.getShowApplicationMode());
+                    assertEquals("SiteMap", application.getDescription());
+                    assertNull(application.getIcon());
+                    assertNull(application.getWidth());
+                    assertNull(application.getHeight());
+                }
+                {
+                    ModelObject wsrpcomponent = container3.getChildren().get(1);
+                    assertTrue(wsrpcomponent instanceof Application);
+                    @SuppressWarnings("unchecked")
+                    Application<WSRP> application = (Application<WSRP>) wsrpcomponent;
+                    assertTrue(application.getType() == ApplicationType.WSRP_PORTLET);
+                    ApplicationState<WSRP> state = application.getState();
+                    assertNotNull(state);
+                    assertTrue(state instanceof TransientApplicationState);
+                    TransientApplicationState<WSRP> tas = (TransientApplicationState<WSRP>) state;
+                    assertEquals("selfv2./portletApplicationName.portletName", tas.getContentId());
+                    assertNull(tas.getContentState());
+
+                    assertEquals("WSRP", application.getTitle());
+                    assertEquals("Someone", Utils.join(";", application.getAccessPermissions()));
+                    assertFalse(application.getShowInfoBar());
+                    assertTrue(application.getShowApplicationState());
+                    assertTrue(application.getShowApplicationMode());
+                    assertNull(application.getDescription());
+                    assertNull(application.getIcon());
+                    assertNull(application.getWidth());
+                    assertNull(application.getHeight());
+                }
+            }
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
+
     }
 
     public void testEmptyPageUnmarshalling() {
         PageMarshaller marshaller = new PageMarshaller();
-        Page.PageSet pages = marshaller.unmarshal(getClass().getResourceAsStream(
-                "/org/exoplatform/portal/mop/management/pages-empty.xml"));
-        assertNotNull(pages);
-        assertNotNull(pages.getPages());
-        assertEquals(1, pages.getPages().size());
-        Page page = pages.getPages().get(0);
-        assertNotNull(page);
-        assertEquals("empty-page", page.getName());
-        assertEquals("Empty", page.getTitle());
-        assertNull(page.getAccessPermissions());
-        assertNull(page.getEditPermission());
-        assertArrayEquals(new String [] {ProtectedResource.EVERYONE}, page.getMoveAppsPermissions());
-        assertArrayEquals(new String [] {ProtectedResource.EVERYONE}, page.getMoveContainersPermissions());
-        assertNotNull(page.getChildren());
-        assertTrue(page.getChildren().isEmpty());
+        InputStream in = null;
+        try {
+            in = getClass().getResourceAsStream("/org/exoplatform/portal/mop/management/pages-empty.xml");
+            Page.PageSet pages = marshaller.unmarshal(in);
+            assertNotNull(pages);
+            assertNotNull(pages.getPages());
+            assertEquals(1, pages.getPages().size());
+            Page page = pages.getPages().get(0);
+            assertNotNull(page);
+            assertEquals("empty-page", page.getName());
+            assertEquals("Empty", page.getTitle());
+            assertNull(page.getAccessPermissions());
+            assertNull(page.getEditPermission());
+            assertArrayEquals(new String [] {ProtectedResource.EVERYONE}, page.getMoveAppsPermissions());
+            assertArrayEquals(new String [] {ProtectedResource.EVERYONE}, page.getMoveContainersPermissions());
+            assertNotNull(page.getChildren());
+            assertTrue(page.getChildren().isEmpty());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
     }
 
     public void testPageMarshalling() {
@@ -455,25 +488,35 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
 
     public void testTemplatePagesUnMarshalling() {
         PageMarshaller marshaller = new PageMarshaller();
-        Page.PageSet pages = marshaller.unmarshal(getClass().getResourceAsStream(
-                "/org/exoplatform/portal/mop/management/pages-template.xml"));
-        assertNotNull(pages);
-        assertNotNull(pages.getPages());
-        assertEquals(1, pages.getPages().size());
-        Page page = pages.getPages().get(0);
+        InputStream in = null;
+        try {
+            in = getClass().getResourceAsStream("/org/exoplatform/portal/mop/management/pages-template.xml");
+            Page.PageSet pages = marshaller.unmarshal(in);
+            assertNotNull(pages);
+            assertNotNull(pages.getPages());
+            assertEquals(1, pages.getPages().size());
+            Page page = pages.getPages().get(0);
 
-        assertEquals("Tab_Default", page.getName());
-        assertEquals("Tab_Default", page.getTitle());
-        assertNotNull(page.getChildren());
-        assertEquals(1, page.getChildren().size());
-        ModelObject child = page.getChildren().get(0);
-        assertTrue(child instanceof Application);
-        @SuppressWarnings("unchecked")
-        Application<Portlet> application = (Application<Portlet>) child;
-        assertTrue(application.getType() == ApplicationType.PORTLET);
-        ApplicationState<Portlet> state = application.getState();
-        assertNotNull(state);
-        assertTrue(state instanceof TransientApplicationState);
+            assertEquals("Tab_Default", page.getName());
+            assertEquals("Tab_Default", page.getTitle());
+            assertNotNull(page.getChildren());
+            assertEquals(1, page.getChildren().size());
+            ModelObject child = page.getChildren().get(0);
+            assertTrue(child instanceof Application);
+            @SuppressWarnings("unchecked")
+            Application<Portlet> application = (Application<Portlet>) child;
+            assertTrue(application.getType() == ApplicationType.PORTLET);
+            ApplicationState<Portlet> state = application.getState();
+            assertNotNull(state);
+            assertTrue(state instanceof TransientApplicationState);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
     }
 
     private void comparePages(Page expected, Page actual) {
