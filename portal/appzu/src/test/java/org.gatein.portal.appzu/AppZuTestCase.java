@@ -28,6 +28,8 @@ import junit.framework.AssertionFailedError;
 import juzu.impl.common.Completion;
 import juzu.impl.common.Name;
 import juzu.impl.common.Tools;
+import juzu.impl.fs.spi.ReadFileSystem;
+import juzu.impl.fs.spi.disk.DiskFileSystem;
 import org.gatein.common.io.IOTools;
 import org.gatein.portal.arquillian.api.Page;
 import org.gatein.portal.arquillian.api.PortalTest;
@@ -57,6 +59,7 @@ import org.openqa.selenium.WebElement;
         @Page("live/page.xml"),
         @Page("compilationfailure/page.xml"),
         @Page("kernelinject/page.xml"),
+        @Page("dotfiles/page.xml"),
         @Page("sample/page.xml")
 })
 public class AppZuTestCase {
@@ -123,7 +126,7 @@ public class AppZuTestCase {
             File src = new File(getClass().getResource(name).toURI());
             copy(src, dst);
             ApplicationRepository repo = ApplicationRepository.instance;
-            repo.addApplication(appName, root.toURI().toURL());
+            repo.addApplication(appName, new DiskFileSystem(new File(root.toURI())));
             return dst;
         }
     }
@@ -190,6 +193,16 @@ public class AppZuTestCase {
     public void testKernelInject() throws Exception {
         deploy("kernelinject");
         driver.get(url.toURI().resolve("./kernelinject").toString());
+        Assert.assertTrue(driver.getPageSource().contains("pass"));
+    }
+
+    @Test
+    @RunAsClient
+    public void testDotFiles() throws Exception {
+        File app = deploy("dotfiles");
+        File dotFile = new File(app, "_Controller.java");
+        Assert.assertTrue(dotFile.renameTo(new File(app, "._Controller.java")));
+        driver.get(url.toURI().resolve("./dotfiles").toString());
         Assert.assertTrue(driver.getPageSource().contains("pass"));
     }
 

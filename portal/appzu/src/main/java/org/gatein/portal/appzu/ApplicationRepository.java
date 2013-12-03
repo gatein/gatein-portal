@@ -27,9 +27,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import juzu.impl.common.Content;
 import juzu.impl.common.Name;
 import juzu.impl.common.Timestamped;
+import juzu.impl.fs.Filter;
 import juzu.impl.fs.Visitor;
 import juzu.impl.fs.spi.ReadFileSystem;
 import juzu.impl.fs.spi.disk.DiskFileSystem;
+import juzu.impl.fs.spi.filter.FilterFileSystem;
 import juzu.impl.fs.spi.url.Node;
 import juzu.impl.fs.spi.url.URLFileSystem;
 import net.sf.webdav.IWebdavStore;
@@ -200,8 +202,18 @@ public class ApplicationRepository {
      * @param fs the application file system
      * @return the app
      */
-    private App addApplication(Name name, ReadFileSystem<?> fs) throws Exception {
-        App app = new App(name, fs);
+    public <T> App addApplication(Name name, ReadFileSystem<T> fs) throws Exception {
+
+        // Filter . files (should be done in Juzu Live I think)
+        ReadFileSystem<?> wrapper = new FilterFileSystem<T>(fs, new Filter.Default<T>() {
+            @Override
+            public boolean acceptFile(T file, String name) throws IOException {
+                return !name.startsWith(".");
+            }
+        });
+
+        //
+        App app = new App(name, wrapper);
         App phantom = applications.putIfAbsent(name, app);
         if (phantom != null) {
             app = phantom;

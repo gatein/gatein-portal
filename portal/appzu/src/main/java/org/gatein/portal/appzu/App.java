@@ -144,6 +144,9 @@ public class App {
 
     public Completion<Boolean> refresh() throws Exception {
         status = bridge.refresh();
+        if (status.isFailed()) {
+            status.getCause().printStackTrace();
+        }
         return status;
     }
 }
