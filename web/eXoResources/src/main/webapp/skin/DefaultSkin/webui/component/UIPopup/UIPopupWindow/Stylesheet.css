@@ -1,23 +1,23 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UIPopupWindow {	
+.UIPopupWindow {
 	position: absolute;
 	visibility: hidden;
 	background: #E1E1E1;
@@ -30,7 +30,7 @@
 	float: right; /* orientation=rt */
 	margin: 5px 0px 0px 8px; /* orientation=lt */
 	margin: 5px 8px 0px 0px; /* orientation=rt */
-	width: 16px; 
+	width: 16px;
 	height: 16px;
 	background: url('background/PopupWindow.gif') no-repeat left bottom;
 }
@@ -39,12 +39,12 @@
 	float: right;
 	margin: 5px 3px 0px 0px;
 	width: 19px; height: 16px;
-	background: url('background/PopupWindow.gif') no-repeat left bottom; 
+	background: url('background/PopupWindow.gif') no-repeat left bottom;
 }
 
 .UIPopupWindow .PopupTitle {
 	margin: 0px 30px 0px;
-	line-height: 26px; 
+	line-height: 26px;
 	vertical-align: middle;
 	cursor: move;
 	color: #000;
@@ -92,8 +92,8 @@
   display: none;
   float: right; /* orientation=lt */
   float: left; /* orientation=rt */
-  cursor: nw-resize; /* orientation=lt */
-  cursor: ne-resize; /* orientation=rt */
+  cursor: se-resize; /* orientation=lt */
+  cursor: sw-resize; /* orientation=rt */
 }
 
 .UIPopupWindow > .OverflowContainer{
@@ -124,7 +124,7 @@
 .UIPortalComposer .CollapseIcon {
 	background: url(background/ExpandIcon.gif) no-repeat left; /* orientation=lt */
 	background: url(background/ExpandIcon-rt.gif) no-repeat right; /* orientation=rt */
-	width: 16px; 
+	width: 16px;
 	height: 14px;
 	float: left;  /* orientation=lt */
 	float: right;  /* orientation=rt */
@@ -135,7 +135,7 @@
 .UIPortalComposer .ExpandIcon {
 	background: url(background/GrayDownIcon.gif) no-repeat left; /* orientation=lt */
 	background: url(background/GrayDownIcon.gif) no-repeat right; /* orientation=rt */
-	width: 16px; 
+	width: 16px;
 	height: 14px;
 	float: left;  /* orientation=lt */
 	float: right;  /* orientation=rt */
