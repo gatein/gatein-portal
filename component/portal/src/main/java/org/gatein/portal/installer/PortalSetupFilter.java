@@ -41,10 +41,14 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class PortalSetupFilter implements Filter {
 
+    public static final String GATEIN_SETUP_ENABLE = "gatein.portal.setup.enable";
+
     private static final String SETUP_JSP = "/setup/jsp/setup.jsp";
     private static final String SETUP_ACTION = "/setupaction";
     private static final String[] resourceExtension = {".css",".png",".jpg"};
     private FilterConfig cfg;
+
+    private boolean setupEnable = Boolean.parseBoolean(System.getProperty(GATEIN_SETUP_ENABLE, "false"));
 
     @Override
     public void destroy() {
@@ -60,14 +64,14 @@ public class PortalSetupFilter implements Filter {
 
         if (PortalSetupService.isSetup(context) || isResourceUri(uri)) {
             chain.doFilter(req, resp);
-        } else {
+        } else if (setupEnable) {
 
             if (uri.endsWith(SETUP_ACTION))
                 chain.doFilter(req, resp);
             else
                 cfg.getServletContext().getRequestDispatcher(SETUP_JSP).forward(req, resp);
-        }
-
+        } else
+            chain.doFilter(req, resp);
     }
 
     private boolean isResourceUri(String uri){
