@@ -21,12 +21,10 @@ package org.gatein.portal.appzu;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.util.concurrent.ConcurrentHashMap;
 
 import juzu.impl.common.Content;
 import juzu.impl.common.Name;
-import juzu.impl.common.Timestamped;
 import juzu.impl.fs.Filter;
 import juzu.impl.fs.Visitor;
 import juzu.impl.fs.spi.ReadFileSystem;
@@ -112,7 +110,7 @@ public class ApplicationRepository {
         for (String atom : name) {
             for (int i = 0;i < atom.length();i++) {
                 char c = atom.charAt(i);
-                if ((i == 0 && !Character.isJavaIdentifierStart(c)) || (Character.isJavaIdentifierPart(c))) {
+                if (!((i == 0 && Character.isJavaIdentifierStart(c)) || (i > 0 && Character.isJavaIdentifierPart(c)))) {
                     throw new Exception("Invalid name " + name);
                 }
             }
