@@ -44,6 +44,7 @@ import org.exoplatform.services.jcr.RepositoryService;
  */
 public class PortalSetupService {
 
+    public static final String GATEIN_SETUP_ENABLE = "gatein.portal.setup.enable";
     public static final String ROOT_PASSWORD_PROPERTY = "gatein.portal.setup.initialpassword.root";
     public static final String REPOSITORY_NAME = "repository";
     public static final String WORKSPACE_NAME = "portal-system";
@@ -157,7 +158,7 @@ public class PortalSetupService {
     }
 
     public static boolean isSetup() {
-        return setup.get(getPCName());
+        return isSetup(getPCName());
     }
 
     public static void setFlag() {
@@ -167,5 +168,4 @@ public class PortalSetupService {
     private static String randomPassword() {
         return new BigInteger(130, new SecureRandom()).toString(8);
     }
-
 }

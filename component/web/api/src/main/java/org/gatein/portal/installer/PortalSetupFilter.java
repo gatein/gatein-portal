@@ -22,40 +22,77 @@
 
 package org.gatein.portal.installer;
 
-import java.io.IOException;
-
+import javax.servlet.FilterChain;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
+import org.exoplatform.web.filter.Filter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 /**
- * This servlet will update root password at first boot of GateIn.
+ * A filter for checking a flag if root user is properly initialized.
+ * If not, filter redirects to GateIn root setup page.
  *
  * @author <a href="mailto:lponce@redhat.com">Lucas Ponce</a>
  *
  */
-public class PortalSetupServlet extends HttpServlet {
+public class PortalSetupFilter implements Filter {
 
-    private static final Logger log = LoggerFactory.getLogger(PortalSetupServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(PortalSetupFilter.class);
 
-    private static final long serialVersionUID = 997716509281091664L;
+    private static final String SETUP_JSP = "/setup/jsp/setup.jsp";
+    private static final String SETUP_ACTION = "/setupaction";
+    private static final String[] resourceExtension = {".css",".png",".jpg"};
+
     private static final String PASSWORD = "password";
     private static final String PASSWORD2 = "password2";
-    private static final String SETUP_JSP = "/setup/jsp/setup.jsp";
     private static final String SETUP_ERROR = "org.gatein.portal.setup.error";
 
+    private boolean setupEnable = Boolean.parseBoolean(System.getProperty(PortalSetupService.GATEIN_SETUP_ENABLE, "false"));
+
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+
+        HttpServletRequest httpReq = (HttpServletRequest) req;
+        String uri = httpReq.getRequestURI();
+        String context = httpReq.getContextPath().substring(1);
+
+        if (PortalSetupService.isSetup(context) || isResourceUri(uri)) {
+            chain.doFilter(req, resp);
+        } else if (setupEnable) {
+            if (uri.endsWith(SETUP_ACTION))
+                setupAction((HttpServletRequest)req, (HttpServletResponse)resp);
+            else {
+                PortalContainer portalContainer = PortalContainer.getInstance();
+                ServletContext mergedContext = portalContainer.getPortalContext();
+                mergedContext.getRequestDispatcher(SETUP_JSP).forward(req, resp);
+            }
+        } else
+            chain.doFilter(req, resp);
+    }
+
+    private boolean isResourceUri(String uri) {
+        for(String extension : resourceExtension){
+            if (uri.endsWith(extension))
+                return true;
+        }
+        return false;
+    }
+
+    private void setupAction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String uri = request.getRequestURI();
         String portal = uri.substring(0, uri.length() - "/setupaction".length());
         String context = request.getContextPath();
@@ -109,10 +146,5 @@ public class PortalSetupServlet extends HttpServlet {
                 }
             }
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
     }
 }

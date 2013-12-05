@@ -158,7 +158,7 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
     private void createUsers(OrganizationService service) throws Exception {
         printInfo("  Init  User  Data");
         List<?> users = config_.getUser();
-        boolean setupEnable = Boolean.parseBoolean(System.getProperty(PortalSetupFilter.GATEIN_SETUP_ENABLE, "false"));
+        boolean setupEnable = Boolean.parseBoolean(System.getProperty(PortalSetupService.GATEIN_SETUP_ENABLE, "false"));
 
         MembershipHandler mhandler = service.getMembershipHandler();
         for (int i = 0; i < users.size(); i++) {
