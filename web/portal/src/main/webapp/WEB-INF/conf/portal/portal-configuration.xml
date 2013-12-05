@@ -566,6 +566,27 @@
   <external-component-plugins>
     <target-component>org.exoplatform.services.listener.ListenerService</target-component>
     <component-plugin>
+      <name>org.exoplatform.portal.config.DataStorage.portalConfigRemoved</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.portal.pom.config.cache.LayoutUpdateListener</type>
+    </component-plugin>
+    <component-plugin>
+      <name>org.exoplatform.portal.config.DataStorage.portalConfigUpdated</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.portal.pom.config.cache.LayoutUpdateListener</type>
+    </component-plugin>
+    <component-plugin>
+      <name>org.exoplatform.portal.config.DataStorage.pageRemoved</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.portal.pom.config.cache.LayoutUpdateListener</type>
+    </component-plugin>
+    <component-plugin>
+      <name>org.exoplatform.portal.config.DataStorage.pageUpdated</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.portal.pom.config.cache.LayoutUpdateListener</type>
+    </component-plugin>
+    
+    <component-plugin>
       <name>org.exoplatform.portal.mop.navigation.navigation_created</name>
       <set-method>addListener</set-method>
       <type>org.exoplatform.web.portal.RefreshCurrentUserPortal</type>
