@@ -2,6 +2,7 @@ package org.gatein.integration.jboss.as7.deployment;
 
 import org.gatein.cdi.CDIPortletContextExtension;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
+import org.jboss.as.server.deployment.AttachmentKey;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -9,7 +10,6 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.reflect.DeploymentReflectionIndex;
 import org.jboss.as.weld.WeldDeploymentMarker;
-import org.jboss.as.weld.deployment.WeldAttachments;
 import org.jboss.logging.Logger;
 import org.jboss.modules.Module;
 import org.jboss.weld.bootstrap.spi.Metadata;
@@ -48,7 +48,7 @@ public class CdiContextExtensionProcessor implements DeploymentUnitProcessor {
         Metadata<Extension> metadata = new MetadataImpl<Extension>(extension, deploymentUnit.getName());
         log.debug("Loaded portable extension " + extension);
 
-        deploymentUnit.addToAttachmentList(WeldAttachments.PORTABLE_EXTENSIONS, metadata);
+        deploymentUnit.addToAttachmentList(AttachmentKey.createList(Metadata.class), metadata);
     }
 
     private Extension loadExtension(String serviceClassName, final DeploymentReflectionIndex index, final ClassLoader loader) throws DeploymentUnitProcessingException {

@@ -24,7 +24,9 @@ package org.gatein.integration.jboss.as7.portal;
 
 import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.*;
 import static org.gatein.integration.jboss.as7.portal.PortalResourceDescriptions.*;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.READ_RESOURCE_OPERATION;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.READ_CHILDREN_NAMES_OPERATION;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.READ_CHILDREN_RESOURCES_OPERATION;
 
 import java.util.EnumSet;
 import java.util.Locale;

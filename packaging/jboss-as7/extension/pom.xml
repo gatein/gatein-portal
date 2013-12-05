@@ -33,6 +33,10 @@
   <artifactId>jboss-as7-integration-extension</artifactId>
   <name>GateIn - Portlet Container (JBoss AS7 Extension)</name>
 
+  <properties>
+    <jbossas.subsystem.test.artifactId>jboss-as-subsystem-test</jbossas.subsystem.test.artifactId>
+  </properties>
+
   <dependencies>
 
     <dependency>
@@ -110,6 +114,19 @@
   </build>
   <profiles>
     <profile>
+      <id>pkg-eap620</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>eap620</value>
+        </property>
+      </activation>
+      <properties>
+        <jbossas.subsystem.test.artifactId>jboss-as-subsystem-test-framework</jbossas.subsystem.test.artifactId>
+      </properties>
+    </profile>
+
+    <profile>
       <id>compile-tests</id>
       <activation>
         <property>
@@ -119,7 +136,8 @@
       <dependencies>
         <dependency>
           <groupId>org.jboss.as</groupId>
-          <artifactId>jboss-as-subsystem-test</artifactId>
+          <artifactId>${jbossas.subsystem.test.artifactId}</artifactId>
+          <version>${version.jboss.as}</version>
           <scope>test</scope>
         </dependency>
       </dependencies>

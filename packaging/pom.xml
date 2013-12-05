@@ -150,5 +150,18 @@
         <module>jboss-as7</module>
       </modules>
     </profile>
+    <profile>
+      <id>pkg-eap620</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>eap620</value>
+        </property>
+      </activation>
+      <modules>
+        <module>common</module>
+        <module>jboss-as7</module>
+      </modules>
+    </profile>
   </profiles>
 </project>

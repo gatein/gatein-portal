@@ -174,5 +174,23 @@
         <ws.security.producer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/producer</ws.security.producer.dir>
       </properties>
     </profile>
+    <profile>
+      <id>pkg-eap620</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>eap620</value>
+        </property>
+      </activation>
+
+      <properties>
+        <version.jboss.as>7.3.0.Final-redhat-14</version.jboss.as>
+        <server.name>jboss-eap-6.2</server.name>
+        <package.filename>package.xml</package.filename>
+        <jbossas.modules.target.dir>${jbossas.target.dir}/modules/system/layers/gatein</jbossas.modules.target.dir>
+        <ws.security.consumer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/consumer</ws.security.consumer.dir>
+        <ws.security.producer.dir>../../../../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/producer</ws.security.producer.dir>
+      </properties>
+    </profile>
   </profiles>
 </project>
