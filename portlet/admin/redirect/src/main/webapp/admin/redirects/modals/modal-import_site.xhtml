@@ -123,7 +123,8 @@
 		// on the error message.
 		function processLastUploadedFile(){
 			// Iterate through the file list in the fileUpload component
-			$(".RedirectAdmin .rf-fu-lst .rf-fu-itm").each(function(){
+			var items = $(".RedirectAdmin .rf-fu-lst .rf-fu-itm"); 
+			items.each(function(idx){
 				var fileItem = $(this);
 				var msg = fileItem.find(".rf-fu-itm-st").html();
 				// Status of file is already known
@@ -131,19 +132,26 @@
 				// If the file was already uploaded and the status of processing
 				// is yet unknown, set the status depending on the error message
 				if ((msg == msgDone) &amp;&amp; (!wasUpdated) ){
-					updateFileStatus(fileItem);
+					var isLast = (idx == items.length - 1); 
+					updateFileStatus(fileItem, isLast);					
 					return fileItem;
-				}
+				}				
 			});
 		}
 
-		function updateFileStatus(fileElement) {
+		function updateFileStatus(fileElement, isLast) {
 		// If error is present, there was an error while processing the file
 			var error = $(".RedirectAdmin span.rf-msg.msg-hidden .rf-msg-det").size() > 0;
 
 			if (error){
 				fileElement.addClass(classError);
 			} else {
+				if (isLast) {
+					window.setTimeout(function() {
+					  //don't use reload, to avoid post back data
+					  window.location.replace(window.location.href.replace("#", ''));		
+					}, '1000');
+				}
 				fileElement.addClass(classSuccess);
 			}
 		}
