@@ -384,6 +384,8 @@ public class UIPortalComposer extends UIContainer {
             uiEditWS.getComposer().setEditted(false);
             uiEditWS.setRendered(false);
 
+            UITabPane tabPane = uiEditWS.getComposer().getChild(UITabPane.class);
+            tabPane.setSelectedTab(1);
         }
 
         protected void fireChangeNode(WebuiRequestContext prContext, UIPortalApplication uiPortalApp, UIPortal uiPortal) throws Exception {
@@ -426,7 +428,9 @@ public class UIPortalComposer extends UIContainer {
             UIPortalComposer uiComposer = event.getSource();
             uiComposer.save();
             uiComposer.setEditted(false);
-
+            //Reset tab pane state
+            UITabPane tabPane = uiComposer.getChild(UITabPane.class);
+            tabPane.setSelectedTab(1);
             PortalRequestContext prContext = Util.getPortalRequestContext();
 
             UIPortalApplication uiPortalApp = (UIPortalApplication) prContext.getUIApplication();
@@ -639,7 +643,9 @@ public class UIPortalComposer extends UIContainer {
             UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
             UIEditInlineWorkspace editInlineWS = event.getSource().getParent();
             UIWorkingWorkspace uiWorkingWS = editInlineWS.getParent();
-
+            //Reset tab pane state
+            UITabPane tabPane = event.getSource().getChild(UITabPane.class);
+            tabPane.setSelectedTab(1);
             UIPortal uiPortal = uiPortalApp.getCurrentSite();
             UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
