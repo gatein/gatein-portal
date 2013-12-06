@@ -52,7 +52,7 @@ public class UIResetPassword extends UIForm {
 
     static final String CONFIRM_NEW_PASSWORD = "confirmnewpassword";
 
-    static User user_;
+    private String userName;
 
     private String tokenId;
 
@@ -67,8 +67,12 @@ public class UIResetPassword extends UIForm {
     }
 
     public void setUser(User user) {
-        user_ = user;
+        userName = user.getUserName();
         getUIStringInput(USER_NAME).setValue(user.getUserName());
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public void setTokenId(String tokenId) {
@@ -113,10 +117,19 @@ public class UIResetPassword extends UIForm {
             }
 
             if (setPassword) {
-                user_.setPassword(newpassword);
-                orgService.getUserHandler().saveUser(user_, true);
-                uiMaskWorkspace.createEvent("Close", Phase.DECODE, request).broadcast();
-                uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
+                User user = orgService.getUserHandler().findUserByName(uiForm.getUserName(), false);
+                if (user == null) {
+                    uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
+                    return;
+                } else if (!user.isEnabled()) {
+                    uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
+                    return;
+                } else {
+                    user.setPassword(newpassword);
+                    orgService.getUserHandler().saveUser(user, true);
+                    uiMaskWorkspace.createEvent("Close", Phase.DECODE, request).broadcast();
+                    uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
+                }
             }
             request.addUIComponentToUpdateByAjax(uiMaskWorkspace);
         }

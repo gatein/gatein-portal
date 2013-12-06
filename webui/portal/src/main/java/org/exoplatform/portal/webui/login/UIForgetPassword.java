@@ -88,10 +88,14 @@ public class UIForgetPassword extends UIForm {
 
             // User provided his username
             if (userName != null) {
-                user = orgSrc.getUserHandler().findUserByName(userName);
+                user = orgSrc.getUserHandler().findUserByName(userName, false);
                 if (user == null) {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
+                    return;
+                } else if (!user.isEnabled()) {
+                    requestContext.getUIApplication().addMessage(
+                            new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
                     return;
                 }
             }
@@ -102,13 +106,18 @@ public class UIForgetPassword extends UIForm {
                 // Querying on email won't work. PLIDM-12
                 // Note that querying on email is inefficient as it loops over all users...
                 query.setEmail(email);
-                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query);
-                if (users.getSize() > 0) {
-                    user = users.load(0, 1)[0];
-                } else {
+                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query, false);
+                if (users == null || users.getSize() == 0) {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.email-not-exist", null));
                     return;
+                } else if (users.getSize() == 1) {
+                    user = users.load(0, 1)[0];
+                    if (!user.isEnabled()) {
+                        requestContext.getUIApplication().addMessage(
+                                new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
+                        return;
+                    }
                 }
             }
 
