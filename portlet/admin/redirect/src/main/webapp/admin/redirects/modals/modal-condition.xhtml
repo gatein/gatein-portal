@@ -100,20 +100,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<ui:repeat value="#{rdrEdit.editedCondition.deviceProperties}" var="rcDevProp" varStatus="counter">
+						<ui:repeat value="#{rdrEdit.deviceProperties}" var="rcDevProp" varStatus="counter">
 						<tr>
 							<td class="condition" colspan="2">
 								<ui:param name="rcDevPropOp" value="#{rcDevProp.equals != null ?  'eq' : rcDevProp.greaterThan != null ? (rcDevProp.lessThan != null ? 'bt' : 'gt') : rcDevProp.lessThan != null ? 'lt' : 'mt'}" />
-								<h:inputText id="name-rcDevProp" styleClass="property property-name-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].propertyName}" />
-								<!-- For some reason this causes the components to stop working.. using pure HTML
-								<h:selectOneMenu id="op-rcDevProp" styleClass="attribute" style="height: 30px;" onchange="propertyFields(this);" value="#{rdrEdit.getPropertyOperator(counter.index)}">
-									<f:selectItem id="eq" itemLabel="Equals" itemValue="eq" />
-									<f:selectItem id="gt" itemLabel="Greater than" itemValue="gt" />
-									<f:selectItem id="lt" itemLabel="Less than" itemValue="lt" />
-									<f:selectItem id="bt" itemLabel="Between" itemValue="bt" />
-									<f:selectItem id="mt" itemLabel="Matches" itemValue="mt" />
-								</h:selectOneMenu>
-								-->
+								<h:inputText id="name-rcDevProp" styleClass="property property-name-input" value="#{rdrEdit.deviceProperties[counter.index].propertyName}" />
+
 								<select name="op-rcDevProp" class="attribute property-operator" style="height: 30px;" onchange="changePropertyFields(this, true);" >
 									<option value="eq" selected='#{rcDevPropOp == "eq" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.eq']}</option>
 									<option value="gt" selected='#{rcDevPropOp == "gt" ? "selected" : ""}'>#{msg['redirect.admin.condition.param.gt']}</option>
@@ -124,31 +116,31 @@
 								<span id="value-holder">
 									<h:panelGroup styleClass="pp-bt" style="#{rcDevPropOp == 'bt' ? '' : 'display:none'}">
 										<div class="input-append-inline">
-											<h:inputText id="val-rcDevProp_bt_gt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].greaterThan}" />
+											<h:inputText id="val-rcDevProp_bt_gt" styleClass="property-value-input" value="#{rdrEdit.deviceProperties[counter.index].betweenLow}" />
 										</div>
 										<span class="td-condition">AND</span>
 										<div class="input-append-inline">
-											<h:inputText id="val-rcDevProp_bt_lt" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].lessThan}" />
+											<h:inputText id="val-rcDevProp_bt_lt" value="#{rdrEdit.deviceProperties[counter.index].betweenHigh}" />
 										</div>
 									</h:panelGroup>
 									<h:panelGroup styleClass="pp-eq" style="#{rcDevPropOp == 'eq' ? '' : 'display:none'}">
 										<div class="input-append-inline">
-											<h:inputText id="val-rcDevProp_eq" styleClass="property-value-input" style="width: 128px;" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].equals}" converter="PropertiesConverter" />
+											<h:inputText id="val-rcDevProp_eq" styleClass="property-value-input" style="width: 128px;" value="#{rdrEdit.deviceProperties[counter.index].equals}" converter="PropertiesConverter" />
 										</div>
 									</h:panelGroup>
 									<h:panelGroup styleClass="pp-mt" style="#{rcDevPropOp == 'mt' ? '' : 'display:none'}">
 										<div class="input-append-inline">
-											<h:inputText id="val-rcDevProp_mt" styleClass="property-value-input" style="width: 128px;" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].matches}" converter="PropertiesConverter" />
+											<h:inputText id="val-rcDevProp_mt" styleClass="property-value-input" style="width: 128px;" value="#{rdrEdit.deviceProperties[counter.index].matches}" converter="PropertiesConverter" />
 										</div>
 									</h:panelGroup>
 									<h:panelGroup styleClass="pp-gt" style="#{rcDevPropOp == 'gt' ? '' : 'display:none'}">
 										<div class="input-append-inline">
-											<h:inputText id="val-rcDevProp_gt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].greaterThan}" />
+											<h:inputText id="val-rcDevProp_gt" styleClass="property-value-input" value="#{rdrEdit.deviceProperties[counter.index].greaterThan}" />
 										</div>
 									</h:panelGroup>
 									<h:panelGroup styleClass="pp-lt" style="#{rcDevPropOp == 'lt' ? '' : 'display:none'}">
 										<div class="input-append-inline">
-											<h:inputText id="val-rcDevProp_lt" styleClass="property-value-input" value="#{rdrEdit.editedCondition.deviceProperties[counter.index].lessThan}" />
+											<h:inputText id="val-rcDevProp_lt" styleClass="property-value-input" value="#{rdrEdit.deviceProperties[counter.index].lessThan}" />
 										</div>
 									</h:panelGroup>
 								</span>
