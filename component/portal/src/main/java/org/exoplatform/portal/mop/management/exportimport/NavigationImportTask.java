@@ -127,6 +127,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         // Import navigation using gatein navigation importer.
         NavigationImporter importer = new NavigationImporter(locale, importMode, data, navigationService, descriptionService);
         importer.perform();
+        dataStorage.save(); // Persists changes. Probably should be a better way to do this via NavigationService
     }
 
     @Override
