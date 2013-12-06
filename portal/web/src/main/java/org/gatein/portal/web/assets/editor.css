@@ -29,6 +29,35 @@
 	min-height: 100px;
 }
 
+.LAYOUT-EDITION .window > h3 {
+	cursor: move;
+}
+
+.LAYOUT-EDITION.container .saveLayout, 
+.LAYOUT-EDITION.container .cancelEditLayout, 
+.LAYOUT-EDITION.container .switchLayout,
+.LAYOUT-EDITION .window > h3 > .close, 
+.LAYOUT-EDITION .window > h3 > .icon {
+	display: inline-block;
+}
+
+.LAYOUT-EDITION.container .layoutComposer {
+	display: block;
+} 
+
+.LAYOUT-EDITION.container .editLayout {
+  	display: none;
+}
+
+.container .editLayout {
+	display: inline-block;
+}
+
+.container .saveLayout, .container .cancelEditLayout, .container .layoutComposer, 
+.container .switchLayout, .window > h3 > .icon, .window > h3 > .close {
+	display: none;
+}
+
 #composers {
 	margin: -70px 0 20px;
 }

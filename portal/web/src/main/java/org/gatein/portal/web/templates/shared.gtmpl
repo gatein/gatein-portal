@@ -1,4 +1,4 @@
-<div class="container <%=editing ? "LAYOUT-EDITION" : ""%>">
+<div class="container">
 
     #{insert/}
 

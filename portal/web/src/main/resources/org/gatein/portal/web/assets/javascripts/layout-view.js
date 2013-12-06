@@ -380,7 +380,6 @@
   var LayoutView = Backbone.View.extend({
     initialize : function(options) {
       var options = options || {};
-      this.pageURL = this.$el.attr('data-pageURL');
       this.urlRoot = this.$el.attr("data-urlRoot");
       this.layoutId = this.$el.attr('data-layoutId');
       this.pageKey = this.$el.attr('data-pageKey');
@@ -400,7 +399,7 @@
       this.model.save({}, {
         parse: false,
         success: function(model, resp, options) {
-          window.location.href = view.pageURL;
+          window.location.reload();
         },
         error: function(model, xhr, options) {
           //TODO: need to define a unified error handler on UI
@@ -488,18 +487,41 @@
       return model;
     }
   });
+  
+  var EditorState = Backbone.Model.extend({
+    defaults : {
+      editMode : 0      
+    }
+  }, {
+    NORMAL: 0,
+    EDIT_PAGE: 1,
+    EDIT_SITE: 2
+  });
 
   // The root container view of Layout Edition mode
   var EditorView = Backbone.View.extend({
     events : {
-      "click .switch" : "changeLayout",
-      "click #saveLayout" : "saveLayout"
+      'click .switch' : 'changeLayout',
+      'click #saveLayout' : 'saveLayout',
+      'click .editLayout' : 'startEdit',
+      'click .cancelEditLayout' : 'cancelEdit'
     },
 
     initialize : function() {
-
-      // Be sure that the element LAYOUT-EDITION has already been available in DOM
-      if (this.el) {
+      this.listenTo(this.model, 'change:editMode', this.switchMode);
+    },
+    
+    startEdit : function() {
+      this.model.set('editMode', EditorState.EDIT_PAGE);
+    },
+    
+    cancelEdit : function() {
+      this.model.set('editMode', EditorState.NORMAL);
+    },
+    
+    switchMode : function() {
+      this.$el.toggleClass('LAYOUT-EDITION');
+      if (this.model.get('editMode') > EditorState.NORMAL) {
 
         // Initialize LayoutView 
         this.layoutView = new LayoutView({
@@ -508,7 +530,11 @@
 
         // Initialize ComposerView
         this.composerView = new ComposerView({el : '#composers'});
+      } else {
+        delete this.layoutView;
+        delete this.composerView;
       }
+      this.trigger('eXo.portal.switchMode', this.model.get('editMode'), this);
     },
 
     getComposerView: function() {
@@ -545,6 +571,6 @@
 
   // Trigger to initialize the LAYOUT EDITION mode
   $(function() {
-    window.editorView = new EditorView({el : '.LAYOUT-EDITION'});
+    window.editorView = new EditorView({el : 'body > .container', model: new EditorState()});
   });
 })();

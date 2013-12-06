@@ -34,9 +34,14 @@
 })
 @WithAssets({
     "bootstrap",
+    "editor",
     "jquery",
     "jquery-ui",
-	"bootstrapjs"
+	"bootstrapjs",
+	"underscore",
+	"backbone",
+	"layout-model",
+	"layout-view"
 })
 @Tags(@Tag(name = "window", path = "window.gtmpl"))
 package org.gatein.portal.web;

@@ -106,19 +106,6 @@ public class ZoneLayout extends Layout {
         }
         if (template != null) {
             parameters.put("path", renderingContext.path != null ? renderingContext.path : "");
-            if (renderingContext.editing) {
-                parameters.put("tooltip", "Drag to edit page");
-                parameters.put("cursor", "cursor: move");
-                parameters.put("icon", "&equiv;");
-                parameters.put("editing", true);
-                parameters.put("editing", true);
-            } else {
-                parameters.put("tooltip", "");
-                parameters.put("cursor", "");
-                parameters.put("icon", "");
-                parameters.put("editing", false);
-            }
-
             parameters.put("layoutId", renderingContext.layoutId != null ? renderingContext.layoutId : "");
             parameters.put("pageKey", renderingContext.pageKey != null ? renderingContext.pageKey : "");
 

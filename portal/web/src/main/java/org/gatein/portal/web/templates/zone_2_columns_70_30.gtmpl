@@ -1,12 +1,12 @@
 <div class="row-fluid">
     <div id="1" class="span3 sortable <%=l1==null || l1.isEmpty() ? 'emptyContainer' : '' %>">
         <% l1.each { name, fragment -> %>
-        #{window name="${name}" title="${tooltip}" icon="${icon}" title="${fragment.title}" editing="${editing}" content="${fragment.content}" /}
+        #{window name="${name}" title="${fragment.title}" content="${fragment.content}" /}
       <% } %>
     </div>
     <div id="2" class="span9 sortable <%=l2==null || l2.isEmpty() ? 'emptyContainer' : '' %>">
         <% l2.each { name, fragment -> %>
-        #{window name="${name}" title="${tooltip}" icon="${icon}" title="${fragment.title}" editing="${editing}" content="${fragment.content}" /}
+        #{window name="${name}" title="${fragment.title}" content="${fragment.content}" /}
         <% } %>
     </div>
 </div>

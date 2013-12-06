@@ -205,7 +205,7 @@ public class Controller {
                     }
 
                     //
-                    if (phase != null && !"edit".equals(phase)) {
+                    if (phase != null) {
 
                         //
                         PageContext pageContext = pageBuilder.build();
@@ -302,14 +302,10 @@ public class Controller {
                         ReactivePage rp = new ReactivePage(
                                 pageContext,
                                 context.getUserContext().getLocale(),
-                                new RenderingContext(path, page.getLayoutId(), page.getKey().format(), "edit".equals(phase)));
+                                new RenderingContext(path, page.getLayoutId(), page.getKey().format()));
 
                         //
-                        Response.Content content = (Response.Content)rp.execute(siteLayout, pageLayout, context);
-                        if (phase != null && "edit".equals(phase)) {
-                            content.withAssets("editor", "underscore", "backbone", "layout-model", "layout-view");
-                        }
-                        return content;
+                       return rp.execute(siteLayout, pageLayout, context);
                     }
                 }
             }
