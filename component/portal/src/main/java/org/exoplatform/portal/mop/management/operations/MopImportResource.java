@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -108,6 +109,9 @@ public class MopImportResource extends SecureOperationHandler implements Operati
                 DescriptionService.class);
         if (descriptionService == null)
             throw new OperationException(operationName, "Description service was null");
+
+        ChromatticManager chromatticManager = operationContext.getRuntimeContext().getRuntimeComponent(ChromatticManager.class);
+        if (chromatticManager == null) throw new OperationException(operationName, "Chromattic manager was null");
 
         String mode = operationContext.getAttributes().getValue("importMode");
         if (mode == null || "".equals(mode))
@@ -211,6 +215,7 @@ public class MopImportResource extends SecureOperationHandler implements Operati
 
         // Perform import
         Map<SiteKey, MopImport> importsRan = new HashMap<SiteKey, MopImport>();
+        OperationException importError = null;
         try {
             log.info("Performing import using importMode '" + mode + "'");
             for (Map.Entry<SiteKey, MopImport> mopImportEntry : importMap.entrySet()) {
@@ -291,10 +296,36 @@ public class MopImportResource extends SecureOperationHandler implements Operati
             String message = (rollbackSuccess) ? "Error during import. Tasks successfully rolled back. Portal should be back to consistent state."
                     : "Error during import. Errors in rollback as well. Portal may be in an inconsistent state.";
 
-            throw new OperationException(operationName, message, t);
+            importError = new OperationException(operationName, message, t);
         } finally {
             importMap.clear();
             importsRan.clear();
+        }
+
+        endRequest(operationName, chromatticManager, importError);
+    }
+
+    // See GTNPORTAL-3257
+    private static void endRequest(String operationName, ChromatticManager manager, OperationException importError) {
+        OperationException error = importError;
+        try {
+            // End the request to flush out anything that might go wrong when finalizing the request.
+            manager.endRequest(true);
+        } catch (Throwable t) {
+            // This allows us to properly respond with an error (500 in REST scenario) if ChromatticManager.endRequest fails
+            if (importError == null) {
+                log.error("Exception occurred ending the request of ChromatticManager after a successful import.", t);
+                error = new OperationException(operationName, "An exception occurred after a successful import. See server logs for more details");
+            } else {
+                log.error("Exception occurred ending the request of ChromatticManager after a failed import.", t);
+            }
+        } finally {
+            // Start it again, as the calling container ends all ComponentRequestLifecycle's, and we don't want the end to be called w/out it beginning again.
+            manager.beginRequest();
+        }
+
+        if (error != null) {
+            throw error;
         }
     }
 
