@@ -425,12 +425,12 @@ public class UIPageNodeForm extends UIFormTabPane {
             UIPageNodeForm uiPageNodeForm = event.getSource();
             UIApplication uiPortalApp = ctx.getUIApplication();
             TreeNode pageNode = uiPageNodeForm.getPageNode();
-            boolean isVisible = uiPageNodeForm.getUICheckBoxInput(VISIBLE).isChecked();
-            boolean isShowPubDate = uiPageNodeForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
             boolean isSystemVisibility = false;
             if (pageNode != null)
                 isSystemVisibility = pageNode.getVisibility() == Visibility.SYSTEM;
 
+            boolean isVisible = isSystemVisibility ? false : uiPageNodeForm.getUICheckBoxInput(VISIBLE).isChecked();
+            boolean isShowPubDate = isSystemVisibility ? false : uiPageNodeForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
             if (isVisible && isShowPubDate && !isSystemVisibility) {
                 Calendar currentCalendar = Calendar.getInstance();
                 currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH),
