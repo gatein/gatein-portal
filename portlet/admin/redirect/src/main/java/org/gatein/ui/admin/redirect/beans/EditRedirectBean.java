@@ -300,13 +300,12 @@ public class EditRedirectBean implements Serializable {
     // current condition being edited
     private int currentConditionIndex;
     private RedirectCondition editedCondition;
+    private ArrayList<DevicePropertyConditionWrapper> deviceProperties;
 
     private String backupConditionName;
     private ArrayList<String> backupContains;
     private ArrayList<String> backupDoesNotContain;
-    private ArrayList<DevicePropertyCondition> backupDeviceProperties;
 
-    private boolean conditionsChanged = false;
     private boolean isNewCondition = false;
 
     private String siteName;
@@ -337,7 +336,9 @@ public class EditRedirectBean implements Serializable {
         this.backupConditionName = editedCondition.getName();
         this.backupContains = new ArrayList<String>(editedCondition.getUserAgentConditions().getContains());
         this.backupDoesNotContain = new ArrayList<String>(editedCondition.getUserAgentConditions().getDoesNotContain());
-        this.backupDeviceProperties = new ArrayList<DevicePropertyCondition>();
+
+        // Since we don't use the DeviceProperties directly but a wrapper, we create it at this point
+        this.deviceProperties = new ArrayList<DevicePropertyConditionWrapper>();
         if (editedCondition.getDeviceProperties() != null) {
             for (DevicePropertyCondition prop : editedCondition.getDeviceProperties()) {
                 DevicePropertyCondition newProp = new DevicePropertyCondition();
@@ -346,10 +347,9 @@ public class EditRedirectBean implements Serializable {
                 newProp.setMatches(prop.getMatches());
                 newProp.setLessThan(prop.getLessThan());
                 newProp.setGreaterThan(prop.getGreaterThan());
-                this.backupDeviceProperties.add(newProp);
+                this.deviceProperties.add(new DevicePropertyConditionWrapper(newProp));
             }
         }
-        this.conditionsChanged = false;
     }
 
     public void addCondition() {
@@ -384,6 +384,7 @@ public class EditRedirectBean implements Serializable {
         emptyDoesNotContain.add("");
         newUAC.setDoesNotContain(emptyDoesNotContain);
         newRC.setUserAgentConditions(newUAC);
+        deviceProperties = new ArrayList<DevicePropertyConditionWrapper>();
 
         return newRC;
     }
@@ -393,7 +394,6 @@ public class EditRedirectBean implements Serializable {
      */
     public void addContains() {
         editedCondition.getUserAgentConditions().getContains().add("");
-        conditionsChanged = true;
     }
 
     /**
@@ -403,7 +403,6 @@ public class EditRedirectBean implements Serializable {
      */
     public void removeContains(Integer index) {
         String rc = editedCondition.getUserAgentConditions().getContains().remove((int) index);
-        conditionsChanged = true;
     }
 
     /**
@@ -411,7 +410,6 @@ public class EditRedirectBean implements Serializable {
      */
     public void addDoesNotContain() {
         editedCondition.getUserAgentConditions().getDoesNotContain().add("");
-        conditionsChanged = true;
     }
 
     /**
@@ -421,11 +419,6 @@ public class EditRedirectBean implements Serializable {
      */
     public void removeDoesNotContain(Integer index) {
         String rc = editedCondition.getUserAgentConditions().getDoesNotContain().remove((int) index);
-        conditionsChanged = true;
-    }
-
-    public boolean getConditionsChanged() {
-        return conditionsChanged;
     }
 
     /**
@@ -440,8 +433,14 @@ public class EditRedirectBean implements Serializable {
         if (isNewCondition) {
             this.pr.getConditions().add(editedCondition);
             isNewCondition = false;
-            conditionsChanged = false;
         }
+        // We don't use DevicePropertyCondition directly, but a wrapper. Need to convert back.
+        ArrayList<DevicePropertyCondition> dpcs = new ArrayList<DevicePropertyCondition>();
+        for(DevicePropertyConditionWrapper dpcw : deviceProperties) {
+            dpcs.add(dpcw.getDevicePropertyCondition());
+        }
+        this.editedCondition.setDeviceProperties(dpcs);
+
         return null;
     }
 
@@ -454,7 +453,13 @@ public class EditRedirectBean implements Serializable {
             this.editedCondition.setName(backupConditionName);
             this.editedCondition.getUserAgentConditions().setContains(backupContains);
             this.editedCondition.getUserAgentConditions().setDoesNotContain(backupDoesNotContain);
-            this.editedCondition.setDeviceProperties(backupDeviceProperties);
+            /* GTNPORTAL-XXXX: We don't use DevicePropertyCondition directly, no need to rollback
+            ArrayList<DevicePropertyCondition> dpcs = new ArrayList<DevicePropertyCondition>();
+            for(DevicePropertyConditionWrapper dpcw : backupDeviceProperties) {
+                dpcs.add(dpcw.getDevicePropertyCondition());
+            }
+            this.editedCondition.setDeviceProperties(dpcs);
+            */
         }
     }
 
@@ -474,7 +479,7 @@ public class EditRedirectBean implements Serializable {
         dpc.setGreaterThan(null);
         dpc.setLessThan(null);
         dpc.setMatches(null);
-        editedCondition.getDeviceProperties().add(dpc);
+        deviceProperties.add(new DevicePropertyConditionWrapper(dpc));
     }
 
     /**
@@ -483,30 +488,16 @@ public class EditRedirectBean implements Serializable {
      * @param index the index of the entry to remove
      */
     public void removeProperty(Integer index) {
-        DevicePropertyCondition rc = editedCondition.getDeviceProperties().remove((int) index);
-        conditionsChanged = true;
+        /*DevicePropertyConditionWrapper rc = */this.deviceProperties.remove((int) index);
     }
 
-    /**
-     * Gets the proper operator to be shown at property editor, mapping it to the &lt;select&gt; element.
-     *
-     * @param index the index of the entry to get the operator from
-     * @return a string value representing the operator (mt for matches, bt for between, gt for greater-than, lt for less-than
-     *         and eq for equals)
-     */
-    public String getPropertyOperator(int index) {
-        DevicePropertyCondition dp = editedCondition.getDeviceProperties().get(index);
-        if (dp.getMatches() != null && !dp.getMatches().trim().isEmpty()) {
-            return "mt";
-        } else if (dp.getGreaterThan() != null && dp.getLessThan() != null) {
-            return "bt";
-        } else if (dp.getGreaterThan() != null) {
-            return "gt";
-        } else if (dp.getLessThan() != null) {
-            return "lt";
-        } else {
-            return "eq";
-        }
+    // Use Device Property Wrapper
+    public ArrayList<DevicePropertyConditionWrapper> getDeviceProperties() {
+        return this.deviceProperties;
+    }
+
+    public void setDeviceProperties(ArrayList<DevicePropertyConditionWrapper> dpcws) {
+        this.deviceProperties = dpcws;
     }
 
     // ----- MAPPINGS -----

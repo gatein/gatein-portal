@@ -177,7 +177,7 @@
 																	#{msg['redirect.admin.condition.param.mt']} '#{devProp.matches}'
 																</h:panelGroup>
 																<h:panelGroup rendered="#{devProp.greaterThan != null and devProp.lessThan != null}">
-																	#{msg['redirect.admin.condition.param.bw']} #{devProp.lessThan} and #{devProp.greaterThan}
+																	#{msg['redirect.admin.condition.param.bw']} #{devProp.greaterThan} and #{devProp.lessThan}
 																</h:panelGroup>
 																<h:panelGroup rendered="#{devProp.greaterThan != null and devProp.lessThan == null}">
 																	#{msg['redirect.admin.condition.param.gt']} #{devProp.greaterThan}
