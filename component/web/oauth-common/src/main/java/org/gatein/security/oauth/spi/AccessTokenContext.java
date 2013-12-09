@@ -54,7 +54,7 @@ public abstract class AccessTokenContext implements Serializable {
 
     public AccessTokenContext(String scopesAsString) {
         if (scopesAsString == null) {
-            throw new IllegalArgumentException("scopesAsString is null");
+            scopesAsString = "";
         }
         String[] scopes = scopesAsString.split(DELIMITER);
         for (String scope : scopes) {

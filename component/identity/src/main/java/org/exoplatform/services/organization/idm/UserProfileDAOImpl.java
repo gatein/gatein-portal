@@ -249,7 +249,12 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
         Set<Attribute> attrs = new HashSet<Attribute>();
 
         for (Map.Entry<String, String> entry : profileAttrs.entrySet()) {
-            attrs.add(new SimpleAttribute(entry.getKey(), entry.getValue()));
+            String attrValue = entry.getValue();
+            // Treat empty strings as null (needed for compatibility with Oracle as Oracle always treats empty strings as null)
+            if ("".equals(attrValue)) {
+                attrValue = null;
+            }
+            attrs.add(new SimpleAttribute(entry.getKey(), attrValue));
         }
 
         Attribute[] attrArray = new Attribute[attrs.size()];
