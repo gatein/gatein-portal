@@ -153,6 +153,9 @@ public class UIRegisterOAuth extends UIContainer {
                 HttpServletRequest httpRequest = portalRequestContext.getRequest();
                 OAuthPrincipal oauthPrincipal = (OAuthPrincipal)authRegistry.getAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL);
 
+                if (newUserProfile == null) {
+                    newUserProfile = orgService.getUserProfileHandler().createUserProfileInstance(newUser.getUserName());
+                }
                 newUserProfile.setAttribute(oauthPrincipal.getOauthProviderType().getUserNameAttrName(), oauthPrincipal.getUserName());
                 try {
                     profileHandler.saveUserProfile(newUserProfile, true);
