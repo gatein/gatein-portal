@@ -26,11 +26,6 @@
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.exoplatform.web.security.security.SecureRandomService</key>
-    <type>org.exoplatform.web.security.security.SecureRandomService</type>
-  </component>
-
-  <component>
     <type>org.exoplatform.web.security.codec.CodecInitializer</type>
     <init-params />
   </component>
