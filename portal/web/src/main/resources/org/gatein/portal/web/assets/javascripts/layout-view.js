@@ -517,6 +517,7 @@
     
     cancelEdit : function() {
       this.model.set('editMode', EditorState.NORMAL);
+      window.location.reload();
     },
     
     switchMode : function() {
