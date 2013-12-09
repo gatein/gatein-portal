@@ -56,6 +56,8 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
     public static final String USER_PASSWORD = "password";
 
+    public static final String USER_PASSWORD_SALT = "passwordSalt";
+
     public static final String USER_FIRST_NAME = "firstName";
 
     public static final String USER_LAST_NAME = "lastName";
@@ -79,6 +81,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
     static {
         Set<String> keys = new HashSet<String>();
         keys.add(USER_PASSWORD);
+        keys.add(USER_PASSWORD_SALT);
         keys.add(USER_FIRST_NAME);
         keys.add(USER_LAST_NAME);
         keys.add(USER_DISPLAY_NAME);
