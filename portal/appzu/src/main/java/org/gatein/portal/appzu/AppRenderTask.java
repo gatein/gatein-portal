@@ -22,16 +22,21 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 
+import juzu.PropertyType;
 import juzu.impl.common.Completion;
 import juzu.impl.common.Tools;
 import juzu.impl.compiler.CompilationError;
 import juzu.impl.compiler.CompilationException;
+import juzu.io.Chunk;
 import juzu.io.OutputStream;
+import juzu.io.Stream;
 import juzu.request.Phase;
+import org.gatein.common.xml.XMLTools;
 import org.gatein.portal.content.RenderTask;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.content.WindowContentContext;
@@ -120,11 +125,50 @@ public class AppRenderTask extends RenderTask {
                 juzu.request.Result.Status status = (juzu.request.Result.Status) result;
                 if (status.streamable != null) {
                     StringWriter buffer = new StringWriter();
-                    OutputStream stream = OutputStream.create(Tools.UTF_8, buffer);
-                    status.streamable.send(stream);
+                    final OutputStream stream = OutputStream.create(Tools.UTF_8, buffer);
+                    final ArrayList<String> assets = new ArrayList<String>();
+                    Stream wrapper = new Stream() {
+                        @Override
+                        public void provide(Chunk chunk) {
+                            if (chunk instanceof Chunk.Property) {
+                                Chunk.Property cp = (Chunk.Property) chunk;
+                                if (cp.type == PropertyType.ASSET) {
+                                    assets.add((String) cp.value);
+                                }
+                            }
+                            stream.provide(chunk);
+                        }
+                        @Override
+                        public void close(Thread.UncaughtExceptionHandler errorHandler) {
+                            stream.close(errorHandler);
+                        }
+                    };
+
+                    //
+                    status.streamable.send(wrapper);
+
+                    // Translate assets to elements (as now there is no way to integrate that with portal assets)
+                    Iterable<String> assetsURLs = content.app.resolveAssets(assets);
+                    ArrayList<Element> elements = new ArrayList<Element>();
+                    for (String assetURL : assetsURLs) {
+                        String s;
+                        if (assetURL.endsWith(".js")) {
+                            s = "<script type=\"text/javascript\" src=\"" + assetURL + "\"></script>";
+                        } else if (assetURL.endsWith(".css")) {
+                            s = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + assetURL + "\"/>";
+                        } else {
+                            s = null;
+                        }
+                        if (s != null) {
+                            Element assetElt = XMLTools.toElement(s);
+                            elements.add(assetElt);
+                        }
+                    }
+
+                    //
                     return new Result.Fragment(
                             Collections.<Map.Entry<String, String>>emptyList(),
-                            Collections.<Element>emptyList(),
+                            elements,
                             content.resolveTitle(Locale.ENGLISH),
                             buffer.toString());
                 }

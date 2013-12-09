@@ -36,6 +36,7 @@
             <select name="templateId" id="inputTemplate">
                 <option value="helloworld">Hello World</option>
                 <option value="inject">@Inject</option>
+                <option value="assets">Assets</option>
             </select>
         </div>
     </div>

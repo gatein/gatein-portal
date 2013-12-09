@@ -23,13 +23,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.ConcurrentHashMap;
 
-import juzu.impl.common.Content;
+import juzu.impl.common.Resource;
 import juzu.impl.common.Name;
-import juzu.impl.fs.Filter;
 import juzu.impl.fs.Visitor;
 import juzu.impl.fs.spi.ReadFileSystem;
 import juzu.impl.fs.spi.disk.DiskFileSystem;
-import juzu.impl.fs.spi.filter.FilterFileSystem;
 import juzu.impl.fs.spi.url.Node;
 import juzu.impl.fs.spi.url.URLFileSystem;
 import net.sf.webdav.IWebdavStore;
@@ -147,14 +145,14 @@ public class ApplicationRepository {
                 public void file(Node file, String name) throws IOException {
                     File f = new File(current, name);
                     if (!f.exists()) {
-                        Content content = source.getContent(file).getObject();
+                        Resource content = source.getResource(file).getObject();
                         if (name.endsWith(".java")) {
                             // Rewrite content
                             String s = content.getCharSequence().toString();
                             s = s.replaceAll(srcPkg, dstPkg);
-                            content = new Content(s);
+                            content = new Resource(s);
                         }
-                        target.setContent(f, content);
+                        target.updateResource(f, content);
                     }
                 }
             });
@@ -186,8 +184,8 @@ public class ApplicationRepository {
         DiskFileSystem fs = createFileSystem(name);
         File root = fs.makePath(name);
         fs.createDir(root);
-        fs.setContent(new File(root, "package-info.java"), new Content("@Application\npackage " + name + ";\n\nimport juzu.Application;\n"));
-        fs.setContent(new File(root, "Controller.java"), new Content(
+        fs.updateResource(new File(root, "package-info.java"), new Resource("@Application\npackage " + name + ";\n\nimport juzu.Application;\n"));
+        fs.updateResource(new File(root, "Controller.java"), new Resource(
                 "package " + name + ";\n" +
                         "import juzu.View;\n" +
                         "import juzu.Response;\n" +
@@ -212,17 +210,7 @@ public class ApplicationRepository {
      * @return the app
      */
     public <T> App addApplication(Name name, String displayName, ReadFileSystem<T> fs) throws Exception {
-
-        // Filter . files (should be done in Juzu Live I think)
-        ReadFileSystem<?> wrapper = new FilterFileSystem<T>(fs, new Filter.Default<T>() {
-            @Override
-            public boolean acceptFile(T file, String name) throws IOException {
-                return !name.startsWith(".");
-            }
-        });
-
-        //
-        App app = new App(name, displayName, wrapper);
+        App app = new App(name, displayName, fs);
         App phantom = applications.putIfAbsent(name, app);
         if (phantom != null) {
             app = phantom;

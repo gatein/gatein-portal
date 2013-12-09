@@ -19,10 +19,13 @@
 package org.gatein.portal.appzu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
+import juzu.impl.asset.Asset;
+import juzu.impl.asset.AssetManager;
 import juzu.impl.asset.AssetServer;
 import juzu.impl.bridge.Bridge;
 import juzu.impl.bridge.BridgeConfig;
@@ -33,7 +36,9 @@ import juzu.impl.common.Completion;
 import juzu.impl.common.JUL;
 import juzu.impl.common.Logger;
 import juzu.impl.common.Name;
+import juzu.impl.fs.Filter;
 import juzu.impl.fs.spi.ReadFileSystem;
+import juzu.impl.fs.spi.filter.FilterFileSystem;
 import juzu.impl.inject.spi.Injector;
 import juzu.impl.inject.spi.InjectorProvider;
 import juzu.impl.resource.ClassLoaderResolver;
@@ -54,6 +59,9 @@ public class App {
     /** . */
     Bridge bridge;
 
+    /** . */
+    final ReadFileSystem fs;
+
     /**
      * The current app status:
      * - null : unitilizaled
@@ -62,8 +70,15 @@ public class App {
      */
     private Completion<Boolean> status;
 
-    public App(Name name, String displayName, final ReadFileSystem<?> fs) throws Exception {
+    public <P> App(Name name, String displayName, final ReadFileSystem<P> fs) throws Exception {
 
+        // Filter . files (should be done in Juzu Live I think)
+        final ReadFileSystem<?> filteredFS = new FilterFileSystem<P>(fs, new Filter.Default<P>() {
+            @Override
+            public boolean acceptFile(P file, String name) throws IOException {
+                return !name.startsWith(".");
+            }
+        });
 
         BridgeContext context = new BridgeContext() {
             @Override
@@ -76,7 +91,7 @@ public class App {
             }
             @Override
             public ReadFileSystem<?> getSourcePath() {
-                return fs;
+                return filteredFS;
             }
             @Override
             public ReadFileSystem<?> getResourcePath() {
@@ -104,7 +119,6 @@ public class App {
             }
             @Override
             public void setAttribute(String key, Object value) {
-
             }
         };
 
@@ -120,6 +134,7 @@ public class App {
         this.bridge = new ApplicationBridge(module, context, config, new AssetServer(), resolver, injector);
         this.name = name;
         this.displayName = displayName;
+        this.fs = fs;
     }
 
     public Name getName() {
@@ -130,10 +145,37 @@ public class App {
         return displayName;
     }
 
+    public Iterable<String> resolveAssets(Iterable<String> ids) {
+        AssetManager manager = bridge.getApplication().resolveBean(AssetManager.class);
+        Iterable<Asset> assets = manager.resolveAssets(ids);
+        ArrayList<String> urls = new ArrayList<String>();
+        for (Asset asset : assets) {
+            String uri = asset.getURI();
+            switch (asset.getLocation()) {
+                case SERVER:
+                    // Not supported
+                    break;
+                case APPLICATION:
+                    urls.add(getWebdavPath() + uri);
+                    break;
+                case URL:
+                    urls.add(uri);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
+        return urls;
+    }
+
+    public String getWebdavPath(){
+        HttpServletRequest req = ThreadContext.getCurentHttpServletRequest();
+        return req.getContextPath() + "/repository" + "/" + name;
+    }
+
     public String getWebdavURL() {
         HttpServletRequest req = ThreadContext.getCurentHttpServletRequest();
-        return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() +
-                req.getContextPath() + "/repository" + "/" + name;
+        return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + getWebdavPath();
     }
 
     public Completion<Boolean> getStatus() {

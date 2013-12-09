@@ -39,6 +39,7 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.StringAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,7 +60,8 @@ import org.openqa.selenium.WebElement;
         @Page("compilationfailure/page.xml"),
         @Page("kernelinject/page.xml"),
         @Page("dotfiles/page.xml"),
-        @Page("sample/page.xml")
+        @Page("sample/page.xml"),
+        @Page("asset/page.xml")
 })
 public class AppZuTestCase {
 
@@ -67,6 +69,10 @@ public class AppZuTestCase {
     public static WebArchive createPortal() {
         WebArchive portal = ShrinkWrap.create(WebArchive.class, "portal.war");
         portal.addAsWebResource(new StringAsset("foo"), "foo");
+        URL fragmentResource = IWebdavStoreImpl.class.getResource("/META-INF/web-fragment.xml");
+        JavaArchive jar = ShrinkWrap.create(JavaArchive.class);
+        jar.addAsManifestResource(fragmentResource, "web-fragment.xml");
+        portal.addAsLibrary(jar);
         return portal;
     }
 
@@ -218,5 +224,18 @@ public class AppZuTestCase {
             Assert.assertTrue(completion.get());
             app.bridge.getApplication().getClassLoader().loadClass("org.gatein.portal.appzu.sample.Controller");
         }
+    }
+
+    @Test
+    @RunAsClient
+    public void testAssets() throws Exception {
+        deploy("asset");
+        driver.get(url.toURI().resolve("./asset").toString());
+        Assert.assertTrue(driver.getPageSource().contains("pass"));
+        WebElement body = driver.findElement(By.tagName("body"));
+        String bar = body.getAttribute("bar");
+        Assert.assertEquals("bar_value", bar);
+        String juu = body.getCssValue("juu");
+        Assert.assertEquals("juu_value", juu);
     }
 }

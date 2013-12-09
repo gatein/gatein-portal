@@ -31,7 +31,7 @@ import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
 import juzu.request.ClientContext;
-import juzu.request.ResourceContext;
+import juzu.request.RequestContext;
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
 import org.gatein.portal.content.ContentType;
@@ -113,7 +113,7 @@ public class PageEditor {
 
     @Resource
     @Route(value = "/savelayout/{javax.portlet.layoutid}")
-    public Response saveLayout(ResourceContext context, @Param(name = "javax.portlet.layoutid") String layoutId) throws Exception {
+    public Response saveLayout(RequestContext context, @Param(name = "javax.portlet.layoutid") String layoutId) throws Exception {
         NodeContext<JSONObject, ElementState> pageStructure = null;
         JSONObject requestData = null;
 
@@ -146,7 +146,7 @@ public class PageEditor {
         }
     }
 
-    private JSONObject getRequestData(ResourceContext context) throws Exception {
+    private JSONObject getRequestData(RequestContext context) throws Exception {
         InputStream content = context.getClientContext().getInputStream();
 
         StringBuilder stringBuilder = new StringBuilder();
