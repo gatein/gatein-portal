@@ -145,7 +145,9 @@
       var selector = "#" + id + " div";
       var $dom = $(selector);
       $dom.html(this.model.get("content"));
-
+      if (editorView.model.get('editMode') == EditorState.EDIT_PAGE) {
+        $dom.append("<div class='mask-layer'></div>");
+      }
       //UpdateID
       this.model.set('id', this.model.get('name'));
       $('#'+id).attr('id', this.model.getId());
@@ -390,7 +392,7 @@
       // Build model from current DOM
       this.model = this.buildModel();
     },
-
+    
     // Listen to clicking on SAVE button
     save : function() {
 
@@ -473,7 +475,10 @@
             'content' : content,
             'title' : title
           });
-          
+          var editorView = window.editorView;
+          if (editorView.model.get("editMode") == EditorState.EDIT_PAGE) {
+            $("#" + app.getId() + " .content").append("<div class='mask-layer'></div>");
+          }
           new ApplicationView({model : app, el : "#" + app.getId()});
           container.addChild(app);
         });
