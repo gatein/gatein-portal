@@ -248,6 +248,12 @@ public class UIListUsers extends UISearch {
             OrganizationService service = uiListUser.getApplicationComponent(OrganizationService.class);
 
             User user = service.getUserHandler().findUserByName(userName, false);
+            if(user == null) {
+                UIApplication uiApp = event.getRequestContext().getUIApplication();
+                uiApp.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null, ApplicationMessage.WARNING));
+                return;
+            }
+
             UserACL userACL = uiListUser.getApplicationComponent(UserACL.class);
             if (userACL.getSuperUser().equals(userName) && user.isEnabled()) {
                 UIApplication uiApp = event.getRequestContext().getUIApplication();
