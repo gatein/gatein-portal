@@ -1090,6 +1090,10 @@
                 <value>${project.build.directory}</value>
               </property>
               <property>
+                <name>gatein.appzu.repository.path</name>
+                <value>${project.build.directory}/apps</value>
+              </property>
+              <property>
                 <name>org.apache.commons.logging.Log</name>
                 <value>org.apache.commons.logging.impl.Log4JLogger</value>
               </property>

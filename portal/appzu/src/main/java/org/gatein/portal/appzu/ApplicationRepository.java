@@ -32,11 +32,16 @@ import juzu.impl.fs.spi.url.Node;
 import juzu.impl.fs.spi.url.URLFileSystem;
 import net.sf.webdav.IWebdavStore;
 import net.sf.webdav.LocalFileSystemStore;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author Julien Viet
  */
 public class ApplicationRepository {
+
+    /** . */
+    static final Logger log = LoggerFactory.getLogger(ApplicationRepository.class);
 
     /** . */
     static final ApplicationRepository instance = new ApplicationRepository();
@@ -45,6 +50,7 @@ public class ApplicationRepository {
         if ("true".equals(System.getProperty("gatein.appzu.security_manager"))) {
             System.setSecurityManager(new AppSecurityManager());
         }
+
     }
 
     public static ApplicationRepository getInstance() {
@@ -61,21 +67,43 @@ public class ApplicationRepository {
     final IWebdavStore store;
 
     public ApplicationRepository() {
+
+        //
         File root;
-        try {
-            root = File.createTempFile("appzu", ".tmp");
-            if (root.delete()) {
-                if (root.mkdirs()) {
-                    root.deleteOnExit();
-                } else {
-                    throw new IOException("Could not create " + root);
-                }
-            } else {
-                throw new IOException("Could not delete " + root);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Could not create application repository", e);
+        String REPO_PATH = System.getProperty("gatein.appzu.repository.path");
+        if (REPO_PATH != null && REPO_PATH.length() > 0) {
+            root = new File(REPO_PATH);
+        } else {
+            root = new File("apps");
         }
+
+        //
+        if (!root.exists()) {
+            if (root.mkdirs()) {
+                log.info("Created application repository " + root.getAbsolutePath());
+            } else {
+                log.info("Could not create application repository " + root.getAbsolutePath());
+            }
+        } else {
+            log.info("Using application repository " + root.getAbsolutePath());
+        }
+
+        // Seed initial aps
+        File[] files = root.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory() && !file.isHidden()) {
+                    Name name = Name.parse(file.getName());
+                    try {
+                        addApplication(name, name.toString());
+                    } catch (Exception e) {
+                        log.error("Invalid app at " + file.getAbsolutePath(), e);
+                    }
+                }
+            }
+        }
+
+        //
         this.root = root;
         this.store = new LocalFileSystemStore(root);
     }
