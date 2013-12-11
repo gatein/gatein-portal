@@ -22,11 +22,17 @@ package org.exoplatform.portal.application;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.login.LogoutControl;
+import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.gatein.wci.ServletContainerFactory;
 
@@ -41,7 +47,32 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
 
     public void onStartRequest(Application app, WebuiRequestContext context) throws Exception {
         LogoutControl.cancelLogout();
+
+        String uid = context.getRemoteUser();
+        User user = null;
+        if (uid != null) {
+            ExoContainer exoContainer = app.getApplicationServiceContainer();
+            if (exoContainer != null) {
+                OrganizationService organizationService = (OrganizationService) exoContainer
+                        .getComponentInstanceOfType(OrganizationService.class);
+                user = organizationService.getUserHandler().findUserByName(uid, false);
+            }
+
+            // If user is not existed OR disabled
+            if (user == null || !user.isEnabled()) {
+                logout(context);
+            }
+        }
     }
+
+    private void logout(WebuiRequestContext context) throws Exception {
+        LogoutControl.wantLogout();
+        PortalRequestContext prContext = (PortalRequestContext) context;
+        NodeURL createURL = prContext.createURL(NodeURL.TYPE);
+        createURL.setResource(new NavigationResource(SiteType.PORTAL, prContext.getPortalOwner(), null));
+        prContext.sendRedirect(createURL.toString());
+    }
+
 
     public void onFailRequest(Application app, WebuiRequestContext context, RequestFailure failureType) {
     }
