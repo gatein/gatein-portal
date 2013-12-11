@@ -128,7 +128,7 @@
 
       // Bind the callback 'updateContent' to the 'change' event of the Application model
       // The callback will be executed in this ApplicationView object context
-      this.model.on('change:content', this.updateContent, this);
+      this.model.on('change:content', this.render, this);
     },
 
     // Render the application frame from template
@@ -136,21 +136,8 @@
       var template = _.template($("#application-template").html());
       this.$el.html(template(this.model.toJSON()));
       this.$el.attr("id", this.model.getId());
+      this.$el.find('.content').append("<div class='mask-layer'></div>");
       return this;
-    },
-
-    // Update the content from Application model to DOM
-    updateContent: function() {
-      var id = this.model.getId();
-      var selector = "#" + id + " div";
-      var $dom = $(selector);
-      $dom.html(this.model.get("content"));
-      if (editorView.model.get('editMode') == EditorState.EDIT_PAGE) {
-        $dom.append("<div class='mask-layer'></div>");
-      }
-      //UpdateID
-      this.model.set('id', this.model.get('name'));
-      $('#'+id).attr('id', this.model.getId());
     },
 
     deleteApp: function() {
@@ -447,6 +434,9 @@
           $(apps).each(function() {
             var appView = new ApplicationView({model : this});
             var $app = appView.render().$el;
+            //Remove if existed app
+            $('#' + appView.model.getId()).remove();
+            //Append newest app content
             $('#' + id).append($app);
           });
           $container = $('#' + id);
@@ -475,10 +465,6 @@
             'content' : content,
             'title' : title
           });
-          var editorView = window.editorView;
-          if (editorView.model.get("editMode") == EditorState.EDIT_PAGE) {
-            $("#" + app.getId() + " .content").append("<div class='mask-layer'></div>");
-          }
           new ApplicationView({model : app, el : "#" + app.getId()});
           container.addChild(app);
         });
@@ -536,6 +522,7 @@
 
         // Initialize ComposerView
         this.composerView = new ComposerView({el : '#composers'});
+        this.layoutView.render();
       } else {
         delete this.layoutView;
         delete this.composerView;
