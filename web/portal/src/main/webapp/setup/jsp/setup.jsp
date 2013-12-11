@@ -28,14 +28,16 @@
 <%@ page import="java.util.ResourceBundle"%>
 <%
 
-  if (PortalSetupService.isSetup(request.getContextPath().substring(1))) {
+  PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());
+  PortalSetupService setupService = (PortalSetupService)portalContainer.getComponentInstance(PortalSetupService.class);
+  
+  if (setupService.isSetup(request.getContextPath().substring(1))) {
       response.sendRedirect(request.getContextPath());
   }
 
   String contextPath = request.getContextPath() ;
   String error = (String)request.getAttribute("org.gatein.portal.setup.error");
 
-  PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());
   ResourceBundleService service = (ResourceBundleService) portalContainer.getComponentInstanceOfType(ResourceBundleService.class);
   ResourceBundle res = service.getResourceBundle(service.getSharedResourceBundleNames(), request.getLocale()) ;
 

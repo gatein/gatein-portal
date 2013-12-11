@@ -34,8 +34,6 @@ import java.io.IOException;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.filter.Filter;
@@ -70,7 +68,8 @@ public class PortalSetupFilter implements Filter {
         String uri = httpReq.getRequestURI();
         String context = httpReq.getContextPath().substring(1);
 
-        if (PortalSetupService.isSetup(context) || isResourceUri(uri)) {
+        PortalSetupService setupService = (PortalSetupService) PortalContainer.getInstance().getComponentInstance(PortalSetupService.class);
+        if (setupService.isSetup(context) || isResourceUri(uri)) {
             chain.doFilter(req, resp);
         } else if (setupEnable) {
             if (uri.endsWith(SETUP_ACTION))
@@ -96,7 +95,8 @@ public class PortalSetupFilter implements Filter {
         String uri = request.getRequestURI();
         String portal = uri.substring(0, uri.length() - "/setupaction".length());
         String context = request.getContextPath();
-        if (PortalSetupService.isSetup(context)) {
+        PortalSetupService setupService = (PortalSetupService) PortalContainer.getInstance().getComponentInstance(PortalSetupService.class);
+        if (setupService.isSetup(context)) {
             response.sendRedirect(portal);
         } else {
             String password = request.getParameter(PASSWORD);
@@ -109,34 +109,12 @@ public class PortalSetupFilter implements Filter {
                 try {
                     OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer()
                             .getComponentInstanceOfType(OrganizationService.class);
-                    User root = service.getUserHandler().findUserByName("root", UserStatus.BOTH);
-                    // In the case the root user is not present
-                    // This case can happens if organization-configuration.xml is not well configured
-                    if (root == null) {
-                        root = service.getUserHandler().createUserInstance("root");
-                        root.setPassword(password);
-                        root.setFirstName("Root");
-                        root.setLastName("Root");
-                        root.setEmail("root@localhost");
-                        root.setDisplayName("root");
-                        service.getUserHandler().createUser(root, true);
-                        // Get memberships
-                        MembershipType manager = service.getMembershipTypeHandler().findMembershipType("manager");
-                        MembershipType member = service.getMembershipTypeHandler().findMembershipType("member");
-                        // Get groups
-                        Group administrators = service.getGroupHandler().findGroupById("/platform/administrators");
-                        Group users = service.getGroupHandler().findGroupById("/platform/users");
-                        Group executive_board = service.getGroupHandler().findGroupById("/organization/management/executive-board");
-                        // Assign users
-                        service.getMembershipHandler().linkMembership(root, administrators, manager, true);
-                        service.getMembershipHandler().linkMembership(root, users, member, true);
-                        service.getMembershipHandler().linkMembership(root, executive_board, member, true);
-                    } else {
-                        root.setPassword(password);
-                        service.getUserHandler().saveUser(root, true);
-                    }
+                    User root = setupService.getRootUser();
+                    root.setPassword(password);
+                    service.getUserHandler().saveUser(root, true);
+
                     // Flag
-                    PortalSetupService.setJcrFlag();
+                    setupService.setJcrFlag();
                     request.setAttribute(SETUP_ERROR, null);
                     response.sendRedirect(portal);
                 } catch (Exception e) {

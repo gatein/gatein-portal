@@ -87,7 +87,7 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
 
     public void init(OrganizationService service) throws Exception {
         // Check setup flag
-        PortalSetupService.checkJcrFlag();
+        //PortalSetupService.checkJcrFlag();
         if (checkDatabaseAlgorithm_ == CHECK_EMPTY && checkExistDatabase(service)) {
             return;
         }
@@ -171,9 +171,9 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
             user.setDisplayName(data.getDisplayName());
 
             // Check root user and JCR flag
-            if ("root".equals(user.getUserName()) && !PortalSetupService.isSetup() && setupEnable) {
-                user.setPassword(PortalSetupService.rootPassword());
-            }
+//            if ("root".equals(user.getUserName()) && !PortalSetupService.isSetup() && setupEnable) {
+//                user.setPassword(PortalSetupService.rootPassword());
+//            }
 
             if (service.getUserHandler().findUserByName(data.getUserName(), UserStatus.BOTH) == null) {
                 service.getUserHandler().createUser(user, true);
