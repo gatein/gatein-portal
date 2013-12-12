@@ -199,13 +199,18 @@ public class UIGroupMembershipForm extends UIForm {
             for (String username : userNames) {
                 if (username == null || username.trim().length() == 0)
                     continue;
-                User user = service.getUserHandler().findUserByName(username);
+                User user = service.getUserHandler().findUserByName(username, false);
                 if (user == null) {
                     check = true;
                     if (listNotExist == null)
                         listNotExist = username;
                     else
                         listNotExist += ", " + username;
+                } else if (!user.isEnabled()){
+                    ApplicationMessage msg = new ApplicationMessage("UIGroupMembershipForm.msg.user-is-disabled", new String[] { user.getUserName()});
+                    msg.setArgsLocalized(false);
+                    uiApp.addMessage(msg);
+                    return;
                 }
             }
             if (check) {
