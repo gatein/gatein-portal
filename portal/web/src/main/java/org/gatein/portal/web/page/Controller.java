@@ -393,7 +393,16 @@ public class Controller {
                     if (parameters == NO_PARAMETERS) {
                         parameters = new HashMap<String, String[]>();
                     }
-                    parameters.put(name, parameter.toArray());
+
+                    String[] values = parameter.toArray();
+                    if(parameters.containsKey(name)) {
+                        String[] oldVals = parameters.get(name);
+                        String[] newVals = new String[oldVals.length + values.length];
+                        System.arraycopy(oldVals, 0, newVals, 0, oldVals.length);
+                        System.arraycopy(values, 0, newVals, oldVals.length, values.length);
+                        values = newVals;
+                    }
+                    parameters.put(name, values);
                 }
             }
         } else {
