@@ -35,6 +35,10 @@ public abstract class ImportTask<T> {
         this.data = data;
     }
 
+    public T getData() {
+        return data;
+    }
+
     public abstract void importData(ImportMode importMode) throws Exception;
 
     public abstract void rollback() throws Exception;

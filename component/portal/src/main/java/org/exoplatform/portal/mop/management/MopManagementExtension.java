@@ -25,6 +25,7 @@ package org.exoplatform.portal.mop.management;
 import org.exoplatform.portal.mop.management.binding.MopBindingProvider;
 import org.exoplatform.portal.mop.management.operations.MopImportResource;
 import org.exoplatform.portal.mop.management.operations.MopReadResource;
+import org.exoplatform.portal.mop.management.operations.TemplateImportResource;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationExportResource;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationReadConfig;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationReadResource;
@@ -50,6 +51,13 @@ import org.gatein.management.spi.ManagementExtension;
 public class MopManagementExtension implements ManagementExtension {
     @Override
     public void initialize(ExtensionContext context) {
+
+        initializeMop(context);
+        initializeTemplate(context);
+
+    }
+
+    private void initializeMop(ExtensionContext context) {
         ComponentRegistration registration = context.registerManagedComponent("mop");
         registration.registerBindingProvider(MopBindingProvider.INSTANCE);
 
@@ -130,6 +138,21 @@ public class MopManagementExtension implements ManagementExtension {
                 .registerSubResource(
                         "{nav-uri: .*}",
                         description("Management resource responsible for handling management operations on specific navigation nodes."));
+    }
+
+    private void initializeTemplate(ExtensionContext context) {
+        ComponentRegistration registration = context.registerManagedComponent("template");
+        registration.registerBindingProvider(MopBindingProvider.INSTANCE);
+
+        ManagedResource.Registration template = registration
+                .registerManagedResource(description("Template Managed Resource, responsible for handling imports operations of templates sites."));
+
+        ManagedResource.Registration templateType = template.registerSubResource("{template-type: portal|group|user}",
+                description("Management resource responsible for handling management operations for a template's import."));
+
+        templateType.registerOperationHandler(OperationNames.IMPORT_RESOURCE, new TemplateImportResource(),
+                description("Imports template data from an zip file."));
+
     }
 
     @Override

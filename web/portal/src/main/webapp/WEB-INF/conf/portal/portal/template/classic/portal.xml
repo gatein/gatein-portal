@@ -32,6 +32,7 @@
   <edit-permission>*:/platform/administrators</edit-permission>
   <properties>
     <entry key="sessionAlive">onDemand</entry>
+    <entry key="template">classic</entry>
   </properties>
 
   <portal-layout>

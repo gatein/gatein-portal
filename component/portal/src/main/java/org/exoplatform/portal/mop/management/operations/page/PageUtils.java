@@ -177,6 +177,7 @@ public class PageUtils {
         portalConfig.setDescription(existing.getDescription());
         portalConfig.setEditPermission(existing.getEditPermission());
         portalConfig.setLabel(existing.getLabel());
+        portalConfig.setSkin(existing.getSkin());
         portalConfig.setLocale(existing.getLocale());
         portalConfig.setModifiable(existing.isModifiable());
         portalConfig.setPortalLayout(copy(existing.getPortalLayout()));
@@ -218,6 +219,9 @@ public class PageUtils {
             }
             if (object instanceof Container) {
                 children.add(copy((Container) object));
+            }
+            if (object instanceof PageBody) {
+                children.add(copy((PageBody) object));
             }
         }
 

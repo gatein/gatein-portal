@@ -109,6 +109,52 @@ public class NavigationUtils {
         return pageNavigation;
     }
 
+    public static PageNavigation copy(PageNavigation existingPageNavigation) {
+        PageNavigation pageNavigation = new PageNavigation();
+        pageNavigation.setOwnerType(existingPageNavigation.getOwnerType());
+        pageNavigation.setOwnerId(existingPageNavigation.getOwnerId());
+        pageNavigation.setPriority(existingPageNavigation.getPriority());
+        for (NavigationFragment existingFragment : existingPageNavigation.getFragments()) {
+            NavigationFragment fragment = copy(existingFragment);
+            pageNavigation.addFragment(fragment);
+        }
+        return pageNavigation;
+    }
+
+    public static NavigationFragment copy(NavigationFragment existingFragment) {
+        NavigationFragment fragment = new NavigationFragment();
+        fragment.setParentURI(existingFragment.getParentURI());
+        for (PageNode existingPageNode : existingFragment.getNodes()) {
+            PageNode pageNode = copy(existingPageNode);
+            fragment.getNodes().add(pageNode);
+        }
+        return fragment;
+    }
+
+    public static PageNode copy(PageNode existingPageNode) {
+        PageNode pageNode = new PageNode();
+
+        if (existingPageNode.getLabels() != null) {
+            pageNode.setLabels(new I18NString(existingPageNode.getLabels()));
+        }
+        pageNode.setIcon(existingPageNode.getIcon());
+        pageNode.setName(existingPageNode.getName());
+        if (existingPageNode.getStartPublicationDate() != null) {
+            pageNode.setStartPublicationDate( (Date)existingPageNode.getStartPublicationDate().clone() );
+        }
+        if (existingPageNode.getEndPublicationDate() != null) {
+            pageNode.setEndPublicationDate( (Date)existingPageNode.getEndPublicationDate().clone() );
+        }
+        pageNode.setVisibility(existingPageNode.getVisibility());
+        pageNode.setPageReference(existingPageNode.getPageReference());
+        for (PageNode existingChild : existingPageNode.getNodes()) {
+            PageNode child = copy(existingChild);
+            pageNode.getNodes().add(child);
+        }
+
+        return pageNode;
+    }
+
     private static PageNavigation createFragmentedPageNavigation(DescriptionService service, NavigationContext navigation,
             NodeContext<NodeContext<?>> node) {
         PageNavigation pageNavigation = new PageNavigation();

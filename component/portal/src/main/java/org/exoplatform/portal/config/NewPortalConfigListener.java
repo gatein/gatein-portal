@@ -45,6 +45,7 @@ import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.ImportMode;
@@ -454,6 +455,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
 
     public boolean createPortalConfig(NewPortalConfig config, String owner) throws Exception {
         String type = config.getOwnerType();
+        String template = config.getTemplateName();
         UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
 
         PortalConfig pConfig;
@@ -466,6 +468,13 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             }
         } else {
             pConfig = obj.getObject();
+        }
+
+        if (template != null && template.length() > 0) {
+            if (pConfig.getProperties() == null) {
+                pConfig.setProperties(new Properties());
+            }
+            pConfig.setProperty("template", template);
         }
 
         ImportMode importMode = getRightMode(config.getImportMode());

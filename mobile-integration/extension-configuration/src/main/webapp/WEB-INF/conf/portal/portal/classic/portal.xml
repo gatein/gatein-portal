@@ -11,6 +11,7 @@
     <properties>
       <entry key="sessionAlive">onDemand</entry>
       <entry key="showPortletInfo">0</entry>
+      <entry key="template">classic</entry>
     </properties>
     <portal-redirects>
         <portal-redirect>
