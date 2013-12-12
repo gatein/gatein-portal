@@ -128,7 +128,7 @@
 
       // Bind the callback 'updateContent' to the 'change' event of the Application model
       // The callback will be executed in this ApplicationView object context
-      this.model.on('change:content', this.updateContent, this);
+      this.model.on('change:content', this.render, this);
     },
 
     // Render the application frame from template
@@ -136,19 +136,8 @@
       var template = _.template($("#application-template").html());
       this.$el.html(template(this.model.toJSON()));
       this.$el.attr("id", this.model.getId());
+      this.$el.find('.content').append("<div class='mask-layer'></div>");
       return this;
-    },
-
-    // Update the content from Application model to DOM
-    updateContent: function() {
-      var id = this.model.getId();
-      var selector = "#" + id + " div";
-      var $dom = $(selector);
-      $dom.html(this.model.get("content"));
-
-      //UpdateID
-      this.model.set('id', this.model.get('name'));
-      $('#'+id).attr('id', this.model.getId());
     },
 
     deleteApp: function() {
@@ -380,7 +369,6 @@
   var LayoutView = Backbone.View.extend({
     initialize : function(options) {
       var options = options || {};
-      this.pageURL = this.$el.attr('data-pageURL');
       this.urlRoot = this.$el.attr("data-urlRoot");
       this.layoutId = this.$el.attr('data-layoutId');
       this.pageKey = this.$el.attr('data-pageKey');
@@ -391,7 +379,7 @@
       // Build model from current DOM
       this.model = this.buildModel();
     },
-
+    
     // Listen to clicking on SAVE button
     save : function() {
 
@@ -400,7 +388,7 @@
       this.model.save({}, {
         parse: false,
         success: function(model, resp, options) {
-          window.location.href = view.pageURL;
+          window.location.reload();
         },
         error: function(model, xhr, options) {
           //TODO: need to define a unified error handler on UI
@@ -446,6 +434,9 @@
           $(apps).each(function() {
             var appView = new ApplicationView({model : this});
             var $app = appView.render().$el;
+            //Remove if existed app
+            $('#' + appView.model.getId()).remove();
+            //Append newest app content
             $('#' + id).append($app);
           });
           $container = $('#' + id);
@@ -474,7 +465,6 @@
             'content' : content,
             'title' : title
           });
-          
           new ApplicationView({model : app, el : "#" + app.getId()});
           container.addChild(app);
         });
@@ -488,18 +478,42 @@
       return model;
     }
   });
+  
+  var EditorState = Backbone.Model.extend({
+    defaults : {
+      editMode : 0      
+    }
+  }, {
+    NORMAL: 0,
+    EDIT_PAGE: 1,
+    EDIT_SITE: 2
+  });
 
   // The root container view of Layout Edition mode
   var EditorView = Backbone.View.extend({
     events : {
-      "click .switch" : "changeLayout",
-      "click #saveLayout" : "saveLayout"
+      'click .switch' : 'changeLayout',
+      'click #saveLayout' : 'saveLayout',
+      'click .editLayout' : 'startEdit',
+      'click .cancelEditLayout' : 'cancelEdit'
     },
 
     initialize : function() {
-
-      // Be sure that the element LAYOUT-EDITION has already been available in DOM
-      if (this.el) {
+      this.listenTo(this.model, 'change:editMode', this.switchMode);
+    },
+    
+    startEdit : function() {
+      this.model.set('editMode', EditorState.EDIT_PAGE);
+    },
+    
+    cancelEdit : function() {
+      this.model.set('editMode', EditorState.NORMAL);
+      window.location.reload();
+    },
+    
+    switchMode : function() {
+      this.$el.toggleClass('LAYOUT-EDITION');
+      if (this.model.get('editMode') > EditorState.NORMAL) {
 
         // Initialize LayoutView 
         this.layoutView = new LayoutView({
@@ -508,7 +522,12 @@
 
         // Initialize ComposerView
         this.composerView = new ComposerView({el : '#composers'});
+        this.layoutView.render();
+      } else {
+        delete this.layoutView;
+        delete this.composerView;
       }
+      this.trigger('eXo.portal.switchMode', this.model.get('editMode'), this);
     },
 
     getComposerView: function() {
@@ -545,6 +564,6 @@
 
   // Trigger to initialize the LAYOUT EDITION mode
   $(function() {
-    window.editorView = new EditorView({el : '.LAYOUT-EDITION'});
+    window.editorView = new EditorView({el : 'body > .container', model: new EditorState()});
   });
 })();

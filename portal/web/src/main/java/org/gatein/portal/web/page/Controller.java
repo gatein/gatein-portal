@@ -205,7 +205,7 @@ public class Controller {
                     }
 
                     //
-                    if (phase != null && !"edit".equals(phase)) {
+                    if (phase != null) {
 
                         //
                         PageContext pageContext = pageBuilder.build();
@@ -302,14 +302,10 @@ public class Controller {
                         ReactivePage rp = new ReactivePage(
                                 pageContext,
                                 context.getUserContext().getLocale(),
-                                new RenderingContext(path, page.getLayoutId(), page.getKey().format(), "edit".equals(phase)));
+                                new RenderingContext(path, page.getLayoutId(), page.getKey().format()));
 
                         //
-                        Response.Content content = (Response.Content)rp.execute(siteLayout, pageLayout, context);
-                        if (phase != null && "edit".equals(phase)) {
-                            content.withAssets("editor", "underscore", "backbone", "layout-model", "layout-view");
-                        }
-                        return content;
+                       return rp.execute(siteLayout, pageLayout, context);
                     }
                 }
             }
@@ -397,7 +393,16 @@ public class Controller {
                     if (parameters == NO_PARAMETERS) {
                         parameters = new HashMap<String, String[]>();
                     }
-                    parameters.put(name, parameter.toArray());
+
+                    String[] values = parameter.toArray();
+                    if(parameters.containsKey(name)) {
+                        String[] oldVals = parameters.get(name);
+                        String[] newVals = new String[oldVals.length + values.length];
+                        System.arraycopy(oldVals, 0, newVals, 0, oldVals.length);
+                        System.arraycopy(values, 0, newVals, oldVals.length, values.length);
+                        values = newVals;
+                    }
+                    parameters.put(name, values);
                 }
             }
         } else {

@@ -9,6 +9,20 @@
     padding: 5px;
 }
 
+.LAYOUT-EDITION .window .content {
+	position: relative;
+}
+
+.LAYOUT-EDITION .window .content .mask-layer {
+	background: none repeat scroll 0 0 #000000;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+    opacity: 0.4;
+}
+
 .LAYOUT-EDITION .emptyContainer {
 	border: 1px dashed #A2A2A2;
 }
@@ -27,6 +41,35 @@
 
 .LAYOUT-EDITION .row-fluid .sortable {
 	min-height: 100px;
+}
+
+.LAYOUT-EDITION .window > h3 {
+	cursor: move;
+}
+
+.LAYOUT-EDITION.container .saveLayout, 
+.LAYOUT-EDITION.container .cancelEditLayout, 
+.LAYOUT-EDITION.container .switchLayout,
+.LAYOUT-EDITION .window > h3 > .close, 
+.LAYOUT-EDITION .window > h3 > .icon {
+	display: inline-block;
+}
+
+.LAYOUT-EDITION.container .layoutComposer {
+	display: block;
+} 
+
+.LAYOUT-EDITION.container .editLayout {
+  	display: none;
+}
+
+.container .editLayout {
+	display: inline-block;
+}
+
+.container .saveLayout, .container .cancelEditLayout, .container .layoutComposer, 
+.container .switchLayout, .window > h3 > .icon, .window > h3 > .close {
+	display: none;
 }
 
 #composers {

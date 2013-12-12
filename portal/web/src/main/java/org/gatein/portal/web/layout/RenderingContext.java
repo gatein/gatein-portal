@@ -13,13 +13,9 @@ public class RenderingContext {
     /** . */
     public final String path;
 
-    /** . */
-    public final boolean editing;
-
-    public RenderingContext(String path, String layoutId, String pageKey, boolean editing) {
+    public RenderingContext(String path, String layoutId, String pageKey) {
         this.path = path;
         this.pageKey = pageKey;
         this.layoutId = layoutId;
-        this.editing = editing;
     }
 }

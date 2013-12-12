@@ -58,7 +58,7 @@
     fetchContent: function(pagePath) {
       //TODO: fetchContentURL should be set on init
       //var url = "/portal/getContent?javax.portlet.contentId=" + this.get('contentId') + "&javax.portlet.contentType=" + this.get('contentType') + "&javax.portlet.path=" + pagePath;
-      var url = '/portal/window/' + this.get('contentType') + '/' + this.get('contentId') + '?javax.portlet.url='+window.location.href;
+      var url = '/portal/window/' + this.get('contentType') + '/' + this.get('contentId') + '?javax.portlet.url='+ encodeURIComponent(window.location.href);
 
       //Delegate to Model#fetch
       this.fetch({url: url});
@@ -194,7 +194,6 @@
     }
   });
 
-  //TODO: we need to refactor this model
   var ComposerTab = Container.extend({
     defaults : {
       type : 'container',
@@ -204,23 +203,22 @@
       tagName: '',
       value: ''
     },
-    //This is temporary property for init _children property
-    __children: false,
 
     initialize : function(attributes, options) {
       Container.prototype.initialize.apply(this, arguments);
-      if(this.__children) {
-        this._children.reset(this.__children);
+      if(attributes.contents) {
+        this._children.reset(attributes.contents);
       }
     },
 
     //When fetch data from server method #set() is always called before #initialize()
     set: function(data, options) {
-      this.__children = data.contents;
+      var tmp = data.contents;
       delete data.contents;
-
-      var _this = this;
+      //_children is not an attribute
+      //it'll be set on initialize method, not the set method
       Container.prototype.set.apply(this, arguments);
+      data.contents = tmp;
     },
     findByContentId: function(contentId) {
       return this._children.findWhere({contentId: contentId});

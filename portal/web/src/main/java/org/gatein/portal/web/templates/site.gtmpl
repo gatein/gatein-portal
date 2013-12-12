@@ -3,22 +3,18 @@
 <div>
     <div>${fragment.content}</div>
 	 <div style="position: relative; top: -51px; left: 639px; width: 100px;">
-        <% if(!editing){%>
-		<a href="@{Controller.index(path=path,phase='edit')}" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+		<a href="javascript: void(0);" class="editLayout" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
 			Edit Page
 		</a>
-        <% } else {%>
-        <a id="saveLayout" href="javascript:void(0);" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+        <a id="saveLayout" class="saveLayout" href="javascript:void(0);" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
             Save
         </a>
         &nbsp;&nbsp;
-        <a href="@{Controller.index(path=path)}" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
+        <a href="javascript:void(0);" class="cancelEditLayout" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
            Cancel
         </a>
-        <%}%>
 	 </div>
-     <% if (editing) { %>
-          <div class="btn-group" style="position: relative; top: -76px; left: 745px">
+          <div class="btn-group switchLayout" style="position: relative; top: -76px; left: 745px">
               <button class="btn dropdown-toggle" data-toggle="dropdown">Switch to <span class="caret"></span></button>
               <ul class="dropdown-menu">
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='1')}">One column</a></li>
@@ -28,12 +24,10 @@
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='5')}">Three columns</a></li>
               </ul>
            </div>
-     <% } %>
 </div>
 <% } %>
 <!--Composer-->
-<% if(editing){%>
-<div class="panel-group" id="composers" data-url="@{PageEditor.getAllContents()}">
+<div class="panel-group layoutComposer" id="composers" data-url="@{PageEditor.getAllContents()}">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h5 class="panel-title">
@@ -97,13 +91,12 @@
 
 <!-- Template for portlet in page -->
 <script type="text/template" id="application-template">
-	<h3 style="${cursor}" title="${tooltip}">
-		${icon}<span class="title">${"<%- title %>"}<span>
-		<% if (editing) { %><button class="close" type="button">x</button> <% } %>
+	<h3>
+		<span class='icon'>&equiv;</span> <span class="title">${"<%- title %>"}<span>
+		<button class="close" type="button">x</button>
 	</h3>
 	<div class="content">${"<%= content %>"}</div>
 </script>
-<%}%>
 <!-- end composer -->
 
 <!-- TODO: need to review how to use PageEditor.saveLayout(layoutId='null') -->
@@ -111,7 +104,6 @@
      data-layoutId="${layoutId}"
      data-pageKey="${pageKey}"
      data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}"
-     data-pageURL="@{Controller.index(path=path)}"
      data-pagePath="${path}">
 ${body}
 </div>

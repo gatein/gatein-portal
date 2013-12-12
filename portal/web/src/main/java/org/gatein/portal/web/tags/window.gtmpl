@@ -1,6 +1,6 @@
 <div id="${parameters.name}" class="window">
-        <h3 style="${parameters.cursor}" title="${parameters.tooltip}">${parameters.icon} <span class="title">${parameters.title}</span>
-            <% if (Boolean.parseBoolean(parameters.editing)) { %><button class="close" type="button">x</button> <% } %>
-        </h3>
-        <div class="content">${parameters.content}</div>
-    </div>
+    <h3><span class='icon'>&equiv;</span> <span class="title">${parameters.title}</span>
+        <button class="close" type="button">x</button>
+    </h3>
+    <div class="content">${parameters.content}</div>
+</div>
