@@ -75,7 +75,7 @@ public class EmailAddressValidator extends MultipleConditionsValidator {
     }
 
     private static boolean validateDomainName(char[] domainName) {
-        if (domainName.length == 0 || !Character.isLetter(domainName[0])
+        if (domainName.length == 0 || !Character.isLetterOrDigit(domainName[0])
                 || !Character.isLetterOrDigit(domainName[domainName.length - 1])) {
             return false;
         }
