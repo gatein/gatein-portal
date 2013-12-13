@@ -105,8 +105,9 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         UIApplication uiApp = context.getUIApplication();
         String username = getUIStringInput(USERNAME).getValue();
         User user = service.getUserHandler().findUserByName(username, false);
-        if (user == null) {
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-is-deleted", null, ApplicationMessage.WARNING));
+        if (user == null || !user.isEnabled()) {
+            String messageBundle = (user == null ? "UIAccountInputSet.msg.user-is-deleted" : "UIAccountInputSet.msg.user-is-disabled");
+            uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));
             UIUserInfo userInfo = getParent();
             if (userInfo != null) {
                 UIAccountEditInputSet accountInput = userInfo.getChild(UIAccountEditInputSet.class);
