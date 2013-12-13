@@ -12,6 +12,7 @@
 - Reactive page (parallel and asynchronous rendering)
 - AppZu live applications (simplify development and deployment)
 - Arquillian Extension
+- Typesafe config support
 
 ## Beta 1
 
