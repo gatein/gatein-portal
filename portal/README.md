@@ -38,14 +38,11 @@
 - Navigation scoped layouts (associate a subtree with a specific layout)
 - Theme support Less based
 
-# GateIn Engine
-
-Implementation of the GateIn Engine for the GateIn 4.0.0 version.
 
 # Instructions
 
 1. Build the project
-2. Run the standalone version `portal/web/target/portal.web-4.0.0-SNAPSHOT-war-exec.jar`
+2. Run it : `portal/packaging/target/portal.packaging-4.0.0-SNAPSHOT-war-exec.jar` or `portal/packaging/target/portal.packaging-4.0.0-SNAPSHOT-tomcat-distrib.tar.gz`
 3. Go on localhost
 
 # Page controller
