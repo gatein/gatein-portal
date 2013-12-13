@@ -105,6 +105,9 @@ public class UISkinSelector extends UIContainer {
             OrganizationService orgService = event.getSource().getApplicationComponent(OrganizationService.class);
             if (remoteUser != null) {
                 UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
+                if(userProfile == null) {
+                    userProfile = orgService.getUserProfileHandler().createUserProfileInstance(remoteUser);
+                }
                 userProfile.getUserInfoMap().put(Constants.USER_SKIN, skin);
                 UserProfileHandler hanlder = orgService.getUserProfileHandler();
                 hanlder.saveUserProfile(userProfile, true);

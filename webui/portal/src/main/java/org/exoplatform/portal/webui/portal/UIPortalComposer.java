@@ -219,7 +219,7 @@ public class UIPortalComposer extends UIContainer {
         String portalAppLanguage = prContext.getLocale().getLanguage();
         OrganizationService orgService = getApplicationComponent(OrganizationService.class);
         UserProfile userProfile = orgService.getUserProfileHandler().findUserProfileByName(remoteUser);
-        String userLanguage = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
+        String userLanguage = userProfile != null ? userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE) : null;
         String browserLanguage = prContext.getRequest().getLocale().getLanguage();
 
         // in case: edit current portal, set skin and language for uiPortalApp

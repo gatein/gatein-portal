@@ -121,7 +121,7 @@ public class UIUserInfo extends UIFormTabPane {
             if (uiUserInfo.getUserName().equals(event.getRequestContext().getRemoteUser())) {
                 UserProfileHandler hanlder = service.getUserProfileHandler();
                 UserProfile userProfile = hanlder.findUserProfileByName(event.getRequestContext().getRemoteUser());
-                String language = userProfile.getAttribute(Constants.USER_LANGUAGE);
+                String language = userProfile != null ? userProfile.getAttribute(Constants.USER_LANGUAGE) : null;
 
                 UIPortalApplication uiApp = Util.getUIPortalApplication();
                 if (language != null && language.trim().length() >= 1) {

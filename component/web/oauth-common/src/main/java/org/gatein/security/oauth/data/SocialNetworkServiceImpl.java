@@ -103,6 +103,10 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
+            if(userProfile == null) {
+                //If use have not profile, he also have not OauthAccessToken
+                return null;
+            }
 
             OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
             return oauthProviderProcessor.getAccessTokenFromUserProfile(userProfile, this);
@@ -116,6 +120,10 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
+            if(userProfile == null) {
+                //Don't need to remove OauthAccessToken if user-profile does not exists
+                return;
+            }
 
             OAuthProviderProcessor<T> oauthProviderProcessor = oauthProviderType.getOauthProviderProcessor();
             oauthProviderProcessor.removeAccessTokenFromUserProfile(userProfile);
@@ -131,6 +139,9 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
         try {
             UserProfileHandler userProfileHandler = orgService.getUserProfileHandler();
             UserProfile userProfile = userProfileHandler.findUserProfileByName(username);
+            if(userProfile == null) {
+                userProfile = userProfileHandler.createUserProfileInstance(username);
+            }
 
             userProfile.setAttribute(oauthProviderType.getUserNameAttrName(), oauthUsername);
 
