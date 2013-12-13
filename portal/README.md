@@ -32,6 +32,8 @@
 - Content registry
 - Eventing (portlet events, portal events)
 - Responsive support
+- Gadget support
+- WSRP support
 - Expose MOP via webdav
 - New "webapp" site type (provide transient descriptor based sites used as templates or for dev)
 - Navigation links (associate a nav with a remote URL, a content, etc...)
