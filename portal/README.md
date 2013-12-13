@@ -1,3 +1,42 @@
+# Roadmap
+
+## Implemented
+
+- Stateless navigation (browser back button, bookmarkability, load balancing & failover friendly, multitab navigation, reduce heap consumption
+- URL maping public render parameter to simple parameters (provide manufacturable URLs)
+- Zone based layouts
+- Persistence agnostic (in memory persistence for testing, document oriented NoSQL)
+- Content provider (asynchronous rendering, content as first class citizen of the platform)
+- Markdown content provider (content provider example)
+- Single war file deployment
+- Reactive page (parallel and asynchronous rendering)
+- AppZu live applications (simplify development and deployment)
+- Arquillian Extension
+
+## Beta 1
+
+- Simple public API (navigations)
+- AppZu navigation portlet using public API
+- Simple page creation
+- JavaScript modules
+
+## Unscheduled features
+
+- Handle sites (for now a single site)
+- Bigpipe rendering
+- AppZu improvements
+- Make all most GateIn apps as AppZu apps
+- Complete public API
+- Templates (page, site)
+- Content registry
+- Eventing (portlet events, portal events)
+- Responsive support
+- Expose MOP via webdav
+- New "webapp" site type (provide transient descriptor based sites used as templates or for dev)
+- Navigation links (associate a nav with a remote URL, a content, etc...)
+- Navigation scoped layouts (associate a subtree with a specific layout)
+- Theme support Less based
+
 # GateIn Engine
 
 Implementation of the GateIn Engine for the GateIn 4.0.0 version.
