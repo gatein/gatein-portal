@@ -190,6 +190,20 @@ As for now we have not yet defined how the windows from different layout can be 
 
 todo.
 
+# Content providers
+
+Content providers allow to extend GateIn with custom content providers, portlets are now a special kind of content providers. The content provider API decouples the aggregation engine from the notion of portlets and provides several benefits:
+
+- asynchronous non blocking content rendering
+- first class citizen, remove the notion of portlet for contents, improves usability
+- well defined and tested integration point
+- remove the need of a portlet for handling content
+- direct content storage in portal model : replace (portlet+preferences) by (content type + content id), allows to find the page pointing to a content in one pass
+
+# Live apps
+
+Live applications deployment is now supported via the AppZu content provider.
+
 # Deployment descriptor
 
 A simplified and improved navigation XML format has been introduced with the following goals:
