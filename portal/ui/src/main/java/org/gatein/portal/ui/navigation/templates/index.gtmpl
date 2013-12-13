@@ -23,6 +23,15 @@
                     <% } %>
                 </ul>
                 <ul class="nav pull-right">
+                	<li>
+                		<a href="javascript: void(0);" class="editLayout">Edit Page</a>
+					</li>
+					<li>
+						<a id="saveLayout" class="saveLayout" href="javascript:void(0);">Save</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);" class="cancelEditLayout">Cancel</a>
+					</li>
                     <%if(username == ""){%>
                     <li>
                         <a href="${loginURL}">Login</a>

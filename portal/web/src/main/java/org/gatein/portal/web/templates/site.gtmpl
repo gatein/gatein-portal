@@ -2,19 +2,7 @@
 <% header.each { name, fragment -> %>
 <div>
     <div>${fragment.content}</div>
-	 <div style="position: relative; top: -51px; left: 639px; width: 100px;">
-		<a href="javascript: void(0);" class="editLayout" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
-			Edit Page
-		</a>
-        <a id="saveLayout" class="saveLayout" href="javascript:void(0);" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
-            Save
-        </a>
-        &nbsp;&nbsp;
-        <a href="javascript:void(0);" class="cancelEditLayout" style="color: #777777; text-shadow: 0 1px 0 #FFFFFF">
-           Cancel
-        </a>
-	 </div>
-          <div class="btn-group switchLayout" style="position: relative; top: -76px; left: 745px">
+          <div class="btn-group switchLayout" style="position: relative; top: -57px; left: 610px">
               <button class="btn dropdown-toggle" data-toggle="dropdown">Switch to <span class="caret"></span></button>
               <ul class="dropdown-menu">
                   <li><a class="switch" href="@{PageEditor.switchLayout(id='1')}">One column</a></li>
