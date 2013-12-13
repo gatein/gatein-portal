@@ -382,14 +382,18 @@ public class TestUserPortal extends AbstractPortalTest {
                 nav = navigations.get(2);
                 assertEquals(5, nav.getPriority());
                 assertEquals(SiteKey.user("root"), nav.getKey()); // 3
-                
-                nav = navigations.get(3);
-                assertEquals(-1, nav.getPriority());
-                assertEquals(SiteKey.group("/organization/management/executive-board"), nav.getKey()); // 5
-                
-                nav = navigations.get(4);
-                assertEquals(-1, nav.getPriority());
-                assertEquals(SiteKey.group("/platform/users"), nav.getKey()); // 4
+
+                //2 last navigations have the same priority -1, they always be at last of the list                
+                //and we don't control their order
+                List<SiteKey> lastNav = new LinkedList<SiteKey>();
+                lastNav.add(SiteKey.group("/organization/management/executive-board"));
+                lastNav.add(SiteKey.group("/platform/users"));
+                for (int i = 3; i < navigations.size(); i++) {
+                    nav = navigations.get(i);
+                    assertEquals(-1, nav.getPriority());
+                    lastNav.remove(nav.getKey());
+                }
+                assertTrue(lastNav.isEmpty());
             }
         }.execute("root");
     }
