@@ -39,6 +39,7 @@ import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
@@ -383,14 +384,14 @@ public class TestUserPortal extends AbstractPortalTest {
                 assertEquals(5, nav.getPriority());
                 assertEquals(SiteKey.user("root"), nav.getKey()); // 3
 
-                //2 last navigations have the same priority -1, they always be at last of the list                
+                //2 last navigations have the same priority -1, they always be at last of the list
                 //and we don't control their order
                 List<SiteKey> lastNav = new LinkedList<SiteKey>();
                 lastNav.add(SiteKey.group("/organization/management/executive-board"));
                 lastNav.add(SiteKey.group("/platform/users"));
                 for (int i = 3; i < navigations.size(); i++) {
                     nav = navigations.get(i);
-                    assertEquals(-1, nav.getPriority());
+                    assertEquals(PageNavigation.UNDEFINED_PRIORITY, nav.getPriority());
                     lastNav.remove(nav.getKey());
                 }
                 assertTrue(lastNav.isEmpty());

@@ -27,6 +27,7 @@ import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
@@ -76,7 +77,7 @@ public class UIPageNavigationForm extends UIForm {
     public void addFormInput() {
         List<SelectItemOption<String>> priorties = new ArrayList<SelectItemOption<String>>();
         int priority = Integer.parseInt(getPriority());
-        if (priority == -1) {
+        if (priority == PageNavigation.UNDEFINED_PRIORITY) {
             ResourceBundle resourceBundle = WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
             String undefined = resourceBundle.getString("UIPageNavigationForm.priority.undefined");
             priorties.add(new SelectItemOption<String>(undefined, getPriority()));

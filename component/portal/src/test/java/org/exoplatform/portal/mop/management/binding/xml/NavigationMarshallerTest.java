@@ -86,7 +86,7 @@ public class NavigationMarshallerTest extends TestCase {
         PageNavigation data = marshaller.unmarshal(getClass().getResourceAsStream(
                 "/org/exoplatform/portal/mop/management/navigation-empty.xml"));
         assertNotNull(data);
-        assertEquals(-1, data.getPriority());
+        assertEquals(PageNavigation.UNDEFINED_PRIORITY, data.getPriority());
         assertNotNull(data.getFragment().getNodes());
         assertTrue(data.getFragment().getNodes().isEmpty());
     }

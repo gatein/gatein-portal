@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -45,6 +46,30 @@ import org.exoplatform.services.organization.Group;
  * @version $Revision$
  */
 public class UserPortalImpl implements UserPortal {
+
+    public static final Comparator<UserNavigation> USER_NAVIGATION_COMPARATOR = new Comparator<UserNavigation>() {
+        public int compare(UserNavigation nav1, UserNavigation nav2) {
+            /* Because we cannot tell how expensive getPriority() is
+             * we better store the priorities into local variables */
+            int priority1 = nav1.getPriority();
+            int priority2 = nav2.getPriority();
+            if (priority1 == priority2) {
+                /* A fix for GTNPORTAL-3322. The original comparator has not imposed
+                 * a total ordering as required by the Comparator interface: "The implementor
+                 * must ensure that sgn(compare(x, y)) == -sgn(compare(y, x)) for all x and y."
+                 * This was not the case when comparing two nodes both having UNDEFINED_PRIORITY. */
+                return 0;
+            }
+            else if (priority1 == PageNavigation.UNDEFINED_PRIORITY) {
+                return 1;
+            } else if (priority2 == PageNavigation.UNDEFINED_PRIORITY) {
+                return -1;
+            }
+            else {
+                return priority1 - priority2;
+            }
+        }
+    };
 
     /** . */
     final UserPortalConfigService service;
@@ -144,16 +169,7 @@ public class UserPortalImpl implements UserPortal {
                 }
 
                 // Sort the list finally
-                Collections.sort(navigations, new Comparator<UserNavigation>() {
-                    public int compare(UserNavigation nav1, UserNavigation nav2) {
-                        if (nav1.getPriority() == -1) {
-                            return 1;
-                        } else if (nav2.getPriority() == -1) {
-                            return -1;
-                        }
-                        return nav1.getPriority() - nav2.getPriority();
-                    }
-                });
+                Collections.sort(navigations, USER_NAVIGATION_COMPARATOR);
             }
 
             //

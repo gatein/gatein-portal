@@ -90,7 +90,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/org/exoplatform/portal/mop/management/navigation-empty.xml");
         obj = ModelUnmarshaller.unmarshall(PageNavigation.class, input);
         pageNavigation = obj.getObject();
-        assertEquals(-1, pageNavigation.getPriority());
+        assertEquals(PageNavigation.UNDEFINED_PRIORITY, pageNavigation.getPriority());
 
         /*
          * IMarshallingContext mctx = bfact.createMarshallingContext(); mctx.setIndent(2); mctx.marshalDocument(obj, "UTF-8",

@@ -24,13 +24,15 @@ import java.util.ArrayList;
 
 public class PageNavigation {
 
+    public static final int UNDEFINED_PRIORITY = -1;
+
     /** . */
     private String ownerType;
 
     /** . */
     private String ownerId;
 
-    private int priority = -1;
+    private int priority = UNDEFINED_PRIORITY;
 
     /** . */
     private ArrayList<NavigationFragment> fragments;
