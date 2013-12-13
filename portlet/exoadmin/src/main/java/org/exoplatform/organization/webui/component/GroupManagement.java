@@ -56,7 +56,7 @@ public class GroupManagement {
         if (username == null)
             username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
         OrganizationService orgService = getOrganizationService();
-        Collection groups = orgService.getGroupHandler().findGroupByMembership(username, membership);
+        Collection groups = orgService.getGroupHandler().resolveGroupByMembership(username, membership);
         for (Object group : groups) {
             if (((Group) group).getId().equals(groupId)) {
                 ret = true;
