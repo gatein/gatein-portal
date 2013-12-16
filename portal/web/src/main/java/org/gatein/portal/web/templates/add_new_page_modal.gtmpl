@@ -1,0 +1,36 @@
+<form action="@{PageEditor.addNewPage()}" method="post">
+	<table>
+         <tbody>
+            <tr>
+               <td><label>Name:</label></td>
+               <td><input type="text" name="pageName" value="" required> *
+            </tr>
+            <tr>
+            	<td><label>Label:</label></td>
+            	<td><input type="text" name="label" value="">
+            </tr>
+            <tr>
+            	<td><label>Parent:</label></td>
+            	<td>
+            		<select name="parent">
+            			<% parents.each { parent -> %>
+            				<option value="${parent}">${parent}</option>
+            			<% } %>
+            		</select>
+            	</td>
+            </tr>
+            <tr>
+            	<td><label>Layout:</label></td>
+            	<td>
+            		<select name="factoryId">
+            			<option value="1">One column</option>
+            			<option value="2">Two columns 70 30</option>
+            			<option value="3">Two columns One row</option>
+            			<option value="4">One row Tow columns</option>
+            			<option value="5">Three columns</option>
+            		</select>
+            	</td>
+            </tr>
+         </tbody>
+    </table>        
+</form>

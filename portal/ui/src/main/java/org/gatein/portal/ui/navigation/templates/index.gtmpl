@@ -24,6 +24,9 @@
                 </ul>
                 <ul class="nav pull-right">
                 	<li>
+                		<a href="#addNewPageModal" data-toggle="modal" class="newPage">New Page</a>
+                	</li>
+                	<li>
                 		<a href="javascript: void(0);" class="editLayout">Edit Page</a>
 					</li>
 					<li>

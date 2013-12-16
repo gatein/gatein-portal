@@ -23,25 +23,44 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.inject.Inject;
+
+import juzu.Action;
 import juzu.Param;
+import juzu.Path;
 import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
+import juzu.impl.common.Tools;
 import juzu.request.ClientContext;
 import juzu.request.RequestContext;
+import juzu.request.UserContext;
+import juzu.template.Template;
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
 import org.gatein.portal.content.ContentType;
 import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
+import org.gatein.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.ui.navigation.UserNode;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
@@ -61,6 +80,86 @@ public class PageEditor {
 
     @Inject
     ProviderRegistry providers;
+    
+    @Inject
+    NavigationService navigationService;
+
+    @Inject
+    DescriptionService descriptionService;
+    
+    @Inject
+    @Path("add_new_page_modal.gtmpl")
+    Template modalBody;
+    
+    @Resource
+    @Route(value = "/modalbody")
+    public Response getModalBody(UserContext userContext) {
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
+        UserNode.Model model = new UserNode.Model(descriptionService, userContext.getLocale());
+        NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.ALL, null);
+        List<String> holder = new ArrayList<String>();
+        collectPaths(root, holder);
+        return modalBody.with().set("parents", holder).ok();
+    }
+    private List<String> collectPaths(NodeContext<UserNode, NodeState> context, List<String> holder) {
+        UserNode userNode = context.getNode();
+        holder.add(userNode.getLink());
+        for (Iterator<NodeContext<UserNode, NodeState>> i = context.iterator(); i.hasNext();) {
+            collectPaths(i.next(), holder);
+        }
+        return holder;
+    }
+    
+    @Action
+    @Route(value = "/newpage")
+    public Response addNewPage(String pageName, String label, String parent, String factoryId, UserContext userContext) {
+        PageKey pageKey = new PageKey(SiteKey.portal("classic"), pageName);
+        String redirectPath = parent + "/" + pageName;
+        parent = parent.substring("/portal".length());
+        // Parse path
+        List<String> names = new ArrayList<String>();
+        for (String name : Tools.split(parent, '/')) {
+            if (name.length() > 0) {
+                names.add(name);
+            }
+        }
+
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
+        NodeContext<?, NodeState> root =  navigationService.loadNode(NodeState.model(), navigation, GenericScope.branchShape(names), null);
+        // Get our node from the navigation
+        NodeContext<?, NodeState> current = root;
+        for (String name : names) {
+            current = current.get(name);
+            if (current == null) {
+                break;
+            }
+        }
+
+        //
+        NodeContext<?, NodeState> pageNode = root.get(pageName);
+        if (pageNode == null) {
+            pageNode = current.add(0, pageName, new NodeState.Builder().label(label).pageRef(pageKey).build());
+            navigationService.saveNode(pageNode, null);
+        } else {
+            NodeState sate = pageNode.getState();
+            pageNode.setState(new NodeState.Builder(sate).pageRef(pageKey).build());
+            navigationService.saveNode(pageNode, null);
+        }
+        org.gatein.portal.mop.page.PageContext page = new org.gatein.portal.mop.page.PageContext(
+                pageKey, 
+                new PageState.Builder().displayName(label).factoryId(factoryId).build());
+
+        pageService.savePage(page);
+        return Response.redirect(redirectPath);
+    }
+    
+    @Resource
+    @Route(value = "/checkpage")
+    public Response checkPageExisted(String pageName) {
+        PageKey pageKey = new PageKey(SiteKey.portal("classic"), pageName);
+        org.gatein.portal.mop.page.PageContext pageContext = pageService.loadPage(pageKey);
+        return pageContext == null ? Response.status(200) : Response.status(500);
+    }
 
     @Resource
     @Route(value = "/switchto/{javax.portlet.z}")

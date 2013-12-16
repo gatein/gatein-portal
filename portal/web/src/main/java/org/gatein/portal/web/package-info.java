@@ -10,6 +10,7 @@
     @Binding(CustomizationService.class),
     @Binding(PageService.class),
     @Binding(NavigationService.class),
+    @Binding(DescriptionService.class),
     @Binding(SiteService.class),
     @Binding(SimpleLayoutFactory.class),
     @Binding(PortletContentProvider.class),
@@ -63,6 +64,7 @@ import org.gatein.portal.web.layout.SimpleLayoutFactory;
 import org.gatein.portal.web.login.LoginFailureMessage;
 import org.gatein.portal.web.login.LoginHelper;
 import org.gatein.portal.mop.customization.CustomizationService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;

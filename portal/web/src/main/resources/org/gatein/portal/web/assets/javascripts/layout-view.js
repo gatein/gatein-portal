@@ -1,5 +1,79 @@
 (function() {
 
+  var AddNewPageView = Backbone.View.extend({
+    events : { 
+      "click .cancel" : "cancel",
+      "click .create" : "submit",
+      "focusout input[name='pageName']" : "checkPageExisted"
+    },
+    
+    cancel : function() {
+      this.$el.removeData('modal');
+    },
+    
+    submit : function() {
+      var form = this.$el.find('form');
+      var pageNameInput = form.find("input[name='pageName']");
+      if (this.verifyPageName(pageNameInput)) {
+        form.submit();
+      }
+    },
+    
+    verifyPageName : function(input) {
+      var regex = new RegExp('^[a-zA-Z0-9._-]$');
+      var pageName = $(input).val();
+      if (!pageName) {
+        setTimeout(function(){
+          $(input).select();
+        }, 0);
+        return false;
+      }
+      if (!regex.test(pageName)) {
+        this.message("Only alpha, digit, dash and underscore characters allowed for page name.");
+        //workaround to select input
+        setTimeout(function(){
+          $(input).select();
+        }, 0);
+        return false;
+      }
+      return true;
+    },
+    
+    checkPageExisted : function(e) {
+      var _this = this;
+      var $el = this.$el; 
+      var checkPageURL = this.$el.attr('data-checkpage-url');
+      var input = e.target;
+      if (this.verifyPageName(input)) {
+        var parent = this.$el.find("select[name='parent']").val();
+        var pageName = $(input).val();
+        $.ajax({
+          url : checkPageURL,
+          data : {
+            "pageName" : pageName,
+            "parent" : parent
+          },
+          statusCode : {
+            200 : function() {
+              $el.find('.modal-header .alert').remove();
+            }, 
+            500 : function() {
+              _this.message("The \"" + pageName + "\" is existed");
+              $(input).select();
+            }
+          }
+        });
+      }
+    },
+    
+    message : function(msg) {
+      var alertBox = $("<div class='alert alert-error'></div>")
+      alertBox.text(msg);
+      this.$el.find('.modal-header').append(alertBox);
+      alertBox.fadeOut(5000);
+    }
+  });
+  
   var ComposerView = Backbone.View.extend({
     events : {
       "keyup .composer-filter" : "onKeyUp"
@@ -560,5 +634,6 @@
   // Trigger to initialize the LAYOUT EDITION mode
   $(function() {
     window.editorView = new EditorView({el : 'body > .container', model: new EditorState()});
+    window.addNewPageView = new AddNewPageView({ el : "#addNewPageModal"});
   });
 })();
