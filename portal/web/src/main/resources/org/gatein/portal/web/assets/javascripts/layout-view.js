@@ -4,26 +4,20 @@
     events : {
       "keyup .composer-filter" : "onKeyUp"
     },
+
     initialize : function(options) {
-
-      // Initialize a Backbone.Collection to hold a list of Application models
-      this.apps = new Backbone.Collection([], {
-        model: ComposerTab,
-        url : this.$el.attr("data-url")
-      });
-
-      this.listenTo(this.apps, 'reset', this.render);
+      this.model = new Composer([], {model: ComposerTab, urlRoot: this.$el.attr("data-url")});
 
       //model attribute in options is modelType in children of ContentType
-      this.apps.fetch({reset: true, model: Application});
+      this.model.fetch({reset: true, model: Application});
 
-      this.filterValue = '';
+      this.listenTo(this.model, 'sync', this.render);
     },
 
     render: function() {
       var $container = $('#composer-apps');
       var template = $("#composer-apps-template").html();
-      var html = _.template(template, {items: this.apps.toJSON()});
+      var html = _.template(template, {items: this.model.toJSON()});
       $container.html(html);
       $container.find("li.content").draggable({
         connectToSortable: ".sortable",
@@ -32,7 +26,8 @@
       });
     },
 
-    filterApp: function(filter) {
+    filterApp: function() {
+      var filter = this.model.get('filterValue');
       var regex = new RegExp(filter, 'i');
 
       //TODO: Need to refact this code
@@ -40,7 +35,7 @@
       var $container = $("#composer-apps");
 
       //For each tab
-      _.each(this.apps.toJSON(), function(contentType) {
+      _.each(this.model.toJSON(), function(contentType) {
         var $tab = $container.find('a[href="#tab-' + contentType.tagName + '"]').parent();
         var children = contentType.children;
         contentType.children = [];
@@ -86,10 +81,10 @@
         timeToWait = 0;
       }
 
-      if(this.filterValue == $.trim($target.val())) {
+      if(this.model.get('filterValue') == $.trim($target.val())) {
         return;
       } else {
-        this.filterValue = $.trim($target.val());
+        this.model.set('filterValue', $.trim($target.val()));
       }
 
       if(!$target.hasClass("loading")) {
@@ -102,13 +97,13 @@
 
       var _this = this;
       this.timeout =  setTimeout(function() {
-        _this.filterApp(_this.filterValue);
+        _this.filterApp();
         $target.removeClass("loading");
       }, timeToWait);
     },
 
     findContent: function(contentId) {
-      var type = this.apps.find(function(type){
+      var type = _.find(this.model.getChildren(), function(type) {
         return type.findByContentId(contentId) || false;
       });
       return type.findByContentId(contentId);
@@ -401,15 +396,15 @@
     // Switch layout with data structure passed as the layoutData argument
     switchLayout : function(layoutData) {
 
-    	var layout = new Object();
-    	layout.id = layoutData.factoryId;
-    	layout.html = layoutData.html;
-    	var containers = [];
-    	$(layout.html).find('.sortable').each(function() {
-    		containers.push(this.id);
-    	});
-    	layout.containers = containers;
-    	
+      var layout = new Object();
+      layout.id = layoutData.factoryId;
+      layout.html = layoutData.html;
+      var containers = [];
+      $(layout.html).find('.sortable').each(function() {
+        containers.push(this.id);
+      });
+      layout.containers = containers;
+      
       // Start switching layout
       this.model.switchLayout(layout);
       
@@ -419,7 +414,7 @@
       
       // Update ContainerView
       $(this.model.getChildren()).each(function() {
-      	new ContainerView({model : this});
+        new ContainerView({model : this});
       })
       
       return this;

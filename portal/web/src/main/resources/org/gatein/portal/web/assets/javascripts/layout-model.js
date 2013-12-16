@@ -224,6 +224,29 @@
       return this._children.findWhere({contentId: contentId});
     }
   });
+  
+  var Composer = Container.extend({
+    defaults: {
+      filterValue: ''
+    },
+    
+    initialize: function(attributes, options) {
+      Container.prototype.initialize.apply(this, arguments);
+
+      this._children.url = options.urlRoot;
+      this.listenTo(this._children, 'sync', (function(composer) {
+        return function() {composer.trigger('sync', this, arguments)}
+      })(this));
+    },
+    
+    fetch: function(options) {
+      this._children.fetch.apply(this._children, arguments);
+    },
+    
+    toJSON: function() {
+      return this._children.toJSON();
+    }
+  });
 
   // 
   var PageLayout = Container.extend({
@@ -236,15 +259,7 @@
     },
     
     initialize : function(attributes, options) {
-
       Container.prototype.initialize.apply(this, arguments);
-      
-      if (!options || !options.model) {
-        this._children = new Backbone.Collection();
-      } else if (options.model){
-        this._children = new Backbone.Collection([], {model : options.model});
-      }
-      
       this.snapshot = this._children;
     },
 
@@ -325,6 +340,7 @@
     'Application' : Application,
     'Container' : Container,
     'ComposerTab': ComposerTab,
+    'Composer': Composer,
     'PageLayout' : PageLayout
   };
   if (typeof window.require === "function" && window.require.amd) {
