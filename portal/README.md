@@ -20,6 +20,8 @@
 - AppZu navigation portlet using public API
 - Simple page creation
 - JavaScript modules
+- Security service for load/save of security state associated with an entity
+- Basic security enforcement
 
 ## Unscheduled features
 
