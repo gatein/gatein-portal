@@ -1,12 +1,12 @@
 .LAYOUT-EDITION .row-fluid {
-    border: 1px dashed #A2A2A2;
-    padding: 10px;
+    border: 1px dashed #A2A2A2;    
 }
 
 .LAYOUT-EDITION .window {
     border: 1px solid #AAAAAA;
     border-radius: 4px 4px 4px 4px;
     padding: 5px;
+    margin: 5px;
 }
 
 .LAYOUT-EDITION .window .content {
