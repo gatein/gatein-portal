@@ -68,7 +68,7 @@
 									</div>
 								</td>
 								<td>#{r.name}</td>
-								<td><span style="#{redirectSiteExists ? '' : 'color: #AA0000;'}"><i class="#{redirectSiteExists ? 'hidden-element' : 'icon-warning-sign tooltipTrigger'}" title="Redirect Site Not Available!"></i> #{msg['redirect.admin.site.redirect.sum.td.redirectto']} #{r.redirectSite}</span><span class="second-info">#{r.conditions.size()} #{msg['redirect.admin.site.redirect.sum.td.conditions']} #{r.mappings.mappings.size()} #{msg['redirect.admin.site.redirect.sum.td.mappings']}</span></td>
+								<td><span style="#{redirectSiteExists ? '' : 'color: #AA0000;'}"><i class="#{redirectSiteExists ? 'hidden-element' : 'icon-warning-sign tooltipTrigger'}" title="#{msg['redirect.admin.site.redirect.sum.td.redirectto.notavailable']}"></i> #{msg['redirect.admin.site.redirect.sum.td.redirectto']} #{r.redirectSite}</span><span class="second-info">#{r.conditions.size()} #{msg['redirect.admin.site.redirect.sum.td.conditions']} #{r.mappings.mappings.size()} #{msg['redirect.admin.site.redirect.sum.td.mappings']}</span></td>
 								<td class="actions" style="text-align: center;">
 									<a4j:commandLink styleClass="configure-redirect redirect-summary" action="#{rdrEdit.load(rdrs.siteName, r.name)}" render=":edit_form" oncomplete="configureRedirect();" title="Configure"><i class="icon-wrench tooltipTrigger" data-original-title="#{msg['redirect.admin.site.redirect.sum.but.config']}">#{msg['redirect.admin.site.redirect.sum.but.config']}</i></a4j:commandLink>
 									<h:commandLink styleClass="delete-redirect redirect-summary" title="Delete">
@@ -120,11 +120,15 @@
 										</h:panelGroup>
 									</h:panelGroup>
 									<div class="control-group">
+										<h:panelGroup id="rdr-site-prev" styleClass="rdr-site-prev #{rdrs.sites.size() == 1 ? 'error-sibling' : ''}"></h:panelGroup>
 										<h:outputLabel for="redirect" styleClass="control-label">#{msg['redirect.admin.site.redirect.to']}</h:outputLabel>
 										<h:selectOneMenu id="redirect" value="#{rdrEdit.redirectSite}" style="height: 30px; line-height: 30px;">
 											<f:selectItems value="#{rdrs.sites}" var="site" itemLabel="#{site.name}" itemValue="#{site.name}" itemDisabled="#{site.name eq rdrs.siteName}" />
 											<f:ajax listener="#{rdrEdit.loadRedirectNodes}" />
 										</h:selectOneMenu>
+										<h:panelGroup id="redirect-error" layout="block">
+											<h:outputText id="redirect-error-text" styleClass="text-error rdr-site-error" value="#{msg['redirect.admin.site.redirect.to.nosites']}" rendered="#{rdrs.sites.size() == 1}" />
+										</h:panelGroup>
 									</div><!-- End .control-group -->
 								</fieldset>
 								<fieldset>
@@ -304,7 +308,7 @@
 								</fieldset>
 								<div class="form-actions">
 									<button id="edit_cancel" class="btn" onclick="closeRedirectEdit(false); return false;" >#{msg['redirect.admin.condition.mapping.cancel']}</button>
-									<a4j:commandButton id="edit_save" value="#{msg['redirect.admin.condition.mapping.save']}" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{not name.valid or not facesContext.postback or facesContext.validationFailed}" />
+									<a4j:commandButton id="edit_save" value="#{msg['redirect.admin.condition.mapping.save']}" styleClass="btn btn-primary" action="#{rdrEdit.saveRedirect}" render="pgRedirectSummary :edit_form :sum_form" eventsQueue="rdr" oncomplete="closeRedirectEdit(true)" disabled="#{(rdrs.sites.size() == 1) or not name.valid or not facesContext.postback or facesContext.validationFailed}" />
 								</div><!-- End .form-actions -->
 						</td>
 					</tr>
