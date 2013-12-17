@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.management.annotations.Impact;
@@ -58,6 +59,21 @@ public class TemplateStatisticService {
     public TemplateStatisticService() {
     }
 
+    public TemplateStatistic findTemplateStatistic(String name) {
+        if (name == null || name.length() == 0) {
+            throw new IllegalArgumentException("Parameter 'templateid' is required.");
+        } else {
+            TemplateStatistic result = apps.get(name);
+            if (result == null) {
+                /* Try to prevent a potential XSS */
+                String safeName = name.replaceAll("[^a-zA-Z0-9_\\-\\./]+", "");
+                throw new IllegalArgumentException("There is no such template with templateid '"+ safeName +"'.");
+            } else {
+                return result;
+            }
+        }
+    }
+
     /*
      * get TemplateStatistic by name, if TemplateStatistic isn't exits, create a new one.
      */
@@ -76,12 +92,12 @@ public class TemplateStatisticService {
     @Managed
     @ManagedDescription("The list of template identifiers sorted alphabetically")
     public String[] getTemplateList() {
-        List<Object> list = new LinkedList<Object>(apps.entrySet());
+        List<Map.Entry<String, TemplateStatistic>> list = new LinkedList<Map.Entry<String, TemplateStatistic>>(apps.entrySet());
         String[] app = new String[list.size()];
         int index = 0;
-        for (Iterator it = list.iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry) it.next();
-            app[index] = (String) entry.getKey();
+        for (Iterator<Entry<String, TemplateStatistic>> it = list.iterator(); it.hasNext();) {
+            Map.Entry<String, TemplateStatistic> entry = it.next();
+            app[index] = entry.getKey();
             index++;
         }
         return app;
@@ -94,7 +110,7 @@ public class TemplateStatisticService {
     @ManagedDescription("The maximum rendering time of a specified template in seconds")
     @Impact(ImpactType.READ)
     public double getMaxTime(@ManagedDescription("The template id") @ManagedName("templateId") String name) {
-        TemplateStatistic app = apps.get(name);
+        TemplateStatistic app = findTemplateStatistic(name);
         return toSeconds(app.getMaxTime());
     }
 
@@ -105,7 +121,7 @@ public class TemplateStatisticService {
     @ManagedDescription("The minimum rendering time of a specified template in seconds")
     @Impact(ImpactType.READ)
     public double getMinTime(@ManagedDescription("The template id") @ManagedName("templateId") String name) {
-        TemplateStatistic app = apps.get(name);
+        TemplateStatistic app = findTemplateStatistic(name);
         return toSeconds(app.getMinTime());
     }
 
@@ -116,7 +132,7 @@ public class TemplateStatisticService {
     @ManagedDescription("The rendering count of a specified template")
     @Impact(ImpactType.READ)
     public long getExecutionCount(@ManagedDescription("The template id") @ManagedName("templateId") String name) {
-        TemplateStatistic app = apps.get(name);
+        TemplateStatistic app = findTemplateStatistic(name);
         return app.executionCount();
     }
 
@@ -127,7 +143,7 @@ public class TemplateStatisticService {
     @ManagedDescription("The average rendering time of a specified template in seconds")
     @Impact(ImpactType.READ)
     public double getAverageTime(@ManagedDescription("The template id") @ManagedName("templateId") String name) {
-        TemplateStatistic app = apps.get(name);
+        TemplateStatistic app = findTemplateStatistic(name);
         return toSeconds(app.getAverageTime());
     }
 
