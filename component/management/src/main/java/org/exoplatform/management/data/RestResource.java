@@ -19,6 +19,8 @@
 
 package org.exoplatform.management.data;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -128,7 +131,7 @@ public class RestResource {
     @GET
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object get(@Context UriInfo info, @PathParam("name") String name) {
+    public Response get(@Context UriInfo info, @PathParam("name") String name) {
         MultivaluedMap<String, String> parameters = info.getQueryParameters();
 
         // Try first to get a property
@@ -147,7 +150,7 @@ public class RestResource {
     @PUT
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object put(@Context UriInfo info, @PathParam("name") String name) {
+    public Response put(@Context UriInfo info, @PathParam("name") String name) {
         MultivaluedMap<String, String> parameters = getParameters(info);
         // Try first to get a property
         RestResourceProperty property = properties.get(name);
@@ -165,7 +168,7 @@ public class RestResource {
     @POST
     @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object post(@Context UriInfo info, @PathParam("name") String name) {
+    public Response post(@Context UriInfo info, @PathParam("name") String name) {
         return tryInvoke(name, getParameters(info), ImpactType.WRITE);
     }
 
@@ -173,11 +176,11 @@ public class RestResource {
      * Try to invoke a method with matching parameters from the query string
      *
      * @param methodName the method name to invoke
-     * @param info the uri info
+     * @param parameters the parameters
      * @param impact the expected impact
      * @return a suitable response
      */
-    private Object tryInvoke(String methodName, MultivaluedMap<String, String> parameters, ImpactType impact) {
+    private Response tryInvoke(String methodName, MultivaluedMap<String, String> parameters, ImpactType impact) {
         //
         RestResourceMethod method = lookupMethod(methodName, parameters.keySet(), impact);
 
@@ -208,7 +211,7 @@ public class RestResource {
      * @param argMap the arguments
      * @return the ok response or an object returned by the method wrapped by {@link ValueWrapper}
      */
-    private Object safeInvoke(MethodInvoker invoker, Map<String, List<String>> argMap) {
+    private Response safeInvoke(MethodInvoker invoker, Map<String, List<String>> argMap) {
         Object resource = managedResource.getResource();
 
         //
@@ -217,10 +220,20 @@ public class RestResource {
         //
         try {
             Object ret = invoker.invoke(resource, argMap);
-            return ret == null ? Response.ok() : ValueWrapper.wrap(ret);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            return Response.serverError();
+            Response.ResponseBuilder rb = ret == null ? Response.ok() : Response.ok(ValueWrapper.wrap(ret));
+            return rb.build();
+        } catch (IllegalAccessException e) {
+            log.error("Could not invoke "+ (invoker == null ? "null" : invoker.getClass().getName()) + ": " + e.getMessage(), e);
+            throw new WebApplicationException(Response.serverError().entity(e.getMessage()).build());
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            if (!(cause instanceof IllegalArgumentException)) {
+                /* IllegalArgumentExceptions can happen when there is a missing or invalid parameter
+                 * there is no need to log them. We'll log exceptions with all other causes. */
+                log.error("Could not invoke "+ (invoker == null ? "null" : invoker.getClass().getName()) + ": " + e.getMessage(), e);
+            }
+            /* because e.getMessage() is null in InvocationTargetException, we use cause.getMessage() if available */
+            throw new WebApplicationException(Response.serverError().entity(cause != null ? cause.getMessage() : e.getMessage()).build());
         } finally {
             managedResource.afterInvoke(resource);
         }
@@ -231,7 +244,7 @@ public class RestResource {
         MultivaluedMap<String, String> parameters = info.getQueryParameters();
         ApplicationContextImpl context = (ApplicationContextImpl) info;
 
-        Type formType = (ParameterizedType) MultivaluedMapImpl.class.getGenericInterfaces()[0];
+        Type formType = MultivaluedMapImpl.class.getGenericInterfaces()[0];
         MediaType contentType = context.getHttpHeaders().getMediaType();
         if (contentType == null) {
             contentType = MediaType.APPLICATION_FORM_URLENCODED_TYPE;
@@ -245,7 +258,18 @@ public class RestResource {
                 form = (MultivaluedMap<String, String>) reader.readFrom(MultivaluedMap.class, formType, null, contentType,
                         context.getHttpHeaders().getRequestHeaders(), context.getContainerRequest().getEntityStream());
             }
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
+            if (log.isTraceEnabled()) {
+                log.trace(e.getMessage(), e);
+            }
+        } catch (WebApplicationException e) {
+            if (log.isTraceEnabled()) {
+                log.trace(e.getMessage(), e);
+            }
+        } catch (IOException e) {
+            if (log.isTraceEnabled()) {
+                log.trace(e.getMessage(), e);
+            }
         }
 
         parameters.putAll(form);

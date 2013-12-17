@@ -53,6 +53,21 @@ public class ApplicationStatisticService implements Startable {
     public ApplicationStatisticService() {
     }
 
+    public ApplicationStatistic findApplicationStatistic(String name) {
+        if (name == null || name.length() == 0) {
+            throw new IllegalArgumentException("Parameter 'applicationId' is required.");
+        } else {
+            ApplicationStatistic result = apps.get(name);
+            if (result == null) {
+                /* Try to prevent a potential XSS */
+                String safeName = name.replaceAll("[^a-zA-Z0-9_\\-\\./]+", "");
+                throw new IllegalArgumentException("There is no such application with applicationId '"+ safeName +"'.");
+            } else {
+                return result;
+            }
+        }
+    }
+
     /*
      * Returns the list of applicationId sorted alphabetically.
      */
@@ -86,7 +101,7 @@ public class ApplicationStatisticService implements Startable {
     @ManagedDescription("The maximum execution time of a specified application in seconds")
     @Impact(ImpactType.READ)
     public double getMaxTime(@ManagedDescription("The application id") @ManagedName("applicationId") String appId) {
-        ApplicationStatistic app = getApplicationStatistic(appId);
+        ApplicationStatistic app = findApplicationStatistic(appId);
         return toSeconds(app.getMaxTime());
     }
 
@@ -97,7 +112,7 @@ public class ApplicationStatisticService implements Startable {
     @ManagedDescription("The minimum execution time of a specified application in seconds")
     @Impact(ImpactType.READ)
     public double getMinTime(@ManagedDescription("The application id") @ManagedName("applicationId") String appId) {
-        ApplicationStatistic app = getApplicationStatistic(appId);
+        ApplicationStatistic app = findApplicationStatistic(appId);
         return toSeconds(app.getMinTime());
     }
 
@@ -108,7 +123,7 @@ public class ApplicationStatisticService implements Startable {
     @ManagedDescription("Return the average execution time of a specified application in seconds")
     @Impact(ImpactType.READ)
     public double getAverageTime(@ManagedDescription("The application id") @ManagedName("applicationId") String appId) {
-        ApplicationStatistic app = getApplicationStatistic(appId);
+        ApplicationStatistic app = findApplicationStatistic(appId);
         return toSeconds(app.getAverageTime());
     }
 
@@ -119,7 +134,7 @@ public class ApplicationStatisticService implements Startable {
     @ManagedDescription("The execution count of a specified application")
     @Impact(ImpactType.READ)
     public long getExecutionCount(@ManagedDescription("The application id") @ManagedName("applicationId") String appId) {
-        ApplicationStatistic app = getApplicationStatistic(appId);
+        ApplicationStatistic app = findApplicationStatistic(appId);
         return app.executionCount();
     }
 

@@ -180,14 +180,10 @@ public class TemplateService {
     @ManagedDescription("Clear the template cache for a specified template identifier")
     @Impact(ImpactType.IDEMPOTENT_WRITE)
     public void reloadTemplate(@ManagedDescription("The template id") @ManagedName("templateId") String name) {
-        try {
-            TemplateStatistic app = statisticService.apps.get(name);
-            if (app != null) {
-                ResourceResolver resolver = app.getResolver();
-                templatesCache_.remove(resolver.createResourceKey(name));
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
+        TemplateStatistic app = statisticService.findTemplateStatistic(name);
+        if (app != null) {
+            ResourceResolver resolver = app.getResolver();
+            templatesCache_.remove(resolver.createResourceKey(name));
         }
     }
 

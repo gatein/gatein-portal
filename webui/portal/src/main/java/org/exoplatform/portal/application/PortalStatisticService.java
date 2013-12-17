@@ -59,6 +59,21 @@ public class PortalStatisticService implements Startable {
 
     }
 
+    protected PortalStatistic findPortalStatistic(String name) {
+        if (name == null || name.length() == 0) {
+            throw new IllegalArgumentException("Parameter 'portalId' is required.");
+        } else {
+            PortalStatistic result = apps.get(name);
+            if (result == null) {
+                /* Try to prevent a potential XSS */
+                String safeName = name.replaceAll("[^a-zA-Z0-9_\\-\\./]+", "");
+                throw new IllegalArgumentException("There is no such portal with portalId '"+ safeName +"'.");
+            } else {
+                return result;
+            }
+        }
+    }
+
     /*
      * Returns the list of the known portal names.
      */
@@ -96,7 +111,7 @@ public class PortalStatisticService implements Startable {
     @ManagedDescription("The maximum execution time of a specified portal in seconds")
     @Impact(ImpactType.READ)
     public double getMaxTime(@ManagedDescription("The portal id") @ManagedName("portalId") String id) {
-        return toSeconds(getPortalStatistic(id).getMaxTime());
+        return toSeconds(findPortalStatistic(id).getMaxTime());
     }
 
     /*
@@ -106,7 +121,7 @@ public class PortalStatisticService implements Startable {
     @ManagedDescription("The mininum execution time of a specified portal in seconds")
     @Impact(ImpactType.READ)
     public double getMinTime(@ManagedDescription("The portal id") @ManagedName("portalId") String id) {
-        return toSeconds(getPortalStatistic(id).getMinTime());
+        return toSeconds(findPortalStatistic(id).getMinTime());
     }
 
     /*
@@ -116,7 +131,7 @@ public class PortalStatisticService implements Startable {
     @ManagedDescription("The average execution time of a specified portal in seconds")
     @Impact(ImpactType.READ)
     public double getAverageTime(@ManagedDescription("The portal id") @ManagedName("portalId") String id) {
-        return toSeconds(getPortalStatistic(id).getAverageTime());
+        return toSeconds(findPortalStatistic(id).getAverageTime());
     }
 
     /*
@@ -126,7 +141,7 @@ public class PortalStatisticService implements Startable {
     @ManagedDescription("The number of request per second of a specified portal")
     @Impact(ImpactType.READ)
     public double getThroughput(@ManagedDescription("The portal id") @ManagedName("portalId") String id) {
-        return getPortalStatistic(id).getThroughput();
+        return findPortalStatistic(id).getThroughput();
     }
 
     /*
@@ -136,7 +151,7 @@ public class PortalStatisticService implements Startable {
     @ManagedDescription("The execution count of a specified portal")
     @Impact(ImpactType.READ)
     public long getExecutionCount(@ManagedDescription("The portal id") @ManagedName("portalId") String id) {
-        return getPortalStatistic(id).viewCount();
+        return findPortalStatistic(id).viewCount();
     }
 
     private double toSeconds(double value) {
