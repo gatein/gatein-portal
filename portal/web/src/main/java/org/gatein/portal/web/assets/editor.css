@@ -50,7 +50,7 @@
 .LAYOUT-EDITION.container .saveLayout, 
 .LAYOUT-EDITION.container .cancelEditLayout, 
 .LAYOUT-EDITION.container .switchLayout,
-.LAYOUT-EDITION .window > h3 > .close, 
+.LAYOUT-EDITION .window > h3 .close, 
 .LAYOUT-EDITION .window > h3 > .icon {
 	display: inline-block;
 }
@@ -68,7 +68,7 @@
 }
 
 .container .saveLayout, .container .cancelEditLayout, .container .layoutComposer, 
-.container .switchLayout, .window > h3 > .icon, .window > h3 > .close {
+.container .switchLayout, .window > h3 > .icon, .window > h3 .close {
 	display: none;
 }
 
