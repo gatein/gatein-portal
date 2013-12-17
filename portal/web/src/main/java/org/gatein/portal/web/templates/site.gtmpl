@@ -42,9 +42,8 @@
 		</div>
 		<div id="portlets" class="panel-collapse collapse in">
 			<div class="panel-body">
-                <div id="composer-apps" >
-                    <!-- list of apps -->
-                </div>
+                <!-- list of apps -->
+                <div id="composer-apps" ></div>
 			</div>
 		</div>
 	</div>
@@ -106,8 +105,7 @@
 <div class="pageBody"
      data-layoutId="${layoutId}"
      data-pageKey="${pageKey}"
-     data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}"
-     data-pagePath="${path}">
+     data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}">
 ${body}
 </div>
 

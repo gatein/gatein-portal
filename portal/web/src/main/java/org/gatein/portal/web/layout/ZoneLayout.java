@@ -105,7 +105,6 @@ public class ZoneLayout extends Layout {
             parameters.put("l3", l3);
         }
         if (template != null) {
-            parameters.put("path", renderingContext.path != null ? renderingContext.path : "");
             parameters.put("layoutId", renderingContext.layoutId != null ? renderingContext.layoutId : "");
             parameters.put("pageKey", renderingContext.pageKey != null ? renderingContext.pageKey : "");
 

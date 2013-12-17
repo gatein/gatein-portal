@@ -56,12 +56,15 @@
     // Fetch application content and update the 'content' attribute in the success callback
     // TODO: It should be moved to View component, specifically in render view
     fetchContent: function(pagePath) {
-      //TODO: fetchContentURL should be set on init
-      //var url = "/portal/getContent?javax.portlet.contentId=" + this.get('contentId') + "&javax.portlet.contentType=" + this.get('contentType') + "&javax.portlet.path=" + pagePath;
-      var url = '/portal/window/' + this.get('contentType') + '/' + this.get('contentId') + '?javax.portlet.url='+ encodeURIComponent(window.location.href);
+      if (!this.contentLoaded && this.isNew()) {
 
-      //Delegate to Model#fetch
-      this.fetch({url: url});
+        //var url = "/portal/getContent?javax.portlet.contentId=" + this.get('contentId') + "&javax.portlet.contentType=" + this.get('contentType') + "&javax.portlet.path=" + pagePath;
+        var url = '/portal/window/' + this.get('contentType') + '/' + this.get('contentId') + '?javax.portlet.url='+ encodeURIComponent(pagePath);
+
+        //Delegate to Model#fetch
+        this.fetch({url: url});
+        this.contentLoaded = true;
+      }
     }
   });
 
@@ -225,7 +228,7 @@
     }
   });
   
-  var Composer = Container.extend({
+  var Composer = Container.extend({    
     defaults: {
       filterValue: ''
     },
@@ -233,14 +236,13 @@
     initialize: function(attributes, options) {
       Container.prototype.initialize.apply(this, arguments);
 
-      this._children.url = options.urlRoot;
       this.listenTo(this._children, 'sync', (function(composer) {
         return function() {composer.trigger('sync', this, arguments)}
       })(this));
     },
     
     fetch: function(options) {
-      this._children.fetch.apply(this._children, arguments);
+      this._children.fetch( _.extend({url: this.urlRoot, model: Application}, options));
     },
     
     toJSON: function() {

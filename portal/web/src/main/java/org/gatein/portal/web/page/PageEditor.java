@@ -166,7 +166,7 @@ public class PageEditor {
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
         ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
         StringBuilder sb = new StringBuilder();
-        layout.render(new RenderingContext(null, null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
+        layout.render(new RenderingContext(null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
         JSON data = new JSON();
         data.set("factoryId", id);

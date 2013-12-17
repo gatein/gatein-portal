@@ -10,11 +10,7 @@ public class RenderingContext {
 
     public final String layoutId;
 
-    /** . */
-    public final String path;
-
-    public RenderingContext(String path, String layoutId, String pageKey) {
-        this.path = path;
+    public RenderingContext(String layoutId, String pageKey) {
         this.pageKey = pageKey;
         this.layoutId = layoutId;
     }

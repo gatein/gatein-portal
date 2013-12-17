@@ -302,7 +302,7 @@ public class Controller {
                         ReactivePage rp = new ReactivePage(
                                 pageContext,
                                 context.getUserContext().getLocale(),
-                                new RenderingContext(path, page.getLayoutId(), page.getKey().format()));
+                                new RenderingContext(page.getLayoutId(), page.getKey().format()));
 
                         //
                        return rp.execute(siteLayout, pageLayout, context);

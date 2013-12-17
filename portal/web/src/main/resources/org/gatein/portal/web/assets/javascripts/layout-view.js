@@ -81,23 +81,26 @@
 
     initialize : function(options) {
       this.model = new Composer([], {model: ComposerTab, urlRoot: this.$el.attr("data-url")});
-
-      //model attribute in options is modelType in children of ContentType
-      this.model.fetch({reset: true, model: Application});
+      this.model.fetch();
 
       this.listenTo(this.model, 'sync', this.render);
+      this.listenTo(this.model, 'change:filterValue', this.render);
     },
 
     render: function() {
       var $container = $('#composer-apps');
-      var template = $("#composer-apps-template").html();
-      var html = _.template(template, {items: this.model.toJSON()});
-      $container.html(html);
-      $container.find("li.content").draggable({
-        connectToSortable: ".sortable",
-        revert: "invalid",
-        helper: "clone"
-      });
+      if ($.trim($container.html()) == '') {
+        var template = $("#composer-apps-template").html();
+        var html = _.template(template, {items: this.model.toJSON()});
+        $container.html(html);
+        $container.find("li.content").draggable({
+          connectToSortable: ".sortable",
+          revert: "invalid",
+          helper: "clone"
+        });
+      } else {
+        this.filterApp();
+      }
     },
 
     filterApp: function() {
@@ -155,12 +158,6 @@
         timeToWait = 0;
       }
 
-      if(this.model.get('filterValue') == $.trim($target.val())) {
-        return;
-      } else {
-        this.model.set('filterValue', $.trim($target.val()));
-      }
-
       if(!$target.hasClass("loading")) {
         $target.addClass("loading");
       }
@@ -171,7 +168,9 @@
 
       var _this = this;
       this.timeout =  setTimeout(function() {
-        _this.filterApp();
+        if(_this.model.get('filterValue') != $.trim($target.val())) {
+          _this.model.set('filterValue', $.trim($target.val()));
+        }
         $target.removeClass("loading");
       }, timeToWait);
     },
@@ -180,7 +179,7 @@
       var type = _.find(this.model.getChildren(), function(type) {
         return type.findByContentId(contentId) || false;
       });
-      return type.findByContentId(contentId);
+      return type.findByContentId(contentId).clone();
     }
   });
 
@@ -202,6 +201,9 @@
 
     // Render the application frame from template
     render: function() {
+      //lazy loading portlet content
+      this.model.fetchContent(window.location.href);
+      
       var template = _.template($("#application-template").html());
       this.$el.html(template(this.model.toJSON()));
       this.$el.attr("id", this.model.getId());
@@ -211,6 +213,7 @@
 
     deleteApp: function() {
       this.model.getParent().removeChild(this.model);
+      this.remove();
 
       // Update snapshot
       var pageView = window.editorView.getPageView();
@@ -370,18 +373,11 @@
 
       // If this is a new application dragged from Composer
       if(!$dragObj.attr("id")) {
-
-        //Add new application
         var composerView = window.editorView.getComposerView();
-        //var application = composerView.apps.findWhere({ 'contentId' : $dragObj.attr("data-contentId")});
-        var application = composerView.findContent($dragObj.attr("data-contentId"));
-
-        // Clone and generate id for new application
-        // TODO: It should NOT force assigning an ID value for a transient model 
-        var newChild = application.clone();
+        
+        //Add new application
+        var newChild = composerView.findContent($dragObj.attr("data-contentId"));
         targetContainer.addChild(newChild, {at: idx});
-        var pagePath = $('.pageBody').attr('data-pagePath');
-        newChild.fetchContent(pagePath);
 
         // Remove dropped item
         $(ui.item).remove();
