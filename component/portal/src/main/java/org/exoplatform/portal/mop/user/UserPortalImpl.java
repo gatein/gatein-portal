@@ -59,13 +59,11 @@ public class UserPortalImpl implements UserPortal {
                  * must ensure that sgn(compare(x, y)) == -sgn(compare(y, x)) for all x and y."
                  * This was not the case when comparing two nodes both having UNDEFINED_PRIORITY. */
                 return 0;
-            }
-            else if (priority1 == PageNavigation.UNDEFINED_PRIORITY) {
+            } else if (priority1 == PageNavigation.UNDEFINED_PRIORITY) {
                 return 1;
             } else if (priority2 == PageNavigation.UNDEFINED_PRIORITY) {
                 return -1;
-            }
-            else {
+            } else {
                 return priority1 - priority2;
             }
         }
