@@ -25,7 +25,7 @@
   <TCP
       singleton_name="gatein-tcp"
       bind_addr="${jgroups.tcp.address:127.0.0.1}"
-      bind_port="${gatein.jgroups.tcp.port:7700}"
+      start_port="${gatein.jgroups.tcp.port:7700}"
       tcp_nodelay="true"
       loopback="true"
       recv_buf_size="20000000"
