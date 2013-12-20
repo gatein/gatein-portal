@@ -2,16 +2,6 @@
 <% header.each { name, fragment -> %>
 <div>
     <div>${fragment.content}</div>
-          <div class="btn-group switchLayout" style="position: relative; top: -57px; left: 610px">
-              <button class="btn dropdown-toggle" data-toggle="dropdown">Switch to <span class="caret"></span></button>
-              <ul class="dropdown-menu">
-                  <li><a class="switch" href="@{PageEditor.switchLayout(id='1')}">One column</a></li>
-                  <li><a class="switch" href="@{PageEditor.switchLayout(id='2')}">Two columns 70 30</a></li>
-                  <li><a class="switch" href="@{PageEditor.switchLayout(id='3')}">Two columns One row</a></li>
-                  <li><a class="switch" href="@{PageEditor.switchLayout(id='4')}">One row Two columns</a></li>
-                  <li><a class="switch" href="@{PageEditor.switchLayout(id='5')}">Three columns</a></li>
-              </ul>
-           </div>
 </div>
 <% } %>
 <!-- Add New Page Modal -->
@@ -30,65 +20,95 @@
 </div>
 
 <!--Composer-->
-<div class="panel-group layoutComposer" id="composers" data-url="@{PageEditor.getAllContents()}">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h5 class="panel-title">
-				<a class="accordion-toggle" data-toggle="collapse" data-parent="#composers" href="#portlets" title="Drag and drop to add new portlet">
-					Composer
-				</a>
-                <input type="text" placeholder="Find application" class="composer-filter"/>
-			</h5>
-		</div>
-		<div id="portlets" class="panel-collapse collapse in">
-			<div class="panel-body">
-                <!-- list of apps -->
-                <div id="composer-apps" ></div>
-			</div>
-		</div>
-	</div>
+<div class="composers layoutComposer" id="composers" data-url="@{PageEditor.getAllContents()}">
+    <div class="composer-controll text-right">
+        <span>
+            <button class="close close-composer" type="button">x</button>
+        </span>
+    </div>
+    <div class="tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#composer-contents" data-toggle="tab" title="">Contents</a></li>
+            <li><a href="#composer-layouts" data-toggle="tab">Layout</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="composer-contents">
+                <div class="box">
+                    <div class="box-header">
+                        <input type="text" placeholder="Find contents" class="composer-filter"/>
+                    </div>
+                    <div id="composer-list-contents" class="box-content">
+
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="composer-layouts">
+                <ul class="unstyled composer-layouts-list">
+                    <li>
+                        <input type="radio" name="composer-layout" id="composer-layout-1" data-layoutURL="@{PageEditor.switchLayout(id='1')}"/>
+                        <label for="composer-layout-1">One column</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="composer-layout" id="composer-layout-2" data-layoutURL="@{PageEditor.switchLayout(id='2')}"/>
+                        <label for="composer-layout-2">Two columns 70 30</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="composer-layout" id="composer-layout-3" data-layoutURL="@{PageEditor.switchLayout(id='3')}"/>
+                        <label for="composer-layout-3">Two columns One row</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="composer-layout" id="composer-layout-4" data-layoutURL="@{PageEditor.switchLayout(id='4')}"/>
+                        <label for="composer-layout-4">One row Two columns</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="composer-layout" id="composer-layout-5" data-layoutURL="@{PageEditor.switchLayout(id='5')}"/>
+                        <label for="composer-layout-5">Three columns</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- Template for #composer-apps content: -->
-<script type="text/template" id="composer-apps-template">
+<!-- Template for render Contents -->
+<script type="text/template" id="composer-list-contents-template">
+    <div>
     ${"<%"} if(items.length == 0) { ${"%>"}
         <div>There is no content matched.</div>
     ${"<%"} } else { ${"%>"}
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                ${"<%"}
-                    _.each(items, function(tab, i){
-                        tab.class = i == 0 ? "active" : "";
-                        if(tab.children.length > 0) {
-                            ${"%>"}
-                            <li class="${"<%- tab.class %>"}"><a href="#tab-${"<%- tab.tagName%>"}" data-toggle="tab">${"<%- tab.displayName%>"}</a></li>
-                            ${"<%"}
-                        }
-                    });
-                ${"%>"}
-            </ul>
-            <div class="tab-content">
-                <div class="composer-tooltip">Drag and drop to add new portlet!</div>
-                ${"<%"}
-                    _.each(items, function(tab, i){
-                        tab.class = i == 0 ? "tab-pane active" : "tab-pane";
-                        if(tab.children.length > 0) {${"%>"}
-                        <div class="${"<%- tab.class %>"}" id="tab-${"<%- tab.tagName%>"}">
-                            <ul class="application-list">
-                                ${"<%"} _.each(tab.children, function(app){ ${"%>"}
-                                <li class="content" data-contentId="${"<%- app.contentId %>"}">
-                                    <div class="draggable">
-                                        ${"<%= app.description %>"}
-                                    </div>
-                                </li>
-                                ${"<%"} }); ${"%>"}
-                            </ul>
+        ${"<%"}
+            _.each(items, function(contentType, i){
+                if(contentType.children.length > 0) { ${"%>"}
+                    <div class="accordion content-type" id="composer-content-acccordion-${"<%- contentType.tagName %>"}">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#composer-content-acccordion-${"<%- contentType.tagName %>"}" href="#collapse${"<%- contentType.tagName %>"}">
+                                    ${"<%- contentType.displayName%>"}
+                                </a>
+                            </div>
+                            <div id="collapse${"<%- contentType.tagName %>"}" class="accordion-body collapse in">
+                                <div class="accordion-inner">
+                                    <ul class="inline">
+                                        ${"<%"}
+                                        _.each(contentType.children, function(content, i){
+                                            ${"%>"}
+                                            <li class="content" data-contentId="${"<%- content.contentId %>"}">
+                                                <div class="text-center">
+                                                    ${"<%= content.description %>"}
+                                                </div>
+                                            </li>
+                                            ${"<%"}
+                                        });
+                                        ${"%>"}
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                    ${"<%"}}
-                    });
-                ${"%>"}
-            </div>
-        </div>
-    ${"<%"} } %>
+                    </div>
+                ${"<%"}}
+            });
+        ${"%>"}
+    ${"<%"} } ${"%>"}
+    </div>
 </script>
 
 <!-- Template for portlet in page -->

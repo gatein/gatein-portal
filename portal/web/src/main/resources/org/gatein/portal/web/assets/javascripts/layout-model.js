@@ -244,9 +244,47 @@
     fetch: function(options) {
       this._children.fetch( _.extend({url: this.urlRoot, model: Application}, options));
     },
+
+    findContent: function(contentId) {
+      var children = this.getChildren();
+      for(var i = 0; i < children.length; i++) {
+        var content = children[i].findByContentId(contentId);
+        if(content) {
+          return content.clone();
+        }
+      }
+    },
     
     toJSON: function() {
       return this._children.toJSON();
+    },
+
+    //TODO: need to review this method
+    getRenderData: function() {
+      var filterValue = this.get('filterValue');
+      if(filterValue == '') {
+        return this.toJSON();
+      }
+
+      var regex = new RegExp(filterValue, 'i');
+
+      var data = [];
+      _.each(this.toJSON(), function(contentType){
+        var children = contentType.children;
+        contentType.children = [];
+
+        _.each(children, function(content){
+          if(regex.test(content.title)){
+            contentType.children.push(content);
+          }
+        });
+
+        if(contentType.children.length > 0) {
+          data.push(contentType);
+        }
+      });
+
+      return data;
     }
   });
 

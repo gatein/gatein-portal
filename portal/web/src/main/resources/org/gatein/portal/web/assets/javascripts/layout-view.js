@@ -76,7 +76,10 @@
   
   var ComposerView = Backbone.View.extend({
     events : {
-      "keyup .composer-filter" : "onKeyUp"
+      "keyup .composer-filter" : "onKeyUp",
+      "click .close-composer": "closeComposer",
+      'click a[data-toggle="tab"]': "onShowTabContent",
+      'click input[name="composer-layout"]': "switchLayout"
     },
 
     initialize : function(options) {
@@ -88,15 +91,19 @@
     },
 
     render: function() {
-      var $container = $('#composer-apps');
+      var $container = this.$el.find('#composer-list-contents');
+
       if ($.trim($container.html()) == '') {
-        var template = $("#composer-apps-template").html();
-        var html = _.template(template, {items: this.model.toJSON()});
+        var template = $("#composer-list-contents-template").html();
+        var html = _.template(template, {items: this.model.getRenderData()});
         $container.html(html);
         $container.find("li.content").draggable({
           connectToSortable: ".sortable",
           revert: "invalid",
-          helper: "clone"
+          helper: "clone",
+          start: function(event, ui) {
+            ui.helper.width($(this).width());
+          }
         });
       } else {
         this.filterApp();
@@ -107,44 +114,32 @@
       var filter = this.model.get('filterValue');
       var regex = new RegExp(filter, 'i');
 
-      //TODO: Need to refact this code
-      var contentTypes = [];
-      var $container = $("#composer-apps");
+      var _this = this;
 
-      //For each tab
-      _.each(this.model.toJSON(), function(contentType) {
-        var $tab = $container.find('a[href="#tab-' + contentType.tagName + '"]').parent();
-        var children = contentType.children;
-        contentType.children = [];
+      //Get all: content type div
+      this.$el.find(".content-type").each(function() {
+        var $contentType = $(this);
+        var display = false;
 
-        //Foreach app in tab
-        _.each(children, function(app) {
-          var $element = $container.find('li[data-contentId="'+app.contentId+'"]');
-          if($element.length > 0) {
-            if(regex.test(app.title)) {
-              contentType.children.push(app);
-              $element.show();
-            } else {
-              $element.hide();
-            }
+        $contentType.find(".content").each(function() {
+          var $content = $(this);
+          var contentId = $content.attr("data-contentId");
+          var content = _this.model.findContent(contentId);
+
+          if(content && regex.test(content.get('title'))) {
+            $content.show();
+            display = true;
+          } else {
+            $content.hide();
           }
-          /*if(regex.test(app.title)) {
-            contentType.children.push(app);
-          }*/
         });
 
-        if($tab.length > 0) {
-          if(contentType.children.length == 0) {
-            $tab.hide();
-          } else {
-            $tab.show();
-          }
+        if(display) {
+          $contentType.show();
+        } else {
+          $contentType.hide();
         }
       });
-
-      //this.renderApps(contentTypes);
-
-      return;
     },
 
     onKeyUp: function(e) {
@@ -158,6 +153,11 @@
         timeToWait = 0;
       }
 
+      var value = $.trim($target.val());
+      if(value == this.model.get("filterValue")) {
+        return;
+      }
+
       if(!$target.hasClass("loading")) {
         $target.addClass("loading");
       }
@@ -168,18 +168,40 @@
 
       var _this = this;
       this.timeout =  setTimeout(function() {
-        if(_this.model.get('filterValue') != $.trim($target.val())) {
-          _this.model.set('filterValue', $.trim($target.val()));
-        }
+        _this.model.set('filterValue', value);
         $target.removeClass("loading");
       }, timeToWait);
     },
 
-    findContent: function(contentId) {
-      var type = _.find(this.model.getChildren(), function(type) {
-        return type.findByContentId(contentId) || false;
+    closeComposer: function(e) {
+      var $target = $(e.target);
+      this.$el.find(".active").removeClass("active");
+      this.$el.find(".nav-tabs").addClass("nav-tabs-close");
+      $target.hide();
+    },
+    onShowTabContent: function(e) {
+      this.$el.find(".close-composer").show();
+      this.$el.find(".nav-tabs").removeClass("nav-tabs-close");
+    },
+
+    switchLayout: function(e) {
+      var $target = $(e.target);
+      var layoutURL = $target.attr("data-layoutURL");
+
+      // Make an ajax request to fetch the new layout data [layout_id, html_template]
+      $.ajax({
+        url : layoutURL,
+        dataType : "json",
+        success : function(result) {
+          // Ask the layout view to switch layout with passed layout data
+          var layoutView = window.editorView.layoutView;
+          layoutView.switchLayout(result);
+        }
       });
-      return type.findByContentId(contentId).clone();
+    },
+
+    findContent: function(contentId) {
+      return this.model.findContent(contentId);
     }
   });
 
@@ -557,7 +579,6 @@
   // The root container view of Layout Edition mode
   var EditorView = Backbone.View.extend({
     events : {
-      'click .switch' : 'changeLayout',
       'click #saveLayout' : 'saveLayout',
       'click .editLayout' : 'startEdit',
       'click .cancelEditLayout' : 'cancelEdit'
@@ -606,24 +627,6 @@
     // Delegate to the LayoutView save
     saveLayout : function() {
       this.layoutView.save();
-    },
-
-    // Clicked on Switch layout button
-    changeLayout : function(e) {
-      var anchor = e.target;
-      var href = $(anchor).attr('href');
-      e.preventDefault();
-
-      // Make an ajax request to fetch the new layout data [layout_id, html_template]
-      $.ajax({
-        url : href,
-        dataType : "json",
-        success : function(result) {
-          // Ask the layout view to switch layout with passed layout data
-          var layoutView = window.editorView.layoutView;
-          layoutView.switchLayout(result);
-        }
-      });
     }
   });
 
