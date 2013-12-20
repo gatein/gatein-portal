@@ -54,7 +54,7 @@
     <org.gatein.mop.version>1.2.1.Final</org.gatein.mop.version>
     <org.gatein.mgmt.version>2.0.1.Final</org.gatein.mgmt.version>
     <org.slf4j.version>1.6.1</org.slf4j.version>
-    <version.chromattic>1.2.2</version.chromattic>
+    <version.chromattic>1.2.4</version.chromattic>
     <version.reflext>1.1.0</version.reflext>
     <org.staxnav.version>0.9.6</org.staxnav.version>
     <jcip.version>1.0</jcip.version>
