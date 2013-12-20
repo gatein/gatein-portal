@@ -92,5 +92,4 @@
   <UFC max_credits="200k" min_threshold="0.20"/>
   <MFC max_credits="200k" min_threshold="0.20"/>
   <FRAG2 frag_size="60000"/>
-  <RSVP timeout="60000" resend_interval="500" ack_on_delivery="false"/>
 </config>
