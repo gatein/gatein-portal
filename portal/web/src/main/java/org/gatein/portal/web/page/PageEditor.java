@@ -30,7 +30,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import juzu.Action;
 import juzu.Param;
 import juzu.Path;
 import juzu.Resource;
@@ -38,6 +37,7 @@ import juzu.Response;
 import juzu.Route;
 import juzu.impl.common.JSON;
 import juzu.impl.common.Tools;
+import juzu.impl.request.Request;
 import juzu.request.ClientContext;
 import juzu.request.RequestContext;
 import juzu.request.UserContext;
@@ -65,6 +65,7 @@ import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayout;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PageEditor {
@@ -110,47 +111,21 @@ public class PageEditor {
         return holder;
     }
     
-    @Action
-    @Route(value = "/newpage")
-    public Response addNewPage(String pageName, String label, String parent, String factoryId, UserContext userContext) {
+    @Resource
+    @Route(value = "/nextstep")
+    public Response nextStepToEdit(String pageName, String label, String parent, String factoryId) {
         PageKey pageKey = new PageKey(SiteKey.portal("classic"), pageName);
-        String redirectPath = parent + "/" + pageName;
-        parent = parent.substring("/portal".length());
-        // Parse path
-        List<String> names = new ArrayList<String>();
-        for (String name : Tools.split(parent, '/')) {
-            if (name.length() > 0) {
-                names.add(name);
-            }
-        }
+        ZoneLayout layout = (ZoneLayout) layoutFactory.builder(factoryId).build();
+        StringBuilder sb = new StringBuilder();
+        layout.render(new RenderingContext(null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
-        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
-        NodeContext<?, NodeState> root =  navigationService.loadNode(NodeState.model(), navigation, GenericScope.branchShape(names), null);
-        // Get our node from the navigation
-        NodeContext<?, NodeState> current = root;
-        for (String name : names) {
-            current = current.get(name);
-            if (current == null) {
-                break;
-            }
-        }
-
-        //
-        NodeContext<?, NodeState> pageNode = root.get(pageName);
-        if (pageNode == null) {
-            pageNode = current.add(0, pageName, new NodeState.Builder().label(label).pageRef(pageKey).build());
-            navigationService.saveNode(pageNode, null);
-        } else {
-            NodeState sate = pageNode.getState();
-            pageNode.setState(new NodeState.Builder(sate).pageRef(pageKey).build());
-            navigationService.saveNode(pageNode, null);
-        }
-        org.gatein.portal.mop.page.PageContext page = new org.gatein.portal.mop.page.PageContext(
-                pageKey, 
-                new PageState.Builder().displayName(label).factoryId(factoryId).build());
-
-        pageService.savePage(page);
-        return Response.redirect(redirectPath);
+        JSON data = new JSON();
+        data.set("factoryId", factoryId);
+        data.set("html", sb.toString());
+        data.set("pageKey", pageKey.format());
+        data.set("label", label);
+        data.set("parent", parent);
+        return Response.status(200).body(data.toString());
     }
     
     @Resource
@@ -209,17 +184,77 @@ public class PageEditor {
         return Response.status(200).body(result.toString());
     }
 
+    private org.gatein.portal.mop.page.PageContext createPage(PageKey pageKey, String label, String parent, String factoryId, UserContext userContext) {
+        parent = parent.substring("/portal".length());
+        label = label != null && !label.isEmpty() ? label : pageKey.getName();
+        // Parse path
+        List<String> names = new ArrayList<String>();
+        for (String name : Tools.split(parent, '/')) {
+            if (name.length() > 0) {
+                names.add(name);
+            }
+        }
+
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
+        NodeContext<?, NodeState> root =  navigationService.loadNode(NodeState.model(), navigation, GenericScope.branchShape(names), null);
+        // Get our node from the navigation
+        NodeContext<?, NodeState> current = root;
+        for (String name : names) {
+            current = current.get(name);
+            if (current == null) {
+                break;
+            }
+        }
+
+        //
+        NodeContext<?, NodeState> pageNode = root.get(pageKey.getName());
+        if (pageNode == null) {
+            pageNode = current.add(null, pageKey.getName(), new NodeState.Builder().label(label).pageRef(pageKey).build());
+            navigationService.saveNode(pageNode, null);
+        } else {
+            NodeState sate = pageNode.getState();
+            pageNode.setState(new NodeState.Builder(sate).pageRef(pageKey).build());
+            navigationService.saveNode(pageNode, null);
+        }
+        org.gatein.portal.mop.page.PageContext page = new org.gatein.portal.mop.page.PageContext(
+                pageKey, 
+                new PageState.Builder().displayName(label).factoryId(factoryId).build());
+
+        pageService.savePage(page);
+        return page;
+    }
 
     @Resource
     @Route(value = "/savelayout/{javax.portlet.layoutid}")
     public Response saveLayout(RequestContext context, @Param(name = "javax.portlet.layoutid") String layoutId) throws Exception {
-        NodeContext<JSONObject, ElementState> pageStructure = null;
-        JSONObject requestData = null;
-
-        pageStructure = (NodeContext<JSONObject, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
-        requestData = getRequestData(context);
-
+        JSONObject requestData = getRequestData(context);
         JSON result = new JSON();
+        if ("newpage".equals(layoutId)) {
+            PageKey pageKey = PageKey.parse(requestData.getString("pageKey"));
+            String label = requestData.getString("label");
+            String parent = requestData.getString("parent");
+            String factoryId = requestData.getString("factoryId");
+            org.gatein.portal.mop.page.PageContext pageContext = createPage(pageKey, label, parent, factoryId, Request.getCurrent().getUserContext());
+            layoutId = pageContext.getLayoutId();
+            result.set("redirect", parent + "/" + pageKey.getName());
+        }
+        
+        NodeContext<JSONObject, ElementState> pageStructure = buildPageStructure(layoutId, requestData);
+        if(requestData != null && pageStructure != null) {
+            return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8")).withMimeType("application/json");
+
+        } else if(pageStructure== null) {
+            return Response.notFound("Can not edit because can not load layout with id " + layoutId);
+
+        } else {
+            return Response.status(400).body("Data is null");
+        }
+    }
+    
+    private NodeContext<JSONObject, ElementState> buildPageStructure(String layoutId, JSONObject requestData) throws JSONException {
+        NodeContext<JSONObject, ElementState> pageStructure = null;
+        pageStructure = (NodeContext<JSONObject, ElementState>) layoutService.loadLayout(ElementState.model(), layoutId, null);
+
         if(requestData != null && pageStructure != null) {
             org.exoplatform.portal.pom.data.JSONContainerAdapter adapter = new org.exoplatform.portal.pom.data.JSONContainerAdapter(requestData, pageStructure);
 
@@ -234,15 +269,8 @@ public class PageEditor {
                 page.setState(page.getState().builder().factoryId(factoryId).build());
                 pageService.savePage(page);
             }
-
-            return Response.status(200).body(result.toString()).withCharset(Charset.forName("UTF-8")).withMimeType("application/json");
-
-        } else if(pageStructure== null) {
-            return Response.notFound("Can not edit because can not load layout with id " + layoutId);
-
-        } else {
-            return Response.status(400).body("Data is null");
         }
+        return pageStructure;
     }
 
     private JSONObject getRequestData(RequestContext context) throws Exception {

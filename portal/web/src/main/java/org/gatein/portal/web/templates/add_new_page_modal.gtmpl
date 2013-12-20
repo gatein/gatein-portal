@@ -1,4 +1,3 @@
-<form action="@{PageEditor.addNewPage()}" method="post">
 	<table>
          <tbody>
             <tr>
@@ -33,4 +32,3 @@
             </tr>
          </tbody>
     </table>        
-</form>

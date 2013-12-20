@@ -3,7 +3,7 @@
   var AddNewPageView = Backbone.View.extend({
     events : { 
       "click .cancel" : "cancel",
-      "click .create" : "submit",
+      "click .next" : "nextStep",
       "focusout input[name='pageName']" : "checkPageExisted"
     },
     
@@ -11,16 +11,53 @@
       this.$el.removeData('modal');
     },
     
-    submit : function() {
-      var form = this.$el.find('form');
-      var pageNameInput = form.find("input[name='pageName']");
+    nextStep : function() {
+      var pageNameInput = this.$el.find("input[name='pageName']");
       if (this.verifyPageName(pageNameInput)) {
-        form.submit();
+        var nextStepURL = this.$el.attr('data-nextstep-url');
+        var parent = this.$el.find("select[name='parent']").val();
+        var factoryId = this.$el.find("select[name='factoryId']").val();
+        var pageName = $(pageNameInput).val();
+        var label = this.$el.find("input[name='label']").val();
+        var _this = this;
+        //
+        $.ajax({
+          url : nextStepURL,
+          dataType : "json",
+          data : {
+            "pageName" : pageName,
+            "label" : label,
+            "parent" : parent,
+            "factoryId" : factoryId
+          },
+          statusCode : {
+            200 : function(result) {
+              $('.pageBody').html(result.html);
+              $('.pageBody').prepend($("<div class='alert alert-warning'><h5>Edit phase for temporary page \"" + result.pageKey + "\"</h5></div>"))
+              _this.$el.modal('hide');
+              _this.$el.removeData('modal');
+              _this.doNextStep(result);
+            }, 
+            500 : function() {
+            }
+          }
+        });
       }
     },
     
+    doNextStep : function(data) {
+      var editor = window.editorView;
+      editor.startEdit();
+      var layout = editor.layoutView.model;
+      layout.set("id","newpage");
+      layout.set("factoryId",data.factoryId);
+      layout.set("parent", data.parent);
+      layout.set("label", data.label);
+      layout.set("pageKey", data.pageKey);
+    },
+    
     verifyPageName : function(input) {
-      var regex = new RegExp('^[a-zA-Z0-9._-]$');
+      var regex = new RegExp('^[a-zA-Z0-9._-]{3,120}$');
       var pageName = $(input).val();
       if (!pageName) {
         setTimeout(function(){
@@ -29,7 +66,7 @@
         return false;
       }
       if (!regex.test(pageName)) {
-        this.message("Only alpha, digit, dash and underscore characters allowed for page name.");
+        this.message("Only alpha, digit, dash and underscore characters (3 - 120) allowed for page name.");
         //workaround to select input
         setTimeout(function(){
           $(input).select();
@@ -475,7 +512,11 @@
       this.model.save({}, {
         parse: false,
         success: function(model, resp, options) {
-          window.location.reload();
+          if (resp.redirect) {
+            window.location = resp.redirect;
+          } else {
+            window.location.reload();
+          }
         },
         error: function(model, xhr, options) {
           //TODO: need to define a unified error handler on UI
@@ -539,7 +580,7 @@
       var model = new PageLayout(
           {id : this.layoutId, pageKey: this.pageKey}, 
           {urlRoot : this.urlRoot, model : Container});
-
+      
       // Loop through all Zone and Application
       this.$el.find('.sortable').each(function() {
         var container = new Container({id : this.id}, {mode : Application});
