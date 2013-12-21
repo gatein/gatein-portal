@@ -834,6 +834,11 @@
 	          subContainer.data("firstTime", true);
 	      }
 	    }
+          
+            // remove the click function on the subContainer. The functionality will still work as before.
+            // Prevents an issue on smaller screened devices when a submenu opens underneath where the screen
+            // was clicked causing multiple events to occur, closing the menu immediately.
+            subContainer.off("click"); 
 	  },
 	  
 	  /**
