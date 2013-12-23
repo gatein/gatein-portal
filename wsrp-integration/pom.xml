@@ -28,14 +28,14 @@
 
   <groupId>org.gatein.integration</groupId>
   <artifactId>gatein-wsrp-integration-parent</artifactId>
-  <version>3.6.4.Final</version>
+  <version>3.6.5.Final-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.6.4.Final</version>
+    <version>3.6.5.Final-SNAPSHOT</version>
   </parent>
 
   <description>GateIn WSRP Integration extension parent</description>
