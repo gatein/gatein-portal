@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -275,7 +274,7 @@ public class UIPortalForm extends UIFormTabPane {
         addUIComponentInput(uiPermissionSetting);
 
         UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure("PortalPermissionSelector", "accessPermissions");
+        uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
         uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
         uiPermissionSetting.addChild(uiListPermissionSelector);
         uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());

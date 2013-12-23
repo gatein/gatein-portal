@@ -122,7 +122,7 @@ public class UIPortletForm extends UIFormTabPane {
         PortalRequestContext prc = Util.getPortalRequestContext();
         if (prc.getSiteType() != SiteType.USER) {
             UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-            uiListPermissionSelector.configure("PortletPermissionSelector", "accessPermissions");
+            uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
             uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
             UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "PortletPermission", null);
             uiPermissionSet.addChild(uiListPermissionSelector);

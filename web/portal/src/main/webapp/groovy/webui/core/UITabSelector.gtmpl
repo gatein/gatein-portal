@@ -1,10 +1,10 @@
-<%	
+<%
 	def rcontext = _ctx.getRequestContext();
 	rcontext.getJavascriptManager().require("SHARED/portalControl");
 %>
 
 <div class="UITabSelector" id="$uicomponent.id">
-	<div class="UIHorizontalTabs"> 
+	<div class="UIHorizontalTabs">
 		<div class="LeftHorizontalTabs">
 			<div class="RightHorizontalTabs">
 				<div class="CenterHorizontalTabs">
@@ -19,16 +19,16 @@
 							<div class="UITab FlatTabStyle">
 								<div class="$style" >
 									<div class="LeftTab" >
-										<div class="RightTab">								
+										<div class="RightTab">
 											<div class="MiddleTab ClearFix" onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this);$actionLink">
 												<div class="TabIcon ${uiChild.id}24x24Icon">
-													<a class="Title"><%=_ctx.appRes("UITabPane.title." + uiChild.getId());%></a>
+													<a class="Title"><%=_ctx.appRes("UITabPane.title." + org.exoplatform.webui.application.WebuiRequestContext.stripUUIDSuffix(uiChild.getId()));%></a>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-							</div> 
+							</div>
 							<div class="LineSeparator"><span></span></div>
 						<%}%>
 					</div>
@@ -38,7 +38,7 @@
 	</div>
 	<div class="UITabContentContainer CSSContent">
 		<%
-			for(uiChild in uicomponent.getChildren()) { 
+			for(uiChild in uicomponent.getChildren()) {
 				String display = "none";
 				if(selectedId.equals(uiChild.id)) display="block";
 				println "<div class=\"UITabContent\" style=\"display: $display\">";
@@ -46,5 +46,5 @@
 				println "</div>";
 			}
 		%>
-	</div>	
-</div>	
+	</div>
+</div>

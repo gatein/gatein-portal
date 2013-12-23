@@ -81,7 +81,7 @@ public class UICategoryForm extends UIFormTabPane {
 
         UIFormInputSet uiPermissionSetting = new UIFormInputSet(FIELD_PERMISSION);
         UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure(WebuiRequestContext.generateUUID(), "accessPermissions");
+        uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
         uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
         uiPermissionSetting.addChild(uiListPermissionSelector);
         addUIComponentInput(uiPermissionSetting);

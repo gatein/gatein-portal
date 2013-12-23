@@ -6,19 +6,17 @@
 	 * Aug 11, 2006
 	 * version: $Id$
 	 */
-%>
-<%
+
 	boolean showCloseButton =	uicomponent.isShowCloseButton();
 	String popupId = uicomponent.getId();
-	String rsId = popupId;
-	if(popupId.indexOf('-')>0){
-		rsId = popupId.substring(0,popupId.lastIndexOf('-'));
-	} 	
+	String rsId = org.exoplatform.webui.application.WebuiRequestContext.stripUUIDSuffix(popupId);
 
-	String title = rsId;
+	String title = "";
 	def component = uicomponent.getUIComponent();
-	if(component != null) title = component.getId();
-	
+	if (component != null) {
+		title = _ctx.appRes(rsId + ".title."+ component.getId());
+	}
+
 	int width = uicomponent.getWindowWidth();
 	int height = uicomponent.getWindowHeight() - 40;
 	def String widthStyle = "";
@@ -27,12 +25,12 @@
 	if(height > 0) heightStyle = "height:" + height + "px;";
 	String show = "none";
 	def rcontext = _ctx.getRequestContext();
-  def module = rcontext.getJavascriptManager().require("SHARED/uiPopupWindow", "uiPopupWindow");
+	def module = rcontext.getJavascriptManager().require("SHARED/uiPopupWindow", "uiPopupWindow");
 	if(uicomponent.isShow()) {
-	   module.addScripts("uiPopupWindow.show('$popupId', $uicomponent.showMask);");
-	   show = "block";
+		module.addScripts("uiPopupWindow.show('$popupId', $uicomponent.showMask);");
+		show = "block";
 	} else if (rcontext.useAjax()) {
-	   module.addScripts("uiPopupWindow.hide('$popupId', $uicomponent.showMask);");
+		module.addScripts("uiPopupWindow.hide('$popupId', $uicomponent.showMask);");
 	}
 %>
 
@@ -44,7 +42,7 @@
 		<% } else { %>
 			<div class="PopupTitleIconRight"><span></span></div>
 		<% } %>
-		<span class="PopupTitle"><%=_ctx.appRes(rsId + ".title."+ title)%></span>
+		<span class="PopupTitle"><%=title%></span>
 	</div>
 	<div class="UIWindowContent">
 		<div class="PopupContent" style="$heightStyle"><% uicomponent.renderChildren(); %></div>
