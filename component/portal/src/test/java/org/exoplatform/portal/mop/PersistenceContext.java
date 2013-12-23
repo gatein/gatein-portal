@@ -19,14 +19,6 @@
 
 package org.exoplatform.portal.mop;
 
-import com.mongodb.DB;
-import com.mongodb.MongoClient;
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodProcess;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.runtime.Network;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.description.SimpleDataCache;
@@ -40,25 +32,39 @@ import org.gatein.portal.impl.mop.ram.RamDescriptionStore;
 import org.gatein.portal.impl.mop.ram.RamLayoutStore;
 import org.gatein.portal.impl.mop.ram.RamNavigationStore;
 import org.gatein.portal.impl.mop.ram.RamPageStore;
-import org.gatein.portal.impl.mop.ram.RamStore;
+import org.gatein.portal.impl.mop.ram.RamSecurityStore;
 import org.gatein.portal.impl.mop.ram.RamSiteStore;
+import org.gatein.portal.impl.mop.ram.RamStore;
 import org.gatein.portal.impl.mop.ram.Tx;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.customization.CustomizationServiceImpl;
 import org.gatein.portal.mop.customization.CustomizationStore;
-import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
-import org.gatein.portal.mop.layout.LayoutStore;
+import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.layout.LayoutServiceImpl;
-import org.gatein.portal.mop.navigation.NavigationStore;
+import org.gatein.portal.mop.layout.LayoutStore;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
-import org.gatein.portal.mop.page.PageStore;
+import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.page.PageServiceImpl;
+import org.gatein.portal.mop.page.PageStore;
+import org.gatein.portal.mop.permission.SecurityService;
+import org.gatein.portal.mop.permission.SecurityServiceImpl;
+import org.gatein.portal.mop.permission.SecurityStore;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.mop.site.SiteServiceImpl;
 import org.gatein.portal.mop.site.SiteStore;
+
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodProcess;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -78,6 +84,8 @@ public abstract class PersistenceContext {
     public abstract NavigationServiceImpl getNavigationService();
 
     public abstract DescriptionService getDescriptionService();
+    
+    public abstract SecurityService getSecurityService();
 
     public abstract PageServiceImpl getPageService();
 
@@ -88,6 +96,8 @@ public abstract class PersistenceContext {
     public abstract NavigationStore getNavigationStore();
 
     public abstract DescriptionStore getDescriptionStore();
+    
+    public abstract SecurityStore getSecurityStore();
 
     public abstract PageStore getPageStore();
 
@@ -131,6 +141,9 @@ public abstract class PersistenceContext {
 
         /** . */
         private DescriptionService descriptionService;
+        
+        /** . */
+        private SecurityService securityService;
 
         /** . */
         private SiteStore siteStore;
@@ -143,6 +156,9 @@ public abstract class PersistenceContext {
 
         /** . */
         private org.exoplatform.portal.mop.description.MopStore descriptionStore;
+        
+        /** . */
+        private SecurityStore securityStore;
 
         @Override
         protected void setUp() {
@@ -162,6 +178,8 @@ public abstract class PersistenceContext {
             navigationService = new NavigationServiceImpl(navigationStore);
             descriptionStore = new org.exoplatform.portal.mop.description.MopStore(mgr, new SimpleDataCache());
             descriptionService = new DescriptionServiceImpl(descriptionStore);
+            securityStore = new org.exoplatform.portal.mop.permission.MopStore(mgr);
+            securityService = new SecurityServiceImpl(securityStore);
             siteStore = new MopStore(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
             siteService = new SiteServiceImpl(siteStore);
             pageStore = new org.exoplatform.portal.mop.page.MopStore(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
@@ -196,6 +214,11 @@ public abstract class PersistenceContext {
         public DescriptionStore getDescriptionStore() {
             return descriptionStore;
         }
+        
+        @Override
+        public SecurityStore getSecurityStore() {
+            return securityStore;
+        }
 
         @Override
         public NavigationServiceImpl getNavigationService() {
@@ -205,6 +228,11 @@ public abstract class PersistenceContext {
         @Override
         public DescriptionService getDescriptionService() {
             return descriptionService;
+        }
+        
+        @Override
+        public SecurityService getSecurityService() {
+            return securityService;
         }
 
         @Override
@@ -272,6 +300,9 @@ public abstract class PersistenceContext {
 
         /** . */
         DescriptionServiceImpl descriptionService;
+        
+        /** . */
+        SecurityServiceImpl securityService;
 
         /** . */
         LayoutServiceImpl layoutService;
@@ -287,6 +318,9 @@ public abstract class PersistenceContext {
 
         /** . */
         RamDescriptionStore descriptionStore;
+        
+        /** . */
+        RamSecurityStore securityStore;
 
         /** . */
         RamPageStore pageStore;
@@ -303,6 +337,7 @@ public abstract class PersistenceContext {
             navigationService = new NavigationServiceImpl(navigationStore = new RamNavigationStore(store));
             pageService = new PageServiceImpl(pageStore = new RamPageStore(store));
             descriptionService = new DescriptionServiceImpl(descriptionStore = new RamDescriptionStore(store));
+            securityService = new SecurityServiceImpl(securityStore = new RamSecurityStore(store));
             layoutService = new LayoutServiceImpl(layoutStore = new RamLayoutStore(store));
             customizationService = new CustomizationServiceImpl(customizationStore = new RamCustomizationStore(store));
             siteService = new SiteServiceImpl(siteStore = new RamSiteStore(store));
@@ -351,6 +386,16 @@ public abstract class PersistenceContext {
         @Override
         public DescriptionStore getDescriptionStore() {
             return descriptionStore;
+        }
+        
+        @Override
+        public SecurityService getSecurityService() {
+            return securityService;
+        }
+
+        @Override
+        public SecurityStore getSecurityStore() {
+            return securityStore;
         }
 
         @Override
@@ -429,6 +474,12 @@ public abstract class PersistenceContext {
 
         /** . */
         private DescriptionStore descriptionStore;
+        
+        /** . */
+        private SecurityService securityService;
+
+        /** . */
+        private SecurityStore securityStore;
 
         /** . */
         private CustomizationService customizationService;
@@ -444,6 +495,7 @@ public abstract class PersistenceContext {
             navigationService = new NavigationServiceImpl(navigationStore = store.getNavigationStore());
             layoutService = new LayoutServiceImpl(layoutStore = store.getLayoutStore());
             descriptionService = new DescriptionServiceImpl(descriptionStore = store.getDescriptionStore());
+            securityService = new SecurityServiceImpl(securityStore = store.getSecurityStore());
             customizationService = new CustomizationServiceImpl(store.getCustomizationStore());
         }
 
@@ -533,6 +585,16 @@ public abstract class PersistenceContext {
         @Override
         public DescriptionStore getDescriptionStore() {
             return descriptionStore;
+        }
+        
+        @Override
+        public SecurityService getSecurityService() {
+            return securityService;
+        }
+
+        @Override
+        public SecurityStore getSecurityStore() {
+            return securityStore;
         }
 
         @Override

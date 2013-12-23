@@ -57,8 +57,10 @@ class MongoElementStore implements NodeStore<ElementState> {
 
     /** . */
     private final String rootId;
+    
+    private final MongoSecurityStore securityStore;
 
-    MongoElementStore(DBObject doc) {
+    MongoElementStore(DBObject doc, MongoSecurityStore securityStore) {
 
         //
         HashMap<String, NodeData<ElementState>> nodes = new HashMap<String, NodeData<ElementState>>();
@@ -131,9 +133,10 @@ class MongoElementStore implements NodeStore<ElementState> {
         this.rootId = doc.get("_id").toString();
         this.nodes = nodes;
         this.contents = contents;
+        this.securityStore = securityStore;
     }
 
-    MongoElementStore(String rootId) {
+    MongoElementStore(String rootId, MongoSecurityStore securityStore) {
 
         //
         HashMap<String, NodeData<ElementState>> nodes = new HashMap<String, NodeData<ElementState>>();
@@ -147,6 +150,7 @@ class MongoElementStore implements NodeStore<ElementState> {
         this.rootId = rootId;
         this.nodes = nodes;
         this.contents = new HashMap<String, DBObject>();
+        this.securityStore = securityStore;
     }
 
     DBObject assemble() {
@@ -262,6 +266,7 @@ class MongoElementStore implements NodeStore<ElementState> {
         List<String> children = Tools.toList(parent.iterator());
         children.remove(targetId);
         nodes.put(parentId, parent = parent.withChildren(children));
+        securityStore.savePermission(targetId, null);
         return parent;
     }
 

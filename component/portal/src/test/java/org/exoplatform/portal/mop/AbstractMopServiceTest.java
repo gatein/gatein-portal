@@ -33,19 +33,20 @@ import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.hierarchy.NodeStore;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.navigation.NavigationData;
-import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationState;
+import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageKey;
-import org.gatein.portal.mop.page.PageStore;
 import org.gatein.portal.mop.page.PageServiceImpl;
 import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.page.PageStore;
+import org.gatein.portal.mop.permission.SecurityService;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SiteStore;
 import org.gatein.portal.mop.site.SiteState;
+import org.gatein.portal.mop.site.SiteStore;
 import org.gatein.portal.mop.site.SiteType;
 
 /**
@@ -255,5 +256,9 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
 
     public final DescriptionService getDescriptionService() {
         return context.getDescriptionService();
+    }
+    
+    public final SecurityService getSecurityService() {
+        return context.getSecurityService();
     }
 }

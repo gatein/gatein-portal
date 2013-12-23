@@ -46,9 +46,9 @@ public class MongoLayoutStore implements LayoutStore {
     public NodeStore<ElementState> begin(String rootId, boolean write) {
         DBObject doc = getLayouts().findOne(new BasicDBObject("_id", new ObjectId(rootId)));
         if (doc != null) {
-            return new MongoElementStore(doc);
+            return new MongoElementStore(doc, store.getSecurityStore());
         } else {
-            return new MongoElementStore(rootId);
+            return new MongoElementStore(rootId, store.getSecurityStore());
         }
     }
 

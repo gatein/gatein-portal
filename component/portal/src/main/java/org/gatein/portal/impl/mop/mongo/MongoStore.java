@@ -22,12 +22,6 @@ import java.lang.reflect.UndeclaredThrowableException;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodProcess;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.runtime.Network;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.gatein.portal.mop.Store;
@@ -55,6 +49,9 @@ public class MongoStore implements Store, Startable {
 
     /** . */
     private MongoDescriptionStore descriptionStore;
+    
+    /** . */
+    private MongoSecurityStore securityStore;
 
     /** . */
     private MongoCustomizationStore customizationStore;
@@ -109,7 +106,8 @@ public class MongoStore implements Store, Startable {
             this.siteStore = new MongoSiteStore(this);
             this.pageStore = new MongoPageStore(this);
             this.descriptionStore = new MongoDescriptionStore(this);
-            this.navigationStore = new MongoNavigationStore(this, descriptionStore);
+            this.securityStore = new MongoSecurityStore(this);
+            this.navigationStore = new MongoNavigationStore(this, descriptionStore, securityStore);
             this.layoutStore = new MongoLayoutStore(this);
             this.customizationStore = new MongoCustomizationStore(layoutStore);
         } catch (Exception e) {
@@ -138,6 +136,10 @@ public class MongoStore implements Store, Startable {
 
     public MongoDescriptionStore getDescriptionStore() {
         return descriptionStore;
+    }
+    
+    public MongoSecurityStore getSecurityStore() {
+        return securityStore;
     }
 
     public MongoCustomizationStore getCustomizationStore() {

@@ -111,6 +111,7 @@ public class MongoSiteStore implements SiteStore {
             sites.remove(key);
             ObjectId id = (ObjectId) doc.get("_id");
             store.getLayoutStore().destroy(id.toString());
+            store.getSecurityStore().savePermission(id.toString(), null);
             return true;
         } else {
             return false;

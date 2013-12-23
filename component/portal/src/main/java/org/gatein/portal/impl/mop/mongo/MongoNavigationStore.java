@@ -47,10 +47,14 @@ public class MongoNavigationStore implements NavigationStore {
 
     /** . */
     private final MongoDescriptionStore descriptionStore;
+    
+    /** . */
+    private final MongoSecurityStore securityStore;
 
-    public MongoNavigationStore(MongoStore store, MongoDescriptionStore descriptionStore) {
+    public MongoNavigationStore(MongoStore store, MongoDescriptionStore descriptionStore, MongoSecurityStore securityStore) {
         this.store = store;
         this.descriptionStore = descriptionStore;
+        this.securityStore = securityStore;
     }
 
     private DBCollection getNavigations() {
@@ -113,6 +117,7 @@ public class MongoNavigationStore implements NavigationStore {
             String id = doc.get("_id").toString();
             destroyNode(id);
             descriptionStore.saveDescriptions(id, null);
+            securityStore.savePermission(id, null);
             return true;
         } else {
             return false;
@@ -209,6 +214,7 @@ public class MongoNavigationStore implements NavigationStore {
             DBObject parentDoc = navigations.findOne(new BasicDBObject("_id", new ObjectId(parentId)));
             List<String> children = (List<String>) parentDoc.get("children");
             children.remove(targetId);
+            securityStore.savePermission(targetId, null);
             navigations.update(new BasicDBObject("_id", new ObjectId(parentId)), new BasicDBObject("$set", new BasicDBObject("children", children)));
             return create(parentId, parentDoc);
         } else {
