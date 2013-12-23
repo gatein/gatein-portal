@@ -46,6 +46,8 @@ import org.exoplatform.webui.core.UIComponent;
  */
 public abstract class WebuiRequestContext extends RequestContext {
 
+    public static final char NAME_DELIMITER = '-';
+
     protected UIApplication uiApplication_;
 
     protected String sessionId_;
@@ -182,7 +184,32 @@ public abstract class WebuiRequestContext extends RequestContext {
         return ((WebuiRequestContext) getParentAppRequestContext()).getJavascriptManager();
     }
 
-    public static String generateUUID() {
-        return "uniq-" + UUID.randomUUID().toString();
+    public static String generateUUID(String prefix) {
+        String uuid = UUID.randomUUID().toString();
+        /* The following is equivalent to prefix.length() + 1 + uuid.length() - 4
+         * where
+         *  + 1 is for the additional minus and
+         *  -4 is for the number of minus signs removed from uuid
+         *    you may want to look into the source of UUID.toString() to see that there are 4
+         *    minus signs in a default UUID */
+        int uuidLen = uuid.length();
+        StringBuilder result = new StringBuilder(prefix.length() + uuidLen  - 3);
+        result.append(prefix).append(NAME_DELIMITER);
+        for (int i = 0; i < uuidLen; i++) {
+            char ch = uuid.charAt(i);
+            if (ch != NAME_DELIMITER) {
+                result.append(ch);
+            }
+        }
+        return result.toString();
+    }
+
+    public static String stripUUIDSuffix(String name) {
+        int lastMinus = name.lastIndexOf(NAME_DELIMITER);
+        if (lastMinus >= 0) {
+            return name.substring(0, lastMinus);
+        } else {
+            return name;
+        }
     }
 }

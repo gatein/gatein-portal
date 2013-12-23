@@ -81,7 +81,6 @@ public class UIListPermissionSelector extends UISelector<String[]> {
         uiPopup.setUIComponent(uiMembershipSelector);
     }
 
-    @SuppressWarnings("unchecked")
     public void configure(String iname, String bfield) {
         setName(iname);
         setId(iname);
@@ -89,10 +88,10 @@ public class UIListPermissionSelector extends UISelector<String[]> {
         UICheckBoxInput uiPublicMode = getChild(UICheckBoxInput.class);
         uiPublicMode.setOnChange("ChangePublicMode", iname);
         UIFormPopupWindow uiPopup = getChild(UIFormPopupWindow.class);
-        uiPopup.setId(iname + "Popup");
+        String prefix = WebuiRequestContext.stripUUIDSuffix(iname);
+        uiPopup.setId(prefix + "Popup"+ iname.substring(prefix.length()));
     }
 
-    @SuppressWarnings("unchecked")
     private boolean existsPermission(List<?> list, Permission permission) {
         for (Object ele : list) {
             Permission per = (Permission) ele;
