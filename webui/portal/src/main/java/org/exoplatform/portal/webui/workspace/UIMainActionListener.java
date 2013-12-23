@@ -80,8 +80,14 @@ public class UIMainActionListener {
             UserNodeFilterConfig filterConfig = createFilterConfig();
             UserNode resolvedNode = resolveNode(selectedNode, filterConfig);
             if (resolvedNode == null) {
+                resolvedNode = resolveNode(selectedNode, null);
+
                 WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-                context.getUIApplication().addMessage(new ApplicationMessage("UIPortalManagement.msg.node.deleted", null));
+                if (resolvedNode == null) {
+                    context.getUIApplication().addMessage(new ApplicationMessage("UIPortalManagement.msg.node.deleted", null));
+                } else {
+                    context.getUIApplication().addMessage(new ApplicationMessage("UIPortalManagement.msg.node.permission", null));
+                }
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
                 return;
             }
