@@ -39,6 +39,7 @@ import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -228,7 +229,7 @@ public class UIPageForm extends UIFormTabPane {
                 || (!uiPage.getSiteKey().getType().equals(SiteType.USER) && getChildById("PermissionSetting") == null)) {
             uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
             UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-            uiListPermissionSelector.configure("PagePermissionSelector", "accessPermissions");
+            uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
             uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
             uiPermissionSetting.addChild(uiListPermissionSelector);
             uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());

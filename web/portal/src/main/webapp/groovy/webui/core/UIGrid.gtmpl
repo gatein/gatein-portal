@@ -97,7 +97,7 @@
                      for (action in beanActions)
                      {
                         if (action == null) continue;
-                        String title = _ctx.appRes(uiParent.getName() + ".action.title." + action);
+                        String title = _ctx.appRes(org.exoplatform.webui.application.WebuiRequestContext.stripUUIDSuffix(uiParent.getName()) + ".action.title." + action);
                         String actionLink = "";
                         if (uiForm != null)
                         {

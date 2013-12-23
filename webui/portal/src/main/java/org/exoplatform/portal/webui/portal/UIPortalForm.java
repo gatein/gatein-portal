@@ -256,7 +256,7 @@ public class UIPortalForm extends UIFormTabPane {
         addUIComponentInput(uiPermissionSetting);
 
         UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure("PortalPermissionSelector", "accessPermissions");
+        uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
         uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
         uiPermissionSetting.addChild(uiListPermissionSelector);
         uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());
