@@ -1,0 +1,13 @@
+@import url(ResponsiveStylesheet.css);
+
+.gtnResponsiveFeaturesPortlet p {
+  font-size: 12px;
+}
+
+.gtnResponsiveFeaturesPortlet h2 {
+  font-size: 14px;
+}
+
+.gtnResponsiveFeaturesPortlet .footer a {
+  font-size: 12px;
+}

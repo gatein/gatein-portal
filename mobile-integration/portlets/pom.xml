@@ -10,105 +10,17 @@
 
   <groupId>org.gatein.portal</groupId>
   <artifactId>responsive-portlets</artifactId>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
   <name>GateIn Portal Responsive Portlets</name>
   <description />
 
-  <build>
-    <finalName>responsive-portlets</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestEntries>
-              <dependencies>org.gatein.common</dependencies>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  <modules>
+    <module>banner</module>
+    <module>navigation</module>
+    <module>features</module>
+    <module>community</module>
+    <module>header</module>
+    <module>footer</module>
+  </modules>
 
-  <dependencies>
-    <dependency>
-      <groupId>javax.portlet</groupId>
-      <artifactId>portlet-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- -->
-    <dependency>
-      <groupId>org.gatein.web</groupId>
-      <artifactId>redirect</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- ExoKernel Integration to retrieve Service -->
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.commons</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.component.common</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.2</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.gatein.pc</groupId>
-      <artifactId>pc-portlet</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.gatein.api</groupId>
-      <artifactId>gatein-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>rome</groupId>
-      <artifactId>rome</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.gatein.common</groupId>
-			<artifactId>common-logging</artifactId>
-			<scope>provided</scope>
-    </dependency>
-
-  </dependencies>
-
-  <repositories>
-    <repository>
-      <id>JBoss repository</id>
-      <url>http://repository.jboss.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-
-  </repositories>
 </project>

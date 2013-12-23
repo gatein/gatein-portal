@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+   http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+    <portlet>
+        <description>Responsive Navigation Portlet</description>
+        <portlet-name>ResponsiveNavigationPortlet</portlet-name>
+        <display-name>Responsive Navigation Portlet</display-name>
+        <portlet-class>org.gatein.portlet.responsive.navigation.NavigationPortlet</portlet-class>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <resource-bundle>locale.portlet.responsivenavigation</resource-bundle>
+        <portlet-info>
+            <title>GateIn Responsive Navigation Portlet</title>
+            <short-title>Navigation Portlet</short-title>
+            <keywords>System</keywords>
+        </portlet-info>
+
+        <portlet-preferences>
+          <preference>
+            <name>ShowEmptyCategories</name>
+            <value>true</value>
+          </preference>
+        </portlet-preferences>
+
+    </portlet>
+</portlet-app>

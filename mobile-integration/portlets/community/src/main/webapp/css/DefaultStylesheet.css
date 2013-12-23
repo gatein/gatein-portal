@@ -1,0 +1,32 @@
+@import url(ResponsiveStylesheet.css);
+
+.gtnResponsiveCommunityPortlet {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.gtnResponsiveCommunityPortlet p {
+  font-size: 12px;
+}
+
+.gtnResponsiveCommunityPortlet #conversation #vimeo-content-mobile .info span,
+.gtnResponsiveCommunityPortlet #conversation .info > span + span,
+.gtnResponsiveCommunityPortlet #conversation .info a {
+  font-size: 11px;
+}
+
+.gtnResponsiveCommunityPortlet #documentation h4 {
+  font-size: 13px;
+}
+
+.gtnResponsiveCommunityPortlet #documentation p,
+.gtnResponsiveCommunityPortlet #conversation .accordion-body > a,
+.gtnResponsiveCommunityPortlet #conversation h6,
+.gtnResponsiveCommunityPortlet #conversation .accordion-toggle {
+  font-size: 12px;
+}
+
+.gtnResponsiveCommunityPortlet #documentation i {
+  width: 73px;
+  height: 57px;
+}

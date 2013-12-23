@@ -967,9 +967,44 @@
     </dependency>
 
     <dependency>
-      <?rename responsive-portlets.war?>
+      <?rename responsive-banner-portlet.war?>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>responsive-portlets</artifactId>
+      <artifactId>portlet.responsive.banner</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <?rename responsive-community-portlet.war?>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.community</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <?rename responsive-features-portlet.war?>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.features</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <?rename responsive-footer-portlet.war?>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.footer</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <?rename responsive-header-portlet.war?>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.header</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <dependency>
+      <?rename responsive-navigation-portlet.war?>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.navigation</artifactId>
       <type>war</type>
     </dependency>
 

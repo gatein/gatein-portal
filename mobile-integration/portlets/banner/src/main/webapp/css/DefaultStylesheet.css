@@ -1,0 +1,10 @@
+@import url(ResponsiveStylesheet.css);
+
+.gtnResponsiveBannerPortlet {
+  margin: 0;
+  border-radius: 0;
+}
+
+.gtnResponsiveBannerPortletShadow {
+  margin: 0;
+}

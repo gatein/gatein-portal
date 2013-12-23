@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>responsive-portlets</artifactId>
+    <version>3.7.0.Alpha02-SNAPSHOT</version>
+  </parent>
+
+
+  <groupId>org.gatein.portal</groupId>
+  <artifactId>portlet.responsive.features</artifactId>
+  <packaging>war</packaging>
+  <name>GateIn Portal Responsive Features Portlet</name>
+  <description />
+
+  <build>
+    <finalName>responsive-features-portlet</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.portlet</groupId>
+      <artifactId>portlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- -->
+    <dependency>
+      <groupId>org.gatein.web</groupId>
+      <artifactId>redirect</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- ExoKernel Integration to retrieve Service -->
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.commons</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.component.common</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>JBoss repository</id>
+      <url>http://repository.jboss.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+
+  </repositories>
+
+</project>

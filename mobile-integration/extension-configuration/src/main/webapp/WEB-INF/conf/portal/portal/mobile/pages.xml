@@ -30,7 +30,7 @@
         <edit-permission>*:/platform/administrators</edit-permission>
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-banner-portlet</application-ref>
                 <portlet-ref>ResponsiveBannerPortlet</portlet-ref>
             </portlet>
             <title>Banner portlet</title>
@@ -41,7 +41,7 @@
         </portlet-application>
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-features-portlet</application-ref>
                 <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
                 <preferences>
                     <preference>
@@ -62,7 +62,7 @@
         </portlet-application>
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-community-portlet</application-ref>
                 <portlet-ref>ResponsiveCommunityPortlet</portlet-ref>                
             </portlet>
             <title>Community portlet</title>
@@ -127,7 +127,7 @@
         <edit-permission>*:/platform/administrators</edit-permission>
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-features-portlet</application-ref>
                 <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
                 <preferences>
                     <preference>

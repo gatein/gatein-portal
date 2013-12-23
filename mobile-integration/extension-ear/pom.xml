@@ -32,7 +32,32 @@
     <!-- The mobile portlets -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
-      <artifactId>responsive-portlets</artifactId>
+      <artifactId>portlet.responsive.header</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.banner</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.community</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.features</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.footer</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>portlet.responsive.navigation</artifactId>
       <type>war</type>
     </dependency>
     <dependency>
@@ -72,9 +97,44 @@
             </webModule>
             <webModule>
               <groupId>org.gatein.portal</groupId>
-              <artifactId>responsive-portlets</artifactId>
-              <contextRoot>/responsive-portlets</contextRoot>
-              <bundleFileName>responsive-portlets.war</bundleFileName>
+              <artifactId>portlet.responsive.header</artifactId>
+              <contextRoot>/responsive-header-portlet</contextRoot>
+              <bundleFileName>responsive-header-portlet.war</bundleFileName>
+              <unpack>true</unpack>
+            </webModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>portlet.responsive.features</artifactId>
+              <contextRoot>/responsive-features-portlet</contextRoot>
+              <bundleFileName>responsive-features-portlet.war</bundleFileName>
+              <unpack>true</unpack>
+            </webModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>portlet.responsive.banner</artifactId>
+              <contextRoot>/responsive-banner-portlet</contextRoot>
+              <bundleFileName>responsive-banner-portlet.war</bundleFileName>
+              <unpack>true</unpack>
+            </webModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>portlet.responsive.community</artifactId>
+              <contextRoot>/responsive-community-portlet</contextRoot>
+              <bundleFileName>responsive-community-portlet.war</bundleFileName>
+              <unpack>true</unpack>
+            </webModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>portlet.responsive.footer</artifactId>
+              <contextRoot>/responsive-footer-portlet</contextRoot>
+              <bundleFileName>responsive-footer-portlet.war</bundleFileName>
+              <unpack>true</unpack>
+            </webModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>portlet.responsive.navigation</artifactId>
+              <contextRoot>/responsive-navigation-portlet</contextRoot>
+              <bundleFileName>responsive-navigation-portlet.war</bundleFileName>
               <unpack>true</unpack>
             </webModule>
             <webModule>

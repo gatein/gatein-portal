@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+
+    <portlet-skin>
+        <application-name>responsive-features-portlet</application-name>
+        <portlet-name>ResponsiveFeaturesPortlet</portlet-name>
+        <skin-name>ResponsiveSkin</skin-name>
+        <css-path>/css/ResponsiveStylesheet.css</css-path>
+    </portlet-skin>
+    
+    <portlet-skin>
+        <application-name>responsive-features-portlet</application-name>
+        <portlet-name>ResponsiveFeaturesPortlet</portlet-name>
+        <skin-name>Default</skin-name>
+        <css-path>/css/DefaultStylesheet.css</css-path>
+    </portlet-skin>
+
+    <module>
+        <name>modernizr</name>
+        <script>
+            <path>/js/modernizr.js</path>
+        </script>
+    </module>
+
+    <module>
+        <name>org_gatein_features</name>
+        <script>
+            <path>/js/features.js</path>
+        </script>
+
+        <depends>
+            <module>jquery</module>
+            <as>jQuery</as>
+        </depends>
+        <depends>
+            <module>modernizr</module>
+        </depends>
+    </module>
+
+    <portlet>
+        <name>ResponsiveFeaturesPortlet</name>
+        <module>
+            <depends>
+                <module>org_gatein_features</module>
+            </depends>
+            <depends>
+                <module>jquery</module>
+                <as>jQuery</as>
+            </depends>
+            <depends>
+               <module>modernizr</module>
+            </depends>
+          </module>
+    </portlet>
+
+</gatein-resources>

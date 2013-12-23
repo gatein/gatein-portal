@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+   http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+    <portlet>
+        <description>Responsive Header Portlet</description>
+        <portlet-name>ResponsiveHeaderPortlet</portlet-name>
+        <display-name>Responsive Header Portlet</display-name>
+        <portlet-class>org.gatein.portlet.responsive.header.HeaderPortlet</portlet-class>
+
+        <supports>
+            <mime-type>text/html</mime-type>
+            <portlet-mode>view</portlet-mode>
+        </supports>
+        <supported-locale>en</supported-locale>
+        <resource-bundle>locale.portlet.responsiveheader</resource-bundle>
+        <portlet-info>
+            <title>GateIn Responsive Header Portlet</title>
+            <short-title>Header Portlet</short-title>
+            <keywords>System</keywords>
+        </portlet-info>
+        <portlet-preferences>
+            <preference>
+                <name>enable.dashboard.link</name>
+                <value>true</value>
+            </preference>
+            <preference>
+                <name>enable.grouppages.link</name>
+                <value>true</value>
+            </preference>
+            <preference>
+                <name>level</name>
+                <value>2</value>
+            </preference>
+        </portlet-preferences>
+    </portlet>
+</portlet-app>

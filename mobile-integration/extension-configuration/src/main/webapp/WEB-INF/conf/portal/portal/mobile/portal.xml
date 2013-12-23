@@ -50,7 +50,7 @@
     <portal-layout>
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-header-portlet</application-ref>
                 <portlet-ref>ResponsiveHeaderPortlet</portlet-ref>
             </portlet>
             <access-permissions>Everyone</access-permissions>
@@ -59,7 +59,7 @@
 
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-navigation-portlet</application-ref>
                 <portlet-ref>ResponsiveNavigationPortlet</portlet-ref>
             </portlet>
             <access-permissions>Everyone</access-permissions>
@@ -70,7 +70,7 @@
 
         <portlet-application>
             <portlet>
-                <application-ref>responsive-portlets</application-ref>
+                <application-ref>responsive-footer-portlet</application-ref>
                 <portlet-ref>ResponsiveFooterPortlet</portlet-ref>
             </portlet>
             <access-permissions>Everyone</access-permissions>
