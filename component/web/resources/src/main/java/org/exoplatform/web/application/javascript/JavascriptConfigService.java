@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.application.javascript;
 
+import javax.servlet.ServletContext;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -36,18 +38,16 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletContext;
-
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.resource.AbstractResourceService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.controller.router.URIWriter;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.BaseScriptResource;
@@ -67,7 +67,7 @@ import org.picocontainer.Startable;
 public class JavascriptConfigService extends AbstractResourceService implements Startable {
 
     /** Our logger. */
-    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
+    private final Log log = ExoLogger.getLogger(JavascriptConfigService.class);
 
     /** The scripts. */
     final ScriptGraph scripts;
@@ -80,6 +80,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
     /** . */
     private static final Pattern INDEX_PATTERN = Pattern.compile("^.+?(_([1-9]+))$");
+
+    public static final Pattern JS_ID_PATTERN = Pattern.compile("^[a-zA-Z_$][0-9a-zA-Z_$]*$");
 
     /** . */
     public static final Comparator<Module> MODULE_COMPARATOR = new Comparator<Module>() {
@@ -332,14 +334,23 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
     private String encode(LinkedList<String> params, String alias) {
         alias = alias.replace("/", "_");
+        Matcher validMatcher = JS_ID_PATTERN.matcher(alias);
+        if (!validMatcher.matches()) {
+            log.error("alias {} is not valid, changing to default 'alias' name", alias);
+            alias = "alias";
+        }
+
+        //
         int idx = -1;
         Iterator<String> iterator = params.descendingIterator();
         while (iterator.hasNext()) {
             String param = iterator.next();
             Matcher matcher = INDEX_PATTERN.matcher(param);
-            if (matcher.matches()) {
-                idx = Integer.parseInt(matcher.group(2));
-                break;
+            if ( matcher.matches()) {
+                if (param.replace(matcher.group(1), "").equals(alias)) {
+                    idx = Integer.parseInt(matcher.group(2));
+                    break;
+                }
             } else if (alias.equals(param)) {
                 idx = 0;
                 break;
@@ -348,7 +359,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
         if (idx != -1) {
             StringBuilder tmp = new StringBuilder(alias);
             tmp.append("_").append(idx + 1);
-            return tmp.toString();
+            String a = tmp.toString();
+            log.warn("alias {} is duplicated, adding index: {}", alias, a);
+            return a;
         } else {
             return alias;
         }

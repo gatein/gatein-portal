@@ -24,10 +24,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.json.JSONArray;
 
 /**
@@ -59,9 +61,15 @@ public class RequireJS {
         } else {
             if (alias != null && !alias.trim().isEmpty()) {
                 alias = alias.trim();
+                Matcher validMatcher = JavascriptConfigService.JS_ID_PATTERN.matcher(alias);
+                if (!validMatcher.matches()) {
+                    log.error("alias {} is not valid JS identifier", alias);
+                    noAlias.add(moduleId);
+                }
                 if (depends.containsKey(alias)) {
                     if (!depends.get(alias).equals(moduleId)) {
                         log.warn("There is already an alias named as {}", alias);
+                        noAlias.add(moduleId);
                     }
                 } else {
                     depends.put(alias, moduleId);

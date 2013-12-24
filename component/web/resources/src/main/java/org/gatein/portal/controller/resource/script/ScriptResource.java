@@ -29,7 +29,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
@@ -45,6 +49,9 @@ import org.gatein.portal.controller.resource.script.Module.Local.Content;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class ScriptResource extends BaseScriptResource<ScriptResource> implements Comparable<ScriptResource> {
+
+    private final Log log = ExoLogger.getLogger(ScriptResource.class);
+
     /** . */
     private final List<Module> modules;
 
@@ -78,6 +85,12 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
         if (alias == null) {
             String resName = id.getName();
             alias = resName.substring(resName.lastIndexOf("/") + 1);
+        }
+        if (FetchMode.ON_LOAD.equals(fetchMode)) {
+            Matcher validMatcher = JavascriptConfigService.JS_ID_PATTERN.matcher(alias);
+            if (!validMatcher.matches()) {
+                log.warn("alias {} is not valid JS identifier", alias);
+            }
         }
         this.alias = alias;
         this.group = group;
