@@ -88,6 +88,8 @@
 	padding: 1px;
 	border: solid 1px gray;
 	font-size: 11px;
+    margin-top: 0px;
+    margin-right: 5px;
 }
 
 .UISearch .UISearchForm .QuickSet input {

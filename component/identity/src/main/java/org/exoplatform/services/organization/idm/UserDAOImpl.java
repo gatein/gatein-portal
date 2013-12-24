@@ -29,8 +29,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.exoplatform.commons.utils.EmptySerializablePageList;
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.DisabledUserException;
@@ -275,10 +273,9 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
     @Override
     public User findUserByName(String userName, UserStatus userStatus) throws Exception {
-        boolean enabledOnly = userStatus == UserStatus.ENABLED;
         if (log.isTraceEnabled()) {
-            Tools.logMethodIn(log, LogLevel.TRACE, "findUserByName", new Object[] { "userName", userName, "enabledOnly",
-                    enabledOnly });
+            Tools.logMethodIn(log, LogLevel.TRACE, "findUserByName", new Object[] { "userName", userName, "userStatus",
+                    userStatus });
         }
 
         IdentitySession session = service_.getIdentitySession();
@@ -315,7 +312,6 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         }
 
         UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
-
         switch (userStatus) {
             case DISABLED:
                 if (filterDisabledUsersInQueries()) {

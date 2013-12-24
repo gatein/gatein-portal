@@ -247,8 +247,12 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
                 log.error("IGNORED: Failed to load UserProfile for username: " + user, ignored);
             }
 
-            if (userProfile == null && log.isDebugEnabled())
-                log.debug("Could not load user profile for " + user + ". Using default portal locale.");
+            if (userProfile == null && log.isWarnEnabled())
+                log.warn("Could not load user profile for " + user + ". Using default portal locale.");
+
+            if(userProfile == null) {
+                userProfile = svc.getUserProfileHandler().createUserProfileInstance(user);
+            }
         }
         return userProfile;
     }
