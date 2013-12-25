@@ -34,6 +34,7 @@ import java.io.IOException;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.filter.Filter;
@@ -69,9 +70,9 @@ public class PortalSetupFilter implements Filter {
         String context = httpReq.getContextPath().substring(1);
 
         PortalSetupService setupService = (PortalSetupService) PortalContainer.getInstance().getComponentInstance(PortalSetupService.class);
-        if (setupService.isSetup(context) || isResourceUri(uri)) {
+        if (!setupEnable || setupService.isSetup(context) || isResourceUri(uri)) {
             chain.doFilter(req, resp);
-        } else if (setupEnable) {
+        } else {
             if (uri.endsWith(SETUP_ACTION))
                 setupAction((HttpServletRequest)req, (HttpServletResponse)resp);
             else {
@@ -79,8 +80,7 @@ public class PortalSetupFilter implements Filter {
                 ServletContext mergedContext = portalContainer.getPortalContext();
                 mergedContext.getRequestDispatcher(SETUP_JSP).forward(req, resp);
             }
-        } else
-            chain.doFilter(req, resp);
+        }
     }
 
     private boolean isResourceUri(String uri) {
@@ -106,6 +106,7 @@ public class PortalSetupFilter implements Filter {
                 request.setAttribute(SETUP_ERROR, "Passwords are not equal");
                 request.getRequestDispatcher(SETUP_JSP).forward(request, response);
             } else {
+                RequestLifeCycle.begin(PortalContainer.getInstance());
                 try {
                     OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer()
                             .getComponentInstanceOfType(OrganizationService.class);
@@ -121,6 +122,8 @@ public class PortalSetupFilter implements Filter {
                     log.error("Root user cannot be configured", e);
                     request.setAttribute(SETUP_ERROR, "Root user cannot be configured. See log for details.");
                     request.getRequestDispatcher(SETUP_JSP).forward(request, response);
+                } finally {
+                    RequestLifeCycle.end();
                 }
             }
         }

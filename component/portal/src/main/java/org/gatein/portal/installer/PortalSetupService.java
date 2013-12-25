@@ -31,7 +31,8 @@ import javax.jcr.Session;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
@@ -65,13 +66,16 @@ public class PortalSetupService implements Startable {
     private String SETUP_FLAG = "gatein-setup-flag";
 
     // We check root password per portal container
-    private HashMap<String, Boolean> setup = new HashMap<String, Boolean>();
+    private Map<String, Boolean> setup = new ConcurrentHashMap<String, Boolean>();
 
-    public PortalSetupService(InitParams params) {
+    private OrganizationService service;
+
+    public PortalSetupService(InitParams params, OrganizationService service) {
         ValueParam param = params.getValueParam("default.workspace");
         if (param != null) {
             WORKSPACE_NAME = param.getValue();
         }
+        this.service = service;
     }
 
     @Override
@@ -79,10 +83,11 @@ public class PortalSetupService implements Startable {
         RequestLifeCycle.begin(PortalContainer.getInstance());
         checkJcrFlag();
         try {
-            OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-            User root = getRootUser();
-            root.setPassword(rootPassword());
-            service.getUserHandler().saveUser(root, false);
+            if (!isSetup()) {
+                User root = getRootUser();
+                root.setPassword(rootPassword());
+                service.getUserHandler().saveUser(root, false);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -91,8 +96,6 @@ public class PortalSetupService implements Startable {
     }
 
     public User getRootUser() throws Exception {
-        OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer()
-                .getComponentInstanceOfType(OrganizationService.class);
         User root = service.getUserHandler().findUserByName("root", UserStatus.BOTH);
         // In the case the root user is not present
         // This case can happens if organization-configuration.xml is not well configured
