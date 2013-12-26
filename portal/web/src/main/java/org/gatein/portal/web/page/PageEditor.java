@@ -115,27 +115,24 @@ public class PageEditor {
     @Route(value = "/nextstep")
     public Response nextStepToEdit(String pageName, String label, String parent, String factoryId) {
         PageKey pageKey = new PageKey(SiteKey.portal("classic"), pageName);
-        ZoneLayout layout = (ZoneLayout) layoutFactory.builder(factoryId).build();
-        StringBuilder sb = new StringBuilder();
-        layout.render(new RenderingContext(null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
+        org.gatein.portal.mop.page.PageContext pageContext = pageService.loadPage(pageKey);
+        if (pageContext != null) {
+            return Response.status(500).body("Page " + pageName + " is existed");
+        } else {
+            ZoneLayout layout = (ZoneLayout) layoutFactory.builder(factoryId).build();
+            StringBuilder sb = new StringBuilder();
+            layout.render(new RenderingContext(null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
-        JSON data = new JSON();
-        data.set("factoryId", factoryId);
-        data.set("html", sb.toString());
-        data.set("pageKey", pageKey.format());
-        data.set("label", label);
-        data.set("parent", parent);
-        return Response.status(200).body(data.toString());
+            JSON data = new JSON();
+            data.set("factoryId", factoryId);
+            data.set("html", sb.toString());
+            data.set("pageKey", pageKey.format());
+            data.set("label", label);
+            data.set("parent", parent);
+            return Response.status(200).body(data.toString());
+        }
     }
     
-    @Resource
-    @Route(value = "/checkpage")
-    public Response checkPageExisted(String pageName) {
-        PageKey pageKey = new PageKey(SiteKey.portal("classic"), pageName);
-        org.gatein.portal.mop.page.PageContext pageContext = pageService.loadPage(pageKey);
-        return pageContext == null ? Response.status(200) : Response.status(500);
-    }
-
     @Resource
     @Route(value = "/switchto/{javax.portlet.z}")
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
