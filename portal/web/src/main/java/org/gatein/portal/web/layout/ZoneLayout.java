@@ -107,7 +107,10 @@ public class ZoneLayout extends Layout {
         if (template != null) {
             parameters.put("layoutId", renderingContext.layoutId != null ? renderingContext.layoutId : "");
             parameters.put("pageKey", renderingContext.pageKey != null ? renderingContext.pageKey : "");
-
+            parameters.put("pageDisplayName", renderingContext.pageDisplayName != null ? renderingContext.pageDisplayName : "");
+            parameters.put("factoryId", renderingContext.factoryId != null ? renderingContext.factoryId : "");
+            parameters.put("parentLink", renderingContext.parentLink != null ? renderingContext.parentLink : "/portal");
+            
             template.renderTo(to, parameters);
         } else {
             throw new UnsupportedOperationException("Layout not found");

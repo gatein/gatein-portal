@@ -1,98 +1,95 @@
 (function() {
 
-  var AddNewPageView = Backbone.View.extend({
+  var PagePropertiesModal = Backbone.View.extend({
     events : { 
       "click .cancel" : "cancel",
-      "click .next" : "nextStep",
-    },
-    
-    initialize : function(options) {
-      this.model = new Backbone.Model();
+      "click .next" : "nextStep"
     },
     
     cancel : function() {
       this.$el.removeData('modal');
-      $('#addNewPageModal').modal('hide');
+      $('#pagePropertiesModal').modal('hide');
+      var editorView = window.editorView;
+      var editMode = editorView.model.get('editMode');
+      if (editMode == EditorState.EDIT_NEW_PAGE) {
+        editorView.model.set('editMode', EditorState.NORMAL);
+      }
     },
     
-    changeProperties : function(e) {
-      $('#addNewPageModal').modal('show');
+    render : function() {
+      var _this = this;
+      $.ajax({
+        url : this.$el.attr('data-parentLinks'),
+        dataType : 'json',
+        success : function(data) {
+          var template = $("#page-properties-modal-template").html();
+          var html = _.template(template, {parentLinks: data.parentLinks});
+          _this.$el.find('.modal-body').html(html);
+          var editorView = window.editorView;
+          if (editorView.model.get('editMode') == EditorState.EDIT_CURRENT_PAGE) {
+            var pageModel = editorView.getPageView().model;
+            $(".modal-body input[name='pageName']").val(pageModel.get('pageName')).prop('disabled', true);
+            $(".modal-body input[name='pageDisplayName']").val(pageModel.get('pageDisplayName'));
+            $(".modal-body select[name='parent']").val(pageModel.get('parentLink')).prop('disabled', true);
+            $(".modal-body select[name='factoryId']").val(pageModel.get('factoryId'));
+          }
+        }
+      })
+    },
+    
+    bindToPageModel : function(pageModel) {
+      pageModel.set("id", "newpage"); 
+      pageModel.set("factoryId", $(".modal-body select[name='factoryId']").val()); 
+      pageModel.set("pageKey", "portal::classic::" + $(".modal-body input[name='pageName']").val()); 
+      pageModel.set("pageName", $(".modal-body input[name='pageName']").val());
+      pageModel.set("pageDisplayName", $(".modal-body input[name='pageDisplayName']").val());
+      pageModel.set("parentLink", $(".modal-body select[name='parentLink']").val());
     },
     
     nextStep : function() {
-      var pageNameInput = this.$el.find("input[name='pageName']");
-      if (this.verifyPageName(pageNameInput)) {
-
-        var nextStepURL = this.$el.attr('data-nextstep-url');
-        this.model.set("parent", this.$el.find("select[name='parent']").val());
-        this.model.set("factoryId", this.$el.find("select[name='factoryId']").val());
-        this.model.set("pageName", $(pageNameInput).val());
-        this.model.set("label", this.$el.find("input[name='label']").val());
-        var _this = this;
-
-        $.ajax({
-          url : nextStepURL,
-          dataType : "json",
-          data : {
-            "pageName" :_this.model.get("pageName"),
-            "label" : _this.model.get("label"),
-            "parent" : _this.model.get("parent"),
-            "factoryId" : _this.model.get("factoryId")
-          },
-          statusCode : {
-            200 : function(result) {
-              _this.$el.modal('hide');
-              _this.$el.removeData('modal');
-              
-              var proBtn = $('<a class="pageProperties" href="#addNewPageModal">Properties</a>');
-              $('a.newPage').replaceWith(proBtn);
-              proBtn.on('click',  _this.changeProperties);
-              _this.$el.on('shown', function() {
-                $(".modal-body input[name='pageName']").val(_this.model.get('pageName'));
-                $(".modal-body input[name='label']").val(_this.model.get('label'));
-                $(".modal-body select[name='parent']").val(_this.model.get('parent'));
-                $(".modal-body select[name='factoryId']").val(_this.model.get('factoryId'));
-              });
-
-              if ($(".pageBody .editNewPage").length == 0) {
-                $('.pageBody').html(result.html);
-                editor = window.editorView;
-                editor.startEdit();
+      var editorView = window.editorView;
+      var editMode = editorView.model.get('editMode');
+      if (editMode == EditorState.EDIT_CURRENT_PAGE) {
+        var pageModel = editorView.getPageView().model;
+        pageModel.set('pageDisplayName', $(".modal-body input[name='pageDisplayName']").val());
+        pageModel.set('factoryId', $(".modal-body select[name='factoryId']").val());
+        this.$el.modal('hide');
+      } else if (editMode == EditorState.EDIT_NEW_PAGE) {
+        var pageNameInput = this.$el.find("input[name='pageName']");
+        if (this.verifyPageName(pageNameInput)) {
+          var _this = this;
+          $.ajax({
+            url : this.$el.attr('data-checkpage-url'),
+            dataType : "json",
+            data : {
+              pageName : $(pageNameInput).val()
+            },
+            success : function(data) {
+              if (data.pageExisted) {
+                _this.message("Page is existed");
+                $(pageNameInput).select();
               } else {
-                $(".pageBody .editNewPage").remove();
-              }
-              
-              layout = editor.layoutView.model;
-              layout.set("id","newpage");
-              if (layout.get('factoryId') && layout.get('factoryId') != result.factoryId) {
-                var layoutURL = $("#composer-layout-" + result.factoryId).attr('data-layoutURL');
-
-                // Make an ajax request to fetch the new layout data [layout_id, html_template]
-                $.ajax({
-                  url : layoutURL,
-                  dataType : "json",
-                  async : false,
-                  success : function(result) {
-                    // Ask the layout view to switch layout with passed layout data
-                    var layoutView = window.editorView.layoutView;
-                    layoutView.switchLayout(result);
+                editorView.switchMode();
+                var pageView = editorView.getPageView();
+                var pageModel = pageView.model;
+                _this.bindToPageModel(pageModel);
+                //clear apps
+                var containers = pageModel.getChildren();
+                $(containers).each(function() {
+                  if (!this.isEmpty()) {
+                    var container = this;
+                    var apps = this.getChildren();
+                    $(apps).each(function() {
+                      container.removeChild(this);
+                    });
                   }
                 });
+                //
+                $('#pagePropertiesModal').modal('hide');
               }
-              
-              layout.set("factoryId",result.factoryId);
-              layout.set("parent", result.parent);
-              layout.set("label", result.label);
-              layout.set("pageKey", result.pageKey);
-              
-              $('.pageBody').prepend($("<div class='alert alert-warning editNewPage'><h5>Edit phase for temporary page \"" + result.pageKey + "\"</h5></div>"))
-            }, 
-            500 : function(resp) {
-              _this.message(resp.responseText);
-              $(pageNameInput).select();
             }
-          }
-        });
+          });
+        }
       }
     },
     
@@ -147,6 +144,8 @@
         var template = $("#composer-list-contents-template").html();
         var html = _.template(template, {items: this.model.getRenderData()});
         $container.html(html);
+        var factoryId = window.editorView.getPageView().model.get('factoryId');
+        $("input#composer-layout-" + factoryId).attr('checked', true);
         $container.find("li.content").draggable({
           connectToSortable: ".sortable",
           revert: "invalid",
@@ -509,12 +508,22 @@
       this.urlRoot = this.$el.attr("data-urlRoot");
       this.layoutId = this.$el.attr('data-layoutId');
       this.pageKey = this.$el.attr('data-pageKey');
-
+      this.pageDisplayName = this.$el.attr('data-pageDisplayName');
+      this.factoryId = this.$el.attr('data-factoryId');
+      this.parentLink = this.$el.attr('data-parentLink');
+      this.pageName = this.pageKey.substring('portal::classic::'.length);
+      
       //TODO: remove /null at the end of url - this should be refactor later
       this.urlRoot = this.urlRoot.substring(0, this.urlRoot.length - 4);
 
       // Build model from current DOM
-      this.model = this.buildModel();
+      this.buildModel();
+      this.listenTo(this.model, "change:factoryId", this.changeFactoryId);
+    },
+    
+    changeFactoryId : function() {
+      var factoryId = this.model.get('factoryId');
+      $("input#composer-layout-" + factoryId).click();
     },
     
     // Listen to clicking on SAVE button
@@ -591,8 +600,20 @@
 
       // TODO: Consider to initialize PageLayout model's url properly following Backbone standard
       var model = new PageLayout(
-          {id : this.layoutId, pageKey: this.pageKey}, 
-          {urlRoot : this.urlRoot, model : Container});
+          {
+            id : this.layoutId, 
+            factoryId : this.factoryId, 
+            pageKey: this.pageKey, 
+            pageName : this.pageName, 
+            pageDisplayName : this.pageDisplayName,
+            parentLink : this.parentLink,
+            html : this.$el.html()
+          },  
+          {
+            urlRoot : this.urlRoot, 
+            model : Container
+          }
+      );
       
       // Loop through all Zone and Application
       this.$el.find('.sortable').each(function() {
@@ -616,7 +637,7 @@
       
       model.updateSnapshot();
       
-      return model;
+      this.model = model;
     }
   });
   
@@ -626,25 +647,35 @@
     }
   }, {
     NORMAL: 0,
-    EDIT_PAGE: 1,
-    EDIT_SITE: 2
+    EDIT_CURRENT_PAGE: 1,
+    EDIT_NEW_PAGE: 2,
+    EDIT_SITE: 3
   });
 
   // The root container view of Layout Edition mode
   var EditorView = Backbone.View.extend({
     events : {
       'click #saveLayout' : 'saveLayout',
-      'click .editLayout' : 'startEdit',
-      'click .cancelEditLayout' : 'cancelEdit'
+      'click .editLayout' : 'startEditCurrentPage',
+      'click .cancelEditLayout' : 'cancelEdit',
+      'click .newPage' : 'addNewPage',
+      'click .pageProperties' : 'changePageProperties'
     },
 
-    initialize : function() {
-      this.listenTo(this.model, 'change:editMode', this.switchMode);
+    startEditCurrentPage : function() {
+      this.model.set('editMode', EditorState.EDIT_CURRENT_PAGE);
+      this.switchMode();
     },
     
-    startEdit : function() {
-      $('a.newPage').remove();
-      this.model.set('editMode', EditorState.EDIT_PAGE);
+    addNewPage : function() {
+      this.model.set('editMode', EditorState.EDIT_NEW_PAGE);
+      this.pageModal = new PagePropertiesModal({ el : "#pagePropertiesModal"})
+      this.pageModal.render();
+    },
+    
+    changePageProperties : function() {
+      if (this.pageModal == undefined) this.pageModal = new PagePropertiesModal({ el : "#pagePropertiesModal"});
+      this.pageModal.render();
     },
     
     cancelEdit : function() {
@@ -688,6 +719,5 @@
   // Trigger to initialize the LAYOUT EDITION mode
   $(function() {
     window.editorView = new EditorView({el : 'body > .container', model: new EditorState()});
-    window.addNewPageView = new AddNewPageView({ el : "#addNewPageModal"});
   });
 })();

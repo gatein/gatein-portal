@@ -4,16 +4,16 @@
     <div>${fragment.content}</div>
 </div>
 <% } %>
-<!-- Add New Page Modal -->
-<div id="addNewPageModal" class="modal hide fade" tabindex="-1"
+<!-- Page properties Modal -->
+<div id="pagePropertiesModal" class="modal hide fade" tabindex="-1"
 	data-keyboard="false" 
-	data-remote="@{PageEditor.getModalBody()}" 
-	data-nextstep-url="@{PageEditor.nextStepToEdit()}">
+	data-parentLinks="@{PageEditor.getParentLinks()}" 
+	data-checkpage-url="@{PageEditor.checkPage()}">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h4>Add New Page</h4>
   </div>
-  <div class="modal-body" style="margin: auto; width: 50%;">
+  <div class="modal-body">
     <p>Loading …</p>
   </div>
   <div class="modal-footer">
@@ -72,6 +72,48 @@
         </div>
     </div>
 </div>
+
+<!-- Template for render Page's properties modal -->
+<script type="text/template" id="page-properties-modal-template">
+	<table>
+         <tbody>
+            <tr>
+               <td><label>Name:</label></td>
+               <td><input type="text" name="pageName" value="" required> *
+            </tr>
+            <tr>
+            	<td><label>Display Name:</label></td>
+            	<td><input type="text" name="pageDisplayName" value=""></td>
+            </tr>
+            <tr>
+            	<td><label>Parent:</label></td>
+            	<td>
+            		<select name="parentLink">
+            			${"<%"}
+            			_.each(parentLinks, function(parent, i){
+            			 ${"%>"}
+                         	<option>${"<%=parent%>"}</option>                   
+                         ${"<%"}
+            			});
+            			${"%>"}
+            		</select>
+            	</td>
+            </tr>
+            <tr>
+            	<td><label>Layout:</label></td>
+            	<td>
+            		<select name="factoryId">
+            			<option value="1">One column</option>
+            			<option value="2">Two columns 70 30</option>
+            			<option value="3">Two columns One row</option>
+            			<option value="4">One row Tow columns</option>
+            			<option value="5">Three columns</option>
+            		</select>
+            	</td>
+            </tr>
+         </tbody>
+    </table>
+</script>
 <!-- Template for render Contents -->
 <script type="text/template" id="composer-list-contents-template">
     <div>
@@ -127,7 +169,10 @@
 <!-- TODO: need to review how to use PageEditor.saveLayout(layoutId='null') -->
 <div class="pageBody"
      data-layoutId="${layoutId}"
+     data-factoryId="${factoryId}"
      data-pageKey="${pageKey}"
+     data-pageDisplayName="${pageDisplayName}"
+     data-parentLink="${parentLink}"
      data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}">
 ${body}
 </div>

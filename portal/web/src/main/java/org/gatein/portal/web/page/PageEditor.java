@@ -31,7 +31,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import juzu.Param;
-import juzu.Path;
 import juzu.Resource;
 import juzu.Response;
 import juzu.Route;
@@ -41,7 +40,6 @@ import juzu.impl.request.Request;
 import juzu.request.ClientContext;
 import juzu.request.RequestContext;
 import juzu.request.UserContext;
-import juzu.template.Template;
 import org.gatein.portal.content.ContentDescription;
 import org.gatein.portal.content.ContentProvider;
 import org.gatein.portal.content.ContentType;
@@ -88,19 +86,17 @@ public class PageEditor {
     @Inject
     DescriptionService descriptionService;
     
-    @Inject
-    @Path("add_new_page_modal.gtmpl")
-    Template modalBody;
-    
     @Resource
-    @Route(value = "/modalbody")
-    public Response getModalBody(UserContext userContext) {
+    @Route(value = "/parentLinks")
+    public Response getParentLinks(UserContext userContext) {
         NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
         UserNode.Model model = new UserNode.Model(descriptionService, userContext.getLocale());
         NodeContext<UserNode, NodeState> root = navigationService.loadNode(model, navigation, Scope.ALL, null);
         List<String> holder = new ArrayList<String>();
         collectPaths(root, holder);
-        return modalBody.with().set("parents", holder).ok();
+        JSON data = new JSON();
+        data.set("parentLinks", holder);
+        return Response.status(200).body(data.toString());
     }
     private List<String> collectPaths(NodeContext<UserNode, NodeState> context, List<String> holder) {
         UserNode userNode = context.getNode();
@@ -112,25 +108,13 @@ public class PageEditor {
     }
     
     @Resource
-    @Route(value = "/nextstep")
-    public Response nextStepToEdit(String pageName, String label, String parent, String factoryId) {
+    @Route(value = "/checkPage")
+    public Response checkPage(String pageName) {
         PageKey pageKey = new PageKey(SiteKey.portal("classic"), pageName);
         org.gatein.portal.mop.page.PageContext pageContext = pageService.loadPage(pageKey);
-        if (pageContext != null) {
-            return Response.status(500).body("Page " + pageName + " is existed");
-        } else {
-            ZoneLayout layout = (ZoneLayout) layoutFactory.builder(factoryId).build();
-            StringBuilder sb = new StringBuilder();
-            layout.render(new RenderingContext(null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
-
-            JSON data = new JSON();
-            data.set("factoryId", factoryId);
-            data.set("html", sb.toString());
-            data.set("pageKey", pageKey.format());
-            data.set("label", label);
-            data.set("parent", parent);
-            return Response.status(200).body(data.toString());
-        }
+        JSON data = new JSON();
+        data.set("pageExisted", pageContext != null ? true : false);
+        return Response.status(200).body(data.toString());
     }
     
     @Resource
@@ -138,7 +122,7 @@ public class PageEditor {
     public Response switchLayout(@Param(name = "javax.portlet.z") String id) throws Exception {
         ZoneLayout layout = (ZoneLayout) layoutFactory.builder(id).build();
         StringBuilder sb = new StringBuilder();
-        layout.render(new RenderingContext(null, null), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
+        layout.render(new RenderingContext(), Collections.<String, Result.Fragment>emptyMap(), null, null, sb);
 
         JSON data = new JSON();
         data.set("factoryId", id);
@@ -181,9 +165,9 @@ public class PageEditor {
         return Response.status(200).body(result.toString());
     }
 
-    private org.gatein.portal.mop.page.PageContext createPage(PageKey pageKey, String label, String parent, String factoryId, UserContext userContext) {
+    private org.gatein.portal.mop.page.PageContext createPage(PageKey pageKey, String pageDisplayName, String parent, String factoryId, UserContext userContext) {
         parent = parent.substring("/portal".length());
-        label = label != null && !label.isEmpty() ? label : pageKey.getName();
+        pageDisplayName = pageDisplayName != null && !pageDisplayName.isEmpty() ? pageDisplayName : pageKey.getName();
         // Parse path
         List<String> names = new ArrayList<String>();
         for (String name : Tools.split(parent, '/')) {
@@ -206,7 +190,7 @@ public class PageEditor {
         //
         NodeContext<?, NodeState> pageNode = root.get(pageKey.getName());
         if (pageNode == null) {
-            pageNode = current.add(null, pageKey.getName(), new NodeState.Builder().label(label).pageRef(pageKey).build());
+            pageNode = current.add(null, pageKey.getName(), new NodeState.Builder().label(pageDisplayName).pageRef(pageKey).build());
             navigationService.saveNode(pageNode, null);
         } else {
             NodeState sate = pageNode.getState();
@@ -215,7 +199,7 @@ public class PageEditor {
         }
         org.gatein.portal.mop.page.PageContext page = new org.gatein.portal.mop.page.PageContext(
                 pageKey, 
-                new PageState.Builder().displayName(label).factoryId(factoryId).build());
+                new PageState.Builder().displayName(pageDisplayName).factoryId(factoryId).build());
 
         pageService.savePage(page);
         return page;
@@ -228,10 +212,10 @@ public class PageEditor {
         JSON result = new JSON();
         if ("newpage".equals(layoutId)) {
             PageKey pageKey = PageKey.parse(requestData.getString("pageKey"));
-            String label = requestData.getString("label");
-            String parent = requestData.getString("parent");
+            String pageDisplayName = requestData.getString("pageDisplayName");
+            String parent = requestData.getString("parentLink");
             String factoryId = requestData.getString("factoryId");
-            org.gatein.portal.mop.page.PageContext pageContext = createPage(pageKey, label, parent, factoryId, Request.getCurrent().getUserContext());
+            org.gatein.portal.mop.page.PageContext pageContext = createPage(pageKey, pageDisplayName, parent, factoryId, Request.getCurrent().getUserContext());
             layoutId = pageContext.getLayoutId();
             result.set("redirect", parent + "/" + pageKey.getName());
         }
@@ -259,11 +243,12 @@ public class PageEditor {
 
             //Update layout
             String factoryId = requestData.getString("factoryId");
+            String pageDisplayName = requestData.getString("pageDisplayName");
             String pageKey = requestData.getString("pageKey");
             if (factoryId != null && pageKey != null && !factoryId.isEmpty() && !pageKey.isEmpty()) {
                 PageKey key = PageKey.parse(pageKey);
                 org.gatein.portal.mop.page.PageContext page = pageService.loadPage(key);
-                page.setState(page.getState().builder().factoryId(factoryId).build());
+                page.setState(page.getState().builder().factoryId(factoryId).displayName(pageDisplayName).build());
                 pageService.savePage(page);
             }
         }

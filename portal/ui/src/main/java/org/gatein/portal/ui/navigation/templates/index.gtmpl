@@ -24,10 +24,13 @@
                 </ul>
                 <ul class="nav pull-right">
                 	<li>
-                		<a href="#addNewPageModal" data-toggle="modal" class="newPage">New Page</a>
+                		<a href="#pagePropertiesModal" data-toggle="modal" class="newPage">New Page</a>
                 	</li>
                 	<li>
                 		<a href="javascript: void(0);" class="editLayout">Edit Page</a>
+					</li>
+					<li>
+						<a id="pageProperties" class="pageProperties" data-toggle="modal" href="#pagePropertiesModal">Properties</a>
 					</li>
 					<li>
 						<a id="saveLayout" class="saveLayout" href="javascript:void(0);">Save</a>

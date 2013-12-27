@@ -47,6 +47,7 @@
 	cursor: move;
 }
 
+.LAYOUT-EDITION.container .pageProperties,
 .LAYOUT-EDITION.container .saveLayout, 
 .LAYOUT-EDITION.container .cancelEditLayout, 
 .LAYOUT-EDITION.container .switchLayout,
@@ -59,7 +60,8 @@
 	display: block;
 } 
 
-.LAYOUT-EDITION.container .editLayout {
+.LAYOUT-EDITION.container .editLayout,
+.LAYOUT-EDITION.container .newPage {
   	display: none;
 }
 
@@ -67,7 +69,7 @@
 	display: inline-block;
 }
 
-.container .saveLayout, .container .cancelEditLayout, .container .layoutComposer, 
+.container .pageProperties, .container .saveLayout, .container .cancelEditLayout, .container .layoutComposer, 
 .container .switchLayout, .window > h3 > .icon, .window > h3 .close {
 	display: none;
 }

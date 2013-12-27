@@ -52,10 +52,12 @@ import juzu.template.Template;
 import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.mop.customization.CustomizationContext;
+import org.gatein.portal.ui.navigation.UserNode;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
 import org.gatein.portal.web.layout.ZoneLayoutFactory;
 import org.gatein.portal.mop.customization.CustomizationService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
@@ -89,6 +91,9 @@ public class Controller {
 
     @Inject
     PageService pageService;
+    
+    @Inject
+    DescriptionService descriptionService;
 
     @Inject
     LayoutService layoutService;
@@ -131,14 +136,15 @@ public class Controller {
 
         //
         NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("classic"));
-        NodeContext<?, NodeState> root =  navigationService.loadNode(NodeState.model(), navigation, GenericScope.branchShape(names), null);
+        UserNode.Model model = new UserNode.Model(descriptionService, context.getUserContext().getLocale());
+        NodeContext<UserNode, NodeState> root =  navigationService.loadNode(model, navigation, GenericScope.branchShape(names), null);
         if (root != null) {
 
             //
             Map<String, RequestParameter> requestParameters = context.getParameters();
 
             // Get our node from the navigation
-            NodeContext<?, NodeState> current = root;
+            NodeContext<UserNode, NodeState> current = root;
             for (String name : names) {
                 current = current.get(name);
                 if (current == null) {
@@ -302,7 +308,12 @@ public class Controller {
                         ReactivePage rp = new ReactivePage(
                                 pageContext,
                                 context.getUserContext().getLocale(),
-                                new RenderingContext(page.getLayoutId(), page.getKey().format()));
+                                new RenderingContext(
+                                        page.getLayoutId(), 
+                                        page.getKey().format(),
+                                        layoutId,
+                                        page.getState() != null ? page.getState().getDisplayName() : null,
+                                        current.getParentNode() != null ? current.getParentNode().getLink() : null));
 
                         //
                        return rp.execute(siteLayout, pageLayout, context);
