@@ -40,9 +40,6 @@ public class UserNavigation {
     /** . */
     private final boolean modifiable;
 
-    /** . */
-    private ResourceBundle bundle;
-
     UserNavigation(UserPortalImpl portal, NavigationContext navigation, boolean modifiable) {
         if (navigation == null) {
             throw new NullPointerException();
@@ -58,11 +55,9 @@ public class UserNavigation {
     }
 
     public ResourceBundle getBundle() {
+        ResourceBundle bundle = portal.context.getBundle(this);
         if (bundle == null) {
-            bundle = portal.context.getBundle(this);
-            if (bundle == null) {
-                bundle = EmptyResourceBundle.INSTANCE;
-            }
+            bundle = EmptyResourceBundle.INSTANCE;
         }
         return bundle;
     }
