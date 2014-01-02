@@ -17,7 +17,7 @@
 						UIFormSelectBox membership = uicomponent.getChild(UIFormSelectBox.class);
 						UIPopupWindow popupWindow = uicomponent.getChild(UIPopupWindow.class);
 				 %>
-                                        <tr><td colspan="2" style="text-align: right;"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
+                                        <tr><td colspan="2" class="require"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
 					<tr>
 						<td class="FieldLabel" scope="row"><label for="username"><%=_ctx.appRes(uicomponent.getName() + ".label.username")%></label></td>
 						<td class="FieldComponent ClearFix" >

@@ -35,7 +35,7 @@
 			<div class="FormInfoIcon UIForm">
 				<table class="UIPropertyInfo UIFormGrid" summary="Page selector table">
                                         <% if (page == null) { %>
-                                        <tr><td colspan="2" style="text-align: right;"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
+                                        <tr><td colspan="2" class="require"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
                                         <% } %>
 					<tr>
 						<td class="FieldLabel" scope="row"><%=_ctx.appRes(uicomponent.getId()+".header.id")%>:</td>

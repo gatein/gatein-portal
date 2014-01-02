@@ -37,6 +37,11 @@
 	vertical-align: top;
 }
 
+.UIFormGrid td.require {
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
+}
+
 .UIForm .UIFormGrid td.FieldComponent {
 	padding: 4px;
 	*padding: 2px 0px 4px 4px;

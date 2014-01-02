@@ -21,7 +21,7 @@
                                         }
                                         if (required) {
                                 %>
-                                        <tr><td colspan="2" style="text-align: right;"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
+                                        <tr><td colspan="2" class="require"><%=_ctx.appRes("legend.required_field") %> (*)</td></tr>
                                 <%
                                         }
 					for(field in uiform.getChildren()) { 

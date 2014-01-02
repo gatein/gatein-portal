@@ -74,7 +74,7 @@ public class UIFormInputWithActions extends UIFormInputSet {
           }
         }
         if (required)
-          w.write("<tr><td colspan=\"2\" style=\"text-align: right;\">" + res.getString("legend.required_field") + " (*)</td></tr>");
+          w.write("<tr><td colspan=\"2\" class=\"require\">" + res.getString("legend.required_field") + " (*)</td></tr>");
         for (UIComponent inputEntry : getChildren()) {
             if (inputEntry.isRendered()) {
                 String label;

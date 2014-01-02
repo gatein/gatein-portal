@@ -18,7 +18,7 @@
                                 %>
                                         <tr>
                                           <td class="FieldLabel portlet-form-label" scope="row"></td>
-                                          <td class="FieldComponent portlet-input-field"><span style="float: right;"><%=_ctx.appRes("legend.required_field") %> (*)</span></td>
+                                          <td class="FieldComponent portlet-input-field require"><%=_ctx.appRes("legend.required_field") %> (*)</td>
                                         </tr>
                                 <%
                                         }
