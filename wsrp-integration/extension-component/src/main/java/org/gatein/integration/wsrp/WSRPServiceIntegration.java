@@ -404,7 +404,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
             consumerRegistry.stop();
         } catch (Exception e) {
             log.debug(e);
-            throw new RuntimeException("Couldn't stop WSRP consumers registry.", e);
+            // We do not throw an exception here, as we cannot guarantee that we'll close before the connection
+            // gets closed, so, we just shutdown uncleanly...
         }
 
         consumerRegistry = null;
