@@ -75,11 +75,17 @@
 }
 
 .composers {
-    border: solid 1px #ddd;
+    /*border: solid 1px #ddd;*/
+    border: solid 1px #08c;
+    background-color: #08c;
     border-radius: 4px;
     padding-top: 5px;
     margin: -15px 0 20px;
     z-index: 10;
+}
+.composers .close {
+    color: #fff;
+    opacity: 0.9;
 }
 .composers .accordion {
     margin-bottom: 0;
@@ -105,8 +111,33 @@
 .composers ul.nav-tabs > li:first-child {
     margin-left: 5px;
 }
+.composers ul.nav-tabs > li > a {
+    color: #fff;
+    border: none;
+}
+.composers ul.nav-tabs > li.active > a {
+    color: #08c;
+}
+.composers ul.nav-tabs > li.active > a:hover {
+    cursor: default;
+    background-color: #fff;
+    color: #08c;
+    border: none;
+    margin-top: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.composers ul.nav-tabs > li > a:hover {
+    background-color: #006687;
+    margin-top: -1px;
+    padding-top: 9px;
+    padding-bottom: 7px;
+}
+
 .composers .tab-content {
     overflow: visible;
+    background-color: #fff;
+    border-radius: 0 0 4px 4px;
 }
 .composers .tab-content > .active {
     padding: 11px;
@@ -130,7 +161,7 @@ li.portlet-placeholder {
 
 .composers ul.composer-layouts-list label {
     display: inline-block;
-    padding-left: 5px;
+    margin-bottom: 0;
 }
 .composers ul.composer-layouts-list input[type="radio"] {
     margin: 0;

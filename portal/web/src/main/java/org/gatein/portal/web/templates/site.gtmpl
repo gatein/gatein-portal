@@ -46,26 +46,61 @@
                 </div>
             </div>
             <div class="tab-pane" id="composer-layouts">
-                <ul class="unstyled composer-layouts-list">
+                <ul class="inline composer-layouts-list">
                     <li>
-                        <input type="radio" name="composer-layout" id="composer-layout-1" data-layoutURL="@{PageEditor.switchLayout(id='1')}"/>
-                        <label for="composer-layout-1">One column</label>
+                        <div class="text-center">
+                            <label for="composer-layout-1">
+                                <img alt="" src="/portal/assets/org/gatein/portal/web/assets/images/1_column.png" width="70px"/>
+                                <br/>
+                                <span>One column</span>
+                            </label>
+                            <br/>
+                            <input type="radio" name="composer-layout" id="composer-layout-1" data-layoutURL="@{PageEditor.switchLayout(id='1')}"/>
+                        </div>
                     </li>
                     <li>
-                        <input type="radio" name="composer-layout" id="composer-layout-2" data-layoutURL="@{PageEditor.switchLayout(id='2')}"/>
-                        <label for="composer-layout-2">Two columns 70 30</label>
+                        <div class="text-center">
+                            <label for="composer-layout-2">
+                                <img alt="" src="/portal/assets/org/gatein/portal/web/assets/images/2_columns_70_30.png" width="70px"/>
+                                <br/>
+                                <span>Two columns 70 30</span>
+                            </label>
+                            <br/>
+                            <input type="radio" name="composer-layout" id="composer-layout-2" data-layoutURL="@{PageEditor.switchLayout(id='2')}"/>
+                        </div>
                     </li>
                     <li>
-                        <input type="radio" name="composer-layout" id="composer-layout-3" data-layoutURL="@{PageEditor.switchLayout(id='3')}"/>
-                        <label for="composer-layout-3">Two columns One row</label>
+                        <div class="text-center">
+                            <label for="composer-layout-3">
+                                <img alt="" src="/portal/assets/org/gatein/portal/web/assets/images/2_2_columns.png" width="70px"/>
+                                <br/>
+                                <span>Two columns One row</span>
+                            </label>
+                            <br/>
+                            <input type="radio" name="composer-layout" id="composer-layout-3" data-layoutURL="@{PageEditor.switchLayout(id='3')}"/>
+                        </div>
                     </li>
                     <li>
-                        <input type="radio" name="composer-layout" id="composer-layout-4" data-layoutURL="@{PageEditor.switchLayout(id='4')}"/>
-                        <label for="composer-layout-4">One row Two columns</label>
+                        <div class="text-center">
+                            <label for="composer-layout-4">
+                                <img alt="" src="/portal/assets/org/gatein/portal/web/assets/images/1_row_2_columns.png" width="70px"/>
+                                <br/>
+                                <span>One row Two columns</span>
+                            </label>
+                            <br/>
+                            <input type="radio" name="composer-layout" id="composer-layout-4" data-layoutURL="@{PageEditor.switchLayout(id='4')}"/>
+                        </div>
                     </li>
                     <li>
-                        <input type="radio" name="composer-layout" id="composer-layout-5" data-layoutURL="@{PageEditor.switchLayout(id='5')}"/>
-                        <label for="composer-layout-5">Three columns</label>
+                        <div class="text-center">
+                            <label for="composer-layout-5">
+                                <img alt="" src="/portal/assets/org/gatein/portal/web/assets/images/3_columns.png" width="70px"/>
+                                <br/>
+                                <span>Three columns</span>
+                            </label>
+                            <br/>
+                            <input type="radio" name="composer-layout" id="composer-layout-5" data-layoutURL="@{PageEditor.switchLayout(id='5')}"/>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -123,14 +158,14 @@
         ${"<%"}
             _.each(items, function(contentType, i){
                 if(contentType.children.length > 0) { ${"%>"}
-                    <div class="accordion content-type" id="composer-content-acccordion-${"<%- contentType.tagName %>"}">
+                    <div class="accordion content-type" id="composer-content-acccordion-${"<%- contentType.tagName %>"}" data-tagName="${"<%- contentType.tagName %>"}">
                         <div class="accordion-group">
                             <div class="accordion-heading">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#composer-content-acccordion-${"<%- contentType.tagName %>"}" href="#collapse${"<%- contentType.tagName %>"}">
                                     ${"<%- contentType.displayName%>"}
                                 </a>
                             </div>
-                            <div id="collapse${"<%- contentType.tagName %>"}" class="accordion-body collapse in">
+                            <div id="collapse${"<%- contentType.tagName %>"}" class="accordion-body collapse">
                                 <div class="accordion-inner">
                                     <ul class="inline">
                                         ${"<%"}

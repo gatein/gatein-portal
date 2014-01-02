@@ -140,9 +140,10 @@
     render: function() {
       var $container = this.$el.find('#composer-list-contents');
 
+      var renderData = this.model.getRenderData();
       if ($.trim($container.html()) == '') {
         var template = $("#composer-list-contents-template").html();
-        var html = _.template(template, {items: this.model.getRenderData()});
+        var html = _.template(template, {items: renderData});
         $container.html(html);
         var factoryId = window.editorView.getPageView().model.get('factoryId');
         $("input#composer-layout-" + factoryId).attr('checked', true);
@@ -155,38 +156,33 @@
           }
         });
       } else {
-        this.filterApp();
+        this.filterApp(renderData);
       }
     },
 
-    filterApp: function() {
-      var filter = this.model.get('filterValue');
-      var regex = new RegExp(filter, 'i');
+    filterApp: function(data) {
 
-      var _this = this;
-
-      //Get all: content type div
       this.$el.find(".content-type").each(function() {
         var $contentType = $(this);
-        var display = false;
+        var contentType = _.findWhere(data, {tagName: $contentType.attr("data-tagName")});
 
-        $contentType.find(".content").each(function() {
-          var $content = $(this);
-          var contentId = $content.attr("data-contentId");
-          var content = _this.model.findContent(contentId);
-
-          if(content && regex.test(content.get('title'))) {
-            $content.show();
-            display = true;
-          } else {
-            $content.hide();
-          }
-        });
-
-        if(display) {
-          $contentType.show();
-        } else {
+        if(!contentType) {
           $contentType.hide();
+        } else {
+          $contentType.show();
+
+          //Filter children
+          var contents = contentType.children;
+
+          $contentType.find(".content").each(function() {
+            var $content = $(this);
+            var content = _.findWhere(contents, {contentId: $content.attr("data-contentId")});
+            if(!content) {
+              $content.hide();
+            } else {
+              $content.show();
+            }
+          });
         }
       });
     },
