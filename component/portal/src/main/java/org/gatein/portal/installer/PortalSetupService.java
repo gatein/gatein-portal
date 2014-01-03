@@ -34,12 +34,16 @@ import java.security.SecureRandom;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
@@ -54,6 +58,7 @@ import org.picocontainer.Startable;
  *
  */
 public class PortalSetupService implements Startable {
+    private static Log log = ExoLogger.getLogger(PortalSetupService.class);
 
     public static final String GATEIN_SETUP_ENABLE = "gatein.portal.setup.enable";
     public static final String ROOT_PASSWORD_PROPERTY = "gatein.portal.setup.initialpassword.root";
@@ -62,61 +67,89 @@ public class PortalSetupService implements Startable {
     private static int COUNT = 9;
     private static String KEY = "somearbitrarycrazystringthatdoesnotmatter";
 
-    private String WORKSPACE_NAME = "portal-system";
-    private String SETUP_FLAG = "gatein-setup-flag";
+    private static final String SETUP_FLAG = "gatein-setup-flag";
+
+    private String jcrWS;
+    private String jcrRepo;
+    private ManageableRepository repository;
 
     // We check root password per portal container
     private Map<String, Boolean> setup = new ConcurrentHashMap<String, Boolean>();
 
-    private OrganizationService service;
+    private OrganizationService orgService;
+    private RepositoryService jcrService;
 
-    public PortalSetupService(InitParams params, OrganizationService service) {
-        ValueParam param = params.getValueParam("default.workspace");
-        if (param != null) {
-            WORKSPACE_NAME = param.getValue();
+    public PortalSetupService(InitParams params, OrganizationService orgService, RepositoryService jcrService) throws Exception {
+
+        ValueParam repoConfig = params.getValueParam("repository");
+        if (repoConfig != null) {
+            jcrRepo = repoConfig.getValue().trim();
         }
-        this.service = service;
+        ValueParam ws = params.getValueParam("workspace");
+        if (ws != null) {
+            jcrWS = ws.getValue().trim();
+        }
+
+        //
+        this.orgService = orgService;
+        this.jcrService = jcrService;
     }
 
     @Override
     public void start() {
-        RequestLifeCycle.begin(PortalContainer.getInstance());
-        checkJcrFlag();
         try {
-            if (!isSetup()) {
-                User root = getRootUser();
-                root.setPassword(rootPassword());
-                service.getUserHandler().saveUser(root, false);
+            if (jcrRepo != null) {
+                repository = jcrService.getRepository(jcrRepo);
+            } else {
+                repository = jcrService.getCurrentRepository();
+            }
+
+            if (jcrWS == null) {
+                jcrWS = repository.getConfiguration().getDefaultWorkspaceName();
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            RequestLifeCycle.end();
+            log.error("Can't get JCR repository", e);
+        }
+
+        if (isEnable()) {
+            RequestLifeCycle.begin(PortalContainer.getInstance());
+            checkJcrFlag();
+            try {
+                if (!isSetup()) {
+                    User root = getRootUser();
+                    root.setPassword(rootPassword());
+                    orgService.getUserHandler().saveUser(root, true);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                RequestLifeCycle.end();
+            }
         }
     }
 
     public User getRootUser() throws Exception {
-        User root = service.getUserHandler().findUserByName("root", UserStatus.BOTH);
+        User root = orgService.getUserHandler().findUserByName("root", UserStatus.BOTH);
         // In the case the root user is not present
         // This case can happens if organization-configuration.xml is not well configured
         if (root == null) {
-            root = service.getUserHandler().createUserInstance("root");
+            root = orgService.getUserHandler().createUserInstance("root");
             root.setFirstName("Root");
             root.setLastName("Root");
             root.setEmail("root@localhost");
             root.setDisplayName("root");
-            service.getUserHandler().createUser(root, true);
+            orgService.getUserHandler().createUser(root, true);
             // Get memberships
-            MembershipType manager = service.getMembershipTypeHandler().findMembershipType("manager");
-            MembershipType member = service.getMembershipTypeHandler().findMembershipType("member");
+            MembershipType manager = orgService.getMembershipTypeHandler().findMembershipType("manager");
+            MembershipType member = orgService.getMembershipTypeHandler().findMembershipType("member");
             // Get groups
-            Group administrators = service.getGroupHandler().findGroupById("/platform/administrators");
-            Group users = service.getGroupHandler().findGroupById("/platform/users");
-            Group executive_board = service.getGroupHandler().findGroupById("/organization/management/executive-board");
+            Group administrators = orgService.getGroupHandler().findGroupById("/platform/administrators");
+            Group users = orgService.getGroupHandler().findGroupById("/platform/users");
+            Group executive_board = orgService.getGroupHandler().findGroupById("/organization/management/executive-board");
             // Assign users
-            service.getMembershipHandler().linkMembership(root, administrators, manager, true);
-            service.getMembershipHandler().linkMembership(root, users, member, true);
-            service.getMembershipHandler().linkMembership(root, executive_board, member, true);
+            orgService.getMembershipHandler().linkMembership(root, administrators, manager, true);
+            orgService.getMembershipHandler().linkMembership(root, users, member, true);
+            orgService.getMembershipHandler().linkMembership(root, executive_board, member, true);
         }
         return root;
     }
@@ -128,9 +161,7 @@ public class PortalSetupService implements Startable {
     private void checkJcrFlag() {
         setup.put(getPCName(), false);
         try {
-            RepositoryService repoService = (RepositoryService) ExoContainerContext.getCurrentContainer()
-                    .getComponentInstanceOfType(RepositoryService.class);
-            Session session = repoService.getCurrentRepository().getSystemSession(WORKSPACE_NAME);
+            Session session = getJcrSession();
             if (session.itemExists("/" + SETUP_FLAG))
                 setup.put(getPCName(), true);
             session.logout();
@@ -142,9 +173,7 @@ public class PortalSetupService implements Startable {
     public void setJcrFlag() {
         RequestLifeCycle.begin(PortalContainer.getInstance());
         try {
-            RepositoryService repoService = (RepositoryService) ExoContainerContext.getCurrentContainer()
-                    .getComponentInstanceOfType(RepositoryService.class);
-            Session session = repoService.getCurrentRepository().getSystemSession(WORKSPACE_NAME);
+            Session session = getJcrSession();
             session.getRootNode().addNode(SETUP_FLAG);
             session.save();
             session.logout();
@@ -229,6 +258,11 @@ public class PortalSetupService implements Startable {
         return isSetup(getPCName());
     }
 
+    public boolean isEnable() {
+        String config = PropertyManager.getProperty(PortalSetupService.GATEIN_SETUP_ENABLE);
+        return Boolean.parseBoolean(config);
+    }
+
     public void setFlag() {
         setup.put(getPCName(), true);
     }
@@ -239,5 +273,13 @@ public class PortalSetupService implements Startable {
 
     @Override
     public void stop() {
+    }
+
+    private Session getJcrSession() throws Exception {
+        if (repository == null) {
+            throw new IllegalStateException("repository is null, jcrSession can only be retrieved after PortalSetupService has started");
+        }
+
+        return repository.getSystemSession(jcrWS);
     }
 }

@@ -60,8 +60,6 @@ public class PortalSetupFilter implements Filter {
     private static final String PASSWORD2 = "password2";
     private static final String SETUP_ERROR = "org.gatein.portal.setup.error";
 
-    private boolean setupEnable = Boolean.parseBoolean(System.getProperty(PortalSetupService.GATEIN_SETUP_ENABLE, "false"));
-
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
 
@@ -70,7 +68,7 @@ public class PortalSetupFilter implements Filter {
         String context = httpReq.getContextPath().substring(1);
 
         PortalSetupService setupService = (PortalSetupService) PortalContainer.getInstance().getComponentInstance(PortalSetupService.class);
-        if (!setupEnable || setupService.isSetup(context) || isResourceUri(uri)) {
+        if (!setupService.isEnable() || setupService.isSetup(context) || isResourceUri(uri)) {
             chain.doFilter(req, resp);
         } else {
             if (uri.endsWith(SETUP_ACTION))

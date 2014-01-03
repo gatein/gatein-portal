@@ -260,7 +260,11 @@
     <type>org.gatein.portal.installer.PortalSetupService</type>
     <init-params>
       <value-param>
-        <name>default.workspace</name>
+        <name>repository</name>
+        <value>${gatein.jcr.repository.default:repository}</value>
+      </value-param>
+      <value-param>
+        <name>workspace</name>
         <value>${gatein.jcr.workspace.default:portal-system}</value>
       </value-param>
     </init-params>
