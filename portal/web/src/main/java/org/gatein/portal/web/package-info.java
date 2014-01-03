@@ -19,8 +19,9 @@
     @Binding(OAuthProviderTypeRegistry.class),
     @Binding(LoginHelper.class),
     @Binding(SSOHelper.class)})
+@WebJars(@WebJar("bootstrap"))
 @Assets({
-    @Asset(id = "bootstrap", value = "bootstrap-2.3.1.min.css"),
+    @Asset(id = "bootstrap", value = "bootstrap/2.3.2/css/bootstrap.min.css"),
     @Asset(id = "editor", value = "editor.css"),
     @Asset(id = "login-stylesheet", value = "login.css"),
     @Asset(id = "social-buttons", value = "social-buttons.css"),
@@ -53,6 +54,8 @@ import juzu.plugin.asset.Assets;
 import juzu.plugin.asset.WithAssets;
 import juzu.plugin.binding.Binding;
 import juzu.plugin.binding.Bindings;
+import juzu.plugin.webjars.WebJar;
+import juzu.plugin.webjars.WebJars;
 import juzu.template.Tag;
 import juzu.template.Tags;
 

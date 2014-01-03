@@ -32,7 +32,7 @@
   <name>GateIn Portal Module</name>
 
   <properties>
-    <juzu.version>0.8.0-beta2</juzu.version>
+    <juzu.version>0.8.0-beta4</juzu.version>
   </properties>
 
   <modules>
@@ -52,6 +52,11 @@
       <dependency>
         <groupId>org.juzu</groupId>
         <artifactId>juzu-core</artifactId>
+        <version>${juzu.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.juzu</groupId>
+        <artifactId>juzu-plugins-webjars</artifactId>
         <version>${juzu.version}</version>
       </dependency>
       <dependency>
