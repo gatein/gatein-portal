@@ -657,7 +657,7 @@ public class PageImportTaskTest extends TestCase {
 
         public Builder addPage(String name) {
             PageData page = new PageData(null, "", name, null, null, null, null, null, null, null,
-                    Collections.<String> emptyList(), Collections.<ComponentData> emptyList(), "", "", null, false);
+                    Collections.<String> emptyList(), Collections.<ComponentData> emptyList(), "", "", Collections.<String>emptyList(), false);
             pages.getPages().add(new Page(page));
 
             return this;
@@ -671,7 +671,7 @@ public class PageImportTaskTest extends TestCase {
     private class PageContextBuilder {
         PageContext page(String name) {
             return new PageContext(siteKey.page(name), new PageState(null, null, false, null, Collections.<String> emptyList(),
-                    null));
+                    Collections.<String>emptyList()));
         }
 
         List<PageContext> pages(Iterable<String> names) {

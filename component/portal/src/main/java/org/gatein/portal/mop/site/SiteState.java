@@ -43,7 +43,7 @@ public class SiteState implements Serializable {
     final List<String> accessPermissions;
 
     /** . */
-    final String editPermission;
+    final List<String> editPermissions;
 
     /** . */
     final Map<String, String> properties;
@@ -56,7 +56,7 @@ public class SiteState implements Serializable {
             String label,
             String description,
             List<String> accessPermissions,
-            String editPermission,
+            List<String> editPermissions,
             Map<String, String> properties,
             String skin) {
 
@@ -65,7 +65,7 @@ public class SiteState implements Serializable {
         this.label = label;
         this.description = description;
         this.accessPermissions = accessPermissions;
-        this.editPermission = editPermission;
+        this.editPermissions = editPermissions;
         this.properties = properties;
         this.skin = skin;
     }
@@ -86,8 +86,8 @@ public class SiteState implements Serializable {
         return accessPermissions;
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public List<String> getEditPermissions() {
+        return editPermissions;
     }
 
     public Map<String, String> getProperties() {
@@ -109,7 +109,7 @@ public class SiteState implements Serializable {
                     Safe.equals(label, that.label) &&
                     Safe.equals(description, that.description) &&
                     Safe.equals(accessPermissions, that.accessPermissions) &&
-                    Safe.equals(editPermission, that.editPermission) &&
+                    Safe.equals(editPermissions, that.editPermissions) &&
                     Safe.equals(properties, that.properties) &&
                     Safe.equals(skin, that.skin);
         }
@@ -119,7 +119,7 @@ public class SiteState implements Serializable {
     @Override
     public String toString() {
         return "SiteState[locale=" + locale + ",label=" + label + ",description=" + description +
-                ",accessPermissions=" + accessPermissions + ",editPermission=" + editPermission +
+                ",accessPermissions=" + accessPermissions + ",editPermission=" + editPermissions +
                 ",properties=" + properties + ",skin=" + skin + "]";
     }
 }

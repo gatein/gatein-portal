@@ -63,7 +63,7 @@ public class TestUserPageACL extends AbstractTestUserACL {
         page = new Page();
         page.setOwnerType("user");
         page.setOwnerId("user");
-        page.setEditPermission("manager:/manageable");
+        page.setEditPermissions(new String[]{"manager:/manageable"});
         assertTrue(root.hasPermission(page));
         assertFalse(administrator.hasPermission(page));
         assertFalse(manager.hasPermission(page));
@@ -97,7 +97,7 @@ public class TestUserPageACL extends AbstractTestUserACL {
         page.setOwnerType("user");
         page.setOwnerId("user");
         page.setAccessPermissions(new String[0]);
-        page.setEditPermission("Everyone");
+        page.setEditPermissions(new String[]{"Everyone"});
         assertTrue(root.hasPermission(page));
         assertFalse(administrator.hasPermission(page));
         assertFalse(manager.hasPermission(page));

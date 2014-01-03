@@ -93,7 +93,7 @@ public class MongoPageStore implements PageStore {
                 (Boolean) doc.get("show_max_window"),
                 (String) doc.get("factory_id"),
                 (List<String>) doc.get("access-permissions"),
-                Utils.firstElement((List<String>) doc.get("edit-permissions"))
+                (List<String>) doc.get("edit-permissions")
         );
         return new PageData(pageKey, id.toString(), id.toString(), pageState);
     }
@@ -120,7 +120,7 @@ public class MongoPageStore implements PageStore {
         doc.put("display_name", pageState.getDisplayName());
         doc.put("description", pageState.getDescription());
         doc.put("access-permissions", pageState.getAccessPermissions());
-        doc.put("edit-permissions", Utils.safeList(pageState.getEditPermission()));
+        doc.put("edit-permissions", pageState.getEditPermissions());
         doc.put("factory_id", pageState.getFactoryId());
         doc.put("show_max_window", pageState.getShowMaxWindow());
         pages.save(doc);

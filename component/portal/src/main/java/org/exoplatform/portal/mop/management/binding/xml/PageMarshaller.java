@@ -114,7 +114,7 @@ public class PageMarshaller extends AbstractMarshaller<Page.PageSet> {
 
         // Access/Edit permissions
         marshalAccessPermissions(writer, page.getAccessPermissions());
-        marshalEditPermission(writer, page.getEditPermission());
+        marshalEditPermission(writer, page.getEditPermissions());
 
         writeOptionalElement(writer, Element.SHOW_MAX_WINDOW, WritableValueTypes.BOOLEAN, page.isShowMaxWindow());
 
@@ -150,7 +150,7 @@ public class PageMarshaller extends AbstractMarshaller<Page.PageSet> {
                     current = navigator.sibling();
                     break;
                 case EDIT_PERMISSION:
-                    page.setEditPermission(unmarshalEditPermission(navigator));
+                    page.setEditPermissions(unmarshalEditPermission(navigator));
                     current = navigator.sibling();
                     break;
                 case SHOW_MAX_WINDOW:

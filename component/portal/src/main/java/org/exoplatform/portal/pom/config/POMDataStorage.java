@@ -174,7 +174,7 @@ public class POMDataStorage implements ModelDataStorage {
                     context.getState().getLabel(),
                     context.getState().getDescription(),
                     context.getState().getAccessPermissions(),
-                    context.getState().getEditPermission(),
+                    context.getState().getEditPermissions(),
                     context.getState().getProperties(),
                     context.getState().getSkin(),
                     container,
@@ -281,7 +281,7 @@ public class POMDataStorage implements ModelDataStorage {
                     container.getChildren(),
                     key.getType(),
                     key.getId(),
-                    null,
+                    Collections.<String>emptyList(),
                     false);
         } else {
             return null;
@@ -380,7 +380,7 @@ public class POMDataStorage implements ModelDataStorage {
                     page.isShowMaxWindow(),
                     page.getFactoryId(),
                     page.getAccessPermissions(),
-                    page.getEditPermission()
+                    page.getEditPermissions()
             ));
             pageService.savePage(context);
         }

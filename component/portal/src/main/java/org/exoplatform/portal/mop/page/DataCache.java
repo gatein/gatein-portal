@@ -67,11 +67,11 @@ abstract class DataCache {
 
         //
         List<String> accessPermissions = Collections.emptyList();
-        String editPermission = null;
+        List<String> editPermission = null;
         if (page.isAdapted(ProtectedResource.class)) {
             ProtectedResource pr = page.adapt(ProtectedResource.class);
             accessPermissions = pr.getAccessPermissions();
-            editPermission = pr.getEditPermission();
+            editPermission = pr.getEditPermissions();
         }
 
         //

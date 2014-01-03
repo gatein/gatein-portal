@@ -41,7 +41,7 @@ public class Page extends Container {
 
     private String ownerId;
 
-    private String editPermission;
+    private String[] editPermissions;
 
     private boolean showMaxWindow = false;
 
@@ -62,7 +62,7 @@ public class Page extends Container {
         //
         this.ownerType = data.getOwnerType();
         this.ownerId = data.getOwnerId();
-        this.editPermission = data.getEditPermission();
+        this.editPermissions = data.getEditPermissions().toArray(new String[data.getEditPermissions().size()]);
         this.showMaxWindow = data.isShowMaxWindow();
     }
 
@@ -86,12 +86,12 @@ public class Page extends Container {
         this.ownerType = ownerType;
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public String[] getEditPermissions() {
+        return editPermissions;
     }
 
-    public void setEditPermission(String editPermission) {
-        this.editPermission = editPermission;
+    public void setEditPermissions(String[] editPermissions) {
+        this.editPermissions = editPermissions;
     }
 
     public boolean isShowMaxWindow() {
@@ -146,7 +146,7 @@ public class Page extends Container {
     public PageData build() {
         List<ComponentData> children = buildChildren();
         return new PageData(storageId, id, name, icon, template, factoryId, title, description, width, height,
-                Utils.safeImmutableList(accessPermissions), children, ownerType, ownerId, editPermission, showMaxWindow);
+                Utils.safeImmutableList(accessPermissions), children, ownerType, ownerId, Utils.safeImmutableList(editPermissions), showMaxWindow);
     }
 
     public static class PageSet {
@@ -176,7 +176,8 @@ public class Page extends Container {
         setShowMaxWindow(state.getShowMaxWindow());
         setAccessPermissions(state.getAccessPermissions() != null ? state.getAccessPermissions()
                 .toArray(new String[state.getAccessPermissions().size()]) : null);
-        setEditPermission(state.getEditPermission());
+        setEditPermissions(state.getEditPermissions() != null ? state.getEditPermissions()
+                .toArray(new String[state.getEditPermissions().size()]) : null);
         return this;
     }
 

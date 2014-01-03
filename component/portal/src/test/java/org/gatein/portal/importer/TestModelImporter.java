@@ -157,14 +157,14 @@ public class TestModelImporter extends AbstractMopServiceTest {
                 true,
                 importMode + "_foo_factory_id",
                 Arrays.asList(importMode + "_foo_access_permission"),
-                importMode + "_foo_edit_permission");
+                Arrays.asList(importMode + "_foo_edit_permission"));
         PageState homeState = new PageState(
                 "Home Page",
                 "Home Page descripton",
                 true,
                 "Default",
                 Arrays.asList("Everyone"),
-                "*:/platform/administrators"
+                Arrays.asList("*:/platform/administrators")
         );
         PageState webexState = new PageState(
                 "Web Explorer Page",
@@ -172,7 +172,7 @@ public class TestModelImporter extends AbstractMopServiceTest {
                 true,
                 "Default",
                 Arrays.asList("Everyone"),
-                "*:/platform/administrators"
+                Arrays.asList("*:/platform/administrators")
         );
         getPageService().savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_foo"), fooState));
         getPageService().savePage(new PageContext(new PageKey(SiteKey.portal(importMode + "Import"), importMode + "_home"), homeState));

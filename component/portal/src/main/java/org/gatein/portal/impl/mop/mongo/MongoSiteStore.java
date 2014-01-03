@@ -68,7 +68,7 @@ public class MongoSiteStore implements SiteStore {
                     (String) doc.get("label"),
                     (String) doc.get("description"),
                     (List<String>) doc.get("access-permissions"),
-                    Utils.firstElement((List<String>) doc.get("edit-permissions")),
+                    (List<String>) doc.get("edit-permissions"),
                     Collections.<String, String>emptyMap(),
                     (String) doc.get("skin")
             );
@@ -95,7 +95,7 @@ public class MongoSiteStore implements SiteStore {
         doc.put("label", siteState.getLabel());
         doc.put("description", siteState.getDescription());
         doc.put("access-permissions", siteState.getAccessPermissions());
-        doc.put("edit-permissions", Utils.safeList(siteState.getEditPermission()));
+        doc.put("edit-permissions", siteState.getEditPermissions());
         doc.put("skin", siteState.getSkin());
         doc.put("properties", siteState.getProperties());
         sites.save(doc);

@@ -77,7 +77,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL {
         page.setOwnerType(getOwnerType());
         page.setOwnerId("foo");
         page.setAccessPermissions(new String[0]);
-        page.setEditPermission("Everyone");
+        page.setEditPermissions(new String[]{"Everyone"});
 
         //
         assertTrue(root.hasPermission(page));
@@ -120,7 +120,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL {
         page.setOwnerType(getOwnerType());
         page.setOwnerId("foo");
         page.setAccessPermissions(new String[0]);
-        page.setEditPermission("whatever:/platform/guests");
+        page.setEditPermissions(new String[]{"whatever:/platform/guests"});
 
         //
         assertTrue(root.hasPermission(page));
@@ -187,7 +187,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL {
         page.setOwnerType(getOwnerType());
         page.setOwnerId("foo");
         page.setAccessPermissions(new String[0]);
-        page.setEditPermission("manager:/manageable");
+        page.setEditPermissions(new String[]{"manager:/manageable"});
 
         //
         assertTrue(root.hasPermission(page));
@@ -197,7 +197,7 @@ public abstract class AbstractTestSharedPageACL extends AbstractTestUserACL {
         assertFalse(guest.hasPermission(page));
 
         //
-        page.setEditPermission("*:/manageable");
+        page.setEditPermissions(new String[]{"*:/manageable"});
 
         //
         assertTrue(root.hasPermission(page));

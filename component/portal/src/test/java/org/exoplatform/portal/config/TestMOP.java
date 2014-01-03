@@ -164,7 +164,7 @@ public class TestMOP extends AbstractConfigTest {
         assertEquals("test", portal.getName());
         assertEquals("en", portal.getLocale());
         assertTrue(Arrays.equals(new String[] { "test_access_permissions" }, portal.getAccessPermissions()));
-        assertEquals("test_edit_permission", portal.getEditPermission());
+        assertTrue(Arrays.equals(new String[] {"test_edit_permission"}, portal.getEditPermissions()));
         assertEquals("test_skin", portal.getSkin());
         assertEquals("test_prop_value", portal.getProperty("prop_key"));
         assertNull(portal.getLabel());
@@ -191,7 +191,7 @@ public class TestMOP extends AbstractConfigTest {
         assertEquals("test_title", pageContext.getState().getDisplayName());
         assertEquals("test_factory_id", pageContext.getState().getFactoryId());
         assertEquals(Arrays.<String> asList("test_access_permissions"), pageContext.getState().getAccessPermissions());
-        assertEquals("test_edit_permission", pageContext.getState().getEditPermission());
+        assertEquals(Arrays.<String>asList("test_edit_permission"), pageContext.getState().getEditPermissions());
         assertEquals(true, pageContext.getState().getShowMaxWindow());
 
         //
@@ -281,7 +281,7 @@ public class TestMOP extends AbstractConfigTest {
         assertTrue(portal.isAdapted(ProtectedResource.class));
         ProtectedResource pr = portal.adapt(ProtectedResource.class);
         assertEquals(Arrays.asList("test_access_permissions"), pr.getAccessPermissions());
-        assertEquals("test_edit_permission", pr.getEditPermission());
+        assertEquals(Arrays.asList("test_edit_permission"), pr.getEditPermissions());
 
         //
         assertEquals("test", portal.getName());
@@ -315,7 +315,7 @@ public class TestMOP extends AbstractConfigTest {
         assertTrue(testPage.isAdapted(ProtectedResource.class));
         ProtectedResource pr = testPage.adapt(ProtectedResource.class);
         assertEquals(Arrays.asList("test_access_permissions"), pr.getAccessPermissions());
-        assertEquals("test_edit_permission", pr.getEditPermission());
+        assertEquals(Arrays.asList("test_edit_permission"), pr.getEditPermissions());
 
         //
         Described testPageDescribed = testPage.adapt(Described.class);

@@ -105,7 +105,7 @@ public abstract class AbstractMopServiceTest extends AbstractMOPTest {
     }
 
     protected final SiteData createSite(SiteType type, String siteName) {
-        return createSite(type, siteName, new SiteState("fr", "", "", Arrays.<String>asList(), "", Collections.<String, String>emptyMap(), ""));
+        return createSite(type, siteName, new SiteState("fr", "", "", Arrays.<String>asList(), Arrays.<String>asList(), Collections.<String, String>emptyMap(), ""));
     }
 
     protected final SiteData createSite(SiteType type, String siteName, SiteState state) {

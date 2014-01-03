@@ -39,8 +39,8 @@ public abstract class ProtectedResource {
     public abstract void setAccessPermissions(List<String> accessPermissions);
 
     @Property(name = "gtn:edit-permissions")
-    public abstract String getEditPermission();
+    public abstract List<String> getEditPermissions();
 
-    public abstract void setEditPermission(String editPermission);
+    public abstract void setEditPermissions(List<String> editPermissions);
 
 }

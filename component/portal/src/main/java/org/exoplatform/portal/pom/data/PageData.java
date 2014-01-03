@@ -31,19 +31,19 @@ public class PageData extends ContainerData {
     private final PageKey key;
 
     /** . */
-    private final String editPermission;
+    private final List<String> editPermissions;
 
     /** . */
     private final boolean showMaxWindow;
 
     public PageData(String storageId, String id, String name, String icon, String template, String factoryId, String title,
             String description, String width, String height, List<String> accessPermissions, List<ComponentData> children,
-            String ownerType, String ownerId, String editPermission, boolean showMaxWindow) {
+            String ownerType, String ownerId, List<String> editPermissions, boolean showMaxWindow) {
         super(storageId, null, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
 
         //
         this.key = new PageKey(ownerType, ownerId, name);
-        this.editPermission = editPermission;
+        this.editPermissions = editPermissions;
         this.showMaxWindow = showMaxWindow;
     }
 
@@ -59,8 +59,8 @@ public class PageData extends ContainerData {
         return key.getId();
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public List<String> getEditPermissions() {
+        return editPermissions;
     }
 
     public boolean isShowMaxWindow() {

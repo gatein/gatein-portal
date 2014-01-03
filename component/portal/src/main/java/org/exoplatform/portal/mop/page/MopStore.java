@@ -95,7 +95,7 @@ public class MopStore implements PageStore {
         if (state != null) {
             ProtectedResource pr = dst.adapt(ProtectedResource.class);
             pr.setAccessPermissions(state.getAccessPermissions());
-            pr.setEditPermission(state.getEditPermission());
+            pr.setEditPermissions(state.getEditPermissions());
 
             //
             Described described = dst.adapt(Described.class);
@@ -189,7 +189,7 @@ public class MopStore implements PageStore {
         ProtectedResource srcPR = srcPage.adapt(ProtectedResource.class);
         ProtectedResource dstPR = dstPage.adapt(ProtectedResource.class);
         dstPR.setAccessPermissions(srcPR.getAccessPermissions());
-        dstPR.setEditPermission(srcPR.getEditPermission());
+        dstPR.setEditPermissions(srcPR.getEditPermissions());
 
         // Need to clone page data structure as well
         copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());
@@ -218,7 +218,7 @@ public class MopStore implements PageStore {
                 ProtectedResource srcPR = srcChild.adapt(ProtectedResource.class);
                 ProtectedResource dstPR = dstChild.adapt(ProtectedResource.class);
                 dstPR.setAccessPermissions(srcPR.getAccessPermissions());
-                dstPR.setEditPermission(srcPR.getEditPermission());
+                dstPR.setEditPermissions(srcPR.getEditPermissions());
             }
 
             //

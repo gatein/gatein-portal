@@ -53,7 +53,7 @@ public class TestSecurityService extends AbstractMopServiceTest {
     public void testLifeCycle() throws Exception {
         //
         assertNull(getSecurityService().loadPermission(id));
-        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo"}, "bar"));
+        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo"}, new String[]{"bar"}));
         assertNotNull(getSecurityService().loadPermission(id));
 
         //
@@ -63,18 +63,18 @@ public class TestSecurityService extends AbstractMopServiceTest {
 
     public void testSavePermission() throws Exception {
         //
-        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo"}, "bar"));
+        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo"}, new String[]{"bar"}));
 
         //
         SecurityState state = persistence.loadPermission(id);
         assertEquals("foo", state.getAccessPermission()[0]);
-        assertEquals("bar", state.getEditPermission());
+        assertEquals("bar", state.getEditPermissions()[0]);
     }
 
     public void testUpdatePermission() throws Exception {
         assertNull(getSecurityService().loadPermission(id));
         
-        SecurityState state = new SecurityState(new String[] {"foo"}, "bar");
+        SecurityState state = new SecurityState(new String[] {"foo"}, new String[]{"bar"});
         getSecurityService().savePermission(id, state);
         assertEquals(state, getSecurityService().loadPermission(id));
 
@@ -85,14 +85,14 @@ public class TestSecurityService extends AbstractMopServiceTest {
         assertNull(update.getAccessPermission());
         
         //
-        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo2"}, "bar2"));
+        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo2"}, new String[] {"bar2"}));
         update = getSecurityService().loadPermission(id);
         assertEquals("foo2", update.getAccessPermission()[0]);
-        assertEquals("bar2", update.getEditPermission());
+        assertEquals("bar2", update.getEditPermissions()[0]);
     }
 
     public void testRemovePermission() throws Exception {
-        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo"}, "bar"));
+        getSecurityService().savePermission(id, new SecurityState(new String[] {"foo"}, new String[] {"bar"}));
 
         //
         assertNotNull(getSecurityService().loadPermission(id));

@@ -98,7 +98,7 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
         marshalAccessPermissions(writer, portalConfig.getAccessPermissions());
 
         // Edit permission
-        marshalEditPermission(writer, portalConfig.getEditPermission());
+        marshalEditPermission(writer, portalConfig.getEditPermissions());
 
         writeOptionalElement(writer, Element.SKIN, portalConfig.getSkin());
 
@@ -181,7 +181,7 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
                     current = navigator.sibling();
                     break;
                 case EDIT_PERMISSION:
-                    portalConfig.setEditPermission(unmarshalEditPermission(navigator));
+                    portalConfig.setEditPermissions(unmarshalEditPermission(navigator));
                     current = navigator.sibling();
                     break;
                 case PORTAL_LAYOUT:

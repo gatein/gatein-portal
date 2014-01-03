@@ -77,11 +77,11 @@ abstract class DataCache {
         if (site != null) {
             Attributes attrs = site.getAttributes();
             List<String> accessPermissions = Collections.emptyList();
-            String editPermission = null;
+            List<String> editPermissions = null;
             if (site.isAdapted(ProtectedResource.class)) {
                 ProtectedResource pr = site.adapt(ProtectedResource.class);
                 accessPermissions = pr.getAccessPermissions();
-                editPermission = pr.getEditPermission();
+                editPermissions = pr.getEditPermissions();
             }
             Described described = site.adapt(Described.class);
             Map<String, String> properties = new HashMap<String, String>();
@@ -93,7 +93,7 @@ abstract class DataCache {
                     described.getName(),
                     described.getDescription(),
                     accessPermissions,
-                    editPermission,
+                    editPermissions,
                     properties,
                     attrs.getValue(MappedAttributes.SKIN)
             );

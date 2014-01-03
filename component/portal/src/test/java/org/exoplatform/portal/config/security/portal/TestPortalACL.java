@@ -69,7 +69,7 @@ public class TestPortalACL extends AbstractTestUserACL {
     public void testPortalEditable() {
         PortalConfig portal = new PortalConfig();
         portal.setAccessPermissions(new String[0]);
-        portal.setEditPermission("manager:/manageable");
+        portal.setEditPermissions(new String[] {"manager:/manageable"});
 
         //
         assertTrue(root.hasEditPermission(portal));
@@ -89,7 +89,7 @@ public class TestPortalACL extends AbstractTestUserACL {
     public void testPortalAccessibleAndEditable() {
         PortalConfig portal = new PortalConfig();
         portal.setAccessPermissions(new String[] { "manager:/manageable" });
-        portal.setEditPermission("manager:/manageable");
+        portal.setEditPermissions(new String[] {"manager:/manageable"});
 
         //
         assertTrue(root.hasEditPermission(portal));

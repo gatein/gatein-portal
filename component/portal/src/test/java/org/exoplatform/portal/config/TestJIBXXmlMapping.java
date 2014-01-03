@@ -276,7 +276,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         //
         Page foo = set.getPages().get(0);
         assertEquals(Collections.singletonList("abc"), Arrays.asList(foo.getAccessPermissions()));
-        assertEquals("def", foo.getEditPermission());
+        assertEquals(Collections.singletonList("def"), Arrays.asList(foo.getEditPermissions()));
         assertEquals("foo", foo.getName());
         assertLayout(foo);
 
@@ -325,7 +325,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(Collections.singleton("entry_key"), properties.keySet());
         assertEquals("entry_value", properties.get("entry_key"));
         assertEquals(Collections.singletonList("an_access_permission"), Arrays.asList(site.getAccessPermissions()));
-        assertEquals("an_edit_permission", site.getEditPermission());
+        assertEquals(Collections.singletonList("an_edit_permission"), Arrays.asList(site.getEditPermissions()));
         assertLayout(site.getPortalLayout());
     }
 }

@@ -116,11 +116,11 @@ public class Mapper {
 
         //
         List<String> accessPermissions = Collections.emptyList();
-        String editPermission = null;
+        List<String> editPermissions = null;
         if (src.isAdapted(ProtectedResource.class)) {
             ProtectedResource pr = src.adapt(ProtectedResource.class);
             accessPermissions = pr.getAccessPermissions();
-            editPermission = pr.getEditPermission();
+            editPermissions = pr.getEditPermissions();
         }
 
         //
@@ -134,7 +134,7 @@ public class Mapper {
 
         //
         return new PortalData(src.getObjectId(), src.getName(), type, attrs.getValue(MappedAttributes.LOCALE),
-                described.getName(), described.getDescription(), accessPermissions, editPermission,
+                described.getName(), described.getDescription(), accessPermissions, editPermissions,
                 Collections.unmodifiableMap(properties), attrs.getValue(MappedAttributes.SKIN), layout, redirects);
     }
 
@@ -237,7 +237,7 @@ public class Mapper {
 
             ProtectedResource pr = dst.adapt(ProtectedResource.class);
             pr.setAccessPermissions(src.getAccessPermissions());
-            pr.setEditPermission(src.getEditPermission());
+            pr.setEditPermissions(src.getEditPermissions());
 
             Described described = dst.adapt(Described.class);
             described.setName(src.getLabel());

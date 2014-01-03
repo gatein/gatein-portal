@@ -85,7 +85,7 @@ public class PageImporter {
         if (dst != null) {
             PageState dstState = new PageState(dst.getTitle(), dst.getDescription(), dst.isShowMaxWindow(), dst.getFactoryId(),
                     dst.getAccessPermissions() != null ? Arrays.asList(dst.getAccessPermissions()) : null,
-                    dst.getEditPermission());
+                    dst.getEditPermissions() != null ? Arrays.asList(dst.getEditPermissions()) : null);
 
             //
             PageContext page = new PageContext(src.getPageKey(), dstState);

@@ -60,7 +60,7 @@ public class PortalConfig extends ModelObject {
 
     private String[] accessPermissions;
 
-    private String editPermission;
+    private String[] editPermissions;
 
     private Properties properties;
 
@@ -104,7 +104,7 @@ public class PortalConfig extends ModelObject {
         this.label = data.getLabel();
         this.description = data.getDescription();
         this.accessPermissions = data.getAccessPermissions().toArray(new String[data.getAccessPermissions().size()]);
-        this.editPermission = data.getEditPermission();
+        this.editPermissions = data.getEditPermissions().toArray(new String[data.getEditPermissions().size()]);
         this.properties = new Properties(data.getProperties());
         this.skin = data.getSkin();
         this.portalLayout = new Container(data.getPortalLayout());
@@ -143,12 +143,12 @@ public class PortalConfig extends ModelObject {
         accessPermissions = s;
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public String[] getEditPermissions() {
+        return editPermissions;
     }
 
-    public void setEditPermission(String editPermission) {
-        this.editPermission = editPermission;
+    public void setEditPermissions(String[] editPermissions) {
+        this.editPermissions = editPermissions;
     }
 
     public String getSkin() {
@@ -295,8 +295,9 @@ public class PortalConfig extends ModelObject {
 
     public PortalData build() {
         List<String> accessPermissions = Utils.safeImmutableList(this.accessPermissions);
+        List<String> editPermissions = Utils.safeImmutableList(this.editPermissions);
         Map<String, String> properties = Utils.safeImmutableMap(this.properties);
-        return new PortalData(storageId, name, type, locale, label, description, accessPermissions, editPermission, properties,
+        return new PortalData(storageId, name, type, locale, label, description, accessPermissions, editPermissions, properties,
                 skin, portalLayout.build(), buildRedirectData());
     }
 

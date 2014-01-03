@@ -149,7 +149,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         assertEquals("test", portal.getName());
         assertEquals("en", portal.getLocale());
         assertTrue(Arrays.equals(new String[] { "test_access_permissions" }, portal.getAccessPermissions()));
-        assertEquals("test_edit_permission", portal.getEditPermission());
+        assertTrue(Arrays.equals(new String[] {"test_edit_permission"}, portal.getEditPermissions()));
         assertEquals("test_skin", portal.getSkin());
         assertEquals("test_prop_value", portal.getProperty("prop_key"));
     }
@@ -174,7 +174,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         assertEquals("test_title", pageContext.getState().getDisplayName());
         assertEquals("test_factory_id", pageContext.getState().getFactoryId());
         assertEquals(Arrays.<String> asList("test_access_permissions"), pageContext.getState().getAccessPermissions());
-        assertEquals("test_edit_permission", pageContext.getState().getEditPermission());
+        assertEquals(Arrays.<String>asList("test_edit_permission"), pageContext.getState().getEditPermissions());
         assertEquals(true, pageContext.getState().getShowMaxWindow());
 
         //

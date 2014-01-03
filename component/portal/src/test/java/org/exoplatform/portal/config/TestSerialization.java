@@ -98,7 +98,7 @@ public class TestSerialization extends AbstractGateInTest {
 
     public void testPage() throws Exception {
         PageData obj = new PageData("foo01", "foo02", "foo03", "foo04", "foo05", "foo06", "foo07", "foo08", "foo09", "foo10",
-                Arrays.asList("foo11"), Arrays.<ComponentData> asList(body), "foo12", "foo13", "foo14", true);
+                Arrays.asList("foo11"), Arrays.<ComponentData> asList(body), "foo12", "foo13", Arrays.asList("foo14"), true);
         PageData clone = IOTools.clone(obj);
         assertEquals(obj.getStorageId(), clone.getStorageId());
         assertEquals(obj.getStorageName(), clone.getStorageName());
@@ -118,12 +118,12 @@ public class TestSerialization extends AbstractGateInTest {
         assertEquals(BodyType.PAGE, ((BodyData) clonedChildren.get(0)).getType());
         assertEquals(obj.getOwnerType(), clone.getOwnerType());
         assertEquals(obj.getOwnerId(), clone.getOwnerId());
-        assertEquals(obj.getEditPermission(), clone.getEditPermission());
+        assertEquals(obj.getEditPermissions(), clone.getEditPermissions());
         assertEquals(obj.isShowMaxWindow(), clone.isShowMaxWindow());
     }
 
     public void testPortal() throws Exception {
-        PortalData obj = new PortalData("foo01", "foo02", "foo03", "foo04", "foo10", "foo11", Arrays.asList("foo05"), "foo06",
+        PortalData obj = new PortalData("foo01", "foo02", "foo03", "foo04", "foo10", "foo11", Arrays.asList("foo05"), Arrays.asList("foo06"),
                 Collections.singletonMap("foo07", "foo08"), "foo09", container, null);
         PortalData clone = IOTools.clone(obj);
         assertEquals(obj.getStorageId(), clone.getStorageId());
@@ -132,7 +132,7 @@ public class TestSerialization extends AbstractGateInTest {
         assertEquals(obj.getType(), clone.getType());
         assertEquals(obj.getLocale(), clone.getLocale());
         assertEquals(obj.getAccessPermissions(), clone.getAccessPermissions());
-        assertEquals(obj.getEditPermission(), clone.getEditPermission());
+        assertEquals(obj.getEditPermissions(), clone.getEditPermissions());
         assertEquals(obj.getProperties(), clone.getProperties());
         assertEquals(obj.getSkin(), clone.getSkin());
     }

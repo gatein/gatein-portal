@@ -101,7 +101,7 @@ public class MopStore implements SiteStore {
             }
             ProtectedResource pr = site.adapt(ProtectedResource.class);
             pr.setAccessPermissions(state.getAccessPermissions());
-            pr.setEditPermission(state.getEditPermission());
+            pr.setEditPermissions(state.getEditPermissions());
             Described described = site.adapt(Described.class);
             described.setName(state.getLabel());
             described.setDescription(state.getDescription());

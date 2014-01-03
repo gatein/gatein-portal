@@ -52,10 +52,10 @@ public class MongoSecurityStore implements SecurityStore {
         DBObject doc = collection.findOne(make(id, null));
         if (doc != null) {
             BasicDBList mongoList = (BasicDBList)doc.get(ACCESS_PERMISSION);
-            String[] accessList = mongoList == null ? null : mongoList.toArray(new String[mongoList.size()]); 
-            return new SecurityState(
-                    accessList,
-                    (String) doc.get(EDIT_PERMISSION));
+            BasicDBList mongoEditList = (BasicDBList)doc.get(EDIT_PERMISSION);
+            String[] accessList = mongoList == null ? null : mongoList.toArray(new String[mongoList.size()]);
+            String[] editList = mongoEditList == null ? null : mongoEditList.toArray(new String[mongoEditList.size()]);
+            return new SecurityState(accessList, editList);
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class MongoSecurityStore implements SecurityStore {
         DBObject doc = new BasicDBObject("_id", id);
         if (state != null) {
             doc.put(ACCESS_PERMISSION, state.getAccessPermission());
-            doc.put(EDIT_PERMISSION, state.getEditPermission());            
+            doc.put(EDIT_PERMISSION, state.getEditPermissions());
         }
         return doc;
     }

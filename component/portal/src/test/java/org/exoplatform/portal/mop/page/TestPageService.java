@@ -58,7 +58,7 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "foo_factory_id",
                 Arrays.asList("foo_access_permission"),
-                "foo_edit_permission");
+                Arrays.asList("foo_edit_permission"));
         createPage(site, "foo", state);
         sync(true);
 
@@ -72,7 +72,7 @@ public class TestPageService extends AbstractMopServiceTest {
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
-        assertEquals("foo_edit_permission", state.getEditPermission());
+        assertEquals(Arrays.asList("foo_edit_permission"), state.getEditPermissions());
         assertEquals("foo_factory_id", state.getFactoryId());
         assertEquals(true, state.getShowMaxWindow());
     }
@@ -93,7 +93,7 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "foo_factory_id",
                 Arrays.asList("foo_access_permission"),
-                "foo_edit_permission");
+                Arrays.asList("foo_edit_permission"));
         createPage(site, "foo", fooState);
         PageState barState = new PageState(
                 "bar_name",
@@ -101,7 +101,7 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "bar_factory_id",
                 Arrays.asList("bar_access_permission"),
-                "bar_edit_permission");
+                Arrays.asList("bar_edit_permission"));
         createPage(site, "bar", barState);
         sync(true);
 
@@ -121,7 +121,7 @@ public class TestPageService extends AbstractMopServiceTest {
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
-        assertEquals("foo_edit_permission", state.getEditPermission());
+        assertEquals(Arrays.asList("foo_edit_permission"), state.getEditPermissions());
         assertEquals("foo_factory_id", state.getFactoryId());
         assertEquals(true, state.getShowMaxWindow());
 
@@ -133,7 +133,7 @@ public class TestPageService extends AbstractMopServiceTest {
         assertEquals("bar_name", state.getDisplayName());
         assertEquals("bar_description", state.getDescription());
         assertEquals(Arrays.asList("bar_access_permission"), state.getAccessPermissions());
-        assertEquals("bar_edit_permission", state.getEditPermission());
+        assertEquals(Arrays.asList("bar_edit_permission"), state.getEditPermissions());
         assertEquals("bar_factory_id", state.getFactoryId());
         assertEquals(true, state.getShowMaxWindow());
     }
@@ -147,7 +147,7 @@ public class TestPageService extends AbstractMopServiceTest {
 
         //
         PageContext pageCtx = new PageContext(site.page("foo"), new PageState("foo_name", "foo_description", true,
-                "foo_factory_id", Arrays.asList("foo_access_permission"), "foo_edit_permission"));
+                "foo_factory_id", Arrays.asList("foo_access_permission"), Arrays.asList("foo_edit_permission")));
         assertTrue(getPageService().savePage(pageCtx));
         sync(true);
 
@@ -156,7 +156,7 @@ public class TestPageService extends AbstractMopServiceTest {
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
-        assertEquals("foo_edit_permission", state.getEditPermission());
+        assertEquals(Arrays.asList("foo_edit_permission"), state.getEditPermissions());
         assertEquals("foo_factory_id", state.getFactoryId());
         assertEquals(true, state.getShowMaxWindow());
     }
@@ -169,14 +169,14 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "foo_factory_id",
                 Arrays.asList("foo_access_permission"),
-                "foo_edit_permission");
+                Arrays.asList("foo_edit_permission"));
         createPage(site, "foo", state);
         sync(true);
 
         //
         PageContext pageCtx = new PageContext(site.key.page("foo"), new PageState("foo_name_2", "foo_description_2", false,
                 "foo_factory_id_2", Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"),
-                "foo_edit_permission_2"));
+                Arrays.asList("foo_edit_permission_2")));
         assertFalse(getPageService().savePage(pageCtx));
         sync(true);
 
@@ -185,7 +185,7 @@ public class TestPageService extends AbstractMopServiceTest {
         assertEquals("foo_name_2", state.getDisplayName());
         assertEquals("foo_description_2", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"), state.getAccessPermissions());
-        assertEquals("foo_edit_permission_2", state.getEditPermission());
+        assertEquals(Arrays.asList("foo_edit_permission_2"), state.getEditPermissions());
         assertEquals("foo_factory_id_2", state.getFactoryId());
         assertEquals(false, state.getShowMaxWindow());
     }
@@ -205,7 +205,7 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "foo_factory_id",
                 Arrays.asList("foo_access_permission"),
-                "foo_edit_permission");
+                Arrays.asList("foo_edit_permission"));
         createPage(site, "foo", state);
         sync(true);
 
@@ -226,7 +226,7 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "factory_id",
                 Arrays.asList("access_permission"),
-                "edit_permission");
+                Arrays.asList("edit_permission"));
         createPage(site, "foo", state);
         createPage(site, "bar", state);
         sync(true);
@@ -244,7 +244,7 @@ public class TestPageService extends AbstractMopServiceTest {
                 true,
                 "foo_factory_id",
                 Arrays.asList("foo_access_permission"),
-                "foo_edit_permission");
+                Arrays.asList("foo_edit_permission"));
         createPage(site, "foo", state);
         sync(true);
 
@@ -257,7 +257,7 @@ public class TestPageService extends AbstractMopServiceTest {
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
-        assertEquals("foo_edit_permission", state.getEditPermission());
+        assertEquals(Arrays.asList("foo_edit_permission"), state.getEditPermissions());
         assertEquals("foo_factory_id", state.getFactoryId());
         assertEquals(true, state.getShowMaxWindow());
 
@@ -304,7 +304,7 @@ public class TestPageService extends AbstractMopServiceTest {
          * // Application banner2 = (Application)container.getChildren().get(0); // assertEquals(banner2.getInstanceId(),
          * banner1.getInstanceId());
          *
-         * // Page srcPage = storage_.getPage("portal::test::test4"); srcPage.setEditPermission("Administrator");
+         * // Page srcPage = storage_.getPage("portal::test::test4"); srcPage.setEditPermissions("Administrator");
          * Application<Portlet>portlet = (Application<Portlet>)srcPage.getChildren().get(0);
          * portlet.setDescription("NewPortlet");
          *
@@ -327,7 +327,7 @@ public class TestPageService extends AbstractMopServiceTest {
 
     public void testCreateWithoutSite() {
         PageContext page = new PageContext(SiteKey.portal("foo").page("homepage"), new PageState("foo", "Foo", false,
-                "factory-id", Arrays.asList("*:/platform/administrators"), "Everyone"));
+                "factory-id", Arrays.asList("*:/platform/administrators"), Arrays.asList("Everyone")));
         try {
             getPageService().savePage(page);
             fail();

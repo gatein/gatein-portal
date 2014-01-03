@@ -197,7 +197,7 @@ public class UserACL {
 
     public boolean hasPermission(PortalConfig pconfig) {
         Identity identity = getIdentity();
-        if (hasPermission(identity, pconfig.getEditPermission())) {
+        if(hasEditPermission(pconfig)) {
             pconfig.setModifiable(true);
             return true;
         }
@@ -212,7 +212,21 @@ public class UserACL {
     }
 
     public boolean hasEditPermission(PortalConfig pconfig) {
-        return hasPermission(getIdentity(), pconfig.getEditPermission());
+        Identity identity = getIdentity();
+
+        if (superUser_.equals(identity.getUserId())) {
+            return true;
+        }
+
+        String[] editPerms = pconfig.getEditPermissions();
+        if(editPerms != null && editPerms.length > 0) {
+            for(String perms : editPerms) {
+                if(hasPermission(identity, perms)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -352,9 +366,21 @@ public class UserACL {
             }
             return false;
         }
-        if (hasPermission(identity, page.getEditPermission())) {
+
+        String currentUser = identity.getUserId();
+        if (superUser_.equals(currentUser)) {
             page.setModifiable(true);
             return true;
+        }
+
+        String[] editPerms = page.getEditPermissions();
+        if(editPerms != null && editPerms.length > 0) {
+            for(String perm : editPerms) {
+                if(hasPermission(identity, perm)) {
+                    page.setModifiable(true);
+                    return true;
+                }
+            }
         }
         page.setModifiable(false);
         return false;
@@ -366,7 +392,18 @@ public class UserACL {
         if (SiteType.USER == key.getSite().getType()) {
             return key.getSite().getName().equals(identity.getUserId());
         } else {
-            return hasPermission(identity, page.getState().getEditPermission());
+            if(superUser_.equals(identity.getUserId())) {
+                return true;
+            }
+            List<String> editPerms = page.getState().getEditPermissions();
+            if(editPerms != null) {
+                for(String perm : editPerms) {
+                    if(hasPermission(identity, perm)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 

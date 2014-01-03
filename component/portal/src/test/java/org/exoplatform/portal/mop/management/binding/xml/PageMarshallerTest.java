@@ -64,7 +64,7 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
         assertEquals("homepage", page.getName());
         assertEquals("Home Page", page.getTitle());
         assertEquals("Everyone", Utils.join(";", page.getAccessPermissions()));
-        assertEquals("*:/platform/administrators", page.getEditPermission());
+        assertEquals("*:/platform/administrators", Utils.join(";", page.getEditPermissions()));
         assertNotNull(page.getChildren());
         assertEquals(1, page.getChildren().size());
         ModelObject child = page.getChildren().get(0);
@@ -114,7 +114,7 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
         assertEquals("loaded-page", page.getName());
         assertEquals("Loaded Page", page.getTitle());
         assertEquals("manager:/platform/administrators;manager:/platform/users", Utils.join(";", page.getAccessPermissions()));
-        assertEquals("*:/platform/administrators", page.getEditPermission());
+        assertEquals("*:/platform/administrators", Utils.join(";", page.getEditPermissions()));
 
         // Verify page children
         assertNotNull(page.getChildren());
@@ -357,7 +357,7 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
         assertEquals("empty-page", page.getName());
         assertEquals("Empty", page.getTitle());
         assertNull(page.getAccessPermissions());
-        assertNull(page.getEditPermission());
+        assertNull(page.getEditPermissions());
         assertNotNull(page.getChildren());
         assertTrue(page.getChildren().isEmpty());
     }
@@ -382,7 +382,7 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
         List<ComponentData> children = Collections.singletonList((ComponentData) containerData);
 
         PageData expectedData = new PageData(null, null, "page-name", null, null, null, "Page Title", null, null, null,
-                Collections.singletonList("access-permissions"), children, "", "", "edit-permission", true);
+                Collections.singletonList("access-permissions"), children, "", "", Collections.singletonList("edit-permission"), true);
 
         Page expected = new Page(expectedData);
 
@@ -419,7 +419,7 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
 
         List<ComponentData> children = Collections.singletonList((ComponentData) applicationData);
         PageData expectedData = new PageData(null, null, "page-name", null, null, null, "Page Title", null, null, null,
-                Collections.singletonList("access-permissions"), children, "", "", "edit-permission", true);
+                Collections.singletonList("access-permissions"), children, "", "", Collections.singletonList("edit-permission"), true);
 
         Page expected = new Page(expectedData);
 
@@ -459,7 +459,7 @@ public class PageMarshallerTest extends AbstractMarshallerTest {
 
         compareComponents(expected.getChildren(), actual.getChildren());
 
-        assertEquals(expected.getEditPermission(), actual.getEditPermission());
+        assertEquals(Arrays.asList(expected.getEditPermissions()), Arrays.asList(actual.getEditPermissions()));
         assertEquals(expected.isShowMaxWindow(), actual.isShowMaxWindow());
     }
 }

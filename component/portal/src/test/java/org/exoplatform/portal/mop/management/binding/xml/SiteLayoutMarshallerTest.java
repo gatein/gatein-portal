@@ -64,7 +64,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertEquals("site-description", data.getDescription());
         assertEquals("en", data.getLocale());
         assertEquals("Everyone", Utils.join(";", data.getAccessPermissions()));
-        assertEquals("*:/platform/administrators", data.getEditPermission());
+        assertEquals("*:/platform/administrators", Utils.join(";", data.getEditPermissions()));
         assertNotNull(data.getProperties());
         assertEquals(1, data.getProperties().size());
         assertTrue(data.getProperties().containsKey("sessionAlive"));
@@ -183,7 +183,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         properties.put("key2", "value2");
 
         PortalData expectedData = new PortalData(null, "name", "type", "locale", "label", "description",
-                Collections.singletonList("access-permissions"), "edit-permissions", properties, "skin", layout, null);
+                Collections.singletonList("access-permissions"), Collections.singletonList("edit-permissions"), properties, "skin", layout, null);
 
         PortalConfig expected = new PortalConfig(expectedData);
 
@@ -202,7 +202,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         assertEquals("portal", actual.getType());
         assertEquals("locale", actual.getLocale());
         assertEquals("access-permissions", Utils.join(";", actual.getAccessPermissions()));
-        assertEquals("edit-permissions", actual.getEditPermission());
+        assertEquals("edit-permissions", Utils.join(";", actual.getEditPermissions()));
         assertEquals(properties, actual.getProperties());
         assertEquals("skin", actual.getSkin());
         assertNotNull(actual.getPortalLayout());

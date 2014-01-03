@@ -75,7 +75,7 @@ public class PageUtils {
     public static PageState toPageState(Page page) {
         return new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(), page.getFactoryId(),
                 page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null,
-                page.getEditPermission());
+                page.getEditPermissions() != null ? Arrays.asList(page.getEditPermissions()) : null);
     }
 
     public static <S extends Serializable> Application<S> copy(Application<S> existing) {
@@ -140,7 +140,7 @@ public class PageUtils {
         Page page = new Page();
 
         // Copy page specific data
-        page.setEditPermission(existing.getEditPermission());
+        page.setEditPermissions(existing.getEditPermissions());
         page.setModifiable(existing.isModifiable());
         page.setOwnerId(existing.getOwnerId());
         page.setOwnerType(existing.getOwnerType());
@@ -174,7 +174,7 @@ public class PageUtils {
         PortalConfig portalConfig = new PortalConfig(existing.getType(), existing.getName());
         portalConfig.setAccessPermissions(copy(existing.getAccessPermissions()));
         portalConfig.setDescription(existing.getDescription());
-        portalConfig.setEditPermission(existing.getEditPermission());
+        portalConfig.setEditPermissions(existing.getEditPermissions());
         portalConfig.setLabel(existing.getLabel());
         portalConfig.setLocale(existing.getLocale());
         portalConfig.setModifiable(existing.isModifiable());

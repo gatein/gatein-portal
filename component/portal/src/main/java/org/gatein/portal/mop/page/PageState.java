@@ -16,7 +16,7 @@ import org.exoplatform.commons.utils.Safe;
 public class PageState implements Serializable {
 
     /** . */
-    final String editPermission;
+    final List<String> editPermissions;
 
     /** . */
     final boolean showMaxWindow;
@@ -34,8 +34,8 @@ public class PageState implements Serializable {
     final List<String> accessPermissions;
 
     public PageState(String displayName, String description, boolean showMaxWindow, String factoryId,
-            List<String> accessPermissions, String editPermission) {
-        this.editPermission = editPermission;
+            List<String> accessPermissions, List<String> editPermissions) {
+        this.editPermissions = editPermissions;
         this.showMaxWindow = showMaxWindow;
         this.factoryId = factoryId;
         this.displayName = displayName;
@@ -43,8 +43,8 @@ public class PageState implements Serializable {
         this.accessPermissions = accessPermissions;
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public List<String> getEditPermissions() {
+        return editPermissions;
     }
 
     public boolean getShowMaxWindow() {
@@ -76,14 +76,14 @@ public class PageState implements Serializable {
             return false;
         }
         PageState that = (PageState) o;
-        return Safe.equals(editPermission, that.editPermission) && showMaxWindow == that.showMaxWindow
+        return Safe.equals(editPermissions, that.editPermissions) && showMaxWindow == that.showMaxWindow
                 && Safe.equals(factoryId, that.factoryId) && Safe.equals(displayName, that.displayName)
                 && Safe.equals(description, that.description) && Safe.equals(accessPermissions, that.accessPermissions);
     }
 
     @Override
     public int hashCode() {
-        int result = editPermission != null ? editPermission.hashCode() : 0;
+        int result = editPermissions != null ? editPermissions.hashCode() : 0;
         result = 31 * result + (showMaxWindow ? 1 : 0);
         result = 31 * result + (factoryId != null ? factoryId.hashCode() : 0);
         result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
@@ -93,13 +93,13 @@ public class PageState implements Serializable {
     }
 
     public Builder builder() {
-        return new Builder(editPermission, showMaxWindow, factoryId, displayName, description, accessPermissions);
+        return new Builder(editPermissions, showMaxWindow, factoryId, displayName, description, accessPermissions);
     }
 
     public static class Builder {
 
         /** . */
-        private String editPermission;
+        private List<String> editPermissions;
 
         /** . */
         private boolean showMaxWindow;
@@ -125,9 +125,9 @@ public class PageState implements Serializable {
                     new ArrayList<String>());
         }
 
-        private Builder(String editPermission, boolean showMaxWindow, String factoryId, String displayName, String description,
+        private Builder(List<String> editPermissions, boolean showMaxWindow, String factoryId, String displayName, String description,
                 List<String> accessPermissions) {
-            this.editPermission = editPermission;
+            this.editPermissions = editPermissions;
             this.showMaxWindow = showMaxWindow;
             this.factoryId = factoryId;
             this.displayName = displayName;
@@ -135,8 +135,8 @@ public class PageState implements Serializable {
             this.accessPermissions = accessPermissions;
         }
 
-        public Builder editPermission(String editPermission) {
-            this.editPermission = editPermission;
+        public Builder editPermissions(List<String> editPermissions) {
+            this.editPermissions = editPermissions;
             return this;
         }
 
@@ -171,7 +171,7 @@ public class PageState implements Serializable {
         }
 
         public PageState build() {
-            return new PageState(displayName, description, showMaxWindow, factoryId, accessPermissions, editPermission);
+            return new PageState(displayName, description, showMaxWindow, factoryId, accessPermissions, editPermissions);
         }
     }
 }

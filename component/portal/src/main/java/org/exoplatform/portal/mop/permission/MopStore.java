@@ -48,7 +48,10 @@ public class MopStore implements SecurityStore {
                 
                 List<String> aList = res.getAccessPermissions();
                 String[] accessPermission = aList == null ? null : aList.toArray(new String[aList.size()]);
-                return new SecurityState(accessPermission, res.getEditPermission());
+
+                aList = res.getEditPermissions();
+                String[] editPermission = aList == null ? null : aList.toArray(new String[aList.size()]);
+                return new SecurityState(accessPermission, editPermission);
             }
         }
         
@@ -64,7 +67,8 @@ public class MopStore implements SecurityStore {
                 ProtectedResource res = obj.adapt(ProtectedResource.class);
                 List<String> accessPer = state.getAccessPermission() == null ? null : Arrays.asList(state.getAccessPermission()); 
                 res.setAccessPermissions(accessPer);
-                res.setEditPermission(state.getEditPermission());                
+                List<String> editPerms = state.getEditPermissions() == null ? null : Arrays.asList(state.getEditPermissions());
+                res.setEditPermissions(editPerms);
             } else {
                 obj.removeAdapter(ProtectedResource.class);
             }

@@ -550,12 +550,13 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
         }
     }
 
-    protected void marshalEditPermission(StaxWriter<Element> writer, String editPermission) throws XMLStreamException {
-        writeOptionalElement(writer, Element.EDIT_PERMISSION, editPermission);
+    protected void marshalEditPermission(StaxWriter<Element> writer, String[] editPermissions) throws XMLStreamException {
+        editPermissions = (editPermissions == null || editPermissions.length == 0) ? null : editPermissions;
+        writeOptionalElement(writer, Element.EDIT_PERMISSION, DelimitedValueType.SEMI_COLON, editPermissions);
     }
 
-    protected String unmarshalEditPermission(StaxNavigator<Element> navigator) throws XMLStreamException {
-        return getContent(navigator, true);
+    protected String[] unmarshalEditPermission(StaxNavigator<Element> navigator) throws XMLStreamException {
+        return parseContent(navigator, DelimitedValueType.SEMI_COLON, null);
     }
 
     protected void writeGateinObjectsNamespace(StaxWriter<Element> writer) throws XMLStreamException {

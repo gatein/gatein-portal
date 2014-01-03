@@ -238,11 +238,11 @@ public class ModelUnmarshaller {
                 validate(pageNav.child(PageElement.name));
                 String name = pageNav.getContent();
                 String[] accessPermission = pageNav.sibling(PageElement.access_permission) ? new String[]{pageNav.getContent()} : EMPTY_STRINGS;
-                String editPermission = pageNav.sibling(PageElement.edit_permission) ? pageNav.getContent() : null;
+                String[] editPermission = pageNav.sibling(PageElement.edit_permission) ? new String[]{pageNav.getContent()} : EMPTY_STRINGS;
                 Page page = new Page();
                 page.setName(name);
                 page.setAccessPermissions(accessPermission);
-                page.setEditPermission(editPermission);
+                page.setEditPermissions(editPermission);
                 set.getPages().add(page);
                 String layout = parseLayout(pageNav.fork(new Naming.Enumerated.Simple<LayoutElement>(LayoutElement.class, null)), page.getChildren());
                 page.setFactoryId(layout);
@@ -267,7 +267,7 @@ public class ModelUnmarshaller {
         String displayName = nav.sibling(SiteElement.display_name) ? nav.getContent() : null;
         String description = nav.sibling(SiteElement.description) ? nav.getContent() : null;
         String[] accessPermission = nav.sibling(SiteElement.access_permission) ? new String[]{nav.getContent()} : EMPTY_STRINGS;
-        String editPermission = nav.sibling(SiteElement.edit_permission) ? nav.getContent() : null;
+        String[] editPermission = nav.sibling(SiteElement.edit_permission) ? new String[]{nav.getContent()} : EMPTY_STRINGS;
         String locale = nav.sibling(SiteElement.locale) ? nav.getContent() : null;
         Properties properties = null;
         if (nav.sibling(SiteElement.properties)) {
@@ -291,7 +291,7 @@ public class ModelUnmarshaller {
         site.setDescription(description);
         site.setLocale(locale);
         site.setAccessPermissions(accessPermission);
-        site.setEditPermission(editPermission);
+        site.setEditPermissions(editPermission);
 
         //
         String layout = parseLayout(nav.fork(new Naming.Enumerated.Simple<LayoutElement>(LayoutElement.class, null)), site.getPortalLayout().getChildren());

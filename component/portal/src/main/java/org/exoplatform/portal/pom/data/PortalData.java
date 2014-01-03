@@ -40,7 +40,7 @@ public class PortalData extends ModelData {
     private final List<String> accessPermissions;
 
     /** . */
-    private final String editPermission;
+    private final List<String> editPermissions;
 
     /** . */
     private final Map<String, String> properties;
@@ -58,7 +58,7 @@ public class PortalData extends ModelData {
     private final List<RedirectData> redirects;
 
     public PortalData(String storageId, String name, String type, String locale, String label, String description,
-            List<String> accessPermissions, String editPermission, Map<String, String> properties, String skin,
+            List<String> accessPermissions, List<String> editPermissions, Map<String, String> properties, String skin,
             ContainerData portalLayout, List<RedirectData> redirects) {
         super(storageId, null);
 
@@ -68,7 +68,7 @@ public class PortalData extends ModelData {
         this.label = label;
         this.description = description;
         this.accessPermissions = accessPermissions;
-        this.editPermission = editPermission;
+        this.editPermissions = editPermissions;
         this.properties = properties;
         this.skin = skin;
         this.portalLayout = portalLayout;
@@ -95,8 +95,8 @@ public class PortalData extends ModelData {
         return accessPermissions;
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public List<String> getEditPermissions() {
+        return editPermissions;
     }
 
     public Map<String, String> getProperties() {
@@ -129,7 +129,7 @@ public class PortalData extends ModelData {
                 label,
                 description,
                 accessPermissions,
-                editPermission,
+                editPermissions,
                 properties,
                 skin
         );

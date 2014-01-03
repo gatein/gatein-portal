@@ -25,9 +25,9 @@ import java.util.Arrays;
 @SuppressWarnings("serial")
 public class SecurityState implements Serializable {
     private String[] accessPermission;
-    private String editPermission;
+    private String[] editPermission;
 
-    public SecurityState(String[] accessPermission, String editPermission) {
+    public SecurityState(String[] accessPermission, String[] editPermission) {
         this.accessPermission = accessPermission;
         this.editPermission = editPermission;
     }
@@ -40,8 +40,12 @@ public class SecurityState implements Serializable {
         }
     }
 
-    public String getEditPermission() {
-        return editPermission;
+    public String[] getEditPermissions() {
+        if(editPermission != null) {
+            return Arrays.copyOf(editPermission, editPermission.length);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -49,7 +53,7 @@ public class SecurityState implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((accessPermission == null) ? 0 : Arrays.hashCode(accessPermission));
-        result = prime * result + ((editPermission == null) ? 0 : editPermission.hashCode());
+        result = prime * result + ((editPermission == null) ? 0 : Arrays.hashCode(editPermission));
         return result;
     }
 
@@ -65,11 +69,10 @@ public class SecurityState implements Serializable {
         if (!Arrays.equals(accessPermission, other.accessPermission)) {
             return false;
         }
-        if (editPermission == null) {
-            if (other.editPermission != null)
-                return false;
-        } else if (!editPermission.equals(other.editPermission))
+        if(!Arrays.equals(editPermission, other.editPermission)) {
             return false;
+        }
+
         return true;
     }
 

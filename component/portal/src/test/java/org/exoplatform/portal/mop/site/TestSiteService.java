@@ -50,7 +50,7 @@ public class TestSiteService extends AbstractMopServiceTest {
                 "load_site",
                 "load_site_description",
                 Arrays.asList("Everyone"),
-                "/platform/administrators",
+                Arrays.asList("/platform/administrators"),
                 Collections.<String, String>emptyMap(),
                 "load_site_skin");
         getSitePersistence().saveSite(key, state);
@@ -72,7 +72,7 @@ public class TestSiteService extends AbstractMopServiceTest {
                 "create_site",
                 "create_site_description",
                 Arrays.asList("Everyone"),
-                "/platform/administrators",
+                Arrays.asList("/platform/administrators"),
                 null,
                 "create_site_skin");
         siteService.saveSite(new SiteContext(key, state));
@@ -91,7 +91,7 @@ public class TestSiteService extends AbstractMopServiceTest {
                 "destroy_site",
                 "destroy_site_description",
                 Arrays.asList("Everyone"),
-                "/platform/administrators",
+                Arrays.asList("/platform/administrators"),
                 null,
                 "destroy_site_skin");
         siteService.saveSite(new SiteContext(key, state));
