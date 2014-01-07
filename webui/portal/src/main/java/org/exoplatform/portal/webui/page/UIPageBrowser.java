@@ -20,7 +20,6 @@
 package org.exoplatform.portal.webui.page;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -349,25 +348,39 @@ public class UIPageBrowser extends UIContainer {
         public void execute(Event<UIPageBrowser> event) throws Exception {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             UIPortalApplication uiApp = (UIPortalApplication) prContext.getUIApplication();
-            UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-            UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
-            uiPageForm.buildForm(null);
-            uiMaskWS.setUIComponent(uiPageForm);
-            uiMaskWS.setShow(true);
 
-            UIFormSelectBox slcOwnerType = uiPageForm.getUIFormSelectBox(UIPageForm.OWNER_TYPE);
-            List<SelectItemOption<String>> types = slcOwnerType.getOptions();
-            for (int i = 0; i < types.size(); i++) {
-                if (PortalConfig.USER_TYPE.equals(types.get(i).getValue())) {
-                    types.remove(types.get(i));
-                    break;
+            boolean hasPermission = false;
+            String currentUser = prContext.getRemoteUser();
+            if (currentUser != null) {
+                UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+                UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
+                uiPageForm.buildForm(null);
+
+                UIFormSelectBox slcOwnerType = uiPageForm.getUIFormSelectBox(UIPageForm.OWNER_TYPE);
+                List<SelectItemOption<String>> types = slcOwnerType.getOptions();
+                for (int i = 0; i < types.size(); i++) {
+                    if (PortalConfig.USER_TYPE.equals(types.get(i).getValue())) {
+                        types.remove(types.get(i));
+                        break;
+                    }
+                }
+
+                if (!types.isEmpty()) {
+                    hasPermission = true;
+
+                    slcOwnerType.setOptions(types);
+                    Event<UIComponent> slcEvent = uiPageForm.createEvent("ChangeOwnerType", Phase.DECODE, event.getRequestContext());
+                    slcEvent.broadcast();
+
+                    uiMaskWS.setUIComponent(uiPageForm);
+                    uiMaskWS.setShow(true);
+                    prContext.addUIComponentToUpdateByAjax(uiMaskWS);
                 }
             }
-            slcOwnerType.setOptions(types);
-            Event<UIComponent> slcEvent = uiPageForm.createEvent("ChangeOwnerType", Phase.DECODE, event.getRequestContext());
-            slcEvent.broadcast();
 
-            prContext.addUIComponentToUpdateByAjax(uiMaskWS);
+            if (!hasPermission) {
+                uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-CreatePage-Permission", null));
+            }
         }
     }
 
