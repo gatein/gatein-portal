@@ -28,23 +28,30 @@
                 	</li>
                 	<li>
                 		<a href="javascript: void(0);" class="editLayout">Edit Page</a>
-					</li>
-					<li>
-						<a id="pageProperties" class="pageProperties" data-toggle="modal" href="#pagePropertiesModal">Properties</a>
-					</li>
-					<li>
-						<a id="saveLayout" class="saveLayout" href="javascript:void(0);">Save</a>
-					</li>
-					<li>
-						<a href="javascript:void(0);" class="cancelEditLayout">Cancel</a>
-					</li>
-                    <%if(username == ""){%>
-                    <li>
-                        <a href="${loginURL}">Login</a>
-                    </li>
-                    <%} else {%>
-                    <li class="dropdown" style="padding-top:10px;">${username} [<a href="${logoutURL}" class="dropdown-toggle" data-toggle="dropdown" style="display: inline;padding: 0;">Logout</a>]</li>
-                    <%}%>
+        					</li>
+        					<li>
+        						<a id="pageProperties" class="pageProperties" data-toggle="modal" href="#pagePropertiesModal">Properties</a>
+        					</li>
+        					<li>
+        						<a id="saveLayout" class="saveLayout" href="javascript:void(0);">Save</a>
+        					</li>
+        					<li>
+        						<a href="javascript:void(0);" class="cancelEditLayout">Cancel</a>
+        					</li>
+                  <%if(username == ""){%>
+                  <li>
+                      <a href="${loginURL}">Login</a>
+                  </li>
+                  <%} else {%>
+                  <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown">${username}</a>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <a tabindex="-1" href="${logoutURL}">Logout</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <%}%>
                 </ul>
             </div>
         </div>
