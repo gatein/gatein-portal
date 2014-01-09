@@ -1,4 +1,4 @@
-(function() {
+(function(Backbone, $, _) {
 
   // An abstract model for Application and Container (Zone) in a layout
   var LayoutComponent = Backbone.Model.extend({
@@ -388,4 +388,4 @@
   } else {
     return $.extend(window, layoutDef);
   }
-})();
+})(Backbone, $, _);

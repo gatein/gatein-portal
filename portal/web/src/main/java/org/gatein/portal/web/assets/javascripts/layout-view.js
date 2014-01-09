@@ -1,255 +1,5 @@
-(function() {
-
-  var PagePropertiesModal = Backbone.View.extend({
-    events : { 
-      "click .cancel" : "cancel",
-      "click .next" : "nextStep"
-    },
-    
-    cancel : function() {
-      this.$el.removeData('modal');
-      $('#pagePropertiesModal').modal('hide');
-      var editorView = window.editorView;
-      var editMode = editorView.model.get('editMode');
-      if (editMode == EditorState.EDIT_NEW_PAGE) {
-        editorView.model.set('editMode', EditorState.NORMAL);
-      }
-    },
-    
-    render : function() {
-      var _this = this;
-      $.ajax({
-        url : this.$el.attr('data-parentLinks'),
-        dataType : 'json',
-        success : function(data) {
-          var template = $("#page-properties-modal-template").html();
-          var html = _.template(template, {parentLinks: data.parentLinks});
-          _this.$el.find('.modal-body').html(html);
-          var editorView = window.editorView;
-          if (editorView.model.get('editMode') == EditorState.EDIT_CURRENT_PAGE) {
-            var pageModel = editorView.getPageView().model;
-            $(".modal-body input[name='pageName']").val(pageModel.get('pageName')).prop('disabled', true);
-            $(".modal-body input[name='pageDisplayName']").val(pageModel.get('pageDisplayName'));
-            $(".modal-body select[name='parent']").val(pageModel.get('parentLink')).prop('disabled', true);
-            $(".modal-body select[name='factoryId']").val(pageModel.get('factoryId'));
-          }
-        }
-      })
-    },
-    
-    bindToPageModel : function(pageModel) {
-      pageModel.set("id", "newpage"); 
-      pageModel.set("factoryId", $(".modal-body select[name='factoryId']").val()); 
-      pageModel.set("pageKey", "portal::classic::" + $(".modal-body input[name='pageName']").val()); 
-      pageModel.set("pageName", $(".modal-body input[name='pageName']").val());
-      pageModel.set("pageDisplayName", $(".modal-body input[name='pageDisplayName']").val());
-      pageModel.set("parentLink", $(".modal-body select[name='parentLink']").val());
-    },
-    
-    nextStep : function() {
-      var editorView = window.editorView;
-      var editMode = editorView.model.get('editMode');
-      if (editMode == EditorState.EDIT_CURRENT_PAGE) {
-        var pageModel = editorView.getPageView().model;
-        pageModel.set('pageDisplayName', $(".modal-body input[name='pageDisplayName']").val());
-        pageModel.set('factoryId', $(".modal-body select[name='factoryId']").val());
-        this.$el.modal('hide');
-      } else if (editMode == EditorState.EDIT_NEW_PAGE) {
-        var pageNameInput = this.$el.find("input[name='pageName']");
-        if (this.verifyPageName(pageNameInput)) {
-          var _this = this;
-          $.ajax({
-            url : this.$el.attr('data-checkpage-url'),
-            dataType : "json",
-            data : {
-              pageName : $(pageNameInput).val()
-            },
-            success : function(data) {
-              if (data.pageExisted) {
-                _this.message("Page is existed");
-                $(pageNameInput).select();
-              } else {
-                editorView.switchMode();
-                var pageView = editorView.getPageView();
-                var pageModel = pageView.model;
-                _this.bindToPageModel(pageModel);
-                //clear apps
-                var containers = pageModel.getChildren();
-                $(containers).each(function() {
-                  if (!this.isEmpty()) {
-                    var container = this;
-                    var apps = this.getChildren();
-                    $(apps).each(function() {
-                      container.removeChild(this);
-                    });
-                  }
-                });
-                //
-                $('#pagePropertiesModal').modal('hide');
-              }
-            }
-          });
-        }
-      }
-    },
-    
-    verifyPageName : function(input) {
-      var regex = new RegExp('^[a-zA-Z0-9._-]{3,120}$');
-      var pageName = $(input).val();
-      if (!pageName) {
-        setTimeout(function(){
-          $(input).select();
-        }, 0);
-        return false;
-      }
-      if (!regex.test(pageName)) {
-        this.message("Only alpha, digit, dash and underscore characters (3 - 120) allowed for page name.");
-        //workaround to select input
-        setTimeout(function(){
-          $(input).select();
-        }, 0);
-        return false;
-      }
-      return true;
-    },
-    
-    message : function(msg) {
-      var alertBox = $("<div class='alert alert-error'></div>")
-      alertBox.text(msg);
-      this.$el.find('.modal-body .alert').remove();
-      this.$el.find('.modal-body').prepend(alertBox);
-    }
-  });
+(function(Backbone, layoutDef, $, jqueryUI, editorView) {
   
-  var ComposerView = Backbone.View.extend({
-    events : {
-      "keyup .composer-filter" : "onKeyUp",
-      "click .close-composer": "closeComposer",
-      'click a[data-toggle="tab"]': "onShowTabContent",
-      'click input[name="composer-layout"]': "switchLayout"
-    },
-
-    initialize : function(options) {
-      this.model = new Composer([], {model: ComposerTab, urlRoot: this.$el.attr("data-url")});
-      this.model.fetch();
-
-      this.listenTo(this.model, 'sync', this.render);
-      this.listenTo(this.model, 'change:filterValue', this.render);
-    },
-
-    render: function() {
-      var $container = this.$el.find('#composer-list-contents');
-
-      var renderData = this.model.getRenderData();
-      if ($.trim($container.html()) == '') {
-        var template = $("#composer-list-contents-template").html();
-        var html = _.template(template, {items: renderData});
-        $container.html(html);
-        var factoryId = window.editorView.getPageView().model.get('factoryId');
-        $("input#composer-layout-" + factoryId).attr('checked', true);
-        $container.find("li.content").draggable({
-          connectToSortable: ".sortable",
-          revert: "invalid",
-          helper: "clone",
-          start: function(event, ui) {
-            ui.helper.width($(this).width());
-          }
-        });
-      } else {
-        this.filterApp(renderData);
-      }
-    },
-
-    filterApp: function(data) {
-
-      this.$el.find(".content-type").each(function() {
-        var $contentType = $(this);
-        var contentType = _.findWhere(data, {tagName: $contentType.attr("data-tagName")});
-
-        if(!contentType) {
-          $contentType.hide();
-        } else {
-          $contentType.show();
-
-          //Filter children
-          var contents = contentType.children;
-
-          $contentType.find(".content").each(function() {
-            var $content = $(this);
-            var content = _.findWhere(contents, {contentId: $content.attr("data-contentId")});
-            if(!content) {
-              $content.hide();
-            } else {
-              $content.show();
-            }
-          });
-        }
-      });
-    },
-
-    onKeyUp: function(e) {
-      var keyCode = e.keyCode || e.which;
-      var timeToWait = 500;
-      var $target = $(e.target);
-
-      if(keyCode == 27) {
-        //Escape key
-        $(e.target).val("");
-        timeToWait = 0;
-      }
-
-      var value = $.trim($target.val());
-      if(value == this.model.get("filterValue")) {
-        return;
-      }
-
-      if(!$target.hasClass("loading")) {
-        $target.addClass("loading");
-      }
-
-      if(this.timeout) {
-        clearTimeout(this.timeout);
-      }
-
-      var _this = this;
-      this.timeout =  setTimeout(function() {
-        _this.model.set('filterValue', value);
-        $target.removeClass("loading");
-      }, timeToWait);
-    },
-
-    closeComposer: function(e) {
-      var $target = $(e.target);
-      this.$el.find(".active").removeClass("active");
-      this.$el.find(".nav-tabs").addClass("nav-tabs-close");
-      $target.hide();
-    },
-    onShowTabContent: function(e) {
-      this.$el.find(".close-composer").show();
-      this.$el.find(".nav-tabs").removeClass("nav-tabs-close");
-    },
-
-    switchLayout: function(e) {
-      var $target = $(e.target);
-      var layoutURL = $target.attr("data-layoutURL");
-
-      // Make an ajax request to fetch the new layout data [layout_id, html_template]
-      $.ajax({
-        url : layoutURL,
-        dataType : "json",
-        success : function(result) {
-          // Ask the layout view to switch layout with passed layout data
-          var layoutView = window.editorView.layoutView;
-          layoutView.switchLayout(result);
-        }
-      });
-    },
-
-    findContent: function(contentId) {
-      return this.model.findContent(contentId);
-    }
-  });
-
   var ApplicationView = Backbone.View.extend({
     tagName: "div",
 
@@ -283,11 +33,11 @@
       this.remove();
 
       // Update snapshot
-      var pageView = window.editorView.getPageView();
+      var pageView = editorView.getPageView();
       pageView.model.updateSnapshot();
     }
   });
-
+  
   var ContainerView = Backbone.View.extend({
 
     initialize : function(options) {
@@ -440,7 +190,7 @@
 
       // If this is a new application dragged from Composer
       if(!$dragObj.attr("id")) {
-        var composerView = window.editorView.getComposerView();
+        var composerView = editorView.getComposerView();
         
         //Add new application
         var newChild = composerView.findContent($dragObj.attr("data-contentId"));
@@ -455,7 +205,7 @@
       }
       
       // Update snapshot
-      var pageView = window.editorView.getPageView();
+      var pageView = editorView.getPageView();
       pageView.model.updateSnapshot();
     },
 
@@ -491,7 +241,6 @@
       $app.remove();
 
       if (container.isEmpty()) {
-        console.log("onRemoveChild.......");
         $cont.addClass('emptyContainer');
       }
     }
@@ -636,84 +385,6 @@
       this.model = model;
     }
   });
-  
-  var EditorState = Backbone.Model.extend({
-    defaults : {
-      editMode : 0      
-    }
-  }, {
-    NORMAL: 0,
-    EDIT_CURRENT_PAGE: 1,
-    EDIT_NEW_PAGE: 2,
-    EDIT_SITE: 3
-  });
 
-  // The root container view of Layout Edition mode
-  var EditorView = Backbone.View.extend({
-    events : {
-      'click #saveLayout' : 'saveLayout',
-      'click .editLayout' : 'startEditCurrentPage',
-      'click .cancelEditLayout' : 'cancelEdit',
-      'click .newPage' : 'addNewPage',
-      'click .pageProperties' : 'changePageProperties'
-    },
-
-    startEditCurrentPage : function() {
-      this.model.set('editMode', EditorState.EDIT_CURRENT_PAGE);
-      this.switchMode();
-    },
-    
-    addNewPage : function() {
-      this.model.set('editMode', EditorState.EDIT_NEW_PAGE);
-      this.pageModal = new PagePropertiesModal({ el : "#pagePropertiesModal"})
-      this.pageModal.render();
-    },
-    
-    changePageProperties : function() {
-      if (this.pageModal == undefined) this.pageModal = new PagePropertiesModal({ el : "#pagePropertiesModal"});
-      this.pageModal.render();
-    },
-    
-    cancelEdit : function() {
-      this.model.set('editMode', EditorState.NORMAL);
-      window.location.reload();
-    },
-    
-    switchMode : function() {
-      this.$el.toggleClass('LAYOUT-EDITION');
-      if (this.model.get('editMode') > EditorState.NORMAL) {
-
-        // Initialize LayoutView 
-        this.layoutView = new LayoutView({
-          el : '.pageBody'
-        });
-
-        // Initialize ComposerView
-        this.composerView = new ComposerView({el : '#composers'});
-        this.layoutView.render();
-      } else {
-        delete this.layoutView;
-        delete this.composerView;
-      }
-      this.trigger('eXo.portal.switchMode', this.model.get('editMode'), this);
-    },
-
-    getComposerView: function() {
-      return this.composerView;
-    },
-
-    getPageView: function() {
-      return this.layoutView;
-    },
-
-    // Delegate to the LayoutView save
-    saveLayout : function() {
-      this.layoutView.save();
-    }
-  });
-
-  // Trigger to initialize the LAYOUT EDITION mode
-  $(function() {
-    window.editorView = new EditorView({el : 'body > .container', model: new EditorState()});
-  });
-})();
+  return LayoutView;
+})(Backbone, layoutDef, $, jqueryUI, editorView);
