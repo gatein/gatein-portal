@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.importer.Importer;
 import org.exoplatform.portal.mop.site.SimpleDataCache;
 import org.gatein.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.permission.SecurityService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.Imported;
@@ -65,6 +66,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             InitParams params,
             LayoutService layoutService,
             SiteService siteService,
+            SecurityService securityService,
             NavigationService navigationService,
             DescriptionService descriptionService) throws Exception {
 
@@ -79,7 +81,8 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
                 navigationService,
                 descriptionService,
                 layoutService,
-                siteService);
+                siteService,
+                securityService);
     }
 
     private void touchImport() {

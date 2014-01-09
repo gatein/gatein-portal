@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.importer;
 import java.util.Arrays;
 
 import org.exoplatform.portal.config.model.Page;
+import org.gatein.portal.mop.hierarchy.NodeChangeListener;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
@@ -32,6 +33,8 @@ import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
 import org.exoplatform.portal.pom.data.PageData;
+import org.gatein.portal.mop.permission.SecurityService;
+import org.gatein.portal.mop.permission.SecurityState;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
@@ -48,14 +51,18 @@ public class PageImporter {
     /** . */
     private final PageService pageService;
 
+    private final SecurityService securityService;
+
     /** . */
     private final ImportMode mode;
 
-    public PageImporter(ImportMode importMode, Page page, LayoutService layoutService, PageService pageService) {
+    public PageImporter(ImportMode importMode, Page page,
+                        LayoutService layoutService, PageService pageService, SecurityService securityService) {
         this.mode = importMode;
         this.src = page;
         this.layoutService = layoutService;
         this.pageService = pageService;
+        this.securityService = securityService;
     }
 
     public void perform() throws Exception {
@@ -83,15 +90,17 @@ public class PageImporter {
         }
 
         if (dst != null) {
-            PageState dstState = new PageState(dst.getTitle(), dst.getDescription(), dst.isShowMaxWindow(), dst.getFactoryId(),
-                    dst.getAccessPermissions() != null ? Arrays.asList(dst.getAccessPermissions()) : null,
-                    dst.getEditPermissions() != null ? Arrays.asList(dst.getEditPermissions()) : null);
+            PageState dstState = new PageState(dst.getTitle(), dst.getDescription(), dst.isShowMaxWindow(), dst.getFactoryId());
 
             //
             PageContext page = new PageContext(src.getPageKey(), dstState);
 
             // First save page as an object
             pageService.savePage(page);
+
+            //Save permission for page
+            SecurityState permission = new SecurityState(dst.getAccessPermissions(), dst.getEditPermissions());
+            securityService.savePermission(page.getData().id, permission);
 
             // We cheat a bit with this cast
             // but well it's easier to do this way

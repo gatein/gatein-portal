@@ -79,9 +79,8 @@ abstract class DataCache {
                 described.getName(),
                 described.getDescription(),
                 attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false),
-                attrs.getValue(MappedAttributes.FACTORY_ID),
-                org.exoplatform.portal.pom.config.Utils.safeImmutableList(accessPermissions),
-                editPermission);
+                attrs.getValue(MappedAttributes.FACTORY_ID)
+            );
 
         //
         return new PageData(

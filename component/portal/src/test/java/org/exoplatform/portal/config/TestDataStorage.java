@@ -522,7 +522,7 @@ public class TestDataStorage extends AbstractConfigTest {
         //
         Page srcPage = storage_.getPage("portal::test::test4");
         PageContext srcPageContext = pageService.loadPage(srcPage.getPageKey());
-        srcPageContext.setState(srcPageContext.getState().builder().editPermissions(Arrays.asList("Administrator")).build());
+        srcPageContext.setState(srcPageContext.getState().builder().build());
         pageService.savePage(srcPageContext);
 
         //
@@ -540,8 +540,8 @@ public class TestDataStorage extends AbstractConfigTest {
         Application<Portlet> portlet1 = (Application<Portlet>) dstPage.getChildren().get(0);
 
         // Check src's edit permission and dst's edit permission
-        assertNotNull(dstPageContext.getState().getEditPermissions());
-        assertEquals(srcPageContext.getState().getEditPermissions(), dstPageContext.getState().getEditPermissions());
+        //assertNotNull(dstPageContext.getState().getEditPermissions());
+        //assertEquals(srcPageContext.getState().getEditPermissions(), dstPageContext.getState().getEditPermissions());
 
         // Check src's children and dst's children
         assertNotNull(portlet1.getDescription());

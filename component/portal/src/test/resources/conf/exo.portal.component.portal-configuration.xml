@@ -28,6 +28,14 @@
     <key>org.exoplatform.commons.scope.ScopeManager</key>
     <type>org.exoplatform.commons.scope.ScopeManager</type>
   </component>
+  <component>
+    <key>org.gatein.portal.mop.permission.SecurityStore</key>
+    <type>org.exoplatform.portal.mop.permission.MopStore</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.permission.SecurityService</key>
+    <type>org.gatein.portal.mop.permission.SecurityServiceImpl</type>
+  </component>
 
   <component>
     <key>org.exoplatform.services.cache.CacheService</key>

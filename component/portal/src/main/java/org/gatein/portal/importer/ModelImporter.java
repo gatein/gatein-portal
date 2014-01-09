@@ -28,6 +28,7 @@ import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.permission.SecurityService;
 import org.gatein.portal.mop.site.SiteService;
 import org.picocontainer.Startable;
 
@@ -71,7 +72,8 @@ public class ModelImporter implements Startable {
             LayoutService layoutService,
             DescriptionService descriptionService,
             NavigationService navigationService,
-            SiteService siteService) {
+            SiteService siteService,
+            SecurityService securityService) {
 
         //
         this.configManager = configManager;
@@ -89,7 +91,8 @@ public class ModelImporter implements Startable {
                         navigationService,
                         descriptionService,
                         layoutService,
-                        siteService);
+                        siteService,
+                        securityService);
             } catch (Exception ex) {
                 logger.error("Could not instantiate importer", ex);
             }

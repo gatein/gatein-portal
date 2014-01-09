@@ -66,8 +66,6 @@ public abstract class ElementState implements Serializable {
 
     public abstract Properties getProperties();
 
-    public abstract List<String> getAccessPermissions();
-
     public abstract static class Builder<E extends ElementState> {
 
         public abstract E build();
@@ -112,14 +110,10 @@ public abstract class ElementState implements Serializable {
         /** . */
         public final Properties properties;
 
-        /** . */
-        public final List<String> accessPermissions;
-
         public Window(
                 ContentType<S> type,
                 ApplicationState<S> state,
-                Properties properties,
-                List<String> accessPermissions) {
+                Properties properties) {
 
             //
             if (type == null) {
@@ -130,7 +124,6 @@ public abstract class ElementState implements Serializable {
             this.type = type;
             this.state = state;
             this.properties = properties;
-            this.accessPermissions = accessPermissions;
         }
 
         public Window(
@@ -145,8 +138,7 @@ public abstract class ElementState implements Serializable {
                 String theme,
                 String width,
                 String height,
-                Map<String, String> properties,
-                List<String> accessPermissions) {
+                Map<String, String> properties) {
 
             //
             if (type == null) {
@@ -170,7 +162,6 @@ public abstract class ElementState implements Serializable {
             this.type = type;
             this.state = state;
             this.properties = builder.build();
-            this.accessPermissions = accessPermissions;
         }
 
         @Override
@@ -178,13 +169,7 @@ public abstract class ElementState implements Serializable {
             ElementState.Window that = (Window)o;
             return Safe.equals(type, that.type) &&
                     Safe.equals(state, that.state) &&
-                    Safe.equals(properties, that.properties) &&
-                    Safe.equals(accessPermissions, that.accessPermissions);
-        }
-
-        @Override
-        public List<String> getAccessPermissions() {
-            return accessPermissions;
+                    Safe.equals(properties, that.properties);
         }
 
         @Override
@@ -193,17 +178,10 @@ public abstract class ElementState implements Serializable {
         }
 
         public WindowBuilder builder() {
-            String[] accessPermissions;
-            if (this.accessPermissions == null) {
-                accessPermissions = EMPTY_STRINGS;
-            } else {
-                accessPermissions = this.accessPermissions.toArray(new String[this.accessPermissions.size()]);
-            }
             return new WindowBuilder(
                     type,
                     state,
-                    properties,
-                    accessPermissions
+                    properties
             );
         }
     }
@@ -219,18 +197,13 @@ public abstract class ElementState implements Serializable {
         /** . */
         private Properties.Builder properties;
 
-        /** . */
-        private String[] accessPermissions;
-
         public WindowBuilder(
                 ContentType type,
                 ApplicationState state,
-                Properties properties,
-                String[] accessPermissions) {
+                Properties properties) {
             this.type = type;
             this.state = state;
             this.properties = properties.builder();
-            this.accessPermissions = accessPermissions;
         }
 
         public WindowBuilder type(ContentType<?> type) {
@@ -300,18 +273,13 @@ public abstract class ElementState implements Serializable {
         }
 */
 
-        public WindowBuilder accessPermissions(String... accessPermissions) {
-            this.accessPermissions = accessPermissions;
-            return this;
-        }
 
         // Autocast (remove me please later)
         public Window build() {
             return new Window(
                     type,
                     state,
-                    properties.build(),
-                    Utils.safeImmutableList(accessPermissions)
+                    properties.build()
             );
         }
     }
@@ -327,11 +295,6 @@ public abstract class ElementState implements Serializable {
         @Override
         public Properties getProperties() {
             return Properties.EMPTY;
-        }
-
-        @Override
-        public List<String> getAccessPermissions() {
-            return Collections.emptyList();
         }
 
         public BodyBuilder builder() {
@@ -382,19 +345,14 @@ public abstract class ElementState implements Serializable {
         public final Properties properties;
 
         /** . */
-        public final List<String> accessPermissions;
-
-        /** . */
         public final boolean dashboard;
 
         public Container(
                 String id,
                 Properties properties,
-                List<String> accessPermissions,
                 boolean dashboard) {
             this.id = id;
             this.properties = properties;
-            this.accessPermissions = accessPermissions;
             this.dashboard = dashboard;
         }
 
@@ -408,7 +366,6 @@ public abstract class ElementState implements Serializable {
                 String description,
                 String width,
                 String height,
-                List<String> accessPermissions,
                 boolean dashboard) {
 
             //
@@ -425,7 +382,6 @@ public abstract class ElementState implements Serializable {
             //
             this.id = id;
             this.properties = builder.build();
-            this.accessPermissions = accessPermissions;
             this.dashboard = dashboard;
         }
 
@@ -435,16 +391,10 @@ public abstract class ElementState implements Serializable {
         }
 
         @Override
-        public List<String> getAccessPermissions() {
-            return accessPermissions;
-        }
-
-        @Override
         public boolean equals(Object o) {
             Container that = (Container) o;
             return Safe.equals(id, that.id) &&
                     Safe.equals(properties, that.properties) &&
-                    Safe.equals(accessPermissions, that.accessPermissions) &&
                     Safe.equals(dashboard, that.dashboard);
         }
 
@@ -452,7 +402,6 @@ public abstract class ElementState implements Serializable {
             return new ContainerBuilder(
                     id,
                     properties,
-                    accessPermissions.toArray(new String[accessPermissions.size()]),
                     dashboard
             );
         }
@@ -468,19 +417,14 @@ public abstract class ElementState implements Serializable {
         private Properties.Builder properties;
 
         /** . */
-        private String[] accessPermissions;
-
-        /** . */
         private boolean dashboard;
 
         public ContainerBuilder(
                 String id,
                 Properties properties,
-                String[] accessPermissions,
                 boolean dashboard) {
             this.id = id;
             this.properties = properties.builder();
-            this.accessPermissions = accessPermissions;
             this.dashboard = dashboard;
         }
 
@@ -529,16 +473,10 @@ public abstract class ElementState implements Serializable {
             return this;
         }
 
-        public ContainerBuilder accessPermissions(String... accessPermissions) {
-            this.accessPermissions = accessPermissions;
-            return this;
-        }
-
         public Container build() {
             return new Container(
                     id,
                     properties.build(),
-                    Utils.safeImmutableList(accessPermissions),
                     dashboard
             );
         }

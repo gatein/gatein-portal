@@ -670,8 +670,7 @@ public class PageImportTaskTest extends TestCase {
 
     private class PageContextBuilder {
         PageContext page(String name) {
-            return new PageContext(siteKey.page(name), new PageState(null, null, false, null, Collections.<String> emptyList(),
-                    Collections.<String>emptyList()));
+            return new PageContext(siteKey.page(name), new PageState(null, null, false, null));
         }
 
         List<PageContext> pages(Iterable<String> names) {

@@ -16,9 +16,6 @@ import org.exoplatform.commons.utils.Safe;
 public class PageState implements Serializable {
 
     /** . */
-    final List<String> editPermissions;
-
-    /** . */
     final boolean showMaxWindow;
 
     /** . */
@@ -30,21 +27,11 @@ public class PageState implements Serializable {
     /** . */
     final String description;
 
-    /** . */
-    final List<String> accessPermissions;
-
-    public PageState(String displayName, String description, boolean showMaxWindow, String factoryId,
-            List<String> accessPermissions, List<String> editPermissions) {
-        this.editPermissions = editPermissions;
+    public PageState(String displayName, String description, boolean showMaxWindow, String factoryId) {
         this.showMaxWindow = showMaxWindow;
         this.factoryId = factoryId;
         this.displayName = displayName;
         this.description = description;
-        this.accessPermissions = accessPermissions;
-    }
-
-    public List<String> getEditPermissions() {
-        return editPermissions;
     }
 
     public boolean getShowMaxWindow() {
@@ -63,10 +50,6 @@ public class PageState implements Serializable {
         return description;
     }
 
-    public List<String> getAccessPermissions() {
-        return accessPermissions;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,30 +59,25 @@ public class PageState implements Serializable {
             return false;
         }
         PageState that = (PageState) o;
-        return Safe.equals(editPermissions, that.editPermissions) && showMaxWindow == that.showMaxWindow
+        return  showMaxWindow == that.showMaxWindow
                 && Safe.equals(factoryId, that.factoryId) && Safe.equals(displayName, that.displayName)
-                && Safe.equals(description, that.description) && Safe.equals(accessPermissions, that.accessPermissions);
+                && Safe.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        int result = editPermissions != null ? editPermissions.hashCode() : 0;
-        result = 31 * result + (showMaxWindow ? 1 : 0);
+        int result = (showMaxWindow ? 1 : 0);
         result = 31 * result + (factoryId != null ? factoryId.hashCode() : 0);
         result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (accessPermissions != null ? accessPermissions.hashCode() : 0);
         return result;
     }
 
     public Builder builder() {
-        return new Builder(editPermissions, showMaxWindow, factoryId, displayName, description, accessPermissions);
+        return new Builder(showMaxWindow, factoryId, displayName, description);
     }
 
     public static class Builder {
-
-        /** . */
-        private List<String> editPermissions;
 
         /** . */
         private boolean showMaxWindow;
@@ -113,41 +91,15 @@ public class PageState implements Serializable {
         /** . */
         private String description;
 
-        /** . */
-        private List<String> accessPermissions;
-
         public Builder() {
-            this(null,
-                    false,
-                    null,
-                    null,
-                    null,
-                    new ArrayList<String>());
+            this(false, null, null, null);
         }
 
-        private Builder(List<String> editPermissions, boolean showMaxWindow, String factoryId, String displayName, String description,
-                List<String> accessPermissions) {
-            this.editPermissions = editPermissions;
+        private Builder(boolean showMaxWindow, String factoryId, String displayName, String description) {
             this.showMaxWindow = showMaxWindow;
             this.factoryId = factoryId;
             this.displayName = displayName;
             this.description = description;
-            this.accessPermissions = accessPermissions;
-        }
-
-        public Builder editPermissions(List<String> editPermissions) {
-            this.editPermissions = editPermissions;
-            return this;
-        }
-
-        public Builder accessPermissions(List<String> accessPermissions) {
-            this.accessPermissions = accessPermissions;
-            return this;
-        }
-
-        public Builder accessPermissions(String... accessPermissions) {
-            this.accessPermissions = new ArrayList<String>(Arrays.asList(accessPermissions));
-            return this;
         }
 
         public Builder showMaxWindow(boolean showMaxWindow) {
@@ -171,7 +123,7 @@ public class PageState implements Serializable {
         }
 
         public PageState build() {
-            return new PageState(displayName, description, showMaxWindow, factoryId, accessPermissions, editPermissions);
+            return new PageState(displayName, description, showMaxWindow, factoryId);
         }
     }
 }

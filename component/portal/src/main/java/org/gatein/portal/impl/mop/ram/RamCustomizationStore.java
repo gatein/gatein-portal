@@ -57,7 +57,7 @@ public class RamCustomizationStore implements CustomizationStore {
         ElementState.Window windowState = (ElementState.Window) customization.getState();
         TransientApplicationState appState = (TransientApplicationState) windowState.state;
         appState = new TransientApplicationState(appState.getContentId(), state, appState.getOwnerType(), appState.getOwnerId());
-        windowState = new ElementState.Window(windowState.type, appState, windowState.properties, windowState.accessPermissions);
+        windowState = new ElementState.Window(windowState.type, appState, windowState.properties);
         current.update(id, windowState);
         return state;
     }

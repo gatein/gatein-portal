@@ -30,6 +30,8 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.gatein.portal.mop.permission.SecurityService;
+import org.gatein.portal.mop.permission.SecurityState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.navigation.NavigationContext;
@@ -65,6 +67,8 @@ public class TestLoadedPOM extends AbstractConfigTest {
     /** . */
     private NavigationService navService;
 
+    private SecurityService securityService;
+
     public TestLoadedPOM(String name) {
         super(name);
     }
@@ -78,6 +82,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         pageService = (PageService) container.getComponentInstanceOfType(PageService.class);
         mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
         navService = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
+        securityService = (SecurityService)container.getComponentInstanceOfType(SecurityService.class);
         session = mgr.openSession();
     }
 
@@ -165,16 +170,19 @@ public class TestLoadedPOM extends AbstractConfigTest {
 
     public void testPage() throws Exception {
         Page page = storage.getPage("portal::test::test1");
-        assertNotNull(page);
+        assertNotNull("Page must not null", page);
 
         PageContext pageContext = pageService.loadPage(page.getPageKey());
-        assertNotNull(pageContext);
+        assertNotNull("Page context must not null", pageContext);
+
+        SecurityState pageSecurity = securityService.loadPermission(pageContext.getData().id);
+        assertNotNull("SecurityState of page must not null", pageSecurity);
 
         //
         assertEquals("test_title", pageContext.getState().getDisplayName());
         assertEquals("test_factory_id", pageContext.getState().getFactoryId());
-        assertEquals(Arrays.<String> asList("test_access_permissions"), pageContext.getState().getAccessPermissions());
-        assertEquals(Arrays.<String>asList("test_edit_permission"), pageContext.getState().getEditPermissions());
+        assertTrue(Arrays.equals(new String[] {"test_access_permissions"}, pageSecurity.getAccessPermission()));
+        assertTrue(Arrays.equals(new String[] {"test_edit_permission"}, pageSecurity.getEditPermissions()));
         assertEquals(true, pageContext.getState().getShowMaxWindow());
 
         //
@@ -187,7 +195,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         assertEquals("container_1_title", container1.getTitle());
         assertEquals("container_1_icon", container1.getIcon());
         assertEquals("container_1_template", container1.getTemplate());
-        assertTrue(Arrays.equals(new String[] { "container_1_access_permissions" }, container1.getAccessPermissions()));
+        //assertTrue(Arrays.equals(new String[] { "container_1_access_permissions" }, container1.getAccessPermissions()));
         assertEquals("container_1_factory_id", container1.getFactoryId());
         assertEquals("container_1_description", container1.getDescription());
         assertEquals("container_1_width", container1.getWidth());
@@ -197,7 +205,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         Application application1 = (Application) children.get(1);
         assertEquals("application_1_theme", application1.getTheme());
         assertEquals("application_1_title", application1.getTitle());
-        assertTrue(Arrays.equals(new String[] { "application_1_access_permissions" }, application1.getAccessPermissions()));
+        //assertTrue(Arrays.equals(new String[] { "application_1_access_permissions" }, application1.getAccessPermissions()));
         assertEquals(true, application1.getShowInfoBar());
         assertEquals(true, application1.getShowApplicationState());
         assertEquals(true, application1.getShowApplicationMode());

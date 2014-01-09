@@ -31,6 +31,8 @@ import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.gatein.portal.mop.permission.SecurityService;
+import org.gatein.portal.mop.permission.SecurityState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.page.PageContext;
@@ -72,8 +74,10 @@ public class UserACL {
 
     private String adminMSType;
 
+    private SecurityService securityService;
+
     @SuppressWarnings("unchecked")
-    public UserACL(InitParams params) {
+    public UserACL(InitParams params, SecurityService securityService) {
         UserACLMetaData md = new UserACLMetaData(params);
 
         ValuesParam mandatoryGroupsParam = params.getValuesParam("mandatory.groups");
@@ -100,6 +104,8 @@ public class UserACL {
         if (adminMSTypeParam != null) {
             setAdminMSType(adminMSTypeParam.getValue());
         }
+
+        this.securityService = securityService;
 
         init(md);
     }
@@ -346,7 +352,7 @@ public class UserACL {
         if (hasEditPermission(page)) {
             return true;
         }
-        List<String> accessPerms = page.getState().getAccessPermissions();
+        String[] accessPerms = loadPermission(page).getAccessPermission();
         if (accessPerms != null) {
             for (String per : accessPerms) {
                 if (hasPermission(identity, per)) {
@@ -395,7 +401,7 @@ public class UserACL {
             if(superUser_.equals(identity.getUserId())) {
                 return true;
             }
-            List<String> editPerms = page.getState().getEditPermissions();
+            String[] editPerms = loadPermission(page).getEditPermissions();
             if(editPerms != null) {
                 for(String perm : editPerms) {
                     if(hasPermission(identity, perm)) {
@@ -405,6 +411,10 @@ public class UserACL {
             }
             return false;
         }
+    }
+
+    private SecurityState loadPermission(PageContext page) {
+        return securityService != null ? securityService.loadPermission(page.getData().id) : new SecurityState(new String[0], new String[0]);
     }
 
     /**

@@ -52,6 +52,7 @@ import org.gatein.common.logging.LoggerFactory;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.permission.SecurityService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
@@ -109,6 +110,8 @@ public class Importer extends BaseComponentPlugin {
     /** . */
     private SiteService siteService;
 
+    private SecurityService securityService;
+
     /** . */
     private final ImportMode defaultImportMode;
 
@@ -128,13 +131,15 @@ public class Importer extends BaseComponentPlugin {
             NavigationService navigationService,
             DescriptionService descriptionService,
             LayoutService layoutService,
-            SiteService siteService) throws Exception {
+            SiteService siteService,
+            SecurityService securityService) throws Exception {
         this.cmanager_ = cmanager;
         this.pageService_ = pageService;
         this.navigationService_ = navigationService;
         this.descriptionService_ = descriptionService;
         this.layoutService = layoutService;
         this.siteService = siteService;
+        this.securityService = securityService;
         this.isFirstStartup = false;
         this.unmarshaller = new ModelUnmarshaller();
 
@@ -440,7 +445,7 @@ public class Importer extends BaseComponentPlugin {
             RequestLifeCycle.begin(PortalContainer.getInstance());
             try { //
                 ImportMode importMode = getRightMode(config.getImportMode());
-                PageImporter importer = new PageImporter(importMode, page, layoutService, pageService_);
+                PageImporter importer = new PageImporter(importMode, page, layoutService, pageService_, securityService);
                 importer.perform();
             } finally {
                 RequestLifeCycle.end();

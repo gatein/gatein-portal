@@ -45,7 +45,7 @@ public class TestPageImporter extends AbstractMopServiceTest {
         Container container = new Container();
         container.setStorageName("foo");
         page.getChildren().add(container);
-        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService());
+        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService(), getSecurityService());
         importer.perform();
         PageContext pageContext = getPageService().loadPage(PageKey.parse("portal::bilto::the_page"));
         NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>)context.getLayoutService().loadLayout(ElementState.model(), pageContext.getLayoutId(), null);
@@ -62,7 +62,7 @@ public class TestPageImporter extends AbstractMopServiceTest {
         page.setName("the_page");
         page.getChildren().add(new Container().setStorageName("foo"));
         page.getChildren().add(new Container().setStorageName("foo"));
-        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService());
+        PageImporter importer = new PageImporter(ImportMode.INSERT, page, context.getLayoutService(), getPageService(), getSecurityService());
         try {
             importer.perform();
         } catch (HierarchyException e) {
@@ -78,10 +78,10 @@ public class TestPageImporter extends AbstractMopServiceTest {
         page.setName("the_page");
         page.getChildren().add(new Container().setStorageName("foo"));
         page.getChildren().add(new Container().setStorageName("bar"));
-        PageImporter importer = new PageImporter(ImportMode.OVERWRITE, page, context.getLayoutService(), context.getPageService());
+        PageImporter importer = new PageImporter(ImportMode.OVERWRITE, page, context.getLayoutService(), context.getPageService(), getSecurityService());
         importer.perform();
         sync(true);
-        importer = new PageImporter(ImportMode.OVERWRITE, page, context.getLayoutService(), context.getPageService());
+        importer = new PageImporter(ImportMode.OVERWRITE, page, context.getLayoutService(), context.getPageService(), context.getSecurityService());
         importer.perform();
     }
 }

@@ -251,7 +251,7 @@ public class JSONContainerAdapter implements ModelAdapter<JSONObject, ElementSta
 
             if (isContainer(json)) {
                 //Create new container
-                return new ElementState.Container(null, json.getString("id"), null, null, null, null, null, null, null, new ArrayList<String>(), false);
+                return new ElementState.Container(null, json.getString("id"), null, null, null, null, null, null, null, false);
 
             } else if ("application".equalsIgnoreCase(type)) {
                 //create new window
@@ -259,7 +259,7 @@ public class JSONContainerAdapter implements ModelAdapter<JSONObject, ElementSta
                 TransientApplicationState state = new TransientApplicationState(contentId);
                 String contentTypeValue = json.getString("contentType");
                 ContentType<?> contentType = ContentType.forValue(contentTypeValue);
-                return new ElementState.Window(contentType, state, null, null, null, false, false, false, null, null, null, null, null);
+                return new ElementState.Window(contentType, state, null, null, null, false, false, false, null, null, null, null);
 
             } else {
                 throw new UnsupportedOperationException();

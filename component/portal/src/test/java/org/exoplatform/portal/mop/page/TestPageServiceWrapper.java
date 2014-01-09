@@ -75,22 +75,21 @@ public class TestPageServiceWrapper extends AbstractMopServiceTest {
         PageKey key = SiteKey.portal("notification").page("home");
 
         // Create
-        PageContext page = new PageContext(key, new PageState("home", "description", true, null,
-                Collections.singletonList("foo"), Collections.singletonList("bar")));
+        PageContext page = new PageContext(key, new PageState("home", "description", true, null));
         assertTrue(serviceWrapper.savePage(page));
         assertEquals(1, createListener.events.size());
         assertEquals(0, updateListener.events.size());
         assertEquals(0, destroyListener.events.size());
 
         // Update
-        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), Collections.singletonList("bar")));
+        page.setState(new PageState("home2", "description2", false, null));
         assertFalse(serviceWrapper.savePage(page));
         assertEquals(1, createListener.events.size());
         assertEquals(1, updateListener.events.size());
         assertEquals(0, destroyListener.events.size());
 
         // Destroy
-        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), Collections.singletonList("bar")));
+        page.setState(new PageState("home2", "description2", false, null));
         assertTrue(serviceWrapper.destroyPage(key));
         assertEquals(1, createListener.events.size());
         assertEquals(1, updateListener.events.size());

@@ -59,23 +59,20 @@ public class Element extends ModelNode<Element, ElementState> {
         return new ElementState.WindowBuilder(
                 ContentType.PORTLET,
                 new TransientApplicationState(portletId, portletState),
-                Properties.EMPTY,
-                ElementState.EMPTY_STRINGS);
+                Properties.EMPTY);
     }
 
     public static ElementState.WindowBuilder clonePortlet(String customizationId) {
         return new ElementState.WindowBuilder(
                 ContentType.PORTLET,
                 new CloneApplicationState(customizationId),
-                Properties.EMPTY,
-                ElementState.EMPTY_STRINGS);
+                Properties.EMPTY);
     }
 
     public static ElementState.ContainerBuilder container() {
         return new ElementState.ContainerBuilder(
                 null,
                 Properties.EMPTY,
-                ElementState.EMPTY_STRINGS,
                 false
         );
     }

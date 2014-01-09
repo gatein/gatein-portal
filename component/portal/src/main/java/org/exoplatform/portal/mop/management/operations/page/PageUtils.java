@@ -73,9 +73,7 @@ public class PageUtils {
     }
 
     public static PageState toPageState(Page page) {
-        return new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(), page.getFactoryId(),
-                page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null,
-                page.getEditPermissions() != null ? Arrays.asList(page.getEditPermissions()) : null);
+        return new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(), page.getFactoryId());
     }
 
     public static <S extends Serializable> Application<S> copy(Application<S> existing) {

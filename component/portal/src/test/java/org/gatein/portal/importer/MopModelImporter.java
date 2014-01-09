@@ -34,6 +34,7 @@ import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.permission.SecurityService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.mop.site.SiteServiceImpl;
@@ -60,6 +61,8 @@ public class MopModelImporter {
 
     private LayoutService layoutService;
 
+    private SecurityService securityService;
+
     private ModelImporter modelImporter;
 
     private POMSessionManager pomMgr;
@@ -81,8 +84,9 @@ public class MopModelImporter {
                     layoutService = context.getLayoutService();
                     navigationService = context.getNavigationService();
                     pomMgr = getPomMgr((PersistenceContext.JCR) context);
+                    securityService = context.getSecurityService();
 
-                    modelImporter = new ModelImporter(configurationManager, initParams, pageService, layoutService, descriptionService, navigationService, siteService);
+                    modelImporter = new ModelImporter(configurationManager, initParams, pageService, layoutService, descriptionService, navigationService, siteService, securityService);
                     wired = true;
                 }
             }

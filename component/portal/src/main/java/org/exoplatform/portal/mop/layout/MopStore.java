@@ -130,7 +130,6 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
                     described.getDescription(),
                     attrs.getValue(MappedAttributes.WIDTH),
                     attrs.getValue(MappedAttributes.HEIGHT),
-                    Utils.safeImmutableList(accessPermissions),
                     "dashboard".equals(attrs.getValue(MappedAttributes.TYPE))
             );
         } else if (type == ObjectType.WINDOW) {
@@ -164,8 +163,7 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
                     theme,
                     attrs.getValue(MappedAttributes.WIDTH),
                     attrs.getValue(MappedAttributes.HEIGHT),
-                    Utils.safeImmutableMap(properties),
-                    Utils.safeImmutableList(accessPermissions));
+                    Utils.safeImmutableMap(properties));
         } else if (type == ObjectType.BODY) {
             state = new ElementState.Body();
         } else {
@@ -219,8 +217,6 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
         if (component instanceof UIContainer) {
             UIContainer container = (UIContainer) component;
             ElementState.Container containerState = (ElementState.Container) state;
-            ProtectedResource pr = container.adapt(ProtectedResource.class);
-            pr.setAccessPermissions(containerState.accessPermissions);
             Described described = container.adapt(Described.class);
             described.setName(containerState.properties.get(ElementState.Container.TITLE));
             described.setDescription(containerState.properties.get(ElementState.Container.DESCRIPTION));
@@ -236,8 +232,6 @@ public class MopStore implements LayoutStore, NodeStore<ElementState> {
         } else if (component instanceof UIWindow) {
             UIWindow window = (UIWindow) component;
             ElementState.Window windowState = (ElementState.Window) state;
-            ProtectedResource pr = window.adapt(ProtectedResource.class);
-            pr.setAccessPermissions(windowState.accessPermissions);
             Described described = window.adapt(Described.class);
             described.setName(windowState.properties.get(ElementState.Window.TITLE));
             described.setDescription(windowState.properties.get(ElementState.Window.DESCRIPTION));

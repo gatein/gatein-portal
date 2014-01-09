@@ -93,9 +93,6 @@ public class MopStore implements PageStore {
             created = false;
         }
         if (state != null) {
-            ProtectedResource pr = dst.adapt(ProtectedResource.class);
-            pr.setAccessPermissions(state.getAccessPermissions());
-            pr.setEditPermissions(state.getEditPermissions());
 
             //
             Described described = dst.adapt(Described.class);

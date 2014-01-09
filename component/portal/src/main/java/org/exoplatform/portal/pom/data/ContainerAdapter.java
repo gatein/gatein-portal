@@ -144,8 +144,7 @@ public class ContainerAdapter implements ModelAdapter<ComponentData, ElementStat
                     application.getTheme(),
                     application.getWidth(),
                     application.getHeight(),
-                    application.getProperties(),
-                    application.getAccessPermissions()
+                    application.getProperties()
             );
         } else if (data instanceof BodyData) {
             return new ElementState.Body();
@@ -161,7 +160,6 @@ public class ContainerAdapter implements ModelAdapter<ComponentData, ElementStat
                     container.getDescription(),
                     container.getWidth(),
                     container.getHeight(),
-                    container.getAccessPermissions(),
                     container instanceof DashboardData
             );
         } else {

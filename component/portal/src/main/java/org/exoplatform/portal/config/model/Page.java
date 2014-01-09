@@ -174,10 +174,6 @@ public class Page extends Container {
         setDescription(state.getDescription());
         setFactoryId(state.getFactoryId());
         setShowMaxWindow(state.getShowMaxWindow());
-        setAccessPermissions(state.getAccessPermissions() != null ? state.getAccessPermissions()
-                .toArray(new String[state.getAccessPermissions().size()]) : null);
-        setEditPermissions(state.getEditPermissions() != null ? state.getEditPermissions()
-                .toArray(new String[state.getEditPermissions().size()]) : null);
         return this;
     }
 

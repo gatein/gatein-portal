@@ -45,7 +45,6 @@ public class RamLayoutStore implements LayoutStore, NodeStore<ElementState> {
             null,
             null,
             null,
-            Collections.<String>emptyList(),
             false
     );
     /** . */
@@ -72,8 +71,7 @@ public class RamLayoutStore implements LayoutStore, NodeStore<ElementState> {
             state = new ElementState.Window(
                     windowState.type,
                     new PersistentApplicationState(nodeId),
-                    windowState.properties,
-                    windowState.accessPermissions
+                    windowState.properties
             );
         }
         return new NodeData<ElementState>(

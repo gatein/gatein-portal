@@ -93,7 +93,6 @@ class MongoElementStore implements NodeStore<ElementState> {
                 state = new ElementState.Container(
                         null,
                         props.build(),
-                        (List<String>) element.get("access-permissions"),
                         false);
             } else {
                 if ("window".equals(type)) {
@@ -115,8 +114,7 @@ class MongoElementStore implements NodeStore<ElementState> {
                     state = new ElementState.Window(
                             contentType,
                             new PersistentApplicationState(id),
-                            props.build(),
-                            (List<String>) element.get("access-permissions"));
+                            props.build());
                     contents.put(id, content);
                 } else if ("body".equals(type)) {
                     state = new ElementState.Body();
@@ -143,7 +141,7 @@ class MongoElementStore implements NodeStore<ElementState> {
         nodes.put(
                 rootId,
                 new NodeData<ElementState>(null, rootId, "", new ElementState.Container(
-                        null, Properties.EMPTY, Collections.<String>emptyList(), false
+                        null, Properties.EMPTY, false
                 ), ElementState.EMPTY_STRINGS));
 
         //
@@ -187,14 +185,12 @@ class MongoElementStore implements NodeStore<ElementState> {
             type = "container";
             content = null;
             ElementState.Container containerState = (ElementState.Container) state;
-            dom.put("access-permissions", containerState.accessPermissions);
             for (Property property : containerState.properties) {
                 doc.put(property.getName(), property.getValue());
             }
         } else if (state instanceof ElementState.Window) {
             type = "window";
             ElementState.Window windowState = (ElementState.Window) state;
-            dom.put("access-permissions", windowState.accessPermissions);
             for (Property property : windowState.properties) {
                 doc.put(property.getName(), property.getValue());
             }

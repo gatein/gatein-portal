@@ -48,20 +48,6 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
-import org.gatein.portal.mop.QueryResult;
-import org.gatein.portal.mop.Property;
-import org.gatein.portal.mop.customization.CustomizationContext;
-import org.gatein.portal.mop.customization.CustomizationService;
-import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SiteType;
-import org.gatein.portal.mop.hierarchy.NodeContext;
-import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.mop.layout.LayoutService;
-import org.gatein.portal.mop.page.PageContext;
-import org.gatein.portal.mop.page.PageService;
-import org.gatein.portal.mop.page.PageState;
-import org.gatein.portal.mop.site.SiteContext;
-import org.gatein.portal.mop.site.SiteService;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
 import org.exoplatform.portal.pom.data.ApplicationData;
@@ -91,6 +77,19 @@ import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIWindow;
+import org.gatein.portal.mop.QueryResult;
+import org.gatein.portal.mop.customization.CustomizationContext;
+import org.gatein.portal.mop.customization.CustomizationService;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.site.SiteContext;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteService;
+import org.gatein.portal.mop.site.SiteType;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
@@ -317,7 +316,7 @@ public class POMDataStorage implements ModelDataStorage {
                     container.properties.get(ElementState.Container.DESCRIPTION),
                     container.properties.get(ElementState.Container.WIDTH),
                     container.properties.get(ElementState.Container.HEIGHT),
-                    container.accessPermissions,
+                    Collections.<String>emptyList(),
                     children
             );
         } else if (state instanceof ElementState.Window) {
@@ -347,7 +346,7 @@ public class POMDataStorage implements ModelDataStorage {
                     window.properties.get(ElementState.Window.WIDTH),
                     window.properties.get(ElementState.Window.HEIGHT),
                     properties,
-                    window.accessPermissions
+                    Collections.emptyList()
             );
         } else if (state instanceof ElementState.Body) {
             return new BodyData(context.getId(), bodyType);
@@ -378,9 +377,7 @@ public class POMDataStorage implements ModelDataStorage {
                     page.getName(),
                     page.getDescription(),
                     page.isShowMaxWindow(),
-                    page.getFactoryId(),
-                    page.getAccessPermissions(),
-                    page.getEditPermissions()
+                    page.getFactoryId()
             ));
             pageService.savePage(context);
         }
