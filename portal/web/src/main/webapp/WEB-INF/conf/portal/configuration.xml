@@ -33,6 +33,12 @@
     <key>org.gatein.portal.mop.customization.CustomizationStore</key>
     <type>org.gatein.portal.impl.mop.ram.RamCustomizationStore</type>
   </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamSecurityStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.permission.SecurityServiceImpl</type>
+  </component>
 
   <!-- Mongo data store -->
   <component profiles="mongo">

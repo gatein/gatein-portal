@@ -49,6 +49,12 @@
   <component>
     <type>org.gatein.portal.mop.customization.CustomizationServiceImpl</type>
   </component>
+  <component>
+    <type>org.gatein.portal.impl.mop.ram.RamSecurityStore</type>
+  </component>
+  <component>
+    <type>org.gatein.portal.mop.permission.SecurityServiceImpl</type>
+  </component>
 
   <!-- -->
   <component>
