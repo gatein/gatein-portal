@@ -1,0 +1,31 @@
+<div class="userpforile">
+    <!-- Message -->
+    <div id="userProfileMessage" class="alert alert-${message.type}" style="display: ${message.message == '' ? 'none' : 'block' }" >
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        ${message.message}
+    </div>
+
+    <div>
+        <!-- Social connect -->
+        <fieldset>
+            <legend>Social profile</legend>
+            <%
+            if (oauthProviders != null) {%>
+            <ul class="unstyled">
+                <% for (def social : oauthProviders) { %>
+                <li class="input-append" style="width:100%">
+                    <label>${social.name}</label>
+                    <input type="text" value="${social.socialAccount}" <%if(social.socialAccount != null && social.socialAccount != ""){%> readonly="readonly" <%}%>
+                           placeholder="Connect with ${social.name}"/>
+                    <%if(social.socialAccount != null && social.socialAccount != "") {%>
+                    <a href="@{UserProfileController.removeOauthLink(oauthProviderKey="${social.oauthKey}")}" class="btn btn-${social.type}"><i class="icon-${social.type}"></i>Delete</a>
+                    <%} else {%>
+                    <a href="${social.link}" class="btn btn-${social.type}"><i class="icon-${social.type}"></i>Connect</a>
+                    <%}%>
+                </li>
+                <%}%>
+            </ul>
+            <%}%>
+        </fieldset>
+    </div>
+</div>

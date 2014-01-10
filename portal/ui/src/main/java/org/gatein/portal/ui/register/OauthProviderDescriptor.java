@@ -25,11 +25,15 @@ public class OauthProviderDescriptor implements Serializable {
     private String name;
     private String link;
     private String type;
+    private String oauthKey;
+    private String socialAccount;
 
-    public OauthProviderDescriptor(String name, String link, String type) {
+    public OauthProviderDescriptor(String name, String link, String type, String key) {
         this.name = name;
         this.link = link;
         this.type = type;
+        this.oauthKey = key;
+        this.socialAccount = "";
     }
 
     public String getName() {
@@ -54,5 +58,21 @@ public class OauthProviderDescriptor implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSocialAccount() {
+        return socialAccount;
+    }
+
+    public String getOauthKey() {
+        return oauthKey;
+    }
+
+    public void setOauthKey(String oauthKey) {
+        this.oauthKey = oauthKey;
+    }
+
+    public void setSocialAccount(String socialAccount) {
+        this.socialAccount = socialAccount;
     }
 }

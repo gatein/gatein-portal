@@ -50,4 +50,16 @@
       <short-title>Register</short-title>
     </portlet-info>
   </portlet>
+  <portlet>
+    <portlet-name>UserProfilePortlet</portlet-name>
+    <portlet-class>org.gatein.portal.ui.userprofile.UserProfilePortlet</portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+      <portlet-mode>view</portlet-mode>
+    </supports>
+    <portlet-info>
+      <title>User Profile Portlet</title>
+      <short-title>UserProfile</short-title>
+    </portlet-info>
+  </portlet>
 </portlet-app>

@@ -42,7 +42,7 @@ public class OauthProviderHelper {
                 } else if (provider.getKey().equals("FACEBOOK")) {
                     type = "facebook";
                 }
-                oauthProviders.add(new OauthProviderDescriptor(provider.getFriendlyName(), provider.getInitOAuthURL(contextPath), type));
+                oauthProviders.add(new OauthProviderDescriptor(provider.getFriendlyName(), provider.getInitOAuthURL(contextPath), type, provider.getKey()));
             }
         }
         return oauthProviders;
