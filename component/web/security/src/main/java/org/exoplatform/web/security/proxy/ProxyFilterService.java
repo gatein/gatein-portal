@@ -146,6 +146,7 @@ public class ProxyFilterService {
                 log.trace("Black list " + pattern + (rejected ? " matched URI " : " did not match URI") + remoteURI);
             }
             if (rejected) {
+                log.info("URL for the gadget is blacklisted (pattern: "+pattern+"). Access to its contents has been blocked. URL: " + remoteURI);
                 return false;
             }
         }
@@ -163,9 +164,7 @@ public class ProxyFilterService {
         }
 
         //
-        if (trace) {
-            log.trace("Rejected implicitely uri " + remoteURI);
-        }
+        log.info("URL for the gadget is not white-listed. Access to its contents has been blocked. URL: " + remoteURI);
 
         //
         return false;
