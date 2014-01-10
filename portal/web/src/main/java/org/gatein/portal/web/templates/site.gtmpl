@@ -55,7 +55,7 @@
                                 <span>One column</span>
                             </label>
                             <br/>
-                            <input type="radio" name="composer-layout" id="composer-layout-1" data-layoutURL="@{PageEditor.switchLayout(id='1')}"/>
+                            <input type="radio" name="composer-layout" id="composer-layout-1" data-factoryId="1"/>
                         </div>
                     </li>
                     <li>
@@ -66,7 +66,7 @@
                                 <span>Two columns 70 30</span>
                             </label>
                             <br/>
-                            <input type="radio" name="composer-layout" id="composer-layout-2" data-layoutURL="@{PageEditor.switchLayout(id='2')}"/>
+                            <input type="radio" name="composer-layout" id="composer-layout-2" data-factoryId="2"/>
                         </div>
                     </li>
                     <li>
@@ -77,7 +77,7 @@
                                 <span>Two columns One row</span>
                             </label>
                             <br/>
-                            <input type="radio" name="composer-layout" id="composer-layout-3" data-layoutURL="@{PageEditor.switchLayout(id='3')}"/>
+                            <input type="radio" name="composer-layout" id="composer-layout-3" data-factoryId="3"/>
                         </div>
                     </li>
                     <li>
@@ -88,7 +88,7 @@
                                 <span>One row Two columns</span>
                             </label>
                             <br/>
-                            <input type="radio" name="composer-layout" id="composer-layout-4" data-layoutURL="@{PageEditor.switchLayout(id='4')}"/>
+                            <input type="radio" name="composer-layout" id="composer-layout-4" data-factoryId="4"/>
                         </div>
                     </li>
                     <li>
@@ -99,7 +99,7 @@
                                 <span>Three columns</span>
                             </label>
                             <br/>
-                            <input type="radio" name="composer-layout" id="composer-layout-5" data-layoutURL="@{PageEditor.switchLayout(id='5')}"/>
+                            <input type="radio" name="composer-layout" id="composer-layout-5" data-factoryId="5"/>
                         </div>
                     </li>
                 </ul>
@@ -208,7 +208,8 @@
      data-pageKey="${pageKey}"
      data-pageDisplayName="${pageDisplayName}"
      data-parentLink="${parentLink}"
-     data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}">
+     data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}"
+     data-layoutURL="@{PageEditor.switchLayout(id='null')}">
 ${body}
 </div>
 

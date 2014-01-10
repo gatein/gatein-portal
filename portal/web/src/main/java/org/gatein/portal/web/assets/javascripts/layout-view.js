@@ -251,6 +251,7 @@
     initialize : function(options) {
       var options = options || {};
       this.urlRoot = this.$el.attr("data-urlRoot");
+      this.layoutURL = this.$el.attr("data-layoutURL");
       this.layoutId = this.$el.attr('data-layoutId');
       this.pageKey = this.$el.attr('data-pageKey');
       this.pageDisplayName = this.$el.attr('data-pageDisplayName');
@@ -260,7 +261,7 @@
       
       //TODO: remove /null at the end of url - this should be refactor later
       this.urlRoot = this.urlRoot.substring(0, this.urlRoot.length - 4);
-
+      this.layoutURL = this.layoutURL.substring(0, this.layoutURL.length - 4);
       // Build model from current DOM
       this.buildModel();
       this.listenTo(this.model, "change:factoryId", this.changeFactoryId);
@@ -268,7 +269,17 @@
     
     changeFactoryId : function() {
       var factoryId = this.model.get('factoryId');
-      $("input#composer-layout-" + factoryId).click();
+      var layoutURL = this.layoutURL + factoryId;
+      // Make an ajax request to fetch the new layout data [layout_id, html_template]
+      $.ajax({
+        url : layoutURL,
+        dataType : "json",
+        success : function(result) {
+          // Ask the layout view to switch layout with passed layout data
+          var layoutView = editorView.layoutView;
+          layoutView.switchLayout(result);
+        }
+      });
     },
     
     // Listen to clicking on SAVE button

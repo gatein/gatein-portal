@@ -44,6 +44,8 @@
           _this.pageModal = new PagePropertiesModal({ el : "#pagePropertiesModal"})
           _this.pageModal.render();
         });
+      } else {
+        this.pageModal.render();
       }
     },
     
