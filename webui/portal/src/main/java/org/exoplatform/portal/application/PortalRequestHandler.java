@@ -131,6 +131,9 @@ public class PortalRequestHandler extends WebRequestHandler {
 
         log.debug("Session ID = " + req.getSession().getId());
 
+        // watch out: this might get overriden later, if the portal itself has a configuration for this value
+        res.setHeader("Cache-Control", "no-cache");
+
         //
         String requestPath = controllerContext.getParameter(REQUEST_PATH);
         String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
@@ -157,9 +160,6 @@ public class PortalRequestHandler extends WebRequestHandler {
         DataStorage storage = (DataStorage) PortalContainer.getComponent(DataStorage.class);
         PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteType, requestSiteName);
 
-        // this might be overriden in a per-portal basis
-        String cacheControl = null;
-
         if (context.getUserPortalConfig() == null) {
             if (persistentPortalConfig == null) {
                 return false;
@@ -169,24 +169,18 @@ public class PortalRequestHandler extends WebRequestHandler {
                 context.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         } else {
-            // gets the cache control from the properties
-            // if it's not set yet, then it's null and it will fall back to the default value
-            cacheControl = persistentPortalConfig.getProperty(PortalProperties.CACHE_CONTROL);
+            String cacheControl = persistentPortalConfig.getProperty(PortalProperties.CACHE_CONTROL);
+            if (cacheControl != null) {
+                // GTNPORTAL-3361
+                // Previously, the Cache-Control was set to no-cache at all times, the reason for that being unclear.
+                // A feature request to allow portals to set their own policy caused this change, but we might
+                // revert if there are bad side-effects. If so, please replace this comment with the background information,
+                // so that it gets documented why the no-cache setting is forced.
+                res.setHeader("Cache-Control", cacheControl);
+            }
 
             processRequest(context, app);
         }
-
-        if (cacheControl == null) {
-            // this was the default before GTNPORTAL-3361
-            cacheControl = "no-cache";
-        }
-
-        // GTNPORTAL-3361
-        // Previously, the Cache-Control was set to no-cache at all times, the reason for that being unclear.
-        // A feature request to allow portals to set their own policy caused this change, but we might
-        // revert if there are bad side-effects. If so, please replace this comment with the background information,
-        // so that it gets documented why the no-cache setting is forced.
-        res.setHeader("Cache-Control", cacheControl);
 
         return true;
     }
