@@ -98,6 +98,8 @@ public class UIPortalForm extends UIFormTabPane {
 
     private static final String FIELD_VIEWPORT = "viewport";
 
+    private static final String FIELD_CACHE_CONTROL = "cacheControl";
+
     private static final String FIELD_SHARED_LAYOUT = "sharedLayout";
 
     private static final String FIELD_LABEL = "label";
@@ -250,6 +252,10 @@ public class UIPortalForm extends UIFormTabPane {
         UIFormSelectBox uiSessionAliveBox = new UIFormSelectBox(FIELD_SESSION_ALIVE, FIELD_SESSION_ALIVE, listSessionAlive);
         uiSessionAliveBox.setValue(PortalProperties.SESSION_ON_DEMAND);
         uiPropertiesSet.addUIFormInput(uiSessionAliveBox);
+
+        UIFormStringInput uiCacheControlinput = new UIFormStringInput(FIELD_CACHE_CONTROL, FIELD_CACHE_CONTROL, null);
+        uiCacheControlinput.setReadOnly(false);
+        uiPropertiesSet.addChild(uiCacheControlinput);
 
         // TODO add more box for showPortletMode and showWindowState if needed
         UIFormCheckBoxInput<Boolean> uiShowInfobarBox = new UIFormCheckBoxInput<Boolean>(FIELD_SHOW_INFOBAR,

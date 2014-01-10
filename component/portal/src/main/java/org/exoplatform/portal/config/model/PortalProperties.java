@@ -43,4 +43,6 @@ public class PortalProperties {
     public static final String SHARED_LAYOUT_ALL = "allUsers";
 
     public static final String SHARED_LAYOUT_ADMINS = "adminsOnly";
+
+    public static final String CACHE_CONTROL = "cacheControl";
 }

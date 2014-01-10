@@ -33,6 +33,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
@@ -110,16 +111,16 @@ public class PortalRequestHandler extends WebRequestHandler {
      *
      * Here are the steps done in the method:
      *
-     * 1) set the header Cache-Control to no-cache <br/>
-     * 2) Get the PortalApplication reference from the controller <br/>
-     * 3) Create a PortalRequestContext object that is a convenient wrapper on all the request information <br/>
-     * 4) Get the collection of ApplicationLifecycle referenced in the PortalApplication and defined in
+     * 1) Get the PortalApplication reference from the controller <br/>
+     * 2) Create a PortalRequestContext object that is a convenient wrapper on all the request information <br/>
+     * 3) Get the collection of ApplicationLifecycle referenced in the PortalApplication and defined in
      * the webui-configuration.xml of the portal application <br/>
-     * 5) Set that context in a ThreadLocal to easily access it <br/>
-     * 6) Check if user have permission to access portal, if not, send 403 status code,
+     * 4) Set that context in a ThreadLocal to easily access it <br/>
+     * 5) Check if user have permission to access portal, if not, send 403 status code,
      * if user has not login, redirect to login page <br/>
      * 6) dispatch to processRequest method, this is protected method, we can extend and override this method to
      * write a new requestHandler base on PortalRequestHandler (@see {@link StandaloneAppRequestHandler})
+     * 7) set the header Cache-Control to no-cache or to the value specified in the portal configuration <br/>
      *
      */
     @SuppressWarnings("unchecked")
@@ -129,7 +130,6 @@ public class PortalRequestHandler extends WebRequestHandler {
         HttpServletResponse res = controllerContext.getResponse();
 
         log.debug("Session ID = " + req.getSession().getId());
-        res.setHeader("Cache-Control", "no-cache");
 
         //
         String requestPath = controllerContext.getParameter(REQUEST_PATH);
@@ -153,9 +153,14 @@ public class PortalRequestHandler extends WebRequestHandler {
         PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
         PortalRequestContext context = new PortalRequestContext(app, controllerContext, requestSiteType, requestSiteName,
                 requestPath, requestLocale);
+
+        DataStorage storage = (DataStorage) PortalContainer.getComponent(DataStorage.class);
+        PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteType, requestSiteName);
+
+        // this might be overriden in a per-portal basis
+        String cacheControl = null;
+
         if (context.getUserPortalConfig() == null) {
-            DataStorage storage = (DataStorage) PortalContainer.getComponent(DataStorage.class);
-            PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteType, requestSiteName);
             if (persistentPortalConfig == null) {
                 return false;
             } else if (req.getRemoteUser() == null) {
@@ -164,8 +169,25 @@ public class PortalRequestHandler extends WebRequestHandler {
                 context.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         } else {
+            // gets the cache control from the properties
+            // if it's not set yet, then it's null and it will fall back to the default value
+            cacheControl = persistentPortalConfig.getProperty(PortalProperties.CACHE_CONTROL);
+
             processRequest(context, app);
         }
+
+        if (cacheControl == null) {
+            // this was the default before GTNPORTAL-3361
+            cacheControl = "no-cache";
+        }
+
+        // GTNPORTAL-3361
+        // Previously, the Cache-Control was set to no-cache at all times, the reason for that being unclear.
+        // A feature request to allow portals to set their own policy caused this change, but we might
+        // revert if there are bad side-effects. If so, please replace this comment with the background information,
+        // so that it gets documented why the no-cache setting is forced.
+        res.setHeader("Cache-Control", cacheControl);
+
         return true;
     }
 

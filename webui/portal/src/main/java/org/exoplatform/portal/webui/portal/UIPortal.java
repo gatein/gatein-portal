@@ -281,6 +281,14 @@ public class UIPortal extends UIContainer {
         }
     }
 
+    public String getCacheControl() {
+        return getProperty(PortalProperties.CACHE_CONTROL);
+    }
+
+    public void setCacheControl(String cacheControl) {
+        setProperty(PortalProperties.CACHE_CONTROL, cacheControl);
+    }
+
     public String getViewport() {
         return getProperty(PortalProperties.VIEWPORT);
     }
