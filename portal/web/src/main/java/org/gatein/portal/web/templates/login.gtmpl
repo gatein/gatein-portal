@@ -2,7 +2,7 @@
     def error = loginFailureMessage.error;
     if(error == null) error = "";
 %>
-<div class="container">
+<div class="login-form">
     <form method="POST" action="@{LoginController.actionLogin()}" class="form-signin">
         <h2 class="form-signin-heading">Please sign in</h2>
         <%if(error != ""){%>
