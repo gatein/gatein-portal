@@ -99,7 +99,7 @@ public class UserProfileController {
             oauthProviders = Collections.emptyList();
         }
         for(OauthProviderDescriptor oauth : oauthProviders) {
-            String key = "user.social-info." + oauth.getType() + ".userName";
+            String key = "user.social-info." + oauth.getOauthKey().toLowerCase() + ".userName";
             String socialAccount = userProfile.getAttribute(key);
             if(socialAccount != null && !socialAccount.isEmpty()) {
                 oauth.setSocialAccount(socialAccount);
