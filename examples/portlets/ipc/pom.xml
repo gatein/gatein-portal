@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+     the parent isn't required, you can drop it if you add a groupId
+     and version
+  -->
+  <parent>
+    <groupId>org.gatein.portal.examples.portlets</groupId>
+    <artifactId>parent</artifactId>
+    <version>3.7.0.Alpha02-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>ipc</artifactId>
+  <packaging>pom</packaging>
+  <name>GateIn Portal Examples - Inter Portlet Communication</name>
+  <description>
+    This project is a basic example of two separate portlet applications communication using Public Render Parameters and Portlet Events.
+  </description>
+
+  <modules>
+    <module>consumer</module>
+    <module>producer</module>
+  </modules>
+  
+</project>

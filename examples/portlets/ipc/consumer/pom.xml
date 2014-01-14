@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!--
+     the parent isn't required, you can drop it if you add a groupId
+     and version
+  -->
+  <parent>
+    <groupId>org.gatein.portal.examples.portlets</groupId>
+    <artifactId>ipc</artifactId>
+    <version>3.7.0.Alpha02-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>consumer</artifactId>
+  <packaging>war</packaging>
+  <name>GateIn Portal Examples - Inter Portlet Communication- Consumes public information</name>
+  <description />
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.portlet</groupId>
+      <artifactId>portlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

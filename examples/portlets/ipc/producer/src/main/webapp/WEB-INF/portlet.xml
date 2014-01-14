@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+             version="2.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+   http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
+  <portlet>
+    <portlet-name>ProducerPublicRenderParameterPortlet</portlet-name>
+    <portlet-class>
+      org.gatein.portal.samples.ipc.ProducerPublicRenderParameterPortlet
+    </portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <portlet-info>
+      <title>IPC Producer Public Render Parameter Portlet</title>
+    </portlet-info>
+    <supported-public-render-parameter>publicParameter</supported-public-render-parameter>
+  </portlet>
+
+  <portlet>
+    <portlet-name>ProducerEventPortlet</portlet-name>
+    <portlet-class>
+      org.gatein.portal.samples.ipc.ProducerEventPortlet
+    </portlet-class>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
+    <portlet-info>
+      <title>IPC Producer Event Portlet</title>
+    </portlet-info>
+    <supported-publishing-event>
+      <qname xmlns:ipc="http://gatein.portal.samples.org">ipc:exampleEvent</qname>
+    </supported-publishing-event>
+    <container-runtime-option>
+      <name>javax.portlet.actionScopedRequestAttributes</name>
+      <value>true</value>
+      <value>numberOfCachedScopes</value>
+      <value>10</value>
+    </container-runtime-option>
+  </portlet>
+
+  <event-definition>
+    <qname xmlns:ipc="http://gatein.portal.samples.org">ipc:exampleEvent</qname>
+    <value-type>org.gatein.portal.samples.ipc.events.ExampleEvent</value-type>
+  </event-definition>
+
+  <public-render-parameter>
+    <identifier>publicParameter</identifier>
+    <qname xmlns:ipc="http://gatein.portal.samples.org">ipc:publicParameter</qname>
+  </public-render-parameter>
+</portlet-app>

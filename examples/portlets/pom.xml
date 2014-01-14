@@ -16,6 +16,7 @@
 
   <modules>
     <module>api</module>
+    <module>ipc</module>
     <module>jquery</module>
     <module>jsphellouser</module>
     <module>simplesthelloworld</module>
