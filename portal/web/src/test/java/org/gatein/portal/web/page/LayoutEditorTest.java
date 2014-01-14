@@ -38,7 +38,7 @@ public class LayoutEditorTest {
    @Deployment
    public static Archive<?> createDeployment() {
        return ShrinkWrap.create(WebArchive.class, "test.war")
-                .as(ExplodedImporter.class).importDirectory("src/main/resources").as(GenericArchive.class);
+                .as(ExplodedImporter.class).importDirectory("src/main/java").as(GenericArchive.class);
    }
    
     @QUnitTest("testJS/LayoutEditorTest.html")
