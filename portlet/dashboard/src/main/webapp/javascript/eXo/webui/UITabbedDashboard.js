@@ -50,7 +50,7 @@ function initTabbedDashboardPortlet(id)
         href += "&portal:isSecure=false";
         href += "&uicomponent=UITabPaneDashboard";
         href += "&op=RenameTabLabel";
-        href += "&objectId=" + input.attr("id");
+        href += "&objectId=" + encodeURIComponent(input.attr("id"));
         href += "&newTabLabel=" + encodeURIComponent(newLabel);
         window.location = href;
       }
