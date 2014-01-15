@@ -132,19 +132,30 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             session.getPersistenceManager().createUser(user.getUserName());
         } catch (Exception e) {
             handleException("Identity operation error: ", e);
-
+            throw e;
         }
 
         if (getIntegrationCache() != null) {
             getIntegrationCache().invalidateAll();
         }
 
-        persistUserInfo(user, session);
+        try {
+            persistUserInfo(user, session);
+        } catch (Exception e) {
+            //Workaround due to issues in Picketlink
+            //1. it has not support transaction for LDAP yet
+            //2. it use internal cache (infinispan) but this cache is not clear when there is exception occurred
+            try {
+                session.getPersistenceManager().removeUser(user.getUserName(),true);
+            } catch (Exception e2) {
+                handleException("Can't remove user", e2);
+            }
+            throw e;
+        }
 
         if (broadcast) {
             postSave(user, true);
         }
-
     }
 
     public void saveUser(User user, boolean broadcast) throws Exception {
@@ -478,7 +489,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         }
     }
 
-    public void persistUserInfo(User user, IdentitySession session) {
+    public void persistUserInfo(User user, IdentitySession session) throws Exception {
         orgService.flush();
 
         AttributesManager am = session.getAttributesManager();
@@ -524,7 +535,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
                     am.updatePassword(session.getPersistenceManager().findUser(user.getUserName()), user.getPassword());
                 } catch (Exception e) {
                     handleException("Cannot update password: " + user.getUserName() + "; ", e);
-
+                    throw e;
                 }
             }
         }
@@ -536,9 +547,8 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             am.updateAttributes(user.getUserName(), attrs);
         } catch (Exception e) {
             handleException("Cannot update attributes for user: " + user.getUserName() + "; ", e);
-
+            throw e;
         }
-
     }
 
     public User getPopulatedUser(String userName, IdentitySession session) throws Exception {

@@ -104,15 +104,20 @@ public class UIAccountChangePass extends UIForm {
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
                 return;
             }
-            user.setPassword(newPass);
-            uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.success", null));
-            service.getUserHandler().saveUser(user, true);
+            try {
+                user.setPassword(newPass);
+                service.getUserHandler().saveUser(user, true);
+                uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.success", null));
+                UIAccountSetting ui = uiForm.getParent();
+                ui.getChild(UIAccountProfiles.class).setRendered(true);
+                ui.getChild(UIAccountChangePass.class).setRendered(false);
+                event.getRequestContext().addUIComponentToUpdateByAjax(ui);
+            } catch (Exception e) {
+                uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.fail", null, ApplicationMessage.ERROR));
+
+            }
             uiForm.reset();
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
-            UIAccountSetting ui = uiForm.getParent();
-            ui.getChild(UIAccountProfiles.class).setRendered(true);
-            ui.getChild(UIAccountChangePass.class).setRendered(false);
-            event.getRequestContext().addUIComponentToUpdateByAjax(ui);
             return;
         }
     }

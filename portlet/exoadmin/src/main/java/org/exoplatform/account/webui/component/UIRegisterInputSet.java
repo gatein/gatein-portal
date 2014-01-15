@@ -178,7 +178,12 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         User user = userHandler.createUserInstance(username);
         bindingFields(user);
 
-        userHandler.createUser(user, true);// Broadcast user creaton event
+        try {
+            userHandler.createUser(user, true);// Broadcast user creaton event
+        } catch (Exception e) {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.create.user", null, ApplicationMessage.ERROR));
+            return false;
+        }
         reset();// Reset the input form
 
         // save user as attribute to WebuiRequestContext for later use

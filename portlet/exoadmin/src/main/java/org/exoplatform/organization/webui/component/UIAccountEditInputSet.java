@@ -144,7 +144,12 @@ public class UIAccountEditInputSet extends UIFormInputSet {
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.WARNING));
             return false;
         }
-        service.getUserHandler().saveUser(user, true);
+        try {
+            service.getUserHandler().saveUser(user, true);
+        } catch (Exception e) {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
+            return false;
+        }
         enableChangePassword(false);
 
         ConversationState state = ConversationState.getCurrent();
