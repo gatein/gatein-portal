@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.application;
 
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 import java.util.ServiceLoader;
@@ -176,7 +177,7 @@ public class PortalRequestHandler extends WebRequestHandler {
                 // A feature request to allow portals to set their own policy caused this change, but we might
                 // revert if there are bad side-effects. If so, please replace this comment with the background information,
                 // so that it gets documented why the no-cache setting is forced.
-                res.setHeader("Cache-Control", cacheControl);
+                res.setHeader("Cache-Control", URLEncoder.encode(cacheControl, "UTF-8"));
             }
 
             processRequest(context, app);
