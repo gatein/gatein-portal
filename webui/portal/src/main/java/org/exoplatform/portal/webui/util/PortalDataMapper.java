@@ -192,6 +192,8 @@ public class PortalDataMapper {
                 newChildren.add(component);
         }
         model.getPortalLayout().setChildren(newChildren);
+        model.getPortalLayout().setMoveAppsPermissions(uiPortal.getMoveAppsPermissions());
+        model.getPortalLayout().setMoveContainersPermissions(uiPortal.getMoveContainersPermissions());
         return model;
     }
 

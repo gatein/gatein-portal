@@ -279,17 +279,31 @@ public class UIPortalForm extends UIFormTabPane {
         UIFormInputSet uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
         addUIComponentInput(uiPermissionSetting);
 
-        UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
-        uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
-        uiPermissionSetting.addChild(uiListPermissionSelector);
-        uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());
+        UIListPermissionSelector uiAccessPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+        uiAccessPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
+        uiAccessPermissionSelector.addValidator(EmptyIteratorValidator.class);
+        uiPermissionSetting.addChild(uiAccessPermissionSelector);
+        uiPermissionSetting.setSelectedComponent(uiAccessPermissionSelector.getId());
 
         UIPermissionSelector uiEditPermission = createUIComponent(UIPermissionSelector.class, null, null);
         uiEditPermission.setRendered(false);
         uiEditPermission.addValidator(org.exoplatform.webui.organization.UIPermissionSelector.MandatoryValidator.class);
         uiEditPermission.configure("UIPermissionSelector", "editPermission");
         uiPermissionSetting.addChild(uiEditPermission);
+
+        ExoContainer container = ExoContainerContext.getCurrentContainer();
+        UserACL acl = container.getComponentInstanceOfType(UserACL.class);
+        if(acl.isSuperUser() || acl.isUserInGroup(acl.getAdminGroups())) {
+            //Move permission
+            UIListPermissionSelector uiMoveAppsPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveAppsPermissions");
+            uiMoveAppsPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveAppsPermissionSelector"), "moveAppsPermissions");
+            uiPermissionSetting.addChild(uiMoveAppsPermissionSelector);
+
+            //MoveContainers permission
+            UIListPermissionSelector uiMoveContainersPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveContainersPermissions");
+            uiMoveContainersPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveContainersPermissionSelector"), "moveContainersPermissions");
+            uiPermissionSetting.addChild(uiMoveContainersPermissionSelector);
+        }
     }
 
     public void setPortalOwner(String portalOwner) {

@@ -440,6 +440,11 @@ public class UserACL {
         return false;
     }
 
+    public boolean isSuperUser() {
+        Identity identity = getIdentity();
+        return superUser_.equals(identity.getUserId());
+    }
+
     private Identity getIdentity() {
         ConversationState conv = ConversationState.getCurrent();
         if (conv == null) {

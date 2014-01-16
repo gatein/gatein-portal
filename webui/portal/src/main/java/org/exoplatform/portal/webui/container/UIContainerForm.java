@@ -19,7 +19,10 @@
 
 package org.exoplatform.portal.webui.container;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
@@ -47,6 +50,7 @@ import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
+import org.exoplatform.webui.organization.UIPermissionSelector;
 
 /**
  * Author : Dang Van Minh minhdv81@yahoo.com Jun 8, 2006
@@ -55,7 +59,7 @@ import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIterator
         @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
                 @EventConfig(listeners = UIContainerForm.SaveActionListener.class),
                 @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE) }),
-        @ComponentConfig(id = "UIContainerPermission", type = UIFormInputSet.class, lifecycle = UIContainerLifecycle.class) })
+        @ComponentConfig(id = "UIContainerPermission", type = UIFormInputSet.class, template = "system:/groovy/webui/core/UITabSelector.gtmpl", events = { @EventConfig(listeners = UIFormInputSet.SelectComponentActionListener.class) }) })
 // initParams = {
 // @ParamConfig(
 // name = "ContainerTemplateOption",
@@ -89,12 +93,29 @@ public class UIContainerForm extends UIFormTabPane {
 
         PortalRequestContext prc = Util.getPortalRequestContext();
         if (prc.getSiteType() != SiteType.USER) {
-            UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-            uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
-            uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
-            UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "UIContainerPermission", null);
-            uiPermissionSet.addChild(uiListPermissionSelector);
-            addUIFormInput(uiPermissionSet);
+            UIFormInputSet uiPermissionSetting = createUIComponent(UIFormInputSet.class, "UIContainerPermission", null);
+
+            UIListPermissionSelector uiAccessPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+            uiAccessPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
+            uiAccessPermissionSelector.addValidator(EmptyIteratorValidator.class);
+            uiPermissionSetting.addChild(uiAccessPermissionSelector);
+            uiPermissionSetting.setSelectedComponent(uiAccessPermissionSelector.getId());
+
+            ExoContainer container = ExoContainerContext.getCurrentContainer();
+            UserACL acl = container.getComponentInstanceOfType(UserACL.class);
+            if(acl.isSuperUser() || acl.isUserInGroup(acl.getAdminGroups())) {
+                //Move permission
+                UIListPermissionSelector uiMoveAppsPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveAppsPermissions");
+                uiMoveAppsPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveAppsPermissionSelector"), "moveAppsPermissions");
+                uiPermissionSetting.addChild(uiMoveAppsPermissionSelector);
+
+                //MoveContainers permission
+                UIListPermissionSelector uiMoveContainersPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveContainersPermissions");
+                uiMoveContainersPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveContainersPermissionSelector"), "moveContainersPermissions");
+                uiPermissionSetting.addChild(uiMoveContainersPermissionSelector);
+            }
+
+            addUIFormInput(uiPermissionSetting);
         }
     }
 
