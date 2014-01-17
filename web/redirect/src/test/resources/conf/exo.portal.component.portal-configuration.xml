@@ -241,6 +241,7 @@
           <value>org.exoplatform.portal.mop.ProtectedContainer</value>
           <value>org.exoplatform.portal.mop.Described</value>
           <value>org.exoplatform.portal.mop.Visible</value>
+          <value>org.exoplatform.portal.mop.RestrictAccess</value>
           <value>org.exoplatform.portal.mop.i18n.I18Nized</value>
           <value>org.exoplatform.portal.mop.i18n.LanguageSpace</value>
           <value>org.exoplatform.portal.mop.i18n.Language</value>

@@ -52,6 +52,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Just a class that contains the Page related action listeners
@@ -60,6 +62,9 @@ import org.exoplatform.webui.event.EventListener;
  * @version $Revision$
  */
 public class UIPageActionListener {
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(UIPageActionListener.class);
+
     public static class ChangeNodeActionListener extends EventListener<UIPortalApplication> {
         public void execute(Event<UIPortalApplication> event) throws Exception {
             PortalRequestContext pcontext = PortalRequestContext.getCurrentInstance();
@@ -104,6 +109,25 @@ public class UIPageActionListener {
                             // If path to node is invalid, get the default node instead of.
                             targetNode = userPortal.getDefaultPath(navigation, builder.build());
                         }
+                    }
+                }
+
+                if (targetNode != null) {
+                    // let's check if this node can be shown at this time
+                    long now = System.currentTimeMillis();
+                    long startPublicationTime = targetNode.getStartPublicationTime();
+                    long endPublicationTime = targetNode.getEndPublicationTime();
+                    boolean restrictOutsidePublicationWindow = targetNode.isRestrictOutsidePublicationWindow();
+
+                    if (shouldRestrictAccess(restrictOutsidePublicationWindow, now, startPublicationTime, endPublicationTime)) {
+                        if (log.isInfoEnabled()) {
+                            log.info("User "
+                                    +pcontext.getRemoteUser()
+                                    +" has tried to access a node ("
+                                    +targetNode.getURI()
+                                    +") which is outside of the publishing window and is restricted.");
+                        }
+                        targetNode = userPortal.getDefaultPath(navigation, builder.build());
                     }
                 }
             }
@@ -163,6 +187,11 @@ public class UIPageActionListener {
             showedUIPortal.refreshUIPage();
             pcontext.setFullRender(true);
             pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID));
+        }
+
+        protected static boolean shouldRestrictAccess(boolean restrictOutsidePublicationWindow, long now, long startPublicationTime, long endPublicationTime) {
+            return ((restrictOutsidePublicationWindow && startPublicationTime > now) ||
+                    (restrictOutsidePublicationWindow && endPublicationTime < now && endPublicationTime > 0));
         }
 
         private UIPortal buildUIPortal(SiteKey siteKey, UIPortalApplication uiPortalApp, UserPortalConfig userPortalConfig)

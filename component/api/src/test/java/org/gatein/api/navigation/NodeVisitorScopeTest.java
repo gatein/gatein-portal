@@ -41,7 +41,7 @@ public class NodeVisitorScopeTest {
     @Test
     public void nodePathScope() {
         NodeState nodeState = new NodeState("label", "icon", -1, -1, Visibility.DISPLAYED, new PageKey(new SiteKey(
-                SiteType.PORTAL, "site"), "page"));
+                SiteType.PORTAL, "site"), "page"), false);
         NodeVisitorMock mock = new NodeVisitorMock();
         Visitor visitor = new NodeVisitorScope(mock).get();
 

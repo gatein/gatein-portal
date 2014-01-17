@@ -60,6 +60,9 @@ public final class NodeState implements Serializable {
         /** . */
         private PageKey pageRef;
 
+        /** . */
+        private boolean restrictOutsidePublicationWindow;
+
         public Builder() {
             this.icon = null;
             this.label = null;
@@ -67,6 +70,7 @@ public final class NodeState implements Serializable {
             this.endPublicationTime = -1;
             this.visibility = Visibility.DISPLAYED;
             this.pageRef = null;
+            this.restrictOutsidePublicationWindow = false;
         }
 
         /**
@@ -85,6 +89,7 @@ public final class NodeState implements Serializable {
             this.endPublicationTime = state.endPublicationTime;
             this.visibility = state.visibility;
             this.pageRef = state.pageRef;
+            this.restrictOutsidePublicationWindow = state.restrictOutsidePublicationWindow;
         }
 
         public Builder label(String label) {
@@ -117,8 +122,14 @@ public final class NodeState implements Serializable {
             return this;
         }
 
+        public Builder restrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow) {
+            this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
+            return this;
+        }
+
         public NodeState build() {
-            return new NodeState(label, icon, startPublicationTime, endPublicationTime, visibility, pageRef);
+            return new NodeState(label, icon, startPublicationTime, endPublicationTime, visibility, pageRef,
+                    restrictOutsidePublicationWindow);
         }
     }
 
@@ -140,14 +151,18 @@ public final class NodeState implements Serializable {
     /** . */
     private final PageKey pageRef;
 
+    /** . */
+    private final boolean restrictOutsidePublicationWindow;
+
     public NodeState(String label, String icon, long startPublicationTime, long endPublicationTime, Visibility visibility,
-            PageKey pageRef) {
+            PageKey pageRef, boolean restrictOutsidePublicationWindow) {
         this.label = label;
         this.icon = icon;
         this.startPublicationTime = startPublicationTime;
         this.endPublicationTime = endPublicationTime;
         this.visibility = visibility;
         this.pageRef = pageRef;
+        this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
     }
 
     public String getLabel() {
@@ -182,6 +197,10 @@ public final class NodeState implements Serializable {
         return pageRef;
     }
 
+    public boolean isRestrictOutsidePublicationWindow() {
+        return restrictOutsidePublicationWindow;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -191,8 +210,10 @@ public final class NodeState implements Serializable {
             NodeState that = (NodeState) o;
             return Safe.equals(label, that.label) && Safe.equals(icon, that.icon)
                     && Safe.equals(startPublicationTime, that.startPublicationTime)
-                    && Safe.equals(endPublicationTime, that.endPublicationTime) && Safe.equals(visibility, that.visibility)
-                    && Safe.equals(pageRef, that.pageRef);
+                    && Safe.equals(endPublicationTime, that.endPublicationTime)
+                    && Safe.equals(visibility, that.visibility)
+                    && Safe.equals(pageRef, that.pageRef)
+                    && Safe.equals(restrictOutsidePublicationWindow, that.restrictOutsidePublicationWindow);
         }
         return false;
     }
@@ -200,7 +221,8 @@ public final class NodeState implements Serializable {
     @Override
     public String toString() {
         return "NodeState[label=" + label + ",icon=" + icon + ",startPublicationTime=" + startPublicationTime
-                + ",endPublicationTime=" + endPublicationTime + ",visibility=" + visibility + ",pageRef=" + pageRef + "]";
+                + ",endPublicationTime=" + endPublicationTime + ",visibility=" + visibility + ",pageRef=" + pageRef
+                + ",restrictOutsidePublicationWindow=" + restrictOutsidePublicationWindow + "]";
     }
 
     public Builder builder() {

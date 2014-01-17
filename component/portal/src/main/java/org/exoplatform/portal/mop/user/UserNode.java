@@ -124,6 +124,18 @@ public class UserNode {
         context.setState(new NodeState.Builder(context.getState()).startPublicationTime(startPublicationTime).build());
     }
 
+    public boolean isRestrictOutsidePublicationWindow() {
+        return context.getState().isRestrictOutsidePublicationWindow();
+    }
+
+    public void setRestrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow) {
+        context.setState(
+                new NodeState.Builder(context.getState())
+                        .restrictOutsidePublicationWindow(restrictOutsidePublicationWindow)
+                        .build()
+        );
+    }
+
     public long getEndPublicationTime() {
         return context.getState().getEndPublicationTime();
     }

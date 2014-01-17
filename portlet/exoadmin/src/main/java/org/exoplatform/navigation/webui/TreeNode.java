@@ -237,6 +237,14 @@ public class TreeNode implements NodeChangeListener<UserNode> {
         node.setEndPublicationTime(endPublicationTime);
     }
 
+    public boolean isRestrictOutsidePublicationWindow() {
+        return node.isRestrictOutsidePublicationWindow();
+    }
+
+    public void setRestrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow) {
+        node.setRestrictOutsidePublicationWindow(restrictOutsidePublicationWindow);
+    }
+
     public void setPageRef(String pageRef) {
         node.setPageRef(pageRef != null ? PageKey.parse(pageRef) : null);
     }

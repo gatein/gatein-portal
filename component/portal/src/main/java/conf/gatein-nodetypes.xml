@@ -129,6 +129,7 @@
                           onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
+
       <propertyDefinition name="gtn:visibility" requiredType="String" autoCreated="false" mandatory="false"
                           onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints>
@@ -139,6 +140,22 @@
         </valueConstraints>
         <defaultValues>
           <defaultValue>DISPLAYED</defaultValue>
+        </defaultValues>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
+
+  <nodeType name="gtn:restrictAccess" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <supertypes>
+        <supertype>nt:base</supertype>
+        <supertype>gtn:visible</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="gtn:restrictOutsidePublicationWindow" requiredType="Boolean" autoCreated="true"
+                          mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+        <defaultValues>
+          <defaultValue>false</defaultValue>
         </defaultValues>
       </propertyDefinition>
     </propertyDefinitions>

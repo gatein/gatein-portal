@@ -54,6 +54,8 @@ public class PageNode extends PageNodeContainer {
     /** . */
     private String pageReference;
 
+    private boolean restrictOutsidePublicationWindow;
+
     public PageNode() {
     }
 
@@ -164,11 +166,20 @@ public class PageNode extends PageNodeContainer {
     public NodeState getState() {
         return new NodeState(labels.getSimple(), icon, startPublicationDate == null ? -1 : startPublicationDate.getTime(),
                 endPublicationDate == null ? -1 : endPublicationDate.getTime(), visibility,
-                pageReference != null ? PageKey.parse(pageReference) : null);
+                pageReference != null ? PageKey.parse(pageReference) : null,
+                restrictOutsidePublicationWindow);
     }
 
     @Override
     public String toString() {
         return "PageNode[" + name + "]";
+    }
+
+    public boolean isRestrictOutsidePublicationWindow() {
+        return restrictOutsidePublicationWindow;
+    }
+
+    public void setRestrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow) {
+        this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
     }
 }

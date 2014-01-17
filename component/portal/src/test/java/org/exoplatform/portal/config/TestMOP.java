@@ -38,6 +38,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.ProtectedResource;
+import org.exoplatform.portal.mop.RestrictAccess;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.Visible;
@@ -260,7 +261,8 @@ public class TestMOP extends AbstractConfigTest {
 
         //
         assertTrue(nodeNavigation.isAdapted(Visible.class));
-        Visible visible = nodeNavigation.adapt(Visible.class);
+        assertTrue(nodeNavigation.isAdapted(RestrictAccess.class));
+        RestrictAccess visible = nodeNavigation.adapt(RestrictAccess.class);
         GregorianCalendar start = new GregorianCalendar(2000, 2, 21, 1, 33, 0);
         start.setTimeZone(TimeZone.getTimeZone("UTC"));
         assertEquals(start.getTime(), visible.getStartPublicationDate());

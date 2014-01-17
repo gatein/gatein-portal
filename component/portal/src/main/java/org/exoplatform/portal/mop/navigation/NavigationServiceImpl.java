@@ -31,7 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.chromattic.api.ChromatticSession;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.RestrictAccess;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Utils;
@@ -585,12 +587,23 @@ public class NavigationServiceImpl implements NavigationService {
             described.setName(state.getLabel());
 
             //
-            Visible visible = sourceNav.adapt(Visible.class);
-            visible.setVisibility(state.getVisibility());
+            if (!sourceNav.isAdapted(RestrictAccess.class)) {
+                // if RestrictAccess is not on the node yet, then it has a legacy Visible
+                // so, we remove the Visible and replace with a RestrictAccess
+                ChromatticSession chromatticSession = session.getManager().getLifeCycle().getContext().getSession();
+                if (sourceNav.isAdapted(Visible.class)) {
+                    chromatticSession.remove(sourceNav.adapt(Visible.class));
+                }
+                RestrictAccess restrictAccess = chromatticSession.create(RestrictAccess.class);
+                chromatticSession.setEmbedded(sourceNav, RestrictAccess.class, restrictAccess);
+            }
 
             //
-            visible.setStartPublicationDate(state.getStartPublicationDate());
-            visible.setEndPublicationDate(state.getEndPublicationDate());
+            RestrictAccess restrictAccess = sourceNav.adapt(RestrictAccess.class);
+            restrictAccess.setVisibility(state.getVisibility());
+            restrictAccess.setStartPublicationDate(state.getStartPublicationDate());
+            restrictAccess.setEndPublicationDate(state.getEndPublicationDate());
+            restrictAccess.setRestrictOutsidePublicationWindow(state.isRestrictOutsidePublicationWindow());
 
             //
             Attributes attrs = sourceNav.getAttributes();

@@ -122,6 +122,8 @@ public class UIPageNodeForm extends UIFormTabPane {
 
     private static final String LABEL = "label";
 
+    public static final String RESTRICT_OUTSIDE_PUBLICATION_WINDOW = "restrictOutsidePublicationWindow";
+
     public UIPageNodeForm() throws Exception {
         super("UIPageNodeForm");
         UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");
@@ -152,7 +154,8 @@ public class UIPageNodeForm extends UIFormTabPane {
                 .addUIFormInput(uiDateInputCheck)
                 .addUIFormInput(
                         new UIFormDateTimeInput(START_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class))
-                .addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class));
+                .addUIFormInput(new UIFormDateTimeInput(END_PUBLICATION_DATE, null, null).addValidator(DateTimeValidator.class))
+                .addUIFormInput(new UICheckBoxInput(RESTRICT_OUTSIDE_PUBLICATION_WINDOW, null, true));
 
         addUIFormInput(uiSettingSet);
         setSelectedTab(uiSettingSet.getId());
@@ -287,6 +290,7 @@ public class UIPageNodeForm extends UIFormTabPane {
             uiSettingSet.removeChildById(SHOW_PUBLICATION_DATE);
             uiSettingSet.removeChildById(START_PUBLICATION_DATE);
             uiSettingSet.removeChildById(END_PUBLICATION_DATE);
+            uiSettingSet.removeChildById(RESTRICT_OUTSIDE_PUBLICATION_WINDOW);
         } else {
             Visibility visibility = pageNode.getVisibility();
             boolean isVisible = visibility == null
@@ -305,6 +309,8 @@ public class UIPageNodeForm extends UIFormTabPane {
                 getUIFormDateTimeInput(END_PUBLICATION_DATE).setCalendar(cal);
             } else
                 getUIFormDateTimeInput(END_PUBLICATION_DATE).setValue(null);
+
+            getUICheckBoxInput(RESTRICT_OUTSIDE_PUBLICATION_WINDOW).setChecked(pageNode.isRestrictOutsidePublicationWindow());
         }
 
         boolean isExtendedMode = true;
@@ -337,9 +343,11 @@ public class UIPageNodeForm extends UIFormTabPane {
                 cal = getUIFormDateTimeInput(END_PUBLICATION_DATE).getCalendar();
                 date = (cal != null) ? cal.getTime() : null;
                 node.setEndPublicationTime(date == null ? -1 : date.getTime());
+                node.setRestrictOutsidePublicationWindow(getUICheckBoxInput(RESTRICT_OUTSIDE_PUBLICATION_WINDOW).isChecked());
             } else {
                 node.setStartPublicationTime(-1);
                 node.setEndPublicationTime(-1);
+                node.setRestrictOutsidePublicationWindow(false);
             }
         }
 
@@ -381,6 +389,7 @@ public class UIPageNodeForm extends UIFormTabPane {
     public void setShowPublicationDate(boolean show) {
         getUIFormDateTimeInput(START_PUBLICATION_DATE).setRendered(show);
         getUIFormDateTimeInput(END_PUBLICATION_DATE).setRendered(show);
+        getUICheckBoxInput(RESTRICT_OUTSIDE_PUBLICATION_WINDOW).setRendered(show);
     }
 
     public Object getSelectedParent() {

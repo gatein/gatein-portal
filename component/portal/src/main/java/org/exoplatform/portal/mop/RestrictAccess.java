@@ -1,5 +1,9 @@
 /*
- * Copyright (C) 2009 eXo Platform SAS.
+ * JBoss, a division of Red Hat
+ * Copyright 2014, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,30 +23,22 @@
 
 package org.exoplatform.portal.mop;
 
-import java.util.Date;
-
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
+ * This class represents a mixin embedded into a Node, and states whether the node should have restricted
+ * access during outside of the publication window.
+ *
+ * User: jpkroehling
+ * Date: 2014-01-23
+ * Time: 2:55 PM
  */
-@MixinType(name = "gtn:visible")
-public abstract class Visible {
+@MixinType(name = "gtn:restrictAccess")
+public abstract class RestrictAccess extends Visible {
+    @Property(name = "gtn:restrictOutsidePublicationWindow")
+    public abstract boolean isRestrictOutsidePublicationWindow();
 
-    @Property(name = "gtn:startpublicationdate")
-    public abstract Date getStartPublicationDate();
+    public abstract void setRestrictOutsidePublicationWindow(boolean restrictOutsidePublicationWindow);
 
-    public abstract void setStartPublicationDate(Date date);
-
-    @Property(name = "gtn:endpublicationdate")
-    public abstract Date getEndPublicationDate();
-
-    public abstract void setEndPublicationDate(Date date);
-
-    @Property(name = "gtn:visibility")
-    public abstract Visibility getVisibility();
-
-    public abstract void setVisibility(Visibility visibility);
 }
