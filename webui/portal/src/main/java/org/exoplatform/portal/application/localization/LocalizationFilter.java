@@ -208,8 +208,8 @@ public class LocalizationFilter extends AbstractFilter {
                 }
             }
 
-            if (userProfile == null && log.isWarnEnabled())
-                log.warn("Could not load user profile for " + user);
+            if (userProfile == null && log.isDebugEnabled())
+                log.debug("Could not load user profile for " + user);
         }
 
         String lang = userProfile == null ? null : userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);

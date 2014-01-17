@@ -963,8 +963,8 @@ public class UIPortalApplication extends UIApplication {
             if (userProfile != null) {
                 portalSkin = userProfile.getUserInfoMap().get(Constants.USER_SKIN);
             } else {
-                if (log.isWarnEnabled())
-                    log.warn("Could not load user profile for " + user + ". Using default portal locale.");
+                if (log.isDebugEnabled())
+                    log.debug("Could not load user profile for " + user + ". Using default portal locale.");
             }
         }
 
