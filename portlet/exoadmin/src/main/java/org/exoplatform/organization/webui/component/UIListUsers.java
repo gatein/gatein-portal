@@ -75,8 +75,6 @@ public class UIListUsers extends UISearch {
 
     public static final String USER_STATUS_FILTER = "userStatusFilter";
 
-    private static UserStatus statusFilter = UserStatus.ENABLED;
-
     private static final String[] USER_BEAN_FIELD = { USER_NAME, LAST_NAME, FIRST_NAME, EMAIL };
 
     private static final String[] USER_ACTION = { "ViewUserInfo", "DeleteUser" };
@@ -93,6 +91,7 @@ public class UIListUsers extends UISearch {
 
     private OrganizationService orgService;
     private Query lastQuery_;
+    private UserStatus statusFilter = UserStatus.ENABLED;
 
     private String userSelected_;
 
