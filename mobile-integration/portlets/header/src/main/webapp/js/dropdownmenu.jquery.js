@@ -127,6 +127,9 @@
                     success: function(data) {
                         menuCategory.append(data);
                         menuCategory.attr("gtn.ajax.fetching", false);
+                        // Re-organize menu layout after AJAX call
+                        // There are cases where menu can be placed out of screen breaking response behaviour
+                        findAndCheckOpenedSubmenu(topmenu);
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
                         console && console.log("Ajax error");
