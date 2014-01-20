@@ -6,9 +6,17 @@ To migrate data, just run this java class:
 __org.exoplatform.services.organization.idm.DisabledUserMigrationScript__ (located in exo.portal.component.identity-xxx.jar)
 
 # Quickstart 
-Default configuration works for default GateIn configuration (hsqldb organization database, default picketlink realm)
+Default configuration works for default GateIn configuration (hsqldb organization database, default picketlink realm). The default IDM, hibernate configuratioin files can be found at GATEIN/component/identity/src/main/resources/
 
+__IDE__
+1. Config hibernate connection url in configuration.properties
+2. Right click on DisableUserMigrationScript.java --> choose Run As --> Java Application
+
+__Command line__
 __java -cp lib/*:target/exo.portal.component.identity-xxx.jar -Dhibernate.connection.url=[connection\_url] org.exoplatform.services.organization.idm.DisabledUserMigrationScript__
+
+__Note__: 
+By default, GateIn use HSQLDB, we need to stop GateIn server before running the migration script
 
 # Custom migration script run
 
