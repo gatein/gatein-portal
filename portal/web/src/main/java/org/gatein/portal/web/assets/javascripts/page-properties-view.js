@@ -130,7 +130,7 @@
                   var pageView = editorView.getPageView();
                   var pageModel = pageView.model;
                   _this.bindToPageModel(pageModel);
-                  this.bindPermissionToPageModel(pageModel);
+                  _this.bindPermissionToPageModel(pageModel);
                   //clear apps
                   var containers = pageModel.getChildren();
                   $(containers).each(function() {
