@@ -110,6 +110,8 @@ public class ZoneLayout extends Layout {
             parameters.put("pageDisplayName", renderingContext.pageDisplayName != null ? renderingContext.pageDisplayName : "");
             parameters.put("factoryId", renderingContext.factoryId != null ? renderingContext.factoryId : "");
             parameters.put("parentLink", renderingContext.parentLink != null ? renderingContext.parentLink : "/portal");
+            parameters.put("accessPermissions", renderingContext.accessPermissions != null ? renderingContext.accessPermissions : "Everyone");
+            parameters.put("editPermissions", renderingContext.editPermissions != null ? renderingContext.editPermissions : "");
             
             template.renderTo(to, parameters);
         } else {

@@ -57,6 +57,8 @@ import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.permission.SecurityService;
+import org.gatein.portal.mop.permission.SecurityState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.ui.navigation.UserNode;
 import org.gatein.portal.web.layout.RenderingContext;
@@ -85,6 +87,9 @@ public class PageEditor {
 
     @Inject
     DescriptionService descriptionService;
+
+    @Inject
+    SecurityService securityService;
     
     @Resource
     @Route(value = "/parentLinks")
@@ -241,16 +246,34 @@ public class PageEditor {
 
             layoutService.saveLayout(adapter, requestData, pageStructure, null);
 
+            String pageKey = requestData.getString("pageKey");
+            PageKey key = PageKey.parse(pageKey);
+            org.gatein.portal.mop.page.PageContext page = pageService.loadPage(key);
+            String pageId = page.getData().id;
+
             //Update layout
             String factoryId = requestData.getString("factoryId");
             String pageDisplayName = requestData.getString("pageDisplayName");
-            String pageKey = requestData.getString("pageKey");
             if (factoryId != null && pageKey != null && !factoryId.isEmpty() && !pageKey.isEmpty()) {
-                PageKey key = PageKey.parse(pageKey);
-                org.gatein.portal.mop.page.PageContext page = pageService.loadPage(key);
                 page.setState(page.getState().builder().factoryId(factoryId).displayName(pageDisplayName).build());
                 pageService.savePage(page);
             }
+
+            //save permission for page
+            JSONArray accessPermissions = requestData.getJSONArray("accessPermissions");
+            String[] accessPerms = new String[accessPermissions.length()];
+            for(int i = 0; i < accessPermissions.length(); i++) {
+                accessPerms[i] = accessPermissions.getString(i);
+            }
+
+            JSONArray editPermissions = requestData.getJSONArray("editPermissions");
+            String[] editPerms = new String[editPermissions.length()];
+            for(int i = 0; i < editPermissions.length(); i++) {
+                editPerms[i] = editPermissions.getString(i);
+            }
+
+            SecurityState securityState = new SecurityState(accessPerms, editPerms);
+            securityService.savePermission(pageId, securityState);
         }
         return pageStructure;
     }

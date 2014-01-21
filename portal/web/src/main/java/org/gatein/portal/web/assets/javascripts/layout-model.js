@@ -295,7 +295,9 @@
       pageKey: '',
       factoryId: '',
       type : 'layout',
-      droppable : true
+      droppable : true,
+      accessPermissions: [],
+      editPermissions: []
     },
     
     initialize : function(attributes, options) {

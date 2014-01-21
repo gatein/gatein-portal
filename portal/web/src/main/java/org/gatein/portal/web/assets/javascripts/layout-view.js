@@ -258,6 +258,11 @@
       this.factoryId = this.$el.attr('data-factoryId');
       this.parentLink = this.$el.attr('data-parentLink');
       this.pageName = this.pageKey.substring('portal::classic::'.length);
+
+      var access = this.$el.attr('data-accessPerms');
+      var edits = this.$el.attr('data-editPerms');
+      this.accessPerms = access.length > 0 ? access.split(',') : [];
+      this.editPerms = edits.length > 0 ? edits.split(',') : [];
       
       //TODO: remove /null at the end of url - this should be refactor later
       this.urlRoot = this.urlRoot.substring(0, this.urlRoot.length - 4);
@@ -363,7 +368,9 @@
             pageName : this.pageName, 
             pageDisplayName : this.pageDisplayName,
             parentLink : this.parentLink,
-            html : this.$el.html()
+            html : this.$el.html(),
+            accessPermissions: this.accessPerms,
+            editPermissions: this.editPerms
           },  
           {
             urlRoot : this.urlRoot, 

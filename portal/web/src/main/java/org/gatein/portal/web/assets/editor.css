@@ -166,3 +166,42 @@ li.portlet-placeholder {
 .composers ul.composer-layouts-list input[type="radio"] {
     margin: 0;
 }
+
+#pagePropertiesModal .modal-header {
+    border-bottom: none;
+}
+#pagePropertiesModal .modal-tab ul.nav-tabs li:first-child {
+    margin-left: 15px;
+}
+.modal-permissions {
+    padding: 0 10px;
+}
+ul.list-permissions li {
+    background: #468847;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 11.844px;
+    font-weight: bold;
+    line-height: 21px;
+    margin: 2px 3px 2px 2px;
+    padding: 1px 4px 2px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+ul.list-permissions li:after {
+    content: " ×";
+    color: #000000;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 16px;
+    opacity: 0.2;
+    position: relative;
+    text-shadow: 0 1px 0 #FFFFFF;
+    top: 1px;
+}
+#pagepermissions .row-permissions {
+    border: none;
+    margin-left: 10px;
+}

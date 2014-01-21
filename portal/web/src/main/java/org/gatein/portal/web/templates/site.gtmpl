@@ -7,14 +7,78 @@
 <!-- Page properties Modal -->
 <div id="pagePropertiesModal" class="modal hide fade" tabindex="-1"
 	data-keyboard="false" 
-	data-parentLinks="@{PageEditor.getParentLinks()}" 
+	data-parentLinks="@{PageEditor.getParentLinks()}"
+    data-allGroupAndMembershipType="@{Organization.getAllGroupAndMembershipType()}"
 	data-checkpage-url="@{PageEditor.checkPage()}">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     <h4>Add New Page</h4>
   </div>
-  <div class="modal-body">
-    <p>Loading …</p>
+  <div class="modal-tab">
+      <div class="tabbable">
+          <ul class="nav nav-tabs">
+              <li class="active"><a href="#pageinfos" data-toggle="tab">Page infos</a></li>
+              <li><a href="#pagepermissions" data-toggle="tab">Permissions</a></li>
+          </ul>
+          <div class="tab-content">
+              <div id="pageinfos" class="tab-pane active modal-body">
+                  <p>Loading …</p>
+              </div>
+              <div id="pagepermissions" class="tab-pane modal-permissions">
+                  <p>Loading …</p>
+                  <!--<ul class="nav nav-pills">
+                      <li class="active">
+                          <a href="#accessPermissions" class="permission-nav">Access</a>
+                      </li>
+                      <li>
+                          <a href="#editPermissions" class="permission-nav">Edit</a>
+                      </li>
+                  </ul>
+                  <div id="accessPermissions" class="row-fluid row-permissions access-permission">
+                      <div class="everyone">
+                          <label class="checkbox">
+                              <input name="everyone" type="checkbox" checked="checked" /> Everyone
+                          </label>
+                      </div>
+                      <div class="permissions hide">
+                          <form class="form-permission form-inline">
+                              <select name="group" class="span7">
+                                  <option value="">Select Group</option>
+                              </select>
+                              <select name="membershipType" class="span3">
+                                  <option value=""></option>
+                                  <option value="*">*</option>
+                              </select>
+                              <button type="submit" class="btn btn-primary addPermission">Add</button>
+                          </form>
+                          <ul class="inline list-permissions">
+                          </ul>
+                      </div>
+                  </div>
+                  <div id="editPermissions" class="row-fluid row-permissions edit-permission hide">
+                      <div class="everyone">
+                          <label class="checkbox">
+                              <input name="everyone" type="checkbox" checked="checked" /> Everyone
+                          </label>
+                      </div>
+                      <div class="permissions hide">
+                          <form class="form-permission form-inline">
+                              <select name="group" class="span7">
+                                  <option value="">Select Group</option>
+                              </select>
+                              <select name="membershipType" class="span3">
+                                  <option value="">Membership</option>
+                                  <option value="*">*</option>
+                              </select>
+                              <button type="submit" class="btn btn-primary addPermission">Add</button>
+                          </form>
+                          <ul class="inline list-permissions">
+                          </ul>
+                      </div>
+                  </div>-->
+              </div>
+          </div>
+      </div>
   </div>
   <div class="modal-footer">
     <button class="btn cancel" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -149,6 +213,100 @@
          </tbody>
     </table>
 </script>
+
+<script type="text/template" id="page-properties-modal-permissions">
+    <ul class="nav nav-pills">
+        <li class="active">
+            <a href="#accessPermissions" class="permission-nav">Access</a>
+        </li>
+        <li>
+            <a href="#editPermissions" class="permission-nav">Edit</a>
+        </li>
+    </ul>
+    <div id="accessPermissions" class="row-fluid row-permissions access-permission">
+        <div class="everyone">
+            <label class="checkbox">
+                <input name="accessPermission" class="everyone" type="checkbox" ${"<%"} if(everyone.access) { ${"%>"} checked="checked" ${"<%"}}${"%>"} /> Everyone
+            </label>
+        </div>
+        <div class="permissions ${"<%"} if(everyone.access) { ${"%>"} hide ${"<%"}}${"%>"}">
+            <form name="accessPermission" class="form-permission form-inline">
+                <select name="group" class="span7">
+                    <option value="">Select Group</option>
+                    ${"<%"}
+                    _.each(groups, function(group, i){
+                    ${"%>"}
+                        <option value="${"<%=group.id%>"}">${"<%=group.id%>"}</option>
+                    ${"<%"}
+                    });
+                    ${"%>"}
+                </select>
+                <select name="membershipType" class="span3">
+                    <option value=""></option>
+                    ${"<%"}
+                    _.each(membershipTypes, function(membershipType, i){
+                    ${"%>"}
+                            <option value="${"<%=membershipType.name%>"}">${"<%=membershipType.name%>"}</option>
+                    ${"<%"}
+                    });
+                    ${"%>"}
+                </select>
+                <button type="submit" class="btn btn-primary addPermission">Add</button>
+            </form>
+            <ul class="inline list-permissions">
+                ${"<%"}
+                _.each(accessPermissions, function(permission, i){
+                ${"%>"}
+                <li class="permission">${"<%=permission%>"}</li>
+                ${"<%"}
+                });
+                ${"%>"}
+            </ul>
+        </div>
+    </div>
+    <div id="editPermissions" class="row-fluid row-permissions edit-permission hide">
+        <div class="everyone">
+            <label class="checkbox">
+                <input name="editPermission" class="everyone" type="checkbox" ${"<%"} if(everyone.edit) { ${"%>"} checked="checked" ${"<%"}}${"%>"} /> Everyone
+            </label>
+        </div>
+        <div class="permissions ${"<%"} if(everyone.edit) { ${"%>"} hide ${"<%"}}${"%>"}">
+            <form name="editPermission" class="form-permission form-inline">
+                <select name="group" class="span7">
+                    <option value="">Select Group</option>
+                    ${"<%"}
+                    _.each(groups, function(group, i){
+                    ${"%>"}
+                        <option value="${"<%=group.id%>"}">${"<%=group.id%>"}</option>
+                    ${"<%"}
+                    });
+                    ${"%>"}
+                </select>
+                <select name="membershipType" class="span3">
+                    <option value=""></option>
+                    ${"<%"}
+                    _.each(membershipTypes, function(membershipType, i){
+                    ${"%>"}
+                            <option value="${"<%=membershipType.name%>"}">${"<%=membershipType.name%>"}</option>
+                    ${"<%"}
+                    });
+                    ${"%>"}
+                </select>
+                <button type="submit" class="btn btn-primary addPermission">Add</button>
+            </form>
+            <ul class="inline list-permissions">
+                ${"<%"}
+                _.each(editPermissions, function(permission, i){
+                ${"%>"}
+                    <li class="permission">${"<%=permission%>"}</li>
+                ${"<%"}
+                });
+                ${"%>"}
+            </ul>
+        </div>
+    </div>
+</script>
+
 <!-- Template for render Contents -->
 <script type="text/template" id="composer-list-contents-template">
     <div>
@@ -209,7 +367,9 @@
      data-pageDisplayName="${pageDisplayName}"
      data-parentLink="${parentLink}"
      data-urlRoot="@{PageEditor.saveLayout(layoutId='null')}"
-     data-layoutURL="@{PageEditor.switchLayout(id='null')}">
+     data-layoutURL="@{PageEditor.switchLayout(id='null')}"
+     data-accessPerms="${accessPermissions}"
+     data-editPerms="${editPermissions}">
 ${body}
 </div>
 

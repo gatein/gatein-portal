@@ -52,6 +52,8 @@ import juzu.template.Template;
 import org.gatein.portal.content.ProviderRegistry;
 import org.gatein.portal.content.Result;
 import org.gatein.portal.mop.customization.CustomizationContext;
+import org.gatein.portal.mop.permission.SecurityService;
+import org.gatein.portal.mop.permission.SecurityState;
 import org.gatein.portal.ui.navigation.UserNode;
 import org.gatein.portal.web.layout.Layout;
 import org.gatein.portal.web.layout.RenderingContext;
@@ -91,6 +93,9 @@ public class Controller {
 
     @Inject
     PageService pageService;
+
+    @Inject
+    SecurityService securityService;
     
     @Inject
     DescriptionService descriptionService;
@@ -304,6 +309,29 @@ public class Controller {
                         Layout pageLayout = layoutFactory.build(layoutId, pageStructure);
                         Layout siteLayout = layoutFactory.build("site", siteStructure);
 
+                        SecurityState securityState = securityService.loadPermission(page.getData().id);
+                        StringBuilder accessPerms = new StringBuilder();
+                        StringBuilder editPerms = new StringBuilder();
+                        if(securityState != null) {
+                            if(securityState.getAccessPermission() != null) {
+                                for(String perm : securityState.getAccessPermission()) {
+                                    accessPerms.append(perm).append(',');
+                                }
+                                if(accessPerms.length() > 0) {
+                                    accessPerms.deleteCharAt(accessPerms.length() - 1);
+                                }
+                            }
+                            if(securityState.getEditPermissions() != null) {
+                                for(String perm : securityState.getEditPermissions()) {
+                                    editPerms.append(perm).append(',');
+                                }
+                                if(editPerms.length() > 0) {
+                                    editPerms.deleteCharAt(editPerms.length() - 1);
+                                }
+                            }
+                        }
+
+
                         //
                         ReactivePage rp = new ReactivePage(
                                 pageContext,
@@ -313,7 +341,9 @@ public class Controller {
                                         page.getKey().format(),
                                         layoutId,
                                         page.getState() != null ? page.getState().getDisplayName() : null,
-                                        current.getParentNode() != null ? current.getParentNode().getLink() : null));
+                                        current.getParentNode() != null ? current.getParentNode().getLink() : null,
+                                        accessPerms.toString(),
+                                        editPerms.toString()));
 
                         //
                        return rp.execute(siteLayout, pageLayout, context);

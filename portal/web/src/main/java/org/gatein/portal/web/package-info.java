@@ -17,8 +17,9 @@
     @Binding(KernelFilter.class),
     @Binding(LoginFailureMessage.class),
     @Binding(OAuthProviderTypeRegistry.class),
-    @Binding(LoginHelper.class),
-    @Binding(SSOHelper.class)})
+    @Binding(SSOHelper.class),
+    @Binding(OrganizationService.class),
+    @Binding(SecurityService.class)})
 @WebJars(@WebJar("bootstrap"))
 
 @Modules({
@@ -95,12 +96,13 @@ import juzu.template.Tag;
 import juzu.template.Tags;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.portal.content.ProviderRegistry;
+import org.gatein.portal.mop.permission.SecurityService;
 import org.gatein.portal.web.kernel.KernelFilter;
 import org.gatein.portal.web.layout.SimpleLayoutFactory;
 import org.gatein.portal.web.login.LoginFailureMessage;
-import org.gatein.portal.web.login.LoginHelper;
 import org.gatein.portal.mop.customization.CustomizationService;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.layout.LayoutService;
