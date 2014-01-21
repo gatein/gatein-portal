@@ -646,7 +646,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         return new ArrayList<String>();
     }
 
-    public Map<String, String[]> getPublicParameters() {
+    /*
+     * Adding Map<String, String[]> parameter to support propagation of publicParameters from URL
+     */
+    public Map<String, String[]> getPublicParameters(Map<String, String[]> portletParameters) {
         Map<String, String[]> publicParamsMap = new HashMap<String, String[]>();
         UIPortal uiPortal = Util.getUIPortal();
         Map<String, String[]> publicParams = uiPortal.getPublicParameters();
@@ -656,6 +659,28 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         for (String oneOfAllParams : allPublicParamsNames) {
             if (supportedPublicParamNames.contains(oneOfAllParams)) {
                 publicParamsMap.put(oneOfAllParams, publicParams.get(oneOfAllParams));
+                // Propagates public parameter from URL
+                if (portletParameters != null && portletParameters.containsKey(oneOfAllParams)) {
+                    publicParamsMap.put(oneOfAllParams, portletParameters.get(oneOfAllParams));
+                    /* setRenderParam() in processAction() propagates public render params across pages.
+                     * UIPortal params are updated to allow same behaviour using URL propagation.
+                     */
+                    publicParams.put(oneOfAllParams, portletParameters.get(oneOfAllParams));
+                }
+            }
+        }
+
+        // Case when portlet has not public parameters in UIPortal but there are supported public parameters in URL
+        if (supportedPublicParams_ != null &&
+            portletParameters != null &&
+            portletParameters.size() > 0 &&
+            allPublicParamsNames.size() == 0) {
+            for (QName qName : supportedPublicParams_.keySet()) {
+                String prpId = supportsPublicParam(qName);
+                if (prpId != null && portletParameters.containsKey(prpId)) {
+                    publicParamsMap.put(prpId, portletParameters.get(prpId));
+                    publicParams.put(prpId, portletParameters.get(prpId));
+                }
             }
         }
 
@@ -671,6 +696,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
 
         //
         return publicParamsMap;
+    }
+
+    public Map<String, String[]> getPublicParameters() {
+        return getPublicParameters(null);
     }
 
     // This is code for integration with PC
@@ -771,8 +800,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
         // Navigational state
         invocation.setNavigationalState(navigationalState);
 
-        // Public navigational state
-        invocation.setPublicNavigationalState(this.getPublicParameters());
+        /* Public navigational state.
+         * Passing portletParameters for public render parameters propagation via URL.
+         */
+        invocation.setPublicNavigationalState(this.getPublicParameters(prc.getPortletParameters()));
 
         // WSRP-specific public navigational state handling needed when we have a URL coming from template
         String navigationalValues = servletRequest.getParameter(WSRP_NAVIGATIONAL_VALUES);
