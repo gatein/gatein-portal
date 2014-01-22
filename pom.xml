@@ -66,7 +66,7 @@
     <version.org.gatein.naming>1.1.1.Final</version.org.gatein.naming>
 
     <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
-    <version.twitter4j>3.0.3</version.twitter4j>
+    <version.twitter4j>3.0.5</version.twitter4j>
 
     <!--
     Various log4j properties for unit tests, examples:
