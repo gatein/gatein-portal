@@ -170,16 +170,17 @@ public class PortalRequestHandler extends WebRequestHandler {
                 context.sendError(HttpServletResponse.SC_FORBIDDEN);
             }
         } else {
-            String cacheControl = persistentPortalConfig.getProperty(PortalProperties.CACHE_CONTROL);
-            if (cacheControl != null) {
-                // GTNPORTAL-3361
-                // Previously, the Cache-Control was set to no-cache at all times, the reason for that being unclear.
-                // A feature request to allow portals to set their own policy caused this change, but we might
-                // revert if there are bad side-effects. If so, please replace this comment with the background information,
-                // so that it gets documented why the no-cache setting is forced.
-                res.setHeader("Cache-Control", URLEncoder.encode(cacheControl, "UTF-8"));
+            if (persistentPortalConfig != null) {
+                String cacheControl = persistentPortalConfig.getProperty(PortalProperties.CACHE_CONTROL);
+                if (cacheControl != null) {
+                    // GTNPORTAL-3361
+                    // Previously, the Cache-Control was set to no-cache at all times, the reason for that being unclear.
+                    // A feature request to allow portals to set their own policy caused this change, but we might
+                    // revert if there are bad side-effects. If so, please replace this comment with the background information,
+                    // so that it gets documented why the no-cache setting is forced.
+                    res.setHeader("Cache-Control", URLEncoder.encode(cacheControl, "UTF-8"));
+                }
             }
-
             processRequest(context, app);
         }
 
