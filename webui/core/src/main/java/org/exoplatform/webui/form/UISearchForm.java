@@ -37,7 +37,12 @@ import org.exoplatform.webui.event.EventListener;
  *
  *           Represents a search form
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UISearchForm.gtmpl", events = @EventConfig(listeners = UISearchForm.QuickSearchActionListener.class))
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UISearchForm.gtmpl",
+        events = {
+                @EventConfig(listeners = UISearchForm.QuickSearchActionListener.class),
+                @EventConfig(listeners = UISearchForm.ClearSearchActionListener.class)
+        }
+)
 @Serialized
 public class UISearchForm extends UIForm {
     /**
@@ -87,6 +92,16 @@ public class UISearchForm extends UIForm {
              * for (UIComponent child : uiSearch.getChildren()) { if (child.isRendered())
              * event.getRequestContext().addUIComponentToUpdateByAjax(child); }
              */
+        }
+    }
+
+    public static class ClearSearchActionListener extends EventListener<UISearchForm> {
+        public void execute(Event<UISearchForm> event) throws Exception {
+            UISearchForm uiForm = event.getSource();
+            UISearch uiSearch = uiForm.getParent();
+            uiForm.getQuickSearchInputSet().reset();
+            uiSearch.quickSearch(uiForm.getQuickSearchInputSet());
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiSearch);
         }
     }
 

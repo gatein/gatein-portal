@@ -65,6 +65,16 @@
 	float: right; /* orientation=rt */
 }
 
+.UISearch .UISearchForm .QuickSet .ClearSearchIcon {
+	margin-left: 10px; /* orientation=lt */
+	margin-right: 10px; /* orientation=rt */
+	width: 24px;
+	height: 24px;
+	background: url('/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/ClearSearch.png') no-repeat;		 /* orientation=lt */
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
 .UISearch .UISearchForm .QuickSet .SimpleSearchOverIcon {
 	margin: 0px 0px 0px 10px;
 	width: 24px;	height: 24px;

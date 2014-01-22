@@ -37,7 +37,14 @@ import org.exoplatform.webui.form.validator.ExpressionValidator;
  * @author <a href="kienna@exoplatform.com">Kien Nguyen</a>
  * @version $Revision$
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIPageSearchForm.gtmpl", events = @EventConfig(listeners = UIPageSearchForm.QuickSearchActionListener.class))
+@ComponentConfig(
+        lifecycle = UIFormLifecycle.class,
+        template = "system:/groovy/portal/webui/page/UIPageSearchForm.gtmpl",
+        events = {
+                @EventConfig(listeners = UIPageSearchForm.QuickSearchActionListener.class),
+                @EventConfig(listeners = UIPageSearchForm.ClearSearchActionListener.class)
+        }
+)
 @Serialized
 public class UIPageSearchForm extends UIForm {
     /**
@@ -67,6 +74,16 @@ public class UIPageSearchForm extends UIForm {
         public void execute(Event<UIPageSearchForm> event) throws Exception {
             UIPageSearchForm uiForm = event.getSource();
             UIPageBrowser uiSearch = uiForm.getParent();
+            uiSearch.quickSearch(uiForm.getQuickSearchInputSet());
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiSearch);
+        }
+    }
+
+    public static class ClearSearchActionListener extends EventListener<UIPageSearchForm> {
+        public void execute(Event<UIPageSearchForm> event) throws Exception {
+            UIPageSearchForm uiForm = event.getSource();
+            UIPageBrowser uiSearch = uiForm.getParent();
+            uiForm.getQuickSearchInputSet().reset();
             uiSearch.quickSearch(uiForm.getQuickSearchInputSet());
             event.getRequestContext().addUIComponentToUpdateByAjax(uiSearch);
         }

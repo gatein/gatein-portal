@@ -3,6 +3,7 @@
 	def jsManager = rcontext.getJavascriptManager();	
 
 	String quickSearchlink = uicomponent.event("QuickSearch");							 	
+	String resetSearchlink = uicomponent.event("ClearSearch");
 	def keyPressAct = "portalControl.UIPortalControl.onEnterPress(event, executeScript);";
 	
 	jsManager.require("SHARED/jquery", "\$").require("SHARED/portalControl", "portalControl")
@@ -28,7 +29,10 @@
 								<a class="SimpleSearchIcon" href="javascript:void(0);" onclick="$quickSearchlink" title="<%= _ctx.appRes("UISearch.label.QuickSearch") %>">
 									<span></span>
 								</a>
-							</div>	
+								<a class="ClearSearchIcon" href="javascript:void(0);" onclick="$resetSearchlink" title="<%= _ctx.appRes("UISearch.label.ClearSearch") %>">
+									<span></span>
+								</a>
+							</div>
 							<%uiform.end()%>	 
 						</div>
 					</div>
