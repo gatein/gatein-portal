@@ -32,15 +32,14 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -321,6 +320,10 @@ public class UIPageForm extends UIFormTabPane {
             uiMaskWS.createEvent("Close", Phase.DECODE, pcontext).broadcast();
             pcontext.getJavascriptManager().require("SHARED/portalComposer", "portalComposer")
                     .addScripts("portalComposer.toggleSaveButton();");
+
+            UIPortalComposer portalComposer = uiPortalApp.findFirstComponentOfType(UIPortalComposer.class);
+            portalComposer.updateWorkspaceComponent();
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
         }
 
         protected void findAllPortlet(List<UIPortlet> list, UIContainer uiContainer) {
