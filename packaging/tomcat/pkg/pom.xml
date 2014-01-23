@@ -370,6 +370,10 @@
       <artifactId>gatein-cdi-injection</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.gatein.cdi</groupId>
+      <artifactId>gatein-cdi-contexts</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javax.enterprise</groupId>
       <artifactId>cdi-api</artifactId>
     </dependency>
