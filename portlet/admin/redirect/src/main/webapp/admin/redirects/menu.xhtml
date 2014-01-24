@@ -17,7 +17,7 @@
 					<ul>
 						<ui:repeat value="#{rdrs.sites}" var="s" varStatus="counter">
 							<li class="dropdown #{rdrs.siteName == s.name ? 'active' : ''} #{((rdrs.siteName != s.name) and (counter.index >= 5)) ? 'extra hidden-element' : ''}">
-								<a4j:commandLink action="#{rdrs.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" onfocus="$(this).next('.dropdown-toggle').click(); return false;" render="@form :sum_form :add_form :form-select-node">
+								<a4j:commandLink action="#{rdrs.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" render="@form :sum_form :add_form :form-select-node">
 									<b:icon value="globe" color="grey" /> #{s.name}
 								</a4j:commandLink>
 								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
@@ -43,7 +43,7 @@
 					<ul>
 						<ui:repeat value="#{rdrs.spaces}" var="s" varStatus="counter">
 							<li class="dropdown #{counter.index >= 5 ? 'extra hidden-element' : ''}">
-								<a href="#" onclick="event.stopPropagation(); $(this).next('.dropdown-toggle').click(); return false;" title="#{s.name}" onfocusin="$(this).next('.dropdown-toggle').click(); return false;" >
+								<a href="#" class="space-link" onclick="event.stopPropagation(); $(this).next('.dropdown-toggle').click(); return false;" title="#{s.name}" >
 									<b:icon value="globe" color="grey" /> #{rdrs.getSpaceLabel(s.name)}
 								</a>
 								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
