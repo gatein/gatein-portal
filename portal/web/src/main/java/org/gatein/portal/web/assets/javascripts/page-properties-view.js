@@ -34,6 +34,15 @@
             var template = $("#page-properties-modal-template").html();
             var html = _.template(template, {parentLinks: data.parentLinks});
             _this.$el.find('.modal-body').html(html);
+            if (editorView.getPageView() != undefined) {
+              var pageModel = editorView.getPageView().model;
+              $(".modal-body input[name='pageName']").val(pageModel.get('pageName'));
+              $(".modal-body input[name='pageDisplayName']").val(pageModel.get('pageDisplayName'));
+              $(".modal-body select[name='parentLink']").val(pageModel.get('parentLink'));
+              $(".modal-body select[name='factoryId']").val(pageModel.get('factoryId'));
+              _this.accessPermissions = pageModel.get('accessPermissions');
+              _this.editPermissions = pageModel.get('editPermissions');
+            }
           }
         });
       } else if (editMode == editorView.EditorState.EDIT_CURRENT_PAGE) {
@@ -62,7 +71,6 @@
         url: this.$el.attr('data-allGroupAndMembershipType'),
         dataType: 'json',
         success: function(data) {
-          console.log(data);
           var template = $("#page-properties-modal-permissions").html();
           var html = _.template(template, {
             groups: data.groups,

@@ -55,8 +55,8 @@
     },
     
     switchMode : function(LayoutView, ComposerView) {
-      this.$el.toggleClass('LAYOUT-EDITION');
       if (this.model.get('editMode') > EditorState.NORMAL) {
+        this.$el.addClass('LAYOUT-EDITION');
         // Initialize LayoutView
         this.layoutView = new LayoutView({
           el : '.pageBody'
@@ -65,6 +65,7 @@
         this.composerView = new ComposerView({el : '#composers'});
         this.layoutView.render();
       } else {
+        this.$el.removeClass('LAYOUT-EDITION');
         delete this.layoutView;
         delete this.composerView;
       }
