@@ -33,12 +33,6 @@
         <extension module="org.jboss.as.weld"/>
         <extension module="org.gatein"/>
     </extensions>
-    <system-properties>
-        <!-- IPv4 is not required, but setting this helps avoid unintended use of IPv6 -->
-        <property name="java.net.preferIPv4Stack" value="true"/>
-        <property name="gatein.jcr.config.type" value="local"/>
-        <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
-    </system-properties>
     <profiles>
         <profile name="default">
             <subsystem xmlns="urn:jboss:domain:logging:1.2">
@@ -314,6 +308,9 @@
                     <suffix value=".yyyy-MM-dd"/>
                     <append value="true"/>
                 </periodic-rotating-file-handler>
+                <logger category="com.google.javascript.jscomp">
+                    <level name="WARN"/>
+                </logger>
                 <logger category="com.arjuna">
                     <level name="WARN"/>
                 </logger>
@@ -345,6 +342,22 @@
                 <datasources>
                     <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
                         <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
+                        <driver>h2</driver>
+                        <security>
+                            <user-name>sa</user-name>
+                            <password>sa</password>
+                        </security>
+                    </datasource>
+                    <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true" use-java-context="true">
+                        <connection-url>jdbc:h2:tcp://localhost/~/jdbcidm_portal</connection-url>
+                        <driver>h2</driver>
+                        <security>
+                            <user-name>sa</user-name>
+                            <password>sa</password>
+                        </security>
+                    </datasource>
+                    <datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS" enabled="true" use-java-context="true">
+                        <connection-url>jdbc:h2:tcp://localhost/~/jdbcjcr_portal</connection-url>
                         <driver>h2</driver>
                         <security>
                             <user-name>sa</user-name>
@@ -557,6 +570,29 @@
                             <policy-module code="Delegating" flag="required"/>
                         </authorization>
                     </security-domain>
+                    <security-domain name="gatein-domain" cache-type="default">
+                        <authentication>
+                            <login-module code="org.exoplatform.web.login.FilterDisabledLoginModule" flag="required">
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                            </login-module>
+                            <login-module code="org.gatein.security.oauth.jaas.OAuthLoginModule" flag="required">
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                            </login-module>
+                            <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
+                                <module-option name="enabled" value="#{gatein.sso.login.module.enabled}"/>
+                                <module-option name="delegateClassName" value="#{gatein.sso.login.module.class}"/>
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                                <module-option name="password-stacking" value="useFirstPass"/>
+                            </login-module>
+                            <login-module code="org.exoplatform.services.security.j2ee.JBossAS7LoginModule" flag="required">
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                            </login-module>
+                        </authentication>
+                    </security-domain>
                 </security-domains>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
@@ -589,6 +625,13 @@
                 <client-config name="Standard-Client-Config"/>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:weld:1.0"/>
+            <subsystem xmlns="urn:jboss:domain:gatein:1.0">
+                <portlet-war-dependencies>
+                    <dependency name="org.gatein.wci"/>
+                    <dependency name="org.gatein.pc"/>
+                    <dependency name="javax.portlet.api"/>
+                </portlet-war-dependencies>
+            </subsystem>
         </profile>
         <profile name="full">
             <subsystem xmlns="urn:jboss:domain:logging:1.2">
@@ -954,6 +997,9 @@
                     <suffix value=".yyyy-MM-dd"/>
                     <append value="true"/>
                 </periodic-rotating-file-handler>
+                <logger category="com.google.javascript.jscomp">
+                    <level name="WARN"/>
+                </logger>
                 <logger category="com.arjuna">
                     <level name="WARN"/>
                 </logger>
@@ -986,6 +1032,22 @@
                 <datasources>
                     <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
                         <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
+                        <driver>h2</driver>
+                        <security>
+                            <user-name>sa</user-name>
+                            <password>sa</password>
+                        </security>
+                    </datasource>
+                    <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true" use-java-context="true">
+                        <connection-url>jdbc:h2:tcp://localhost/~/jdbcidm_portal</connection-url>
+                        <driver>h2</driver>
+                        <security>
+                            <user-name>sa</user-name>
+                            <password>sa</password>
+                        </security>
+                    </datasource>
+                    <datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS" enabled="true" use-java-context="true">
+                        <connection-url>jdbc:h2:tcp://localhost/~/jdbcjcr_portal</connection-url>
                         <driver>h2</driver>
                         <security>
                             <user-name>sa</user-name>
@@ -1307,6 +1369,29 @@
                             <policy-module code="Delegating" flag="required"/>
                         </authorization>
                     </security-domain>
+                    <security-domain name="gatein-domain" cache-type="default">
+                        <authentication>
+                            <login-module code="org.exoplatform.web.login.FilterDisabledLoginModule" flag="required">
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                            </login-module>
+                            <login-module code="org.gatein.security.oauth.jaas.OAuthLoginModule" flag="required">
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                            </login-module>
+                            <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
+                                <module-option name="enabled" value="#{gatein.sso.login.module.enabled}"/>
+                                <module-option name="delegateClassName" value="#{gatein.sso.login.module.class}"/>
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                                <module-option name="password-stacking" value="useFirstPass"/>
+                            </login-module>
+                            <login-module code="org.exoplatform.services.security.j2ee.JBossAS7LoginModule" flag="required">
+                                <module-option name="portalContainerName" value="portal"/>
+                                <module-option name="realmName" value="gatein-domain"/>
+                            </login-module>
+                        </authentication>
+                    </security-domain>
                 </security-domains>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
@@ -1339,6 +1424,13 @@
                 <client-config name="Standard-Client-Config"/>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:weld:1.0"/>
+            <subsystem xmlns="urn:jboss:domain:gatein:1.0">
+                <portlet-war-dependencies>
+                    <dependency name="org.gatein.wci"/>
+                    <dependency name="org.gatein.pc"/>
+                    <dependency name="javax.portlet.api"/>
+                </portlet-war-dependencies>
+            </subsystem>
         </profile>
     </profiles>
     <!--
@@ -1434,6 +1526,16 @@
                 <permgen max-size="256m"/>
             </jvm>
             <socket-binding-group ref="full-sockets"/>
+            <!--
+                 System properties on GateIn depend on profile default/full or ha/full-ha.
+                 Similar ones are used in standalone*.xml configuration examples.
+            -->
+            <system-properties>
+                <!-- IPv4 is not required, but setting this helps to avoid unintended use of IPv6 -->
+                <property name="java.net.preferIPv4Stack" value="true"/>
+                <property name="gatein.jcr.config.type" value="local"/>
+                <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
+            </system-properties>
         </server-group>
         <server-group name="other-server-group" profile="full">
             <jvm name="default">
@@ -1441,6 +1543,74 @@
                 <permgen max-size="256m"/>
             </jvm>
             <socket-binding-group ref="full-sockets"/>
+            <!--
+                 System properties on GateIn depend on profile default/full or ha/full-ha.
+                 Similar ones are used in standalone*.xml configuration examples.
+            -->
+            <system-properties>
+                <!-- IPv4 is not required, but setting this helps to avoid unintended use of IPv6 -->
+                <property name="java.net.preferIPv4Stack" value="true"/>
+                <property name="gatein.jcr.config.type" value="local"/>
+                <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
+            </system-properties>
         </server-group>
+        <!--
+              Server group definition examples.
+              System properties on GateIn depend on profile default/full or ha/full-ha.
+              Similar ones are used in standalone*.xml configuration examples.
+
+        <server-group name="profile-default-group" profile="default">
+            <jvm name="default">
+                <heap size="1303m" max-size="1303m"/>
+                <permgen max-size="256m"/>
+            </jvm>
+            <socket-binding-group ref="standard-sockets"/>
+            <system-properties>
+                <property name="java.net.preferIPv4Stack" value="true"/>
+                <property name="gatein.jcr.config.type" value="local"/>
+                <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
+            </system-properties>
+        </server-group>
+        <server-group name="profile-ha-group" profile="ha">
+            <jvm name="default">
+                <heap size="1303m" max-size="1303m"/>
+                <permgen max-size="256m"/>
+            </jvm>
+            <socket-binding-group ref="ha-sockets"/>
+            <system-properties>
+                <property name="java.net.preferIPv4Stack" value="true"/>
+                <property name="exo.profiles" value="cluster"/>
+                <property name="gatein.jcr.config.type" value="cluster"/>
+                <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.jbosscache.LocalIndexChangesFilter"/>
+                <property name="gatein.jcr.storage.enabled" value="false"/>
+            </system-properties>
+        </server-group>
+        <server-group name="profile-full-group" profile="full">
+            <jvm name="default">
+                <heap size="1303m" max-size="1303m"/>
+                <permgen max-size="256m"/>
+            </jvm>
+            <socket-binding-group ref="full-sockets"/>
+            <system-properties>
+                <property name="java.net.preferIPv4Stack" value="true"/>
+                <property name="gatein.jcr.config.type" value="local"/>
+                <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
+            </system-properties>
+        </server-group>
+        <server-group name="profile-full-ha-group" profile="full-ha">
+            <jvm name="default">
+                <heap size="1303m" max-size="1303m"/>
+                <permgen max-size="256m"/>
+            </jvm>
+            <socket-binding-group ref="full-ha-sockets"/>
+            <system-properties>
+                <property name="java.net.preferIPv4Stack" value="true"/>
+                <property name="exo.profiles" value="cluster"/>
+                <property name="gatein.jcr.config.type" value="cluster"/>
+                <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.jbosscache.LocalIndexChangesFilter"/>
+                <property name="gatein.jcr.storage.enabled" value="false"/>
+            </system-properties>
+        </server-group>
+        -->
     </server-groups>
 </domain>
