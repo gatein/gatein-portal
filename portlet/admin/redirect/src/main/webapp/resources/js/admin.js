@@ -185,6 +185,27 @@ function configureRedirect() {
 	});
 }
 
+$(document).on('focusout', '.dropdown-menu a', function(e) {
+	$(this).closest('.dropdown').removeClass('open');
+});
+
+$(document).on('keydown', '.site-link', function(e) {
+	var code = e.keyCode || e.which;
+	var shift = e.shiftKey;
+
+	if (code == '9' && shift) {
+		$(this).closest('.dropdown').removeClass('open');
+	}
+});
+
+$(document).on('keyup', '.site-link,.space-link', function(e) {
+	var code = e.keyCode || e.which;
+
+	if (code == '9') {
+		$(this).next('.dropdown-toggle').dropdown('toggle');
+	}
+});
+
 /**
  * Enable usage of keys to toggle ON/OFF switches.
  */
