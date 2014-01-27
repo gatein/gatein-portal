@@ -122,26 +122,31 @@ public class POMSessionManager implements Startable {
             // related to (portal,classic) are also evicted
             final PortalKey portalKey = (PortalKey) key;
             try {
-                cache.select(new CachedObjectSelector<ScopedKey<?>, Object>() {
-                    public boolean select(ScopedKey<?> selectedGlobalKey, ObjectCacheInfo<?> ocinfo) {
-                        if (globalKey.getScope().equals(selectedGlobalKey.getScope())) {
-                            Serializable selectedLocalKey = selectedGlobalKey.getKey();
-                            if (selectedLocalKey instanceof OwnerKey) {
-                                OwnerKey selectedOwnerKey = (OwnerKey) selectedLocalKey;
-                                if (selectedOwnerKey.getType().equals(portalKey.getType())
-                                        && selectedOwnerKey.getId().equals(portalKey.getId())) {
-                                    return true;
+                /* GTNPORTAL-3387
+                 * cache.select() can throw a NullPointerException if cache.getCacheSize() == 0
+                 */
+                if (cache.getCacheSize() > 0) {
+                    cache.select(new CachedObjectSelector<ScopedKey<?>, Object>() {
+                        public boolean select(ScopedKey<?> selectedGlobalKey, ObjectCacheInfo<?> ocinfo) {
+                            if (globalKey.getScope().equals(selectedGlobalKey.getScope())) {
+                                Serializable selectedLocalKey = selectedGlobalKey.getKey();
+                                if (selectedLocalKey instanceof OwnerKey) {
+                                    OwnerKey selectedOwnerKey = (OwnerKey) selectedLocalKey;
+                                    if (selectedOwnerKey.getType().equals(portalKey.getType())
+                                            && selectedOwnerKey.getId().equals(portalKey.getId())) {
+                                        return true;
+                                    }
                                 }
                             }
+                            return false;
                         }
-                        return false;
-                    }
 
-                    public void onSelect(ExoCache<? extends ScopedKey<?>, ?> exoCache, ScopedKey<?> key,
-                            ObjectCacheInfo<?> ocinfo) throws Exception {
-                        cache.remove(key);
-                    }
-                });
+                        public void onSelect(ExoCache<? extends ScopedKey<?>, ?> exoCache, ScopedKey<?> key,
+                                             ObjectCacheInfo<?> ocinfo) throws Exception {
+                            cache.remove(key);
+                        }
+                    });
+                }
             } catch (Exception e) {
                 log.error("Unexpected error when clearing pom cache", e);
             }
