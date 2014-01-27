@@ -84,12 +84,6 @@ public class PortalLoginTestCase extends AbstractPortalTestCase {
         portal.merge(ShrinkWrap.
                 create(GenericArchive.class).
                 as(ExplodedImporter.class).
-                importDirectory("src/main/webapp/WEB-INF/conf/organization").
-                as(GenericArchive.class), "/WEB-INF/conf/organization", Filters.exclude("web.xml"));
-
-        portal.merge(ShrinkWrap.
-                create(GenericArchive.class).
-                as(ExplodedImporter.class).
                 importDirectory("src/test/resources/WEB-INF/conf").
                 as(GenericArchive.class), "/WEB-INF/conf", Filters.exclude("web.xml"));
 
@@ -150,7 +144,7 @@ public class PortalLoginTestCase extends AbstractPortalTestCase {
         Assert.assertNotNull(password);
 
         username.sendKeys("root");
-        password.sendKeys("gtn");
+        password.sendKeys("exo");
         form.submit();
 
         String portletURL = deploymentURL + "page1";

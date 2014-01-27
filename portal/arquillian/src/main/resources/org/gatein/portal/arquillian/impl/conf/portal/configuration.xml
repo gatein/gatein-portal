@@ -55,7 +55,10 @@
   <component>
     <type>org.gatein.portal.mop.permission.SecurityServiceImpl</type>
   </component>
-
+ <component>
+    <key>org.exoplatform.services.organization.OrganizationService</key>
+    <type>org.exoplatform.services.organization.impl.mock.DummyOrganizationService</type>
+  </component>
   <!-- -->
   <component>
     <type>org.gatein.portal.importer.ModelImporter</type>
