@@ -174,24 +174,6 @@
 
     <!-- JBoss -->
     <dependency>
-      <groupId>org.jboss.cache</groupId>
-      <artifactId>jbosscache-core</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>jgroups</groupId>
-          <artifactId>jgroups</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.jboss.javaee</groupId>
-          <artifactId>jboss-transaction-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.jboss</groupId>
-          <artifactId>jboss-common-core</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>org.jgroups</groupId>
       <artifactId>jgroups</artifactId>
     </dependency>
@@ -291,7 +273,7 @@
     </dependency-->
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
+      <artifactId>exo.kernel.component.ext.cache.impl.infinispan.v5</artifactId>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.core</groupId>
@@ -1079,13 +1061,11 @@
     </dependency>
     <dependency>
       <groupId>org.htmlparser</groupId>
+      <artifactId>htmllexer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.htmlparser</groupId>
       <artifactId>htmlparser</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>com.sun</groupId>
-          <artifactId>tools</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.ibm.icu</groupId>
@@ -1221,7 +1201,7 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>xpp3</groupId>
+      <groupId>org.ogce</groupId>
       <artifactId>xpp3</artifactId>
     </dependency>
     <dependency>

@@ -23,6 +23,7 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -104,7 +105,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         UIApplication uiApp = context.getUIApplication();
         String username = getUIStringInput(USERNAME).getValue();
-        User user = service.getUserHandler().findUserByName(username, false);
+        User user = service.getUserHandler().findUserByName(username, UserStatus.BOTH);
         if (user == null || !user.isEnabled()) {
             String messageBundle = (user == null ? "UIAccountInputSet.msg.user-is-deleted" : "UIAccountInputSet.msg.user-is-disabled");
             uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));
@@ -136,7 +137,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         Query query = new Query();
         String email = getUIStringInput("email").getValue();
         query.setEmail(email);
-        if (service.getUserHandler().findUsersByQuery(query, false).getSize() > 0 && !oldEmail.equals(email)) {
+        if (service.getUserHandler().findUsersByQuery(query, UserStatus.BOTH).getSize() > 0 && !oldEmail.equals(email)) {
             // Be sure it keep old value
             user.setEmail(oldEmail);
             query.setEmail(oldEmail);

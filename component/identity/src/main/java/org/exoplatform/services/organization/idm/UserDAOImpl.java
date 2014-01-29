@@ -38,6 +38,7 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.organization.impl.UserImpl;
 import org.gatein.common.logging.LogLevel;
 import org.picketlink.idm.api.Attribute;
@@ -185,7 +186,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         orgService.flush();
         IdentitySession session = service_.getIdentitySession();
-        User foundUser = getPopulatedUser(userName, session, false);
+        User foundUser = getPopulatedUser(userName, session, UserStatus.BOTH);
 
         if (foundUser == null || foundUser.isEnabled() == enabled) {
             return foundUser;
@@ -235,6 +236,12 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             return null;
         }
 
+        User exoUser = getPopulatedUser(userName, session, UserStatus.BOTH);
+
+        if (broadcast) {
+            preDelete(exoUser);
+        }
+
         try {
             // Remove all memberships and profile first
             orgService.getMembershipHandler().removeMembershipByUser(userName, false);
@@ -242,12 +249,6 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         } catch (Exception e) {
             handleException("Cannot cleanup user relationships: " + userName + "; ", e);
 
-        }
-
-        User exoUser = getPopulatedUser(userName, session, false);
-
-        if (broadcast) {
-            preDelete(exoUser);
         }
 
         try {
@@ -269,17 +270,19 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
     //
     public User findUserByName(String userName) throws Exception {
-        return findUserByName(userName, true);
+        return findUserByName(userName, UserStatus.ENABLED);
     }
 
-    public User findUserByName(String userName, boolean enabledOnly) throws Exception {
+    @Override
+    public User findUserByName(String userName, UserStatus userStatus) throws Exception {
+        boolean enabledOnly = userStatus == UserStatus.ENABLED;
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findUserByName", new Object[] { "userName", userName, "enabledOnly",
                     enabledOnly });
         }
 
         IdentitySession session = service_.getIdentitySession();
-        User user = getPopulatedUser(userName, session, enabledOnly);
+        User user = getPopulatedUser(userName, session, userStatus);
 
         if (log.isTraceEnabled()) {
             Tools.logMethodOut(log, LogLevel.TRACE, "findUserByName", user);
@@ -298,26 +301,36 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         if (enabledOnly) {
             qb = addDisabledUserFilter(qb);
         }
-        return new LazyPageList<User>(new IDMUserListAccess(qb, pageSize, true, enabledOnly), pageSize);
+        return new LazyPageList<User>(new IDMUserListAccess(qb, pageSize, true, enabledOnly ? UserStatus.ENABLED : UserStatus.DISABLED), pageSize);
     }
 
     public ListAccess<User> findAllUsers() throws Exception {
-        return findAllUsers(true);
+        return findAllUsers(UserStatus.ENABLED);
     }
 
     @Override
-    public ListAccess<User> findAllUsers(boolean enabledOnly) throws Exception {
+    public ListAccess<User> findAllUsers(UserStatus userStatus) throws Exception {
         if (log.isTraceEnabled()) {
-            Tools.logMethodIn(log, LogLevel.TRACE, "findAllUsers", new Object[] { "enabledOnly", enabledOnly });
+            Tools.logMethodIn(log, LogLevel.TRACE, "findAllUsers", new Object[] { "userStatus", userStatus });
         }
 
         UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
-        enabledOnly = enabledOnly && filterDisabledUsersInQueries();
-        if (enabledOnly) {
-            qb = addDisabledUserFilter(qb);
+        switch (userStatus) {
+            case DISABLED:
+                if (filterDisabledUsersInQueries()) {
+                    qb = addEnabledUserFilter(qb);
+                }
+                break;
+            case BOTH:
+                break;
+            case ENABLED:
+                if (filterDisabledUsersInQueries()) {
+                    qb = addDisabledUserFilter(qb);
+                }
+                break;
         }
-        return new IDMUserListAccess(qb, 20, !countPaginatedUsers(), enabledOnly);
+        return new IDMUserListAccess(qb, 20, !countPaginatedUsers(), userStatus);
     }
 
     //
@@ -326,7 +339,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             Tools.logMethodIn(log, LogLevel.TRACE, "authenticate", new Object[] { "userName", username, "password", "****" });
         }
 
-        User user = findUserByName(username, false);
+        User user = findUserByName(username, UserStatus.BOTH);
         if (user == null) {
             if (log.isTraceEnabled()) {
                 Tools.logMethodOut(log, LogLevel.TRACE, "authenticate", false);
@@ -383,18 +396,18 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
     //
 
     public ListAccess<User> findUsersByQuery(Query q) throws Exception {
-        return findUsersByQuery(q, true);
+        return findUsersByQuery(q, UserStatus.ENABLED);
     }
 
     @Override
-    public ListAccess<User> findUsersByQuery(Query q, boolean enabledOnly) throws Exception {
+    public ListAccess<User> findUsersByQuery(Query q, UserStatus userStatus) throws Exception {
         if (log.isTraceEnabled()) {
-            Tools.logMethodIn(log, LogLevel.TRACE, "findUsersByQuery", new Object[] { q, enabledOnly });
+            Tools.logMethodIn(log, LogLevel.TRACE, "findUsersByQuery", new Object[] { q, userStatus });
         }
 
         // if only condition is email which is unique then delegate to other method as it will be more efficient
         if (q.getUserName() == null && q.getEmail() != null && q.getFirstName() == null && q.getLastName() == null) {
-            final User uniqueUser = findUserByUniqueAttribute(USER_EMAIL, q.getEmail(), enabledOnly);
+            final User uniqueUser = findUserByUniqueAttribute(USER_EMAIL, q.getEmail(), userStatus);
 
             if (uniqueUser != null) {
                 return new ListAccess<User>() {
@@ -426,7 +439,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         IntegrationCache cache = getIntegrationCache();
 
         if (cache != null) {
-            list = cache.getGtnUserLazyPageList(getCacheNS(), q, enabledOnly);
+            list = cache.getGtnUserLazyPageList(getCacheNS(), q, userStatus);
             if (list != null) {
                 return list;
             }
@@ -460,19 +473,29 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             qb.attributeValuesFilter(UserDAOImpl.USER_LAST_NAME, new String[] { q.getLastName() });
         }
 
-        enabledOnly = enabledOnly && filterDisabledUsersInQueries();
-        if (enabledOnly) {
-            qb = addDisabledUserFilter(qb);
+        switch (userStatus) {
+            case DISABLED:
+                if (filterDisabledUsersInQueries()) {
+                    qb = addEnabledUserFilter(qb);
+                }
+                break;
+            case BOTH:
+                break;
+            case ENABLED:
+                if (filterDisabledUsersInQueries()) {
+                    qb = addDisabledUserFilter(qb);
+                }
+                break;
         }
 
         if (q.getUserName() == null && q.getEmail() == null && q.getFirstName() == null && q.getLastName() == null) {
-            list = new IDMUserListAccess(qb, 20, !countPaginatedUsers(), enabledOnly);
+            list = new IDMUserListAccess(qb, 20, !countPaginatedUsers(), userStatus);
         } else {
-            list = new IDMUserListAccess(qb, 20, false, enabledOnly);
+            list = new IDMUserListAccess(qb, 20, false, userStatus);
         }
 
         if (cache != null) {
-            cache.putGtnUserLazyPageList(getCacheNS(), q, list, enabledOnly);
+            cache.putGtnUserLazyPageList(getCacheNS(), q, list, userStatus);
         }
 
         return list;
@@ -487,13 +510,13 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
     }
 
     public User findUserByEmail(String email) throws Exception {
-        return findUserByUniqueAttribute(USER_EMAIL, email, true);
+        return findUserByUniqueAttribute(USER_EMAIL, email, UserStatus.ENABLED);
     }
 
-    public User findUserByUniqueAttribute(String attributeName, String attributeValue, boolean enabledOnly) throws Exception {
+    public User findUserByUniqueAttribute(String attributeName, String attributeValue, UserStatus userStatus) throws Exception {
         if (log.isTraceEnabled()) {
             Tools.logMethodIn(log, LogLevel.TRACE, "findUserByUniqueAttribute", new Object[] { "findUserByUniqueAttribute",
-                    attributeName, attributeValue, enabledOnly });
+                    attributeName, attributeValue, userStatus });
         }
 
         IdentitySession session = service_.getIdentitySession();
@@ -516,7 +539,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             user = new UserImpl(plUser.getId());
             populateUser(user, session);
 
-            if (enabledOnly && !user.isEnabled()) {
+            if (!userStatus.matches(user.isEnabled())) {
                 user = null;
             }
         }
@@ -529,13 +552,13 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
     }
 
     public ListAccess<User> findUsersByGroupId(String groupId) throws Exception {
-        return findUsersByGroupId(groupId, true);
+        return findUsersByGroupId(groupId, UserStatus.ENABLED);
     }
 
     @Override
-    public ListAccess<User> findUsersByGroupId(String groupId, boolean enabledOnly) throws Exception {
+    public ListAccess<User> findUsersByGroupId(String groupId, UserStatus userStatus) throws Exception {
         if (log.isTraceEnabled()) {
-            Tools.logMethodIn(log, LogLevel.TRACE, "findUsersByGroupId", new Object[] { groupId, enabledOnly });
+            Tools.logMethodIn(log, LogLevel.TRACE, "findUsersByGroupId", new Object[] { groupId, userStatus });
         }
 
         UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
@@ -566,12 +589,22 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         qb.addRelatedGroup(jbidGroup);
 
-        enabledOnly = enabledOnly && filterDisabledUsersInQueries();
-        if (enabledOnly) {
-            qb = addDisabledUserFilter(qb);
+        switch (userStatus) {
+            case DISABLED:
+                if (filterDisabledUsersInQueries()) {
+                    qb = addEnabledUserFilter(qb);
+                }
+                break;
+            case BOTH:
+                break;
+            case ENABLED:
+                if (filterDisabledUsersInQueries()) {
+                    qb = addDisabledUserFilter(qb);
+                }
+                break;
         }
 
-        return new IDMUserListAccess(qb, 20, false, enabledOnly);
+        return new IDMUserListAccess(qb, 20, false, userStatus);
     }
 
     //
@@ -677,7 +710,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
     }
 
-    public User getPopulatedUser(String userName, IdentitySession session, boolean enabledOnly) throws Exception {
+    public User getPopulatedUser(String userName, IdentitySession session, UserStatus userStatus) throws Exception {
         Object u = null;
 
         orgService.flush();
@@ -696,7 +729,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
         User user = new UserImpl(userName);
         populateUser(user, session);
 
-        return !enabledOnly || user.isEnabled() ? user : null;
+        return userStatus.matches(user.isEnabled()) ? user : null;
     }
 
     public void populateUser(User user, IdentitySession session) {
@@ -814,6 +847,10 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
     private UserQueryBuilder addDisabledUserFilter(UserQueryBuilder qb) throws Exception {
         return qb.attributeValuesFilter(UserDAOImpl.USER_ENABLED, new String[] {Boolean.TRUE.toString()});
+    }
+
+    private UserQueryBuilder addEnabledUserFilter(UserQueryBuilder qb) throws Exception {
+        return qb.attributeValuesFilter(UserDAOImpl.USER_ENABLED, new String[] {Boolean.FALSE.toString()});
     }
 
     private boolean countPaginatedUsers() {

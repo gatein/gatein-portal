@@ -30,6 +30,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -186,7 +187,7 @@ public class UIRegisterForm extends UIForm {
         private boolean usernameIsUsed(String username, OrganizationService orgService) {
             UserHandler userHandler = orgService.getUserHandler();
             try {
-                if (userHandler.findUserByName(username, false) != null) {
+                if (userHandler.findUserByName(username, UserStatus.BOTH) != null) {
                     return true;
                 }
             } catch (Exception ex) {

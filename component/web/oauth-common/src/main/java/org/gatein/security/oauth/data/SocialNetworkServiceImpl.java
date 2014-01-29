@@ -30,6 +30,7 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.security.codec.AbstractCodec;
 import org.exoplatform.web.security.codec.CodecInitializer;
 import org.exoplatform.web.security.security.TokenServiceInitializationException;
@@ -66,8 +67,8 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
 
         // TODO: Ugly, but it's used due to OrganizationService API limitations because it doesn't allow to find user by unique userProfile attribute
         try {
-            Method m = userHandler.getClass().getDeclaredMethod("findUserByUniqueAttribute", String.class, String.class, boolean.class);
-            return (User)m.invoke(userHandler, oauthProviderType.getUserNameAttrName(), oauthProviderUsername, false);
+            Method m = userHandler.getClass().getDeclaredMethod("findUserByUniqueAttribute", String.class, String.class, UserStatus.class);
+            return (User)m.invoke(userHandler, oauthProviderType.getUserNameAttrName(), oauthProviderUsername, UserStatus.BOTH);
         } catch (NoSuchMethodException e) {
             String error = "Method findUserByUniqueAttribute(String, String, boolean) is not available on userHandler object " + userHandler +
                     "of class " + userHandler.getClass();

@@ -37,37 +37,33 @@
   <name>GateIn - Portal</name>
 
   <properties>
-    <org.exoplatform.kernel.version>2.5.0-Alpha3</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.6.0-Alpha3</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.4.0-Alpha3</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.16.0-Alpha3</org.exoplatform.jcr.version>
+    <org.exoplatform.kernel.version>2.5.0-Alpha4</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.6.0-Alpha4</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.4.0-Alpha4</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.16.0-Alpha4</org.exoplatform.jcr.version>
     <org.exoplatform.framework.junit.version>1.2.4-GA</org.exoplatform.framework.junit.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-4</nl.captcha.simplecaptcha.version>
     <org.gatein.api.version>1.0.1.Final</org.gatein.api.version>
-    <org.gatein.common.version>2.1.1.Final</org.gatein.common.version>
-    <org.gatein.wci.version>2.3.1.Final</org.gatein.wci.version>
-    <org.gatein.pc.version>2.4.3.Final</org.gatein.pc.version>
-    <org.gatein.sso.version>1.3.4.Final</org.gatein.sso.version>
+    <org.gatein.common.version>2.2.0.Beta01</org.gatein.common.version>
+    <org.gatein.wci.version>2.4.0.Beta01</org.gatein.wci.version>
+    <org.gatein.pc.version>2.5.0.Beta01</org.gatein.pc.version>
+    <org.gatein.sso.version>1.4.0.Beta01</org.gatein.sso.version>
     <org.picketlink.idm>1.4.4.Final</org.picketlink.idm>
     <org.gatein.wsrp.version>2.2.11.Final</org.gatein.wsrp.version>
-    <org.gatein.mop.version>1.2.1.Final</org.gatein.mop.version>
+    <org.gatein.mop.version>1.3.0.Beta01</org.gatein.mop.version>
     <org.gatein.mgmt.version>2.0.1.Final</org.gatein.mgmt.version>
-    <org.slf4j.version>1.6.1</org.slf4j.version>
-    <version.chromattic>1.2.4</version.chromattic>
+    <version.chromattic>1.3.0-beta1</version.chromattic>
     <version.reflext>1.1.0</version.reflext>
     <org.staxnav.version>0.9.6</org.staxnav.version>
     <jcip.version>1.0</jcip.version>
-    <commons-dbcp.version>1.2.2</commons-dbcp.version>
+    <commons-dbcp.version>1.4</commons-dbcp.version>
     <commons-logging.version>1.1.1</commons-logging.version>
     <com.google.javascript.version>r1592</com.google.javascript.version>
     <jboss-dmr.version>1.1.1.Final</jboss-dmr.version>
     <org.jboss.portletbridge.version>3.3.1.Final</org.jboss.portletbridge.version>
     <version.cdi.portlet.integration>1.0.3.Final</version.cdi.portlet.integration>
     <version.org.gatein.naming>1.1.1.Final</version.org.gatein.naming>
-
-    <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
-    <version.twitter4j>3.0.5</version.twitter4j>
 
     <!--
     Various log4j properties for unit tests, examples:
@@ -136,7 +132,7 @@
       <dependency>
         <groupId>org.gatein</groupId>
         <artifactId>gatein-dep</artifactId>
-        <version>1.2.1.Final</version>
+        <version>1.3.0.Beta01</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -146,13 +142,6 @@
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
         <version>${com.google.javascript.version}</version>
-      </dependency>
-
-      <!-- TODO: Remove after upgrade to gatein-dep 1.2.2 -->
-      <dependency>
-        <groupId>org.twitter4j</groupId>
-        <artifactId>twitter4j-core</artifactId>
-        <version>${version.twitter4j}</version>
       </dependency>
 
       <dependency>
@@ -189,7 +178,7 @@
       </dependency>
       <dependency>
         <groupId>org.exoplatform.kernel</groupId>
-        <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
+        <artifactId>exo.kernel.component.ext.cache.impl.infinispan.v5</artifactId>
         <version>${org.exoplatform.kernel.version}</version>
         <exclusions>
           <exclusion>
@@ -1098,13 +1087,11 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>${org.slf4j.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
-      <version>${org.slf4j.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -85,6 +85,13 @@
       <groupId>org.exoplatform.core</groupId>
       <artifactId>exo.core.component.organization.tests</artifactId>
       <version>${org.exoplatform.core.version}</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.organization.tests</artifactId>
+      <version>${org.exoplatform.core.version}</version>
       <classifier>test-sources</classifier>
       <scope>test</scope>
     </dependency>

@@ -38,6 +38,7 @@ import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -253,7 +254,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
             }
         }
         List results = new CopyOnWriteArrayList();
-        ListAccess<User> listUsers = service.getUserHandler().findUsersByQuery(q, isShowOnlyEnabledUser);
+        ListAccess<User> listUsers = service.getUserHandler().findUsersByQuery(q, isShowOnlyEnabledUser ? UserStatus.ENABLED : UserStatus.BOTH);
         for (User user : listUsers.load(0, listUsers.getSize())) {
             results.add(user);
         }

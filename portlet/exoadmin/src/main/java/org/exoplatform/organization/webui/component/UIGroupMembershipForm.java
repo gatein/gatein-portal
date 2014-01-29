@@ -33,6 +33,7 @@ import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -199,7 +200,7 @@ public class UIGroupMembershipForm extends UIForm {
             for (String username : userNames) {
                 if (username == null || username.trim().length() == 0)
                     continue;
-                User user = service.getUserHandler().findUserByName(username, false);
+                User user = service.getUserHandler().findUserByName(username, UserStatus.BOTH);
                 if (user == null) {
                     check = true;
                     if (listNotExist == null)

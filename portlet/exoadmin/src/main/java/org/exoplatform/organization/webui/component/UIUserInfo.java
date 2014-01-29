@@ -29,6 +29,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.web.application.AbstractApplicationMessage;
@@ -77,7 +78,7 @@ public class UIUserInfo extends UIFormTabPane {
     public void setUser(String userName) throws Exception {
         username_ = userName;
         OrganizationService service = getApplicationComponent(OrganizationService.class);
-        User user = service.getUserHandler().findUserByName(userName, false);
+        User user = service.getUserHandler().findUserByName(userName, UserStatus.BOTH);
 
         getChild(UIAccountEditInputSet.class).setValue(user);
         getChild(UIUserProfileInputSet.class).setUserProfile(userName);

@@ -24,6 +24,7 @@ import org.exoplatform.portal.webui.CaptchaValidator;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -165,7 +166,7 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         String username = getUserName();
 
         // Check if user name already existed
-        if (userHandler.findUserByName(username, false) != null) {
+        if (userHandler.findUserByName(username, UserStatus.BOTH) != null) {
             Object[] args = { username };
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", args));
             return false;
@@ -174,7 +175,7 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         // Check if mail address is already used
         Query query = new Query();
         query.setEmail(getEmail());
-        if (userHandler.findUsersByQuery(query, false).getSize() > 0) {
+        if (userHandler.findUsersByQuery(query, UserStatus.BOTH).getSize() > 0) {
             Object[] args = { username };
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
             return false;
