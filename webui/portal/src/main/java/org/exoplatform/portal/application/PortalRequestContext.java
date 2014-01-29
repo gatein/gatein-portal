@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -312,8 +313,17 @@ public class PortalRequestContext extends WebuiRequestContext {
     }
 
     public void requestAuthenticationLogin() throws Exception {
-        String doLoginPath = request_.getContextPath() + "/" + DO_LOGIN_PATTERN + "?initialURI=" + request_.getRequestURI();
-        sendRedirect(doLoginPath);
+        StringBuilder initialURI = new StringBuilder();
+        initialURI.append(request_.getRequestURI());
+        if (request_.getQueryString() != null) {
+            initialURI.append("?").append(request_.getQueryString());
+        }
+
+        StringBuilder loginPath = new StringBuilder();
+        loginPath.append(request_.getContextPath()).append("/").append(DO_LOGIN_PATTERN);
+        loginPath.append("?initialURI=").append(URLEncoder.encode(initialURI.toString(), "UTF-8"));
+
+        sendRedirect(loginPath.toString());
     }
 
     public String getTitle() throws Exception {
