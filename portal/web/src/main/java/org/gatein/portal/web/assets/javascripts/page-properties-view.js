@@ -62,7 +62,7 @@
       var everyone = {
         //Default everyone can access to page
         access: (this.accessPermissions.length == 1 && this.accessPermissions[0] == 'Everyone') || (this.accessPermissions.length == 0),
-        edit: (this.editPermissions.length == 1 && this.editPermissions[0] == 'Everyone')
+        edit: (this.editPermissions.length == 1 && this.editPermissions[0] == 'Everyone') || (this.editPermissions.length == 0)
       };
       this.accessPermissions = _.without(this.accessPermissions, 'Everyone');
       this.editPermissions = _.without(this.editPermissions, 'Everyone');
