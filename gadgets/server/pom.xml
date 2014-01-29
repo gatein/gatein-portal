@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.gadgets</artifactId>
-    <version>3.6.5.Final-SNAPSHOT</version>
+    <version>3.6.5.Final</version>
   </parent>
 
   <artifactId>exo.portal.gadgets-server</artifactId>
