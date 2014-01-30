@@ -27,8 +27,10 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.ProtectedContainer;
+import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
@@ -41,20 +43,32 @@ import org.exoplatform.portal.mop.page.PageServiceException;
 import org.exoplatform.portal.mop.page.PageServiceImpl;
 import org.exoplatform.portal.mop.page.PageServiceWrapper;
 import org.exoplatform.portal.mop.page.PageState;
+import org.exoplatform.portal.pom.spi.gadget.Gadget;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.Identity;
 import org.exoplatform.services.security.IdentityConstants;
 import org.exoplatform.services.security.IdentityRegistry;
+import org.gatein.api.application.Application;
+import org.gatein.api.application.ApplicationImpl;
+import org.gatein.api.application.ApplicationRegistry;
+import org.gatein.api.application.ApplicationRegistryImpl;
 import org.gatein.api.common.Filter;
 import org.gatein.api.common.Pagination;
 import org.gatein.api.internal.Parameters;
-import org.gatein.api.internal.StringJoiner;
 import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.NavigationImpl;
 import org.gatein.api.oauth.OAuthProvider;
 import org.gatein.api.oauth.OAuthProviderAccessor;
+import org.gatein.api.composition.BareContainer;
+import org.gatein.api.composition.Container;
+import org.gatein.api.composition.ContainerImpl;
+import org.gatein.api.composition.ContainerItem;
 import org.gatein.api.page.Page;
+import org.gatein.api.composition.PageBuilder;
+import org.gatein.api.composition.PageBuilderImpl;
 import org.gatein.api.page.PageId;
 import org.gatein.api.page.PageImpl;
 import org.gatein.api.page.PageQuery;
@@ -102,6 +116,7 @@ public class PortalImpl implements Portal {
     private final IdentityRegistry identityRegistry;
     private final UserPortalConfigService userPortalConfigService;
     private final OAuthProviderAccessor oauthProviderAccessor;
+    private ApplicationRegistry applicationRegistry;
 
     public PortalImpl(DataStorage dataStorage, PageService pageService, NavigationService navigationService,
                       DescriptionService descriptionService, ResourceBundleManager bundleManager, Authenticator authenticator,
@@ -256,15 +271,103 @@ public class PortalImpl implements Portal {
     }
 
     @Override
+    public PageBuilder newPageBuilder() {
+        return new PageBuilderImpl();
+    }
+
+    @Override
+    public ApplicationRegistry getApplicationRegistry() {
+        if (null == applicationRegistry) {
+            applicationRegistry = new ApplicationRegistryImpl();
+        }
+        return applicationRegistry;
+    }
+
+    @Override
     public Page getPage(PageId pageId) {
         Parameters.requireNonNull(pageId, "pageId");
 
         try {
             PageContext context = pageService.loadPage(Util.from(pageId));
-            return (context == null) ? null : new PageImpl(context);
+
+            if (context == null) {
+                // Page not found
+                return null;
+            }
+            return new PageImpl(this, context);
         } catch (Throwable e) {
             throw new ApiException("Failed to get page", e);
         }
+    }
+
+    public List<ContainerItem> getPageRootContainer(PageContext pageContext) {
+        org.exoplatform.portal.config.model.Page pageModel;
+        try {
+            pageModel = dataStorage.getPage(pageContext.getKey().format());
+        } catch (Throwable e) {
+            throw new ApiException("Failed to load the containers for page", e);
+        }
+
+        return getContainerItemsFor(pageModel.getChildren());
+    }
+
+    private List<ContainerItem> getContainerItemsFor(ArrayList<ModelObject> children) {
+
+        List<ContainerItem> items = new ArrayList<ContainerItem>(children.size());
+
+        for (ModelObject child : children) {
+            items.add(getContainerItemFor(child));
+        }
+        return items;
+    }
+
+    private ContainerItem getContainerItemFor(ModelObject child) {
+        if (child instanceof org.exoplatform.portal.config.model.Container) {
+            return getContainerItemFor((org.exoplatform.portal.config.model.Container) child);
+        } else if (child instanceof org.exoplatform.portal.config.model.Application<?>) {
+            return getContainerItemFor((org.exoplatform.portal.config.model.Application<?>) child);
+        } else {
+            log.warn("Unrecognized ModelObject type for a page: " + child.getClass());
+            return null;
+        }
+    }
+
+    private ContainerItem getContainerItemFor(org.exoplatform.portal.config.model.Container src) {
+        List<ContainerItem> children = null;
+        ArrayList<ModelObject> srcChildren = src.getChildren();
+        if (srcChildren != null) {
+            children = getContainerItemsFor(srcChildren);
+        }
+
+        ContainerImpl container = new ContainerImpl(children);
+        container.setTemplate(src.getTemplate());
+        container.setMoveAppsPermission(Util.from(src.getMoveAppsPermissions()));
+        container.setMoveContainersPermission(Util.from(src.getMoveContainersPermissions()));
+        container.setAccessPermission(Util.from(src.getAccessPermissions()));
+        return container;
+    }
+
+    private ContainerItem getContainerItemFor(org.exoplatform.portal.config.model.Application<?> src) {
+        ApplicationImpl dst = new ApplicationImpl();
+
+        dst.setAccessPermission(Util.from(src.getAccessPermissions()));
+        dst.setDescription(src.getDescription());
+        dst.setIconURL(src.getIcon());
+        dst.setId(src.getId());
+        dst.setApplicationName(src.getType().getName());
+
+        ApplicationType<?> type = src.getType();
+        if (type == ApplicationType.GADGET) {
+            dst.setType(org.gatein.api.application.ApplicationType.GADGET);
+        } else if (type == ApplicationType.PORTLET) {
+            dst.setType(org.gatein.api.application.ApplicationType.PORTLET);
+        } else if (type == ApplicationType.WSRP_PORTLET) {
+            dst.setType(org.gatein.api.application.ApplicationType.WSRP);
+        } else {
+            throw new IllegalStateException("Application Type is not of any recognized type.");
+        }
+
+        return dst;
     }
 
     @Override
@@ -277,14 +380,18 @@ public class PortalImpl implements Portal {
             throw new EntityNotFoundException("Site " + pageId.getSiteId() + " doesn't exist");
         }
 
-        Permission edit = Permission.any("platform", "administrators");
-        List<String> moveAppsPermissions = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
-        List<String> moveContainersPermissions = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
+        /* Fulfill the contract of Page and Container interfaces. */
+        Permission accessPermissions = Container.DEFAULT_ACCESS_PERMISSION;
+        Permission edit = Page.DEFAULT_EDIT_PERMISSION;
+        Permission moveAppsPermissions = Container.DEFAULT_MOVE_APPS_PERMISSION;
+        Permission moveContainersPermissions = Container.DEFAULT_MOVE_CONTAINERS_PERMISSION;
 
-        PageState pageState = new PageState(pageId.getPageName(), null, false, null, Arrays.asList(Util.from(Permission
-                .everyone())), Util.from(edit)[0], moveAppsPermissions, moveContainersPermissions);
+        PageState pageState = new PageState(pageId.getPageName(), null, false, null,
+                Arrays.asList(Util.from(accessPermissions)),
+                Util.from(edit)[0], Arrays.asList(Util.from(moveAppsPermissions)),
+                Arrays.asList(Util.from(moveContainersPermissions)));
 
-        PageImpl p = new PageImpl(new PageContext(Util.from(pageId), pageState));
+        PageImpl p = new PageImpl(this, new PageContext(Util.from(pageId), pageState));
         p.setCreate(true);
         return p;
     }
@@ -314,7 +421,7 @@ public class PortalImpl implements Portal {
 
         List<Page> pages = new ArrayList<Page>();
         while (iterator.hasNext()) {
-            pages.add(new PageImpl(iterator.next()));
+            pages.add(new PageImpl(this, iterator.next()));
         }
 
         filter(pages, query.getFilter());
@@ -324,24 +431,195 @@ public class PortalImpl implements Portal {
 
     @Override
     public void savePage(Page page) {
-        Parameters.requireNonNull(page, "page");
+        PageImpl pageImpl = (PageImpl) page;
+        Parameters.requireNonNull(pageImpl, "page");
 
-        if (getSite(page.getSiteId()) == null) {
-            throw new EntityNotFoundException("Site " + page.getSiteId() + " doesn't exist");
+        if (getSite(pageImpl.getSiteId()) == null) {
+            throw new EntityNotFoundException("Site " + pageImpl.getSiteId() + " doesn't exist");
         }
 
-        if (((PageImpl) page).isCreate() && getPage(page.getId()) != null) {
+        if (pageImpl.isCreate() && getPage(pageImpl.getId()) != null) {
             // There is still a small chance someone else creates the page, but this is currently the best we can do
-            throw new EntityAlreadyExistsException("Cannot create page. Page " + page.getId() + " already exists.");
+            throw new EntityAlreadyExistsException("Cannot create page. Page " + pageImpl.getId() + " already exists.");
         }
 
-        PageContext context = ((PageImpl) page).getPageContext();
+        PageContext context = pageImpl.getPageContext();
 
         try {
             pageService.savePage(context);
+
+            if (!pageImpl.isChildrenSet()) {
+                // it seems that the page was created without a container, and it wasn't loaded,
+                // so, we are done
+                return;
+            }
+
+            // Added as required by the Compose Page API work:
+            // In addition to the pageService, which stores only metadata about the page, we also send it
+            // to the dataStorage for persistence, because this one takes care of persisting the children as well.
+            // As such, we need to get the ModelObject representation of the Page, which is the only representation
+            // that the dataStorage would accept.
+            dataStorage.save(getModelObjectFor(pageImpl));
+            dataStorage.save();
         } catch (Throwable t) {
-            throw new ApiException("Failed to save page " + page.getId(), t);
+            throw new ApiException("Failed to save page " + pageImpl.getId(), t);
         }
+    }
+
+    /**
+     * This method returns the org.exoplatform.portal.config.model.Page object that is ready to be persisted by the
+     * data storage.
+     *
+     * It first tries to find an existing page with the given PageKey and returns it, with the attributes from the
+     * source page already set on the existing page, making the resulting Page ready to be persisted.
+     *
+     * If the page doesn't exists, returns a newly created instance, ready to be persisted.
+     *
+     * @param page the org.exoplatform.api.page.Page to be queries/converted
+     * @return the org.exoplatform.portal.config.model.Page ready to be persisted
+     */
+    private org.exoplatform.portal.config.model.Page getModelObjectFor(PageImpl page) throws Exception {
+        // first, let's try to retrieve a possible existing page from the permanent storage:
+        org.exoplatform.portal.config.model.Page model = dataStorage.getPage(page.getPageContext().getKey().format());
+
+        // now, let's start the conversion, with the permissions
+        List<String> moveAppsPermissions = page.getPageContext().getState().getMoveAppsPermissions();
+        List<String> moveContainersPermissions = page.getPageContext().getState().getMoveContainersPermissions();
+        List<String> accessPermissions = page.getPageContext().getState().getAccessPermissions();
+
+        // and now, override the values from the stored model with the ones we've received
+        model.setName(page.getName());
+        model.setDescription(page.getDescription());
+        model.setTitle(page.getTitle());
+
+        model.setAccessPermissions(accessPermissions.toArray(new String[accessPermissions.size()]));
+        model.setEditPermission(page.getEditPermission().toString());
+        model.setMoveAppsPermissions(moveAppsPermissions.toArray(new String[moveAppsPermissions.size()]));
+        model.setMoveContainersPermissions(moveContainersPermissions.toArray(new String[moveContainersPermissions.size()]));
+
+        model.setShowMaxWindow(page.getPageContext().getState().getShowMaxWindow());
+
+        // converts all the children objects into ModelObjects, and set them as children of the persisted page
+        // note that this effectively overrides the current children from the persisted page
+        model.setChildren(getModelObjectsFor(page));
+
+        // and finally, return the persisted model, with the changes applies
+        return model;
+    }
+
+    /**
+     * Converts a generic container generated by the API into a list of ModelObject. This means that a top-level
+     * container from the API will then be converted into a list of children containers. This effectively "flattens"
+     * the first level, taking only the top-level children into consideration.
+     *
+     * @param container the Container from the API to be converted
+     * @return an ArrayList instead of a generic List, as it's required by org.exoplatform.portal.config.model.Container#setChildren
+     */
+    private ArrayList<ModelObject> getModelObjectsFor(BareContainer container) {
+        // basically, what this method does is:
+        // 1) iterates over the children of the provided container: each of them should be a ModelObject item on a list
+        //    at the end of the execution
+        // 2) determines the type of the object being iterated
+        // 2.1) if it's a container, converts the meta-data into a ModelObject and then make a recursive call to convert
+        //      the child objects into ModelObjects
+        // 2.2) if it's an application, just convert it into a ModelObject
+        // 3) return the list of converted objects
+
+        ArrayList<ModelObject> children = new ArrayList<ModelObject>();
+        List<ContainerItem> containerChildren = container.getChildren();
+
+        // this will almost certainly never be null, but better check...
+        if (null != containerChildren) {
+
+            // for each application or container on the top-level container, convert it into a ModelObject and add
+            // to the list of children to return
+            for (ContainerItem containerItem : containerChildren) {
+
+                if (containerItem instanceof Container) {
+                    Container containerItemContainer = (Container) containerItem;
+                    // it's a container, so, we might have yet another level of children to convert
+                    // also, we need information about which type of container it is, and this is expressed by the
+                    // template property, as there's pretty much no difference between a column container and a row
+                    // container at the storage level
+                    org.exoplatform.portal.config.model.Container child = new org.exoplatform.portal.config.model.Container();
+                    child.setTemplate(containerItemContainer.getTemplate());
+                    child.setAccessPermissions(Util.from(containerItemContainer.getAccessPermission()));
+                    child.setMoveAppsPermissions(Util.from(containerItemContainer.getMoveAppsPermission()));
+                    child.setMoveContainersPermissions(Util.from(containerItemContainer.getMoveContainersPermission()));
+
+                    // recursive call, to convert all the children into model objects for this container
+                    child.setChildren(getModelObjectsFor(containerItemContainer));
+
+                    // and finally, add to the list of children
+                    children.add(child);
+                } else if (containerItem instanceof Application) {
+
+                    // this child is an application, so, get a ModelObject representation for it and add to children
+                    children.add(getModelObjectFor((Application)containerItem));
+                } else {
+
+                    // how come it's not a Container nor an Application???
+                    throw new IllegalStateException("An unrecognized ContainerItem was found: " + containerItem.getClass());
+                }
+
+            }
+        }
+
+        // might be an empty list!
+        return children;
+    }
+
+    /**
+     * Converts an Application object from the API into an org.exoplatform.portal.config.model.Application<S>
+     * @param application the Application object from the API to be converted
+     * @return an appropriate org.exoplatform.portal.config.model.Application<S>, as a ModelObject or null, if
+     * a valid application type wasn't available on the original Application object.
+     * @throws java.lang.IllegalStateException if the application type is none of the known types (Gadget, Portlet, WSRP)
+     */
+    private ModelObject getModelObjectFor(Application application) {
+        // for our purposes, the handling of applications is pretty much the same accross applications,
+        // *but*, we need to set the correct application type... so, we need to check it, and get an appropriate
+        // Application<S>... otherwise, we could have made a generic call to convertIntoModelObject and kept it simpler
+        switch (application.getType()) {
+            case GADGET:
+                return convertIntoModelObject(
+                        application,
+                        new org.exoplatform.portal.config.model.Application<Gadget>(ApplicationType.GADGET)
+                );
+            case PORTLET:
+                return convertIntoModelObject(
+                        application,
+                        new org.exoplatform.portal.config.model.Application<Portlet>(ApplicationType.PORTLET)
+                );
+            case WSRP:
+                return convertIntoModelObject(
+                        application,
+                        new org.exoplatform.portal.config.model.Application<WSRP>(ApplicationType.WSRP_PORTLET)
+                );
+            default:
+                throw new IllegalStateException("Application type was not recognized: " + application.getType());
+        }
+    }
+
+    /**
+     * Converts a given API Application into a ModelObject, using a model Application<S> object provided as destination.
+     * @param src the source API Application
+     * @param dst the object to receive the properties from the src
+     * @return the dst object, populated with the properties from src
+     */
+    private <S> ModelObject convertIntoModelObject(Application src,
+                                               org.exoplatform.portal.config.model.Application<S> dst) {
+
+        // here's the key part on converting an application from the API into an application that is going to be persisted
+        // as a component of the page. The risk is that any new properties added to the Application<S> will need
+        // a new property at both the API level and here.
+        TransientApplicationState<S> state = new TransientApplicationState<S>(src.getApplicationName());
+        dst.setAccessPermissions(Util.from(src.getAccessPermission()));
+        dst.setDescription(src.getDescription());
+        dst.setIcon(src.getIconURL());
+        dst.setId(src.getId());
+        dst.setState(state);
+        return dst;
     }
 
     @Override

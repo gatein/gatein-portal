@@ -33,6 +33,16 @@
    </component>
 
    <component>
+      <key>org.gatein.api.composition.PageBuilder</key>
+      <type>org.gatein.api.composition.PageBuilderImpl</type>
+   </component>
+
+   <component>
+      <key>org.gatein.api.application.ApplicationRegistry</key>
+      <type>org.gatein.api.application.ApplicationRegistryImpl</type>
+   </component>
+
+   <component>
       <key>org.gatein.api.oauth.OAuthProviderAccessor</key>
       <type>org.exoplatform.portal.application.oauth.OAuthProviderAccessorImpl</type>
    </component>

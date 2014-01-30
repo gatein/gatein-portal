@@ -212,6 +212,26 @@ public class PageState implements Serializable {
             return this;
         }
 
+        public Builder moveAppsPermissions(List<String> moveAppsPermissions) {
+            this.moveAppsPermissions = moveAppsPermissions;
+            return this;
+        }
+
+        public Builder moveAppsPermissions(String... moveAppsPermissions) {
+            this.moveAppsPermissions = new ArrayList<String>(Arrays.asList(moveAppsPermissions));
+            return this;
+        }
+
+        public Builder moveContainersPermissions(List<String> moveContainersPermissions) {
+            this.moveContainersPermissions = moveContainersPermissions;
+            return this;
+        }
+
+        public Builder moveContainersPermissions(String... moveContainersPermissions) {
+            this.moveContainersPermissions = new ArrayList<String>(Arrays.asList(moveContainersPermissions));
+            return this;
+        }
+
         public Builder showMaxWindow(boolean showMaxWindow) {
             this.showMaxWindow = showMaxWindow;
             return this;

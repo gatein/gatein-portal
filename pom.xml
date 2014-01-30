@@ -44,7 +44,7 @@
     <org.exoplatform.framework.junit.version>1.2.4-GA</org.exoplatform.framework.junit.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-4</nl.captcha.simplecaptcha.version>
-    <org.gatein.api.version>1.0.1.Final</org.gatein.api.version>
+    <org.gatein.api.version>1.0.2.Final-SNAPSHOT</org.gatein.api.version>
     <org.gatein.common.version>2.2.2.Final</org.gatein.common.version>
     <org.gatein.wci.version>2.4.1.Final</org.gatein.wci.version>
     <org.gatein.pc.version>2.5.1.Final</org.gatein.pc.version>
