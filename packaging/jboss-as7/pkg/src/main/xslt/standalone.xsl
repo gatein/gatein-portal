@@ -27,7 +27,7 @@
          <system-properties>
             <property name="exo.profiles" value="cluster"/>
             <property name="gatein.jcr.config.type" value="cluster"/>
-            <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.jbosscache.LocalIndexChangesFilter"/>
+            <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.ispn.ISPNIndexChangesFilter"/>
             <property name="gatein.jcr.storage.enabled" value="false"/>
          </system-properties>
       </xsl:if>     

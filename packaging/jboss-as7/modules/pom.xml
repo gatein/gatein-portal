@@ -178,6 +178,16 @@
       <artifactId>jgroups</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.infinispan</groupId>
+      <artifactId>infinispan-core</artifactId>
+    </dependency>
+
+    <dependency>
+       <groupId>org.infinispan</groupId>
+       <artifactId>infinispan-cachestore-jdbc</artifactId>
+    </dependency>
+
     <!--dependency>
        <groupId>org.jboss.mc-int</groupId>
        <artifactId>jboss-mc-int-common</artifactId>
