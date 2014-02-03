@@ -33,6 +33,6 @@
     <module name="org.apache.log4j"/>
     <module name="org.javassist"/>
     <module name="org.hibernate"/>
-    <module name="org.infinispan" slot="gatein"/>
+    <module name="org.infinispan"/>
   </dependencies>
 </module>
