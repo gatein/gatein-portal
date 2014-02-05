@@ -59,7 +59,7 @@ public class CacheUserProfileFilter extends AbstractFilter {
                             OrganizationService.class);
 
                     begin(orgService);
-                    User user = orgService.getUserHandler().findUserByName(state.getIdentity().getUserId(), UserStatus.DISABLED);
+                    User user = orgService.getUserHandler().findUserByName(state.getIdentity().getUserId(), UserStatus.BOTH);
                     end(orgService);
                     state.setAttribute(USER_PROFILE, user);
                 }
