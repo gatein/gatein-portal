@@ -314,7 +314,10 @@ public class PortalRequestContext extends WebuiRequestContext {
 
     public void requestAuthenticationLogin() throws Exception {
         StringBuilder initialURI = new StringBuilder();
-        initialURI.append(request_.getRequestURI()).append("?").append(request_.getQueryString());
+        initialURI.append(request_.getRequestURI());
+        if (request_.getQueryString() != null) {
+            initialURI.append("?").append(request_.getQueryString());
+        }
 
         StringBuilder loginPath = new StringBuilder();
         loginPath.append(request_.getContextPath()).append("/").append(DO_LOGIN_PATTERN);
