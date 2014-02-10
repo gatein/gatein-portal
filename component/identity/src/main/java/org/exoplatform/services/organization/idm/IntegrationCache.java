@@ -127,7 +127,6 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
             ioNode.put(NODE_OBJECT_KEY, list);
 
             if (log.isTraceEnabled()) {
-
                 log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query, userStatus) + ";namespace=" + ns);
             }
         }
@@ -211,19 +210,9 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
         StringBuilder sb = new StringBuilder();
         String SEP = ":::";
 
-        if (userStatus == UserStatus.BOTH) {
-/*
-            sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
-                    .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
-                    .append(query.getToLoginDate()).append(SEP);
-*/
-            throw new UnsupportedOperationException("Implement me");
-        } else {
-            boolean enabledOnly = userStatus == UserStatus.ENABLED;
-            sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
-                    .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
-                    .append(query.getToLoginDate()).append(SEP).append(enabledOnly).append(SEP);
-        }
+        sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
+                .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
+                .append(query.getToLoginDate()).append(SEP).append(userStatus.name()).append(SEP);
 
         return sb.toString();
     }
