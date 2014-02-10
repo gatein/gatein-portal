@@ -29,6 +29,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -180,7 +181,7 @@ public class UIListUsers extends UISearch {
             String username = event.getRequestContext().getRequestParameter(OBJECTID);
             UIListUsers uiListUsers = event.getSource();
             OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
-            User user = service.getUserHandler().findUserByName(username, false);
+            User user = service.getUserHandler().findUserByName(username, UserStatus.BOTH);
             if (user == null) {
                 UIApplication uiApplication = event.getRequestContext().getUIApplication();
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,
@@ -247,7 +248,7 @@ public class UIListUsers extends UISearch {
             String userName = event.getRequestContext().getRequestParameter(OBJECTID);
             OrganizationService service = uiListUser.getApplicationComponent(OrganizationService.class);
 
-            User user = service.getUserHandler().findUserByName(userName, false);
+            User user = service.getUserHandler().findUserByName(userName, UserStatus.BOTH);
             if(user == null) {
                 UIApplication uiApp = event.getRequestContext().getUIApplication();
                 uiApp.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null, ApplicationMessage.WARNING));

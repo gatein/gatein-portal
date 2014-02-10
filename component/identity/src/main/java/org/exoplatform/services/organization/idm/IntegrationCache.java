@@ -1,6 +1,7 @@
 package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.services.organization.Query;
+import org.exoplatform.services.organization.UserStatus;
 import org.gatein.common.NotYetImplemented;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -117,8 +118,8 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
      * @param query
      * @param list
      */
-    void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list, boolean enabledOnly) {
-        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, enabledOnly));
+    void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list, UserStatus userStatus) {
+        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, userStatus));
 
         Node ioNode = addNode(nodeFqn);
 
@@ -127,7 +128,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
 
             if (log.isTraceEnabled()) {
 
-                log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query, enabledOnly) + ";namespace=" + ns);
+                log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query, userStatus) + ";namespace=" + ns);
             }
         }
     }
@@ -139,9 +140,9 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
      * @param query
      * @return LazyPageList
      */
-    IDMUserListAccess getGtnUserLazyPageList(String ns, Query query, boolean enabledOnly) {
+    IDMUserListAccess getGtnUserLazyPageList(String ns, Query query, UserStatus userStatus) {
 
-        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, enabledOnly));
+        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, userStatus));
 
         Node node = getNode(nodeFqn);
 
@@ -149,7 +150,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
             IDMUserListAccess list = (IDMUserListAccess) node.get(NODE_OBJECT_KEY);
 
             if (log.isTraceEnabled() && list != null) {
-                log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query, enabledOnly)
+                log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query, userStatus)
                         + ";namespace=" + ns);
             }
 
@@ -206,13 +207,23 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
 
     }
 
-    String getQueryKey(Query query, boolean enabledOnly) {
+    String getQueryKey(Query query, UserStatus userStatus) {
         StringBuilder sb = new StringBuilder();
         String SEP = ":::";
 
-        sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
-                .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
-                .append(query.getToLoginDate()).append(SEP).append(enabledOnly).append(SEP);
+        if (userStatus == UserStatus.BOTH) {
+/*
+            sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
+                    .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
+                    .append(query.getToLoginDate()).append(SEP);
+*/
+            throw new UnsupportedOperationException("Implement me");
+        } else {
+            boolean enabledOnly = userStatus == UserStatus.ENABLED;
+            sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
+                    .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
+                    .append(query.getToLoginDate()).append(SEP).append(enabledOnly).append(SEP);
+        }
 
         return sb.toString();
     }

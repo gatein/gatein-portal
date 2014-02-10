@@ -13,7 +13,7 @@
   <name>GateIn for Tomcat 7 packaging</name>
 
   <properties>
-    <version.apache.tomcat>7.0.37</version.apache.tomcat>
+    <version.apache.tomcat>7.0.34</version.apache.tomcat>
     <tomcat.archive.name>apache-tomcat-${version.apache.tomcat}</tomcat.archive.name>
     <server.name>${tomcat.archive.name}</server.name>
     <tomcat.dir>${servers.dir}/${server.name}</tomcat.dir>

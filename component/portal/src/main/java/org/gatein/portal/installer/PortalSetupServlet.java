@@ -34,6 +34,7 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -71,7 +72,7 @@ public class PortalSetupServlet extends HttpServlet {
                 try {
                     OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer()
                             .getComponentInstanceOfType(OrganizationService.class);
-                    User root = service.getUserHandler().findUserByName("root", false);
+                    User root = service.getUserHandler().findUserByName("root", UserStatus.BOTH);
                     // In the case the root user is not present
                     // This case can happens if organization-configuration.xml is not well configured
                     if (root == null) {

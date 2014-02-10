@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
@@ -55,7 +56,7 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
             if (exoContainer != null) {
                 OrganizationService organizationService = (OrganizationService) exoContainer
                         .getComponentInstanceOfType(OrganizationService.class);
-                user = organizationService.getUserHandler().findUserByName(uid, false);
+                user = organizationService.getUserHandler().findUserByName(uid, UserStatus.BOTH);
             }
 
             // If user is not existed OR disabled

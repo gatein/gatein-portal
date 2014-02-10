@@ -28,6 +28,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -45,6 +46,6 @@ public class FindUsersPageList extends PageListAccess<User, Query> {
     protected ListAccess<User> create(Query state) throws Exception {
         ExoContainer container = PortalContainer.getInstance();
         OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
-        return service.getUserHandler().findUsersByQuery(state, enabledOnly);
+        return service.getUserHandler().findUsersByQuery(state, enabledOnly ? UserStatus.ENABLED : UserStatus.BOTH);
     }
 }

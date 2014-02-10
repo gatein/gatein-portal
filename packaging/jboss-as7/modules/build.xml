@@ -142,10 +142,6 @@
       <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
     </module-def>
 
-    <module-def name="org.jboss.cache">
-      <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
-    </module-def>
-
     <module-def name="org.jgroups" slot="gatein">
       <maven-resource group="org.jgroups" artifact="jgroups"/>
     </module-def>
@@ -193,6 +189,7 @@
     </module-def>
 
     <module-def name="org.htmlparser">
+      <maven-resource group="org.htmlparser" artifact="htmllexer"/>
       <maven-resource group="org.htmlparser" artifact="htmlparser"/>
     </module-def>
 
@@ -244,7 +241,7 @@
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.cache"/>
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.command"/>
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.common"/>
-      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.ext.cache.impl.jboss.v3"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.ext.cache.impl.infinispan.v5"/>
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.container"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.api" />
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.application-registry"/>

@@ -39,6 +39,7 @@ import org.exoplatform.services.organization.OrganizationConfig;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.OrganizationServiceInitializer;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 
 /**
  * Clone of OrganizationDatabaseInitializer class.
@@ -101,7 +102,7 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
     }
 
     private boolean checkExistDatabase(OrganizationService service) throws Exception {
-        ListAccess<User> users = service.getUserHandler().findAllUsers(false);
+        ListAccess<User> users = service.getUserHandler().findAllUsers(UserStatus.BOTH);
         if (users != null && users.getSize() > 0)
             return true;
         return false;
@@ -172,7 +173,7 @@ public class SetupOrganizationDatabaseInitializer extends BaseComponentPlugin im
                 user.setPassword(PortalSetupService.rootPassword());
             }
 
-            if (service.getUserHandler().findUserByName(data.getUserName(), false) == null) {
+            if (service.getUserHandler().findUserByName(data.getUserName(), UserStatus.BOTH) == null) {
                 service.getUserHandler().createUser(user, true);
                 printInfo("    Created user " + data.getUserName());
             } else if (updateUsers) {

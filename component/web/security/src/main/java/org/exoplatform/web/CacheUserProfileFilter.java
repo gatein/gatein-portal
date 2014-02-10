@@ -31,6 +31,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.IdentityConstants;
 
@@ -58,7 +59,7 @@ public class CacheUserProfileFilter extends AbstractFilter {
                             OrganizationService.class);
 
                     begin(orgService);
-                    User user = orgService.getUserHandler().findUserByName(state.getIdentity().getUserId(), false);
+                    User user = orgService.getUserHandler().findUserByName(state.getIdentity().getUserId(), UserStatus.BOTH);
                     end(orgService);
                     state.setAttribute(USER_PROFILE, user);
                 }

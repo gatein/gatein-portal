@@ -29,6 +29,7 @@ import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -98,7 +99,7 @@ public class UIGroupEditMembershipForm extends UIForm {
             }
             String userName = formMembership.getUserName();
             Group group = service.getGroupHandler().findGroupById(uiForm.groupId);
-            User user = service.getUserHandler().findUserByName(userName, false);
+            User user = service.getUserHandler().findUserByName(userName, UserStatus.BOTH);
             if(user == null || !user.isEnabled()) {
                 String messageBundle = (user == null ? "UIAccountInputSet.msg.user-is-deleted" : "UIAccountInputSet.msg.user-is-disabled");
                 uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));

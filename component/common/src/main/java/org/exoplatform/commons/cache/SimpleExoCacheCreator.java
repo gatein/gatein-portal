@@ -20,13 +20,17 @@
 package org.exoplatform.commons.cache;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.Callable;
 
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cache.ExoCacheConfig;
 import org.exoplatform.services.cache.ExoCacheInitException;
 import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
-import org.exoplatform.services.cache.impl.jboss.ExoCacheCreator;
-import org.jboss.cache.Cache;
+import org.exoplatform.services.cache.impl.infinispan.ExoCacheCreator;
+import org.infinispan.Cache;
+import org.infinispan.configuration.cache.ConfigurationBuilder;
 
 /**
  * Gives more flexibility in GateIn cache usage.
@@ -35,21 +39,23 @@ import org.jboss.cache.Cache;
  * @version $Revision$
  */
 public class SimpleExoCacheCreator implements ExoCacheCreator {
-    public ExoCache<Serializable, Object> create(ExoCacheConfig config, Cache<Serializable, Object> jbossCache)
-            throws ExoCacheInitException {
-        ExoCache<Serializable, Object> simple = new ConcurrentFIFOExoCache<Serializable, Object>();
-        simple.setName(config.getName());
-        simple.setLabel(config.getLabel());
-        simple.setMaxSize(config.getMaxSize());
-        simple.setLiveTime(config.getLiveTime());
-        return simple;
-    }
 
-    public Class<? extends ExoCacheConfig> getExpectedConfigType() {
+  @Override
+  public ExoCache<Serializable, Object> create(ExoCacheConfig config, ConfigurationBuilder confBuilder, Callable<Cache<Serializable, Object>> cacheGetter) throws ExoCacheInitException {
+    ExoCache<Serializable, Object> simple = new ConcurrentFIFOExoCache<Serializable, Object>();
+    simple.setName(config.getName());
+    simple.setLabel(config.getLabel());
+    simple.setMaxSize(config.getMaxSize());
+    simple.setLiveTime(config.getLiveTime());
+    return simple;
+  }
+
+  public Class<? extends ExoCacheConfig> getExpectedConfigType() {
         return ExoCacheConfig.class;
     }
 
-    public String getExpectedImplementation() {
-        return "simple";
-    }
+  @Override
+  public Set<String> getExpectedImplementations() {
+    return Collections.singleton("simple");
+  }
 }

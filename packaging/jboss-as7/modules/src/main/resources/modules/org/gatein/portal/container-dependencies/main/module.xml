@@ -66,9 +66,9 @@
     <module name="org.gatein.oauth" export="true"/>
 
     <!--
-         JBossCache configuration loads schemas via TCCL
+         ExoCacheFactory uses infinispan which uses portal classloader and serviceloader pattern to init parsers
     -->
-    <module name="org.jboss.cache" export="true"/>
+    <module name="org.infinispan" services="export"/>
 
     <!--
          Needed for clustering. JBoss Cache CacheMarshaller200 loads classes via TCCL
