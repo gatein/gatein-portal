@@ -62,7 +62,8 @@
 
             // If the submenu overflows over right border of page, move it to the left / reverse it (apply inverse CSS)
             // TODO: handle case where there is also not enough room on the other side...
-            if ((elementWidth + handlerLeft > screenWidth) || (handlerLeft < 0)) {
+            var rtlOffset = 100; // rtlOffset to fix menu issues in RTL mode for some Android devices
+            if ((elementWidth + handlerLeft > screenWidth) || (handlerLeft < rtlOffset)) {
                 if (!menuElement.hasClass(settings.inverseSubmenuClass))
                     menuElement.addClass(settings.inverseSubmenuClass);
             }
