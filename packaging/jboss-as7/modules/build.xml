@@ -142,6 +142,14 @@
       <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
     </module-def>
 
+    <module-def name="org.infinispan" slot="gatein">
+      <maven-resource group="org.infinispan" artifact="infinispan-core"/>
+    </module-def>
+
+    <module-def name="org.infinispan.cachestore.jdbc" slot="gatein">
+      <maven-resource group="org.infinispan" artifact="infinispan-cachestore-jdbc"/>
+    </module-def>
+
     <module-def name="org.jgroups" slot="gatein">
       <maven-resource group="org.jgroups" artifact="jgroups"/>
     </module-def>
