@@ -255,6 +255,21 @@
     </init-params>
   </component>
 
+  <component>
+    <key>org.gatein.portal.installer.PortalSetupService</key>
+    <type>org.gatein.portal.installer.PortalSetupService</type>
+    <init-params>
+      <value-param>
+        <name>repository</name>
+        <value>${gatein.jcr.repository.default:repository}</value>
+      </value-param>
+      <value-param>
+        <name>workspace</name>
+        <value>${gatein.jcr.workspace.default:portal-system}</value>
+      </value-param>
+    </init-params>
+  </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
     <component-plugin>

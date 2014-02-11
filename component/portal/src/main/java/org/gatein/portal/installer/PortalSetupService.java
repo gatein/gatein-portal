@@ -22,19 +22,34 @@
 
 package org.gatein.portal.installer;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.HashMap;
-
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.jcr.Session;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.MembershipType;
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
+import org.picocontainer.Startable;
 
 /**
  * This class is responsible to check a flag in JCR and memory for proper GateIn root password setup.
@@ -42,29 +57,111 @@ import org.exoplatform.services.jcr.RepositoryService;
  * @author <a href="mailto:lponce@redhat.com">Lucas Ponce</a>
  *
  */
-public class PortalSetupService {
+public class PortalSetupService implements Startable {
+    private static Log log = ExoLogger.getLogger(PortalSetupService.class);
 
+    public static final String GATEIN_SETUP_ENABLE = "gatein.portal.setup.enable";
     public static final String ROOT_PASSWORD_PROPERTY = "gatein.portal.setup.initialpassword.root";
-    public static final String REPOSITORY_NAME = "repository";
-    public static final String WORKSPACE_NAME = "portal-system";
-    public static final String SETUP_FLAG = "gatein-setup-flag";
-    public static final String SALT = "unodostrescuatro";
-    public static final int COUNT = 9;
-    public static final String KEY = "somearbitrarycrazystringthatdoesnotmatter";
+
+    private static String SALT = "unodostrescuatro";
+    private static int COUNT = 9;
+    private static String KEY = "somearbitrarycrazystringthatdoesnotmatter";
+
+    private static final String SETUP_FLAG = "gatein-setup-flag";
+
+    private String jcrWS;
+    private String jcrRepo;
+    private ManageableRepository repository;
 
     // We check root password per portal container
-    private static HashMap<String, Boolean> setup = new HashMap<String, Boolean>();
+    private Map<String, Boolean> setup = new ConcurrentHashMap<String, Boolean>();
 
-    private static String getPCName() {
+    private OrganizationService orgService;
+    private RepositoryService jcrService;
+
+    public PortalSetupService(InitParams params, OrganizationService orgService, RepositoryService jcrService) throws Exception {
+
+        ValueParam repoConfig = params.getValueParam("repository");
+        if (repoConfig != null) {
+            jcrRepo = repoConfig.getValue().trim();
+        }
+        ValueParam ws = params.getValueParam("workspace");
+        if (ws != null) {
+            jcrWS = ws.getValue().trim();
+        }
+
+        //
+        this.orgService = orgService;
+        this.jcrService = jcrService;
+    }
+
+    @Override
+    public void start() {
+        try {
+            if (jcrRepo != null) {
+                repository = jcrService.getRepository(jcrRepo);
+            } else {
+                repository = jcrService.getCurrentRepository();
+            }
+
+            if (jcrWS == null) {
+                jcrWS = repository.getConfiguration().getDefaultWorkspaceName();
+            }
+        } catch (Exception e) {
+            log.error("Can't get JCR repository", e);
+        }
+
+        if (isEnable()) {
+            RequestLifeCycle.begin(PortalContainer.getInstance());
+            checkJcrFlag();
+            try {
+                if (!isSetup()) {
+                    User root = getRootUser();
+                    root.setPassword(rootPassword());
+                    orgService.getUserHandler().saveUser(root, true);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                RequestLifeCycle.end();
+            }
+        }
+    }
+
+    public User getRootUser() throws Exception {
+        User root = orgService.getUserHandler().findUserByName("root", UserStatus.BOTH);
+        // In the case the root user is not present
+        // This case can happens if organization-configuration.xml is not well configured
+        if (root == null) {
+            root = orgService.getUserHandler().createUserInstance("root");
+            root.setFirstName("Root");
+            root.setLastName("Root");
+            root.setEmail("root@localhost");
+            root.setDisplayName("root");
+            orgService.getUserHandler().createUser(root, true);
+            // Get memberships
+            MembershipType manager = orgService.getMembershipTypeHandler().findMembershipType("manager");
+            MembershipType member = orgService.getMembershipTypeHandler().findMembershipType("member");
+            // Get groups
+            Group administrators = orgService.getGroupHandler().findGroupById("/platform/administrators");
+            Group users = orgService.getGroupHandler().findGroupById("/platform/users");
+            Group executive_board = orgService.getGroupHandler().findGroupById("/organization/management/executive-board");
+            // Assign users
+            orgService.getMembershipHandler().linkMembership(root, administrators, manager, true);
+            orgService.getMembershipHandler().linkMembership(root, users, member, true);
+            orgService.getMembershipHandler().linkMembership(root, executive_board, member, true);
+        }
+        return root;
+    }
+
+    private String getPCName() {
         return ExoContainerContext.getCurrentContainer().getContext().getPortalContainerName();
     }
 
-    public static void checkJcrFlag() {
+    private void checkJcrFlag() {
         setup.put(getPCName(), false);
         try {
-            RepositoryService repoService = (RepositoryService) ExoContainerContext.getCurrentContainer()
-                    .getComponentInstanceOfType(RepositoryService.class);
-            Session session = repoService.getRepository(REPOSITORY_NAME).getSystemSession(WORKSPACE_NAME);
+            Session session = getJcrSession();
             if (session.itemExists("/" + SETUP_FLAG))
                 setup.put(getPCName(), true);
             session.logout();
@@ -73,21 +170,22 @@ public class PortalSetupService {
         }
     }
 
-    public static void setJcrFlag() {
+    public void setJcrFlag() {
+        RequestLifeCycle.begin(PortalContainer.getInstance());
         try {
-            RepositoryService repoService = (RepositoryService) ExoContainerContext.getCurrentContainer()
-                    .getComponentInstanceOfType(RepositoryService.class);
-            Session session = repoService.getRepository(REPOSITORY_NAME).getSystemSession(WORKSPACE_NAME);
+            Session session = getJcrSession();
             session.getRootNode().addNode(SETUP_FLAG);
             session.save();
             session.logout();
             setup.put(getPCName(), true);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            RequestLifeCycle.end();
         }
     }
 
-    public static String rootPassword() {
+    private String rootPassword() {
 
         String password = null;
         try {
@@ -105,7 +203,7 @@ public class PortalSetupService {
         }
     }
 
-    public static String decodePassword(String encodedPassword) throws Exception {
+    public String decodePassword(String encodedPassword) throws Exception {
 
         if (encodedPassword == null) {
             return null;
@@ -152,20 +250,36 @@ public class PortalSetupService {
      * PortalContainer's name matches with ServletContextName.
      * @see org.exoplatform.container.RootContainer
      */
-    public static boolean isSetup(String context) {
+    public boolean isSetup(String context) {
         return (setup.get(context) != null ? setup.get(context) : false);
     }
 
-    public static boolean isSetup() {
-        return setup.get(getPCName());
+    public boolean isSetup() {
+        return isSetup(getPCName());
     }
 
-    public static void setFlag() {
+    public boolean isEnable() {
+        String config = PropertyManager.getProperty(PortalSetupService.GATEIN_SETUP_ENABLE);
+        return Boolean.parseBoolean(config);
+    }
+
+    public void setFlag() {
         setup.put(getPCName(), true);
     }
 
-    private static String randomPassword() {
+    private String randomPassword() {
         return new BigInteger(130, new SecureRandom()).toString(8);
     }
 
+    @Override
+    public void stop() {
+    }
+
+    private Session getJcrSession() throws Exception {
+        if (repository == null) {
+            throw new IllegalStateException("repository is null, jcrSession can only be retrieved after PortalSetupService has started");
+        }
+
+        return repository.getSystemSession(jcrWS);
+    }
 }

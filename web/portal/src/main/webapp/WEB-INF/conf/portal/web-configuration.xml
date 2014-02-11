@@ -105,6 +105,27 @@
         </object-param>
       </init-params>
     </component-plugin>
+    <component-plugin>
+      <name>Portal Setup filter Plugin</name>
+      <set-method>addFilterDefinitions</set-method>
+      <type>org.exoplatform.web.filter.FilterDefinitionPlugin</type>
+      <init-params>
+        <object-param>
+          <name>Portal Setup Filter</name>
+          <object type="org.exoplatform.web.filter.FilterDefinition">
+            <field name="filter"><object type="org.gatein.portal.installer.PortalSetupFilter"/></field>
+            <field name="patterns">
+              <!-- WARNING: the mapping is expressed with regular expressions -->
+              <collection type="java.util.ArrayList" item-type="java.lang.String">
+                <value>
+                  <string>.*</string>
+                </value>
+              </collection>
+            </field>
+          </object>
+        </object-param>
+      </init-params>
+    </component-plugin>
   </external-component-plugins>
 
 </configuration>
