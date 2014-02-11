@@ -4,7 +4,7 @@
 @Application(defaultController = Controller.class)
 @Bindings({
     @Binding(ProviderRegistry.class),
-    @Binding(PortletAppManager.class),
+    @Binding(PortletDeployer.class),
     @Binding(PortalContainer.class),
     @Binding(LayoutService.class),
     @Binding(CustomizationService.class),
@@ -111,5 +111,5 @@ import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.web.page.Controller;
 import org.gatein.portal.web.content.portlet.PortletContentProvider;
-import org.gatein.portal.web.portlet.PortletAppManager;
+import org.gatein.portal.web.content.portlet.PortletDeployer;
 import org.gatein.security.oauth.spi.OAuthProviderTypeRegistry;

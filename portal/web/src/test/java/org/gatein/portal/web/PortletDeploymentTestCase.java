@@ -27,7 +27,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletInvoker;
-import org.gatein.portal.web.portlet.PortletAppManager;
+import org.gatein.portal.web.content.portlet.PortletDeployer;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -84,7 +84,7 @@ public class PortletDeploymentTestCase {
     @RunAsClient
     public void testDeployed() throws Exception {
         PortalContainer portal = RootContainer.getInstance().getPortalContainer("portal");
-        PortletAppManager manager = (PortletAppManager) portal.getComponentInstanceOfType(PortletAppManager.class);
+        PortletDeployer manager = (PortletDeployer) portal.getComponentInstanceOfType(PortletDeployer.class);
         PortletInvoker invoker = manager.getInvoker();
         Set<Portlet> portlets = invoker.getPortlets();
         System.out.println(portlets);

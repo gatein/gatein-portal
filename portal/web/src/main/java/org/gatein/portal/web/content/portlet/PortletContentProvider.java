@@ -66,10 +66,7 @@ import org.gatein.portal.content.Result;
 import org.gatein.portal.content.WindowContentContext;
 import org.gatein.portal.web.page.Encoder;
 import org.gatein.portal.content.ContentProvider;
-import org.gatein.portal.web.portlet.PortletAppManager;
 import org.gatein.portal.web.servlet.Context;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * @author Julien Viet
@@ -78,10 +75,10 @@ import org.json.JSONObject;
 public class PortletContentProvider implements ContentProvider<Portlet> {
 
     /** . */
-    final PortletAppManager portletManager;
+    final PortletDeployer portletManager;
 
     @Inject
-    public PortletContentProvider(PortletAppManager portletManager) {
+    public PortletContentProvider(PortletDeployer portletManager) {
         this.portletManager = portletManager;
     }
 

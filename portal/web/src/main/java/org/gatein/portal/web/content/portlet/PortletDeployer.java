@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.web.portlet;
+package org.gatein.portal.web.content.portlet;
 
 import java.util.Set;
 
@@ -37,11 +37,9 @@ import org.gatein.pc.portlet.aspects.ValveInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
 import org.gatein.pc.portlet.impl.deployment.DeploymentException;
-import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
-import org.gatein.portal.web.content.portlet.PortletStateConverter;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
@@ -50,23 +48,25 @@ import org.gatein.wci.WebAppListener;
 import org.picocontainer.Startable;
 
 /**
+ * A bean that deploys portlets.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class PortletAppManager implements WebAppListener, Startable {
+public class PortletDeployer implements WebAppListener, Startable {
 
     /** . */
-    private final Logger logger = LoggerFactory.getLogger(PortletAppManager.class);
+    private final Logger logger = LoggerFactory.getLogger(PortletDeployer.class);
 
     /** . */
     private final PortletInvoker invoker;
 
     /** . */
-    private final PortletApplicationDeployer deployer;
+    private final org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer deployer;
 
-    public PortletAppManager() {
+    public PortletDeployer() {
 
         ContainerPortletInvoker containerPortletInvoker = new ContainerPortletInvoker();
-        PortletApplicationDeployer deployer = new PortletApplicationDeployer(containerPortletInvoker);
+        org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer deployer = new org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer(containerPortletInvoker);
 
         // Container stack
         PortletInvokerInterceptor consumerPortletInvoker = new PortletInvokerInterceptor();
@@ -94,6 +94,12 @@ public class PortletAppManager implements WebAppListener, Startable {
         return invoker;
     }
 
+    /**
+     * Returns all the known portlets.
+     *
+     * @return the portlets
+     * @throws PortletInvokerException
+     */
 	public Set<Portlet> getAllPortlets() throws PortletInvokerException {
 		return invoker.getPortlets();
 	}

@@ -6,7 +6,7 @@
 
   <!-- -->
   <component>
-    <type>org.gatein.portal.web.portlet.PortletAppManager</type>
+    <type>org.gatein.portal.web.content.portlet.PortletDeployer</type>
   </component>
 
   <!-- -->
