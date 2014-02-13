@@ -17,6 +17,18 @@ import com.ibatis.jpetstore.service.OrderService;
 
 public class OrderBeanTest extends MockObjectTestCase {
 
+    @Override
+    protected void setUp() throws Exception {
+        Map sessionMap = ActionContext.getActionContext().getSessionMap();
+        sessionMap.clear();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        Map sessionMap = ActionContext.getActionContext().getSessionMap();
+        sessionMap.clear();
+    }
+
     public void testShouldGetCardTypes() {
         Mock accountServiceMock = mock(AccountService.class);
         Mock orderServiceMock = mock(OrderService.class);
