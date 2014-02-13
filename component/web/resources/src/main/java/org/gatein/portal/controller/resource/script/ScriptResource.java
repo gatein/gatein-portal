@@ -117,7 +117,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
                         + ". They have difference fetchMode");
             } else if (dependency.closure.contains(id)) {
                 // Detect cycle
-                throw new IllegalStateException("Going to create a cycle");
+                throw new IllegalStateException("Adding script dependency "+ dependency.id +" to "+ id +" would introduce a circle");
             }
         }
 
