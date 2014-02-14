@@ -348,11 +348,11 @@ public class UIPageBrowser extends UIContainer {
         public void execute(Event<UIPageBrowser> event) throws Exception {
             PortalRequestContext prContext = Util.getPortalRequestContext();
             UIPortalApplication uiApp = (UIPortalApplication) prContext.getUIApplication();
+            UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
 
             boolean hasPermission = false;
             String currentUser = prContext.getRemoteUser();
             if (currentUser != null) {
-                UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
                 UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
                 uiPageForm.buildForm(null);
 
@@ -379,6 +379,7 @@ public class UIPageBrowser extends UIContainer {
             }
 
             if (!hasPermission) {
+                uiMaskWS.setUIComponent(null);
                 uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-CreatePage-Permission", null));
             }
         }

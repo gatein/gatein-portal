@@ -14,7 +14,7 @@
 	String title = "";
 	def component = uicomponent.getUIComponent();
 	if (component != null) {
-		title = _ctx.appRes(rsId + ".title."+ component.getId());
+		title = _ctx.appRes(rsId + ".title."+ org.exoplatform.webui.application.WebuiRequestContext.stripUUIDSuffix(component.getId()));
 	}
 
 	int width = uicomponent.getWindowWidth();

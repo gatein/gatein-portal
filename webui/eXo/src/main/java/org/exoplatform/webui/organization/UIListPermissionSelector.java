@@ -85,11 +85,18 @@ public class UIListPermissionSelector extends UISelector<String[]> {
         setName(iname);
         setId(iname);
         setBindingField(bfield);
+        String prefix = WebuiRequestContext.stripUUIDSuffix(iname);
+        String suffix = iname.substring(prefix.length());
         UICheckBoxInput uiPublicMode = getChild(UICheckBoxInput.class);
+        uiPublicMode.setName("publicMode" + suffix);
         uiPublicMode.setOnChange("ChangePublicMode", iname);
         UIFormPopupWindow uiPopup = getChild(UIFormPopupWindow.class);
-        String prefix = WebuiRequestContext.stripUUIDSuffix(iname);
-        uiPopup.setId(prefix + "Popup"+ iname.substring(prefix.length()));
+        uiPopup.setId(prefix + "Popup"+ suffix);
+
+        UIGroupMembershipSelector uiMembershipSelector = (UIGroupMembershipSelector)uiPopup.getUIComponent();
+        uiMembershipSelector.setId("ListPermissionSelector" + suffix);
+        uiMembershipSelector.getChild(UITree.class).setId("TreeListPermissionSelector" + suffix);
+        uiMembershipSelector.getChild(UIBreadcumbs.class).setId("BreadcumbsListPermissionSelector" + suffix);
     }
 
     private boolean existsPermission(List<?> list, Permission permission) {

@@ -32,10 +32,11 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.ProtectedContainer;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
+import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -52,6 +53,7 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormPopupWindow;
@@ -81,6 +83,9 @@ public class UIPageForm extends UIFormTabPane {
     private UIPage uiPage_;
 
     protected UIFormInputSet uiPermissionSetting;
+    protected UIListPermissionSelector uiAccessPermissionSelector;
+    protected UIListPermissionSelector uiMoveAppsPermissionSelector;
+    protected UIListPermissionSelector uiMoveContainersPermissionSelector;
 
     protected UIFormSelectBox groupIdSelectBox = null;
 
@@ -136,18 +141,16 @@ public class UIPageForm extends UIFormTabPane {
             page.setShowMaxWindow(getUICheckBoxInput("showMaxWindow").getValue());
         }
         if (!SiteType.USER.getName().equals(page.getOwnerType())) {
-            page.setAccessPermissions(uiPermissionSetting.getChild(UIListPermissionSelector.class).getValue());
+            page.setAccessPermissions(uiAccessPermissionSelector.getValue());
             page.setEditPermission(uiPermissionSetting.getChild(UIPermissionSelector.class).getValue());
+            //
+            if(uiMoveAppsPermissionSelector != null && uiMoveContainersPermissionSelector != null) {
+                page.setMoveAppsPermissions(uiMoveAppsPermissionSelector.getValue());
+                page.setMoveContainersPermissions(uiMoveContainersPermissionSelector.getValue());
+            }
         }
         UserACL userACL = getApplicationComponent(UserACL.class);
         userACL.hasPermission(page);
-
-        /* Once there is a UI for setting these permissions, the defaults should
-         * be replaced accordingly */
-        List<String> appPerms = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
-        page.setMoveAppsPermissions(appPerms.toArray(new String[appPerms.size()]));
-        List<String> contPerms = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
-        page.setMoveContainersPermissions(contPerms.toArray(new String[contPerms.size()]));
 
         UIFormInputItemSelector<?> uiTemplate = getChildById("Template");
         if (uiTemplate != null) {
@@ -236,11 +239,11 @@ public class UIPageForm extends UIFormTabPane {
         if (uiPage == null
                 || (!uiPage.getSiteKey().getType().equals(SiteType.USER) && getChildById("PermissionSetting") == null)) {
             uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
-            UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-            uiListPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
-            uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
-            uiPermissionSetting.addChild(uiListPermissionSelector);
-            uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());
+            uiAccessPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+            uiAccessPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListPermissionSelector"), "accessPermissions");
+            uiAccessPermissionSelector.addValidator(EmptyIteratorValidator.class);
+            uiPermissionSetting.addChild(uiAccessPermissionSelector);
+            uiPermissionSetting.setSelectedComponent(uiAccessPermissionSelector.getId());
             UIPermissionSelector uiEditPermission = createUIComponent(UIPermissionSelector.class, null, null);
             uiEditPermission.setRendered(false);
             uiEditPermission.addValidator(org.exoplatform.webui.organization.UIPermissionSelector.MandatoryValidator.class);
@@ -248,8 +251,14 @@ public class UIPageForm extends UIFormTabPane {
             uiEditPermission.configure("UIPermissionSelector", "editPermission");
             uiPermissionSetting.addChild(uiEditPermission);
 
+            //build move* permission form for edit page
+            //for the case add new page, we'll build form in ChangeOwnerType action listener
+            if (uiPage != null) {
+                buildMovePermissionForm(uiPage.getSiteKey());
+            }
+
             // TODO: This following line is fixed for bug PORTAL-2127
-            uiListPermissionSelector.getChild(UIFormPopupWindow.class).setId("UIPageFormPopupGroupMembershipSelector");
+            uiAccessPermissionSelector.getChild(UIFormPopupWindow.class).setId("UIPageFormPopupGroupMembershipSelector");
             addUIFormInput(uiPermissionSetting);
             uiPermissionSetting.getChild(UIPermissionSelector.class).setEditable(true);
         }
@@ -267,6 +276,45 @@ public class UIPageForm extends UIFormTabPane {
 
     }
 
+    private void buildMovePermissionForm(SiteKey siteKey) throws Exception {
+        if(canChangeMovePermission(siteKey)) {
+            //Move permission
+            if (uiMoveAppsPermissionSelector == null || findComponentById(uiMoveAppsPermissionSelector.getId()) == null) {
+                if (uiMoveAppsPermissionSelector == null) {
+                    uiMoveAppsPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+                    uiMoveAppsPermissionSelector.setPublicMode(true);
+                    uiMoveAppsPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveAppsPermissionSelector"), "moveAppsPermissions");
+
+                    //MoveContainers permission
+                    uiMoveContainersPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
+                    uiMoveContainersPermissionSelector.setPublicMode(true);
+                    uiMoveContainersPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveContainersPermissionSelector"), "moveContainersPermissions");
+                }
+                uiPermissionSetting.addChild(uiMoveAppsPermissionSelector);
+                uiPermissionSetting.addChild(uiMoveContainersPermissionSelector);
+            }
+        } else if (uiMoveAppsPermissionSelector != null) {
+            uiPermissionSetting.setSelectedComponent(1);
+            uiPermissionSetting.removeChildById(uiMoveAppsPermissionSelector.getId());
+            uiPermissionSetting.removeChildById(uiMoveContainersPermissionSelector.getId());
+        }
+    }
+
+    private static boolean canChangeMovePermission(SiteKey siteKey) {
+        boolean canEditMovePermission = false;
+
+        ExoContainer container = ExoContainerContext.getCurrentContainer();
+        UserACL acl = container.getComponentInstanceOfType(UserACL.class);
+
+        if(SiteType.GROUP.equals(siteKey.getType())) {
+            canEditMovePermission = acl.hasEditPermissionOnNavigation(siteKey);
+        } else {
+            canEditMovePermission = acl.isSuperUser() || acl.isUserInGroup(acl.getAdminGroups());
+        }
+
+        return canEditMovePermission;
+    }
+
     public static class SaveActionListener extends EventListener<UIPageForm> {
         public void execute(Event<UIPageForm> event) throws Exception {
             UIPageForm uiPageForm = event.getSource();
@@ -281,12 +329,20 @@ public class UIPageForm extends UIFormTabPane {
             uiPageForm.invokeSetBindingBean(page);
             uiPage.setAccessPermissions(page.getAccessPermissions());
             uiPage.setEditPermission(page.getEditPermission());
+            if(canChangeMovePermission(uiPage.getSiteKey())) {
+                uiPage.setMoveAppsPermissions(page.getMoveAppsPermissions());
+                uiPage.setMoveContainersPermissions(page.getMoveContainersPermissions());
+            }
             uiPage.setTitle(page.getTitle());
             uiPage.setShowMaxWindow(page.isShowMaxWindow());
 
             uiMaskWS.createEvent("Close", Phase.DECODE, pcontext).broadcast();
             pcontext.getJavascriptManager().require("SHARED/portalComposer", "portalComposer")
                     .addScripts("portalComposer.toggleSaveButton();");
+
+            UIPortalComposer portalComposer = uiPortalApp.findFirstComponentOfType(UIPortalComposer.class);
+            portalComposer.updateWorkspaceComponent();
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
         }
 
         protected void findAllPortlet(List<UIPortlet> list, UIContainer uiContainer) {
@@ -329,6 +385,8 @@ public class UIPageForm extends UIFormTabPane {
                 permission = userACL.getMakableMT() + ":" + groupIdSelected;
                 uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(permission);
             }
+            UIFormInput ownerIdInput = (UIFormInput)uiForm.findComponentById(OWNER_ID);
+            uiForm.buildMovePermissionForm(new SiteKey(ownerType, ownerIdInput.getValue().toString()));
             prContext.addUIComponentToUpdateByAjax(uiForm.getParent());
         }
     }
@@ -361,6 +419,8 @@ public class UIPageForm extends UIFormTabPane {
                 permission = userACL.getMakableMT() + ":" + groupIdSelected;
                 uiForm.findFirstComponentOfType(UIPermissionSelector.class).setValue(permission);
             }
+            UIFormInput ownerIdInput = (UIFormInput)uiForm.findComponentById(OWNER_ID);
+            uiForm.buildMovePermissionForm(new SiteKey(ownerType, ownerIdInput.getValue().toString()));
             event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
         }
     }
