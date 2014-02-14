@@ -185,7 +185,7 @@
       <pattern>[^/]*</pattern>
     </path-param>
     <route path="/{gtn:resource}{gtn:lang}{gtn:compress}.js">
-      <path-param qname="gtn:resource">
+      <path-param qname="gtn:resource" encoding="preserve-path">
         <pattern>.+?</pattern>
       </path-param>
       <path-param qname="gtn:lang" capture-group="true">
@@ -193,6 +193,21 @@
       </path-param>
       <path-param qname="gtn:compress" capture-group="true">
         <pattern>-(min)|</pattern>
+      </path-param>
+    </route>
+  </route>
+
+  <!-- Static Script Resources, i.e. images, HTML tempates, CSS, etc. distributed with JavaScript frameworks -->
+  <route path="/scripts/{gtn:version}/{gtn:scope}/">
+    <route-param qname="gtn:handler">
+      <value>staticScriptResource</value>
+    </route-param>
+    <path-param qname="gtn:version" encoding="preserve-path">
+      <pattern>[^/]*</pattern>
+    </path-param>
+    <route path="/{gtn:resource}">
+      <path-param qname="gtn:resource" encoding="preserve-path">
+        <pattern>.*</pattern>
       </path-param>
     </route>
   </route>

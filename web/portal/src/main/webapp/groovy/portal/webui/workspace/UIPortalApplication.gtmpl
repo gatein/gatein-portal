@@ -21,10 +21,14 @@
 	def headerScripts = new LinkedList();
 	def jsConfig = uicomponent.getJSConfig();
 	def remoteScripts = new JSONArray();
-	for (module in scriptsURLs.keySet()) {
-		def url = jsConfig.get("paths").get(module);
-		headerScripts.add(url != null ? url + ".js" : module);
-		if (scriptsURLs.get(module)) {
+	def paths = jsConfig.get("paths");
+	for (java.util.Map.Entry en : scriptsURLs) {
+		def module = en.getKey();
+		def url = paths.opt(module);
+		if (url != null) {
+			headerScripts.add(url + ".js");
+		}
+		if (en.getValue()) {
 			remoteScripts.put(module);
 		}
 	}

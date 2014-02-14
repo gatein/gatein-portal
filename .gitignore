@@ -12,3 +12,4 @@ release.properties
 .settings
 .metadata
 .directory
+component/web/resources/transaction.log

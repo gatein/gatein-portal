@@ -816,6 +816,10 @@
       <artifactId>closure-compiler</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-io</artifactId>
+    </dependency>
+    <dependency>
       <groupId>eu.medsea.mimeutil</groupId>
       <artifactId>mime-util</artifactId>
     </dependency>

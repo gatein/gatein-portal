@@ -44,6 +44,7 @@
     <module name="com.google.apis" />
     <module name="com.google.guava" slot="gatein"/>
     <module name="com.google.javascript"/>
+    <module name="org.codehaus.plexus"/>
     <module name="com.h2database.h2"/>
     <module name="com.jhlabs.filters"/>
     <module name="com.thoughtworks.xstream"/>

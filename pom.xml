@@ -60,6 +60,7 @@
     <commons-dbcp.version>1.4</commons-dbcp.version>
     <commons-logging.version>1.1.1</commons-logging.version>
     <com.google.javascript.version>r1592</com.google.javascript.version>
+    <plexus-io.version>2.0.6</plexus-io.version>
     <jboss-dmr.version>1.1.1.Final</jboss-dmr.version>
     <org.jboss.portletbridge.version>3.3.1.Final</org.jboss.portletbridge.version>
     <version.cdi.portlet.integration>1.0.3.Final</version.cdi.portlet.integration>
@@ -145,6 +146,11 @@
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
         <version>${com.google.javascript.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-io</artifactId>
+        <version>${plexus-io.version}</version>
       </dependency>
 
       <dependency>

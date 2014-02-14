@@ -510,13 +510,15 @@ public class UIPortalApplication extends UIApplication {
         Map<String, Boolean> tmp = new LinkedHashMap<String, Boolean>();
         Map<ScriptResource, FetchMode> resolved = service.resolveIds(requiredResources);
         for (ScriptResource rs : resolved.keySet()) {
-            ResourceId id = rs.getId();
-            // SHARED/bootstrap should be loaded first
-            if (ResourceScope.SHARED.equals(id.getScope()) && "bootstrap".equals(id.getName())) {
-                ret.put(id.toString(), false);
-            } else {
-                boolean isRemote = !rs.isEmpty() && rs.getModules().get(0) instanceof Module.Remote;
-                tmp.put(id.toString(), isRemote);
+            if (!rs.isNativeAmd()) {
+                ResourceId id = rs.getId();
+                // SHARED/bootstrap should be loaded first
+                if (ResourceScope.SHARED.equals(id.getScope()) && "bootstrap".equals(id.getName())) {
+                    ret.put(id.toString(), false);
+                } else {
+                    boolean isRemote = !rs.isEmpty() && rs.getModules().get(0) instanceof Module.Remote;
+                    tmp.put(id.toString(), isRemote);
+                }
             }
         }
         ret.putAll(tmp);

@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.application.javascript;
 
-import javax.servlet.ServletContext;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -38,6 +36,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.commons.utils.PropertyManager;
@@ -47,8 +47,10 @@ import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.ResourceRequestHandler;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.BaseScriptResource;
 import org.gatein.portal.controller.resource.script.FetchMode;
@@ -56,6 +58,7 @@ import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptGraph;
 import org.gatein.portal.controller.resource.script.ScriptGroup;
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.portal.controller.resource.script.StaticScriptResource;
 import org.gatein.portal.controller.resource.script.ScriptResource.DepInfo;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
@@ -72,8 +75,17 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     /** The scripts. */
     final ScriptGraph scripts;
 
+    /** A collection of {@link StaticScriptResource}s keyed by the given
+     * {@link StaticScriptResource#getResourcePath()}*/
+    private final Map<String, StaticScriptResource> staticScriptResources;
+
     /** . */
     private final WebAppListener deployer;
+
+    /**
+     * @see #getSharedBaseUrl(ControllerContext)
+     */
+    private volatile String sharedBaseUrl;
 
     /** . */
     public static final List<String> RESERVED_MODULE = Arrays.asList("require", "exports", "module");
@@ -95,6 +107,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
         //
         this.scripts = new ScriptGraph();
+        this.staticScriptResources = new HashMap<String, StaticScriptResource>();
         this.deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
     }
 
@@ -128,12 +141,18 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                 //
                 boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
 
-                if (isModule) {
+                if (resource.isNativeAmd()) {
+                    /* nothing to do for an AMD module */
+                    // buffer.append("/* native AMD module */\n");
+                } else if (isModule) {
+                    Set<ResourceId> depResourceIds = resource.getDependencies();
+                    int argCount = depResourceIds.size();
                     JSONArray deps = new JSONArray();
+
                     LinkedList<String> params = new LinkedList<String>();
-                    List<String> argNames = new LinkedList<String>();
-                    List<String> argValues = new LinkedList<String>(params);
-                    for (ResourceId id : resource.getDependencies()) {
+                    List<String> argNames = new ArrayList<String>(argCount);
+                    List<String> argValues = new ArrayList<String>(argCount);
+                    for (ResourceId id : depResourceIds) {
                         ScriptResource dep = getResource(id);
                         if (dep != null) {
                             Set<DepInfo> depInfos = resource.getDepInfo(id);
@@ -182,7 +201,10 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                     }
                 }
 
-                if (isModule) {
+                if (resource.isNativeAmd()) {
+                    /* nothing to do for an AMD module */
+                    //buffer.append("\n");
+                } else if (isModule) {
                     buffer.append("\n});");
                 } else {
                     buffer.append("\nif (typeof define === 'function' && define.amd && !require.specified('")
@@ -233,7 +255,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
         return scripts.resolve(ids);
     }
 
+
     public JSONObject getJSConfig(ControllerContext controllerContext, Locale locale) throws Exception {
+
         JSONObject paths = new JSONObject();
         JSONObject shim = new JSONObject();
 
@@ -271,6 +295,10 @@ public class JavascriptConfigService extends AbstractResourceService implements 
         }
 
         JSONObject config = new JSONObject();
+        String sharedBaseUrl = getSharedBaseUrl(controllerContext);
+        if (sharedBaseUrl != null) {
+            config.put("baseUrl", sharedBaseUrl);
+        }
         config.put("paths", paths);
         config.put("shim", shim);
         return config;
@@ -454,4 +482,92 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             sub.close();
         }
     }
+
+    /**
+     * Returns a value equivalent to
+     * <pre>"/"+ defaultPortalContext
+     * + "/"+ ResourceRequestHandler.SCRIPT_HANDLER_NAME
+     * + "/"+ ResourceRequestHandler.VERSION
+     * + "/"+ ResourceScope.SHARED.name()</pre>
+     *
+     * This value is used as {@code baseUrl} in the configuration of requireJS javascript
+     * loader on the client side.
+     *
+     * Rather than concatenating the above values this method uses
+     * {@link BaseScriptResource#createBaseParameters()} and delegates to
+     * {@link ControllerContext#renderURL(Map, URIWriter)} which seems to be safer for
+     * any future changes.
+     *
+     * The value computed once is stored in {@link JavascriptConfigService#sharedBaseUrl} and
+     * re-used upon subsequent calls.
+     *
+     * @param controllerContext
+     * @return
+     * @throws Exception
+     */
+    private String getSharedBaseUrl(ControllerContext controllerContext) throws Exception {
+        if (this.sharedBaseUrl == null) {
+            /* Let's accept some harmless race conditions here rather than syncing explicitly.
+             * It does not matter if this.sharedBaseUrl gets initialized several times
+             * concurrently as the result will be the same every time.*/
+
+            Map<QualifiedName, String> baseParams = BaseScriptResource.createBaseParameters();
+            baseParams.put(ResourceRequestHandler.SCOPE_QN, ResourceScope.SHARED.name());
+            baseParams.put(ResourceRequestHandler.RESOURCE_QN, "fake");
+
+            /* 52 is the length of /portal/scripts/3.8.0.Beta01-SNAPSHOT/SHARED/fake.js
+             * it should be a little bit more than necessary in most cases */
+            StringBuilder buffer = new StringBuilder(52);
+            URIWriter writer = new URIWriter(buffer);
+            controllerContext.renderURL(baseParams, writer);
+
+            if (buffer.length() < 2) {
+                throw new IllegalStateException("sharedBaseUrl too short: '"+ buffer.toString() +"'");
+            }
+            /* There is no StringBuilder.lastIndexOf(char) let's loop manually */
+            int lastSlash = -1;
+            for (int i = buffer.length() -1; i >= 0; i--) {
+                if (buffer.charAt(i) == '/') {
+                    lastSlash = i;
+                    break;
+                }
+            }
+            if (lastSlash < 0) {
+                throw new IllegalStateException("No slash in '"+ buffer.toString() +"'");
+            }
+            this.sharedBaseUrl = buffer.substring(0, lastSlash);
+        }
+        return this.sharedBaseUrl;
+    }
+
+    /**
+     * Puts the given {@link StaticScriptResource} to {@link #staticScriptResources} using
+     * {@link StaticScriptResource#getResourcePath()} as a key.
+     *
+     * @param staticScriptResource
+     */
+    public void addStaticScriptResource(StaticScriptResource staticScriptResource) {
+        String resourcePath = staticScriptResource.getResourcePath();
+        if (staticScriptResources.containsKey(resourcePath)) {
+            log.warn("Ignoring "+ StaticScriptResource.class.getSimpleName() +" with an already available resource path: "+ staticScriptResource);
+        } else {
+            /* add only if not there already */
+            if (log.isDebugEnabled()) {
+                log.debug("Adding "+ staticScriptResource);
+            }
+            staticScriptResources.put(resourcePath, staticScriptResource);
+        }
+    }
+
+    /**
+     * Equivalent to {@code staticScriptResources.get(resourcePath)}.
+     * See {@link #staticScriptResources} and {@link StaticScriptResource#getResourcePath()}
+     *
+     * @param resourcePath see {@link StaticScriptResource#getResourcePath()}
+     * @return
+     */
+    public StaticScriptResource getStaticScriptResource(String resourcePath) {
+        return staticScriptResources.get(resourcePath);
+    }
+
 }

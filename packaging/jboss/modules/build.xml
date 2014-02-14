@@ -138,6 +138,11 @@
       <maven-resource group="com.google.javascript" artifact="closure-compiler"/>
     </module-def>
 
+    <module-def name="org.codehaus.plexus">
+      <maven-resource group="org.codehaus.plexus" artifact="plexus-io"/>
+      <maven-resource group="org.codehaus.plexus" artifact="plexus-utils"/>
+    </module-def>
+
     <module-def name="org.codehaus.groovy">
       <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
     </module-def>

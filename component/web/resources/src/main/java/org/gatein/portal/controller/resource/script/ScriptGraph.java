@@ -161,7 +161,7 @@ public class ScriptGraph {
     }
 
     public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException {
-        return addResource(id, fetchMode, null, null, null);
+        return addResource(id, fetchMode, null, null, null, false);
     }
 
     /**
@@ -173,7 +173,7 @@ public class ScriptGraph {
      * @return the resource
      * @throws NullPointerException if id or fetchMode is null
      */
-    public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias, String groupName, String contextPath)
+    public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias, String groupName, String contextPath, boolean nativeAmd)
             throws NullPointerException {
         if (id == null) {
             throw new NullPointerException("No null resource accepted");
@@ -218,7 +218,7 @@ public class ScriptGraph {
                 }
             }
 
-            map.put(name, resource = new ScriptResource(this, id, fetchMode, alias, group));
+            map.put(name, resource = new ScriptResource(this, id, fetchMode, alias, group, nativeAmd));
         } else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name))) {
             throw new IllegalStateException("Duplicate ResourceId : " + id + ", later resource definition will be ignored");
         }

@@ -70,17 +70,20 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
     /** . */
     final ScriptGroup group;
 
+    final boolean nativeAmd;
+
     ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode) {
-        this(graph, id, fetchMode, null, null);
+        this(graph, id, fetchMode, null, null, false);
     }
 
-    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias, ScriptGroup group) {
+    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias, ScriptGroup group, boolean nativeAmd) {
         super(graph, id);
 
         this.modules = new ArrayList<Module>();
         this.closure = new HashSet<ResourceId>();
         this.dependencies = new LinkedHashMap<ResourceId, Set<DepInfo>>();
         this.fetchMode = fetchMode;
+        this.nativeAmd = nativeAmd;
 
         if (alias == null) {
             String resName = id.getName();
@@ -223,6 +226,15 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
 
     public ScriptGroup getGroup() {
         return group;
+    }
+
+    /**
+     * Returns {@code true} if this is an AMD resource. See the invocations of {@link #isNativeAmd()} in
+     * {@link JavascriptConfigService#getScript(ResourceId, Locale)} to learn more about the purpose
+     * of this method.
+     */
+    public boolean isNativeAmd() {
+        return nativeAmd;
     }
 
     public class DepInfo {

@@ -69,7 +69,19 @@ public class ResourceRequestHandler extends WebRequestHandler implements WebAppL
     /** . */
     public static final String VERSION;
 
-    private static final long MAX_AGE;
+    /** . */
+    public static final String SCRIPT_HANDLER_NAME = "script";
+
+    /**
+     * {@code Cache-Control} HTTP header
+     */
+    public static final String CACHE_CONTROL = "Cache-Control";
+
+    /**
+     * Equivalent to {@code "max-age=" + MAX_AGE + ",s-maxage=" + MAX_AGE} where {@code MAX_AGE} is
+     * age in seconds.
+     */
+    public static final String CACHE_CONTROL_VALUE;
 
     static {
         // Detecting version from maven properties
@@ -111,7 +123,7 @@ public class ResourceRequestHandler extends WebRequestHandler implements WebAppL
             }
         }
 
-        MAX_AGE = seconds;
+        CACHE_CONTROL_VALUE = "max-age=" + seconds + ",s-maxage=" + seconds;
     }
 
     /** . */
@@ -132,6 +144,26 @@ public class ResourceRequestHandler extends WebRequestHandler implements WebAppL
     /** . */
     public static final QualifiedName LANG_QN = QualifiedName.create("gtn", "lang");
 
+    /**
+     * Returns {@code true} if {@link PropertyManager#isDevelopping()} is {@code true} or
+     * if {@code ifModifiedSince} is before {@code lastModified}.
+     *
+     * {@code lastModified} is expected to be rounded down to the nearest second already before
+     * calling this method.
+     *
+     * @param ifModifiedSince the request header value
+     * @param lastModified the last modified date of a server side resource rounded down to the nearest second
+     * @return
+     */
+    public static boolean isModified(long ifModifiedSince, long lastModified) {
+        if (PropertyManager.isDevelopping()) {
+            return true;
+        } else {
+            return lastModified > ifModifiedSince;
+        }
+    }
+
+
     /** . */
     private final FutureMap<ScriptKey, ScriptResult, ControllerContext> cache;
 
@@ -141,7 +173,7 @@ public class ResourceRequestHandler extends WebRequestHandler implements WebAppL
 
     @Override
     public String getHandlerName() {
-        return "script";
+        return SCRIPT_HANDLER_NAME;
     }
 
     @Override
@@ -190,13 +222,13 @@ public class ResourceRequestHandler extends WebRequestHandler implements WebAppL
                 response.setContentType("text/javascript");
                 response.setCharacterEncoding("UTF-8");
 
-                response.setHeader("Cache-Control", "max-age=" + MAX_AGE + ",s-maxage=" + MAX_AGE);
+                response.setHeader(CACHE_CONTROL, CACHE_CONTROL_VALUE);
 
                 // Set content length
                 response.setContentLength(resolved.bytes.length);
 
                 long ifModifiedSince = request.getDateHeader(IF_MODIFIED_SINCE);
-                if (resolved.isModified(ifModifiedSince)) {
+                if (isModified(ifModifiedSince, resolved.lastModified)) {
                     response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, resolved.lastModified);
                     // Send bytes
                     ServletOutputStream out = response.getOutputStream();

@@ -18,13 +18,18 @@
  */
 package org.exoplatform.web.application.javascript;
 
+import static org.exoplatform.web.application.javascript.JavascriptConfigParser.SCRIPT_RESOURCE_DESCRIPTORS_ATTR;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.portal.controller.resource.script.StaticScriptResource;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
@@ -33,20 +38,22 @@ import org.gatein.portal.controller.resource.script.ScriptResource;
  */
 public class JavascriptTask {
 
-    private List<ScriptResourceDescriptor> descriptors;
+    private List<ScriptResourceDescriptor> descriptors = new ArrayList<ScriptResourceDescriptor>();
+    private List<StaticScriptResource> staticScriptResources = new ArrayList<StaticScriptResource>();
 
-    public JavascriptTask() {
-        descriptors = new ArrayList<ScriptResourceDescriptor>();
-    }
-
-    public void execute(JavascriptConfigService service, ServletContext scontext) {
-        for (ScriptResourceDescriptor desc : descriptors) {
+    public List<ScriptResourceDescriptor> execute(JavascriptConfigService service, ServletContext scontext) {
+        List<ScriptResourceDescriptor> finishedDescriptors = this.descriptors;
+        /* make sure finishedDescriptors won't change or leak */
+        this.descriptors = null;
+        finishedDescriptors = Collections.unmodifiableList(finishedDescriptors);
+        scontext.setAttribute(SCRIPT_RESOURCE_DESCRIPTORS_ATTR, finishedDescriptors);
+        for (ScriptResourceDescriptor desc : finishedDescriptors) {
             String contextPath = null;
             if (desc.modules.size() > 0) {
                 contextPath = desc.modules.get(0).getContextPath();
             }
 
-            ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group, contextPath);
+            ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group, contextPath, desc.nativeAmd);
             if (resource != null) {
                 for (Javascript module : desc.modules) {
                     module.addModuleTo(resource);
@@ -59,9 +66,42 @@ public class JavascriptTask {
                 }
             }
         }
+
+        for (StaticScriptResource staticScriptResource : staticScriptResources) {
+            service.addStaticScriptResource(staticScriptResource);
+        }
+
+        return finishedDescriptors;
     }
 
     public void addDescriptor(ScriptResourceDescriptor desc) {
+        if (descriptors == null) {
+            throw new IllegalStateException("Cannot modify this task after execute() has been called.");
+        }
         descriptors.add(desc);
     }
+
+    public void addDescriptors(Collection<ScriptResourceDescriptor> descs) {
+        if (descriptors == null) {
+            throw new IllegalStateException("Cannot modify this task after execute() has been called.");
+        }
+        descriptors.addAll(descs);
+    }
+
+    /**
+     * @param r
+     */
+    public void addStaticScriptResource(StaticScriptResource r) {
+        this.staticScriptResources.add(r);
+    }
+
+    /**
+     * Returns an umodifiable wrapper of {@link #descriptors}. For testing purposes.
+     *
+     * @return
+     */
+    public List<ScriptResourceDescriptor> getDescriptors() {
+        return Collections.unmodifiableList(descriptors);
+    }
+
 }

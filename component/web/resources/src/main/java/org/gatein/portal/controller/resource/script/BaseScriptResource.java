@@ -35,6 +35,19 @@ import org.gatein.portal.controller.resource.ResourceRequestHandler;
  */
 public class BaseScriptResource<R extends Resource<R>> extends Resource<R> {
 
+    /**
+     * This is quite closely tied to what is set in {@code controller.xml}.
+     * @return
+     */
+    public static Map<QualifiedName, String> createBaseParameters() {
+        Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+        parameters.put(WebAppController.HANDLER_PARAM, ResourceRequestHandler.SCRIPT_HANDLER_NAME);
+        parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
+        parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+        parameters.put(ResourceRequestHandler.LANG_QN, "");
+        return parameters;
+    }
+
     /** . */
     ScriptGraph graph;
 
@@ -54,13 +67,9 @@ public class BaseScriptResource<R extends Resource<R>> extends Resource<R> {
         super(id);
 
         //
-        Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-        parameters.put(WebAppController.HANDLER_PARAM, "script");
+        Map<QualifiedName, String> parameters = createBaseParameters();
         parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
         parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
-        parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
-        parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
-        parameters.put(ResourceRequestHandler.LANG_QN, "");
 
         //
         Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
