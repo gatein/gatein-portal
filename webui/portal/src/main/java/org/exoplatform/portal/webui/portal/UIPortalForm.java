@@ -297,11 +297,13 @@ public class UIPortalForm extends UIFormTabPane {
             //Move permission
             UIListPermissionSelector uiMoveAppsPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveAppsPermissions");
             uiMoveAppsPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveAppsPermissionSelector"), "moveAppsPermissions");
+            uiMoveAppsPermissionSelector.setPublicMode(true);
             uiPermissionSetting.addChild(uiMoveAppsPermissionSelector);
 
             //MoveContainers permission
             UIListPermissionSelector uiMoveContainersPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveContainersPermissions");
             uiMoveContainersPermissionSelector.configure(WebuiRequestContext.generateUUID("UIListMoveContainersPermissionSelector"), "moveContainersPermissions");
+            uiMoveContainersPermissionSelector.setPublicMode(true);
             uiPermissionSetting.addChild(uiMoveContainersPermissionSelector);
         }
     }
@@ -351,6 +353,11 @@ public class UIPortalForm extends UIFormTabPane {
                     UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
                     UIPortal editPortal = (UIPortal) uiEditWS.getUIComponent();
                     uiForm.invokeSetBindingBean(editPortal);
+
+                    //Need to refresh to make sure Move*-permission take effect immediately
+                    UIPortalComposer portalComposer = uiPortalApp.findFirstComponentOfType(UIPortalComposer.class);
+                    portalComposer.updateWorkspaceComponent();
+                    prContext.ignoreAJAXUpdateOnPortlets(true);
                 }
             } else {
                 UIApplication uiApp = Util.getPortalRequestContext().getUIApplication();
@@ -389,8 +396,14 @@ public class UIPortalForm extends UIFormTabPane {
             service.createUserPortalConfig(SiteType.PORTAL.getName(), portalName, template);
 
             PortalConfig pconfig = dataService.getPortalConfig(portalName);
-            uiForm.invokeSetBindingBean(pconfig);
+            UIPortal uiPortal = uiForm.createUIComponent(UIPortal.class, null, null);
+            PortalDataMapper.toUIPortal(uiPortal, pconfig);
+
+            uiForm.invokeSetBindingBean(uiPortal);
+
+            pconfig = (PortalConfig) PortalDataMapper.buildModelObject(uiPortal);
             dataService.save(pconfig);
+
             UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);
             UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
             uiMaskWS.createEvent("Close", Phase.DECODE, pcontext).broadcast();
