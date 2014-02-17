@@ -26,7 +26,7 @@
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
+    <key>org.infinispan.transaction.lookup.TransactionManagerLookup</key>
     <type>org.exoplatform.services.transaction.infinispan.JBossStandaloneJTAManagerLookup</type>
   </component>
 
