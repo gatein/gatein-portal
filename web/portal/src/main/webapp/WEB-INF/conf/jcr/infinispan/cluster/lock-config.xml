@@ -51,7 +51,7 @@
       <jmxStatistics enabled="true"/>
       <eviction strategy="NONE"/>
        <loaders passivation="false" shared="true" preload="true">
-           <loader class="org.exoplatform.services.jcr.infinispan.JdbcStringBasedCacheStore" fetchPersistentState="true" ignoreModifications="false" purgeOnStartup="false">
+           <store class="org.exoplatform.services.jcr.infinispan.JdbcStringBasedCacheStore" fetchPersistentState="true" ignoreModifications="false" purgeOnStartup="false">
                <properties>
                    <property name="stringsTableNamePrefix" value="${infinispan-cl-cache.jdbc.table.name}"/>
                    <property name="idColumnName" value="${infinispan-cl-cache.jdbc.id.column}"/>
@@ -66,7 +66,7 @@
                    <property name="datasourceJndiLocation" value="${infinispan-cl-cache.jdbc.datasource}"/>
                </properties>
                <async enabled="false"/>
-           </loader>
+           </store>
        </loaders>
    </default>
 
