@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>responsive-portlets</artifactId>
-    <version>3.7.0.Alpha02-SNAPSHOT</version>
+    <version>3.8.Beta01-SNAPSHOT</version>
   </parent>
 
 
