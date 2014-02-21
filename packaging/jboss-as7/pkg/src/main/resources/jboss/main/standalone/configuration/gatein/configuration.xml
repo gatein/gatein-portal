@@ -87,10 +87,4 @@
     </init-params>
   </component>
 
-  <!-- SecureRandomService configured at RootContainer scope to be initialized just once per JVM -->
-  <component>
-    <key>org.exoplatform.web.security.security.SecureRandomService</key>
-    <type>org.exoplatform.web.security.security.SecureRandomService</type>
-  </component>
-
 </configuration>
