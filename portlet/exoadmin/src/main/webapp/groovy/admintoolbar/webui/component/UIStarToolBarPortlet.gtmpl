@@ -19,6 +19,7 @@
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true)); document.activeElement.blur();";
 	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true)); document.activeElement.blur();";
 	String changeSkinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeSkin', true)); document.activeElement.blur();";
+	String logoutMessageKey = uicomponent.getLogoutMessageKey();
 %>
 <ul class="UIStarToolBarPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab portlet-menu-item" style="width: 62px" title="Portal Actions">
@@ -31,7 +32,7 @@
 				<a href="#" onclick="$changeSkinAction" class="ChangeSkinIcon" title="Change Skin"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeSkin")%></a>
 			</li>
 			<li class="MenuItem portlet-menu-cascade-item">
-				<a href="#" onclick="eXo.portal.logout();" class="SignOutIcon" title="Sign Out"><%=_ctx.appRes("UIStarToolbarPortlet.item.Logout")%></a>
+				<a href="#" onclick="eXo.portal.logout();" class="SignOutIcon" title="Sign Out"><%=_ctx.appRes(logoutMessageKey)%></a>
 			</li>
 		</ul>		
 	</li>

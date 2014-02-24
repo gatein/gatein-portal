@@ -21,10 +21,12 @@ package org.exoplatform.toolbar.webui.component;
 
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.gatein.web.security.impersonation.ImpersonatedIdentity;
 
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/admintoolbar/webui/component/UIUserInfoPortlet.gtmpl")
 public class UIUserInfoPortlet extends UIPortletApplication {
@@ -32,8 +34,16 @@ public class UIUserInfoPortlet extends UIPortletApplication {
     public UIUserInfoPortlet() throws Exception {
     }
 
-    public User getUser() {
+    public String getUserDisplayName() {
         ConversationState state = ConversationState.getCurrent();
-        return (User) state.getAttribute(CacheUserProfileFilter.USER_PROFILE);
+        User user = (User) state.getAttribute(CacheUserProfileFilter.USER_PROFILE);
+
+        Identity identity = state.getIdentity();
+        if (identity instanceof ImpersonatedIdentity) {
+            String adminUsername = ((ImpersonatedIdentity) identity).getParentConversationState().getIdentity().getUserId();
+            return user.getDisplayName() + " (" + adminUsername + ")";
+        } else {
+            return user.getDisplayName();
+        }
     }
 }

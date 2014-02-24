@@ -131,6 +131,12 @@
 	margin: auto;
 }
 
+.UIGrid .ImpersonateUserIcon {
+    width: 16px; height: 16px;
+    background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/Impersonation.gif') no-repeat;
+    margin: auto;
+}
+
 /*###################### UIListMembershipType Icon ######################*/
 
 .UIGrid .DeleteMembershipIcon {

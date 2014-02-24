@@ -42,6 +42,8 @@ public class UserACLMetaData {
     /** . */
     private String portalCreateGroups;
 
+    private String userImpersonateGroups;
+
     public UserACLMetaData() {
     }
 
@@ -66,6 +68,10 @@ public class UserACLMetaData {
         ValueParam portalCretorGroupsParam = params.getValueParam("portal.creator.groups");
         if (portalCretorGroupsParam != null) {
             setPortalCreateGroups(portalCretorGroupsParam.getValue());
+        }
+        ValueParam userImpersonateGroupsParam = params.getValueParam("user.impersonate.groups");
+        if (userImpersonateGroupsParam != null) {
+            setUserImpersonateGroups(userImpersonateGroupsParam.getValue());
         }
     }
 
@@ -99,5 +105,13 @@ public class UserACLMetaData {
 
     public void setPortalCreateGroups(String portalCreateGroups) {
         this.portalCreateGroups = portalCreateGroups;
+    }
+
+    public String getUserImpersonateGroups() {
+        return userImpersonateGroups;
+    }
+
+    public void setUserImpersonateGroups(String userImpersonateGroups) {
+        this.userImpersonateGroups = userImpersonateGroups;
     }
 }

@@ -75,12 +75,8 @@ public class WebAppImpl implements WebApp {
         throw new NotYetImplemented();
     }
 
-    public boolean invalidateSession(String sessId) {
-        throw new NotYetImplemented();
-    }
-
     @Override
-    public HttpSession getHttpSession(String s) {
+    public HttpSession getHttpSession(String sessId) {
         throw new NotYetImplemented();
     }
 

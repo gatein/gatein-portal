@@ -73,6 +73,11 @@
   </filter>
 
   <filter>
+    <filter-name>ImpersonationFilter</filter-name>
+    <filter-class>org.gatein.web.security.impersonation.ImpersonationFilter</filter-class>
+  </filter>
+
+  <filter>
     <filter-name>ConversationStateUpdateFilter</filter-name>
     <filter-class>org.exoplatform.web.login.ConversationStateUpdateFilter</filter-class>
   </filter>
@@ -200,6 +205,11 @@
   </filter-mapping>
 
   <filter-mapping>
+    <filter-name>ImpersonationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
     <filter-name>ConversationStateUpdateFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
@@ -275,8 +285,11 @@
     <servlet-class>org.gatein.wci.api.GateInServlet</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
-  
-  <!--  =================================================================  -->
+
+  <servlet>
+    <servlet-name>ImpersonationServlet</servlet-name>
+    <servlet-class>org.gatein.web.security.impersonation.ImpersonationServlet</servlet-class>
+  </servlet>
 
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -306,7 +319,12 @@
     <servlet-name>GateInServlet</servlet-name>
     <url-pattern>/gateinservlet</url-pattern>
   </servlet-mapping>
-  
+
+  <servlet-mapping>
+    <servlet-name>ImpersonationServlet</servlet-name>
+    <url-pattern>/impersonate</url-pattern>
+  </servlet-mapping>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>user authentication</web-resource-name>
