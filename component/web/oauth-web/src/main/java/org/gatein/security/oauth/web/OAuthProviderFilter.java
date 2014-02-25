@@ -85,6 +85,7 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
         String interaction = httpRequest.getParameter(OAuthConstants.PARAM_OAUTH_INTERACTION);
         if (OAuthConstants.PARAM_OAUTH_INTERACTION_VALUE_START.equals(interaction)) {
             initInteraction(httpRequest, httpResponse);
+            saveRememberMe(httpRequest);
             saveInitialURI(httpRequest);
         }
 
@@ -188,6 +189,11 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
         if (initialURI != null) {
             request.getSession().setAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT, initialURI);
         }
+    }
+
+    protected void saveRememberMe(HttpServletRequest request) {
+        String rememberMe = request.getParameter(OAuthConstants.PARAM_REMEMBER_ME);
+        request.getSession().setAttribute(OAuthConstants.ATTRIBUTE_REMEMBER_ME, rememberMe);
     }
 
     protected abstract OAuthProviderType<T> getOAuthProvider();

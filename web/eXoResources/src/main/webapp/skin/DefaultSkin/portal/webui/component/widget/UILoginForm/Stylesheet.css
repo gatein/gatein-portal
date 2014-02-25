@@ -266,3 +266,15 @@
     background: url("background/twitter.png") 8px no-repeat;
     border-color: #62bdf5;
 }
+
+.UILoginForm #login-LINKEDIN {
+    background-color: #005f8d;
+    border-color: rgba(0,0,0,0.2);
+}
+.UILoginForm #login-LINKEDIN:hover {
+    background-color: #007bb6;
+    border-color: rgba(0,0,0,0.2);
+}
+.UILoginForm #login-LINKEDIN > div {
+    background: url("background/linkedin.png") 6px 1px no-repeat;
+}

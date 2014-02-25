@@ -61,6 +61,11 @@ public enum OAuthExceptionCode {
     GOOGLE_ERROR,
 
     /**
+     * Some error during LinkedIn processing
+     */
+    LINKEDIN_ERROR,
+
+    /**
      * Error when we have invalid or revoked access token
      */
     ACCESS_TOKEN_ERROR,

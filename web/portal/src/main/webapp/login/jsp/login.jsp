@@ -138,12 +138,21 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
               <%
                 if (registry.isOAuthEnabled()) {
               %>
+              <script type="text/javascript">
+                  function goSocialLoginUrl(url) {
+                      if(document.getElementById('rememberme').checked) {
+                          url += '&_rememberme=true';
+                      }
+                      window.location = url;
+                      return false;
+                  }
+              </script>
               <div class="LoginDelimiter">
                 <span><%= res.getString("UILoginForm.label.Delimiter")%></span>
               </div>
               <div class='SocialLoginButtons'>
                 <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
-                <a href="<%= oauthProvType.getInitOAuthURL(contextPath, uri) %>" id="login-<%= oauthProvType.getKey() %>"
+                <a href="javascript:void(0)" onclick="goSocialLoginUrl('<%= oauthProvType.getInitOAuthURL(contextPath, uri) %>')" id="login-<%= oauthProvType.getKey() %>"
                    class="login-button">
                   <div><%= oauthProvType.getFriendlyName() %>
                   </div>

@@ -81,6 +81,11 @@ public class LoginServlet extends AbstractHttpServlet {
     /** . */
     public static final String COOKIE_NAME = "rememberme";
 
+    public static final String OAUTH_COOKIE_NAME = "oauth_rememberme";
+
+    //value of this field need equals with org.gatein.security.oauth.common.OAuthConstants.ATTRIBUTE_REMEMBER_ME
+    public static final String SESSION_ATTRIBUTE_REMEMBER_ME = "_rememberme";
+
     /**
      * Register WCI authentication listener, which is used to bind credentials to temporary authentication registry after each
      * successful login
@@ -111,6 +116,18 @@ public class LoginServlet extends AbstractHttpServlet {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (COOKIE_NAME.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getOauthRememberMeTokenCookie (HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (OAUTH_COOKIE_NAME.equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }
@@ -170,6 +187,20 @@ public class LoginServlet extends AbstractHttpServlet {
                         cookie.setPath(req.getContextPath());
                         cookie.setMaxAge((int) tokenService.getValidityTime());
                         resp.addCookie(cookie);
+
+                    } else {
+
+                        //Handle oauth remember me
+                        if("true".equals(req.getSession().getAttribute(SESSION_ATTRIBUTE_REMEMBER_ME))) {
+                            CookieTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+                            String cookieToken = tokenService.createToken(credentials);
+                            Cookie cookie = new Cookie(OAUTH_COOKIE_NAME, cookieToken);
+                            cookie.setPath(req.getContextPath());
+                            cookie.setMaxAge((int) tokenService.getValidityTime());
+                            resp.addCookie(cookie);
+
+                            req.getSession().removeAttribute(SESSION_ATTRIBUTE_REMEMBER_ME);
+                        }
                     }
                 }
             } else {

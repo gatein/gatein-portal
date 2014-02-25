@@ -81,6 +81,13 @@
       <groupId>org.twitter4j</groupId>
       <artifactId>twitter4j-core</artifactId>
     </dependency>
+
+    <!-- LinkedIn -->
+    <dependency>
+      <groupId>org.scribe</groupId>
+      <artifactId>scribe</artifactId>
+    </dependency>
+
     <!-- Google -->
     <dependency>
       <groupId>com.google.oauth-client</groupId>

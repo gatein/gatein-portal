@@ -401,6 +401,17 @@
     </depends>
   </module>
 
+  <module>
+    <name>uiSocialLoginButtons</name>
+    <load-group>webuiGRP</load-group>
+    <script>
+      <path>/javascript/eXo/webui/UISocialLoginButtons.js</path>
+    </script>
+    <depends>
+      <module>jquery</module>
+    </depends>
+  </module>
+
   <!-- WebUI-EXT Javascripts -->
 
   <module>
