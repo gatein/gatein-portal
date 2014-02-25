@@ -40,7 +40,8 @@ import org.exoplatform.webui.event.EventListener;
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class, events = {
         @EventConfig(listeners = UIEditInlineWorkspace.ConfirmCloseActionListener.class),
-        @EventConfig(listeners = UIEditInlineWorkspace.AbortCloseActionListener.class) })
+        @EventConfig(listeners = UIEditInlineWorkspace.AbortCloseActionListener.class),
+        @EventConfig(listeners = UIEditInlineWorkspace.ConfirmFinishActionListener.class)})
 public class UIEditInlineWorkspace extends UIContainer {
 
     public UIEditInlineWorkspace() throws Exception {
@@ -83,6 +84,20 @@ public class UIEditInlineWorkspace extends UIContainer {
         uiConfirmation.setActions(actionConfirms);
     }
 
+    public void createActionConfirm(String message, String confirmAction, String abortAction) {
+        UIConfirmation uiConfirmation = getChild(UIConfirmation.class);
+        ResourceBundle resourceBundle = WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
+        String yes = resourceBundle.getString("UIEditInlineWorkspace.confirm.yes");
+        String no = resourceBundle.getString("UIEditInlineWorkspace.confirm.no");
+        uiConfirmation.setMessage(resourceBundle.getString(message));
+
+        List<ActionConfirm> actionConfirms = new ArrayList<ActionConfirm>();
+        actionConfirms.add(new ActionConfirm(confirmAction, yes));
+        actionConfirms.add(new ActionConfirm(abortAction, no));
+        uiConfirmation.setActions(actionConfirms);
+        ((WebuiRequestContext) WebuiRequestContext.getCurrentInstance()).addUIComponentToUpdateByAjax(uiConfirmation);
+    }
+
     public static class ConfirmCloseActionListener extends EventListener<UIEditInlineWorkspace> {
 
         @Override
@@ -96,6 +111,21 @@ public class UIEditInlineWorkspace extends UIContainer {
             Event<UIComponent> abortEvent = uiPortalComposer.createEvent("Abort", event.getExecutionPhase(),
                     event.getRequestContext());
             abortEvent.broadcast();
+        }
+    }
+
+    public static class ConfirmFinishActionListener extends EventListener<UIEditInlineWorkspace> {
+        @Override
+        public void execute(Event<UIEditInlineWorkspace> event) throws Exception {
+            UIConfirmation uiConfirmation = event.getSource().getChild(UIConfirmation.class);
+            uiConfirmation.createEvent("Close", event.getExecutionPhase(), event.getRequestContext()).broadcast();
+
+            UIPortalComposer uiPortalComposer = event.getSource().getChild(UIPortalComposer.class);
+            if (uiPortalComposer.getId().equals(UIPortalComposer.UIPAGE_EDITOR)) {
+                uiPortalComposer.savePage(event.getSource(), event);
+            } else {
+                uiPortalComposer.saveSite();
+            }
         }
     }
 

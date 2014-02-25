@@ -351,17 +351,19 @@ public class UIPortal extends UIContainer {
                 tokenService.deleteToken(token);
             }
 
-            String portalName = prContext.getPortalOwner();
-            NodeURL createURL = prContext.createURL(NodeURL.TYPE);
-            createURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
-
             LogoutControl.wantLogout();
             Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
             cookie.setPath(req.getContextPath());
             cookie.setMaxAge(0);
             prContext.getResponse().addCookie(cookie);
 
-            prContext.sendRedirect(createURL.toString());
+            Object logoutOnly = prContext.getAttribute(UIPortalComposer.LOGOUT_ONLY);
+            if (!Boolean.parseBoolean(String.valueOf(logoutOnly))) {
+                String portalName = prContext.getPortalOwner();
+                NodeURL createURL = prContext.createURL(NodeURL.TYPE);
+                createURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
+                prContext.sendRedirect(createURL.toString());
+            }
         }
 
         private String getTokenCookie(HttpServletRequest req) {
