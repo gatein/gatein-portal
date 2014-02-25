@@ -350,12 +350,22 @@ public class UIPortal extends UIContainer {
                 AbstractTokenService<GateInToken, String> tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
                 tokenService.deleteToken(token);
             }
+            token = LoginServlet.getOauthRememberMeTokenCookie(req);
+            if(token != null) {
+                AbstractTokenService<GateInToken, String> tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+                tokenService.deleteToken(token);
+            }
 
             LogoutControl.wantLogout();
             Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
             cookie.setPath(req.getContextPath());
             cookie.setMaxAge(0);
             prContext.getResponse().addCookie(cookie);
+
+            Cookie oauthCookie = new Cookie(LoginServlet.OAUTH_COOKIE_NAME, "");
+            oauthCookie.setPath(req.getContextPath());
+            oauthCookie.setMaxAge(0);
+            prContext.getResponse().addCookie(oauthCookie);
 
             Object logoutOnly = prContext.getAttribute(UIPortalComposer.LOGOUT_ONLY);
             if (!Boolean.parseBoolean(String.valueOf(logoutOnly))) {

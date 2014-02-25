@@ -261,6 +261,26 @@ input[type=checkbox]
     border-right-color:#59c5ee;
 }
 
+#social-login #login-LINKEDIN {
+    background-color: #005f8d;
+    border-color: rgba(0,0,0,0.2);
+}
+
+#social-login #login-LINKEDIN:hover {
+    background-color: #007bb6;
+    border-color: rgba(0,0,0,0.2);
+}
+
+#social-login #login-LINKEDIN > div {
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/linkedin.png") 6px 2px no-repeat;
+    border-top-color: #007bb6;
+}
+
+#social-login #login-LINKEDIN > div:before {
+    border-right: 1px solid rgba(0,0,0,0.2);
+    border-left: none;
+}
+
 .SignInDelimiter {
     margin: .31em 0;
     text-align: center;

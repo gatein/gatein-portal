@@ -81,6 +81,27 @@
     </init-params>
   </component>
 
+  <!-- LinkedIn -->
+  <component>
+    <key>org.gatein.security.oauth.linkedin.LinkedinProcessor</key>
+    <type>org.gatein.security.oauth.linkedin.LinkedinProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>apiKey</name>
+        <value>${gatein.oauth.linkedin.apiKey}</value>
+      </value-param>
+      <value-param>
+        <name>apiSecret</name>
+        <value>${gatein.oauth.linkedin.apiSecret}</value>
+      </value-param>
+      <!-- URL to redirect from LinkedIn during LinkedIn OAuth authentication -->
+      <value-param>
+        <name>redirectURL</name>
+        <value>${gatein.oauth.linkedin.redirectURL}</value>
+      </value-param>
+    </init-params>
+  </component>
+
   <component>
     <key>org.gatein.security.oauth.google.GoogleProcessor</key>
     <type>org.gatein.security.oauth.google.GoogleProcessorImpl</type>
@@ -196,6 +217,29 @@
         <value-param>
           <name>filterMapping</name>
           <value>/googleAuth</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.webapi.OAuthFilterIntegrator</target-component>
+    <component-plugin>
+      <name>LinkedInFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
+      <init-params>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.web.linkedin.LinkedInFilter</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.linkedin.enabled:false}</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/linkedinAuth</value>
         </value-param>
       </init-params>
     </component-plugin>
@@ -324,6 +368,41 @@
         <value-param>
           <name>friendlyName</name>
           <value>Twitter</value>
+        </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.security.oauth.spi.OAuthProviderTypeRegistry</target-component>
+    <component-plugin>
+      <name>LinkedInOauthProvider</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.security.oauth.registry.OauthProviderTypeRegistryPlugin</type>
+      <init-params>
+        <value-param>
+          <name>key</name>
+          <value>LINKEDIN</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.linkedin.enabled}</value>
+        </value-param>
+        <value-param>
+          <name>userNameAttributeName</name>
+          <value>user.social-info.linkedin.userName</value>
+        </value-param>
+        <value-param>
+          <name>oauthProviderProcessorClass</name>
+          <value>org.gatein.security.oauth.linkedin.LinkedinProcessor</value>
+        </value-param>
+        <value-param>
+          <name>initOAuthURL</name>
+          <value>/linkedinAuth</value>
+        </value-param>
+        <value-param>
+          <name>friendlyName</name>
+          <value>LinkedIn</value>
         </value-param>
       </init-params>
     </component-plugin>

@@ -134,12 +134,22 @@ public class UIStandaloneAppContainer extends UIContainer {
                 AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
                 tokenService.deleteToken(token);
             }
+            token = LoginServlet.getOauthRememberMeTokenCookie(req);
+            if (token != null) {
+                AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+                tokenService.deleteToken(token);
+            }
 
             LogoutControl.wantLogout();
             Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
             cookie.setPath(req.getContextPath());
             cookie.setMaxAge(0);
             context.getResponse().addCookie(cookie);
+
+            Cookie oauthCookie = new Cookie(LoginServlet.OAUTH_COOKIE_NAME, "");
+            oauthCookie.setPath(req.getContextPath());
+            oauthCookie.setMaxAge(0);
+            context.getResponse().addCookie(oauthCookie);
 
             context.sendRedirect(req.getRequestURI());
         }

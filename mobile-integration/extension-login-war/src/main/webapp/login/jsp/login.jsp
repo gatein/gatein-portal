@@ -111,13 +111,22 @@
                 %>
             </fieldset>
           <% if(registry.isOAuthEnabled()) { %>
+          <script type="text/javascript">
+              function goSocialLoginUrl(url) {
+                  if(document.getElementById('rememberme').checked) {
+                      url += '&_rememberme=true';
+                  }
+                  window.location = url;
+                  return false;
+              }
+          </script>
           <div id="social-pane">
           <div class="SignInDelimiter">
             <span><%=res.getString("UILoginForm.label.mobile.login.oauth.Delimiter")%></span>
           </div>
           <div id="social-login">
             <% for (OAuthProviderType oauthProvType : registry.getEnabledOAuthProviders()) { %>
-            <a href="<%= oauthProvType.getInitOAuthURL(contextPath, uri) %>" id="login-<%= oauthProvType.getKey() %>" class="login-button">
+            <a href="javascript:void(0)" onclick="goSocialLoginUrl('<%= oauthProvType.getInitOAuthURL(contextPath, uri) %>')" id="login-<%= oauthProvType.getKey() %>" class="login-button">
               <div><%= oauthProvType.getFriendlyName() %></div>
             </a>
             <% } %>
