@@ -162,7 +162,9 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
         }
 
         authenticationRegistry.setAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER_FOR_JAAS, portalUser);
-        socialNetworkService.updateOAuthAccessToken(principal.getOauthProviderType(), portalUser.getUserName(), principal.getAccessToken());
+        if(portalUser.isEnabled()) {
+            socialNetworkService.updateOAuthAccessToken(principal.getOauthProviderType(), portalUser.getUserName(), principal.getAccessToken());
+        }
 
         // Now Facebook/Google authentication handshake is finished and credentials are in session. We can redirect to JAAS authentication
         String loginRedirectURL = httpResponse.encodeRedirectURL(getLoginRedirectUrl(httpRequest, portalUser.getUserName()));
