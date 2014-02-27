@@ -114,6 +114,24 @@
     background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/twitter.png") left no-repeat;
     border-color: #62bdf5 #62bdf5 #62bdf5 #62bdf5;
 }
+.SocialRegisterButtons .register-LINKEDIN {
+    background-color: #005f8d;
+    background: linear-gradient(to bottom, #007bb6, #005f8d);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#007bb6), to(#005f8d));
+    border-color:rgba(0,0,0,0.2);
+}
+
+.SocialRegisterButtons .register-LINKEDIN:hover {
+    background-color: #007bb6;
+    background: linear-gradient(to bottom, #0092D8, #007bb6);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0092D8), to(#007bb6));
+    border-color:rgba(0,0,0,0.2);
+}
+
+.SocialRegisterButtons .register-LINKEDIN > div {
+    background: url("/eXoResources/skin/DefaultSkin/portal/webui/component/widget/UILoginForm/background/linkedin.png") 2px 1px no-repeat;
+    border-color: #0092D8 #0092D8 #0092D8 #0092D8;
+}
 
 .RegisterDelimiter {
     text-align: center;
