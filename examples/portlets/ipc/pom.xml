@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.gatein.portal.examples.portlets</groupId>
     <artifactId>parent</artifactId>
-    <version>3.7.0.Alpha02-SNAPSHOT</version>
+    <version>3.7.0.Beta01</version>
   </parent>
 
   <artifactId>ipc</artifactId>

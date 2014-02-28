@@ -27,7 +27,7 @@
   <parent>
     <artifactId>gatein-wsrp-integration-parent</artifactId>
     <groupId>org.gatein.integration</groupId>
-    <version>3.7.0.Alpha02-SNAPSHOT</version>
+    <version>3.7.0.Beta01</version>
   </parent>
 
   <artifactId>extension-war</artifactId>
