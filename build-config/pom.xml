@@ -33,7 +33,7 @@
   <groupId>org.gatein.portal</groupId>
   <artifactId>gatein-portal-build-config</artifactId>
   <name>GateIn Portal: Build Configuration</name>
-  <version>3.7.0.Beta01</version>
+  <version>3.7.0.Beta02-SNAPSHOT</version>
 
   <licenses>
     <license>
