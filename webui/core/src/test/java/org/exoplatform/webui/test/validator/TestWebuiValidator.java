@@ -18,9 +18,8 @@ package org.exoplatform.webui.test.validator;
 
 import java.util.List;
 import java.util.Locale;
-
+import java.util.Set;
 import junit.framework.TestCase;
-
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
@@ -32,6 +31,7 @@ import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.NumberFormatValidator;
 import org.exoplatform.webui.form.validator.NumberRangeValidator;
+import org.exoplatform.webui.form.validator.PasswordPolicyValidator;
 import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
@@ -87,6 +87,42 @@ public class TestWebuiValidator extends TestCase {
         assertFalse(expected(validator, uiInput));
         uiInput.setValue("28/09/2011 10:59:59");
         assertFalse(expected(validator, uiInput));
+    }
+
+    public void testCustomPasswordValidator() {
+        Validator validator = new UserConfigurableValidator("mycompanypasspolicy");
+        assertFalse(expected(validator, "ABC123ABC!@#")); // missing lowercase
+        assertFalse(expected(validator, "12312312312312312312")); // more than 20 chars
+        assertFalse(expected(validator, "123123123")); // mising upper/lower case
+        assertFalse(expected(validator, "A1a")); // less than 6 chars
+        assertFalse(expected(validator, "ABC123")); // missing lowercase
+        assertFalse(expected(validator, "abc123")); // missing uppercase
+        assertTrue(expected(validator, "ABC123abc"));
+        assertTrue(expected(validator, "abc123ABC"));
+        assertTrue(expected(validator, "abcABC123"));
+        assertTrue(expected(validator, "123abcABC"));
+        assertTrue(expected(validator, "123abcABC!@#"));
+    }
+
+    public void testPasswordPolicyValidator() {
+        Validator validator = new PasswordPolicyValidator();
+        assertFalse(expected(validator, "ABC123ABC!@#")); // missing lowercase
+        assertFalse(expected(validator, "12312312312312312312")); // more than 20 chars
+        assertFalse(expected(validator, "123123123")); // mising upper/lower case
+        assertFalse(expected(validator, "A1a")); // less than 6 chars
+        assertFalse(expected(validator, "ABC123")); // missing lowercase
+        assertFalse(expected(validator, "abc123")); // missing uppercase
+        assertTrue(expected(validator, "ABC123abc"));
+        assertTrue(expected(validator, "abc123ABC"));
+        assertTrue(expected(validator, "abcABC123"));
+        assertTrue(expected(validator, "123abcABC"));
+        assertTrue(expected(validator, "123abcABC!@#"));
+    }
+    
+    public void testCheckAvaibleConfigurations() {
+        Set<String> configurations = UserConfigurableValidator.getConfigurationNames();
+        assertFalse(configurations.contains("nonexistingConf"));
+        assertTrue(configurations.contains("mycompanypasspolicy"));
     }
 
     public void testUsernameValidator() {

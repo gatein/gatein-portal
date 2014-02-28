@@ -34,7 +34,7 @@ import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.exoplatform.webui.form.validator.PasswordPolicyValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
@@ -76,12 +76,12 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         uiCheckbox.setOnChange("ToggleChangePassword", "UIUserInfo");
         addUIFormInput(uiCheckbox);
         UIFormInputBase<String> uiInput = new UIFormStringInput(PASSWORD1X, null, null)
-                .setType(UIFormStringInput.PASSWORD_TYPE).addValidator(PasswordStringLengthValidator.class, 6, 30)
+                .setType(UIFormStringInput.PASSWORD_TYPE).addValidator(PasswordPolicyValidator.class)
                 .addValidator(MandatoryValidator.class);
         uiInput.setRendered(false);
         addUIFormInput(uiInput);
         uiInput = new UIFormStringInput(PASSWORD2X, null, null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30);
+                .addValidator(MandatoryValidator.class).addValidator(PasswordPolicyValidator.class);
         uiInput.setRendered(false);
         addUIFormInput(uiInput);
     }

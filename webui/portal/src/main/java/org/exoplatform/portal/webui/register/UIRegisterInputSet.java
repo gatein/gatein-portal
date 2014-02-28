@@ -18,8 +18,6 @@
  */
 package org.exoplatform.portal.webui.register;
 
-import javax.portlet.PortletPreferences;
-
 import org.exoplatform.portal.webui.CaptchaValidator;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -32,10 +30,12 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.exoplatform.webui.form.validator.PasswordPolicyValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
@@ -72,10 +72,10 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
                 UserConfigurableValidator.class, UserConfigurableValidator.USERNAME));
 
         addUIFormInput(new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+                .addValidator(MandatoryValidator.class).addValidator(PasswordPolicyValidator.class));
 
         addUIFormInput(new UIFormStringInput(CONFIRM_PASSWORD, CONFIRM_PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+                .addValidator(MandatoryValidator.class).addValidator(PasswordPolicyValidator.class));
 
         addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(StringLengthValidator.class, 1, 45)
                 .addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));

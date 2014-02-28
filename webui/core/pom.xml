@@ -59,4 +59,24 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  
+  <build>
+      <plugins>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                  <argLine>-Xms512m -Xmx512m</argLine>
+                  <systemProperties>
+                      <property>
+                          <name>gatein.conf.dir</name>
+                          <value>${project.build.testOutputDirectory}/conf</value>
+                      </property>
+                  </systemProperties>
+              </configuration>
+          </plugin>
+      </plugins>
+
+  </build>
+  
 </project>

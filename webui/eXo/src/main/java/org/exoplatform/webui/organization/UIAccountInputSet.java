@@ -30,7 +30,7 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.exoplatform.webui.form.validator.PasswordPolicyValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
@@ -56,10 +56,10 @@ public class UIAccountInputSet extends UIFormInputWithActions {
                 UserConfigurableValidator.class, UserConfigurableValidator.USERNAME));
 
         addUIFormInput(new UIFormStringInput(PASSWORD1X, "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+                .addValidator(MandatoryValidator.class).addValidator(PasswordPolicyValidator.class));
 
         addUIFormInput(new UIFormStringInput(PASSWORD2X, "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+                .addValidator(MandatoryValidator.class).addValidator(PasswordPolicyValidator.class));
 
         addUIFormInput(new UIFormStringInput("firstName", "firstName", null).addValidator(StringLengthValidator.class, 1, 45)
                 .addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));

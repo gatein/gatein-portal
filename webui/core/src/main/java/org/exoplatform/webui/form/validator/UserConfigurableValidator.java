@@ -26,11 +26,12 @@ package org.exoplatform.webui.form.validator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.regex.Pattern;
-
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.log.ExoLogger;
@@ -183,6 +184,19 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
                 messages.addMessage(localizationKey, new Object[] { label, configuration.formatMessage });
             }
         }
+    }
+
+    /**
+     * Provides a way to query what are the currently known policies from the configuration files. For instance,
+     * if an entry exists as gatein.validators.mycompanypasspolicy.regexp , then there's a configuration called
+     * "mycompanypasspolicy", and this will be returned by this method.
+     *
+     * Note: the built-in configurations are <b>not</b> returned by this method, only the custom-provided ones.
+     *
+     * @return a set containing all known configuration key names.
+     */
+    public static final Set<String> getConfigurationNames() {
+        return Collections.unmodifiableSet(configurations.keySet());
     }
 
     private static class ValidatorConfiguration {

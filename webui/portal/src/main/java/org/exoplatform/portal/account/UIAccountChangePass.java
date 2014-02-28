@@ -38,7 +38,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.exoplatform.webui.form.validator.PasswordPolicyValidator;
 
 /**
  * Created by The eXo Platform SARL Author : tung.dang tungcnw@gmail.com
@@ -55,9 +55,9 @@ public class UIAccountChangePass extends UIForm {
         addUIFormInput(new UIFormStringInput("currentpass", "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
                 .addValidator(MandatoryValidator.class));
         addUIFormInput(new UIFormStringInput("newpass", "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(PasswordStringLengthValidator.class, 6, 30).addValidator(MandatoryValidator.class));
+                .addValidator(PasswordPolicyValidator.class).addValidator(MandatoryValidator.class));
         addUIFormInput(new UIFormStringInput("confirmnewpass", "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(PasswordStringLengthValidator.class, 6, 30).addValidator(MandatoryValidator.class));
+                .addValidator(PasswordPolicyValidator.class).addValidator(MandatoryValidator.class));
     }
 
     public static class ResetActionListener extends EventListener<UIAccountChangePass> {
