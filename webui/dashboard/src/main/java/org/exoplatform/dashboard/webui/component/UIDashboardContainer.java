@@ -465,6 +465,16 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
             int row = Integer.parseInt(context.getRequestParameter(ROWINDEX));
             String objectId = context.getRequestParameter(UIComponent.OBJECTID);
 
+            /**
+             * Gadgets IDs have "/" characters.
+             * We need to workaround them in the markup to be W3C compliant.
+             *
+             * "_slash_" -> "/"
+             *
+             * @see UIDashboardSelectContainer#getGadgetsOfCategory(org.exoplatform.application.registry.ApplicationCategory)
+             */
+            objectId = objectId.replaceAll("_slash_", "/");
+
             ApplicationRegistryService service = uiDashboard.getApplicationComponent(ApplicationRegistryService.class);
             Application application = service.getApplication(objectId);
             if (application == null) {

@@ -98,6 +98,15 @@ public class UIDashboardSelectContainer extends UIContainer {
             Application app = gadgetIterator.next();
             for (String p : app.getAccessPermissions()) {
                 if (acl.hasPermission(p)) {
+                    /**
+                     * Gadgets IDs have "/" characters.
+                     * We need to workaround them in the markup to be W3C compliant.
+                     *
+                     * "/" -> "_slash_"
+                     *
+                     * @see UIDashboardContainer.AddNewGadgetActionListener#execute(org.exoplatform.webui.event.Event)
+                     */
+                    app.setId(app.getId().replaceAll("/", "_slash_"));
                     listGadgets.add(app);
                     break;
                 }

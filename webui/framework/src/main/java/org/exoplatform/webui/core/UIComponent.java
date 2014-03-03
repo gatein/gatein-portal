@@ -48,6 +48,8 @@ public abstract class UIComponent {
 
     public static final String AJAX_ASYNC = "ajax_async";
 
+    private static final String GTN_PREFIX = "gtn";
+
     private String id;
 
     private boolean rendered = true;
@@ -64,7 +66,7 @@ public abstract class UIComponent {
 
     public UIComponent setId(String id) {
         if (id == null) {
-            this.id = Integer.toString(Math.abs(hashCode()));
+            this.id = new StringBuilder().append(GTN_PREFIX).append(Math.abs(hashCode())).toString();
         } else {
             this.id = id;
         }

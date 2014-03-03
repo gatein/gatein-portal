@@ -37,6 +37,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
  */
 public class UICaptcha extends UIFormStringInput {
 
+    private static final String GTN_PREFIX = "gtn";
+
     public UICaptcha(String name, String bindingExpression, String value) {
         super(name, bindingExpression, value);
     }
@@ -51,7 +53,9 @@ public class UICaptcha extends UIFormStringInput {
         // Random parameter
         url.setParameter("v", String.valueOf(System.currentTimeMillis()));
 
-        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + URLWriter.toString(url) + "\" alt=\"Captcha image for visual validation\" /><br/>");
+        context.getWriter().write(new StringBuilder().append("<div id='")
+                .append(GTN_PREFIX).append(getId()).append("'><img src=\"")
+                .append(URLWriter.toString(url)).append("\" alt=\"Captcha image for visual validation\" /><br/>").toString());
         super.processRender(context);
         context.getWriter().write("</div>");
     }

@@ -32,6 +32,8 @@ public class UIGroovyPortlet extends UIPortletApplication {
 
     private static final String DEFAULT_TEMPLATE = "system:/groovy/portal/webui/application/UIGroovyPortlet.gtmpl";
 
+    private static final String GTN_PREFIX = "gtn";
+
     private final String template_;
 
     private final String windowId;
@@ -43,7 +45,7 @@ public class UIGroovyPortlet extends UIPortletApplication {
         PortletRequest prequest = context.getRequest();
         template_ = prequest.getPreferences().getValue("template", DEFAULT_TEMPLATE);
         windowId = prequest.getWindowID();
-        id = windowId + "-portlet";
+        id = new StringBuilder().append(GTN_PREFIX).append(windowId).append("-portlet").toString();
     }
 
     public String getId() {

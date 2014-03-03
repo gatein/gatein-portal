@@ -43,6 +43,8 @@ public class UIForm extends UIContainer {
 
     public static final String SUBCOMPONENT_ID = "subComponentId";
 
+    private static final String GTN_PREFIX = "gtn";
+
     // private List<Validator> validators ;
 
     private String[] actions_ = null;
@@ -215,7 +217,8 @@ public class UIForm extends UIContainer {
     private String getFormId() {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         if (context instanceof PortletRequestContext) {
-            return ((PortletRequestContext) context).getWindowId() + "#" + getId();
+            return new StringBuilder().append(GTN_PREFIX).append(((PortletRequestContext) context).getWindowId())
+                    .append("#").append(getId()).toString();
         }
         return getId();
     }

@@ -46,6 +46,8 @@ public class UIDashboard extends UIContainer {
 
     public static String APP_NOT_EXIST = "APP_NOT_EXIT";
 
+    private static final String GTN_PREFIX = "gtn";
+
     private boolean isShowSelectPopup = false;
 
     private String aggregatorId;
@@ -121,7 +123,7 @@ public class UIDashboard extends UIContainer {
             event.getRequestContext().addUIComponentToUpdateByAjax(uiDashboard.getChild(UIPopupWindow.class));
             if (isShow) {
                 event.getRequestContext().getJavascriptManager().require("SHARED/dashboard", "dashboard")
-                        .addScripts("dashboard.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
+                        .addScripts("dashboard.UIDashboard.onLoad('" + GTN_PREFIX + windowId + "'," + uiDashboard.canEdit() + ");");
             }
         }
     }

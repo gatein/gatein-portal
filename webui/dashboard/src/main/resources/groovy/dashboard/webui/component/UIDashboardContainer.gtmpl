@@ -5,10 +5,11 @@
   
   def uiDashboard = uicomponent.getParent();
   def rcontext = _ctx.getRequestContext() ;
-  JavascriptManager jsmanager = rcontext.getJavascriptManager();  
+  JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  String GTN_PREFIX = "gtn";
   String windowId = uicomponent.getWindowId() ;
   DashboardParent parent = (DashboardParent)uicomponent.getParent().getParent();
-  jsmanager.require("SHARED/dashboard", "dashboard").addScripts("dashboard.UIDashboard.onLoad('" + windowId + "'," + parent.canEdit() + ");") ;
+  jsmanager.require("SHARED/dashboard", "dashboard").addScripts("dashboard.UIDashboard.onLoad('" + GTN_PREFIX + windowId + "'," + parent.canEdit() + ");") ;
 %>
 <div id="$uicomponent.id" class="UIDashboardContainer">
 	<div class="GadgetContainer UIResizableBlock" id="GadgetContainer">

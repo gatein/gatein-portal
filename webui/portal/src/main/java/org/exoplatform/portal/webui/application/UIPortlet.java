@@ -145,6 +145,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
     private static final AbstractPortalContext PORTAL_CONTEXT = new AbstractPortalContext(Collections.singletonMap(
             "javax.portlet.markup.head.element.support", "true"));
 
+    private static final String GTN_PREFIX = "gtn";
+
     /** . */
     private String storageId;
 
@@ -237,7 +239,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
     }
 
     public String getId() {
-        return storageName;
+        return new StringBuilder().append(GTN_PREFIX).append(storageName).toString();
     }
 
     public String getApplicationId() {
