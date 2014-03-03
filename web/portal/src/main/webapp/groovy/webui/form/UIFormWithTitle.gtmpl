@@ -64,7 +64,7 @@
 	</div>
 	<%uiform.end()%>
 </div>
-<script language="javascript">
+<script type="text/javascript">
 	function SubmitAction(event) {
 		var event = window.event || event;
 		var code;

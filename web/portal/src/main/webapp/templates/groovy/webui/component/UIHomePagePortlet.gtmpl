@@ -84,12 +84,12 @@
 		<div class="PortletDecoration">
                 	<div class="Information">
 				<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%></div>
-				<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank" title="Goto GateIn" ><span class="skipHidden">Goto GateIn</span></a>
+				<a class="VersionIcon" href="http://www.jboss.org/gatein/" onclick="this.target= '_blank';return true;" title="Goto GateIn" ><span class="skipHidden">Goto GateIn</span></a>
 			</div>
 			<div class="DotLine"><span></span></div>
                         <div class="ContactUs">
 				<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>
-				<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank" title="Goto Discussions"><span class="skipHidden">Goto Discussions</span></a>
+				<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" onclick="this.target= '_blank';return true;" title="Goto Discussions"><span class="skipHidden">Goto Discussions</span></a>
 			</div>
 		</div>
 		<div class="ClearFix"></div>

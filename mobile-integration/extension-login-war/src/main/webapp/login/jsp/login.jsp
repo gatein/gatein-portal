@@ -88,7 +88,7 @@
         <%   }%>
         <button id="button-close-alert" type="button"><%=res.getString("UILoginForm.label.mobile.login.Close")%></button></p></div>
         <% }%>
-        <form id="login-form" name="login-form" action="<%= contextPath + "/login"%>" method="post">
+        <form id="login-form" action="<%= contextPath + "/login"%>" method="post">
             <fieldset>
                 <legend><%=res.getString("UILoginForm.label.Signin")%></legend>
                 <label for="username"><%=res.getString("UILoginForm.label.UserName")%></label>

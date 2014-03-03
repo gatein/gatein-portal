@@ -5,10 +5,10 @@
 	<div class="TRContainer">
 		<div class="PortletDecoration">					
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%> <br /> <%=_ctx.appRes("UIHomePagePortlet.Label.ExtendedHomePage")%></div>
-			<a class="VersionIcon" href="http://www.jboss.org/gatein/" target="_blank"></a>
+			<a class="VersionIcon" href="http://www.jboss.org/gatein/" onclick="this.target= '_blank';return true;"></a>
 			<div class="DotLine"><span></span></div>
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.GuideText")%></div>
-			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" target="_blank"></a>
+			<a class="ContactIcon" href="http://community.jboss.org/en/gatein?view=discussions" onclick="this.target= '_blank';return true;"></a>
 			
 		</div>
 	</div>
