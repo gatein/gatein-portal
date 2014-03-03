@@ -34,7 +34,7 @@
 	}
 %>
 
-<div class="UIPopupWindow UIDragObject NormalStyle" exo:minWidth="200" exo:minHeight="200" id="$popupId" style="$widthStyle display: $show;">
+<div class="UIPopupWindow UIDragObject NormalStyle" id="$popupId" style="$widthStyle display: $show;">
 	<div class="OverflowContainer ClearFix">
 		<span class="PopupTitleIcon"></span>
 		<%if (showCloseButton) {%>

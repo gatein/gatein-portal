@@ -671,7 +671,7 @@
 	  {
 	    var portalNav = portalNavigation;
 	
-	    var getNodeURL = tab.attr("exo:getNodeURL");
+	    var getNodeURL = tab.children(".exo.getNodeURL").first().val();
 	    var menuItemContainer = tab.find("." + portalNav.containerStyleClass).first();
 	    if (getNodeURL && !menuItemContainer.length)
 	    {
@@ -809,7 +809,7 @@
 	    var menuItem = $(this);
 	    var portalNav = portalNavigation;
 	    
-	    var getNodeURL = menuItem.attr("exo:getNodeURL");
+	    var getNodeURL = menuItem.children(".exo.getNodeURL").first().val();
 	    var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
 		    if (getNodeURL && !subContainer.length) {
 			    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
@@ -819,7 +819,6 @@
 		  	}	
 		  	if (!data || !data.length) {
 			   menuItem.removeClass("ArrowIcon");
-			   menuItem.removeAttr("exo:getNodeURL");
 		  	   return;
 		    }
 		  	menuItem.append(portalNav.generateContainer(data));
@@ -913,8 +912,8 @@
 		   var actionLink = node.actionLink ? node.actionLink : "#" + node.label;
 		
 		   htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'"));
-		   htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" );
 		   htmlFrags += ("' title='" + node.label + "'>");
+           htmlFrags += ("<input type='hidden' class='exo getNodeURL' value='" + node.getNodeURL + "' />");
 		   htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
 		   "href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
 		   if (node.childs.length) {

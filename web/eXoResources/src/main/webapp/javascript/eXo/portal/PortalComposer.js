@@ -24,8 +24,8 @@
 	  {
 		eXo.portal.portalMode = portalMode;
 		eXo.portal.hasEditted = isEditted;
-			
-	    $("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
+
+        $("div#" + id).find("div.OverflowContainer > span").eq(0).on("click", function()
 	    {
 	      portalComposer.toggle($(this));
 	    });

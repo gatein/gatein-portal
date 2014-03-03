@@ -61,11 +61,12 @@
 			MimeResponse res = _ctx.getRequestContext().getResponse();
 			ResourceURL resourceURL = res.createResourceURL();
 			resourceURL.setResourceID(node.getURI());	
-			getNodeURL = "exo:getNodeURL='" + URLWriter.toString(resourceURL) + "'";
+			getNodeURL = URLWriter.toString(resourceURL);
 		}
 		
 		print """
-			<li class="MenuItem $clazz $tabStyleNavigation" $getNodeURL>
+			<li class="MenuItem $clazz $tabStyleNavigation">
+			  <input type="hidden" class="exo getNodeURL" value="$getNodeURL" />
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";

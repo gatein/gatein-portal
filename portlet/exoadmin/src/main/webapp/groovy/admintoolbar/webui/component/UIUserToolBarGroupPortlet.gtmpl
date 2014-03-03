@@ -63,11 +63,12 @@
 			
 			ResourceURL resourceURL = res.createResourceURL();			
 			resourceURL.setResourceID(groupId + "::" + node.getURI());	
-			getNodeURL = "exo:getNodeURL='" + URLWriter.toString() + "'";
+			getNodeURL = URLWriter.toString();
 		}
 		
 		print """
-		   <li class="MenuItem $clazz $tabStyleNavigation portlet-menu-cascade-item" $getNodeURL>
+		   <li class="MenuItem $clazz $tabStyleNavigation portlet-menu-cascade-item">
+		     <input type="hidden" class="exo getNodeURL" value="$getNodeURL" />
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$actionLink" $title>$label</a>""";

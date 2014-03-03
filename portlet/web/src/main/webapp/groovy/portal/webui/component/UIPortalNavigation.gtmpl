@@ -47,7 +47,7 @@
 		   MimeResponse res = _ctx.getRequestContext().getResponse();
 		   javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 		   resourceURL.setResourceID(node.getURI());
-		   getNodeURL = "exo:getNodeURL='" + URLWriter.toString(resourceURL) + "'";
+		   getNodeURL = URLWriter.toString(resourceURL);
 		}
 
 		String label = node.getEncodedResolvedLabel();
@@ -58,7 +58,8 @@
 		}
 					
 		print """
-		<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
+		<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title">
+		  <input type="hidden" class="exo getNodeURL" value="$getNodeURL" />
 		""";
 		if(node.getPageRef() != null) {
 		    nodeURL.setNode(node);
@@ -98,7 +99,8 @@
 					    javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 						resourceURL.setResourceID(node.getURI());										
 	%>			
-					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=URLWriter.toString(resourceURL) %>">
+					<li class="UITab $tabStyleNavigation">
+					  <input type="hidden" class="exo getNodeURL" value="<%=URLWriter.toString(resourceURL) %>" />
 				<%	} else { %>
 					<li class="UITab $tabStyleNavigation">
 				<%  } 					
