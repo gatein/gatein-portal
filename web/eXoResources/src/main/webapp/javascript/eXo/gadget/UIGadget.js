@@ -32,9 +32,12 @@
 	   */
 	  createGadget : function(url, id, metadata, userPref, view, hostName, debug, nocache)
 	  {
+        var ampPlain = "&";
+        var ampXhtml = "&amp;";
+        var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
 	    window.gadgets = window.gadgets || {};
 	    eXo.gadgets = window.gadgets;
-	    gadgets.pubsubURL = hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0");  
+	    gadgets.pubsubURL = hostName + '/js/gatein-container.js?c=1' + (debug ? amp + "debug=1": "") + (nocache ? amp +"nocache=1" : amp + "nocache=0");
 	    var args = arguments;
 		  window.require([gadgets.pubsubURL], function() {
 
@@ -278,14 +281,16 @@
 	      minIcon.removeClass("RestoreGadget").addClass("MinimizeGadget");
 	      minIcon.attr("title", minIcon.attr("miniTitle"));
 	    }
-	
+        var ampPlain = "&";
+        var ampXhtml = "&amp;";
+        var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
 	    var portletID = portletFrag.parent().attr("id");
 	    var dashboardID = gadget.closest(".UIDashboard").attr("id");
 	    var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-	    href += "&portal:type=action&uicomponent=" + dashboardID;
-	    href += "&op=MinimizeGadget";
-	    href += "&minimized=" + minimized;
-	    href += "&objectId=" + gadget.attr("id") + "&ajaxRequest=true";
+	    href += amp + "portal:type=action&uicomponent=" + dashboardID;
+	    href += amp + "op=MinimizeGadget";
+	    href += amp + "minimized=" + minimized;
+	    href += amp + "objectId=" + gadget.attr("id") + amp + "ajaxRequest=true";
 	    ajaxGet(href);
 	
 	    //TODO: Examine if this is really useful
@@ -308,14 +313,17 @@
 	    {
 	      return;
 	    }
-	    var portletID = portletFrag.parent().attr("id");
+        var ampPlain = "&";
+        var ampXhtml = "&amp;";
+        var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
+        var portletID = portletFrag.parent().attr("id");
 	    var dashboardID = gadget.closest(".UIDashboard").attr("id");
 	    var maximizeParam = gadget.closest(".UIDashboardContainer").length > 0 ? "maximize" : "unmaximize";
 	    var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-	    href += "&portal:type=action&uicomponent=" + dashboardID;
-	    href += "&op=MaximizeGadget";
-	    href += "&maximize=" + maximizeParam;
-	    href += "&objectId=" + gadget.attr("id") + "&ajaxRequest=true";
+	    href += amp + "portal:type=action" + amp + "uicomponent=" + dashboardID;
+	    href += amp + "op=MaximizeGadget";
+	    href += amp + "maximize=" + maximizeParam;
+	    href += amp + "objectId=" + gadget.attr("id") + amp + "ajaxRequest=true";
 	    ajaxGet(href, true);
 	  },
 	
@@ -336,10 +344,13 @@
 	
 	      if (confirm("${GadgetDeletionConfirmation}"))
 	      {
+            var ampPlain = "&";
+            var ampXhtml = "&amp;";
+            var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
 	        var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-	        href += "&portal:type=action&uicomponent=" + dashboardID;
-	        href += "&op=DeleteGadget";
-	        href += "&objectId=" + gadget.attr("id") + "&ajaxRequest=true";
+	        href += amp + "portal:type=action&uicomponent=" + dashboardID;
+	        href += amp + "op=DeleteGadget";
+	        href += amp + "objectId=" + gadget.attr("id") + amp + "ajaxRequest=true";
 	
 	        var dashboardCont = gadget.closest(".UIDashboardContainer");
 	        if (dashboardCont.length > 0)

@@ -52,6 +52,7 @@ function initTabbedDashboardPortlet(id)
         href += "&op=RenameTabLabel";
         href += "&objectId=" + encodeURIComponent(input.attr("id"));
         href += "&newTabLabel=" + encodeURIComponent(newLabel);
+        // href variable in window.location object should go in plain text
         window.location = href;
       }
     };
@@ -104,6 +105,7 @@ function initTabbedDashboardPortlet(id)
           href += "&op=AddDashboard";
           href += "&objectId=" + encodeURIComponent(label);
           this.inRequest = true;
+          // href variable in window.location object should go in plain text
           window.location = href;
         }
       }

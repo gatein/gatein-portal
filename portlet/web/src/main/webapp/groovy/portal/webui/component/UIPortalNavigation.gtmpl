@@ -8,6 +8,7 @@
 	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
+	import org.exoplatform.portal.url.URLWriter;
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -46,7 +47,7 @@
 		   MimeResponse res = _ctx.getRequestContext().getResponse();
 		   javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 		   resourceURL.setResourceID(node.getURI());
-		   getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+		   getNodeURL = "exo:getNodeURL='" + URLWriter.toString(resourceURL) + "'";
 		}
 
 		String label = node.getEncodedResolvedLabel();
@@ -97,7 +98,7 @@
 					    javax.portlet.ResourceURL resourceURL = res.createResourceURL();
 						resourceURL.setResourceID(node.getURI());										
 	%>			
-					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=resourceURL.toString() %>">
+					<li class="UITab $tabStyleNavigation" exo:getNodeURL="<%=URLWriter.toString(resourceURL) %>">
 				<%	} else { %>
 					<li class="UITab $tabStyleNavigation">
 				<%  } 					

@@ -44,12 +44,16 @@ gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
     var portletFrag = ggWindow.closest(".PORTLET-FRAGMENT");
     if (portletFrag.length > 0)
     {
+      var ampPlain = "&";
+      var ampXhtml = "&amp;";
+      var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
+
       var portletID = portletFrag.parent().attr("id");
       var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-      href += "&portal:type=action&uicomponent=" + compID;
-      href += "&op=SaveUserPref";
-      href += "&ajaxRequest=true";
-      href += "&userPref=" + encodedPrefs;
+      href += amp + "portal:type=action" + amp + "uicomponent=" + compID;
+      href += amp + "op=SaveUserPref";
+      href += amp + "ajaxRequest=true";
+      href += amp + "userPref=" + encodedPrefs;
       ajaxGet(href, true);
     }
     else

@@ -10,6 +10,7 @@
 	import org.json.JSONArray;
 	import org.exoplatform.container.PortalContainer;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.portal.url.URLWriter;
 
 	def rcontext = _ctx.getRequestContext() ;
 	String docBase = rcontext.getRequestContextPath() ;
@@ -79,6 +80,11 @@
 		eXo.env.addLoadedRemoteScripts(<%=remoteScripts%>);
 		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
+		<% } %>
+		<% if (URLWriter.isUrlEncoded()) { %>
+		    eXo.env.portal.urlEncoded = true;
+		<% } else { %>
+		    eXo.env.portal.urlEncoded = false;
 		<% } %>
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}

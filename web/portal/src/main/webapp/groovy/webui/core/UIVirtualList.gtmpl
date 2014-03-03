@@ -1,13 +1,14 @@
 <%  
     import org.exoplatform.webui.core.UIComponent;
+    import org.exoplatform.portal.url.URLWriter
     
     boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     
     def uiRepeater = uicomponent.getRepeater();
     uiRepeater.feedNext();
-    
-    String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
+    String amp = URLWriter.isUrlEncoded() ? "&amp;" : "&";
+    String url = uicomponent.url("LoadNext") + amp + "ajaxRequest=true";
     String css = "";
     if (uicomponent.getHeight() > 0) {
        css = "height: " + uicomponent.getHeight() + "px";

@@ -705,7 +705,9 @@
 	*    the AjaxRequest and will be called by the XHR during the process method 
 	*/
 	window.doRequest = function(method, url, queryString, callback) {
-	  request = new AjaxRequest(method, url, queryString) ;
+      // URL parameter can be passed in strict encoded format, AjaxRequest() expects a plain url param
+      var urlPlain = url.replace(/&amp;/g, "&");
+	  request = new AjaxRequest(method, urlPlain, queryString) ;
 	  handler = new HttpResponseHandler() ;
 	  request.onSuccess = handler.ajaxResponse ;
 	  request.onLoading = handler.ajaxLoading ;

@@ -225,6 +225,9 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view, opt_params
   var iframe = $("#" + gadget.getIframeId());
   var ggWindow = iframe.closest(".UIGadget");
   var url = gadget.getIframeUrl();
+  var ampPlain = "&";
+  var ampXhtml = "&amp;";
+  var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
   var currentView = gadget.view || gadgets.container.view_;
   if (currentView == view)
   {
@@ -235,7 +238,7 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view, opt_params
   {
     if (url.indexOf('view-params=') == -1)
     {
-      url += '&view-params=' + $.toJSON(opt_params);
+      url += amp + 'view-params=' + $.toJSON(opt_params);
     }
     else
     {
@@ -254,10 +257,10 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view, opt_params
   var portletID = portletFrag.parent().attr("id");
   var compID = portletFrag.children("div").attr("id");
   var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-  href += "&portal:type=action&uicomponent=" + compID;
-  href += "&op=MaximizeGadget";
-  href += "&maximize=" + maximize;
-  href += "&objectId=" + ggWindow.attr("id") + "&ajaxRequest=true";
+  href += amp + "portal:type=action&uicomponent=" + compID;
+  href += amp + "op=MaximizeGadget";
+  href += amp + "maximize=" + maximize;
+  href += amp + "objectId=" + ggWindow.attr("id") + amp + "ajaxRequest=true";
   ajaxGet(href, true);
 };
 
@@ -550,32 +553,38 @@ gadgets.IfrGadget.prototype.getUserPrefsDialogId = function() {
 };
 
 gadgets.IfrGadget.prototype.getIframeUrl = function() {
+  var ampPlain = "&";
+  var ampXhtml = "&amp;";
+  var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
   return this.serverBase_ + (this.serverBase_.charAt(this.serverBase_.length) == '/' ? "" : "/") + 'ifr?' +
       'container=' + gadgets.container.name_ +
-      '&mid=' +  this.id +
-      '&nocache=' + this.nocache +
-      '&country=' + gadgets.container.country_ +
-      '&lang=' + gadgets.container.language_ +
-      '&view=' + (this.view || gadgets.container.view_) +
-      (this.specVersion ? '&v=' + this.specVersion : '') +
-      (gadgets.container.parentUrl_ ? '&parent=' + encodeURIComponent(gadgets.container.parentUrl_) : '') +
-      (this.debug ? '&debug=1' : '') +
+      amp + 'mid=' +  this.id +
+      amp + 'nocache=' + this.nocache +
+      amp + 'country=' + gadgets.container.country_ +
+      amp + 'lang=' + gadgets.container.language_ +
+      amp + 'view=' + (this.view || gadgets.container.view_) +
+      (this.specVersion ? amp + 'v=' + this.specVersion : '') +
+      (gadgets.container.parentUrl_ ? amp + 'parent=' + encodeURIComponent(gadgets.container.parentUrl_) : '') +
+      (this.debug ? amp + 'debug=1' : '') +
       this.getAdditionalParams() +
       this.getUserPrefsParams() +
-      (this.secureToken ? '&st=' + encodeURIComponent(this.secureToken) : '') +
-      '&url=' + encodeURIComponent(this.specUrl) +
+      (this.secureToken ? amp + 'st=' + encodeURIComponent(this.secureToken) : '') +
+      amp + 'url=' + encodeURIComponent(this.specUrl) +
       '#rpctoken=' + this.rpcToken +
       (this.viewParams ?
-          '&view-params=' +  encodeURIComponent(gadgets.json.stringify(this.viewParams)) : '') +
-      (this.hashData ? '&' + this.hashData : '');
+          amp + 'view-params=' +  encodeURIComponent(gadgets.json.stringify(this.viewParams)) : '') +
+      (this.hashData ? amp + this.hashData : '');
 };
 
 gadgets.IfrGadget.prototype.getUserPrefsParams = function() {
+  var ampPlain = "&";
+  var ampXhtml = "&amp;";
+  var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
   var params = '';
   if (this.getUserPrefs()) {
     for(var name in this.getUserPrefs()) {
       var value = this.getUserPref(name);
-      params += '&up_' + encodeURIComponent(name) + '=' +
+      params += amp + 'up_' + encodeURIComponent(name) + '=' +
           encodeURIComponent(value);
     }
   }
@@ -761,6 +770,9 @@ gadgets.IfrGadget.prototype.refresh = function() {
 
 gadgets.IfrGadget.prototype.sendServerRequest = function(op, key, value)
 {
+  var ampPlain = "&";
+  var ampXhtml = "&amp;";
+  var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
   var gadget = $("#gadget_" + this.id);
   if (gadget.length > 0)
   {
@@ -769,9 +781,9 @@ gadgets.IfrGadget.prototype.sendServerRequest = function(op, key, value)
     {
       var portletID = portletFrag.parent().attr("id");
       var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-      href += "&portal:type=action&uicomponent=" + gadget.parent().attr("id").replace(/^content-/, "");
-      href += "&op=" + op;
-      href += "&" + key + "=" + value;
+      href += amp + "portal:type=action&uicomponent=" + gadget.parent().attr("id").replace(/^content-/, "");
+      href += amp + "op=" + op;
+      href += amp + key + "=" + value;
       ajaxAsyncGetRequest(href, true);
     }
     else

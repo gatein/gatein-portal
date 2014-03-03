@@ -108,7 +108,12 @@
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.api</artifactId>
     </dependency>
-    
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.test.core</artifactId>

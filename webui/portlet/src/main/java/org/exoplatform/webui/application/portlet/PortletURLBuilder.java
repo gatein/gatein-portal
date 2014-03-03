@@ -25,6 +25,7 @@ import org.exoplatform.web.application.Parameter;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
+import org.exoplatform.portal.url.URLWriter;
 
 /**
  * Created by The eXo Platform SAS Apr 3, 2007
@@ -91,7 +92,7 @@ public class PortletURLBuilder extends URLBuilder<UIComponent> {
             url.setProperty(CSRF_PROP, Boolean.TRUE.toString());
         }
 
-        return url.toString();
+        return URLWriter.toString(url);
 
     }
 }

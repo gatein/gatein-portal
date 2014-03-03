@@ -63,16 +63,20 @@ window.ajaxPost = function(url, queryString, callback) {
 eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
   var url = eXo.env.server.portalURLTemplate.replace("_portal:componentId_", targetComponentId);
   url = url.replace("_portal:action_", actionName);
-  
+
+  var ampPlain = "&";
+  var ampXhtml = "&amp;";
+  var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
+
   if(params != null) {
   	var len = params.length ;
     for(var i = 0 ; i < len ; i++) {
       var paramName = encodeURIComponent(params[i].name);
       var paramValue = encodeURIComponent(params[i].value);
-      url += "&" +  paramName + "=" + paramValue ;
+      url += amp +  paramName + "=" + paramValue ;
     }
   }
-  if(useAjax) url += "&ajaxRequest=true" ;
+  if(useAjax) url += amp + "ajaxRequest=true" ;
 
   return url;
 };

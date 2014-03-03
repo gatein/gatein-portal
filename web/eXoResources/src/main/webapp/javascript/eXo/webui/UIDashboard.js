@@ -108,14 +108,17 @@
 		},
 	
 		createRequest : function(componentId, action, params){
+            var ampPlain = "&";
+            var ampXhtml = "&amp;";
+            var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
 			var url = eXo.env.server.portalBaseURL;
 			url += '?portal:componentId=' + componentId +
-								'&portal:type=action&uicomponent=UIDashboard&op=' + action ;
-			url += '&ajaxRequest=true';
+								amp + 'portal:type=action' + amp + 'uicomponent=UIDashboard' + amp + 'op=' + action ;
+			url += amp + 'ajaxRequest=true';
 			if(params != null) {
 		  	var len = params.length ;
 		    for(var i = 0 ; i < len ; i++) {
-		      url += "&" +  params[i].name + "=" + params[i].value ;
+		      url += amp +  params[i].name + "=" + params[i].value ;
 		    }
 		  }
 			return url;

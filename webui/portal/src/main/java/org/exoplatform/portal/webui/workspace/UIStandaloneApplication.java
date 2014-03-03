@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils;
 import org.exoplatform.portal.application.StandaloneAppRequestContext;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinService;
+import org.exoplatform.portal.url.URLWriter;
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.JavascriptManager;
@@ -229,7 +230,11 @@ public class UIStandaloneApplication extends UIApplication {
     public String getPortalURLTemplate() throws UnsupportedEncodingException {
         StandaloneAppRequestContext context = WebuiRequestContext.getCurrentInstance();
         ComponentURL urlTemplate = context.createURL(ComponentURL.TYPE);
-        urlTemplate.setMimeType(MimeType.PLAIN);
+        if (URLWriter.isUrlEncoded()) {
+            urlTemplate.setMimeType(MimeType.XHTML);
+        } else {
+            urlTemplate.setMimeType(MimeType.PLAIN);
+        }
         urlTemplate.setPath(context.getNodePath());
         urlTemplate.setResource(EMPTY_COMPONENT);
         urlTemplate.setAction("{portal:action}");

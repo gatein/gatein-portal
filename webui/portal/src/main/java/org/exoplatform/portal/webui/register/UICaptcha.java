@@ -27,6 +27,7 @@ import java.util.Calendar;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceURL;
 
+import org.exoplatform.portal.url.URLWriter;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIFormStringInput;
 
@@ -44,14 +45,13 @@ public class UICaptcha extends UIFormStringInput {
 
         RenderResponse resp = context.getResponse();
 
-        //
         ResourceURL url = resp.createResourceURL();
 
         // context.getPortalContextPath() + "/captcha?v=" + Calendar.getInstance().getTimeInMillis()
+        // Random parameter
+        url.setParameter("v", String.valueOf(System.currentTimeMillis()));
 
-        String random = "&v=" + Calendar.getInstance().getTimeInMillis();
-
-        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString() + random + "\" alt=\"Captcha image for visual validation\" /><br/>");
+        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + URLWriter.toString(url) + "\" alt=\"Captcha image for visual validation\" /><br/>");
         super.processRender(context);
         context.getWriter().write("</div>");
     }

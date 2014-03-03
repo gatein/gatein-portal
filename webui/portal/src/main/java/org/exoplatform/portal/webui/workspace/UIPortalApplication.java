@@ -51,6 +51,7 @@ import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
+import org.exoplatform.portal.url.URLWriter;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -991,7 +992,11 @@ public class UIPortalApplication extends UIApplication {
     public String getPortalURLTemplate() throws UnsupportedEncodingException {
         PortalRequestContext pcontext = Util.getPortalRequestContext();
         ComponentURL urlTemplate = pcontext.createURL(ComponentURL.TYPE);
-        urlTemplate.setMimeType(MimeType.PLAIN);
+        if (URLWriter.isUrlEncoded()) {
+            urlTemplate.setMimeType(MimeType.XHTML);
+        } else {
+            urlTemplate.setMimeType(MimeType.PLAIN);
+        }
         urlTemplate.setPath(pcontext.getNodePath());
         urlTemplate.setResource(EMPTY_COMPONENT);
         urlTemplate.setAction("_portal:action_");
@@ -1003,6 +1008,11 @@ public class UIPortalApplication extends UIApplication {
         PortalRequestContext pcontext = Util.getPortalRequestContext();
         NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE,
                 new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
+        if (URLWriter.isUrlEncoded()) {
+            nodeURL.setMimeType(MimeType.XHTML);
+        } else {
+            nodeURL.setMimeType(MimeType.PLAIN);
+        }
         return nodeURL.toString();
     }
 

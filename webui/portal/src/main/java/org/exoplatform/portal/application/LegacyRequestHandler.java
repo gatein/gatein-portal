@@ -35,6 +35,7 @@ import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.url.PortalURLContext;
+import org.exoplatform.portal.url.URLWriter;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.url.MimeType;
@@ -122,7 +123,12 @@ public class LegacyRequestHandler extends WebRequestHandler {
         NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
         url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
-        url.setMimeType(MimeType.PLAIN);
+
+        if (URLWriter.isUrlEncoded()) {
+            url.setMimeType(MimeType.XHTML);
+        } else {
+            url.setMimeType(MimeType.PLAIN);
+        }
 
         Enumeration paraNames = request.getParameterNames();
         while (paraNames.hasMoreElements()) {

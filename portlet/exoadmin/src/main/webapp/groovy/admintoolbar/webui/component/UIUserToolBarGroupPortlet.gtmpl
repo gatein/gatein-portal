@@ -12,6 +12,7 @@
 	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.mop.SiteKey;
 	import org.exoplatform.portal.mop.SiteType;
+	import org.exoplatform.portal.url.URLWriter;
 
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
@@ -62,7 +63,7 @@
 			
 			ResourceURL resourceURL = res.createResourceURL();			
 			resourceURL.setResourceID(groupId + "::" + node.getURI());	
-			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
+			getNodeURL = "exo:getNodeURL='" + URLWriter.toString() + "'";
 		}
 		
 		print """
