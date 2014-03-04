@@ -7,14 +7,19 @@
     $(".gtnResponsiveMenuCollapseButton").each(function(){
 
             $(this).click(function(){
-                if ($(this).data("target") && $(this).data("target-class") && $(this).data("action") == "toggleCSS")
+                var dataTarget = $(this).children(".data.target").first();
+                var dataTargetClass = $(this).children(".data.target.class").first();
+                var dataAction = $(this).children(".data.action").first();
+                var dataSelfClass = $(this).children(".data.self.class").first();
+
+                if (dataTarget && dataTargetClass && dataAction.val() == "toggleCSS")
                 {
-                    $($(this).data("target")).toggleClass($(this).data("target-class"));
+                    $(dataTarget.val()).toggleClass(dataTargetClass.val());
                 }
 
-                if ($(this).data("self-class") && $(this).data("action") == "toggleCSS")
+                if (dataSelfClass && dataAction.val() == "toggleCSS")
                 {
-                    $(this).toggleClass($(this).data("self-class"));
+                    $(this).toggleClass(dataSelfClass.val());
                 }
             });
 

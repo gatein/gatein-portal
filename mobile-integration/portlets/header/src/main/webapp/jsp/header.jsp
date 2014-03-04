@@ -41,9 +41,12 @@ jsMan.require("SHARED/org_gatein_responsive_menu", "menu").addScripts("menu.init
 <div id="<portlet:namespace/>_gtnResponsiveHeaderPortlet" class="gtnResponsiveHeaderPortlet">
     <div class="collapsibleRow clearfix">
         <div id="<portlet:namespace/>_logo" class="logo" onclick="window.location = '${homePageLink}';"><span class="skipHidden">GateIn</span></div>
-        <div id="<portlet:namespace/>_icon" class="gtnResponsiveMenuCollapseButton"
-            data-target="#<portlet:namespace/>_options" data-action="toggleCSS" data-target-class="display"
-            data-self-class="enabled"><div class="collapseButtonIcon" title="${resourceBundle.getString('label.ShowGroupPages')}"></div>
+        <div id="<portlet:namespace/>_icon" class="gtnResponsiveMenuCollapseButton">
+            <input type="hidden" class="data target" value="#<portlet:namespace/>_options" />
+            <input type="hidden" class="data action" value="toggleCSS" />
+            <input type="hidden" class="data target class" value="display" />
+            <input type="hidden" class="data self class" value="enabled" />
+            <div class="collapseButtonIcon" title="${resourceBundle.getString('label.ShowGroupPages')}"></div>
         </div>
         <div id="<portlet:namespace/>_options" class="gtnResponsiveMenu options collapsibleContent collapsibleRow">
             <ol class="menu">
