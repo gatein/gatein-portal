@@ -19,7 +19,10 @@
 						<div class="UISearchForm">
 							<%uiform.begin()%>
 						      <div class="QuickSet">
-								<div class="SearchTitle"><label for="searchTerm,searchOption"><%=_ctx.appRes("UISearch.label.Search")%>:</label></div>
+								<div class="SearchTitle"><label for="searchTerm"><%=_ctx.appRes("UISearch.label.Search")%>:</label>
+								    <label for="searchOption" style="display:none;"><%=_ctx.appRes("UISearch.label.Search")%>:</label>
+                                    <label for="UIListUsers-userStatusFilter" style="display:none;"><%=_ctx.appRes("UISearch.label.Search")%>:</label>
+								</div>
 								<% 
 									QuickSearchInputSet = uiform.getQuickSearchInputSet();
 									for(field in QuickSearchInputSet.getChildren()) {

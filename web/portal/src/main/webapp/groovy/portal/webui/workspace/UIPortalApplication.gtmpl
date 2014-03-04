@@ -1,6 +1,6 @@
 <!DOCTYPE html
-		PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-					 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+		PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%
 	import org.exoplatform.portal.application.PortalRequestContext ;
 	import org.exoplatform.webui.core.UIComponent;
@@ -137,6 +137,7 @@
                      This old browser it expects right to be positive instead of negative in order to hide the content instead of displaying it.
                      If the page is over 10000px wide and rtl we assume this situation. -->
                 <script type="text/javascript">
+                // <!--<![CDATA[
                      if (window.onload) {
                        var currentOnLoad = window.onload;
                        window.onload = function() { currentOnLoad(); checkRTLWidth() };
@@ -149,6 +150,7 @@
                           stylesheet.insertRule("html[dir='rtl'] .skipHidden { right: 10000px !important;}", stylesheet.cssRules.length);
                        }
                     }
+                // ]]>-->
                 </script>
                 <!-- /508 Compliancy -->
 

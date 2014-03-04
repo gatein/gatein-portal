@@ -77,7 +77,8 @@
 						}
 		if(hasChild) {
 			print """
-				<ul class="MenuItemContainer portlet-menu-cascade-separator skipHidden" style="position: absolute; display:block">					
+				<ul class="MenuItemContainer portlet-menu-cascade-separator skipHidden" style="position: absolute; display:block">
+		          <li class="w3c compatibility" style="display: none;"></li>
 			""" ;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(child, nodeURL);

@@ -15,7 +15,7 @@ String applicationDescription = encoder.encode(application.getDescription());
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
 	<div class="UIBreadcumb">
-		<a href="javascript:;" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><div class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>"><span class="skipHidden"><%=_ctx.appRes("UIApplicationInfo.title.editApplication")%></span></div></a>
+		<a href="javascript:;" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><span class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>"><span class="skipHidden"><%=_ctx.appRes("UIApplicationInfo.title.editApplication")%></span></span></a>
 		<div class="BreadcumbInfo">
 			<div class="FL" title="<%= category.getDisplayName(true) %>"><%= categoryDisplayName %></div>
 			<div class="RightBlackGridArrow16x16Icon"><span></span></div>
@@ -24,26 +24,15 @@ String applicationDescription = encoder.encode(application.getDescription());
 	</div>
 	<div class="Application">
 			<div class="PortletIcons">
-					<img src="$srcBG" onError="src='$srcBGError'" alt=""/>
+					<img src="$srcBG" id="srcBG" alt=""/>
+
+					<script type="text/javascript">
+                    // <!--<![CDATA[
+                        document.getElementById("srcBG").onerror = function() { this.src='$srcBGError'; };
+                    // ]]>-->
+					</script>
 			</div>
-			<!--
-			<div class="ApplicationContent">
-				<div class="TitleBarApplication">
-					<span class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.displayName")%></span>
-					<span class="RightLabel"><%= applicationDisplayName %></span>
-				</div>
-				<div class="ApplicationContentLabel">
-					<div class="ContentLabel">
-						<span class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.name")%></span>
-						<span><%= name %></span>
-					</div>
-					<div class="ContentLabel">
-						<span class="LeftLabel"><%=_ctx.appRes("UIApplicationInfo.label.description")%></span>
-						<span class="RightLabel"><%= applicationDescription %></span>
-					</div>
-				</div>
-			</div>
-			-->
+
 			<div class="ApplicationContent">
 				<table class="TitleBarApplication" summary="Application Display Name">
 					<tr>

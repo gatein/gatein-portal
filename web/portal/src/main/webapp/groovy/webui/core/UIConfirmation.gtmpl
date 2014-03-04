@@ -53,7 +53,7 @@
 	{
 		for(act in actions)
 		{
-			println "	<a href=\"javascript:void(0);\" onclick="+uicomponent.event("Click", act.getEventId())+" class=\"ActionButton LightBlueStyle\"> ${act.getActionKey()} </a>";
+			println "	<a href=\"javascript:void(0);\" onclick=\""+uicomponent.event("Click", act.getEventId())+"\" class=\"ActionButton LightBlueStyle\"> ${act.getActionKey()} </a>";
 		}
 	}
 %>

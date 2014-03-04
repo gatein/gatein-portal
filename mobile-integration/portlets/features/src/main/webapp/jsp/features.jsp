@@ -28,7 +28,7 @@
                 <c:set var="feature" value="${featureName.trim()}" />
                 <div class="feature ${feature}Feature clearfix">
                     <img alt="${resourceBundle.getString(feature.concat('.alttext'))}"
-                        src="${renderRequest.contextPath}/images/feature-${feature}.svg">
+                        src="${renderRequest.contextPath}/images/feature-${feature}.svg" />
                     <div class="text">
                         <h2>${resourceBundle.getString(feature.concat(".label"))}</h2>
                         <p>${resourceBundle.getString(feature.concat(".text"))}</p>
