@@ -86,7 +86,7 @@ public class UIListUsers extends UISearch {
     private static final List<SelectItemOption<String>> USER_STATUS_OPTIONS = Collections.unmodifiableList(Arrays.asList(
                 new SelectItemOption<String>("Enabled", UserStatus.ENABLED.name()),
                 new SelectItemOption<String>("Disabled", UserStatus.DISABLED.name()),
-                new SelectItemOption<String>("All", UserStatus.BOTH.name())
+                new SelectItemOption<String>("All", UserStatus.ANY.name())
             ));
 
     private OrganizationService orgService;
@@ -184,7 +184,7 @@ public class UIListUsers extends UISearch {
             String status = selectBox.getValue();
             statusFilter = UserStatus.valueOf(status);
         } else {
-            statusFilter = UserStatus.BOTH;
+            statusFilter = UserStatus.ANY;
         }
 
         search(query);
@@ -224,7 +224,7 @@ public class UIListUsers extends UISearch {
         UIListUsers uiListUser = event.getSource();
         OrganizationService service = uiListUser.getApplicationComponent(OrganizationService.class);
 
-        User user = service.getUserHandler().findUserByName(userName, UserStatus.BOTH);
+        User user = service.getUserHandler().findUserByName(userName, UserStatus.ANY);
 
         if(user == null) {
             UIApplication uiApp = event.getRequestContext().getUIApplication();
@@ -249,7 +249,7 @@ public class UIListUsers extends UISearch {
             String username = event.getRequestContext().getRequestParameter(OBJECTID);
             UIListUsers uiListUsers = event.getSource();
             OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
-            User user = service.getUserHandler().findUserByName(username, UserStatus.BOTH);
+            User user = service.getUserHandler().findUserByName(username, UserStatus.ANY);
             if (user == null) {
                 UIApplication uiApplication = event.getRequestContext().getUIApplication();
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,

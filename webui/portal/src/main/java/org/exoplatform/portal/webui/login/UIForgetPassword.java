@@ -89,7 +89,7 @@ public class UIForgetPassword extends UIForm {
 
             // User provided his username
             if (userName != null) {
-                user = orgSrc.getUserHandler().findUserByName(userName, UserStatus.BOTH);
+                user = orgSrc.getUserHandler().findUserByName(userName, UserStatus.ANY);
                 if (user == null) {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
@@ -107,7 +107,7 @@ public class UIForgetPassword extends UIForm {
                 // Querying on email won't work. PLIDM-12
                 // Note that querying on email is inefficient as it loops over all users...
                 query.setEmail(email);
-                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query, UserStatus.BOTH);
+                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query, UserStatus.ANY);
                 if (users == null || users.getSize() == 0) {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.email-not-exist", null));

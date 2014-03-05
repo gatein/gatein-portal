@@ -69,7 +69,7 @@ public class FilterDisabledLoginModule extends AbstractLoginModule {
                         OrganizationService.class);
 
                 UserHandler uHandler = service.getUserHandler();
-                User user = uHandler.findUserByName(username, UserStatus.BOTH);
+                User user = uHandler.findUserByName(username, UserStatus.ANY);
 
                 if (user == null) {
                     log.debug("user {0} doesn't exists. FilterDisabledLoginModule will be ignored.", username);

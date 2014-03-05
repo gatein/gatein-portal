@@ -129,7 +129,7 @@ public class PortalSetupService implements Startable {
     }
 
     public User getRootUser() throws Exception {
-        User root = orgService.getUserHandler().findUserByName("root", UserStatus.BOTH);
+        User root = orgService.getUserHandler().findUserByName("root", UserStatus.ANY);
         // In the case the root user is not present
         // This case can happens if organization-configuration.xml is not well configured
         if (root == null) {

@@ -118,7 +118,7 @@ public class UIResetPassword extends UIForm {
             }
 
             if (setPassword) {
-                User user = orgService.getUserHandler().findUserByName(uiForm.getUserName(), UserStatus.BOTH);
+                User user = orgService.getUserHandler().findUserByName(uiForm.getUserName(), UserStatus.ANY);
                 if (user == null) {
                     uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
                     return;

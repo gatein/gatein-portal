@@ -407,7 +407,7 @@ public class UIPortalComponentActionListener {
 
             OrganizationService orgSrc = uiPortal.getApplicationComponent(OrganizationService.class);
             // get user
-            User user = orgSrc.getUserHandler().findUserByName(token.getPayload().getUsername(), UserStatus.BOTH);
+            User user = orgSrc.getUserHandler().findUserByName(token.getPayload().getUsername(), UserStatus.ANY);
             if (user == null) {
                 requestContext.getUIApplication().addMessage(new ApplicationMessage("UIForgetPassword.msg.user-delete", null));
                 return;
