@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.9.Final</version>
+    <version>3.5.10.Final-SNAPSHOT</version>
     <relativePath>../../../pom.xml</relativePath>
   </parent>
 
@@ -38,23 +38,23 @@
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.sample.extension.config</artifactId>
-      <version>3.5.9.Final</version>
+      <version>3.5.10.Final-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.sample.extension.jar</artifactId>
-      <version>3.5.9.Final</version>
+      <version>3.5.10.Final-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.web.api</artifactId>
-      <version>3.5.9.Final</version>
+      <version>3.5.10.Final-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.sample.extension.war</artifactId>
-      <version>3.5.9.Final</version>
+      <version>3.5.10.Final-SNAPSHOT</version>
       <type>war</type>
     </dependency>
   </dependencies>
