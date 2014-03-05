@@ -166,7 +166,7 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         String username = getUserName();
 
         // Check if user name already existed
-        if (userHandler.findUserByName(username, UserStatus.BOTH) != null) {
+        if (userHandler.findUserByName(username, UserStatus.ANY) != null) {
             Object[] args = { username };
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", args));
             return false;
@@ -175,7 +175,7 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         // Check if mail address is already used
         Query query = new Query();
         query.setEmail(getEmail());
-        if (userHandler.findUsersByQuery(query, UserStatus.BOTH).getSize() > 0) {
+        if (userHandler.findUsersByQuery(query, UserStatus.ANY).getSize() > 0) {
             Object[] args = { username };
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args));
             return false;

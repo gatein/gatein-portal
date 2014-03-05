@@ -184,7 +184,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         orgService.flush();
         IdentitySession session = service_.getIdentitySession();
-        User foundUser = getPopulatedUser(userName, session, UserStatus.BOTH);
+        User foundUser = getPopulatedUser(userName, session, UserStatus.ANY);
 
         if (foundUser == null || foundUser.isEnabled() == enabled) {
             return foundUser;
@@ -234,7 +234,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             return null;
         }
 
-        User exoUser = getPopulatedUser(userName, session, UserStatus.BOTH);
+        User exoUser = getPopulatedUser(userName, session, UserStatus.ANY);
 
         if (broadcast) {
             preDelete(exoUser);
@@ -318,7 +318,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
                     qb = addEnabledUserFilter(qb);
                 }
                 break;
-            case BOTH:
+            case ANY:
                 break;
             case ENABLED:
                 if (filterDisabledUsersInQueries()) {
@@ -335,7 +335,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
             Tools.logMethodIn(log, LogLevel.TRACE, "authenticate", new Object[] { "userName", username, "password", "****" });
         }
 
-        User user = findUserByName(username, UserStatus.BOTH);
+        User user = findUserByName(username, UserStatus.ANY);
         if (user == null) {
             if (log.isTraceEnabled()) {
                 Tools.logMethodOut(log, LogLevel.TRACE, "authenticate", false);
@@ -475,7 +475,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
                     qb = addEnabledUserFilter(qb);
                 }
                 break;
-            case BOTH:
+            case ANY:
                 break;
             case ENABLED:
                 if (filterDisabledUsersInQueries()) {
@@ -591,7 +591,7 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
                     qb = addEnabledUserFilter(qb);
                 }
                 break;
-            case BOTH:
+            case ANY:
                 break;
             case ENABLED:
                 if (filterDisabledUsersInQueries()) {

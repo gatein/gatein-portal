@@ -122,7 +122,7 @@ public class ImpersonationServlet extends AbstractHttpServlet {
         OrganizationService orgService = (OrganizationService)getContainer().getComponentInstanceOfType(OrganizationService.class);
         User userToImpersonate;
         try {
-            userToImpersonate = orgService.getUserHandler().findUserByName(usernameToImpersonate, UserStatus.BOTH);
+            userToImpersonate = orgService.getUserHandler().findUserByName(usernameToImpersonate, UserStatus.ANY);
         } catch (Exception e) {
             throw new ServletException(e);
         }

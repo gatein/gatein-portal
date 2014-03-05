@@ -187,7 +187,7 @@ public class UIRegisterForm extends UIForm {
         private boolean usernameIsUsed(String username, OrganizationService orgService) {
             UserHandler userHandler = orgService.getUserHandler();
             try {
-                if (userHandler.findUserByName(username, UserStatus.BOTH) != null) {
+                if (userHandler.findUserByName(username, UserStatus.ANY) != null) {
                     return true;
                 }
             } catch (Exception ex) {

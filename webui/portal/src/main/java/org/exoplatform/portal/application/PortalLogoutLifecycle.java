@@ -58,7 +58,7 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
             if (exoContainer != null) {
                 OrganizationService organizationService = (OrganizationService) exoContainer
                         .getComponentInstanceOfType(OrganizationService.class);
-                user = organizationService.getUserHandler().findUserByName(uid, UserStatus.BOTH);
+                user = organizationService.getUserHandler().findUserByName(uid, UserStatus.ANY);
             }
 
             // If user is not existed OR disabled

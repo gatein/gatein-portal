@@ -200,7 +200,7 @@ public class UIGroupMembershipForm extends UIForm {
             for (String username : userNames) {
                 if (username == null || username.trim().length() == 0)
                     continue;
-                User user = service.getUserHandler().findUserByName(username, UserStatus.BOTH);
+                User user = service.getUserHandler().findUserByName(username, UserStatus.ANY);
                 if (user == null) {
                     check = true;
                     if (listNotExist == null)
