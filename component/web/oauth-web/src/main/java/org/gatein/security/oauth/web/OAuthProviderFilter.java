@@ -63,11 +63,15 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
     private OAuthProviderTypeRegistry oAuthProviderTypeRegistry;
     private SocialNetworkService socialNetworkService;
 
+    protected String providerKey;
+
     @Override
     protected void initImpl() {
-        authenticationRegistry = (AuthenticationRegistry)getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
-        oAuthProviderTypeRegistry = (OAuthProviderTypeRegistry)getExoContainer().getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
-        socialNetworkService = (SocialNetworkService)getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
+        this.providerKey = this.getInitParameter("providerKey");
+
+        authenticationRegistry = getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+        oAuthProviderTypeRegistry = getExoContainer().getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
+        socialNetworkService = getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
         oauthProviderProcessor = getOAuthProvider().getOauthProviderProcessor();
     }
 
@@ -194,6 +198,11 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
     protected void saveRememberMe(HttpServletRequest request) {
         String rememberMe = request.getParameter(OAuthConstants.PARAM_REMEMBER_ME);
         request.getSession().setAttribute(OAuthConstants.ATTRIBUTE_REMEMBER_ME, rememberMe);
+    }
+
+    protected <T extends AccessTokenContext> OAuthProviderType<T> getOauthProvider(String defaultKey, Class<T> c) {
+        String key = this.providerKey != null ? this.providerKey : defaultKey;
+        return getOAuthProviderTypeRegistry().getOAuthProvider(key, c);
     }
 
     protected abstract OAuthProviderType<T> getOAuthProvider();

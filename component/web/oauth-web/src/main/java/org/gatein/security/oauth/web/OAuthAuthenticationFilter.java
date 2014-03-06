@@ -38,6 +38,7 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.common.OAuthConstants;
 import org.gatein.security.oauth.spi.OAuthPrincipal;
+import org.gatein.security.oauth.spi.OAuthPrincipalProcessor;
 import org.gatein.security.oauth.spi.SocialNetworkService;
 import org.gatein.security.oauth.utils.OAuthUtils;
 import org.gatein.sso.agent.filter.api.AbstractSSOInterceptor;
@@ -78,8 +79,8 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
                 ", registrationUrl=" + this.registrationUrl +
                 ", attachUsernamePasswordToLoginURL=" + this.attachUsernamePasswordToLoginURL);
 
-        socialNetworkService = (SocialNetworkService)getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
-        authenticationRegistry = (AuthenticationRegistry)getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+        socialNetworkService = getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
+        authenticationRegistry = getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
     }
 
     @Override
@@ -136,7 +137,9 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
             log.trace("Not found portalUser with username " + principal.getUserName() + ". Redirecting to registration form");
         }
 
-        User gateInUser = OAuthUtils.convertOAuthPrincipalToGateInUser(principal);
+        //User gateInUser = OAuthUtils.convertOAuthPrincipalToGateInUser(principal);
+        OAuthPrincipalProcessor principalProcessor = principal.getOauthProviderType().getOauthPrincipalProcessor();
+        User gateInUser = principalProcessor.convertToGateInUser(principal);
         authenticationRegistry.setAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER, gateInUser);
 
         String registrationRedirectUrl = getRegistrationRedirectURL(httpRequest);

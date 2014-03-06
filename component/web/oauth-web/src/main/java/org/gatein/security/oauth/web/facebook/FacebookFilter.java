@@ -46,7 +46,7 @@ public class FacebookFilter extends OAuthProviderFilter<FacebookAccessTokenConte
 
     @Override
     protected OAuthProviderType<FacebookAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK, FacebookAccessTokenContext.class);
+        return this.getOauthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_FACEBOOK, FacebookAccessTokenContext.class);
     }
 
     @Override

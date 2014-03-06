@@ -28,7 +28,9 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.gatein.common.classloader.DelegatingClassLoader;
+import org.gatein.security.oauth.principal.DefaultPrincipalProcessor;
 import org.gatein.security.oauth.spi.AccessTokenContext;
+import org.gatein.security.oauth.spi.OAuthPrincipalProcessor;
 import org.gatein.security.oauth.spi.OAuthProviderProcessor;
 import org.gatein.security.oauth.spi.OAuthProviderType;
 
@@ -46,6 +48,13 @@ public class OauthProviderTypeRegistryPlugin<T extends AccessTokenContext> exten
         String enabledPar = getParam(params, "enabled");
         String usernameAttributeName = getParam(params, "userNameAttributeName");
         String oauthProviderProcessorClass = getParam(params, "oauthProviderProcessorClass");
+        String principalProcessorClassName = null;
+
+        ValueParam param = params.getValueParam("principalProcessorClass");
+        if(param != null) {
+            principalProcessorClassName = param.getValue();
+        }
+
         String initOAuthURL = getParam(params, "initOAuthURL");
         String friendlyName = getParam(params, "friendlyName");
 
@@ -56,9 +65,17 @@ public class OauthProviderTypeRegistryPlugin<T extends AccessTokenContext> exten
             ClassLoader oauth = OAuthProviderType.class.getClassLoader();
             ClassLoader delegating = new DelegatingClassLoader(tccl, oauth);
             Class<OAuthProviderProcessor<T>> processorClass = (Class<OAuthProviderProcessor<T>>)delegating.loadClass(oauthProviderProcessorClass);
-            OAuthProviderProcessor<T> oauthProviderProcessor = (OAuthProviderProcessor<T>)containerContext.getContainer().getComponentInstanceOfType(processorClass);
+            OAuthProviderProcessor<T> oauthProviderProcessor = containerContext.getContainer().getComponentInstanceOfType(processorClass);
 
-            oauthPrType = new OAuthProviderType<T>(key, enabled, usernameAttributeName, oauthProviderProcessor, initOAuthURL, friendlyName);
+            OAuthPrincipalProcessor principalProcessor = null;
+            Class<OAuthPrincipalProcessor> principalProcessorClass = (Class<OAuthPrincipalProcessor>) (principalProcessorClassName != null ? delegating
+                    .loadClass(principalProcessorClassName) : DefaultPrincipalProcessor.class);
+            principalProcessor = containerContext.getContainer().getComponentInstanceOfType(principalProcessorClass);
+            if (principalProcessor == null) {
+                principalProcessor = principalProcessorClass.newInstance();
+            }
+
+            oauthPrType = new OAuthProviderType<T>(key, enabled, usernameAttributeName, oauthProviderProcessor, principalProcessor, initOAuthURL, friendlyName);
         } else {
             oauthPrType = null;
         }

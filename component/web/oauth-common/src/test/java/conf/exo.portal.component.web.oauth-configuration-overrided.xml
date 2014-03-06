@@ -122,6 +122,11 @@
     <type>org.exoplatform.web.security.security.SecureRandomService</type>
   </component>
 
+  <component>
+    <key>org.gatein.security.oauth.principal.DefaultPrincipalProcessor</key>
+    <type>org.gatein.security.oauth.test.DefaultPrincipalProcessorOverrided</type>
+  </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.organization.OrganizationService</target-component>
     <component-plugin>

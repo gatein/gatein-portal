@@ -49,7 +49,7 @@ public class TwitterFilter extends OAuthProviderFilter<TwitterAccessTokenContext
 
     @Override
     protected OAuthProviderType<TwitterAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER, TwitterAccessTokenContext.class);
+        return getOauthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_TWITTER, TwitterAccessTokenContext.class);
     }
 
     @Override

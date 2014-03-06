@@ -43,7 +43,7 @@ public class LinkedInFilter extends OAuthProviderFilter<LinkedinAccessTokenConte
 
     @Override
     protected OAuthProviderType<LinkedinAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_LINKEDIN, LinkedinAccessTokenContext.class);
+        return getOauthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_LINKEDIN, LinkedinAccessTokenContext.class);
     }
 
     @Override
