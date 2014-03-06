@@ -161,6 +161,10 @@
       <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
       <init-params>
         <value-param>
+          <name>providerKey</name>
+          <value>FACEBOOK</value>
+        </value-param>
+        <value-param>
           <name>filterClass</name>
           <value>org.gatein.security.oauth.web.facebook.FacebookFilter</value>
         </value-param>
@@ -183,6 +187,10 @@
       <set-method>addPlugin</set-method>
       <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
       <init-params>
+        <value-param>
+          <name>providerKey</name>
+          <value>TWITTER</value>
+        </value-param>
         <value-param>
           <name>filterClass</name>
           <value>org.gatein.security.oauth.web.twitter.TwitterFilter</value>
@@ -207,6 +215,10 @@
       <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
       <init-params>
         <value-param>
+          <name>providerKey</name>
+          <value>GOOGLE</value>
+        </value-param>
+        <value-param>
           <name>filterClass</name>
           <value>org.gatein.security.oauth.web.google.GoogleFilter</value>
         </value-param>
@@ -229,6 +241,10 @@
       <set-method>addPlugin</set-method>
       <type>org.gatein.security.oauth.webapi.OAuthFilterIntegratorPlugin</type>
       <init-params>
+        <value-param>
+          <name>providerKey</name>
+          <value>LINKEDIN</value>
+        </value-param>
         <value-param>
           <name>filterClass</name>
           <value>org.gatein.security.oauth.web.linkedin.LinkedInFilter</value>
@@ -397,6 +413,10 @@
           <value>org.gatein.security.oauth.linkedin.LinkedinProcessor</value>
         </value-param>
         <value-param>
+          <name>principalProcessorClass</name>
+          <value>org.gatein.security.oauth.linkedin.LinkedInPrincipalProcessor</value>
+        </value-param>
+        <value-param>
           <name>initOAuthURL</name>
           <value>/linkedinAuth</value>
         </value-param>
@@ -432,6 +452,10 @@
           <value>org.gatein.security.oauth.google.GoogleProcessor</value>
         </value-param>
         <value-param>
+          <name>oauthPrincipalProcessorClass</name>
+          <value>package.Classname</value>
+        </value-param>
+        <value-param>
           <name>initOAuthURL</name>
           <value>/googleAuth</value>
         </value-param>
@@ -442,5 +466,4 @@
       </init-params>
     </component-plugin>
   </external-component-plugins>
-
 </configuration>

@@ -45,7 +45,7 @@ public class GoogleFilter extends OAuthProviderFilter<GoogleAccessTokenContext> 
 
     @Override
     protected OAuthProviderType<GoogleAccessTokenContext> getOAuthProvider() {
-        return getOAuthProviderTypeRegistry().getOAuthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE, GoogleAccessTokenContext.class);
+        return this.getOauthProvider(OAuthConstants.OAUTH_PROVIDER_KEY_GOOGLE, GoogleAccessTokenContext.class);
     }
 
     @Override

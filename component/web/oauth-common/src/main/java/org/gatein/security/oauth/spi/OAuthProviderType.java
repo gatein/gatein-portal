@@ -46,6 +46,8 @@ public class OAuthProviderType<T extends AccessTokenContext> {
     // Reference to OAuthProviderProcessor for this OAuth Provider. Processor can be used to call OAuth operations on given OAuth provider
     private final OAuthProviderProcessor<T> oauthProviderProcessor;
 
+    private final OAuthPrincipalProcessor oauthPrincipalProcessor;
+
     // URL suffix used to start OAuth authentication workflow with given OAuth provider
     private final String initOAuthURL;
 
@@ -53,11 +55,12 @@ public class OAuthProviderType<T extends AccessTokenContext> {
     private final String friendlyName;
 
     public OAuthProviderType(String key, boolean enabled, String userNameAttrName, OAuthProviderProcessor<T> oauthProviderProcessor,
-                             String initOAuthURL, String friendlyName) {
+                             OAuthPrincipalProcessor principalProcessor, String initOAuthURL, String friendlyName) {
         this.key = key;
         this.enabled = enabled;
         this.userNameAttrName = userNameAttrName;
         this.oauthProviderProcessor = oauthProviderProcessor;
+        this.oauthPrincipalProcessor = principalProcessor;
         this.initOAuthURL = initOAuthURL;
         this.friendlyName = friendlyName;
     }
@@ -76,6 +79,10 @@ public class OAuthProviderType<T extends AccessTokenContext> {
 
     public OAuthProviderProcessor<T> getOauthProviderProcessor() {
         return oauthProviderProcessor;
+    }
+
+    public OAuthPrincipalProcessor getOauthPrincipalProcessor() {
+        return this.oauthPrincipalProcessor;
     }
 
     public String getInitOAuthURL(String contextPath, String requestURI) {
@@ -97,6 +104,7 @@ public class OAuthProviderType<T extends AccessTokenContext> {
                 .append(", enabled=" + enabled)
                 .append(", userNameAttrName=" + userNameAttrName)
                 .append(", oauthProviderProcessor=" + oauthProviderProcessor)
+                .append(", oauthPrincipalProcessor=" + oauthPrincipalProcessor)
                 .append(", initOAuthURL=" + initOAuthURL)
                 .append(", friendlyName=" + friendlyName)
                 .append(" ]").toString();
