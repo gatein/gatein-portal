@@ -86,7 +86,13 @@ public class LegacyRequestHandler extends WebRequestHandler {
         HttpServletResponse response = context.getResponse();
 
         if (requestURI.startsWith(request.getContextPath() + "/private/") && request.getRemoteUser() == null) {
-            String doLoginPath = request.getContextPath() + "/login" + "?initialURI=" + request.getRequestURI();
+            // GTNPORTAL-3415 - Preserve query string if present
+            StringBuilder initialURI = new StringBuilder();
+            initialURI.append(request.getRequestURI());
+            if (request.getQueryString() != null) {
+                initialURI.append("?").append(request.getQueryString());
+            }
+            String doLoginPath = request.getContextPath() + "/login" + "?initialURI=" + initialURI.toString();
             response.sendRedirect(response.encodeRedirectURL(doLoginPath));
             return true;
         }
