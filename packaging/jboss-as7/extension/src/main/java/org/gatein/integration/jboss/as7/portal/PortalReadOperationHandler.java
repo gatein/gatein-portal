@@ -74,7 +74,7 @@ public class PortalReadOperationHandler implements OperationStepHandler {
             }
         }, OperationContext.Stage.MODEL);
 
-        context.addStep(delegate, OperationContext.Stage.RUNTIME);
+        context.addStep(delegate, OperationContext.Stage.MODEL);
 
         context.completeStep();
     }
