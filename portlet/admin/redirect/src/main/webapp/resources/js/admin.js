@@ -7,10 +7,8 @@ function init() {
 	bootstrapDropdown();
 	bootstrapTooltip();
 	bootstrapAlert();
-	bootstrapPopover();
 	bootstrapButton();
 	bootstrapModal();
-	bootstrapTypeahead();
 	// Useful js
 	button();
 	toggleContent();
@@ -257,14 +255,6 @@ bootstrapAlert = function() {
 	});
 };
 
-// Enabling popover
-bootstrapPopover = function() {
-	$('[rel=popover]').popover();
-	$('[rel=popoverTop]').popover({
-		placement: 'top'
-	});
-};
-
 // Enabling radio buttons
 bootstrapButton = function() {
 	$('.radio-group').button();
@@ -298,11 +288,6 @@ bootstrapModal = function() {
 	$('.modal button.close').click(function() {
 		$(this).parent.parent.modal('hide');
 	});
-};
-
-// Typeahead
-bootstrapTypeahead = function() {
-	$('.typeahead').typeahead();
 };
 
 // Do not move screen when clicking in a button

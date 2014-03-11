@@ -7,7 +7,7 @@
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
 	<h:form id="condition_form">
-	<div class="modal confirmation hide" id="modal-condition" data-backdrop="static">
+	<div class="modal confirmation hide" id="modal-condition">
 		<h:panelGroup layout="block" id="modal-condition-wrapper">
 		<div class="modal-header">
 			<!-- <button class="modal-close" data-dismiss="modal" title="Close">Close</button> -->
@@ -21,11 +21,11 @@
 				<h:message id="condition_name-message" for="condition_name" />
 			</div><!-- End .control-group -->
 			<div class="control-group">
-				<h:panelGroup id="uasHolder">
+				<h:panelGroup id="uasHolder" layout="block">
 				<table class="table table-striped" id="condition-string" summary="Redirect condition">
 					<thead>
 						<tr>
-							<th scope="col">#{msg['redirect.admin.condition.agent.string']} <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="#{msg['redirect.admin.condition.agent.string.accept']}">#{msg['redirect.admin.condition.agent.string.accept']}</i></th>
+							<th scope="col">#{msg['redirect.admin.condition.agent.string']} <i class="icon-info-sign icon-gray tooltipTrigger data-placement-right" title="#{msg['redirect.admin.condition.agent.string.accept']}">#{msg['redirect.admin.condition.agent.string.accept']}</i></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -88,18 +88,19 @@
 				</h:panelGroup>
 			</div><!-- End .control-group -->
 
-			<h:panelGroup id="condition_properties" styleClass="control-group">
+			<h:panelGroup id="condition_properties" styleClass="control-group" layout="block">
 				<h:panelGroup style="#{rdrEdit.editedCondition.deviceProperties == null or rdrEdit.editedCondition.deviceProperties.size() == 0 ? '' : 'display:none;'}">
 					<a4j:commandLink action="#{rdrEdit.addProperty}" styleClass="btn btn-mini pull-right" render="condition_properties" oncomplete="afterAddProperty();">#{msg['redirect.admin.condition.property.add']}</a4j:commandLink>
 				</h:panelGroup>
 				<table class="table table-striped button-mini" id="condition-properties" style="#{rdrEdit.editedCondition.deviceProperties == null ? 'display: none;' : ''}" summary="Redirect properties">
 					<thead>
 						<tr>
-							<th scope="col">#{msg['redirect.admin.condition.property']} <i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="#{msg['redirect.admin.condition.property.spec']}">#{msg['redirect.admin.condition.property.spec']}</i></th>
+							<th scope="col">#{msg['redirect.admin.condition.property']} <i class="icon-info-sign icon-gray tooltipTrigger data-placement-right" title="#{msg['redirect.admin.condition.property.spec']}">#{msg['redirect.admin.condition.property.spec']}</i></th>
 							<th scope="col" class="hidden-element actions">#{msg['redirect.admin.condition.actions']}</th>
 						</tr>
 					</thead>
 					<tbody>
+            <tr style="display: none;"><td></td></tr>
 						<ui:repeat value="#{rdrEdit.deviceProperties}" var="rcDevProp" varStatus="counter">
 						<tr>
 							<td class="condition" colspan="2">

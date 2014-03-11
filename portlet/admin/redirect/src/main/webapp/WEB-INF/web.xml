@@ -43,6 +43,16 @@
     <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
     <param-value>true</param-value>
   </context-param>
+  <context-param>
+    <description>W3C validation in auto-generated javax.faces.ViewState input hidden elements</description>
+    <param-name>com.sun.faces.autoCompleteOffOnViewState</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <description>W3C validation in auto-generated javax.faces.ViewState input hidden elements</description>
+    <param-name>com.sun.faces.enableViewStateIdRendering</param-name>
+    <param-value>false</param-value>
+  </context-param>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>

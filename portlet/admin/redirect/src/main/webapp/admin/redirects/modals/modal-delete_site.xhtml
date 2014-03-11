@@ -10,7 +10,7 @@
 	<input type="hidden" id="delete-site-id-input" name="delete-site-id-input" value="UNDEFINED"/>
 	<div class="modal hide" id="modal-delete-site">
 		<div class="modal-header">
-			<button class="modal-close" data-dismiss="modal">Close</button>
+			<button class="modal-close data-dismiss-modal">Close</button>
 			<h3>#{msg['redirect.admin.sdelete.h']}</h3>
 		</div>
 		<div class="modal-body">
@@ -21,8 +21,8 @@
 			</p>
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.sdelete.but.cancel']}</a>
-			<a href="#" id="button-select-node" class="btn btn-danger">#{msg['redirect.admin.sdelete.but.delete']}</a>
+			<a href="#" class="btn data-dismiss-modal">#{msg['redirect.admin.sdelete.but.cancel']}</a>
+			<a href="#" id="button-delete-node" class="btn btn-danger">#{msg['redirect.admin.sdelete.but.delete']}</a>
 		</div>
 	</div><!-- end .modal -->
 	</h:form>

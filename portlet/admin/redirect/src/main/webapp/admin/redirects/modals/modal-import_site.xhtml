@@ -6,75 +6,12 @@
 			 xmlns:a4j="http://richfaces.org/a4j"
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
-	<style type="text/css">
-		.rf-fu {
-			border: 0;
-			width: 100%;
-		}
-		.rf-fu-hdr {
-			background: none;
-			border: 0;
-		}
-		.rf-fu-btn-add {
-			background: none;
-			border: 0;
-		}
-		.rf-fu-btn-cnt-add {
-			background: none;
-			font-size: 14px;
-		}
-		.rf-fu-btn-clr {
-			background: none;
-			border: 0;
-		}
-		.rf-fu-btn-cnt-clr {
-			background: none;
-			font-size: 14px;
-		}
-		.rf-fu-btn-upl {
-			visibility: hidden;
-		}
-
-		.rf-fu-itm {
-			border: 1px solid #ccc;
-			background-color: #eee;
-			padding: 3px 10px;
-			display: inline-block;
-			border-radius: 3px;
-			line-height: 25px;
-			width: 94%;
-			margin-top: 7px;
-			margin-left: 5px;
-		}
-		.rf-fu-itm-lbl {
-			font-size: 14px;
-		}
-		.rf-fu-itm-lnk {
-			color: #AAAAAA;
-			font-size: 14px;
-			text-decoration: none;
-		}
-		.rf-fu-inp {
-			cursor: pointer;
-		}
-		.rf-fu-itm-st {
-			height: 0;
-			margin: 0;
-		}
-
-		.rf-fu-itm.itm-error {
-			background: #f0dfd8;
-		}
-		.rf-fu-itm.itm-success {
-			background: #dff0d8;
-		}
-		.msg-hidden {
-			display: none;
-		}
-	</style>
+  <h:head>
+    <h:outputStylesheet library="css" name="modal-import_site.css" />
+  </h:head>
 
 	<h:form id="form-import-site">
-	<div class="modal hide" id="modal-import-site" data-backdrop="static">
+	<div class="modal hide" id="modal-import-site">
 		<div class="modal-header">
 			<!-- <a class="modal-close" data-dismiss="modal" title="Close">Close</a> -->
 			<h3>#{msg['redirect.admin.import.h']}</h3>
@@ -106,7 +43,7 @@
 			</div><!-- End .control-group -->
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.import.cancel']}</a>
+			<a href="#" class="btn data-dismiss-modal">#{msg['redirect.admin.import.cancel']}</a>
 			<a href="#" id="button-import-site" class="btn btn-primary" onclick="$('.rf-fu-btn-cnt-upl').click();">#{msg['redirect.admin.import.but']}</a>
 		</div>
 	</div><!-- end .modal -->
@@ -131,10 +68,12 @@
 				var wasUpdated = fileItem.hasClass(classError) || fileItem.hasClass(classSuccess);
 				// If the file was already uploaded and the status of processing
 				// is yet unknown, set the status depending on the error message
-				if ((msg == msgDone) &amp;&amp; (!wasUpdated) ){
-					var isLast = (idx == items.length - 1); 
-					updateFileStatus(fileItem, isLast);					
-					return fileItem;
+				if ((msg == msgDone)) {
+          if (!wasUpdated) {
+            var isLast = (idx == items.length - 1);
+            updateFileStatus(fileItem, isLast);
+            return fileItem;
+          }
 				}				
 			});
 		}
@@ -174,6 +113,7 @@
 			$(".rf-fu-lst").append(noSitesDiv);
 			$(".rf-fu-itm").addClass("attachment");
 		});
+
 	</script>
 
 </ui:fragment>

@@ -7,7 +7,7 @@
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
 	<h:form id="menu_form" class="menu_form">
-		<nav id="local-nav">
+		<div id="local-nav">
 			<ul class="nav nav-list">
 				<li id="sites"> <!-- Sites List / begin -->
 					<div>
@@ -20,7 +20,7 @@
 								<a4j:commandLink action="#{rdrs.setSiteName(s.name)}" styleClass="site-link" onclick="$('.edit-group').hide();" render="@form :sum_form :add_form :form-select-node">
 									<b:icon value="globe" color="grey" /> #{s.name}
 								</a4j:commandLink>
-								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
+								<span class="dropdown-toggle"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
 								<ul class="dropdown-menu">
 									<li>
 										<a4j:mediaOutput element="a" cacheable="false" createContent="#{exporter.exportSite}">
@@ -35,7 +35,7 @@
 						</ui:repeat>
 					</ul>
 				</li> <!-- Sites List / end -->
-				<li id="sites"> <!-- Spaces List / begin -->
+				<li id="spaces"> <!-- Spaces List / begin -->
 					<div>
 						<span class="toggle" style="background: none;">#{msg['redirect.admin.menu.spaces']}</span>
 						<h:panelGroup styleClass="more" rendered="#{rdrs.spaces.size() > 5}">#{msg['redirect.admin.menu.more']}</h:panelGroup>
@@ -46,7 +46,7 @@
 								<a href="#" class="space-link" onclick="event.stopPropagation(); $(this).next('.dropdown-toggle').click(); return false;" title="#{s.name}" >
 									<b:icon value="globe" color="grey" /> #{rdrs.getSpaceLabel(s.name)}
 								</a>
-								<span class="dropdown-toggle" data-toggle="dropdown"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
+								<span class="dropdown-toggle"><i class="icon-opened icon-gray">#{msg['redirect.admin.menu.actions']}</i></span>
 								<ul class="dropdown-menu">
 									<li>
 										<a4j:mediaOutput element="a" cacheable="false" createContent="#{exporter.exportSite}">
@@ -63,10 +63,10 @@
 				</li> <!-- Sites List / end -->
 				<li id="server">
 					<ul>
-						<li><a href="#modal-import-site" class="import-site" data-toggle="modal" id="import-site"><i class="icon-download-alt icon-gray"></i> #{msg['redirect.admin.menu.import']}</a></li>
+						<li><a href="#modal-import-site" class="import-site data-toggle-modal" id="import-site"><i class="icon-download-alt icon-gray"></i> #{msg['redirect.admin.menu.import']}</a></li>
 					</ul>
 				</li>
 			</ul>
-		</nav>
+		</div>
 	</h:form>
 </ui:fragment>

@@ -7,7 +7,7 @@
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
 	<h:form id="form-select-node">
-	<div class="modal hide" id="modal-select-node" data-backdrop="static">
+	<div class="modal hide" id="modal-select-node">
 		<h:panelGroup layout="block" id="modal-select-node-wrapper">
 			<div class="modal-header">
 				<!-- <button class="modal-close" data-dismiss="modal">Close</button> -->
@@ -16,6 +16,7 @@
 			<div class="modal-body">
 				<div class="window-list">
 					<ul class="clearfix">
+            <li style="display: none;"></li>
 						<ui:repeat value="#{rdrEdit.currentNodeNames}" var="n" varStatus="status">
 							<li><label for="#{n}" class="#{status.first ? 'active' : ''}"><input class="radio-node" type="radio" id="#{n}" name="user-group" checked="#{status.first ? 'checked' : ''}"/>#{n}</label></li>
 						</ui:repeat>
@@ -23,7 +24,7 @@
 				</div><!-- End .windowList -->
 			</div><!-- End .modal-body -->
 			<div class="modal-footer">
-				<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.select.but.cancel']}</a>
+				<a href="#" class="btn data-dismiss-modal">#{msg['redirect.admin.select.but.cancel']}</a>
 				<a href="#" id="button-select-node" class="btn btn-primary" onclick="selectNodeFromList(); return false;">#{msg['redirect.admin.select.but.select']}</a>
 			</div>
 		</h:panelGroup>

@@ -538,6 +538,11 @@
 	color: #333333;
 }
 
+.RedirectAdmin #node-mappings legend {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
 .RedirectAdmin legend i {
 	margin-top: 3px;
 	margin-right: 3px;

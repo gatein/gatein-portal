@@ -7,7 +7,7 @@
 			 xmlns:b="http://richfaces.org/sandbox/bootstrap">
 
 	<h:form id="form-delete-redirect">
-	<div class="modal hide" id="modal-delete-redirect" data-backdrop="static">
+	<div class="modal hide" id="modal-delete-redirect">
 		<div class="modal-header">
 			<!-- <button class="modal-close" data-dismiss="modal">Close</button> -->
 			<h3>#{msg['redirect.admin.delete.h']}</h3>
@@ -20,7 +20,7 @@
 			</p>
 		</div><!-- End .modal-body -->
 		<div class="modal-footer">
-			<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">#{msg['redirect.admin.delete.cancel']}</a>
+			<a href="#" class="btn data-dismiss-modal">#{msg['redirect.admin.delete.cancel']}</a>
 			<h:commandLink styleClass="btn btn-danger" onclick="$('#modal-delete-redirect').modal('hide')">
 				<f:ajax event="action" render=":sum_form" listener="#{rdrEdit.deleteRedirect()}" onevent="showAlert('#{msg['redirect.admin.delete.alert.h']}', '#{msg['redirect.admin.delete.alert.msg']}', 'alert-danger')"/>#{msg['redirect.admin.delete.delete']}
 			</h:commandLink>

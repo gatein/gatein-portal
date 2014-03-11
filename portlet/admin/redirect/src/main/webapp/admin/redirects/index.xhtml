@@ -87,7 +87,7 @@
 
 		<!-- Edit Redirect Table -->
 		<h:form id="edit_form" styleClass="form-horizontal">
-		<h:panelGroup id="edit_group" styleClass="edit-group" style="display: none;">
+		<h:panelGroup id="edit_group" styleClass="edit-group" style="display: none;" layout="block">
 			<table id="edit_redirect-table" class="table table-striped" summary="Redirect configuration edit">
 				<tbody>
 					<tr style="display: none;"><td></td></tr>
@@ -135,8 +135,7 @@
 									<legend>
 										<span class="toggle">#{msg['redirect.admin.site.redirect.conditions']}</span>
 									</legend>
-									<div>
-										<h:panelGroup id="conditions-group" styleClass="control-group">
+										<h:panelGroup id="conditions-group" styleClass="control-group" layout="block">
 											<div class="alert" style="#{empty rdrEdit.conditions ? '' : 'display: none;'}">#{msg['redirect.admin.site.redirect.conditions.msg']}</div>
 											<b:commandButton styleClass="btn btn-small inside-table add-condition" value="#{msg['redirect.admin.site.redirect.conditions.add']}" action="#{rdrEdit.addCondition}" oncomplete="$('#conditionOp').text('#{msg['redirect.admin.condition.h.condition.add']}'); $('#modal-condition').modal('show'); $('input[id$=&quot;condition_name&quot;]').focus();" execute="@this" render=":condition_form" />
 											<table class="table table-striped button-small" id="conditions-table" summary="Redirect conditions">
@@ -197,11 +196,11 @@
 														</td>
 													</tr>
 													</ui:repeat>
+                          <tr style="display: none"><td></td></tr>
 												</tbody>
 											</table>
 											<h:outputScript>sortable();</h:outputScript>
 										</h:panelGroup><!-- End .control-group -->
-									</div>
 								</fieldset>
 								<fieldset id="node-mappings">
 									<legend>
@@ -214,7 +213,7 @@
 												<label class="checkbox">
 													<h:selectBooleanCheckbox name="matching" id="matching" value="#{rdrEdit.useNodeNameMatching}"/>#{msg['redirect.admin.condition.mapping.match.msg']}
 												</label>
-												<i class="icon-info-sign icon-gray tooltipTrigger" title="#{msg['redirect.admin.condition.mapping.match.origin']}" data-placement="right">#{msg['redirect.admin.condition.mapping.match.origin']}</i>
+												<i class="icon-info-sign icon-gray tooltipTrigger data-placement-right" title="#{msg['redirect.admin.condition.mapping.match.origin']}">#{msg['redirect.admin.condition.mapping.match.origin']}</i>
 											</div>
 										</div><!-- End .control-group -->
 										<h:panelGroup layout="block" id="mappingsWrapper" styleClass="control-group">
@@ -252,7 +251,7 @@
 																	<b:commandButton
 																			styleClass="tooltipTrigger select-node"
 																			title="#{msg['redirect.admin.condition.mapping.view']}"
-																			style="width: 40px; margin-left: -5px;"
+																			style="width: 40px; margin-left: -5px; height: 30px;"
 																			render="modal-select-node-wrapper"
 																			onclick="nodeInput = $(this).prev('input')"
 																			oncomplete="showNodeList()"
@@ -272,7 +271,7 @@
 																	<b:commandButton
 																			styleClass="tooltipTrigger select-node"
 																			title="#{msg['redirect.admin.condition.mapping.view']}"
-																			style="width: 40px; margin-left: -5px;"
+																			style="width: 40px; margin-left: -5px; height: 30px;"
 																			render="modal-select-node-wrapper"
 																			onclick="nodeInput = $(this).prev('input')"
 																			oncomplete="showNodeList()"
@@ -288,6 +287,7 @@
 															</td>
 														</tr>
 														</ui:repeat>
+                            <tr style="display: none"><td></td></tr>
 													</tbody>
 												</table>
 											</div>
@@ -301,7 +301,7 @@
 													<f:selectItem itemValue="ROOT" itemLabel="#{msg['redirect.admin.condition.mapping.item.root']}" />
 													<f:selectItem itemValue="COMMON_ANCESTOR_NAME_MATCH" itemLabel="#{msg['redirect.admin.condition.mapping.item.ancestor']}" />
 												</h:selectOneMenu>
-												<i class="icon-info-sign icon-gray tooltipTrigger" data-placement="right" title="#{msg['redirect.admin.condition.mapping.unresolved.msg']}">#{msg['redirect.admin.condition.mapping.unresolved.msg']}</i>
+												<i class="icon-info-sign icon-gray tooltipTrigger data-placement-right" title="#{msg['redirect.admin.condition.mapping.unresolved.msg']}">#{msg['redirect.admin.condition.mapping.unresolved.msg']}</i>
 											</div>
 										</div><!-- End .control-group -->
 									</div>

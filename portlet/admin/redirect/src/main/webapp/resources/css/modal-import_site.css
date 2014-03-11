@@ -1,0 +1,64 @@
+.rf-fu {
+    border: 0;
+    width: 100%;
+}
+.rf-fu-hdr {
+    background: none;
+    border: 0;
+}
+.rf-fu-btn-add {
+    background: none;
+    border: 0;
+}
+.rf-fu-btn-cnt-add {
+    background: none;
+    font-size: 14px;
+}
+.rf-fu-btn-clr {
+    background: none;
+    border: 0;
+}
+.rf-fu-btn-cnt-clr {
+    background: none;
+    font-size: 14px;
+}
+.rf-fu-btn-upl {
+    visibility: hidden;
+}
+
+.rf-fu-itm {
+    border: 1px solid #ccc;
+    background-color: #eee;
+    padding: 3px 10px;
+    display: inline-block;
+    border-radius: 3px;
+    line-height: 25px;
+    width: 94%;
+    margin-top: 7px;
+    margin-left: 5px;
+}
+.rf-fu-itm-lbl {
+    font-size: 14px;
+}
+.rf-fu-itm-lnk {
+    color: #AAAAAA;
+    font-size: 14px;
+    text-decoration: none;
+}
+.rf-fu-inp {
+    cursor: pointer;
+}
+.rf-fu-itm-st {
+    height: 0;
+    margin: 0;
+}
+
+.rf-fu-itm.itm-error {
+    background: #f0dfd8;
+}
+.rf-fu-itm.itm-success {
+    background: #dff0d8;
+}
+.msg-hidden {
+    display: none;
+}
