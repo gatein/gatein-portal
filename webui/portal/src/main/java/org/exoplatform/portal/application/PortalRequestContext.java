@@ -591,7 +591,7 @@ public class PortalRequestContext extends WebuiRequestContext {
      * @param portletWindowId The ID of portlet window contributing markup header
      */
     public void addExtraMarkupHeader(Element element, String portletWindowId) {
-        element.setAttribute("class", "ExHead-" + portletWindowId);
+        element.setAttribute("id", "ExHead-" + portletWindowId + generateUUID("_rnd_"));
         if (this.extraMarkupHeaders == null) {
             this.extraMarkupHeaders = new ArrayList<Element>();
         }

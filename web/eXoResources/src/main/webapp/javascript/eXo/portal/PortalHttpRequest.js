@@ -480,7 +480,7 @@
 	      {
 	        for (var i = 0; i < portletResponses.length; i++)
 	        {
-	          head.find(".ExHead-" + portletResponses[i].portletId + ":not(title)").remove();
+	          head.find("[id^='ExHead-" + portletResponses[i].portletId + "']:not(title)").remove();
 	        }
 	      }
 	
@@ -488,7 +488,7 @@
 	      {
 	        $(response.data).find(".PORTLET-FRAGMENT").each(function()
 	        {
-	          head.find(".ExHead-" + this.parentNode.id.replace("EditMode-", "") + ":not(title)").remove();
+	          head.find("[id^='ExHead-" + this.parentNode.id.replace("EditMode-", "") + "']:not(title)").remove();
 	        });
 	      }
 	    }
@@ -496,10 +496,10 @@
 	    {
 	    	//This code will be run after we've finished update html
 	    	var portlets = $("body .PORTLET-FRAGMENT");
-	    	var exHeads = head.find("[class^='ExHead-']:not(title)");
+	    	var exHeads = head.find("[id^='ExHead-']:not(title)");
 	    	exHeads.each(function()
 			{
-	    		var portletId = this.className.substring(7);
+	    		var portletId = this.id.substring(7, this.id.indexOf('_rnd_'));
 	    		var del = true;
 	    		portlets.each(function() {
 	    			if (this.parentNode.id.replace("EditMode-", "") === portletId) {
