@@ -67,7 +67,7 @@ public class ImpersonationUtils {
      * @param portalContextPath context-path of portal (assumption is that ImpersonationServlet is available on this path too)
      * @return uri to send to impersonationServlet including all parameters
      */
-    public static String createFinishImpersonationURL(String portalContextPath) {
+    public static String createExitImpersonationURL(String portalContextPath) {
         // Redirect to ImpersonationServlet and trigger stop of Impersonation session
         String impersonationServletUri = portalContextPath + ImpersonationServlet.IMPERSONATE_URL_SUFIX;
 

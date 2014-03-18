@@ -339,7 +339,7 @@ public class UIPortal extends UIContainer {
             if (identity instanceof ImpersonatedIdentity) {
 
                 // Redirect to ImpersonationServlet and trigger stop of Impersonation session
-                String impersonationRedirectURI = ImpersonationUtils.createFinishImpersonationURL(req.getContextPath());
+                String impersonationRedirectURI = ImpersonationUtils.createExitImpersonationURL(req.getContextPath());
                 prContext.sendRedirect(impersonationRedirectURI);
                 return;
             }

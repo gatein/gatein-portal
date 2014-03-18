@@ -35,6 +35,8 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.services.security.Identity;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.url.navigation.NavigationResource;
@@ -55,6 +57,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.gatein.web.security.impersonation.ImpersonatedIdentity;
 import org.gatein.web.security.impersonation.ImpersonationUtils;
 
 /**
@@ -307,11 +310,11 @@ public class UIListUsers extends UISearch {
         public void execute(Event<UIListUsers> event) throws Exception {
             UIListUsers uiListUsers = event.getSource();
             String userName = event.getRequestContext().getRequestParameter(OBJECTID);
+            UIApplication uiApplication = event.getRequestContext().getUIApplication();
 
             OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
             User userToImpersonate = service.getUserHandler().findUserByName(userName, UserStatus.ANY);
             if (userToImpersonate == null) {
-                UIApplication uiApplication = event.getRequestContext().getUIApplication();
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,
                         ApplicationMessage.WARNING));
                 return;
@@ -319,9 +322,16 @@ public class UIListUsers extends UISearch {
 
             UserACL userACL = uiListUsers.getApplicationComponent(UserACL.class);
             if (!userACL.hasImpersonateUserPermission(userToImpersonate)) {
-                UIApplication uiApplication = event.getRequestContext().getUIApplication();
                 String[] args = new String[] { userName };
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.insufficient-permission-to-impersonate-user", args,
+                        ApplicationMessage.WARNING));
+                return;
+            }
+
+            ConversationState currentConversationState = ConversationState.getCurrent();
+            Identity currentIdentity = currentConversationState.getIdentity();
+            if (currentIdentity instanceof ImpersonatedIdentity) {
+                uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.already-impersonated", null,
                         ApplicationMessage.WARNING));
                 return;
             }

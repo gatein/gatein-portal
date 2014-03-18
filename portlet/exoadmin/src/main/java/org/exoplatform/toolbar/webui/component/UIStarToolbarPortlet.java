@@ -38,7 +38,7 @@ public class UIStarToolbarPortlet extends UIPortletApplication {
     public String getLogoutMessageKey() {
         Identity identity = ConversationState.getCurrent().getIdentity();
         if (identity instanceof ImpersonatedIdentity) {
-            return "UIStarToolbarPortlet.item.FinishImpersonation";
+            return "UIStarToolbarPortlet.item.ExitImpersonation";
         } else {
             return "UIStarToolbarPortlet.item.Logout";
         }
