@@ -60,6 +60,54 @@ public class HTMLEntityEncoder extends EntityEncoder {
      */
     private static final char[] IMMUNE_HTMLATTR = { ',', '.', '-', '_' };
 
+    public String encodeIfNotEncoded(String input) {
+        ParameterValidation.throwIllegalArgExceptionIfNull(input, "String");
+        if (!isEncoded(input)) {
+            return encode(input);
+        }
+
+        return input;
+    }
+
+    /**
+     * Best-effort basis for determining whether an input is already encoded
+     *
+     * @param input the text to verify
+     * @return whether or not the text seems to be encoded
+     */
+    public final boolean isEncoded(String input) {
+
+        int indexFirstEntityStart = input.indexOf('&');
+
+        if (indexFirstEntityStart == -1) {
+            return false; // no & at all, so, definitely not encoded
+        }
+
+        int indexFirstEntityFinish = input.indexOf(';', indexFirstEntityStart);
+
+        if (indexFirstEntityFinish == -1) {
+            return false; // no ; at all, so, definitely not encoded
+        }
+
+        String firstEntity = input.substring(indexFirstEntityStart + 1, indexFirstEntityFinish);
+
+        if ("".equals(firstEntity)) {
+            return false;
+            // we have something like "&;", so, certainly not encoded... if it were encoded,
+            // the first ampersand would have been replaced by &amp;, and it would have been caught
+        }
+
+        int found = reverse(firstEntity);
+        if (found > 0) {
+            return true;
+        }
+
+        // we have not found a positive indication that firstEntity is indeed something that translates into a single
+        // char, so, if it starts with "#x", then it's a unicode number... otherwise, let's be conservative and report
+        // that this is not encoded
+        return firstEntity.startsWith("#x");
+    }
+
     /**
      * Encode data for use in HTML
      *

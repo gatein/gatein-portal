@@ -51,4 +51,33 @@ public class TestHTMLEntityEncoder extends TestCase {
                 "&lt;a&#x20;href&#x3d;&quot;http&#x3a;&#x2f;&#x2f;example.com&#x2f;&#x3f;name1&#x3d;value1&amp;name2&#x3d;value2&amp;name3&#x3d;a&#x2b;b&quot;&gt;link&lt;&#x2f;a&gt;",
                 htmlEncoder.encodeHTMLAttribute("<a href=\"http://example.com/?name1=value1&name2=value2&name3=a+b\">link</a>"));
     }
+
+    public void testIsEncoded() {
+        assertTrue(htmlEncoder.isEncoded("&ccedil;&atilde;o"));
+        assertFalse(htmlEncoder.isEncoded("not encoded"));
+        assertFalse(htmlEncoder.isEncoded("not encoded;"));
+        assertTrue(htmlEncoder.isEncoded("encoded&#x3b;"));
+        assertFalse(htmlEncoder.isEncoded("&not encoded;"));
+        assertFalse(htmlEncoder.isEncoded("&not encoded"));
+        assertFalse(htmlEncoder.isEncoded("not encoded&;"));
+        assertTrue(htmlEncoder.isEncoded("encoded&amp;"));
+        assertTrue(htmlEncoder.isEncoded("&amp;encoded;"));
+        assertTrue(htmlEncoder.isEncoded("&lt;h1&gt;HELLO WORLD&lt;&#x2f;h1&gt;"));
+        assertTrue(htmlEncoder.isEncoded("alert&#x28;&#x27;HELLO WORLD&#x27;&#x29;"));
+    }
+
+    public void testEncodeIfNotEncoded() {
+        assertEquals("&lt;h1&gt;HELLO WORLD&lt;&#x2f;h1&gt;", htmlEncoder.encodeIfNotEncoded("<h1>HELLO WORLD</h1>"));
+        assertEquals("&ccedil;&atilde;o", htmlEncoder.encodeIfNotEncoded("&ccedil;&atilde;o"));
+        assertEquals("not encoded", htmlEncoder.encodeIfNotEncoded("not encoded"));
+        assertEquals("not encoded&#x3b;", htmlEncoder.encodeIfNotEncoded("not encoded;"));
+        assertEquals("encoded&#x3b;", htmlEncoder.encodeIfNotEncoded("encoded&#x3b;"));
+        assertEquals("&amp;not encoded&#x3b;", htmlEncoder.encodeIfNotEncoded("&not encoded;"));
+        assertEquals("&amp;not encoded", htmlEncoder.encodeIfNotEncoded("&not encoded"));
+        assertEquals("not encoded&amp;&#x3b;", htmlEncoder.encodeIfNotEncoded("not encoded&;"));
+        assertEquals("encoded&amp;", htmlEncoder.encodeIfNotEncoded("encoded&amp;"));
+        assertEquals("&amp;encoded;", htmlEncoder.encodeIfNotEncoded("&amp;encoded;"));
+        assertEquals("&lt;h1&gt;HELLO WORLD&lt;&#x2f;h1&gt;", htmlEncoder.encodeIfNotEncoded("&lt;h1&gt;HELLO WORLD&lt;&#x2f;h1&gt;"));
+        assertEquals("alert&#x28;&#x27;HELLO WORLD&#x27;&#x29;", htmlEncoder.encodeIfNotEncoded("alert&#x28;&#x27;HELLO WORLD&#x27;&#x29;"));
+    }
 }
