@@ -7,9 +7,9 @@
 %>
 </div>
   <script type="text/javascript">
-  <!--CDTATA
+  // <!--<![CDATA[
   <%=jsManager.getJavaScripts()%>
-  -->
+  // ]]>-->
   </script>
 </body>
 </html>

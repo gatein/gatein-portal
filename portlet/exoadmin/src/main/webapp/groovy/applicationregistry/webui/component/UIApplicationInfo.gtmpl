@@ -1,6 +1,7 @@
 <%
 import org.gatein.common.text.EntityEncoder;
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
+import org.exoplatform.webui.application.WebuiRequestContext;
 def application = uicomponent.getApplication();
 def category = uicomponent.getApplicationCategory();
 String name = application.getApplicationName();
@@ -12,6 +13,7 @@ EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 String categoryDisplayName = encoder.encode(category.getDisplayName(true));
 String applicationDisplayName = encoder.encode(application.getDisplayName());
 String applicationDescription = encoder.encode(application.getDescription());
+String idSrcBG = WebuiRequestContext.generateUUID("srcBG");
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
 	<div class="UIBreadcumb">
@@ -24,11 +26,11 @@ String applicationDescription = encoder.encode(application.getDescription());
 	</div>
 	<div class="Application">
 			<div class="PortletIcons">
-					<img src="$srcBG" id="srcBG" alt=""/>
+					<img src="$srcBG" id="$idSrcBG" alt=""/>
 
 					<script type="text/javascript">
                     // <!--<![CDATA[
-                        document.getElementById("srcBG").onerror = function() { this.src='$srcBGError'; };
+                        document.getElementById("$idSrcBG").onerror = function() { this.src='$srcBGError'; };
                     // ]]>-->
 					</script>
 			</div>
