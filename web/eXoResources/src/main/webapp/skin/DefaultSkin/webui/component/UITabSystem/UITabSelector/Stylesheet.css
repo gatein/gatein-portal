@@ -110,6 +110,16 @@
 	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission-rt.gif) no-repeat right; /* orientation=rt */
 }
 
+.UITabSelector .FlatTabStyle .UIListMoveAppsPermissionSelector24x24Icon {
+    background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/Catergory.gif) no-repeat left; /* orientation=lt */
+    background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/Catergory.gif) no-repeat right; /* orientation=rt */
+}
+
+.UITabSelector .FlatTabStyle .UIListMoveContainersPermissionSelector24x24Icon {
+    background: url(/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/PortalContainerIcon.gif) no-repeat left; /* orientation=lt */
+    background: url(/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/PortalContainerIcon.gif) no-repeat right; /* orientation=rt */
+}
+
 .UITabSelector .FlatTabStyle	a.Title {
 	margin-left: 30px; /* orientation=lt */
 	margin-right: 30px; /* orientation=rt */
