@@ -24,12 +24,9 @@ When the gatein.dev property is set it will build and package one or several ser
 
 The various values for gatein.dev are:
 
+- eap630     : JBoss EAP 6.3.0.Alpha1
 - tomcat7    : Tomcat 7
-- jbossas711 : JBoss AS 7.1.1.Final
-- jbossas713 : JBoss AS 7.1.3.Final
 - jetty      : Jetty (unsupported at the moment)
-
-
 
 Build instructions
 ==================
@@ -76,38 +73,28 @@ There are server specific equivalents that have to be used when packaging severa
 
 
 
-  Packaging with JBoss-AS-7.x.x
-  -----------------------------------
+  Packaging with JBoss EAP 6.3.0.Alpha1
+  -------------------------------------
 
-If you don’t have an existing JBoss AS distribution, the build can automatically download it for you.
-
-Issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=$AS7_LABEL -Ddownload
-
-Where $AS7_LABEL is one of: jbossas711, or jbossas713.
-
-
-If you have an existing JBoss-AS-7.x.x distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-as-7.x.x directory.
+First, you'll need to download JBoss EAP 6.3.0.Alpha1 from JBoss.org's download page: http://www.jboss.org/jbossas/downloads/ . 
+Then, unpack it on SERVERS_DIR, so that you get SERVERS_DIR/jboss-eap-6.3 directory. 
 
 In this case you can issue the following command:
 
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=$AS7_LABEL
+mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=eap630
 
+For more finegrained control you can specify the directory under SERVERS_DIR that contains the jboss-eap-6.3 that you wish to use for packaging.
+You do that by using -Dserver.name=$NAME.
 
-For more finegrained control you can specify the directory under $SERVERS_DIR that contains the jboss-as-7.x.x that you wish to use for packaging.
-You do that by using either -Dserver.name=$NAME or -Djboss7.name=$NAME.
+IMPORTANT: The eap630 profile uses the same artifact versions as released by JBoss EAP 6.3.0.Alpha1. This means that it's guaranteed to work only with that version. Using another EAP version might or might not work. 
 
-IMPORTANT: Make sure that your $AS7_LABEL matches the JBoss AS version in your specified directory.
+The packaged GateIn is available in packaging/jboss/pkg/target/jboss-eap
 
-
-The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.
-
-To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
+To start it, go to jboss-eap directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
 
 Access the portal at: http://localhost:8080/portal
 
-For more info about JBoss AS7 support see packaging/jboss-as7/README.txt
+For more info about JBoss AS support see packaging/jboss/README.txt
 
 
 
@@ -177,12 +164,7 @@ mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Ddownload
 
 You can also specify server names for each container - for example:
 
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Djboss7.name=jboss-7.1.0 -Dtomcat7.name=tomcat-7.0.19 -Djetty.name=jetty-6.0.24
-
-
-For JBoss AS7 packaging the version used in this case would be 7.1.1.Final. If you want to use a different version you have to specify it with -Dversion.jboss.as=.
-Valid values are: 7.1.1.Final, and 7.1.3.Final
-
+mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Djboss.name=jboss-eap-6.3 -Dtomcat7.name=tomcat-7.0.19 -Djetty.name=jetty-6.0.24
 
 
 Release instructions

@@ -1442,6 +1442,44 @@ memory option properties. This should be removed when we can just set the compil
       </properties>
     </profile>
     <profile>
+      <id>pkg-jbossas</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-servers-dir-specified</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <message>"
+
+                        Build profile 'jbossas' is no longer supported. You may want to use: 'eap630'.
+
+                        "
+                      </message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>pkg-jbossas710</id>
       <activation>
         <property>
@@ -1466,7 +1504,45 @@ memory option properties. This should be removed when we can just set the compil
                     <requireProperty>
                       <message>"
 
-                        Build profile 'jbossas710' is no longer supported. You may want to use: 'jbossas711'.
+                        Build profile 'jbossas710' is no longer supported. You may want to use: 'eap630'.
+
+                        "
+                      </message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>pkg-jbossas711</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas711</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-servers-dir-specified</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <message>"
+
+                        Build profile 'jbossas711' is no longer supported. You may want to use: 'eap630'.
 
                         "
                       </message>
@@ -1504,7 +1580,159 @@ memory option properties. This should be removed when we can just set the compil
                     <requireProperty>
                       <message>"
 
-                        Build profile 'jbossas712' is no longer supported. You may want to use: 'jbossas713'.
+                        Build profile 'jbossas712' is no longer supported. You may want to use: 'eap630'.
+
+                        "
+                      </message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>pkg-jbossas713</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas713</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-servers-dir-specified</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <message>"
+
+                        Build profile 'jbossas713' is no longer supported. You may want to use: 'eap630'.
+
+                        "
+                      </message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>pkg-jbossas720</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas720</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-servers-dir-specified</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <message>"
+
+                        Build profile 'jbossas720' is no longer supported. You may want to use: 'eap630'.
+
+                        "
+                      </message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>pkg-eap</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>eap</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-servers-dir-specified</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <message>"
+
+                        Build profile 'eap' is no longer supported. You may want to use: 'eap630'.
+
+                        "
+                      </message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>pkg-eap620</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>eap620</value>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>check-servers-dir-specified</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <message>"
+
+                        Build profile 'eap620' is no longer supported. You may want to use: 'eap630'.
 
                         "
                       </message>

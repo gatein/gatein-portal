@@ -43,7 +43,7 @@
         <module>common</module>
         <module>tomcat</module>
         <!--<module>jetty</module>-->
-        <module>jboss-as7</module>
+        <module>jboss</module>
       </modules>
     </profile>
     <profile>
@@ -86,81 +86,16 @@
       </modules>
     </profile>
     <profile>
-      <id>pkg-jbossas</id>
+      <id>pkg-eap630</id>
       <activation>
         <property>
           <name>gatein.dev</name>
-          <value>jbossas</value>
+          <value>eap630</value>
         </property>
       </activation>
       <modules>
         <module>common</module>
-        <module>jboss-as7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas711</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas711</value>
-        </property>
-      </activation>
-      <modules>
-        <module>common</module>
-        <module>jboss-as7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas713</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas713</value>
-        </property>
-      </activation>
-      <modules>
-        <module>common</module>
-        <module>jboss-as7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas720</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas720</value>
-        </property>
-      </activation>
-      <modules>
-        <module>common</module>
-        <module>jboss-as7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-eap</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>eap</value>
-        </property>
-      </activation>
-      <modules>
-        <module>common</module>
-        <module>jboss-as7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-eap620</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>eap620</value>
-        </property>
-      </activation>
-      <modules>
-        <module>common</module>
-        <module>jboss-as7</module>
+        <module>jboss</module>
       </modules>
     </profile>
   </profiles>

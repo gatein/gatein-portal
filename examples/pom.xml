@@ -54,56 +54,11 @@
       </modules>
     </profile>
     <profile>
-      <id>pkg-jbossas711</id>
+      <id>pkg-eap630</id>
       <activation>
         <property>
           <name>gatein.dev</name>
-          <value>jbossas711</value>
-        </property>
-      </activation>
-      <modules>
-        <module>extension</module>
-        <module>portal</module>
-        <module>portlets</module>
-        <module>skins</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas713</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas713</value>
-        </property>
-      </activation>
-      <modules>
-        <module>extension</module>
-        <module>portal</module>
-        <module>portlets</module>
-        <module>skins</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-jbossas720</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>jbossas720</value>
-        </property>
-      </activation>
-      <modules>
-        <module>extension</module>
-        <module>portal</module>
-        <module>portlets</module>
-        <module>skins</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-eap</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>eap</value>
+          <value>eap630</value>
         </property>
       </activation>
       <modules>
