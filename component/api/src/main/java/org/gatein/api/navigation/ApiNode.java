@@ -43,6 +43,7 @@ import org.gatein.api.EntityNotFoundException;
 import org.gatein.api.Portal;
 import org.gatein.api.PortalRequest;
 import org.gatein.api.Util;
+import org.gatein.api.common.Attributes;
 import org.gatein.api.common.i18n.LocalizedString;
 import org.gatein.api.internal.ObjectToStringBuilder;
 import org.gatein.api.internal.Parameters;
@@ -62,6 +63,7 @@ public class ApiNode implements Node {
     private String resolvedDisplayName;
     private String resolvedURI;
     private boolean displayNameChanged;
+    private Attributes attributes;
 
     private final SiteId siteId;
 
@@ -202,6 +204,17 @@ public class ApiNode implements Node {
     @Override
     public Node getParent() {
         return context.getParentNode();
+    }
+
+    /**
+     * @see org.gatein.api.navigation.Node#getAttributes()
+     */
+    @Override
+    public Attributes getAttributes() {
+        if (attributes == null) {
+            attributes = new ApiNodeAttributes(context);
+        }
+        return attributes;
     }
 
     @Override

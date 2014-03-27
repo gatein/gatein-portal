@@ -30,7 +30,8 @@ import org.exoplatform.portal.mop.page.PageKey;
 public class TestScope extends AbstractGateInTest {
 
     public void testBranchShape() {
-        NodeState nodeState = new NodeState("", null, -1, -1, Visibility.DISPLAYED, PageKey.parse("portal::classic::home"), false);
+        NodeState nodeState = new NodeState("", null, -1, -1, Visibility.DISPLAYED,
+                PageKey.parse("portal::classic::home"), false, AttributesState.EMPTY);
 
         //
         Scope scope0 = GenericScope.branchShape(new String[0], Scope.CHILDREN);

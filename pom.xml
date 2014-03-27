@@ -314,6 +314,12 @@
         <version>${org.gatein.api.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.gatein.api</groupId>
+        <artifactId>gatein-api</artifactId>
+        <type>test-jar</type>
+        <version>${org.gatein.api.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.gatein.common</groupId>
         <artifactId>common-common</artifactId>
         <version>${org.gatein.common.version}</version>

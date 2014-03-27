@@ -23,8 +23,10 @@ package org.gatein.api.navigation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Comparator;
 import java.util.Date;
@@ -33,6 +35,7 @@ import java.util.NoSuchElementException;
 
 import org.gatein.api.AbstractApiTest;
 import org.gatein.api.EntityAlreadyExistsException;
+import org.gatein.api.common.Attributes;
 import org.gatein.api.navigation.Visibility.Status;
 import org.gatein.api.page.PageId;
 import org.junit.Before;
@@ -80,7 +83,7 @@ public class ApiNodeTest extends AbstractApiTest {
     @Before
     public void before() throws Exception {
         super.before();
-        
+
         createSite(defaultSiteId);
 
         navigation = portal.getNavigation(defaultSiteId);
@@ -414,6 +417,13 @@ public class ApiNodeTest extends AbstractApiTest {
         assertVisibility(false, Status.SYSTEM, null, c);
     }
 
+    @Test
+    public void attributesNotNull() {
+        Node c = root.addChild("child");
+        assertNotNull(c.getAttributes());
+        assertEquals(0, c.getAttributes().size());
+    }
+
     public Node getRoot(boolean expanded) {
         return navigation.getRootNode(expanded ? Nodes.visitChildren() : Nodes.visitNone());
     }
@@ -432,4 +442,5 @@ public class ApiNodeTest extends AbstractApiTest {
         assertEquals(expectedFlag, actualNode.getVisibility().getStatus());
         assertEquals(expectedDate, actualNode.getVisibility().getPublicationDate());
     }
+
 }

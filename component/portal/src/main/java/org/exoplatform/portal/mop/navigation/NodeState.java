@@ -63,6 +63,9 @@ public final class NodeState implements Serializable {
         /** . */
         private boolean restrictOutsidePublicationWindow;
 
+        /** . */
+        private AttributesState attributesState;
+
         public Builder() {
             this.icon = null;
             this.label = null;
@@ -71,6 +74,7 @@ public final class NodeState implements Serializable {
             this.visibility = Visibility.DISPLAYED;
             this.pageRef = null;
             this.restrictOutsidePublicationWindow = false;
+            this.attributesState = null;
         }
 
         /**
@@ -90,6 +94,7 @@ public final class NodeState implements Serializable {
             this.visibility = state.visibility;
             this.pageRef = state.pageRef;
             this.restrictOutsidePublicationWindow = state.restrictOutsidePublicationWindow;
+            this.attributesState = state.attributesState;
         }
 
         public Builder label(String label) {
@@ -127,9 +132,14 @@ public final class NodeState implements Serializable {
             return this;
         }
 
+        public Builder attributes(AttributesState attributes) {
+            this.attributesState = attributes;
+            return this;
+        }
+
         public NodeState build() {
             return new NodeState(label, icon, startPublicationTime, endPublicationTime, visibility, pageRef,
-                    restrictOutsidePublicationWindow);
+                    restrictOutsidePublicationWindow, attributesState);
         }
     }
 
@@ -154,8 +164,12 @@ public final class NodeState implements Serializable {
     /** . */
     private final boolean restrictOutsidePublicationWindow;
 
+    /** . */
+    private final AttributesState attributesState;
+
     public NodeState(String label, String icon, long startPublicationTime, long endPublicationTime, Visibility visibility,
-            PageKey pageRef, boolean restrictOutsidePublicationWindow) {
+            PageKey pageRef, boolean restrictOutsidePublicationWindow, AttributesState attributes) {
+
         this.label = label;
         this.icon = icon;
         this.startPublicationTime = startPublicationTime;
@@ -163,6 +177,7 @@ public final class NodeState implements Serializable {
         this.visibility = visibility;
         this.pageRef = pageRef;
         this.restrictOutsidePublicationWindow = restrictOutsidePublicationWindow;
+        this.attributesState = attributes == null ? AttributesState.EMPTY : attributes;
     }
 
     public String getLabel() {
@@ -201,6 +216,10 @@ public final class NodeState implements Serializable {
         return restrictOutsidePublicationWindow;
     }
 
+    public AttributesState getAttributesState() {
+        return attributesState;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this) {
@@ -213,7 +232,8 @@ public final class NodeState implements Serializable {
                     && Safe.equals(endPublicationTime, that.endPublicationTime)
                     && Safe.equals(visibility, that.visibility)
                     && Safe.equals(pageRef, that.pageRef)
-                    && Safe.equals(restrictOutsidePublicationWindow, that.restrictOutsidePublicationWindow);
+                    && Safe.equals(restrictOutsidePublicationWindow, that.restrictOutsidePublicationWindow)
+                    && Safe.equals(attributesState, that.attributesState);
         }
         return false;
     }
@@ -222,7 +242,8 @@ public final class NodeState implements Serializable {
     public String toString() {
         return "NodeState[label=" + label + ",icon=" + icon + ",startPublicationTime=" + startPublicationTime
                 + ",endPublicationTime=" + endPublicationTime + ",visibility=" + visibility + ",pageRef=" + pageRef
-                + ",restrictOutsidePublicationWindow=" + restrictOutsidePublicationWindow + "]";
+                + ",restrictOutsidePublicationWindow=" + restrictOutsidePublicationWindow
+                + ",attributes=" + attributesState + "]";
     }
 
     public Builder builder() {
