@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.packaging.tomcat</artifactId>
-    <version>3.7.0.Beta02-SNAPSHOT</version>
+    <version>3.7.0.Final</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.tomcat7</artifactId>
   <packaging>jar</packaging>
