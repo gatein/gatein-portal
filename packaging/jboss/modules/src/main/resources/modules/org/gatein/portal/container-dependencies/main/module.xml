@@ -68,7 +68,7 @@
     <!--
          ExoCacheFactory uses infinispan which uses portal classloader and serviceloader pattern to init parsers
     -->
-    <module name="org.infinispan" slot="gatein" services="export"/>
+    <module name="org.infinispan" services="export"/>
 
     <!--
          Needed for clustering. JBoss Cache CacheMarshaller200 loads classes via TCCL

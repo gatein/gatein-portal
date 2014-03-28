@@ -6,7 +6,7 @@ rem
 
 rem $Id$
 
-@if not "%ECHO%" == ""  echo %ECHO%
+@if not "%ECHO%" == "" echo %ECHO%
 @if "%OS%" == "Windows_NT" setlocal
 
 if "%OS%" == "Windows_NT" (
@@ -41,7 +41,7 @@ if "%OS%" == "Windows_NT" (
 
 rem Setup JBoss specific properties
 if "x%JAVA_HOME%" == "x" (
-  set  JAVA=java
+  set JAVA=java
   echo JAVA_HOME is not set. Unexpected results may occur.
   echo Set JAVA_HOME to the directory of your local JDK to avoid this message.
 ) else (
@@ -64,7 +64,7 @@ set JBOSS_ENDORSED_DIRS=%JBOSS_HOME%\lib\endorsed
 
 rem Set default module root paths
 if "x%JBOSS_MODULEPATH%" == "x" (
-  set  "JBOSS_MODULEPATH=%JBOSS_HOME%\modules\system\add-ons\gatein"
+  set "JBOSS_MODULEPATH=%JBOSS_HOME%\modules\system\layers\gatein"
 )
 
 "%JAVA%" ^
