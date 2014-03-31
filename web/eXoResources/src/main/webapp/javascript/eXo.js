@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -25,13 +25,13 @@ var eXo  = {
   env : { portal: {}, client: {}, server: {} },
 
   portal : { },
-    
+
   webui : { },
 
   gadget : { },
 
   session : { },
-  
+
   i18n : { }
 };
 
@@ -39,13 +39,13 @@ var eXo  = {
 /*
 * This is the main entry method for every Ajax calls to the eXo Portal
 *
-* It is simply a dispatcher method that fills some init fields before 
+* It is simply a dispatcher method that fills some init fields before
 * calling the doRequest() method
 */
 window.ajaxGet = function(url, callback) {
   if (!callback) callback = null ;
   require(["SHARED/portalRequest"], function() {
-	  doRequest("Get", url, null, callback);	  
+	  doRequest("Get", url, null, callback);
   });
 };
 
@@ -85,7 +85,7 @@ eXo.env.addLoadedRemoteScripts = function(scripts) {
 	if (typeof define === 'function' && define.amd) {
 		for (var i = 0; i < scripts.length; i++) {
 			define(scripts[i]);
-		}		
+		}
 	}
 };
 
@@ -93,14 +93,14 @@ eXo.env.addLoadedRemoteScripts = function(scripts) {
  * This method is internal used for GateIn to simulate requirejs
  * 2 difference method signs
  * require(depName)
- * require(array, callback) 
+ * require(array, callback)
  */
 eXo.require = function() {
 	if (arguments.length == 1) {
 		//eXo.define.names and eXo.define.deps are defined in GateIn JS wrapper
 		var ctxDepNames = eXo.define.names;
 		var ctxDeps = eXo.define.deps;
-		
+
 		var idx = eXo.inArray(ctxDepNames, arguments[0]);
 		if (idx !== -1) {
 			return ctxDeps[idx];
@@ -121,18 +121,18 @@ eXo.require.toUrl = require.toUrl;
  * 3 difference method signs
  * define(name, array, callback)
  * define(array, callback)
- * define(callback) 
+ * define(callback)
  */
 eXo.define = function() {
 	var reqList = [], callback = null;
-	
+
 	if (arguments.length == 1) {
 		callback = arguments[0];
 		if (callback instanceof Function) {
 			reqList = ["require", "exports", "module"];
 		}
-	} else {		
-		for (var i = 0; i < arguments.length; i++) {	
+	} else {
+		for (var i = 0; i < arguments.length; i++) {
 			var arg = arguments[i];
 			if (arg instanceof Array) {
 				reqList = arg;
@@ -141,12 +141,12 @@ eXo.define = function() {
 			}
 		}
 	}
-	
+
 	//eXo.define.names and eXo.define.deps are defined in GateIn JS wrapper
 	var ctxDepNames = eXo.define.names;
 	var ctxDeps = eXo.define.deps;
-	
-	var deps = [];	
+
+	var deps = [];
 	for (var i = 0; i < reqList.length; i++) {
 		var idx = eXo.inArray(ctxDepNames, reqList[i]);
 		if (idx !== -1) {
@@ -155,7 +155,7 @@ eXo.define = function() {
 			deps[i] = null;
 		}
 	}
-	
+
 	var result;
 	if (callback instanceof Function) {
 		var result = callback.apply(this, deps);
@@ -165,7 +165,7 @@ eXo.define = function() {
 				result = deps[idx].exports;
 			} else if ((idx = eXo.inArray(reqList, "exports")) != -1) {
 				result = deps[idx];
-			}			
+			}
 		}
 	} else {
 		result = callback;
@@ -179,7 +179,7 @@ eXo.inArray = function(arr, itm) {
 	for (var i = 0; i < arr.length; i++) {
 		if (arr[i] === itm) {
 			return i;
-		} 
+		}
 	}
 	return -1;
 };
