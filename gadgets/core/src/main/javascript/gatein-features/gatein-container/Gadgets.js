@@ -555,7 +555,9 @@ gadgets.IfrGadget.prototype.getUserPrefsDialogId = function() {
 gadgets.IfrGadget.prototype.getIframeUrl = function() {
   var ampPlain = "&";
   var ampXhtml = "&amp;";
-  var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
+  // var amp = eXo.env.portal.urlEncoded ? ampXhtml : ampPlain;
+  // getIframeUrl will be always in plain text as it's invoked in a javascript context
+  var amp = ampPlain;
   return this.serverBase_ + (this.serverBase_.charAt(this.serverBase_.length) == '/' ? "" : "/") + 'ifr?' +
       'container=' + gadgets.container.name_ +
       amp + 'mid=' +  this.id +
