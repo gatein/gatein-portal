@@ -43,7 +43,10 @@
 		<span class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> MaximizeAction IconControl"                     
                      title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"></span>
 		<span class="<%=isMini ? "RestoreGadget": "MinimizeGadget";%> MinimizeAction IconControl" 
-			style="display:none;" title="<%=isMini ? unminiTitle : miniTitle%>" miniTitle="$miniTitle" unminiTitle="$unminiTitle"></span>
+			style="display:none;" title="<%=isMini ? unminiTitle : miniTitle%>">
+			<input type="hidden" class="miniTitle" value="$miniTitle" />
+			<input type="hidden" class="unminiTitle" value="$unminiTitle" />
+	    </span>
 		<% if(uicomponent.isSettingUserPref()) { %>
 		   <span class="EditGadget IconControl" title="<%=_ctx.appRes("UIGadget.tooltip.editGadget")%>"></span>
 		<% } %>

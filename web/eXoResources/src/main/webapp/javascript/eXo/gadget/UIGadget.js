@@ -275,13 +275,13 @@
 	    {
 	      gadgetApp.css("display", "none");
 	      minIcon.removeClass("MinimizeGadget").addClass("RestoreGadget");
-	      minIcon.attr("title", minIcon.attr("unminiTitle"));
+	      minIcon.attr("title", minIcon.closest(".unminiTitle").val());
 	    }
 	    else
 	    {
 	      gadgetApp.css("display", "block");
 	      minIcon.removeClass("RestoreGadget").addClass("MinimizeGadget");
-	      minIcon.attr("title", minIcon.attr("miniTitle"));
+	      minIcon.attr("title", minIcon.closest(".miniTitle").val());
 	    }
         var ampPlain = "&";
         var ampXhtml = "&amp;";

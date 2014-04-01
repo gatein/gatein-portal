@@ -110,6 +110,8 @@ public class UIGadget extends UIComponent {
 
     public static String SAVE_PREF_FAIL = "UIGadget.savePrefFail";
 
+    private static final String GTN_PREFIX = "gtn";
+
     /**
      * Initializes a newly created <code>UIGadget</code> object
      *
@@ -137,7 +139,7 @@ public class UIGadget extends UIComponent {
     }
 
     public String getId() {
-        return storageName;
+        return new StringBuilder().append(GTN_PREFIX).append(storageName).toString();
     }
 
     public String getStandaloneURL() {
