@@ -13,7 +13,7 @@
 %>
 <div class="UIItemSelector" id="$uicomponent.id">
 	<div class="RightColumnStyle">
-		<input type="hidden" name="<%=uicomponent.getName();%>" value ="">
+		<input type="hidden" name="<%=uicomponent.getName();%>" value ="" />
 		<%/*Begin ItemList*/%>
 		<div class="ItemListContainer ItemSelectorAncestor">
 			<%uicomponent.renderChild(UIDropDownControl.class);%>			
@@ -37,7 +37,7 @@
 					}	 
 			%>
 					<div class="ItemList ItemListBackground"	style="display: $display;">
-						<%								
+						<%
 							for(template in templates){
 								String itemSelected = "Item"; 
 								String setHiddenValue = "eXo.webui.UIForm.setHiddenValue('"+form.getName()+"', '"+uicomponent.getName()+"','"+template.getLabel()+"' )";
@@ -49,9 +49,11 @@
 											<div class="ItemTitle"><%=_ctx.appRes("UIWizardPageSelectLayoutForm.label."+template.getLabel())%></div>
 										</div>
 									</div>
-									<div id="SetValue" class="ExtraActions" style="display: none">$setHiddenValue;</div>
+									<div class="SetValue ExtraActions" style="display: none">$setHiddenValue;</div>
 								</div>
-						<%}%>
+						<%
+						    }
+                        %>
 					</div>
 			<%}%>
 		</div>

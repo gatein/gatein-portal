@@ -35,7 +35,8 @@
 					<%=uicomponent.renderNode(object);%>											
 					<%	
 						if(uicomponent.isSelected(object)){%>
-							<div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
+							<div class = "ChildrenContainer">
+							    <input type="hidden" class="actionLink" value="$actionLink" />
 						<%	
 						int countChild=0;
 						for(child in children) {
@@ -62,7 +63,8 @@
 					<%=uicomponent.renderNode(object);%>											
 					<%	
 						if(uicomponent.isSelected(object)){%>
-						<div class = "ChildrenContainer" actionLink="$actionLink" display = "block">
+						<div class = "ChildrenContainer">
+						    <input type="hidden" class="actionLink" value="$actionLink" />
 						<%	
 						int countChild=0;
 						for(child in children) {

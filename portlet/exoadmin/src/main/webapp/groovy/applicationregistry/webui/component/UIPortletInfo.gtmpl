@@ -3,7 +3,8 @@
 	import java.util.Map.Entry;
 	import org.exoplatform.applicationregistry.webui.component.UICategorySelector;
 	import org.gatein.common.text.EntityEncoder;
-  import org.exoplatform.commons.utils.HTMLEntityEncoder;
+    import org.exoplatform.commons.utils.HTMLEntityEncoder;
+    import org.exoplatform.webui.application.WebuiRequestContext;
 
 	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
 	String categoryNames = uicomponent.getCategorieNames();
@@ -12,6 +13,7 @@
 	def portletPreferences = portlet.getPortletPreferences();
 	String srcBG = "/" + portlet.getPortletGroup() + "/skin/DefaultSkin/portletIcons/" + portlet.getName() + ".png";
 	String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
+	String idSrcBG = WebuiRequestContext.generateUUID("srcBG");
 %>
 <div class="UIPortletInfo" id="$uicomponent.id">
 
@@ -26,7 +28,12 @@
 
 		<div class="Application">
 			<div title="Portlet 1" class="PortletIcons">
-					<img src="$srcBG" onError="src='$srcBGError'" alt=""/>
+					<img src="$srcBG" id="$idSrcBG" alt=""/>
+                    <script type="text/javascript">
+                    // <!--<![CDATA[
+                        document.getElementById("$idSrcBG").onerror = function() { this.src='$srcBGError'; };
+                    // ]]>-->
+                    </script>
 			</div>
 			<!--
 			<div class="ApplicationContent">

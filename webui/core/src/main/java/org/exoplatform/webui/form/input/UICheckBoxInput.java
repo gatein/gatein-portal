@@ -136,9 +136,9 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean> {
             w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
         }
         if (isChecked())
-            w.write(" checked");
+            w.write(" checked=\"checked\" ");
         if (isDisabled())
-            w.write(" disabled");
+            w.write(" disabled=\"disabled\" ");
 
         renderHTMLAttributes(w);
 

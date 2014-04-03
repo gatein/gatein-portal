@@ -16,7 +16,7 @@
 %>
 <div class="UIItemSelector" id="$uicomponent.id">
 	<div class="RightColumnStyle" style="width: 99.5%;">
-		<input type="hidden" name="<%=uicomponent.getName();%>" value="$selectedValue">
+		<input type="hidden" name="<%=uicomponent.getName();%>" value="$selectedValue" />
 		<%/*Begin ItemList*/ %>
 		<div class="ItemListContainer ItemSelectorAncestor">
 			<div class="PageConfigOptionList">
@@ -49,9 +49,11 @@
 											<div class="ItemTitle"><%=_ctx.appRes("UIWizardPageSelectLayoutForm.label."+template.label)%></div>
 										</div>
 									</div>
-									<div id="SetValue" class="ExtraActions" style="display: none">$setHiddenValue;</div>
+									<div class="SetValue ExtraActions" style="display: none">$setHiddenValue;</div>
 								</div>
-						<%}%>
+						<%
+						    }
+                        %>
 						
 					</div>
 			<%}%>

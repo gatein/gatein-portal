@@ -541,7 +541,11 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
         //
         Application application = new Application();
-        application.setId(contentDef.getCategory().getName() + "/" + contentDef.getName());
+        /**
+         * Apps ID has a "/" character that is rendered into id markup.
+         * We need to workaround it to be W3C compliant.
+         */
+        application.setId(contentDef.getCategory().getName() + "_slash_" + contentDef.getName());
         application.setCategoryName(contentDef.getCategory().getName());
         application.setType(applicationType);
         application.setApplicationName(contentDef.getName());

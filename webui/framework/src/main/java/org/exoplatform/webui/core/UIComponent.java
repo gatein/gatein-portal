@@ -68,7 +68,11 @@ public abstract class UIComponent {
         if (id == null) {
             this.id = new StringBuilder().append(GTN_PREFIX).append(Math.abs(hashCode())).toString();
         } else {
-            this.id = id;
+            if (id.length() > 0 && Character.isDigit(id.charAt(0))) {
+                this.id = new StringBuilder().append(GTN_PREFIX).append(id).toString();
+            } else {
+                this.id = id;
+            }
         }
         return this;
     }

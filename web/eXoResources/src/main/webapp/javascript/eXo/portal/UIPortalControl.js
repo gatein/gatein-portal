@@ -30,7 +30,7 @@ var uiPortalControl = {
     var ancest = $(selectedElement).parent().closest(".Node");
     var childrenCont = ancest.find("div.ChildrenContainer").eq(0);
     var newHTML = "<div onclick=\""
-        + childrenCont.attr("actionLink")
+        + childrenCont.closest("actionLink").val()
         + "\" class=\"ExpandIcon\">" + selectedElement.innerHTML + "</div>";
     ancest.html(newHTML);
   },

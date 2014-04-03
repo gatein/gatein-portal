@@ -6,7 +6,7 @@
 	UIRightClickPopupMenu uiPopupMenu = uicomponent.getChild(UIRightClickPopupMenu.class);
 	String popupMenu = "";
 %>
-<div id="UIPageNodeSelector">
+<div id="UIPageNodeSelector-Container">
 <%
 	if(uiPopupMenu != null && uiPopupMenu.isRendered()) {
 		String id = uicomponent.getParent().getId();

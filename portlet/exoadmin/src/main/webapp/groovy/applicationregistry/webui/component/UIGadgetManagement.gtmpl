@@ -5,8 +5,8 @@
 %>
 <div class="UIGadgetManagement" id="$uicomponent.id">
 	<div class="UIControlbar ClearFix">
-		<a href="javascript:;" onclick="<%= uicomponent.event("AddRemoteGadget") %>"><div class="IconControl AddNewIcon" ><%=_ctx.appRes("UIGadgetManagement.label.addRemote")%></div></a>
-		<a href="javascript:;" onclick="<%= uicomponent.event("AddLocalGadget") %>"><div class="IconControl CreateNewIcon" ><%=_ctx.appRes("UIGadgetManagement.label.createNew")%></div></a>
+		<a href="javascript:;" onclick="<%= uicomponent.event("AddRemoteGadget") %>"><span style="display: block;" class="IconControl AddNewIcon" ><%=_ctx.appRes("UIGadgetManagement.label.addRemote")%></span></a>
+		<a href="javascript:;" onclick="<%= uicomponent.event("AddLocalGadget") %>"><span style="display: block;" class="IconControl CreateNewIcon" ><%=_ctx.appRes("UIGadgetManagement.label.createNew")%></span></a>
 	</div>
 	
 	<div class="AppRegistryContainer ClearFix">

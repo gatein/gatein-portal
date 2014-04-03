@@ -2,6 +2,7 @@
 	import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	import org.exoplatform.web.application.JavascriptManager;
+	import org.exoplatform.webui.application.WebuiRequestContext;
 	
 	def categories = uicomponent.getCategories();
 	def selectedCategory = uicomponent.getSelectedCategory();
@@ -47,11 +48,17 @@
 								    String applicationDescription = encoder.encode(application.getDescription());
 									String srcBG = application.getIconURL();
 									String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
+									String idSrcBG = WebuiRequestContext.generateUUID("srcBG");
 								%>
 									<div class="UIVTab VTabStyle3 DragObjectPortlet" id="<%=application.getId();%>">
 										<div class="VTabContentBG">
 											<div class="OverflowContainer ClearFix">
-												<img src="<%=(srcBG!=null && srcBG.length()>0)?srcBG:srcBGError%>" onError="src='$srcBGError'"  alt=""/>
+												<img src="<%=(srcBG!=null && srcBG.length()>0)?srcBG:srcBGError%>" id="$idSrcBG" alt=""/>
+                                                <script type="text/javascript">
+                                                // <!--<![CDATA[
+                                                    document.getElementById("$idSrcBG").onerror = function() { this.src='$srcBGError'; };
+                                                // ]]>-->
+                                                </script>
 												<div class="ContentInfo" title="$applicationName" style="cursor:move;">
 													<div class="LabelTab">$applicationName</div>
 													<div class="LableText">$applicationDescription</div>
