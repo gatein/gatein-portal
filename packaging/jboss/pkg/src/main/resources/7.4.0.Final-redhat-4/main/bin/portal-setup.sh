@@ -47,7 +47,7 @@ if [ "x$JAVA" = "x" ]; then
 fi
 
 if [ "x$JBOSS_MODULEPATH" = "x" ]; then
-    JBOSS_MODULEPATH="$JBOSS_HOME/modules/system/layers/gatein"
+    JBOSS_MODULEPATH="$JBOSS_HOME/modules/system/layers"
 fi
 
 # For Cygwin, switch paths to Windows format before running java
@@ -62,8 +62,15 @@ fi
 # Sample JPDA settings for remote socket debugging
 #JAVA_OPTS="$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y"
 
+SCRIPT_CLASSPATH="$JBOSS_MODULEPATH/gatein/org/gatein/lib/main/*"
+SCRIPT_CLASSPATH="$SCRIPT_CLASSPATH\:$JBOSS_MODULEPATH/gatein/org/gatein/common/main/*"
+SCRIPT_CLASSPATH="$SCRIPT_CLASSPATH\:$JBOSS_MODULEPATH/base/org/slf4j/main/*"
+SCRIPT_CLASSPATH="$SCRIPT_CLASSPATH\:$JBOSS_MODULEPATH/base/org/slf4j/impl/main/*"
+SCRIPT_CLASSPATH="$SCRIPT_CLASSPATH\:$JBOSS_MODULEPATH/base/org/slf4j/jcl-over-slf4j/main/*"
+SCRIPT_CLASSPATH="$SCRIPT_CLASSPATH\:$JBOSS_MODULEPATH/base/org/jboss/logmanager/main/*"
+
 eval \"$JAVA\" $JAVA_OPTS \
-         -cp \"$JBOSS_MODULEPATH/org/gatein/lib/main/*\:$JBOSS_MODULEPATH/org/gatein/common/main/*\" \
+         -cp $SCRIPT_CLASSPATH \
          org.gatein.portal.installer.PortalSetupCommand \
          -f \"$JBOSS_HOME/standalone/configuration/gatein/configuration.properties\" \
          "$@"

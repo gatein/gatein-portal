@@ -64,11 +64,18 @@ set JBOSS_ENDORSED_DIRS=%JBOSS_HOME%\lib\endorsed
 
 rem Set default module root paths
 if "x%JBOSS_MODULEPATH%" == "x" (
-  set "JBOSS_MODULEPATH=%JBOSS_HOME%\modules\system\layers\gatein"
+  set "JBOSS_MODULEPATH=%JBOSS_HOME%\modules\system\layers"
 )
 
+set "SCRIPT_CLASSPATH=%JBOSS_MODULEPATH%\gatein\org\gatein\lib\main\*"
+set "SCRIPT_CLASSPATH=%SCRIPT_CLASSPATH%;%JBOSS_MODULEPATH%\gatein\org\gatein\common\main\*"
+set "SCRIPT_CLASSPATH=%SCRIPT_CLASSPATH%;%JBOSS_MODULEPATH%\base\org\slf4j\main\*"
+set "SCRIPT_CLASSPATH=%SCRIPT_CLASSPATH%;%JBOSS_MODULEPATH%\base\org\slf4j\impl\main\*"
+set "SCRIPT_CLASSPATH=%SCRIPT_CLASSPATH%;%JBOSS_MODULEPATH%\base\org\slf4j\jcl-over-slf4j\main\*"
+set "SCRIPT_CLASSPATH=%SCRIPT_CLASSPATH%;%JBOSS_MODULEPATH%\base\org\jboss\logmanager\main\*"
+
 "%JAVA%" ^
-    -cp "%JBOSS_MODULEPATH%\org\gatein\lib\main\*;%JBOSS_MODULEPATH%\org\gatein\common\main\*" ^
+    -cp %SCRIPT_CLASSPATH% ^
     org.gatein.portal.installer.PortalSetupCommand ^
     -f "%JBOSS_HOME%\standalone\configuration\gatein\configuration.properties" ^
      %*
