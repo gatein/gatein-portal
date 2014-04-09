@@ -727,7 +727,13 @@ public class UIPortalComposer extends UIContainer {
         UIPortal uiPortal = uiPortalApp.getCurrentSite();
         DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
         PageService pageService = uiWorkingWS.getApplicationComponent(PageService.class);
-        UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
+
+        UIPage uiPage;
+        if (!UIPage.isFullPreview()) {
+            uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
+        } else {
+            uiPage = uiWorkingWS.findFirstComponentOfType(UIPage.class);
+        }
 
         Page page = (Page) PortalDataMapper.buildModelObject(uiPage);
         String pageId = page.getPageId();
