@@ -247,6 +247,15 @@ public class UIApplicationOrganizer extends UIContainer {
             Application selectedApp = uiOrganizer.getApplication(appName);
             ApplicationRegistryService service = uiOrganizer.getApplicationComponent(ApplicationRegistryService.class);
             String selectedAppId = selectedApp.getId();
+            /**
+             * Apps IDs have "/" characters.
+             * We need to workaround them in the markup to be W3C compliant.
+             *
+             * "_slash_" -> "/"
+             *
+             * @see UIDashboardSelectContainer#getGadgetsOfCategory(org.exoplatform.application.registry.ApplicationCategory)
+             */
+            selectedAppId = selectedAppId.replaceAll("_slash_", "/");
             if (service.getApplication(selectedAppId) == null) {
                 UIApplication uiApp = ctx.getUIApplication();
                 uiApp.addMessage(new ApplicationMessage("UIOrganizer.msg.applicationNoExist", null));
@@ -340,7 +349,17 @@ public class UIApplicationOrganizer extends UIContainer {
             }
             ApplicationRegistryService service = uiOrganizer.getApplicationComponent(ApplicationRegistryService.class);
             Application app = uiOrganizer.getApplication(appName);
-            if (service.getApplication(app.getId()) != null) {
+            String selectedAppId = app.getId();
+            /**
+             * Apps IDs have "/" characters.
+             * We need to workaround them in the markup to be W3C compliant.
+             *
+             * "_slash_" -> "/"
+             *
+             * @see UIDashboardSelectContainer#getGadgetsOfCategory(org.exoplatform.application.registry.ApplicationCategory)
+             */
+            selectedAppId = selectedAppId.replaceAll("_slash_", "/");
+            if (service.getApplication(selectedAppId) != null) {
                 service.remove(app);
             }
             String cateName = uiOrganizer.getSelectedCategory().getName();
