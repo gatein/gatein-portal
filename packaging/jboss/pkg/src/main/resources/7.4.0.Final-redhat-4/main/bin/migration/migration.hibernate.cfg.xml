@@ -1,0 +1,50 @@
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <!--
+            <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
+            <property name="hibernate.connection.url">jdbc:hsqldb:file:/home/phuongvv/workspace/exoportal/gatein-portal/master/packaging/tomcat/tomcat7/target/tomcat/gatein/data/db/data/jdbcidm_portal;shutdown=true;hsqldb.write_delay=false</property>
+            <property name="hibernate.connection.username">sa</property>
+            <property name="hibernate.connection.password"></property>
+            <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+
+            <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+            <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/gateinidm</property>
+            <property name="hibernate.connection.username">root</property>
+            <property name="hibernate.connection.password">password</property>
+            <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        -->
+        <property name="hibernate.connection.autocommit">false</property>
+        <property name="hibernate.cache.use_second_level_cache">false</property>
+        <property name="hibernate.cache.use_query_cache">false</property>
+        <property name="hibernate.listeners.envers.autoRegister">false</property>
+        <property name="hibernate.current_session_context_class">thread</property>
+
+        <!-- Use the C3P0 connection pool provider -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+
+        <!-- Show and print nice SQL on stdout -->
+        <property name="show_sql">false</property>
+        <property name="format_sql">false</property>
+        <!-- List of XML mapping files -->
+        <mapping resource="mappings/HibernateRealm.hbm.xml" />
+        <mapping
+                resource="mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml" />
+        <mapping
+                resource="mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObject.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectCredential.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectCredentialType.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectAttribute.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectType.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectRelationship.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectRelationshipType.hbm.xml" />
+        <mapping resource="mappings/HibernateIdentityObjectRelationshipName.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>
