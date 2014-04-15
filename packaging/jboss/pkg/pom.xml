@@ -281,8 +281,6 @@
               <target>
                 <ant antfile="${project.basedir}/${package.filename}" inheritRefs="true">
                   <target name="package" />
-                  <!-- without the next line the wrong version.jboss.ass is passed to antrun -->
-                  <property name="version.jboss.as" value="${version.jboss.as}" />
                   <property name="maven.project.basedir" value="${project.basedir}" />
                   <property name="maven.project.build.directory" value="${project.build.directory}" />
                 </ant>

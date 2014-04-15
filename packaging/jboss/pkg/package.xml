@@ -2,8 +2,6 @@
 
 <project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
-  <property name="samples.dir" value="${maven.project.basedir}/src/main/resources/${version.jboss.as}/samples"/>
-
   <target name="prepare" depends="prepare-server-dir,package">
   </target>
 
@@ -31,19 +29,6 @@
 
     <!-- Extract downloaded JBossAS to servers dir -->
     <unzip src="${jbossas.zip}" dest="${servers.dir}" overwrite="false"/>
-  </target>
-
-  <target name="package-samples-checkdir">
-    <condition property="pkg.samples.hasdir">
-      <available file="${samples.dir}" type="dir"/>
-    </condition>
-  </target>
-
-  <target name="package-samples-copy" depends="package-samples-checkdir" if="pkg.samples.hasdir">
-    <!-- Copy version specific bin, modules, configuration files -->
-    <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
-      <fileset dir="${samples.dir}"/>
-    </copy>
   </target>
 
   <target name="package-samples" unless="pkg.nosamples">
@@ -87,21 +72,6 @@
        <fileset dir="${maven.project.basedir}/src/main/resources/jboss/samples" />
     </copy>
     -->
-
-    <!-- Package version specific samples configuration if requested -->
-    <antcall target="package-samples-copy" inheritAll="true" inheritRefs="true"/>
-  </target>
-
-  <target name="package-version-checkdir">
-    <condition property="pkg.version.hasdir">
-      <available file="${maven.project.basedir}/src/main/resources/${version.jboss.as}/main" type="dir"/>
-    </condition>
-  </target>
-
-  <target name="package-version-copy" depends="package-version-checkdir" if="pkg.version.hasdir">
-    <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
-      <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}/main"/>
-    </copy>
   </target>
 
   <target name="package">
@@ -168,9 +138,6 @@
     <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
       <fileset dir="${maven.project.basedir}/src/main/resources/jboss/main"/>
     </copy>
-
-    <!-- Copy version specific bin, modules, configuration files -->
-    <antcall target="package-version-copy" inheritAll="true" inheritRefs="true"/>
 
     <!-- Copy modules -->
     <copy todir="${jbossas.modules.target.dir}" preservelastmodified="true" overwrite="true">
