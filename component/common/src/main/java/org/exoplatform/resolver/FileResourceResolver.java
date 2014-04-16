@@ -80,4 +80,8 @@ public class FileResourceResolver extends ResourceResolver {
         return "file:";
     }
 
+    @Override
+    public ResourceKey createResourceKey(String url) {
+        return new ResourceKey(this.getResourceScheme().hashCode(), url);
+    }
 }

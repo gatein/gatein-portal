@@ -68,4 +68,8 @@ public class ClasspathResourceResolver extends ResourceResolver {
         return "classpath:";
     }
 
+    @Override
+    public ResourceKey createResourceKey(String url) {
+        return new ResourceKey(this.getResourceScheme().hashCode(), url);
+    }
 }

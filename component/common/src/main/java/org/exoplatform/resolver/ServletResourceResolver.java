@@ -93,4 +93,8 @@ public class ServletResourceResolver extends ResourceResolver {
         return scheme_;
     }
 
+    @Override
+    public ResourceKey createResourceKey(String url) {
+        return new ResourceKey(scontext_.getContextPath().hashCode(), url);
+    }
 }
