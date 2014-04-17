@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
@@ -29,13 +30,34 @@ import org.exoplatform.webui.form.UIFormInput;
  *
  * Validates whether the value is composed of letters, digit , '_' or '-'h First character could not be digit or '-'
  */
-public class IdentifierValidator extends MultipleConditionsValidator implements Serializable {
+public class ConfigurableIdentifierValidator extends MultipleConditionsValidator implements Serializable {
+    protected static int DEFAULT_MIN_LENGTH = 3;
+    protected static int DEFAULT_MAX_LENGTH = 30;
 
-    @Override
-    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
+    protected Integer min = DEFAULT_MIN_LENGTH;
+    protected Integer max = DEFAULT_MAX_LENGTH;
+
+    protected static String IDENTIFER_VALIDATOR_REGEX ="^[\\p{L}_][\\p{L}\\d_-]*$";
+
+    public ConfigurableIdentifierValidator() {
+    }
+
+    public ConfigurableIdentifierValidator(int min, int max) {
+        this.min = min;
+        this.max = max;
+    }
+
+    static void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput, Integer min, Integer max) {
+        char[] buff = value.toCharArray();
+        if (buff.length < min || buff.length > max) {
+            messages.addMessage("StringLengthValidator.msg.length-invalid",
+                    new Object[] { label, min.toString(), max.toString() });
+        }
+
         if (Character.isDigit(value.charAt(0)) || value.charAt(0) == '-') {
             messages.addMessage("FirstAndSpecialCharacterNameValidator.msg", new Object[] { label, uiInput.getBindingField() });
         }
+
         for (int i = 0; i < value.length(); i++) {
             char c = value.charAt(i);
             if (!Character.isLetter(c) && !Character.isDigit(c) && c != '_' && c != '-') {
@@ -44,4 +66,10 @@ public class IdentifierValidator extends MultipleConditionsValidator implements 
             }
         }
     }
+
+    @Override
+    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
+        validate(value, label,messages,uiInput, min, max);
+    }
+
 }

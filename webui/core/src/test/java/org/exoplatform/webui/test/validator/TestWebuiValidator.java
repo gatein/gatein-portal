@@ -129,6 +129,16 @@ public class TestWebuiValidator extends TestCase {
         assertFalse(expected(validator, "a"));
     }
 
+    public void validateIdentifierByConfigurableValidator() {
+        final UserConfigurableValidator validator = new UserConfigurableValidator(UserConfigurableValidator.PAGE_NAME);
+        assertTrue(expected(validator, "caffé-_"));
+        assertTrue(expected(validator, "Caffé"));
+        assertTrue(expected(validator, "_caffé-_"));
+        assertTrue(expected(validator, "caffé01"));
+        assertFalse(expected(validator, "-caffé"));
+        assertFalse(expected(validator, "01caffé"));
+        assertFalse(expected(validator, "caffé+"));
+    }
     public void testEmailValidator() {
         Validator validator = new EmailAddressValidator();
         assertFalse(expected(validator, "root"));
@@ -221,9 +231,12 @@ public class TestWebuiValidator extends TestCase {
     public void testIdentifierValidator() {
         Validator validator = new IdentifierValidator();
         assertTrue(expected(validator, "caffé-_"));
+        assertTrue(expected(validator, "Caffé"));
+        assertTrue(expected(validator, "_caffé-_"));
         assertTrue(expected(validator, "caffé01"));
         assertFalse(expected(validator, "-caffé"));
         assertFalse(expected(validator, "01caffé"));
+        assertFalse(expected(validator, "caffé+"));
     }
 
     public boolean expected(Validator validator, final String input) {
