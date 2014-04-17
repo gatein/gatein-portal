@@ -464,6 +464,28 @@
             <field name="replicated"><boolean>true</boolean></field>
           </object>
         </object-param>
+        <!-- TemplateService configuration -->
+        <object-param>
+          <name>cache.config.TemplateService</name>
+          <description>The JBoss Cache configuration for the template service</description>
+          <object type="org.exoplatform.services.cache.ExoCacheConfig">
+            <field name="name"><string>TemplateService</string></field>
+            <field name="maxSize"><int>${gatein.cache.template.maxsize:5000}</int></field>
+            <field name="liveTime"><long>${gatein.cache.template.livetime:600}</long></field>
+            <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
+          </object>
+        </object-param>
+        <object-param profiles="cluster">
+          <name>cache.config.TemplateService</name>
+          <description>The JBoss Cache configuration for the template service</description>
+          <object type="org.exoplatform.services.cache.impl.infinispan.generic.GenericExoCacheConfig">
+            <field name="name"><string>TemplateService</string></field>
+            <field name="strategy"><string>LIRS</string></field>
+            <field name="maxEntries"><int>${gatein.cache.template.maxnodes:5000}</int></field>
+            <field name="lifespan"><long>${gatein.cache.template.expiration:600000}</long></field>
+            <field name="replicated"><boolean>true</boolean></field>
+          </object>
+        </object-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>
