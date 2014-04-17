@@ -62,6 +62,7 @@ import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /**
  * Created by The eXo Platform SARL Author : Nguyen Thi Hoa hoa.nguyen@exoplatform.com Oct 31, 2006
@@ -121,7 +122,7 @@ public class UIWizardPageSetInfo extends UIForm {
 
         addChild(UIPageNodeSelector.class, null, null);
         addUIFormInput(new UIFormStringInput(PAGE_NAME, "name", null).addValidator(MandatoryValidator.class)
-                .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class));
+                .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.PAGE_NAME));
         addUIFormInput(uiSwitchLabelMode);
         addUIFormInput(new UIFormStringInput(PAGE_DISPLAY_NAME, "label", null).setMaxLength(255).addValidator(
                 StringLengthValidator.class, 3, 120));
