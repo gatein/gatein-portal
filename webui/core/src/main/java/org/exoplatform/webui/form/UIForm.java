@@ -25,6 +25,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.webui.CSRFTokenUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
@@ -154,8 +155,8 @@ public class UIForm extends UIContainer {
 
         Writer writer = context.getWriter();
         writer.append("<form class=\"UIForm\" id=\"").append(getId()).append("\" action=\"").append(b).append('\"');
-        if (submitAction_ != null) {
-            writer.append(" onsubmit=\"").append(submitAction_).append("\"");
+        if (getSubmitAction() != null) {
+            writer.append(" onsubmit=\"").append(HTMLEntityEncoder.getInstance().encodeHTMLAttribute(getSubmitAction())).append("\"");
         }
         if (multipart_) {
             writer.append(" enctype=\"multipart/form-data\"");
