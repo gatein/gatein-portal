@@ -65,6 +65,7 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
 
     public static final String USERNAME = "username";
     public static final String GROUPMEMBERSHIP = "groupmembership";
+    public static final String PAGE_NAME = "pagename";
     public static final String EMAIL = "email";
     public static final String DEFAULT_LOCALIZATION_KEY = "ExpressionValidator.msg.value-invalid";
     /**
@@ -171,6 +172,8 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
                 if (!Pattern.matches(GROUP_MEMBERSHIP_VALIDATION_REGEX, value)) {
                     messages.addMessage(localizationKey, new Object[] { label });
                 }
+            } else if (PAGE_NAME.equals(validatorName)) {
+                ConfigurableIdentifierValidator.validate(value, label, messages, uiInput, ConfigurableIdentifierValidator.DEFAULT_MIN_LENGTH, ConfigurableIdentifierValidator.DEFAULT_MAX_LENGTH);
             }
         } else {
             // otherwise, use the user-provided configuration
@@ -193,20 +196,22 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
 
         private ValidatorConfiguration(String propertyKey, Properties properties) {
             // used to assign backward compatible default values
-            boolean isUser = USERNAME.equals(propertyKey);
-            boolean isEmail = EMAIL.equals(propertyKey);
-
             String prefixedKey = KEY_PREFIX + propertyKey;
-
-            String property = properties.getProperty(prefixedKey + ".length.min");
-            minLength = property != null ? Integer.valueOf(property) : (isUser ? UsernameValidator.DEFAULT_MIN_LENGTH : 0);
-
-            property = properties.getProperty(prefixedKey + ".length.max");
-            maxLength = property != null ? Integer.valueOf(property) : (isUser ? UsernameValidator.DEFAULT_MAX_LENGTH
-                    : Integer.MAX_VALUE);
-
-            pattern = properties.getProperty(prefixedKey + ".regexp", (isEmail ? EMAIL_VALIDATION_REGEX
-                    : Utils.USER_NAME_VALIDATOR_REGEX));
+            String minProperty = properties.getProperty(prefixedKey + ".length.min");
+            String maxProperty = properties.getProperty(prefixedKey + ".length.max");
+            if (USERNAME.equals(propertyKey)) {
+                minLength = minProperty != null ? Integer.valueOf(minProperty) : UsernameValidator.DEFAULT_MIN_LENGTH;
+                maxLength = maxProperty != null ? Integer.valueOf(maxProperty) : UsernameValidator.DEFAULT_MAX_LENGTH;
+                pattern = properties.getProperty(prefixedKey + ".regexp", Utils.USER_NAME_VALIDATOR_REGEX);
+            } else if (PAGE_NAME.equals(propertyKey)) {
+                minLength = minProperty != null ? Integer.valueOf(minProperty) : ConfigurableIdentifierValidator.DEFAULT_MIN_LENGTH;
+                maxLength = maxProperty != null ? Integer.valueOf(maxProperty) : ConfigurableIdentifierValidator.DEFAULT_MAX_LENGTH;
+                pattern = properties.getProperty(prefixedKey + ".regexp", ConfigurableIdentifierValidator.IDENTIFER_VALIDATOR_REGEX);
+            } else {
+                minLength = minProperty != null ? Integer.valueOf(minProperty) : 0;
+                maxLength = maxProperty != null ? Integer.valueOf(maxProperty) : Integer.MAX_VALUE;
+                pattern = properties.getProperty(prefixedKey + ".regexp", Utils.USER_NAME_VALIDATOR_REGEX);
+            }
             formatMessage = properties.getProperty(prefixedKey + ".format.message", pattern);
         }
 
