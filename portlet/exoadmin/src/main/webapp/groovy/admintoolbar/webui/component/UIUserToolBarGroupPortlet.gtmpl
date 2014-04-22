@@ -63,7 +63,7 @@
 			
 			ResourceURL resourceURL = res.createResourceURL();			
 			resourceURL.setResourceID(groupId + "::" + node.getURI());	
-			getNodeURL = URLWriter.toString();
+			getNodeURL = URLWriter.toString(resourceURL);
 		}
 		
 		print """
