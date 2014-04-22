@@ -78,7 +78,15 @@ public class UIPermissionForm extends UIForm {
         ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
         application_.setModifiedDate(Calendar.getInstance().getTime());
         WebuiRequestContext ctx = WebuiRequestContext.getCurrentInstance();
-        if (service.getApplication(application_.getId()) == null) {
+        /**
+         * Apps IDs have "/" characters.
+         * We need to workaround them in the markup to be W3C compliant.
+         *
+         * "_slash_" -> "/"
+         */
+        String selectedAppId = application_.getId();
+        selectedAppId = selectedAppId.replaceAll("_slash_", "/");
+        if (service.getApplication(selectedAppId) == null) {
             UIApplication uiApp = ctx.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("application.msg.changeNotExist", null));
             return;

@@ -84,7 +84,15 @@ public class UIApplicationForm extends UIForm {
             UIApplicationOrganizer uiOrganizer = uiForm.getParent();
             ApplicationRegistryService service = uiForm.getApplicationComponent(ApplicationRegistryService.class);
             Application application = uiForm.getApplication();
-            if (service.getApplication(application.getId()) == null) {
+            /**
+             * Apps IDs have "/" characters.
+             * We need to workaround them in the markup to be W3C compliant.
+             *
+             * "_slash_" -> "/"
+             */
+            String selectedAppId = application.getId();
+            selectedAppId = selectedAppId.replaceAll("_slash_", "/");
+            if (service.getApplication(selectedAppId) == null) {
                 UIApplication uiApp = ctx.getUIApplication();
                 uiApp.addMessage(new ApplicationMessage("application.msg.changeNotExist", null));
                 uiOrganizer.reload();
