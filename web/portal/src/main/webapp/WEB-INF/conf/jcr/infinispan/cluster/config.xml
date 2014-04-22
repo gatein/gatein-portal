@@ -34,7 +34,7 @@
 
       <globalJmxStatistics jmxDomain="platform.insp.cache.jcr" enabled="true" allowDuplicateDomains="true"/>
 
-      <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport" clusterName="${infinispan-cluster-name}" distributedSyncTimeout="20000">
+      <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport" clusterName="${gatein.infinispan.cluster.name}" distributedSyncTimeout="20000">
          <properties>
             <property name="configurationFile" value="${gatein.jcr.jgroups.config}"/>
          </properties>

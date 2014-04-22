@@ -97,7 +97,7 @@
     <MFC max_credits="2M"
          min_threshold="0.4"/>
     <FRAG2 frag_size="60K"  />
-    <RSVP resend_interval="2000" timeout="10000"/>
+    <RSVP resend_interval="2000" timeout="10000" ack_on_delivery="false" />
     <pbcast.STATE_TRANSFER />
     <!-- pbcast.FLUSH  /-->
 </config>
