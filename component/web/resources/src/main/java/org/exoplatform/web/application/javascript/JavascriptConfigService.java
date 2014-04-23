@@ -263,7 +263,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
         Map<ResourceId, String> groupURLs = new HashMap<ResourceId, String>();
         for (ScriptResource resource : getAllResources()) {
-            if (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope())) {
+            if (!resource.isNativeAmd() /* exclude native AMD modules to reduce the size
+                                         * of the HTTP response as there may be thosands of them
+                                         * They are always SHARED so there is no need to put their URLs here
+                                         * explicitly. */
+                    && (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))) {
                 String name = resource.getId().toString();
                 List<Module> modules = resource.getModules();
 

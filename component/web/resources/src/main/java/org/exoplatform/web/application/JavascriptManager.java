@@ -105,7 +105,14 @@ public class JavascriptManager {
                 Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
                 tmp.put(id, null);
                 for (ScriptResource res : service.resolveIds(tmp).keySet()) {
-                    require(res.getId().toString());
+                    if (res.isNativeAmd()) {
+                        /* Require scopeless id for native AMD modules. They are implicitly SHARED
+                         * and baseUrl of requirejs ends with SHARED. Therefore there is no need
+                         * to prepend the scope to the name here. */
+                        require(res.getId().getName());
+                    } else {
+                        require(res.getId().toString());
+                    }
                 }
             }
         }
