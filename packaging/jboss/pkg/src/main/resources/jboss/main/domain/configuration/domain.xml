@@ -2,7 +2,6 @@
 
 <domain xmlns="urn:jboss:domain:1.6">
     <extensions>
-        <extension module="com.redhat.gss.redhat-access-plugin"/>
         <extension module="org.jboss.as.clustering.infinispan"/>
         <extension module="org.jboss.as.clustering.jgroups"/>
         <extension module="org.jboss.as.cmp"/>
@@ -1401,7 +1400,6 @@
                 <remote-naming/>
             </subsystem>
             <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
-            <subsystem xmlns="urn:com.redhat.gss.redhat-access-plugin:1.0"/>
             <subsystem xmlns="urn:jboss:domain:remoting:1.1">
                 <connector name="remoting-connector" socket-binding="remoting" security-realm="ApplicationRealm"/>
             </subsystem>
@@ -1580,7 +1578,7 @@
         </socket-binding-group>
     </socket-binding-groups>
     <server-groups>
-        <server-group name="main-server-group" profile="full">
+        <server-group name="main-server-group" profile="default">
             <jvm name="default">
                 <heap size="1000m" max-size="1000m"/>
                 <permgen max-size="256m"/>
@@ -1597,7 +1595,7 @@
                 <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
             </system-properties>
         </server-group>
-        <server-group name="other-server-group" profile="full-ha">
+        <server-group name="other-server-group" profile="full">
             <jvm name="default">
                 <heap size="1000m" max-size="1000m"/>
                 <permgen max-size="256m"/>
