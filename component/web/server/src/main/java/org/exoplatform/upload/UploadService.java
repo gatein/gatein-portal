@@ -73,9 +73,6 @@ public class UploadService {
             defaultUploadLimitMB_ = new UploadLimit(Integer.parseInt(params.getValueParam("upload.limit.size").getValue()),
                     UploadUnit.MB);
         uploadLocation_ = tmpDir + "/" + pinfo.getContainerName() + "/eXoUpload";
-        File uploadDir = new File(uploadLocation_);
-        if (!uploadDir.exists())
-            uploadDir.mkdirs();
     }
 
     public void register(MimeTypeUploadPlugin plugin) {
@@ -164,6 +161,9 @@ public class UploadService {
      */
     public void createUploadResource(String uploadId, String encoding, String contentType, double contentLength,
             InputStream inputStream) throws Exception {
+        File uploadDir = new File(uploadLocation_);
+        if (!uploadDir.exists())
+            uploadDir.mkdirs();
         UploadResource upResource = new UploadResource(uploadId);
         RequestStreamReader reader = new RequestStreamReader(upResource);
         uploadResources.put(upResource.getUploadId(), upResource);
@@ -305,7 +305,10 @@ public class UploadService {
 
         // Set factory constraints
         factory.setSizeThreshold(0);
-        factory.setRepository(new File(uploadLocation_));
+        File uploadDir = new File(uploadLocation_);
+        if (!uploadDir.exists())
+            uploadDir.mkdirs();
+        factory.setRepository(uploadDir);
 
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
