@@ -84,10 +84,10 @@ eXo.webui.UIPageTemplateOptions = {
         var selectedItem = $(itemList[i]).find("div.SelectedItem").eq(0);
         if (!selectedItem || selectedItem == null)
           continue;
-        var setValue = selectedItem.closest(".SetValue");
-        if (setValue == null)
-          continue;
-        eval(setValue.innerHTML);
+        var setValue = selectedItem.find(".SetValue");
+        if (setValue.length > 0) {
+            eval(setValue.html());
+        }
       } else {
         itemList[i].style.display = "none";
         if (itemDetailList.length > 0)
