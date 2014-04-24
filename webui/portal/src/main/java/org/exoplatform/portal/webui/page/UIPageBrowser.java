@@ -419,7 +419,7 @@ public class UIPageBrowser extends UIContainer {
 
             page.setOwnerType(uiPage.getSiteKey().getTypeName());
 
-            List<UIPortlet> uiPortlets = new ArrayList<UIPortlet>();
+            List<UIPortlet<?, ?>> uiPortlets = new ArrayList<UIPortlet<?, ?>>();
             findAllPortlet(uiPortlets, uiPage);
             ArrayList<ModelObject> applications = new ArrayList<ModelObject>();
             for (UIPortlet uiPortlet : uiPortlets) {

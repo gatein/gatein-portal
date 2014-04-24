@@ -466,8 +466,8 @@ public class UserPortalConfigService implements Startable {
                 updateOwnership(child, ownerType, ownerId);
             }
         } else if (object instanceof Application) {
-            Application application = (Application) object;
-            TransientApplicationState applicationState = (TransientApplicationState) application.getState();
+            Application<?> application = (Application<?>) object;
+            TransientApplicationState<?> applicationState = (TransientApplicationState<?>) application.getState();
             if (applicationState != null && (applicationState.getOwnerType() == null || applicationState.getOwnerId() == null)) {
                 applicationState.setOwnerType(ownerType);
                 applicationState.setOwnerId(ownerId);
@@ -533,4 +533,38 @@ public class UserPortalConfigService implements Startable {
     public PortalConfig getPortalConfigFromTemplate(String templateName) {
         return newPortalConfigListener_.getPortalConfigFromTemplate(PortalConfig.PORTAL_TYPE, templateName);
     }
+
+    /**
+     * Sets the default access, edit, move apps and move containers permissions on the given {@link Page}
+     * depending on the the value of {@link Page#getOwnerType()}.
+     * <p>
+     * For {@code ownerType} equal to {@link SiteType#PORTAL#getName()}, the portal is loaded
+     * and the permissions are overtaken from it.
+     * <p>
+     * Otherwise, i.e. for {@link SiteType#GROUP} and {@link SiteType#USER} owner types,
+     * {@link Page#getOwnerId()} is used as a value to set access, move apps and move containers
+     * permissions.
+     * <p>
+     * All other cases throw an {@link IllegalStateException}.
+     *
+     * @param page the page on which the permissions will be set
+     * @throws Exception
+     */
+    public void setDefaultPermissions(Page page) throws Exception {
+        String ownerType = page.getOwnerType();
+        if (SiteType.PORTAL.getName().equals(ownerType)) {
+            PortalConfig portalConfig = storage_.getPortalConfig(page.getOwnerType(), page.getOwnerId());
+            page.setAccessPermissions(portalConfig.getAccessPermissions());
+            page.setEditPermission(portalConfig.getEditPermission());
+        } else if (SiteType.GROUP.getName().equals(ownerType)) {
+            String ownerId = page.getOwnerId();
+            String siteName = ownerId.startsWith("/") ? ownerId : "/" + ownerId;
+            String[] accessPermissions = new String[] { "*:" + siteName };
+            page.setAccessPermissions(accessPermissions);
+            page.setEditPermission(userACL_.getMakableMT() + ":" + siteName);
+        } else if (SiteType.USER.getName().equals(ownerType)) {
+            /* Nothing can be done for users */
+        }
+    }
+
 }

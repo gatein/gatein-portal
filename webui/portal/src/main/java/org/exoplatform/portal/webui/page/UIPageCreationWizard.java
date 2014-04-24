@@ -24,10 +24,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
@@ -49,9 +50,9 @@ import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication.EditMode;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -267,19 +268,6 @@ public class UIPageCreationWizard extends UIPageWizard {
 
     public static class ViewStep3ActionListener extends EventListener<UIPageCreationWizard> {
 
-        private void setDefaultPermission(Page page, SiteKey siteKey) {
-            UIPortal uiPortal = Util.getUIPortal();
-            if (SiteType.PORTAL.equals(siteKey.getType())) {
-                page.setAccessPermissions(uiPortal.getAccessPermissions());
-                page.setEditPermission(uiPortal.getEditPermission());
-            } else if (SiteType.GROUP.equals(siteKey.getType())) {
-                UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
-                String siteName = siteKey.getName().startsWith("/") ? siteKey.getName() : "/" + siteKey.getName();
-                page.setAccessPermissions(new String[] { "*:" + siteName });
-                page.setEditPermission(acl.getMakableMT() + ":" + siteName);
-            }
-        }
-
         public void execute(Event<UIPageCreationWizard> event) throws Exception {
             UIPageCreationWizard uiWizard = event.getSource();
             uiWizard.setShowActions(false);
@@ -311,27 +299,33 @@ public class UIPageCreationWizard extends UIPageWizard {
             UserNavigation pageNavi = uiNodeSelector.getNavigation();
             String ownerType = pageNavi.getKey().getTypeName();
             String ownerId = pageNavi.getKey().getName();
+            String pageName = "page" + UUID.randomUUID().hashCode();
 
-            UIFormStringInput pageName = uiPageInfo.getUIStringInput(UIWizardPageSetInfo.PAGE_NAME);
-            Page page = uiPageTemplateOptions.createPageFromSelectedOption(ownerType, ownerId);
-            page.setName("page" + page.hashCode());
-            String pageId = ownerType + "::" + ownerId + "::" + page.getName();
-
-            // check page is exist
+            // Check if the page exists
+            PageKey pageKey = new SiteKey(ownerType, ownerId).page(pageName);
             PageService pageService = uiWizard.getApplicationComponent(PageService.class);
-            if (pageService.loadPage(PageKey.parse(pageId)) != null) {
+            if (pageService.loadPage(pageKey) != null) {
                 uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
                 uiWizard.viewStep(FIRST_STEP);
                 uiWizard.updateWizardComponent();
             }
-            page.setModifiable(true);
+
+            UIFormStringInput pageNameInput = uiPageInfo.getUIStringInput(UIWizardPageSetInfo.PAGE_NAME);
+
+            Page page = uiPageTemplateOptions.createPageFromSelectedOption(ownerType, ownerId);
 
             // Set default permissions on the page
-            setDefaultPermission(page, pageNavi.getKey());
+            UserPortalConfigService configService = uiPortalApp.getApplicationComponent(UserPortalConfigService.class);
+            configService.setDefaultPermissions(page);
 
-            if (page.getTitle() == null || page.getTitle().trim().length() == 0) {
-                page.setTitle(pageName.getValue());
+            page.setName(pageName);
+            page.setModifiable(true);
+
+            String title = pageNameInput.getValue();
+            if (title == null || title.trim().length() < 1) {
+                title = page.getName();
             }
+            page.setTitle(title);
 
             UIPagePreview uiPagePreview = uiWizard.getChild(UIPagePreview.class);
 
@@ -352,7 +346,6 @@ public class UIPageCreationWizard extends UIPageWizard {
          */
         private UIPortal prepareUIPortal(UIPortalApplication uiPortalApp, PortalRequestContext pcontext, UIWorkingWorkspace uiWorkingWS, Page page) throws Exception {
 
-//            UIPortal currentPortal = uiPortalApp.getCurrentSite();
             DataStorage dataStorage = uiPortalApp.getApplicationComponent(DataStorage.class);
             PortalConfig portalConfig = dataStorage.getPortalConfig(pcontext.getSiteType().getName(), pcontext.getSiteName());
             UIPortal transientPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);

@@ -39,11 +39,10 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.ProtectedContainer;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.page.PageContext;
@@ -52,8 +51,8 @@ import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.page.UIPageSelector;
+import org.exoplatform.portal.webui.page.UIPageTemplateOptions;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
-import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.resources.LocaleConfig;
@@ -79,7 +78,6 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
-import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
@@ -623,6 +621,7 @@ public class UIPageNodeForm extends UIFormTabPane {
     }
 
     public static class CreatePageActionListener extends EventListener<UIPageNodeForm> {
+
         public void execute(Event<UIPageNodeForm> event) throws Exception {
             UIPageNodeForm uiForm = event.getSource();
             UIPageSelector pageSelector = uiForm.findFirstComponentOfType(UIPageSelector.class);
@@ -634,7 +633,7 @@ public class UIPageNodeForm extends UIFormTabPane {
             /*********************************************************************/
             for (UIComponent uiChild : children) {
                 if (uiChild instanceof UIFormInputBase) {
-                    UIFormInputBase uiInput = (UIFormInputBase) uiChild;
+                    UIFormInputBase<?> uiInput = (UIFormInputBase<?>) uiChild;
                     if (!uiInput.isValid())
                         continue;
                     List<Validator> validators = uiInput.getValidators();
@@ -654,26 +653,24 @@ public class UIPageNodeForm extends UIFormTabPane {
                 }
             }
 
-            UserACL userACL = uiForm.getApplicationComponent(UserACL.class);
-
             String ownerId = uiForm.getOwner();
-            String[] accessPermission = new String[1];
-            accessPermission[0] = "*:" + ownerId;
-            String editPermission = userACL.getMakableMT() + ":" + ownerId;
-
-            if (SiteType.PORTAL.equals(uiForm.getOwnerType())) {
-                UIPortal uiPortal = Util.getUIPortal();
-                accessPermission = uiPortal.getAccessPermissions();
-                editPermission = uiPortal.getEditPermission();
-            }
-
             UIFormStringInput uiPageName = uiInputSet.getChildById("pageName");
-            UIFormStringInput uiPageTitle = uiInputSet.getChildById("pageTitle");
 
-            /* Once there is a UI for setting these permissions, the defaults should
-             * be replaced accordingly */
-            List<String> moveAppsPermissions = ProtectedContainer.DEFAULT_MOVE_APPLICATIONS_PERMISSIONS;
-            List<String> moveContainersPermissions = ProtectedContainer.DEFAULT_MOVE_CONTAINERS_PERMISSIONS;
+            /* Find out the default permissions */
+            UserPortalConfigService configService = uiForm.getApplicationComponent(UserPortalConfigService.class);
+
+            UIPageTemplateOptions uiTemplateConfig = uiForm.createUIComponent(UIPageTemplateOptions.class, null, null);
+            String defaultTemplate = uiTemplateConfig.getDefaultItemOption().getValue();
+            Page page = configService.createPageTemplate(defaultTemplate, uiForm.getOwnerType().getName(), ownerId);
+            /* Taking the move*Permissions from the default template is the thing most compliant with
+             * taking the permissions from templates which we normally do elsewhere */
+            List<String> moveAppsPermissions = page.getMoveAppsPermissions() != null ? Arrays.asList(page.getMoveAppsPermissions()) : null;
+            List<String> moveContainersPermissions = page.getMoveContainersPermissions() != null ? Arrays.asList(page.getMoveContainersPermissions()) : null;
+            configService.setDefaultPermissions(page);
+            String[] accessPermission = page.getAccessPermissions();
+            String editPermission = page.getEditPermission();
+
+            UIFormStringInput uiPageTitle = uiInputSet.getChildById("pageTitle");
 
             PageState pageState = new PageState(uiPageTitle.getValue(), null, false, null,
                     accessPermission != null ? Arrays.asList(accessPermission) : null, editPermission, moveAppsPermissions, moveContainersPermissions);

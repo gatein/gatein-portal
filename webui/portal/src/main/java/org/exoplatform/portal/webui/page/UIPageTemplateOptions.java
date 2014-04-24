@@ -115,10 +115,10 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector<String> {
             selectedItemOption_ = getDefaultItemOption();
         if (selectedItemOption_ == null)
             return null;
-        Object temp = selectedItemOption_.getValue();
+        String temp = selectedItemOption_.getValue();
         if (temp == null)
             return null;
         UserPortalConfigService configService = getApplicationComponent(UserPortalConfigService.class);
-        return configService.createPageTemplate(temp.toString(), ownerType, ownerId);
+        return configService.createPageTemplate(temp, ownerType, ownerId);
     }
 }
