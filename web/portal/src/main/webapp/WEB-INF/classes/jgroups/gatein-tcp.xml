@@ -39,7 +39,7 @@
       sock_conn_timeout="300"
       skip_suspected_members="true"
       timer.num_threads="12"
-      enable_diagnostics="${jboss.jgroups.enable_diagnostics:true}"
+      enable_diagnostics="${jboss.jgroups.enable_diagnostics:false}"
       diagnostics_addr="${jboss.jgroups.diagnostics_addr:224.0.75.75}"
       diagnostics_port="${jboss.jgroups.diagnostics_port:7500}"
 

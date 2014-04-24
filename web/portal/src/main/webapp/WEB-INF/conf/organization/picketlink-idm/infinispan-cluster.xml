@@ -32,7 +32,7 @@
     <transport clusterName="${jboss.partition.name:DefaultPartition}-idm" distributedSyncTimeout="60000"
                nodeName="${jboss.node.name:gtn}">
       <properties>
-        <property name="configurationFile" value="jgroups/gatein-${gatein.default.jgroups.stack:udp}-ispn.xml"/>
+        <property name="configurationFile" value="${gatein.jcr.jgroups.config.idm}"/>
       </properties>
     </transport>
 

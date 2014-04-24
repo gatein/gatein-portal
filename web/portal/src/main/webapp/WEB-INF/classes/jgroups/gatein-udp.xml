@@ -31,6 +31,7 @@
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/JGroups-3.2.xsd">
     <UDP
             singleton_name="gatein-udp"
+            mcast_addr="${gatein.jgroups.udp.mcast_addr:230.0.0.4}"
             mcast_port="${gatein.jgroups.udp.mcast_port:45588}"
             tos="8"
             ucast_recv_buf_size="20M"
@@ -42,7 +43,7 @@
             max_bundle_timeout="30"
             ip_ttl="${jgroups.udp.ip_ttl:8}"
             enable_bundling="true"
-            enable_diagnostics="${jboss.jgroups.enable_diagnostics:true}"
+            enable_diagnostics="${jboss.jgroups.enable_diagnostics:false}"
             thread_naming_pattern="cl"
 
             timer_type="old"

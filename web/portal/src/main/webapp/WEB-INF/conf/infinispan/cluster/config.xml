@@ -33,7 +33,9 @@
 
       <globalJmxStatistics jmxDomain="platform.insp.cache.template" enabled="true" allowDuplicateDomains="true"/>
 
-      <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport" clusterName="${gatein.infinispan.cluster.name}" distributedSyncTimeout="20000">
+      <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
+                 clusterName="${gatein.infinispan.cluster.name}" distributedSyncTimeout="20000"
+                 nodeName="${jboss.node.name:gtn}">
          <properties>
             <property name="configurationFile" value="${gatein.jcr.jgroups.config}"/>
          </properties>
