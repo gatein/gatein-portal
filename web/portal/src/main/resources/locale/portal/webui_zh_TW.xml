@@ -483,7 +483,7 @@
       <ForAccount>立即註冊一個帳戶</ForAccount>
       <SigninFail>登錄失敗。使用者名或密碼錯誤。</SigninFail>
       <Copyright>
-        <![CDATA[Copyright &copy; 2009-2012. All rights Reserved, eXo Platform SAS and Red Hat, Inc.]]></Copyright>
+        <![CDATA[Copyright &copy; 2009-2014. All rights Reserved, eXo Platform SAS and Red Hat, Inc.]]></Copyright>
     </label>
   </UILoginForm>
 
@@ -1555,7 +1555,7 @@
 
   <UIPortalToolPanel>
     <label>
-      <copyrightText><![CDATA[Copyright &copy; 2009-2012. All rights Reserved,]]></copyrightText>
+      <copyrightText><![CDATA[Copyright &copy; 2009-2014. All rights Reserved,]]></copyrightText>
       <companyTitleText>eXo Platform SAS and Red Hat, Inc..
       </companyTitleText>
     </label>
