@@ -70,7 +70,7 @@
             def beanId = uicomponent.getBeanIdFor(bean);
             if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
                 if(!uicomponent.getFieldValue(bean, "enabled")) {
-                    rowStyle = "font-style: italic; background: darkgray";
+                    rowStyle = "font-style: italic; background: #dedfdf";
                 } else {
                     rowStyle = null;
                 }
@@ -115,11 +115,11 @@
 
                         String classIcon = "";
                         if (uicomponent.getFieldValue(bean, "enabled")) {
-                            enableDisableTitle = "Disabled User";
-                            classIcon = "CheckDisable";
-                        } else {
                             enableDisableTitle = "Enabled User";
                             classIcon = "Check";
+                        } else {
+                            enableDisableTitle = "Disabled User";
+                            classIcon = "CheckDisable";
                         }
                         %>
                         <a href="javascript:;" onclick="$enableDisableActionLink">
