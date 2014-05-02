@@ -346,6 +346,7 @@ public class PortalSetupCommand {
     private void writeRootPasswordLine(Writer w) throws SetupCommandException, IOException {
         try {
             String encodedPassword = PortalSetupService.encodePassword(password);
+            w.write('\n');
             w.write(PortalSetupService.ROOT_PASSWORD_PROPERTY);
             w.write('=');
             w.write(encodedPassword);
