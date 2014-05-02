@@ -611,8 +611,10 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T> {
         writer.writeAttribute(attribute.getLocalName(), value);
     }
 
-    private static enum Attribute {
-        ID("id"), TEMPLATE("template"), WIDTH("width"), HEIGHT("height");
+    public static enum Attribute {
+        ID("id"), TEMPLATE("template"), WIDTH("width"), HEIGHT("height"),
+        PROPERTIES_KEY("key");
+
 
         private final String name;
 

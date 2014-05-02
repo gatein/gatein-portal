@@ -53,20 +53,15 @@ public class Util {
         if (attributes == null) {
             return null;
         }
-
-        Properties properties = new Properties();
-        properties.putAll(attributes);
-
-        for (String key : properties.keySet()) {
-            if (key.equals(Site.AttributeKeys.SHOW_PORTLET_INFO_BAR.getName())) {
-                String value = properties.get(key);
-                boolean show = Boolean.parseBoolean(value);
-                if (show) {
-                    properties.put(key, "1");
-                } else {
-                    properties.put(key, "0");
-                }
+        Properties properties = new Properties(attributes);
+        Object showInfoBarKey = Site.AttributeKeys.SHOW_PORTLET_INFO_BAR.getName();
+        String showInfoBar = properties.get(showInfoBarKey);
+        if (showInfoBar == null) {
+            if (properties.containsKey(showInfoBarKey)) {
+                properties.remove(showInfoBarKey);
             }
+        } else {
+            properties.put(showInfoBar, Boolean.parseBoolean(showInfoBar) ? "1" : "0");
         }
         return properties;
     }

@@ -118,25 +118,7 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
 
         writeOptionalElement(writer, Element.SKIN, portalConfig.getSkin());
 
-        boolean propertiesWritten = false;
-        Map<String, String> properties = portalConfig.getProperties();
-        if (properties != null) {
-            for (String key : properties.keySet()) {
-                if (!propertiesWritten) {
-                    writer.writeStartElement(Element.PROPERTIES);
-                    propertiesWritten = true;
-                }
-                String value = properties.get(key);
-                if (value != null) {
-                    writer.writeStartElement(Element.PROPERTIES_ENTRY);
-                    writer.writeAttribute(Attribute.PROPERTIES_KEY.getLocalName(), key);
-                    writer.writeContent(value).writeEndElement();
-                }
-            }
-            if (propertiesWritten) {
-                writer.writeEndElement();
-            }
-        }
+        Utils.marshalProperties(writer, portalConfig.getProperties());
 
         // portal redirects
         redirectXmlHandler.write(writer, portalConfig.getPortalRedirects());
@@ -186,16 +168,7 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
                     current = navigator.sibling();
                     break;
                 case PROPERTIES:
-                    Properties properties = new Properties();
-                    if (navigator.navigate(Axis.CHILD, Element.PROPERTIES_ENTRY)) {
-                        for (StaxNavigator<Element> fork : navigator.fork(Element.PROPERTIES_ENTRY)) {
-                            String key = getRequiredAttribute(fork, Attribute.PROPERTIES_KEY.getLocalName());
-                            String value = getRequiredContent(fork, false);
-                            properties.put(key, value);
-                        }
-                    } else {
-                        throw expectedElement(navigator, Element.PROPERTIES_ENTRY);
-                    }
+                    Properties properties = Utils.unmarshalProperties(navigator);
                     portalConfig.setProperties(properties);
                     current = navigator.next();
                     break;
@@ -281,25 +254,6 @@ public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
         portalConfig.setPortalLayout(portalLayout);
 
         return portalConfig;
-    }
-
-    private static enum Attribute {
-        PROPERTIES_KEY("key");
-
-        private final String name;
-
-        Attribute(final String name) {
-            this.name = name;
-        }
-
-        /**
-         * Get the local name of this element.
-         *
-         * @return the local name
-         */
-        public String getLocalName() {
-            return name;
-        }
     }
 
     private static int countPageBodyElements(Container container, int pageBodyCount) {

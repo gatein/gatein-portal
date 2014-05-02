@@ -22,7 +22,9 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
-import static org.gatein.common.xml.stax.navigator.Exceptions.*;
+import static org.gatein.common.xml.stax.navigator.Exceptions.expectedElement;
+import static org.gatein.common.xml.stax.navigator.Exceptions.unexpectedElement;
+import static org.gatein.common.xml.stax.navigator.Exceptions.unknownElement;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.createNavigator;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseContent;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
@@ -152,6 +154,8 @@ public class NavigationMarshaller implements Marshaller<PageNavigation> {
         writeOptionalElement(writer, Element.VISIBILITY, visibility);
         writeOptionalElement(writer, Element.PAGE_REFERENCE, node.getPageReference());
 
+        Utils.marshalProperties(writer, node.getProperties());
+
         // Marshall children
         List<PageNode> children = node.getNodes();
         if (children != null && !children.isEmpty()) {
@@ -257,6 +261,10 @@ public class NavigationMarshaller implements Marshaller<PageNavigation> {
                 case PAGE_REFERENCE:
                     node.setPageReference(navigator.getContent());
                     current = navigator.sibling();
+                    break;
+                case PROPERTIES:
+                    node.setProperties(Utils.unmarshalProperties(navigator));
+                    current = navigator.next();
                     break;
                 case NODE:
                     PageNode child = unmarshalNode(navigator.fork());

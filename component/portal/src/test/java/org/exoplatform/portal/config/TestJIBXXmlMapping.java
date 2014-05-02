@@ -197,6 +197,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(1, fragment.getNodes().size());
         PageNode bar = fragment.getNode("bar");
         assertNotNull(bar);
+        assertEquals(new Properties(), bar.getProperties());
     }
 
     public void testNavigationNodeProperties() throws Exception {
@@ -221,7 +222,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertNotNull(props1);
         assertEquals(4, props1.size());
         assertEquals("http://example.com", props1.get("externalURI"));
-        assertEquals("true", props1.get("true"));
+        assertEquals("true", props1.get("openInNewWindow"));
         assertEquals(256, props1.getIntValue("intKey"));
         assertTrue(Math.abs(props1.getDoubleValue("dblKey") - 3.14) < 0.00001);
 

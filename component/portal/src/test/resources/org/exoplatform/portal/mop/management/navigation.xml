@@ -33,6 +33,12 @@
       <label>#{portal.classic.home}</label>
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::classic::homepage</page-reference>
+      <properties>
+        <entry key="externalURI">http://example.com</entry>
+        <entry key="openInNewWindow">true</entry>
+        <entry key="intKey">256</entry>
+        <entry key="dblKey">3.14</entry>
+      </properties>
       <node>
         <uri>home/home-1</uri>
         <name>home-1</name>

@@ -38,6 +38,7 @@ import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.Visibility;
 
 /**
@@ -45,6 +46,18 @@ import org.exoplatform.portal.mop.Visibility;
  * @version $Revision$
  */
 public class NavigationMarshallerTest extends TestCase {
+
+    private static final Properties EMPTY_PROPS = new Properties();
+
+    private static Properties createNonEmptyProperties() {
+        Properties props = new Properties();
+        props.put("externalURI", "http://example.com");
+        props.put("openInNewWindow", "true");
+        props.put("intKey", 256);
+        props.put("dblKey", 3.14);
+        return props;
+    }
+
     public void testNavigationUnmarshalling() {
         NavigationMarshaller marshaller = new NavigationMarshaller();
         PageNavigation data = marshaller.unmarshal(getClass().getResourceAsStream(
@@ -54,30 +67,32 @@ public class NavigationMarshallerTest extends TestCase {
         assertNotNull(data.getFragment());
         assertEquals(7, data.getFragment().getNodes().size());
         PageNode node = data.getFragment().getNodes().get(0);
+
+
         verifyNode(node, "home", "#{portal.classic.home}", "home", Visibility.DISPLAYED, "portal::classic::homepage", null,
-                null, null, 1);
+                null, null, createNonEmptyProperties(), 1);
         node = node.getNodes().get(0);
         Date start = createDate(2011, 1, 10, 12, 13, 55);
         Date end = createDate(2011, 1, 17, 17, 14, 0);
-        verifyNode(node, "home-1", "Home 1", "home/home-1", Visibility.TEMPORAL, null, start, end, "StarAward", 1);
+        verifyNode(node, "home-1", "Home 1", "home/home-1", Visibility.TEMPORAL, null, start, end, "StarAward", EMPTY_PROPS, 1);
         node = node.getNodes().get(0);
         verifyNode(node, "empty", "Empty", "home/home-1/empty", Visibility.HIDDEN, "portal::classic::empty-page", null, null,
-                null, 0);
+                null, EMPTY_PROPS, 0);
 
         node = data.getFragment().getNodes().get(5);
-        verifyNode(node, "notfound", "NotFound", "notfound", Visibility.SYSTEM, null, null, null, null, 0);
+        verifyNode(node, "notfound", "NotFound", "notfound", Visibility.SYSTEM, null, null, null, null, EMPTY_PROPS, 0);
 
         node = data.getFragment().getNodes().get(6);
-        verifyNode(node, "n0", "n0", "n0", Visibility.DISPLAYED, "portal::classic::n0", null, null, null, 1);
+        verifyNode(node, "n0", "n0", "n0", Visibility.DISPLAYED, "portal::classic::n0", null, null, null, EMPTY_PROPS, 1);
         node = node.getNodes().get(0);
-        verifyNode(node, "n0", "n0", "n0/n0", Visibility.DISPLAYED, "portal::classic::n0_n0", null, null, null, 10);
+        verifyNode(node, "n0", "n0", "n0/n0", Visibility.DISPLAYED, "portal::classic::n0_n0", null, null, null, EMPTY_PROPS, 10);
         for (int i = 0; i < 10; i++) {
             String name = "n" + i;
             String uri = "n0/n0/n" + i;
             String pageref = uri.replace("/", "_");
 
             PageNode child = node.getNodes().get(i);
-            verifyNode(child, name, name, uri, Visibility.DISPLAYED, "portal::classic::" + pageref, null, null, null, 0);
+            verifyNode(child, name, name, uri, Visibility.DISPLAYED, "portal::classic::" + pageref, null, null, null, EMPTY_PROPS, 0);
         }
     }
 
@@ -174,21 +189,23 @@ public class NavigationMarshallerTest extends TestCase {
         Calendar endCal = Calendar.getInstance();
         endCal.set(Calendar.MILLISECOND, 0);
         Date end = endCal.getTime();
+        Properties props = createNonEmptyProperties();
 
         PageNode expectedChild1 = newPageNode("node-1", "Icon-1", "Node 1", null, null, Visibility.DISPLAYED, null,
+                props,
                 new ArrayList<PageNode>());
 
         I18NString labels = new I18NString(new LocalizedString("Node 2", Locale.ENGLISH), new LocalizedString("Node 2",
                 Locale.FRENCH), new LocalizedString("Node 2", Locale.TAIWAN));
 
         PageNode expectedChild2 = newPageNode("node-2", "Icon-2", labels, createDate(2011, 7, 22, 10, 10, 10),
-                createDate(2011, 7, 30, 12, 0, 0), Visibility.SYSTEM, "some:page:ref", new ArrayList<PageNode>());
+                createDate(2011, 7, 30, 12, 0, 0), Visibility.SYSTEM, "some:page:ref", EMPTY_PROPS, new ArrayList<PageNode>());
 
         ArrayList<PageNode> children = new ArrayList<PageNode>(2);
         children.add(expectedChild1);
         children.add(expectedChild2);
 
-        PageNode expectedNode = newPageNode("node", "Icon", "Node", start, end, Visibility.HIDDEN, "page-ref", children);
+        PageNode expectedNode = newPageNode("node", "Icon", "Node", start, end, Visibility.HIDDEN, "page-ref", EMPTY_PROPS, children);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         NavigationMarshaller marshaller = new NavigationMarshaller();
@@ -227,7 +244,7 @@ public class NavigationMarshallerTest extends TestCase {
     }
 
     private void verifyNode(PageNode node, String name, String label, String uri, Visibility visibility, String pageRef,
-            Date start, Date end, String icon, int children) {
+            Date start, Date end, String icon, Properties properties, int children) {
         assertNotNull(node);
         assertEquals(name, node.getName());
         assertEquals(label, node.getLabel());
@@ -236,6 +253,7 @@ public class NavigationMarshallerTest extends TestCase {
         assertEquals(start, node.getStartPublicationDate());
         assertEquals(end, node.getEndPublicationDate());
         assertEquals(icon, node.getIcon());
+        assertEquals(properties, node.getProperties());
         assertNotNull(node.getNodes());
         assertEquals(children, node.getNodes().size());
     }
@@ -264,6 +282,7 @@ public class NavigationMarshallerTest extends TestCase {
         assertEquals(expected.getEndPublicationDate(), actual.getEndPublicationDate());
         assertEquals(expected.getVisibility(), actual.getVisibility());
         assertEquals(expected.getPageReference(), actual.getPageReference());
+        assertEquals(expected.getProperties(), actual.getProperties());
         assertEquals(expected.getNodes().size(), actual.getNodes().size());
     }
 
@@ -281,7 +300,7 @@ public class NavigationMarshallerTest extends TestCase {
     }
 
     private PageNode newPageNode(String name, String icon, String label, Date start, Date end, Visibility visibility,
-            String pageref, ArrayList<PageNode> pageNodes) {
+            String pageref, Properties properties, ArrayList<PageNode> pageNodes) {
         PageNode pageNode = new PageNode();
         pageNode.setName(name);
         pageNode.setIcon(icon);
@@ -290,13 +309,14 @@ public class NavigationMarshallerTest extends TestCase {
         pageNode.setEndPublicationDate(end);
         pageNode.setVisibility(visibility);
         pageNode.setPageReference(pageref);
+        pageNode.setProperties(properties);
         pageNode.setChildren(pageNodes);
 
         return pageNode;
     }
 
     private PageNode newPageNode(String name, String icon, I18NString labels, Date start, Date end, Visibility visibility,
-            String pageref, ArrayList<PageNode> pageNodes) {
+            String pageref, Properties properties, ArrayList<PageNode> pageNodes) {
         PageNode pageNode = new PageNode();
         pageNode.setName(name);
         pageNode.setIcon(icon);
@@ -305,6 +325,7 @@ public class NavigationMarshallerTest extends TestCase {
         pageNode.setEndPublicationDate(end);
         pageNode.setVisibility(visibility);
         pageNode.setPageReference(pageref);
+        pageNode.setProperties(properties);
         pageNode.setChildren(pageNodes);
 
         return pageNode;

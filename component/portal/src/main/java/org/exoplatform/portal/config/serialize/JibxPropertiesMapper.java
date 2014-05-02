@@ -63,12 +63,10 @@ public class JibxPropertiesMapper implements IMarshaller, IUnmarshaller, IAliasa
         marshallName = name;
     }
 
-    @SuppressWarnings("unused")
     public boolean isExtension(String index) {
         return false;
     }
 
-    @SuppressWarnings("unused")
     public boolean isExtension(int index) {
         return false;
     }
@@ -105,7 +103,6 @@ public class JibxPropertiesMapper implements IMarshaller, IUnmarshaller, IAliasa
         return ctx.isAt(marshalURI, marshallName);
     }
 
-    @SuppressWarnings("unchecked")
     public Object unmarshal(Object obj, IUnmarshallingContext ictx) throws JiBXException {
         UnmarshallingContext ctx = (UnmarshallingContext) ictx;
         if (!ctx.isAt(marshalURI, marshallName))

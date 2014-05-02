@@ -22,6 +22,10 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
+import static org.gatein.common.xml.stax.navigator.Exceptions.expectedElement;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredAttribute;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredContent;
+
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,8 +35,11 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.exoplatform.portal.config.model.LocalizedString;
+import org.exoplatform.portal.config.model.Properties;
+import org.exoplatform.portal.mop.management.binding.xml.AbstractMarshaller.Attribute;
 import org.gatein.common.xml.stax.navigator.StaxNavUtils;
 import org.gatein.common.xml.stax.writer.StaxWriter;
+import org.staxnav.Axis;
 import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
 
@@ -113,6 +120,41 @@ class Utils {
                 return array;
             }
         }
+    }
+
+    public static void marshalProperties(StaxWriter<Element> writer, Properties properties) {
+        boolean propertiesStarted = false;
+        if (properties != null) {
+            for (String key : properties.keySet()) {
+                if (!propertiesStarted) {
+                    writer.writeStartElement(Element.PROPERTIES);
+                    propertiesStarted = true;
+                }
+                String value = properties.get(key);
+                if (value != null) {
+                    writer.writeStartElement(Element.PROPERTIES_ENTRY);
+                    writer.writeAttribute(Attribute.PROPERTIES_KEY.getLocalName(), key);
+                    writer.writeContent(value).writeEndElement();
+                }
+            }
+            if (propertiesStarted) {
+                writer.writeEndElement();
+            }
+        }
+    }
+
+    public static Properties unmarshalProperties(StaxNavigator<Element> navigator) {
+        Properties properties = new Properties();
+        if (navigator.navigate(Axis.CHILD, Element.PROPERTIES_ENTRY)) {
+            for (StaxNavigator<Element> fork : navigator.fork(Element.PROPERTIES_ENTRY)) {
+                String key = getRequiredAttribute(fork, Attribute.PROPERTIES_KEY.getLocalName());
+                String value = getRequiredContent(fork, false);
+                properties.put(key, value);
+            }
+        } else {
+            throw expectedElement(navigator, Element.PROPERTIES_ENTRY);
+        }
+        return properties;
     }
 
 }

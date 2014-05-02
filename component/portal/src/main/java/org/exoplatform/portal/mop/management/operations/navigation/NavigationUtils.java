@@ -33,6 +33,7 @@ import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.GenericScope;
@@ -40,6 +41,7 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 
 /**
@@ -147,6 +149,7 @@ public class NavigationUtils {
         }
         pageNode.setVisibility(existingPageNode.getVisibility());
         pageNode.setPageReference(existingPageNode.getPageReference());
+        pageNode.setProperties(new Properties(existingPageNode.getProperties()));
         for (PageNode existingChild : existingPageNode.getNodes()) {
             PageNode child = copy(existingChild);
             pageNode.getNodes().add(child);
@@ -190,7 +193,8 @@ public class NavigationUtils {
         PageNode pageNode = new PageNode();
         pageNode.setName(node.getName());
 
-        if (node.getState().getLabel() == null) {
+        NodeState nodeState = node.getState();
+        if (nodeState.getLabel() == null) {
             Map<Locale, Described.State> descriptions = service.getDescriptions(node.getId());
             if (descriptions != null && !descriptions.isEmpty()) {
                 I18NString labels = new I18NString();
@@ -201,22 +205,24 @@ public class NavigationUtils {
                 pageNode.setLabels(labels);
             }
         } else {
-            pageNode.setLabel(node.getState().getLabel());
+            pageNode.setLabel(nodeState.getLabel());
         }
 
-        pageNode.setIcon(node.getState().getIcon());
-        long startPublicationTime = node.getState().getStartPublicationTime();
+        pageNode.setIcon(nodeState.getIcon());
+        long startPublicationTime = nodeState.getStartPublicationTime();
         if (startPublicationTime != -1) {
             pageNode.setStartPublicationDate(new Date(startPublicationTime));
         }
 
-        long endPublicationTime = node.getState().getEndPublicationTime();
+        long endPublicationTime = nodeState.getEndPublicationTime();
         if (endPublicationTime != -1) {
             pageNode.setEndPublicationDate(new Date(endPublicationTime));
         }
 
-        pageNode.setVisibility(node.getState().getVisibility());
-        pageNode.setPageReference(node.getState().getPageRef() != null ? node.getState().getPageRef().format() : null);
+        pageNode.setVisibility(nodeState.getVisibility());
+        pageNode.setPageReference(nodeState.getPageRef() != null ? nodeState.getPageRef().format() : null);
+
+        pageNode.setProperties(new Properties(nodeState.getAttributesState()));
 
         if (node.getNodes() != null) {
             ArrayList<PageNode> children = new ArrayList<PageNode>(node.getNodeCount());
