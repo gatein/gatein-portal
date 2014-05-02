@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (C) 2009 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<xs:schema
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_1_7"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_7"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
+  <!-- A top page element -->
+  <xs:element name="page" type="pageType"/>
+
+  <!-- A top page-set element -->
+  <xs:element name="page-set" type="pageSetType"/>
+
+  <!-- A top portal-config element -->
+  <xs:element name="portal-config" type="portalConfigType"/>
+
+  <!-- A top container element -->
+  <xs:element name="container" type="containerType"/>
+
+  <!-- A top node-navigation element -->
+  <xs:element name="node-navigation" type="nodeNavigationType"/>
+
+  <!-- A localized string -->
+  <xs:complexType name="localizedString">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute ref="xml:lang"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <!-- The type of a top navigation node -->
+  <xs:complexType name="nodeNavigationType">
+    <xs:sequence>
+      <xs:element name="priority" type="xs:positiveInteger" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="page-nodes" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="parent-uri" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="node" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- The type of a navigation node -->
+  <xs:complexType name="nodeType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="label" type="localizedString" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="icon" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="start-publication-date" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="end-publication-date" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="visibility" type="visibility" default="DISPLAYED" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="page-reference" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="properties" type="propertiesType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="node" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="visibility">
+    <xs:restriction base='xs:string'>
+      <xs:enumeration value="DISPLAYED"/>
+      <xs:enumeration value="HIDDEN"/>
+      <xs:enumeration value="TEMPORAL"/>
+      <xs:enumeration value="SYSTEM"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="pageSetType">
+    <xs:sequence>
+      <xs:element name="page" type="pageType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="portalConfigType">
+    <xs:sequence>
+      <xs:element name="portal-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="label" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="locale" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="access-permissions" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="skin" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="properties" type="propertiesType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="portal-redirects" type="redirectsType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="portal-layout" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <xs:group ref="containerChildrenGroup"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="propertiesType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="entry" type="propertiesEntryType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="propertiesEntryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="key" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:group name="containerChildrenGroup">
+    <xs:sequence>
+      <xs:element name="move-apps-permissions" type="xs:string" minOccurs="0" maxOccurs="1" default="Everyone"/>
+      <xs:element name="move-containers-permissions" type="xs:string" minOccurs="0" maxOccurs="1" default="Everyone"/>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="portlet-application" type="portletApplicationType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="gadget-application" type="gadgetApplicationType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="container" type="containerType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="page-body" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="site-body" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:complexType name="pageType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="factory-id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="access-permissions" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="edit-permission" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="show-max-window" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="containerChildrenGroup"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="containerType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="icon" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="access-permissions" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="factory-id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:group ref="containerChildrenGroup"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+    <xs:attribute name="template" type="xs:string"/>
+    <xs:attribute name="attribute" type="xs:string"/>
+    <xs:attribute name="width" type="xs:string"/>
+    <xs:attribute name="height" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="portletApplicationType">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="portlet" type="portletType"/>
+        <xs:element name="wsrp" type="xs:string"/>
+      </xs:choice>
+      <xs:group ref="applicationGroup"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gadgetApplicationType">
+    <xs:sequence>
+      <xs:element name="gadget" type="gadgetType" minOccurs="1" maxOccurs="1"/>
+      <xs:group ref="applicationGroup"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:group name="applicationGroup">
+    <xs:sequence>
+      <xs:element name="theme" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="access-permissions" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="show-info-bar" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="show-application-state" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="show-application-mode" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="icon" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="width" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="height" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:group>
+
+  <xs:complexType name="portletType">
+    <xs:sequence>
+      <xs:element name="application-ref" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="portlet-ref" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="preferences" type="portletPreferencesType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="gadgetType">
+    <xs:sequence>
+      <xs:element name="gadget-ref" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="portletPreferencesType">
+    <xs:sequence>
+      <xs:element name="preference" type="portletPreferenceType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="portletPreferenceType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="value" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="read-only" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="redirectsType">
+    <xs:sequence>
+      <xs:element name="portal-redirect" type="redirectType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="redirectType">
+    <xs:sequence>
+      <xs:element name="redirect-site" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="enabled" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="conditions" type="conditionsType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="node-mapping" type="mappingsType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="conditionsType">
+    <xs:sequence>
+      <xs:element name="condition" type="conditionType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="conditionType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="user-agent" type="userAgentType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="device-properties" type="devicePropertiesType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="userAgentType">
+    <xs:sequence>
+      <xs:element name="contains" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="does-not-contain" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="devicePropertiesType">
+    <xs:sequence>
+      <xs:element name="device-property" type="devicePropertyType" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="devicePropertyType">
+    <xs:sequence>
+      <xs:element name="property-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="greater-than" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="less-than" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="equals" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="matches" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="mappingsType">
+    <xs:sequence>
+      <xs:element name="use-node-name-matching" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="unresolved-nodes" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="node-map" type="nodeMapType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="nodeMapType">
+    <xs:sequence>
+      <xs:element name="origin-node" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="redirect-node" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>

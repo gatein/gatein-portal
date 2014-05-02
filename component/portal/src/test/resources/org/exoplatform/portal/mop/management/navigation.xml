@@ -22,9 +22,9 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<node-navigation xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_6"
+<node-navigation xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_7"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_6 http://www.gatein.org/xml/ns/gatein_objects_1_6">
+                 xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_7 http://www.gatein.org/xml/ns/gatein_objects_1_7">
   <priority>111</priority>
   <page-nodes>
     <node>

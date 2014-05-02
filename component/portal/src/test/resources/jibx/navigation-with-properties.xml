@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (C) 2011 eXo Platform SAS.
   ~
@@ -22,16 +22,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_7 http://www.gatein.org/xml/ns/gatein_objects_1_7"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_7">
-  <priority>10</priority>
+  <priority>1</priority>
 
   <page-nodes>
     <node>
-      <uri>register</uri>
-      <name>register</name>
-      <label>#{platform.guests.register}</label>
-      <page-reference>group::/test/normalized::register</page-reference>
+      <uri>bar</uri>
+      <name>bar</name>
+      <label>bar_label</label>
+      <properties>
+        <entry key="externalURI">http://example.com</entry>
+        <entry key="openInNewWindow">true</entry>
+        <entry key="intKey">256</entry>
+        <entry key="dblKey">3.14</entry>
+      </properties>
     </node>
-
   </page-nodes>
-
 </node-navigation>

@@ -38,7 +38,9 @@ public enum Version {
 
     V_1_5("http://www.gatein.org/xml/ns/gatein_objects_1_5"),
 
-    V_1_6("http://www.gatein.org/xml/ns/gatein_objects_1_6");
+    V_1_6("http://www.gatein.org/xml/ns/gatein_objects_1_6"),
+
+    V_1_7("http://www.gatein.org/xml/ns/gatein_objects_1_7");
 
     /** . */
     private final String uri;

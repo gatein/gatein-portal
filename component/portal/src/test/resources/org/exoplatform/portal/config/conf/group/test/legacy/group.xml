@@ -20,8 +20,8 @@
 
 <portal-config
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_6 http://www.gatein.org/xml/ns/gatein_objects_1_6"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_6">
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_7 http://www.gatein.org/xml/ns/gatein_objects_1_7"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_7">
   <portal-name>test/legacy</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>

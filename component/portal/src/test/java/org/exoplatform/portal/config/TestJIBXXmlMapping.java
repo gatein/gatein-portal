@@ -22,6 +22,7 @@ package org.exoplatform.portal.config;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.exoplatform.component.test.AbstractGateInTest;
@@ -33,6 +34,7 @@ import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.config.model.Version;
@@ -119,7 +121,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/jibx/simple-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
-        assertEquals(Version.V_1_6, obj.getVersion());
+        assertEquals(Version.V_1_7, obj.getVersion());
 
         //
         PageNode bar = nav.getFragment().getNode("bar");
@@ -137,7 +139,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/jibx/extended-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
-        assertEquals(Version.V_1_6, obj.getVersion());
+        assertEquals(Version.V_1_7, obj.getVersion());
 
         //
         PageNode foo = nav.getFragment().getNode("foo");
@@ -184,7 +186,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
                 "src/test/resources/jibx/fragment-navigation.xml"));
         ;
         PageNavigation nav = obj.getObject();
-        assertEquals(Version.V_1_6, obj.getVersion());
+        assertEquals(Version.V_1_7, obj.getVersion());
 
         //
         ArrayList<NavigationFragment> fragments = nav.getFragments();
@@ -195,5 +197,33 @@ public class TestJIBXXmlMapping extends AbstractGateInTest {
         assertEquals(1, fragment.getNodes().size());
         PageNode bar = fragment.getNode("bar");
         assertNotNull(bar);
+    }
+
+    public void testNavigationNodeProperties() throws Exception {
+        UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream(
+                "src/test/resources/jibx/navigation-with-properties.xml"));
+        ;
+        PageNavigation nav = obj.getObject();
+        assertEquals(Version.V_1_7, obj.getVersion());
+
+        //
+        ArrayList<NavigationFragment> fragments = nav.getFragments();
+        assertNotNull(fragments);
+        assertEquals(1, fragments.size());
+        NavigationFragment fragment = fragments.get(0);
+        List<PageNode> nodes = fragment.getNodes();
+        assertEquals(1, nodes.size());
+
+        PageNode n1 = fragment.getNode("bar");
+        assertNotNull(n1);
+
+        Properties props1 = n1.getProperties();
+        assertNotNull(props1);
+        assertEquals(4, props1.size());
+        assertEquals("http://example.com", props1.get("externalURI"));
+        assertEquals("true", props1.get("true"));
+        assertEquals(256, props1.getIntValue("intKey"));
+        assertTrue(Math.abs(props1.getDoubleValue("dblKey") - 3.14) < 0.00001);
+
     }
 }

@@ -32,12 +32,13 @@ public enum Namespace {
     GATEIN_OBJECTS_1_3("http://www.gatein.org/xml/ns/gatein_objects_1_3"),
     GATEIN_OBJECTS_1_4("http://www.gatein.org/xml/ns/gatein_objects_1_4"),
     GATEIN_OBJECTS_1_5("http://www.gatein.org/xml/ns/gatein_objects_1_5"),
-    GATEIN_OBJECTS_1_6("http://www.gatein.org/xml/ns/gatein_objects_1_6");
+    GATEIN_OBJECTS_1_6("http://www.gatein.org/xml/ns/gatein_objects_1_6"),
+    GATEIN_OBJECTS_1_7("http://www.gatein.org/xml/ns/gatein_objects_1_7");
 
     /**
      * The current namespace version.
      */
-    public static final Namespace CURRENT = GATEIN_OBJECTS_1_6;
+    public static final Namespace CURRENT = GATEIN_OBJECTS_1_7;
 
     private final String name;
 
