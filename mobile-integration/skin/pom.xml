@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>mobile-integration</artifactId>
-    <version>3.8.0.Beta02-SNAPSHOT</version>
+    <version>3.8.0.Final</version>
   </parent>
 
   <groupId>org.gatein.portal</groupId>
