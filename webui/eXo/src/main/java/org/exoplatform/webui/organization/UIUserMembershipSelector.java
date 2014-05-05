@@ -32,6 +32,7 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIGrid;
@@ -171,7 +172,7 @@ public class UIUserMembershipSelector extends UISelector<String> {
             int currentPage = pageIterator.getCurrentPage();
             OrganizationService service = uiUserMembershipSelector.getApplicationComponent(OrganizationService.class);
             service.getMembershipHandler().removeMembership(id, true);
-            User user = service.getUserHandler().findUserByName(uiUserMembershipSelector.getUser());
+            User user = service.getUserHandler().findUserByName(uiUserMembershipSelector.getUser(), UserStatus.ANY);
             uiUserMembershipSelector.setUser(user);
             while (currentPage > pageIterator.getAvailablePage())
                 currentPage--;
