@@ -37,6 +37,7 @@ import org.exoplatform.services.organization.MembershipEventListener;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserStatus;
 import org.gatein.common.logging.LogLevel;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.Role;
@@ -102,7 +103,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         if (user == null) {
             throw new InvalidNameException("Can not create membership record because user is null");
         }
-        if (orgService.getUserHandler().findUserByName(user.getUserName()) == null) {
+        if (orgService.getUserHandler().findUserByName(user.getUserName(), UserStatus.ANY) == null) {
             throw new InvalidNameException("Can not create membership record because user " + user.getUserName() + " does not exist.");
         }
 

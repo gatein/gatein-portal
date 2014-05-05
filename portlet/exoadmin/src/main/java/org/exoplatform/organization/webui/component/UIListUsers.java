@@ -256,12 +256,6 @@ public class UIListUsers extends UISearch {
                         ApplicationMessage.WARNING));
                 return;
             }
-            if (!user.isEnabled()) {
-                UIApplication uiApplication = event.getRequestContext().getUIApplication();
-                uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-disabled", null,
-                        ApplicationMessage.WARNING));
-                return;
-            }
             uiListUsers.setRendered(false);
             UIUserManagement uiUserManager = uiListUsers.getParent();
             UIUserInfo uiUserInfo = uiUserManager.getChild(UIUserInfo.class);

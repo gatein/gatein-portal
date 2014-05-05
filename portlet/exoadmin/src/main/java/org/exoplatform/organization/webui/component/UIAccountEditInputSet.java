@@ -23,6 +23,7 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
@@ -102,12 +103,14 @@ public class UIAccountEditInputSet extends UIFormInputSet {
     }
 
     public boolean save(OrganizationService service) throws Exception {
+        UserHandler userDAO = service.getUserHandler();
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         UIApplication uiApp = context.getUIApplication();
         String username = getUIStringInput(USERNAME).getValue();
-        User user = service.getUserHandler().findUserByName(username, UserStatus.ANY);
-        if (user == null || !user.isEnabled()) {
-            String messageBundle = (user == null ? "UIAccountInputSet.msg.user-is-deleted" : "UIAccountInputSet.msg.user-is-disabled");
+
+        User user = userDAO.findUserByName(username, UserStatus.ANY);
+        if (user == null) {
+            String messageBundle = "UIAccountInputSet.msg.user-is-deleted";
             uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));
             UIUserInfo userInfo = getParent();
             if (userInfo != null) {
@@ -120,6 +123,13 @@ public class UIAccountEditInputSet extends UIFormInputSet {
             }
             return false;
         }
+
+        //need to enable user before saving
+        boolean enable = user.isEnabled();
+        if (!enable) {
+            user = userDAO.setEnabled(username, true, false);
+        }
+
         String oldEmail = user.getEmail();
         invokeSetBindingField(user);
         if (isChangePassword()) {
@@ -145,9 +155,13 @@ public class UIAccountEditInputSet extends UIFormInputSet {
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.WARNING));
             return false;
         }
-        service.getUserHandler().saveUser(user, true);
-        enableChangePassword(false);
 
+        service.getUserHandler().saveUser(user, true);
+        if (!enable) {
+            user = userDAO.setEnabled(username, false, false);
+        }
+
+        enableChangePassword(false);
         ConversationState state = ConversationState.getCurrent();
         if (username.equals(((User) state.getAttribute(CacheUserProfileFilter.USER_PROFILE)).getUserName())) {
             state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
