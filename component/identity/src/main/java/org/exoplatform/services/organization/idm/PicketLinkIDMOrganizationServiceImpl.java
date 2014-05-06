@@ -52,6 +52,9 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
     private static final Logger log = LoggerFactory.getLogger(PicketLinkIDMOrganizationServiceImpl.class);
     private static final boolean traceLoggingEnabled = log.isTraceEnabled();
 
+    // Indicates whether any call to startRequest and endRequest is accepted
+    private volatile boolean acceptComponentRequestCall;
+
     public PicketLinkIDMOrganizationServiceImpl(InitParams params, PicketLinkIDMService idmService,
             JTAUserTransactionLifecycleService jtaTransactionLifecycleService) throws Exception {
         groupDAO_ = new GroupDAOImpl(this, idmService);
@@ -92,11 +95,11 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
     @Override
     public void start() {
-
         try {
             if (configuration.isUseJTA()) {
                 jtaTransactionLifecycleService.registerListener(new IDMTransactionSyncListener(idmService_));
             }
+            acceptComponentRequestCall = true;
 
             RequestLifeCycle.begin(this);
 
@@ -129,6 +132,8 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
      */
 
     public void startRequest(ExoContainer container) {
+        if (!acceptComponentRequestCall)
+            return;
         try {
             if (configuration.isUseJTA()) {
                 if (traceLoggingEnabled) {
@@ -175,6 +180,8 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
     }
 
     public void endRequest(ExoContainer container) {
+        if (!acceptComponentRequestCall)
+            return;
         if (configuration.isUseJTA()) {
             if (traceLoggingEnabled) {
                 log.trace("Finishing UserTransaction in method endRequest");
