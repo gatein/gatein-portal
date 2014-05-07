@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -250,7 +251,7 @@ public class LoginServlet extends AbstractHttpServlet {
             SSOHelper ssoHelper = getContainer().getComponentInstanceOfType(SSOHelper.class);
 
             String disabledUser = (String)req.getAttribute(FilterDisabledLoginModule.DISABLED_USER_NAME);
-            boolean meetDisabledUser = disabledUser == null ? false : (disabledUser.equals(username));
+            boolean meetDisabledUser = disabledUser != null;
             if(ssoHelper.skipJSPRedirection() && meetDisabledUser) {
                 resp.setContentType("text/html; charset=UTF-8");
                 getServletContext().getRequestDispatcher("/login/jsp/disabled.jsp").include(req, resp);
@@ -262,8 +263,14 @@ public class LoginServlet extends AbstractHttpServlet {
                 }
                 resp.sendRedirect(ssoRedirectUrl);
             } else {
+                StringBuilder loginPath = new StringBuilder("/login/jsp/login.jsp");
+                if (meetDisabledUser) {
+                    String errorData = meetDisabledUser ? new LoginError(LoginError.DISABLED_USER_ERROR, disabledUser).toString() : "";
+                    loginPath.append("?").append(LoginError.ERROR_PARAM).append("=").append(URLEncoder.encode(errorData, "UTF-8"));
+                }
+
                 resp.setContentType("text/html; charset=UTF-8");
-                getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+                getServletContext().getRequestDispatcher(loginPath.toString()).include(req, resp);
             }
         }
     }

@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.application;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -32,10 +36,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.ExpressionUtil;
@@ -314,6 +314,10 @@ public class PortalRequestContext extends WebuiRequestContext {
     }
 
     public void requestAuthenticationLogin() throws Exception {
+        requestAuthenticationLogin(null);
+    }
+
+    public void requestAuthenticationLogin(Map<String, String> params) throws Exception {
         StringBuilder initialURI = new StringBuilder();
         initialURI.append(request_.getRequestURI());
         if (request_.getQueryString() != null) {
@@ -332,6 +336,12 @@ public class PortalRequestContext extends WebuiRequestContext {
         }
 
         loginPath.append("?initialURI=").append(URLEncoder.encode(initialURI.toString(), "UTF-8"));
+        if (params != null) {
+            for (Map.Entry<String, String> param : params.entrySet()) {
+                loginPath.append("&").append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                loginPath.append("=").append(URLEncoder.encode(param.getValue(), "UTF-8"));
+            }
+        }
 
         sendRedirect(loginPath.toString());
     }

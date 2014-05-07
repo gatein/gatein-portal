@@ -118,6 +118,14 @@ public class RememberMeFilter extends AbstractFilter {
             }
         }
 
+        if (req.getRemoteUser() == null) {
+            String disabledUser = (String)req.getAttribute(FilterDisabledLoginModule.DISABLED_USER_NAME);
+            if (disabledUser != null) {
+                req.getRequestDispatcher("/login").forward(req, resp);
+                return;
+            }
+        }
+
         // Continue
         chain.doFilter(req, resp);
     }

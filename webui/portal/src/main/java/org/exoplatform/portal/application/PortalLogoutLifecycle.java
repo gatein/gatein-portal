@@ -22,8 +22,10 @@ package org.exoplatform.portal.application;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -32,9 +34,8 @@ import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
+import org.exoplatform.web.login.LoginError;
 import org.exoplatform.web.login.LogoutControl;
-import org.exoplatform.web.url.navigation.NavigationResource;
-import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.web.security.impersonation.ImpersonatedIdentity;
@@ -44,7 +45,6 @@ import org.gatein.web.security.impersonation.ImpersonatedIdentity;
  * @version $Revision$
  */
 public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestContext> {
-
     public void onInit(Application app) throws Exception {
     }
 
@@ -65,20 +65,22 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
             if (user == null || !user.isEnabled()) {
                 // If we are in the middle of impersonation, we won't logout
                 if (!(ConversationState.getCurrent().getIdentity() instanceof ImpersonatedIdentity)) {
-                    logout(context);
+                    logout(user, context);
                 }
             }
         }
     }
 
-    private void logout(WebuiRequestContext context) throws Exception {
+    private void logout(User user, WebuiRequestContext context) throws Exception {
         LogoutControl.wantLogout();
-        PortalRequestContext prContext = (PortalRequestContext) context;
-        NodeURL createURL = prContext.createURL(NodeURL.TYPE);
-        createURL.setResource(new NavigationResource(SiteType.PORTAL, prContext.getPortalOwner(), null));
-        prContext.sendRedirect(createURL.toString());
-    }
 
+        LoginError error = new LoginError(LoginError.DISABLED_USER_ERROR, user.getUserName());
+        Map<String, String> param = new HashMap<String, String>();
+        param.put(LoginError.ERROR_PARAM, error.toString());
+
+        PortalRequestContext prContext = (PortalRequestContext)context;
+        prContext.requestAuthenticationLogin(param);
+    }
 
     public void onFailRequest(Application app, WebuiRequestContext context, RequestFailure failureType) {
     }
