@@ -86,7 +86,7 @@ public class UIListUsers extends UISearch {
     private static final List<SelectItemOption<String>> USER_STATUS_OPTIONS = Collections.unmodifiableList(Arrays.asList(
                 new SelectItemOption<String>("Enabled", UserStatus.ENABLED.name()),
                 new SelectItemOption<String>("Disabled", UserStatus.DISABLED.name()),
-                new SelectItemOption<String>("All", UserStatus.ANY.name())
+                new SelectItemOption<String>("Any", UserStatus.ANY.name())
             ));
 
     private OrganizationService orgService;
