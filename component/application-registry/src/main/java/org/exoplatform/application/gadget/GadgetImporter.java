@@ -69,8 +69,7 @@ public abstract class GadgetImporter {
         // Get bytes
         byte[] bytes = getGadgetBytes(gadgetURI);
         if (bytes == null) {
-            log.error("Cannot import gadget " + gadgetURI + " because its data could not be found");
-            throw new IOException();
+            throw new IOException("Cannot import gadget " + gadgetURI + " because its data could not be found");
         }
 
         //
