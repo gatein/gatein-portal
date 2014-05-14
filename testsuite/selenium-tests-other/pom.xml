@@ -26,12 +26,12 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.testsuite</artifactId>
-    <version>3.8.1.Final</version>
+    <version>3.8.2.Final-SNAPSHOT</version>
   </parent>
 
   <groupId>org.gatein.portal</groupId>
   <artifactId>portal-testsuite-selenium-ui-tests</artifactId>
-  <version>3.8.1.Final</version>
+  <version>3.8.2.Final-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Selenium UI Tests for GateIn</name>
   <description>Selenium UI Tests for GateIn</description>
