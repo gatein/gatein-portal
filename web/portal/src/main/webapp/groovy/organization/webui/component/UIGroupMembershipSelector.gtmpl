@@ -1,9 +1,9 @@
 <%
-	import	org.exoplatform.webui.core.UIBreadcumbs; 
-	import	org.exoplatform.webui.core.UITree; 
+	import	org.exoplatform.webui.core.UIBreadcumbs;
+	import	org.exoplatform.webui.core.UITree;
 %>
 <div class="UIGroupMembershipSelector" id="$uicomponent.id">
-	<div class="Container ClearFix"> 
+	<div class="Container ClearFix">
 		<div class="SelectedGroupPath"><% uicomponent.renderChild(UIBreadcumbs.class); %></div>
 		<div class="GroupSelector">
 			<div class="ContentContainer">
@@ -15,11 +15,11 @@
 			<div class="ContentContainer">
 				<div class="MembershipTitle"><%=_ctx.appRes("UIGroupMembershipSelector.label.selectMembership")%></div>
 				<div class="OverflowContainer">
-					<%								
+					<%
 					boolean even = true;
-					for(member in uicomponent.getListMemberhip()){
+					for(member in uicomponent.loadListMemberhip()){
 						String rowCssClass = "OddRow";
-						if(even) rowCssClass = "EvenRow";	
+						if(even) rowCssClass = "EvenRow";
 						even = !even;
 					%>
 						<div class="$rowCssClass">
@@ -30,4 +30,4 @@
 			</div>
 		</div>
 	</div>
-</div> 		
+</div>
