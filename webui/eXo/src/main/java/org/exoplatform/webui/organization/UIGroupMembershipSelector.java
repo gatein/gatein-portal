@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -60,8 +59,6 @@ public class UIGroupMembershipSelector extends UIContainer {
 
     private Group selectGroup_;
 
-    private List<String> listMemberhip;
-
     public UIGroupMembershipSelector() throws Exception {
         UIBreadcumbs uiBreadcumbs = addChild(UIBreadcumbs.class, "BreadcumbGroupSelector", "BreadcumbGroupSelector");
         UITree tree = addChild(UITree.class, "UITreeGroupSelector", "TreeGroupSelector");
@@ -82,26 +79,7 @@ public class UIGroupMembershipSelector extends UIContainer {
         UITree tree = getChild(UITree.class);
         if (tree != null && tree.getSibbling() == null) {
             Collection<?> sibblingsGroup = service.getGroupHandler().findGroups(null);
-            tree.setSibbling((List) sibblingsGroup);
-        }
-
-        List<MembershipType> memberships = (List<MembershipType>) service.getMembershipTypeHandler().findMembershipTypes();
-        Collections.sort(memberships, new Comparator<MembershipType>() {
-            @Override
-            public int compare(MembershipType o1, MembershipType o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        listMemberhip = new LinkedList<String>();
-        boolean containWildcard = false;
-        for (MembershipType mt : memberships) {
-            listMemberhip.add(mt.getName());
-            if ("*".equals(mt.getName())) {
-                containWildcard = true;
-            }
-        }
-        if (!containWildcard) {
-            ((LinkedList) listMemberhip).addFirst("*");
+            tree.setSibbling(sibblingsGroup);
         }
 
         super.processRender(context);
@@ -121,7 +99,7 @@ public class UIGroupMembershipSelector extends UIContainer {
 
         if (groupId == null) {
             sibblingGroup = service.getGroupHandler().findGroups(null);
-            tree.setSibbling((List) sibblingGroup);
+            tree.setSibbling(sibblingGroup);
             tree.setChildren(null);
             tree.setSelected(null);
             selectGroup_ = null;
@@ -138,11 +116,11 @@ public class UIGroupMembershipSelector extends UIContainer {
             parentGroup = service.getGroupHandler().findGroupById(parentGroupId);
         }
 
-        Collection childrenGroup = service.getGroupHandler().findGroups(selectGroup_);
+        Collection<Group> childrenGroup = service.getGroupHandler().findGroups(selectGroup_);
         sibblingGroup = service.getGroupHandler().findGroups(parentGroup);
 
-        tree.setSibbling((List) sibblingGroup);
-        tree.setChildren((List) childrenGroup);
+        tree.setSibbling(sibblingGroup);
+        tree.setChildren(childrenGroup);
         tree.setSelected(selectGroup_);
         tree.setParentSelected(parentGroup);
     }
@@ -164,8 +142,40 @@ public class UIGroupMembershipSelector extends UIContainer {
         return list;
     }
 
-    public List<String> getListMemberhip() {
+    public List<String> loadListMemberhip() throws Exception {
+        OrganizationService service = getApplicationComponent(OrganizationService.class);
+
+        List<MembershipType> memberships = (List<MembershipType>) service.getMembershipTypeHandler().findMembershipTypes();
+        Collections.sort(memberships, new Comparator<MembershipType>() {
+            @Override
+            public int compare(MembershipType o1, MembershipType o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        List<String> listMemberhip = new ArrayList<String>(memberships.size() + 1);
+        listMemberhip.add("*");
+        for (MembershipType mt : memberships) {
+            String name = mt.getName();
+            if (!"*".equals(name)) {
+                listMemberhip.add(name);
+            }
+        }
         return listMemberhip;
+    }
+
+    /**
+     * Returns {@link #loadListMemberhip()} and does nothing else. Kept for backwards compatibility only.
+     * @return
+     * @deprecated use {@link #loadListMemberhip()} instead.
+     */
+    @Deprecated
+    public List<String> getListMemberhip() {
+        try {
+            return loadListMemberhip();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String event(String name, String beanId) throws Exception {
@@ -199,7 +209,6 @@ public class UIGroupMembershipSelector extends UIContainer {
             WebuiRequestContext pcontext = event.getRequestContext();
 
             UIPopupWindow uiPopup = uiSelector.getParent();
-            UIForm uiForm = uiSelector.getAncestorOfType(UIForm.class);
 
             if (uiSelector.getCurrentGroup() == null) {
                 UIApplication uiApp = pcontext.getUIApplication();
