@@ -33,7 +33,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
-import org.exoplatform.services.organization.idm.UserImpl;
+import org.exoplatform.services.organization.impl.UserImpl;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.url.navigation.NavigationResource;
