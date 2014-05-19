@@ -29,9 +29,12 @@ import java.io.Serializable;
 /**
  * TODO: This is temporary implementation, which should be removed after https://issues.jboss.org/browse/EXOJCR-1780 will be
  * fixed and available in GateIn.
+ * Because issue https://issues.jboss.org/browse/EXOJCR-1780 was fixed and this class will be removed soon.
+ * You should use {@org.exoplatform.services.organization.impl.UserImpl} instead of this class for avoiding error in future.
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
+@Deprecated
 public class UserImpl extends org.exoplatform.services.organization.impl.UserImpl implements Serializable {
     private String displayName;
 
