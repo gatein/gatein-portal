@@ -27,6 +27,7 @@ import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequireJS;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.exoplatform.web.application.javascript.ScriptResources;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
@@ -50,12 +51,13 @@ public class TestJavascriptManager extends AbstractWebResourceTest {
 
         if (isFirstStartup) {
             URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
-            JavascriptConfigParser.processConfigResource(url.openStream(), jsService, new MockServletContext() {
+            ScriptResources scriptResources = new JavascriptConfigParser(new MockServletContext() {
                 @Override
                 public String getContextPath() {
                     return "mockwebapp";
                 }
-            });
+            }, url.openStream()).parse();
+            jsService.add(scriptResources);
 
             isFirstStartup = false;
         }

@@ -41,6 +41,7 @@ import org.exoplatform.test.mocks.servlet.MockServletRequest;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.exoplatform.web.application.javascript.ScriptResources;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.io.IOTools;
@@ -82,7 +83,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
             jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
             URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
-            JavascriptConfigParser.processConfigResource(url.openStream(), jsService, mockServletContext);
+            ScriptResources scriptResources = new JavascriptConfigParser(mockServletContext, url.openStream()).parse();
+            jsService.add(scriptResources);
 
             isFirstStartup = false;
         }

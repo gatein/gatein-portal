@@ -30,6 +30,7 @@ import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.portal.resource.AbstractResourceDeployer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.javascript.ScriptResources.ImmutableScriptResources;
 import org.gatein.wci.WebApp;
 
 /**
@@ -53,6 +54,11 @@ public class JavascriptConfigDeployer extends AbstractResourceDeployer {
      * The name of the portal container
      */
     private final String portalContainerName;
+
+    /**
+     * A key used to store a collection of JavaScript resources loaded from a given servlet context.
+     */
+    public static final String SCRIPT_RESOURCES_ATTR = "gatein.script.resources";
 
     public JavascriptConfigDeployer(String portalContainerName, JavascriptConfigService javascriptService) {
         this.javascriptService = javascriptService;
@@ -79,7 +85,12 @@ public class JavascriptConfigDeployer extends AbstractResourceDeployer {
     protected void remove(WebApp webApp) {
         javascriptService.unregisterServletContext(webApp);
         try {
-            JavascriptConfigParser.unregisterResources(javascriptService, webApp.getServletContext());
+            ServletContext scontext = webApp.getServletContext();
+            ImmutableScriptResources scriptResources = (ImmutableScriptResources) scontext.getAttribute(SCRIPT_RESOURCES_ATTR);
+            if (scriptResources != null) {
+                javascriptService.remove(scriptResources, scontext.getContextPath());
+                scontext.removeAttribute(SCRIPT_RESOURCES_ATTR);
+            }
         } catch (Exception ex) {
             LOG.error(
                 "An error occured while removing script resources for the context '"
@@ -91,7 +102,11 @@ public class JavascriptConfigDeployer extends AbstractResourceDeployer {
         InputStream is = null;
         try {
             is = scontext.getResourceAsStream(AbstractResourceDeployer.GATEIN_CONFIG_RESOURCE);
-            JavascriptConfigParser.processConfigResource(is, javascriptService, scontext);
+            ScriptResources scriptResources = new JavascriptConfigParser(scontext, is).parse();
+            if (!scriptResources.isEmpty()) {
+                javascriptService.add(scriptResources);
+                scontext.setAttribute(JavascriptConfigDeployer.SCRIPT_RESOURCES_ATTR, scriptResources.toImmutable());
+            }
         } catch (Exception ex) {
             LOG.error(
                     "An error occurs while processing 'Javascript in gatein-resources.xml' from the context '"

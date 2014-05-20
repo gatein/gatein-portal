@@ -37,8 +37,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.Javascript.Local;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
-import org.exoplatform.web.application.javascript.JavascriptTask;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
+import org.exoplatform.web.application.javascript.ScriptResources;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
 import org.xml.sax.SAXException;
 
@@ -252,9 +252,8 @@ public class TestAmdParser extends junit.framework.TestCase {
     private void assertConfigMatchesResult(String config, String[] expectedPaths) throws SAXException, IOException,
             ParserConfigurationException, UnsupportedEncodingException {
         JavascriptConfigParser parser = new JavascriptConfigParser(new MockAMDServletContext(), new ByteArrayInputStream(config.getBytes("UTF-8")));
-        JavascriptTask jst = new JavascriptTask();
-        parser.addScriptsTo(jst);
-        List<ScriptResourceDescriptor> scripts = jst.getDescriptors();
+        ScriptResources resources = parser.parse();
+        List<ScriptResourceDescriptor> scripts = resources.getScriptResourceDescriptors();
         assertEqualPaths(new TreeSet<String>(Arrays.asList(expectedPaths)), scripts);
     }
 
