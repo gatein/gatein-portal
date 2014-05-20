@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
@@ -44,8 +45,8 @@ import org.gatein.common.xml.XMLTools;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMode;
-import org.gatein.portal.controller.resource.script.StaticScriptResource;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
+import org.gatein.portal.controller.resource.script.StaticScriptResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -125,14 +126,15 @@ public class JavascriptConfigParser {
     public static final String INCLUDES_TAG = "includes";
     public static final String EXCLUDE_TAG = "exclude";
     public static final String EXCLUDES_TAG = "excludes";
+    public static final String PATH_ENTRY_TAG = "path-entry";
+    public static final String PREFIX_TAG = "prefix";
+    public static final String TARGET_PATH_TAG = "target-path";
 
     /** . */
     private final ServletContext servletContext;
     private final String contextPath;
 
     private final Document document;
-
-    static final String SCRIPT_RESOURCE_DESCRIPTORS_ATTR = "gatein.script.resource.descriptors";
 
     private static final Log log = ExoLogger.getExoLogger(JavascriptConfigParser.class);
 
@@ -157,38 +159,24 @@ public class JavascriptConfigParser {
         }
     }
 
-    public static void processConfigResource(InputStream is, JavascriptConfigService service, ServletContext scontext) throws SAXException, IOException, ParserConfigurationException {
-        JavascriptConfigParser parser = new JavascriptConfigParser(scontext, is);
-        JavascriptTask task = new JavascriptTask();
-        parser.addScriptsTo(task);
-        task.execute(service, scontext);
-    }
-
-    public static void unregisterResources(JavascriptConfigService service, ServletContext scontext) {
-        @SuppressWarnings("unchecked")
-        List<ScriptResourceDescriptor> descriptors = (List<ScriptResourceDescriptor>) scontext.getAttribute(SCRIPT_RESOURCE_DESCRIPTORS_ATTR);
-        if (descriptors == null)
-            return;
-
-        JavascriptUnregisterTask task = new JavascriptUnregisterTask();
-        for (ScriptResourceDescriptor script : descriptors) {
-            task.addDescriptor(script);
-        }
-        task.execute(service, scontext);
-        scontext.removeAttribute(SCRIPT_RESOURCE_DESCRIPTORS_ATTR);
-    }
-
-    public void addScriptsTo(JavascriptTask result) {
+    /**
+     * Transforms the underlying {@link #document} into a new {@link ScriptResources} instance.
+     *
+     * @return a {@link ScriptResources}
+     */
+    public ScriptResources parse() {
+        ScriptResources result = new ScriptResources();
         Element element = document.getDocumentElement();
         for (String tagName : PARSEABLE_SCRIPT_TAGS) {
             for (Element childElt : XMLTools.getChildren(element, tagName)) {
                 Collection<ScriptResourceDescriptor> descriptors = parseScripts(childElt);
                 if (descriptors != null) {
-                    result.addDescriptors(descriptors);
+                    result.getScriptResourceDescriptors().addAll(descriptors);
                 }
             }
         }
         parseAmd(element, result);
+        return result;
     }
 
     private Collection<ScriptResourceDescriptor> parseScripts(Element element) {
@@ -383,6 +371,14 @@ public class JavascriptConfigParser {
         return childElt == null ? null : XMLTools.asString(childElt, true);
     }
 
+    /**
+     * Parses {@code <includes>} or {@code <excludes>}.
+     *
+     * @param filesetElement
+     * @param cludesTag {@code "includes"} or {@code "excludes"}
+     * @param cludeTag {@code "include"} or {@code "exclude"}
+     * @return
+     */
     private String[] parseCludes(Element filesetElement, String cludesTag, String cludeTag) {
         Element cludesElement = XMLTools.getUniqueChild(filesetElement, cludesTag, false);
         if (cludesElement != null) {
@@ -398,9 +394,35 @@ public class JavascriptConfigParser {
 
     }
 
-    private void parseAmd(Element documentElement, final JavascriptTask result) {
+    private void parseAmd(Element documentElement, final ScriptResources result) {
         Element amd = XMLTools.getUniqueChild(documentElement, AMD_TAG, false);
         if (amd != null) {
+
+            Map<String, List<String>> paths = result.getPaths();
+            for (Element pathEntry : XMLTools.getChildren(amd, PATH_ENTRY_TAG)) {
+                /* path-entry can look like this:
+                 * <path-entry>
+                 *   <prefix>/dojo</prefix>
+                 *   <target-path>http://my-cdn.com/dojo/1.9.2</target-path>
+                 *   <target-path>http://other-cdn.com/dojo/1.9.2</target-path>
+                 *   <target-path>/local/path/dojo/1.9.2</target-path>
+                 * </path-entry>
+                 *
+                 * esp. note that multiple target-paths are possible
+                 * the second target-path and all following target-paths are interpreted as fallback
+                 * urls by require.js
+                 */
+                Element prefixElement = XMLTools.getUniqueChild(pathEntry, PREFIX_TAG, true);
+                String prefix = XMLTools.asString(prefixElement, true);
+                List<Element> targetPathElements = XMLTools.getChildren(pathEntry, TARGET_PATH_TAG);
+                List<String> targetPaths = new ArrayList<String>(targetPathElements.size());
+                for (Element targetPathElement : targetPathElements) {
+                    String targetPath = XMLTools.asString(targetPathElement, true);
+                    targetPaths.add(targetPath);
+                }
+                paths.put(prefix, targetPaths);
+            }
+
             for (Element fileset : XMLTools.getChildren(amd, FILESET_TAG)) {
                 Element dirElement = XMLTools.getUniqueChild(fileset, DIRECTORY_TAG, true);
                 String dir = XMLTools.asString(dirElement, true);
@@ -447,7 +469,7 @@ public class JavascriptConfigParser {
                                         amdFile, contextPath, Integer.MAX_VALUE);
                                 d.modules.add(js);
 
-                                result.addDescriptor(d);
+                                result.getScriptResourceDescriptors().add(d);
                                 return;
                             }
                         }
@@ -456,7 +478,7 @@ public class JavascriptConfigParser {
                         /* directory.length() - 1 because we want the resourceURI to start with '/' */
                         String resourceURI = amdFile.substring(directorySlash.length() - 1, amdFileLength);
                         StaticScriptResource r = new StaticScriptResource(contextPath, directory, resourceURI, lastModified);
-                        result.addStaticScriptResource(r);
+                        result.getStaticScriptResources().add(r);
 
                     }
                 };

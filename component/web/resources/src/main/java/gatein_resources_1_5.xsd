@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (C) 2011 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<xs:schema
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_resources_1_5"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_5"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+
+  <!-- The root element type that contains the various resource declarations -->
+  <xs:element name="gatein-resources" xmlns:gt="http://www.gatein.org/xml/ns/gatein_resources_1_5">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="portal-skin" type="portal-skin"/>
+        <xs:element name="portlet-skin" type="portlet-skin"/>
+        <xs:element name="window-style" type="window-style"/>
+        <xs:element name="javascript" type="javascript"/>
+        <xs:element name="resource-bundle" type="resource-bundle"/>
+        <xs:element name="portlet" type="portlet"/>
+        <xs:element name="portal" type="portal"/>
+        <xs:element name="module" type="module"/>
+        <xs:element name="scripts" type="scripts"/>
+        <xs:element name="amd" type="amd"/>
+      </xs:choice>
+    </xs:complexType>
+
+    <xs:unique name="shared-js-uniqueness">
+      <xs:selector xpath="gt:module|gt:scripts"/>
+      <xs:field xpath="gt:name"/>
+    </xs:unique>
+    <xs:unique name="portlet-js-uniqueness">
+      <xs:selector xpath="gt:portlet"/>
+      <xs:field xpath="gt:name"/>
+    </xs:unique>
+    <xs:unique name="portal-js-uniqueness">
+      <xs:selector xpath="gt:portal"/>
+      <xs:field xpath="gt:name"/>
+    </xs:unique>
+  </xs:element>
+
+  <!-- Declares a portal skin resource -->
+  <xs:complexType name="portal-skin">
+    <xs:sequence>
+      <xs:element name="skin-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="skin-module" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="css-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="css-priority" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="overwrite" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a portlet skin resource -->
+  <xs:complexType name="portlet-skin">
+    <xs:sequence>
+      <!-- The portlet application name -->
+      <xs:element name="application-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The portlet name -->
+      <xs:element name="portlet-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The name of the skin to load -->
+      <xs:element name="skin-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The css path of the skin relative to the application context -->
+      <xs:element name="css-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- Overwrite -->
+      <xs:element name="overwrite" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      <!-- The css priority of the skin to indicate condition for sorting -->
+      <xs:element name="css-priority" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a window style -->
+  <xs:complexType name="window-style" mixed="true">
+    <xs:sequence>
+
+      <!-- The window style name -->
+      <xs:element name="style-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The window style theme -->
+      <xs:element name="style-theme" type="style-theme" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- The window style theme -->
+  <xs:complexType name="style-theme">
+    <xs:sequence>
+      <!-- The theme name -->
+      <xs:element name="theme-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a javascript resource  -->
+  <xs:complexType name="javascript">
+    <xs:sequence>
+      <xs:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="param">
+    <xs:sequence>
+      <!-- The portal name loading particular JavaScript module -->
+      <xs:element name="portal-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      <!-- The javascript module -->
+      <xs:element name="js-module" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The javascript path -->
+      <xs:element name="js-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The javascript priority -->
+      <xs:element name="js-priority" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a resource bundle -->
+  <xs:complexType name="resource-bundle">
+  </xs:complexType>
+
+  <xs:complexType name="module">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="native-amd" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element name="load-group" type="xs:string" minOccurs="0" maxOccurs="1"/>
+          <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="script" type="script" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:element name="depends" type="module-dependency" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="scripts">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:element name="depends" type="scripts-dependency" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="resources-container" abstract="true">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:choice>
+        <xs:element name="module" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:choice>
+                <xs:sequence>
+                  <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  <xs:element name="load-group" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                  <xs:element name="script" type="script" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+                <xs:sequence>
+                  <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+              </xs:choice>
+              <xs:element name="depends" type="module-dependency" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="scripts" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:choice>
+                <xs:sequence>
+                  <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                  <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:sequence>
+                  <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+              </xs:choice>
+              <xs:element name="depends" type="scripts-dependency" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="portlet">
+    <xs:complexContent>
+      <xs:extension base="resources-container"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="portal">
+    <xs:complexContent>
+      <xs:extension base="resources-container"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="scripts-dependency">
+    <xs:sequence>
+      <xs:element name="scripts" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="module-dependency">
+    <xs:sequence>
+      <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="script">
+    <xs:sequence>
+      <xs:choice>
+        <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="adapter" type="adapter" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:element name="resource-bundle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="adapter" mixed="true">
+    <xs:sequence>
+      <xs:element name="include" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="url">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="http(s)?://([a-zA-Z0-9\-\.]+/)*([a-zA-Z0-9\-\.])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="amd">
+    <xs:sequence>
+      <xs:element name="path-entry" type="path-entry" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="fileset" type="fileset" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="path-entry">
+    <xs:sequence>
+      <xs:element name="prefix" type="non-empty-string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="target-path" type="non-empty-string" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="fileset">
+    <xs:sequence>
+      <xs:element name="directory" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:sequence>
+        <xs:element name="includes" type="includes" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="excludes" type="excludes" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="includes">
+    <xs:sequence>
+      <xs:element name="include" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="excludes">
+    <xs:sequence>
+      <xs:element name="exclude" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="non-empty-string">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1" />
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
