@@ -66,6 +66,7 @@ import org.exoplatform.services.resources.ResourceBundleManager;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.URLFactory;
@@ -320,7 +321,16 @@ public class PortalRequestContext extends WebuiRequestContext {
         }
 
         StringBuilder loginPath = new StringBuilder();
-        loginPath.append(request_.getContextPath()).append("/").append(DO_LOGIN_PATTERN);
+
+        //. Check SSO Enable
+        ExoContainer container = getApplication().getApplicationServiceContainer();
+        SSOHelper ssoHelper = container.getComponentInstanceOfType(SSOHelper.class);
+        if(ssoHelper != null && ssoHelper.isSSOEnabled()) {
+            loginPath.append(request_.getContextPath()).append(ssoHelper.getSSORedirectURLSuffix());
+        } else {
+            loginPath.append(request_.getContextPath()).append("/").append(DO_LOGIN_PATTERN);
+        }
+
         loginPath.append("?initialURI=").append(URLEncoder.encode(initialURI.toString(), "UTF-8"));
 
         sendRedirect(loginPath.toString());
