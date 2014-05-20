@@ -22,6 +22,8 @@ package org.exoplatform.portal.webui.portal;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
@@ -711,6 +713,8 @@ public class UIPortalComposer extends UIContainer {
                     return;
                 } else {
                     composer.savePage(editInlineWS, event);
+                    RequestLifeCycle.end();
+                    RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
                 }
             } catch (StaleModelException ex) {
                 // Temporary solution to concurrency-related issue
