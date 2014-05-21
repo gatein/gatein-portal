@@ -141,6 +141,36 @@ public class TestSkinService extends AbstractSkinServiceTest {
                 skinService.getCSS(newControllerContext(getRouter(), url), true));
     }
 
+    public void testProcessImportCrossDomainCSS() throws Exception {
+
+        crossDomainCSS("@import url(//example.com/some.css); aaa;");
+        crossDomainCSS("@import url('//example.com/some.css'); aaa;");
+        crossDomainCSS("@import url(\"//example.com/some.css\"); aaa;");
+        crossDomainCSS("@import url(http://example.com/some.css); aaa;");
+        crossDomainCSS("@import url('http://example.com/some.css'); aaa;");
+        crossDomainCSS("@import url(\"http://example.com/some.css\"); aaa;");
+        crossDomainCSS("@import url(https://example.com/some.css); aaa;");
+        crossDomainCSS("@import url('https://example.com/some.css'); aaa;");
+        crossDomainCSS("@import url(\"https://example.com/some.css\"); aaa;");
+
+        crossDomainCSS("@import '//example.com/some.css'; aaa;");
+        crossDomainCSS("@import \"//example.com/some.css\"; aaa;");
+        crossDomainCSS("@import 'http://example.com/some.css'; aaa;");
+        crossDomainCSS("@import \"http://example.com/some.css\"; aaa;");
+        crossDomainCSS("@import 'https://example.com/some.css'; aaa;");
+        crossDomainCSS("@import \"https://example.com/some.css\"; aaa;");
+
+    }
+    private void crossDomainCSS(String crossDomainCss) throws Exception {
+        String masterCssPath = "/process/import/master.css";
+        String masterCssUrl = newSimpleSkin(masterCssPath).createURL(controllerCtx).toString();
+        resResolver.addResource(masterCssPath, crossDomainCss);
+        assertEquals(crossDomainCss, skinService.getCSS(newControllerContext(getRouter(), masterCssUrl), true));
+        skinService.invalidateCachedSkin(masterCssPath);
+    }
+
+
+
     public void testLastModifiedSince() throws Exception {
         String resource = "/last/modify/since.css";
         SkinURL skinURL = newSimpleSkin(resource).createURL(controllerCtx);
@@ -155,5 +185,27 @@ public class TestSkinService extends AbstractSkinServiceTest {
         skinURL.setOrientation(Orientation.RT);
         Thread.sleep(1000);
         assertTrue(lastModified < skinService.getLastModified(newControllerContext(getRouter(), skinURL.toString())));
+    }
+
+    public void testIsExternalUrl() {
+        assertFalse(SkinService.isExternalUrl(null));
+        assertFalse(SkinService.isExternalUrl(""));
+        assertFalse(SkinService.isExternalUrl("/"));
+        assertFalse(SkinService.isExternalUrl("/foo"));
+        assertFalse(SkinService.isExternalUrl("/foo/bar/baz"));
+        assertFalse(SkinService.isExternalUrl("foo/bar/baz"));
+        assertFalse(SkinService.isExternalUrl("foo-bar-baz"));
+        assertFalse(SkinService.isExternalUrl("http"));
+        assertFalse(SkinService.isExternalUrl("https"));
+
+        assertTrue(SkinService.isExternalUrl("//"));
+        assertTrue(SkinService.isExternalUrl("//foo"));
+        assertTrue(SkinService.isExternalUrl("//foo/bar/baz"));
+        assertTrue(SkinService.isExternalUrl("http:"));
+        assertTrue(SkinService.isExternalUrl("http://foo"));
+        assertTrue(SkinService.isExternalUrl("http://foo/bar/baz"));
+        assertTrue(SkinService.isExternalUrl("https:"));
+        assertTrue(SkinService.isExternalUrl("https://foo"));
+        assertTrue(SkinService.isExternalUrl("https://foo/bar/baz"));
     }
 }

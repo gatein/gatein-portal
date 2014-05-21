@@ -96,6 +96,7 @@ public class TestXSDValidator extends TestCase {
             if (!failureExpect) {
                 StringWriter sw = new StringWriter();
                 PrintWriter out = new PrintWriter(sw);
+                out.println("Validation failed for file '"+ fileName +"'.");
                 ex.printStackTrace(out);
                 out.close();
                 fail(sw.toString());
