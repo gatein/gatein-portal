@@ -109,6 +109,11 @@ public class SkinResourceRequestHandler extends WebRequestHandler {
                 if (e instanceof SocketException) {
                     // Should we print something/somewhere exception message
                 } else {
+                    // We want to ignore the ClientAbortException since this is caused by the users
+                    // browser closing the connection and is not something we should be logging.
+                    if(e.getClass().toString().contains("ClientAbortException")) {
+                        return true;
+                    }
                     log.error("Could not render css " + resource, e);
                 }
                 return false;
