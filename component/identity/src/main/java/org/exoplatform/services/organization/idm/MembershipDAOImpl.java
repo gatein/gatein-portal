@@ -128,10 +128,6 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
             }
         }
 
-        if (isAssociationMapped() && getAssociationMapping().equals(mt.getName())) {
-            getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
-        }
-
         MembershipImpl membership = new MembershipImpl();
         membership.setMembershipType(mt.getName());
         membership.setUserName(user.getUserName());
@@ -139,6 +135,12 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
 
         if (broadcast) {
             preSave(membership, true);
+        }
+
+        if (isAssociationMapped() && getAssociationMapping().equals(mt.getName())) {
+            if(!getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, user.getUserName())) {
+                getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
+            }
         }
 
         if (isCreateMembership(mt.getName(), g.getId())) {
