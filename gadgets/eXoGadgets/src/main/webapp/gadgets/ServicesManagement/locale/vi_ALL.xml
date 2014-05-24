@@ -35,6 +35,9 @@
   <msg name="method">
     Phương thức
   </msg>
+  <msg name="property">
+    Thuộc tính
+  </msg>
   <msg name="parameters">
     Tham số
   </msg>
