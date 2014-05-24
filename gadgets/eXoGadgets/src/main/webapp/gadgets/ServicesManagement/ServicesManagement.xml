@@ -107,7 +107,7 @@
 			  <!-- Start Properties UIGrid -->
 			  <div class="TitleGrid ClearFix">
                 <div class="BgTitle ClearFix">
-                    <h3>Properties</h3>
+                    <h3>__MSG_property__</h3>
                     <select id="propertiesSelector"></select>
                 </div>
               </div>
@@ -171,8 +171,8 @@
 			</div>
 			
 			<div class="TitleGadget ClearFix">
-                          <div id="MethodsTab" class="Tab TabSelected"><a href="javascript:;" class="TabLink">Methods</a></div>
-                          <div id="PropertiesTab" class="Tab"><a href="javascript:;" class="TabLink">Properties</a></div>
+                          <div id="MethodsTab" class="Tab TabSelected"><a href="javascript:;" class="TabLink">__MSG_method__</a></div>
+                          <div id="PropertiesTab" class="Tab"><a href="javascript:;" class="TabLink">__MSG_property__</a></div>
 			</div>
 			<div id="ServiceMethods" class="GadgetGrid GadgetGmCanvasMessage ContentSelected">
 				<table cellspacing="0" class="UIGrid" summary="Services Management configuration">

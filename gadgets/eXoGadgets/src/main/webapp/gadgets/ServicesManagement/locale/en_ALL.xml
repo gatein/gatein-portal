@@ -38,6 +38,9 @@
   <msg name="method">
     Method
   </msg>
+  <msg name="property">
+    Property
+  </msg>
   <msg name="parameters">
     Parameters
   </msg>

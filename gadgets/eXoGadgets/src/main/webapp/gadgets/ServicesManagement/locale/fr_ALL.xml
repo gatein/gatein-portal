@@ -35,6 +35,9 @@
   <msg name="method">
     Méthode
   </msg>
+  <msg name="property">
+    Propriété
+  </msg>
   <msg name="parameters">
     Paramètres
   </msg>
