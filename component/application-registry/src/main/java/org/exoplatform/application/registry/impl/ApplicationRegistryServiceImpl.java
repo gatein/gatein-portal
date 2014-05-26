@@ -471,7 +471,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                     }
 
                     if (!isExist) {
-                        app = category.createContent(portletName, contentType, contentId);
+                        app = category.createContent(displayName, contentType, contentId);
                         app.setDisplayName(displayName);
                         app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
                         app.setAccessPermissions(permissions);
