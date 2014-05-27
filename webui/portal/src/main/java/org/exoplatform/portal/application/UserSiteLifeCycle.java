@@ -21,7 +21,9 @@ package org.exoplatform.portal.application;
 
 import java.util.Arrays;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -72,6 +74,9 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
             if (portalConfig == null) {
                 log.debug("About to create user site for user " + userName);
                 configService.createUserSite(userName);
+                // BZ 1059036 - Force the flushing of JCR.
+                RequestLifeCycle.end();
+                RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
             }
 
             UserPortalConfig userPortalConfig = context.getUserPortalConfig();
