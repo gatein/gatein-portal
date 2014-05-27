@@ -126,10 +126,14 @@ public class UIResetPassword extends UIForm {
                     uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
                     return;
                 } else {
-                    user.setPassword(newpassword);
-                    orgService.getUserHandler().saveUser(user, true);
-                    uiMaskWorkspace.createEvent("Close", Phase.DECODE, request).broadcast();
-                    uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
+                    try {
+                        user.setPassword(newpassword);
+                        orgService.getUserHandler().saveUser(user, true);
+                        uiMaskWorkspace.createEvent("Close", Phase.DECODE, request).broadcast();
+                        uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
+                    } catch (Exception e) {
+                        uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-fail", null, ApplicationMessage.ERROR));
+                    }
                 }
             }
             request.addUIComponentToUpdateByAjax(uiMaskWorkspace);
