@@ -156,7 +156,13 @@ public class UIAccountEditInputSet extends UIFormInputSet {
             return false;
         }
 
-        service.getUserHandler().saveUser(user, true);
+        try {
+            service.getUserHandler().saveUser(user, true);
+        } catch (Exception e) {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
+            return false;
+        }
+
         if (!enable) {
             user = userDAO.setEnabled(username, false, false);
         }

@@ -123,7 +123,12 @@ public class UIAccountProfiles extends UIForm {
                 user.setDisplayName(uiForm.getUIStringInput("displayName").getValue());
                 user.setEmail(newEmail);
                 uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
-                service.getUserHandler().saveUser(user, true);
+                try {
+                    service.getUserHandler().saveUser(user, true);
+                } catch (Exception e) {
+                    uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.fail", null, ApplicationMessage.ERROR));
+                    return;
+                }
 
                 state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);
                 UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);

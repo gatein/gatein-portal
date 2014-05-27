@@ -120,14 +120,24 @@ public class UIAccountInputSet extends UIFormInputWithActions {
                 return false;
             }
 
-            service.getUserHandler().createUser(user, true);
+            try {
+                service.getUserHandler().createUser(user, true);
+            } catch (Exception e) {
+                uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.create.user", null, ApplicationMessage.ERROR));
+                return false;
+            }
             reset();
             return true;
         }
         User user = service.getUserHandler().findUserByName(username);
         invokeSetBindingField(user);
         // user.setPassword(Util.encodeMD5(pass1x)) ;
-        service.getUserHandler().saveUser(user, true);
+        try {
+            service.getUserHandler().saveUser(user, true);
+        } catch (Exception e) {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
+            return false;
+        }
         return true;
     }
 
