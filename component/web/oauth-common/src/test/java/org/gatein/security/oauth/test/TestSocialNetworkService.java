@@ -128,6 +128,9 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         } catch (Exception e) {
             throw new UndeclaredThrowableException(e);
         }
+
+        orgService.getUserHandler().removeUser(user1.getUserName(), false);
+        orgService.getUserHandler().removeUser(user2.getUserName(), false);
     }
 
     public void testPersistOAuthAccessTokens() throws Exception {
@@ -179,6 +182,9 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         assertNull(socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
         assertNull(socialNetworkService.getOAuthAccessToken(getTwitterProvider(), user1.getUserName()));
         assertNotNull(socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user2.getUserName()));
+
+        orgService.getUserHandler().removeUser(user1.getUserName(), false);
+        orgService.getUserHandler().removeUser(user2.getUserName(), false);
     }
 
     public void testInvalidationOfAccessTokens() throws Exception {
@@ -226,6 +232,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         userProfile1.setAttribute(getGoogleProvider().getUserNameAttrName(), "googleUsername2");
         orgService.getUserProfileHandler().saveUserProfile(userProfile1, true);
         assertNull(socialNetworkService.getOAuthAccessToken(getGoogleProvider(), user1.getUserName()));
+
+        orgService.getUserHandler().removeUser(user1.getUserName(), false);
     }
 
     public void testLongAccessToken() throws Exception {
@@ -261,6 +269,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
         twitterToken = new TwitterAccessTokenContext(shortAccessToken, shortAccessToken);
         socialNetworkService.updateOAuthAccessToken(getTwitterProvider(), user1.getUserName(), twitterToken);
         assertEquals(twitterToken, socialNetworkService.getOAuthAccessToken(getTwitterProvider(), user1.getUserName()));
+
+        orgService.getUserHandler().removeUser(user1.getUserName(), false);
     }
 
     public void testAccessTokensWithMoreScopes() throws Exception {
@@ -280,6 +290,8 @@ public class TestSocialNetworkService extends AbstractKernelTest {
 
         // Verify that Facebook accessTokens could be obtained and are equals to saved access token
         assertEquals(facebookToken, socialNetworkService.getOAuthAccessToken(getFacebookProvider(), user1.getUserName()));
+
+        orgService.getUserHandler().removeUser(user1.getUserName(), false);
     }
 
     private OAuthProviderType<FacebookAccessTokenContext> getFacebookProvider() {
