@@ -257,7 +257,7 @@ public class UIAddApplicationForm extends UIForm {
             }
 
             Application app = cloneApplication(tmp);
-            UIApplicationRegistryPortlet.setPermissionToEveryone(app);
+            UIApplicationRegistryPortlet.setPermissionToAdminGroup(app);
 
             if (displayName != null && displayName.trim().length() > 0) {
                 app.setDisplayName(displayName);
