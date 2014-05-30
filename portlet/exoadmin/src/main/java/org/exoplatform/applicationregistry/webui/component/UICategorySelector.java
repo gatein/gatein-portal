@@ -137,7 +137,7 @@ public class UICategorySelector extends UIForm {
             for (ApplicationCategory category : categories) {
                 if (selector.getSelectedCategories().contains("category_" + category.getName())) {
                     Application newApp = cloneApplication(selector.getApplication());
-                    UIApplicationRegistryPortlet.setPermissionToEveryone(newApp);
+                    UIApplicationRegistryPortlet.setPermissionToAdminGroup(newApp);
                     appRegService.save(category, newApp);
                 }
             }

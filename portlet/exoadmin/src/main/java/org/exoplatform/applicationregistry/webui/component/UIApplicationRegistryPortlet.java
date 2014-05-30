@@ -23,10 +23,10 @@ import java.util.ArrayList;
 
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.services.security.MembershipEntry;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.ViewChildActionListener;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
@@ -43,16 +43,18 @@ public class UIApplicationRegistryPortlet extends UIPortletApplication {
         addChild(UIApplicationRegistryEditMode.class, null, null).setRendered(false);
     }
 
-    @Override
-    public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception {
-        // TODO Auto-generated method stub
-        super.processRender(app, context);
-    }
-
     public static void setPermissionToEveryone(Application app) {
         ArrayList<String> defaultPermission = new ArrayList<String>();
         defaultPermission.add(UserACL.EVERYONE);
 
         app.setAccessPermissions(defaultPermission);
+    }
+
+    public static void setPermissionToAdminGroup(Application app) {
+        ArrayList<String> permissions = new ArrayList<String>();
+        UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+        MembershipEntry anyOfAdminGroup = new MembershipEntry(acl.getAdminGroups());
+        permissions.add(anyOfAdminGroup.toString());
+        app.setAccessPermissions(permissions);
     }
 }
