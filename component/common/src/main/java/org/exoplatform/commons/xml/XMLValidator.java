@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ * @deprecated this class checks only if a document is well formed, but does not validate against XML schema (see GTNPORTAL-3501).
  */
 public class XMLValidator {
 
@@ -63,6 +64,7 @@ public class XMLValidator {
      * @return the document when it is valid or null
      * @throws java.io.IOException any IOException thrown by using the provided URL
      * @throws NullPointerException if the provided URL is null
+     * @deprecated this class checks only if a document is well formed, but does not validate against XML schema (see GTNPORTAL-3501).
      */
     public Document validate(DocumentSource source) throws NullPointerException, IOException {
         if (source == null) {

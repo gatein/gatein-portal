@@ -30,7 +30,6 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
@@ -76,7 +75,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
 
         PortalContainer portalContainer = getContainer();
 
-        skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
+        skinService = portalContainer.getComponentInstanceOfType(SkinService.class);
 
         controllerCtx = getControllerContext();
 
@@ -93,8 +92,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
 
             URL url = mockServletContext.getResource("/gatein-resources.xml");
 
-            DocumentSource source = DocumentSource.create(url);
-            Document document = GateInResourcesSchemaValidator.validate(source);
+            Document document = GateInResourcesSchemaValidator.validate(url);
             final List<SkinConfigTask> skinTasks = SkinConfigParser.parse(document);
             skinService.addSkins(skinTasks, mockServletContext);
             //
@@ -273,6 +271,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
             String portalPath = request.getRequestURI().substring(request.getContextPath().length());
 
             //
+            @SuppressWarnings("unchecked")
             Iterator<Map<QualifiedName, String>> matcher = router.matcher(portalPath, request.getParameterMap());
             Map<QualifiedName, String> parameters = null;
             if (matcher.hasNext()) {

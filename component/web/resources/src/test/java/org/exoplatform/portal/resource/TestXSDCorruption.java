@@ -47,7 +47,7 @@ public class TestXSDCorruption extends TestCase {
                 sb.append(hex.substring(hex.length() - 2));
             }
         }
-        assertEquals(expected, sb.toString());
+        assertEquals("md5 does not match for '"+ resourcePath +"'", expected, sb.toString());
     }
 
     public void testGateInResources1_x() throws Exception {
@@ -56,6 +56,6 @@ public class TestXSDCorruption extends TestCase {
         assertHash("7925f1cd0a91dcb6a95f8dcb87973792", "gatein_resources_1_2.xsd");
         assertHash("5a8602c916aee90249d7e5b8885de56e", "gatein_resources_1_3.xsd");
         assertHash("dad312d2e0db8bc140b6ab88e5d2793e", "gatein_resources_1_4.xsd");
-        assertHash("399e51acf080fab3a416791932230935", "gatein_resources_1_5.xsd");
+        assertHash("9e31b3df22a371b0a7b6dc1f0ab0f529", "gatein_resources_1_5.xsd");
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_5 file:///home/ppalaga/git/gatein-portal/component/web/resources/src/main/java/gatein_resources_1_5.xsd"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5"
     xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_5">
 
     <amd>

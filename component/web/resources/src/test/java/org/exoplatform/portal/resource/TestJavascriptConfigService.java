@@ -34,7 +34,6 @@ import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 
-import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
@@ -85,8 +84,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
             jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
             URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
-            DocumentSource source = DocumentSource.create(url);
-            Document document = GateInResourcesSchemaValidator.validate(source);
+            Document document = GateInResourcesSchemaValidator.validate(url);
             ScriptResources scriptResources = new JavascriptConfigParser(mockServletContext, document).parse();
             jsService.add(scriptResources);
 

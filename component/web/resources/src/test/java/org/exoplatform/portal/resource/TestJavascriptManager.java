@@ -21,7 +21,6 @@ package org.exoplatform.portal.resource;
 import java.io.IOException;
 import java.net.URL;
 
-import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.JavascriptManager;
@@ -53,8 +52,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest {
 
         if (isFirstStartup) {
             URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
-            DocumentSource source = DocumentSource.create(url);
-            Document document = GateInResourcesSchemaValidator.validate(source);
+            Document document = GateInResourcesSchemaValidator.validate(url);
             ScriptResources scriptResources = new JavascriptConfigParser(new MockServletContext() {
                 @Override
                 public String getContextPath() {

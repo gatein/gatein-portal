@@ -21,23 +21,24 @@ package org.exoplatform.portal.resource;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import junit.framework.TestCase;
 
-import org.exoplatform.commons.xml.DocumentSource;
-
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
- * @date 5/23/12
+ * @author <a href="ppalaga@redhat.com">Peter Palaga</a>
  */
-public class TestXSDValidator extends TestCase {
+public class TestGateInResourcesSchemaValidator extends TestCase {
+
+    public void testIntegrity() {
+        GateInResourcesSchemaValidator.assertValid();
+    }
 
     public void testXSDValidation() {
         validateDocument("amd-cdn.xml", false);
         validateDocument("amd-cdn-invalid-prefix.xml", true);
         validateDocument("amd-cdn-invalid-target-path.xml", true);
+        validateDocument("invalid-1_3.xml", false);
         validateDocument("f0.xml", false);
         validateDocument("f1.xml", false);
         validateDocument("f2.xml", true);
@@ -58,9 +59,8 @@ public class TestXSDValidator extends TestCase {
         System.out.println("Checking file "+ fileName);
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         URL url = loader.getResource("validator/" + fileName);
-        DocumentSource source = DocumentSource.create(url);
         try {
-            GateInResourcesSchemaValidator.validate(source);
+            GateInResourcesSchemaValidator.validate(url);
             if (failureExpect) {
                 fail("Validation failure expected for '"+ fileName +"'.");
             }

@@ -148,10 +148,8 @@ public class TestSkipCommentReader extends TestCase {
         initiateReader(reader);
 
         assertEquals(SkipCommentReader.State.ENCOUNTING_ORDINARY_CHARACTER, skipCommentReader.getCursorState());
-        for (int i = 0; i < 7; i++)
-
-        {
-            int readChar = skipCommentReader.readSingleCharacter();
+        for (int i = 0; i < 7; i++) {
+            skipCommentReader.readSingleCharacter();
             assertEquals(SkipCommentReader.State.ENCOUNTING_ORDINARY_CHARACTER, skipCommentReader.getCursorState());
         }
 
