@@ -24,10 +24,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -48,9 +50,7 @@ import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.application.javascript.ScriptResources.ImmutablePathsBuilder;
 import org.exoplatform.web.application.javascript.ScriptResources.ImmutableScriptResources;
-import org.exoplatform.web.application.javascript.ScriptResources.ImmutableStaticScriptResourcesBuilder;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.portal.controller.resource.ResourceId;
@@ -64,17 +64,177 @@ import org.gatein.portal.controller.resource.script.ScriptGroup;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 import org.gatein.portal.controller.resource.script.ScriptResource.DepInfo;
 import org.gatein.portal.controller.resource.script.StaticScriptResource;
-import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
-import org.gatein.wci.WebAppListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.picocontainer.Startable;
 
-public class JavascriptConfigService extends AbstractResourceService implements Startable {
+public class JavascriptConfigService extends AbstractResourceService {
+
+    /**
+     * A builder for producing immutable paths {@link Map}s.
+     *
+     * @see {@link ScriptResources#paths}
+     * @see {@link JavascriptConfigService#paths}
+     *
+     * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
+     */
+    static class ImmutablePathsBuilder {
+        /**
+         * @return an empty immutable {@link Map}.
+         */
+        public static Map<String, List<String>> buildEmpty() {
+            return Collections.emptyMap();
+        }
+
+        /**
+         * The result for {@link #build()} is collected here.
+         */
+        private final Map<String, List<String>> paths;
+
+        /**
+         * Creates a new builder based on the given {@code paths}. The values from {@code paths}
+         * are deeply copied into a new {@link LinkedHashMap}. It is a {@link LinkedHashMap} because
+         * the order of paths matters - they represent a fallback sequence tried in the given order.
+         *
+         * @param paths the initial {@link #paths}
+         */
+        public ImmutablePathsBuilder(Map<String, List<String>> paths) {
+            super();
+            this.paths = new LinkedHashMap<String, List<String>>(paths);
+            for (Map.Entry<String, List<String>> en : this.paths.entrySet()) {
+                en.setValue(Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
+            }
+        }
+
+        /**
+         * Adds the all elements from {@code pathEntries} to {@link #paths}. If a key of an added entry
+         * is available in {@link #paths}, a {@link DuplicateResourceKeyException} is thrown.
+         *
+         * @param pathEntries
+         * @return see above
+         * @throws DuplicateResourceKeyException if a key of an added entry is available in {@link #paths}
+         */
+        public ImmutablePathsBuilder add(Map<String, List<String>> pathEntries) throws DuplicateResourceKeyException {
+            for (Entry<String, List<String>> en : pathEntries.entrySet()) {
+                List<String> availableValue = this.paths.get(en.getKey());
+                if (availableValue != null) {
+                    throw new DuplicateResourceKeyException("Ignoring path entry " + en + " because the given resource path was already provided: "
+                            + availableValue);
+                } else {
+                    /* add only if not there already */
+                    if (log.isDebugEnabled()) {
+                        log.debug("Adding path entry " + en);
+                    }
+                    this.paths.put(en.getKey(), Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
+                }
+            }
+            return this;
+        }
+
+        /**
+         * @return a new immutable paths {@link Map} that can be used in {@link JavascriptConfigService#paths}.
+         */
+        public Map<String, List<String>> build() {
+            return Collections.unmodifiableMap(paths);
+        }
+
+        /**
+         * Removes all keys given in {@code keysToRemove} from the underlying {@link #paths}.
+         *
+         * @param keysToRemove
+         * @return
+         */
+        public ImmutablePathsBuilder removeAll(Collection<String> keysToRemove) {
+            for (String prefix : keysToRemove) {
+                paths.remove(prefix);
+            }
+            return this;
+        }
+    }
+
+    /**
+     * A builder for producing immutable static script resources {@link Map}s.
+     *
+     * @see {@link ScriptResources#staticScriptResources}
+     * @see {@link JavascriptConfigService#staticScriptResources}
+     *
+     * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
+     *
+     */
+    static class ImmutableStaticScriptResourcesBuilder {
+        /**
+         * @return an empty immutable {@link Map}.
+         */
+        public static Map<String, StaticScriptResource> buildEmpty() {
+            return Collections.emptyMap();
+        }
+
+        /**
+         * The result for {@link #build()} is collected here.
+         */
+        private final Map<String, StaticScriptResource> staticScriptResources;
+
+        /**
+         * Creates a new builder based on the given {@code staticScriptResources}. The values from {@code paths}
+         * are copied into a new {@link HashMap}.
+         *
+         * @param staticScriptResources
+         */
+        public ImmutableStaticScriptResourcesBuilder(Map<String, StaticScriptResource> staticScriptResources) {
+            super();
+            this.staticScriptResources = new HashMap<String, StaticScriptResource>(staticScriptResources);
+        }
+
+        /**
+         * Adds the all elements from {@code toAdd} to {@link #staticScriptResources}. If a {@code resourcePath}
+         * of an added entry is available in {@link #staticScriptResources} as a key,
+         * a {@link DuplicateResourceKeyException} is thrown.
+         *
+         * @param toAdd entries to add
+         * @return
+         * @throws DuplicateResourceKeyException if a {@code resourcePath} of an added entry is
+         *          available in {@link #staticScriptResources} as a key, a {@link DuplicateResourceKeyException} is thrown.
+         */
+        public ImmutableStaticScriptResourcesBuilder add(Collection<StaticScriptResource> toAdd) throws DuplicateResourceKeyException {
+            for (StaticScriptResource staticScriptResource : toAdd) {
+                String resourcePath = staticScriptResource.getResourcePath();
+                StaticScriptResource availableValue = staticScriptResources.get(resourcePath);
+                if (availableValue != null) {
+                    throw new DuplicateResourceKeyException("Ignoring " + StaticScriptResource.class.getSimpleName() + " " + staticScriptResource
+                            + " because the given resource path was already provided by " + availableValue);
+                } else {
+                    /* add only if not there already */
+                    if (log.isDebugEnabled()) {
+                        log.debug("Adding " + staticScriptResource);
+                    }
+                    staticScriptResources.put(resourcePath, staticScriptResource);
+                }
+            }
+            return this;
+        }
+
+        /**
+         * @return a new immutable staticScriptResources {@link Map} that can be used in {@link JavascriptConfigService#staticScriptResources}.
+         */
+        public Map<String, StaticScriptResource> build() {
+            return Collections.unmodifiableMap(staticScriptResources);
+        }
+
+        /**
+         * Removes all entries given in {@code toRemove} from the underlying {@link #staticScriptResources}.
+         * @param toRemove
+         * @return
+         */
+        public ImmutableStaticScriptResourcesBuilder removeAll(Collection<StaticScriptResource> toRemove) {
+            for (StaticScriptResource staticScriptResource : toRemove) {
+                staticScriptResources.remove(staticScriptResource.getResourcePath());
+            }
+            return this;
+        }
+    }
 
     /** Our logger. */
-    private final Log log = ExoLogger.getLogger(JavascriptConfigService.class);
+    private static final Log log = ExoLogger.getLogger(JavascriptConfigService.class);
 
     /** The scripts. */
     private final ScriptGraph scripts;
@@ -88,7 +248,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
      * <a href="http://requirejs.org/docs/api.html#pathsfallbacks">fallback paths</a>
      * feature of require.js.
      * <p>
-     * Within {@link JavascriptConfigService}, {@link #paths} is always assigned a deeply immutable
+     * Internally, a {@link LinkedHashMap} is used, because the order of paths matters - they
+     * represent a fallback sequence tried in the given order by require.js.
+     * <p>
+     * Within {@link JavascriptConfigService}, {@link #paths} is always assigned a deeply immutable instance.
+     *
      * {@link Map}. This is because there may happen concurrent invocations of say
      * {@link #remove(ImmutableScriptResources, String)} and {@link #getJSConfig(ControllerContext, Locale)}.
      */
@@ -102,9 +266,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
      * {@link #remove(ImmutableScriptResources, String)} and {@link #getJSConfig(ControllerContext, Locale)}.
      */
     private Map<String, StaticScriptResource> staticScriptResources;
-
-    /** . */
-    private final WebAppListener deployer;
 
     /**
      * @see #getSharedBaseUrl(ControllerContext)
@@ -133,7 +294,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
         this.scripts = new ScriptGraph();
         this.paths = ImmutablePathsBuilder.buildEmpty();
         this.staticScriptResources = ImmutableStaticScriptResourcesBuilder.buildEmpty();
-        this.deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
     }
 
     public Reader getScript(ResourceId resourceId, Locale locale) throws Exception {
@@ -291,7 +451,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             List<String> pathValues = en.getValue();
             switch (pathValues.size()) {
                 case 0:
-                    /* This should never happen as it is fobidded in gatein_resources XSD */
+                    /* This should never happen as it is forbidden in gatein_resources XSD */
                     throw new IllegalStateException("Unexpected empty target path list for prefix '"+ prefix +"'.");
                 case 1:
                     paths.put(prefix, pathValues.get(0));
@@ -351,28 +511,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
     public ScriptResource getResource(ResourceId resource) {
         return scripts.getResource(resource);
-    }
-
-    /**
-     * Start service. Registry org.exoplatform.web.application.javascript.JavascriptDeployer,
-     * org.exoplatform.web.application.javascript.JavascriptRemoval into ServletContainer
-     *
-     * @see org.picocontainer.Startable#start()
-     */
-    public void start() {
-        log.debug("Registering JavascriptConfigService for servlet container events");
-        ServletContainerFactory.getServletContainer().addWebAppListener(deployer);
-    }
-
-    /**
-     * Stop service. Remove org.exoplatform.web.application.javascript.JavascriptDeployer,
-     * org.exoplatform.web.application.javascript.JavascriptRemoval from ServletContainer
-     *
-     * @see org.picocontainer.Startable#stop()
-     */
-    public void stop() {
-        log.debug("Unregistering JavascriptConfigService for servlet container events");
-        ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
     }
 
     private Reader getJavascript(Module module, Locale locale) {
@@ -612,14 +750,14 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
         List<StaticScriptResource> toAddStaticScriptResources = scriptResources.getStaticScriptResources();
         if (toAddStaticScriptResources != null && !toAddStaticScriptResources.isEmpty()) {
-            newStaticScriptResources = new ScriptResources.ImmutableStaticScriptResourcesBuilder(
-                    this.staticScriptResources).accept(toAddStaticScriptResources).build();
+            newStaticScriptResources = new ImmutableStaticScriptResourcesBuilder(
+                    this.staticScriptResources).add(toAddStaticScriptResources).build();
         }
 
         Map<String, List<String>> toAddPaths = scriptResources.getPaths();
         if (toAddPaths != null && !toAddPaths.isEmpty()) {
-            newPaths = new ScriptResources.ImmutablePathsBuilder(this.paths)
-                    .accept(toAddPaths).build();
+            newPaths = new ImmutablePathsBuilder(this.paths)
+                    .add(toAddPaths).build();
         }
 
         for (ScriptResourceDescriptor desc : scriptResources.getScriptResourceDescriptors()) {
@@ -643,8 +781,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
         }
 
         /* No exception was thrown, now we can at once assign these two local variables to service fields */
-        this.staticScriptResources = newStaticScriptResources;
-        this.paths = newPaths;
+        if (newStaticScriptResources != null) {
+            this.staticScriptResources = newStaticScriptResources;
+        }
+        if (newPaths != null) {
+            this.paths = newPaths;
+        }
 
     }
 
@@ -662,14 +804,14 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
         List<StaticScriptResource> toRemoveStaticScriptResources = scriptResources.getStaticScriptResources();
         if (toRemoveStaticScriptResources != null && !toRemoveStaticScriptResources.isEmpty()) {
-            Map<String, StaticScriptResource> newStaticScriptResources = new ScriptResources.ImmutableStaticScriptResourcesBuilder(
+            Map<String, StaticScriptResource> newStaticScriptResources = new ImmutableStaticScriptResourcesBuilder(
                     this.staticScriptResources).removeAll(toRemoveStaticScriptResources).build();
             this.staticScriptResources = newStaticScriptResources;
         }
 
         Map<String, List<String>> toRemovePaths = scriptResources.getPaths();
         if (toRemovePaths != null && !toRemovePaths.isEmpty()) {
-            Map<String, List<String>> newPaths = new ScriptResources.ImmutablePathsBuilder(this.paths)
+            Map<String, List<String>> newPaths = new ImmutablePathsBuilder(this.paths)
                     .removeAll(toRemovePaths.keySet()).build();
             this.paths = newPaths;
         }

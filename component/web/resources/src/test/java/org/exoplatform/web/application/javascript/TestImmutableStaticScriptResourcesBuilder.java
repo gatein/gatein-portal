@@ -57,8 +57,8 @@ public class TestImmutableStaticScriptResourcesBuilder extends TestCase {
     public void testAcceptAcceptable() throws DuplicateResourceKeyException {
         Map<String, StaticScriptResource> initialMap = toStaticScriptResourceMap(RESOURCE_1);
         Collection<StaticScriptResource> toAdd = Arrays.asList(RESOURCE_2);
-        Map<String, StaticScriptResource> actual = new ScriptResources.ImmutableStaticScriptResourcesBuilder(
-                initialMap).accept(toAdd).build();
+        Map<String, StaticScriptResource> actual = new JavascriptConfigService.ImmutableStaticScriptResourcesBuilder(
+                initialMap).add(toAdd).build();
         Map<String, StaticScriptResource> expected = toStaticScriptResourceMap(RESOURCE_1, RESOURCE_2);
         assertEquals(expected, actual);
     }
@@ -67,8 +67,8 @@ public class TestImmutableStaticScriptResourcesBuilder extends TestCase {
         Map<String, StaticScriptResource> initialMap = toStaticScriptResourceMap(RESOURCE_1);
         Collection<StaticScriptResource> toAdd = Arrays.asList(RESOURCE_1);
         try {
-            new ScriptResources.ImmutableStaticScriptResourcesBuilder(
-                    initialMap).accept(toAdd).build();
+            new JavascriptConfigService.ImmutableStaticScriptResourcesBuilder(
+                    initialMap).add(toAdd).build();
             fail("DuplicateResourceKeyException expected");
         } catch (DuplicateResourceKeyException expected) {
         }
@@ -77,7 +77,7 @@ public class TestImmutableStaticScriptResourcesBuilder extends TestCase {
     public void testRemoveAvailable() throws DuplicateResourceKeyException {
         Map<String, StaticScriptResource> initialMap = toStaticScriptResourceMap(RESOURCE_1, RESOURCE_2);
         Collection<StaticScriptResource> toRemove = Arrays.asList(RESOURCE_2);
-        Map<String, StaticScriptResource> actual = new ScriptResources.ImmutableStaticScriptResourcesBuilder(
+        Map<String, StaticScriptResource> actual = new JavascriptConfigService.ImmutableStaticScriptResourcesBuilder(
                 initialMap).removeAll(toRemove).build();
         Map<String, StaticScriptResource> expected = toStaticScriptResourceMap(RESOURCE_1);
         assertEquals(expected, actual);
@@ -86,7 +86,7 @@ public class TestImmutableStaticScriptResourcesBuilder extends TestCase {
     public void testRemoveUnavailable() throws DuplicateResourceKeyException {
         Map<String, StaticScriptResource> initialMap = toStaticScriptResourceMap(RESOURCE_1);
         Collection<StaticScriptResource> toRemove = Arrays.asList(RESOURCE_2);
-        Map<String, StaticScriptResource> actual = new ScriptResources.ImmutableStaticScriptResourcesBuilder(
+        Map<String, StaticScriptResource> actual = new JavascriptConfigService.ImmutableStaticScriptResourcesBuilder(
                 initialMap).removeAll(toRemove).build();
         Map<String, StaticScriptResource> expected = toStaticScriptResourceMap(RESOURCE_1);
         assertEquals(expected, actual);
@@ -94,7 +94,7 @@ public class TestImmutableStaticScriptResourcesBuilder extends TestCase {
 
     public void testBuildUnmodifiable() throws DuplicateResourceKeyException {
         Map<String, StaticScriptResource> initialMap = toStaticScriptResourceMap(RESOURCE_1);
-        Map<String, StaticScriptResource> actual = new ScriptResources.ImmutableStaticScriptResourcesBuilder(initialMap).build();
+        Map<String, StaticScriptResource> actual = new JavascriptConfigService.ImmutableStaticScriptResourcesBuilder(initialMap).build();
         try {
             actual.put(RESOURCE_2.getResourcePath(), RESOURCE_2);
             fail("UnsupportedOperationException expected");

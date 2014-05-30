@@ -20,15 +20,8 @@
 package org.exoplatform.portal.resource.config.xml;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.ServletContext;
-
-import org.exoplatform.commons.xml.DocumentSource;
-import org.exoplatform.commons.xml.XMLValidator;
-import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.config.tasks.PortalSkinTask;
 import org.exoplatform.portal.resource.config.tasks.PortletSkinTask;
 import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
@@ -43,45 +36,6 @@ import org.w3c.dom.NodeList;
  */
 
 public class SkinConfigParser {
-
-    /** . */
-    public static final String GATEIN_RESOURCES_1_0_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_0";
-
-    /** . */
-    public static final String GATEIN_RESOURCES_1_1_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_1";
-
-    /** . */
-    public static final String GATEIN_RESOURCES_1_2_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_2";
-
-    /** . */
-    public static final String GATEIN_RESOURCES_1_3_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_3";
-
-    /** . */
-    public static final String GATEIN_RESOURCES_1_4_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_4";
-
-    /** . */
-    public static final String GATEIN_RESOURCES_1_5_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_5";
-
-    /** . */
-    private static final String GATEIN_RESOURCE_1_0_XSD_PATH = "gatein_resources_1_0.xsd";
-
-    /** . */
-    private static final String GATEIN_RESOURCE_1_1_XSD_PATH = "gatein_resources_1_1.xsd";
-
-    /** . */
-    private static final String GATEIN_RESOURCE_1_2_XSD_PATH = "gatein_resources_1_2.xsd";
-
-    /** . */
-    private static final String GATEIN_RESOURCE_1_3_XSD_PATH = "gatein_resources_1_3.xsd";
-
-    /** . */
-    private static final String GATEIN_RESOURCE_1_4_XSD_PATH = "gatein_resources_1_4.xsd";
-
-    /** . */
-    private static final String GATEIN_RESOURCE_1_5_XSD_PATH = "gatein_resources_1_5.xsd";
-
-    /** . */
-    private static final XMLValidator VALIDATOR;
 
     /** . */
     public static final String OVERWRITE = "overwrite";
@@ -122,29 +76,8 @@ public class SkinConfigParser {
     /** . */
     public static final String THEME_NAME_TAG = "theme-name";
 
-    static {
-        Map<String, String> systemIdToResourcePath = new HashMap<String, String>();
-        systemIdToResourcePath.put(GATEIN_RESOURCES_1_0_SYSTEM_ID, GATEIN_RESOURCE_1_0_XSD_PATH);
-        systemIdToResourcePath.put(GATEIN_RESOURCES_1_1_SYSTEM_ID, GATEIN_RESOURCE_1_1_XSD_PATH);
-        systemIdToResourcePath.put(GATEIN_RESOURCES_1_2_SYSTEM_ID, GATEIN_RESOURCE_1_2_XSD_PATH);
-        systemIdToResourcePath.put(GATEIN_RESOURCES_1_3_SYSTEM_ID, GATEIN_RESOURCE_1_3_XSD_PATH);
-        systemIdToResourcePath.put(GATEIN_RESOURCES_1_4_SYSTEM_ID, GATEIN_RESOURCE_1_4_XSD_PATH);
-        systemIdToResourcePath.put(GATEIN_RESOURCES_1_5_SYSTEM_ID, GATEIN_RESOURCE_1_5_XSD_PATH);
-        VALIDATOR = new XMLValidator(SkinConfigParser.class, systemIdToResourcePath);
-    }
-
-    public static void processConfigResource(DocumentSource source, SkinService skinService, ServletContext scontext) {
-        List<SkinConfigTask> allTasks = fetchTasks(source);
-        if (allTasks != null) {
-            for (SkinConfigTask task : allTasks) {
-                task.execute(skinService, scontext);
-            }
-        }
-    }
-
-    public static List<SkinConfigTask> fetchTasks(DocumentSource source) {
+    public static List<SkinConfigTask> parse(Document document) {
         try {
-            Document document = VALIDATOR.validate(source);
 
             List<SkinConfigTask> tasks = new ArrayList<SkinConfigTask>();
             Element docElement = document.getDocumentElement();

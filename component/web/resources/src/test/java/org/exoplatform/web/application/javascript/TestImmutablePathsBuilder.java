@@ -55,8 +55,8 @@ public class TestImmutablePathsBuilder extends TestCase {
     public void testAcceptAcceptable() throws DuplicateResourceKeyException {
         Map<String, List<String>> initialMap = toPathMap(PREFIX_1, TARGET_PATH_1);
         Map<String, List<String>> toAdd = toPathMap(PREFIX_2, TARGET_PATH_2);
-        Map<String, List<String>> actual = new ScriptResources.ImmutablePathsBuilder(
-                initialMap).accept(toAdd).build();
+        Map<String, List<String>> actual = new JavascriptConfigService.ImmutablePathsBuilder(
+                initialMap).add(toAdd).build();
         Map<String, List<String>> expected = toPathMap(PREFIX_1, TARGET_PATH_1, PREFIX_2, TARGET_PATH_2);
         assertEquals(expected, actual);
     }
@@ -65,8 +65,8 @@ public class TestImmutablePathsBuilder extends TestCase {
         Map<String, List<String>> initialMap = toPathMap(PREFIX_1, TARGET_PATH_1);
         Map<String, List<String>> toAdd = toPathMap(PREFIX_1, TARGET_PATH_1);
         try {
-            new ScriptResources.ImmutablePathsBuilder(
-                    initialMap).accept(toAdd).build();
+            new JavascriptConfigService.ImmutablePathsBuilder(
+                    initialMap).add(toAdd).build();
             fail("DuplicateResourceKeyException expected");
         } catch (DuplicateResourceKeyException expected) {
         }
@@ -75,7 +75,7 @@ public class TestImmutablePathsBuilder extends TestCase {
     public void testRemoveAvailable() throws DuplicateResourceKeyException {
         Map<String, List<String>> initialMap = toPathMap(PREFIX_1, TARGET_PATH_1);
         Collection<String> toRemove = Arrays.asList(PREFIX_2);
-        Map<String, List<String>> actual = new ScriptResources.ImmutablePathsBuilder(
+        Map<String, List<String>> actual = new JavascriptConfigService.ImmutablePathsBuilder(
                 initialMap).removeAll(toRemove).build();
         Map<String, List<String>> expected = toPathMap(PREFIX_1, TARGET_PATH_1);
         assertEquals(expected, actual);
@@ -84,7 +84,7 @@ public class TestImmutablePathsBuilder extends TestCase {
     public void testRemoveUnavailable() throws DuplicateResourceKeyException {
         Map<String, List<String>> initialMap = toPathMap(PREFIX_1, TARGET_PATH_1);
         Collection<String> toRemove = Arrays.asList(PREFIX_2);
-        Map<String, List<String>> actual = new ScriptResources.ImmutablePathsBuilder(
+        Map<String, List<String>> actual = new JavascriptConfigService.ImmutablePathsBuilder(
                 initialMap).removeAll(toRemove).build();
         Map<String, List<String>> expected = toPathMap(PREFIX_1, TARGET_PATH_1);
         assertEquals(expected, actual);
@@ -92,7 +92,7 @@ public class TestImmutablePathsBuilder extends TestCase {
 
     public void testBuildUnmodifiable() throws DuplicateResourceKeyException {
         Map<String, List<String>> initialMap = toPathMap(PREFIX_1, TARGET_PATH_1);
-        Map<String, List<String>> actual = new ScriptResources.ImmutablePathsBuilder(initialMap).build();
+        Map<String, List<String>> actual = new JavascriptConfigService.ImmutablePathsBuilder(initialMap).build();
         try {
             actual.put(PREFIX_2, Arrays.asList(TARGET_PATH_2));
             fail("UnsupportedOperationException expected");

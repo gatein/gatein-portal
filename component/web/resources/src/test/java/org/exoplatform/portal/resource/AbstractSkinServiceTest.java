@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,12 +38,14 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.component.test.web.ServletContextImpl;
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.test.mocks.servlet.MockServletRequest;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.Router;
+import org.w3c.dom.Document;
 
 @ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml") })
 public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
@@ -89,7 +92,11 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
             skinService.addResourceResolver(resResolver);
 
             URL url = mockServletContext.getResource("/gatein-resources.xml");
-            SkinConfigParser.processConfigResource(DocumentSource.create(url), skinService, mockServletContext);
+
+            DocumentSource source = DocumentSource.create(url);
+            Document document = GateInResourcesSchemaValidator.validate(source);
+            final List<SkinConfigTask> skinTasks = SkinConfigParser.parse(document);
+            skinService.addSkins(skinTasks, mockServletContext);
             //
             touchSetUp();
         }

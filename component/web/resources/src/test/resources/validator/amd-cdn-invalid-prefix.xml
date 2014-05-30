@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_5 file:///home/ppalaga/git/gatein-portal/component/web/resources/src/main/java/gatein_resources_1_5.xsd"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_5">
+
+    <amd>
+        <path-entry>
+            <prefix>/my/prefix</prefix><target-path></target-path>
+        </path-entry>
+    </amd>
+
+</gatein-resources>

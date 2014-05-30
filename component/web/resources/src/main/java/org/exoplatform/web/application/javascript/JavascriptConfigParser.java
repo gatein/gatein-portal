@@ -31,8 +31,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.codehaus.plexus.components.io.fileselectors.FileInfo;
@@ -140,23 +138,10 @@ public class JavascriptConfigParser {
 
     private static final String[] PARSEABLE_SCRIPT_TAGS = new String[] {JAVA_SCRIPT_TAG, MODULE_TAG, SCRIPTS_TAG, PORTLET_TAG, PORTAL_TAG};
 
-    public JavascriptConfigParser(ServletContext servletContext, InputStream input) throws SAXException, IOException, ParserConfigurationException {
+    public JavascriptConfigParser(ServletContext servletContext, Document document) throws SAXException, IOException, ParserConfigurationException {
         this.servletContext = servletContext;
         this.contextPath = servletContext.getContextPath();
-        try {
-            DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            this.document = docBuilder.parse(input);
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (Exception e) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Could not close an InputStream", e);
-                    }
-                }
-            }
-        }
+        this.document = document;
     }
 
     /**
