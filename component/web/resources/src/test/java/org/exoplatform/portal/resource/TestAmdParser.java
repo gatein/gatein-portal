@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.resource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -48,7 +47,9 @@ import org.xml.sax.SAXException;
  */
 public class TestAmdParser extends junit.framework.TestCase {
 
-
+    private static final String GATEIN_RESOURCES_ELEMENT = "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+            + " xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5\""
+            + " xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_5\">";
 
     /**
      * Ensure that {@link MockAMDServletContext} does what it is supposed to do.
@@ -79,7 +80,7 @@ public class TestAmdParser extends junit.framework.TestCase {
      * @throws Exception
      */
     public void testAmdAll() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "</fileset>"
@@ -97,7 +98,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSingleTopDir() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "<includes><include>*.js</include></includes>"
@@ -112,7 +113,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSpecificFileName() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "<includes>"
@@ -128,7 +129,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSingleSecondLevelDir() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd/package1</directory>"
                 + "</fileset>"
@@ -142,7 +143,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSingleSecondLevelDirWithTerminalSlash() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd/package1/</directory>"
                 + "</fileset>"
@@ -156,7 +157,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSingleSecondLevelDirWithSlash() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd/package1/</directory>"
                 + "</fileset>"
@@ -171,7 +172,7 @@ public class TestAmdParser extends junit.framework.TestCase {
 
 
     public void testAmdSubtree() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "<includes>"
@@ -188,7 +189,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSubtrees() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "<includes>"
@@ -207,7 +208,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdSubtreeWithExclude() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "<includes>"
@@ -226,7 +227,7 @@ public class TestAmdParser extends junit.framework.TestCase {
     }
 
     public void testAmdRepeatedIncludes() throws Exception {
-        String config = "<gatein-resources><amd>"
+        String config = GATEIN_RESOURCES_ELEMENT +"<amd>"
                 + "<fileset>"
                 + "<directory>/js/amd</directory>"
                 + "<includes>"
@@ -253,7 +254,7 @@ public class TestAmdParser extends junit.framework.TestCase {
      */
     private void assertConfigMatchesResult(String config, String[] expectedPaths) throws SAXException, IOException,
             ParserConfigurationException, UnsupportedEncodingException {
-        DocumentSource source = DocumentSource.create("gatein-resources.xml", new ByteArrayInputStream(config.getBytes("UTF-8")));
+        DocumentSource source = DocumentSource.create("gatein-resources.xml", config.getBytes("UTF-8"));
         Document document = GateInResourcesSchemaValidator.validate(source);
 
         JavascriptConfigParser parser = new JavascriptConfigParser(new MockAMDServletContext(), document);

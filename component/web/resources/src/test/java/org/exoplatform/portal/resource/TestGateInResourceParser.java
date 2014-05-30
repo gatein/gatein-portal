@@ -6,7 +6,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Document;
@@ -37,15 +36,14 @@ public class TestGateInResourceParser extends TestCase {
         assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_4.xml");
     }
 
-    public void testResources1_5() throws IOException, SAXException {
-        assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_5.xml");
+    public void testResources1_4_1() throws IOException, SAXException {
+        assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_4_1.xml");
     }
 
     private void assertDescriptorCanBeLoaded(String descriptorPath) throws IOException, SAXException {
         URL url = Thread.currentThread().getContextClassLoader().getResource(descriptorPath);
         assertNotNull("The " + descriptorPath + " can not be found", url);
-        DocumentSource source = DocumentSource.create(url);
-        Document document = GateInResourcesSchemaValidator.validate(source);
+        Document document = GateInResourcesSchemaValidator.validate(url);
         List<SkinConfigTask> tasks = SkinConfigParser.parse(document);
         assertNotNull("There are no tasks", tasks);
         assertEquals(8, tasks.size());

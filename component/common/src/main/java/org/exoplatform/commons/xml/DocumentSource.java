@@ -19,6 +19,7 @@
 
 package org.exoplatform.commons.xml;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -44,13 +45,20 @@ public abstract class DocumentSource {
         return identifier;
     }
 
+    /**
+     * Returns a new {@link InputStream}. When called multiple times, returns distinct
+     * {@link InputStream} that can be read independently.
+     *
+     * @return a new {@link InputStream}
+     * @throws IOException
+     */
     public abstract InputStream getStream() throws IOException;
 
-    public static DocumentSource create(String identifier, final InputStream in) {
+    public static DocumentSource create(String identifier, final byte[] bytes) {
         return new DocumentSource(identifier) {
             @Override
             public InputStream getStream() throws IOException {
-                return in;
+                return new ByteArrayInputStream(bytes);
             }
         };
     }

@@ -20,8 +20,8 @@
   -->
 <gatein-resources
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5"
-    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_5">
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_4 http://www.gatein.org/xml/ns/gatein_resources_1_4_1"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_4">
 
   <!-- Portal skins -->
   <portal-skin>

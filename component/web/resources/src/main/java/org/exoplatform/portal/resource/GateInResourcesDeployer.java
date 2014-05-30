@@ -29,7 +29,6 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
-import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
@@ -51,23 +50,21 @@ import org.w3c.dom.Document;
  *
  */
 public class GateInResourcesDeployer implements WebAppListener {
-
-    public static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
-
-    /**
-     * A key used to store a collection of JavaScript resources loaded from a given servlet context.
-     */
-    public static final String SCRIPT_RESOURCES_ATTR = "gatein.script.resources";
-
-    /** . */
     private static final Logger log = LoggerFactory.getLogger(GateInResourcesDeployer.class);
 
+    /** Path to {@code gatein-resources.xml} */
+    public static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
+
+    /** A key used to store a collection of JavaScript resources loaded from a given servlet context. */
+    public static final String SCRIPT_RESOURCES_ATTR = "gatein.script.resources";
+
+    /** The {@link SkinService} */
     private final SkinService skinService;
-    /** . */
+
+    /** The {@link JavascriptConfigService} */
     private final JavascriptConfigService javascriptConfigService;
-    /**
-     * The name of the portal container
-     */
+
+    /** The name of the portal container */
     private final String portalContainerName;
 
     /**
@@ -119,9 +116,8 @@ public class GateInResourcesDeployer implements WebAppListener {
 
         ServletContext scontext = webApp.getServletContext();
         try {
-            DocumentSource source = DocumentSource.create(url);
             /* Validate straight away here before creating the PortalContainerPostInitTask */
-            final Document document = GateInResourcesSchemaValidator.validate(source);
+            final Document document = GateInResourcesSchemaValidator.validate(url);
             /* Also parse both before creating the PortalContainerPostInitTask */
             final ScriptResources scriptResources = new JavascriptConfigParser(scontext, document).parse();
             final List<SkinConfigTask> skinTasks = SkinConfigParser.parse(document);

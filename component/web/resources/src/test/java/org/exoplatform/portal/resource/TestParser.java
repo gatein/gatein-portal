@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.resource;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -34,43 +33,55 @@ import org.exoplatform.web.application.javascript.DependencyDescriptor;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class TestParser extends AbstractGateInTest {
-    private static final Logger log = LoggerFactory.getLogger(TestParser.class);
 
-    private static final String GATEIN_RESOURCES_ELEMENT = "<gatein-resources>";
+    private static final String GATEIN_15_RESOURCES_ELEMENT = "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+            + " xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5\""
+            + " xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_5\">";
+
+    private static final String GATEIN_14_RESOURCES_ELEMENT = "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
+            + " xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_4 http://www.gatein.org/xml/ns/gatein_resources_1_4\""
+            + " xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_4\">";
+
+    private static final String PLAIN_RESOURCES_ELEMENT = "<gatein-resources>";
 
     private static List<ScriptResourceDescriptor> parseScripts(String config) throws IOException, SAXException, ParserConfigurationException {
-        DocumentSource source = DocumentSource.create("gatein-resources.xml", new ByteArrayInputStream(config.getBytes("UTF-8")));
+        return parseScripts(config, true);
+    }
+
+    private static List<ScriptResourceDescriptor> parseScripts(String config, boolean failOnSchemaValidationError) throws IOException, SAXException, ParserConfigurationException {
+        DocumentSource source = DocumentSource.create("gatein-resources.xml", config.getBytes("UTF-8"));
         Document document;
         try {
             document = GateInResourcesSchemaValidator.validate(source);
-        } catch (SAXException e) {
-            log.error("Validation failed for gatein-resources\n"+ config);
-            throw e;
+            JavascriptConfigParser parser = new JavascriptConfigParser(new MockServletContext("mypath"), document);
+            return parser.parse().getScriptResourceDescriptors();
+        } catch (SAXParseException e) {
+            if (failOnSchemaValidationError) {
+                fail(e.toString() +"\n"+ config, e);
+                return null;
+            } else {
+                throw e;
+            }
         }
-        JavascriptConfigParser parser = new JavascriptConfigParser(new MockServletContext("mypath"), document);
-        return parser.parse().getScriptResourceDescriptors();
     }
 
 
     public void testShared() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
-                + "\n<module>"
+        String config =
+                 "\n<module>"
                 + "\n<name>foo</name>"
                 + "\n<script>"
-                + "\n<name>foo_module</name>"
-
                 + "\n<path>/foo_module.js</path>"
                 + "\n</script>"
                 + "\n<depends>"
@@ -85,8 +96,6 @@ public class TestParser extends AbstractGateInTest {
                 "<scripts>"
                 + "\n<name>foo_scripts</name>"
                 + "\n<script>"
-                + "\n<name>foo_module</name>"
-
                 + "\n<path>/foo_module.js</path>"
                 + "\n</script>"
                 + "\n<depends>"
@@ -100,7 +109,7 @@ public class TestParser extends AbstractGateInTest {
 
                 "</gatein-resources>";
 
-        List<ScriptResourceDescriptor> scripts = parseScripts(config);
+        List<ScriptResourceDescriptor> scripts = parseScripts(GATEIN_15_RESOURCES_ELEMENT + config);
         assertEquals(2, scripts.size());
         ScriptResourceDescriptor desc = scripts.get(0);
         assertEquals(new ResourceId(ResourceScope.SHARED, "foo"), desc.getId());
@@ -115,13 +124,11 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testPortlet() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
-                + "\n<portlet>"
+        String config =
+                "\n<portlet>"
                 + "\n<name>foo</name>"
                 + "\n<module>"
                 + "\n<script>"
-
-                + "\n<name>foo_module</name>"
                 + "\n<path>/foo_module.js</path>"
                 + "\n</script>"
                 + "\n<depends>"
@@ -135,7 +142,7 @@ public class TestParser extends AbstractGateInTest {
 
                 + "\n</portlet>"
                 + "\n</gatein-resources>";
-        List<ScriptResourceDescriptor> scripts = parseScripts(config);
+        List<ScriptResourceDescriptor> scripts = parseScripts(GATEIN_15_RESOURCES_ELEMENT + config);
         assertEquals(1, scripts.size());
         ScriptResourceDescriptor desc = scripts.get(0);
         assertEquals(new ResourceId(ResourceScope.PORTLET, "mypath/foo"), desc.getId());
@@ -145,13 +152,11 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testPortal() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
-                + "\n<portal>"
+        String config =
+                "\n<portal>"
                 + "\n<name>foo</name>"
                 + "\n<module>"
                 + "\n<script>"
-
-                + "\n<name>foo_module</name>"
                 + "\n<path>/foo_module.js</path>"
                 + "\n</script>"
                 + "\n<depends>"
@@ -166,7 +171,7 @@ public class TestParser extends AbstractGateInTest {
                 + "\n</portal>"
                 + "\n</gatein-resources>";
 
-        List<ScriptResourceDescriptor> scripts = parseScripts(config);
+        List<ScriptResourceDescriptor> scripts = parseScripts(GATEIN_15_RESOURCES_ELEMENT + config);
         assertEquals(1, scripts.size());
         ScriptResourceDescriptor desc = scripts.get(0);
         assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
@@ -176,13 +181,11 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testModules() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
-                + "\n<portal>"
+        String config =
+                "\n<portal>"
                 + "\n<name>foo</name>"
                 + "\n<module>"
                 + "\n<script>"
-
-                + "\n<name>local_module</name>"
                 + "\n<path>/local_module.js</path>"
                 + "\n</script>"
                 + "\n</module>"
@@ -190,7 +193,7 @@ public class TestParser extends AbstractGateInTest {
 
                 + "\n</gatein-resources>";
 
-        List<ScriptResourceDescriptor> scripts = parseScripts(config);
+        List<ScriptResourceDescriptor> scripts = parseScripts(GATEIN_15_RESOURCES_ELEMENT + config);
         assertEquals(1, scripts.size());
         ScriptResourceDescriptor desc = scripts.get(0);
 
@@ -203,13 +206,11 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testResourceBundle() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
-                + "\n<portal>"
+        String config =
+                "\n<portal>"
                 + "\n<name>foo</name>"
                 + "\n<module>"
                 + "\n<script>"
-
-                + "\n<name>foo_module</name>"
                 + "\n<path>/foo_module.js</path>"
                 + "\n<resource-bundle>my_bundle</resource-bundle>"
 
@@ -218,7 +219,7 @@ public class TestParser extends AbstractGateInTest {
                 + "\n</portal>"
                 + "\n</gatein-resources>";
 
-        List<ScriptResourceDescriptor> scripts = parseScripts(config);
+        List<ScriptResourceDescriptor> scripts = parseScripts(GATEIN_15_RESOURCES_ELEMENT + config);
         assertEquals(1, scripts.size());
         ScriptResourceDescriptor desc = scripts.get(0);
         assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
@@ -228,7 +229,7 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testSupportedLocales() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
+        String config = GATEIN_15_RESOURCES_ELEMENT
                 + "\n<portal>"
                 + "\n<name>foo</name>"
                 + "\n<module>"
@@ -249,7 +250,7 @@ public class TestParser extends AbstractGateInTest {
 
     public void testRemoteResource() throws Exception {
 
-        String config = GATEIN_RESOURCES_ELEMENT
+        String config = GATEIN_15_RESOURCES_ELEMENT
 
                 + "\n<module><name>foo</name><url>http://jquery.com/jquery.js</url></module>"
                 + "\n</gatein-resources>";
@@ -264,7 +265,7 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testAlias() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
+        String config = GATEIN_15_RESOURCES_ELEMENT
                 + "\n<module>"
                 + "\n<name>foo</name>"
                 + "\n<as>f</as>"
@@ -281,7 +282,7 @@ public class TestParser extends AbstractGateInTest {
         assertEquals("f", desc.getAlias());
         assertEquals("b", desc.getDependencies().get(0).getAlias());
 
-        String config1 = GATEIN_RESOURCES_ELEMENT
+        String config1 = GATEIN_15_RESOURCES_ELEMENT
                 + "\n<portal>"
                 + "\n<name>zoo</name>"
                 + "\n<as>z</as>"
@@ -302,37 +303,32 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testLoadGroup() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
+        String config = GATEIN_15_RESOURCES_ELEMENT
                 + "\n<module>"
                 + "\n<name>foo_module</name>"
 
                 + "\n<load-group>foo_group</load-group>"
                 + "\n<script>"
-                + "\n<name>foo_module</name>"
                 + "\n<path>/foo_module.js</path>"
 
                 + "\n</script>"
-                + "\n</module>" +
+                + "\n</module>"
 
-                "<portal>"
+                + "<portal>"
                 + "\n<name>foo_portal</name>"
                 + "\n<module>"
                 + "\n<load-group>foo_group</load-group>"
                 + "\n<script>"
-
-                + "\n<name>foo_portal</name>"
                 + "\n<path>/foo_portal.js</path>"
                 + "\n</script>"
                 + "\n</module>"
-                + "\n</portal>" +
+                + "\n</portal>"
 
-                "<portlet>"
+                + "<portlet>"
                 + "\n<name>foo_portlet</name>"
                 + "\n<module>"
                 + "\n<load-group>foo_group</load-group>"
                 + "\n<script>"
-
-                + "\n<name>foo_portlet</name>"
                 + "\n<path>/foo_portlet.js</path>"
                 + "\n</script>"
                 + "\n</module>"
@@ -349,13 +345,11 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testLoadGroupRestriction() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
-                + "\n<scripts>"
+        String config = "\n<scripts>"
                 + "\n<name>foo_scripts</name>"
 
                 + "\n<load-group>foo_group</load-group>"
                 + "\n<script>"
-                + "\n<name>foo_module</name>"
                 + "\n<path>/foo_module.js</path>"
 
                 + "\n</script>"
@@ -364,12 +358,25 @@ public class TestParser extends AbstractGateInTest {
                 "<module>"
                 + "\n<name>foo_module</name>"
                 + "\n<load-group>foo_group</load-group>"
-                + "\n<url>testURL</url>"
+                + "\n<url>http://foo.com/any.js</url>"
 
                 + "\n</module>"
                 + "\n</gatein-resources>";
-        List<ScriptResourceDescriptor> scripts = parseScripts(config);
+        try {
+            parseScripts(GATEIN_15_RESOURCES_ELEMENT + config, false);
+            fail("SAXParseException expected for gatein_resources_1_4_1 XSD");
+        } catch (SAXParseException expected) {
+        }
 
+        /* ... but should pass with gatein_resources_1_3 XSD */
+        List<ScriptResourceDescriptor> scripts = parseScripts(GATEIN_14_RESOURCES_ELEMENT + config);
+        assertEquals(2, scripts.size());
+        for (ScriptResourceDescriptor des : scripts) {
+            assertNull(des.getGroup());
+        }
+
+        /* ... and without any namespace declared */
+        scripts = parseScripts(PLAIN_RESOURCES_ELEMENT + config);
         assertEquals(2, scripts.size());
         for (ScriptResourceDescriptor des : scripts) {
             assertNull(des.getGroup());
@@ -377,10 +384,10 @@ public class TestParser extends AbstractGateInTest {
     }
 
     public void testAdapter() throws Exception {
-        String config = GATEIN_RESOURCES_ELEMENT
+        String config = GATEIN_15_RESOURCES_ELEMENT
                 + "\n<module>"
                 + "\n<name>foo_module</name>"
-                + "\n<script><name>foo</name>"
+                + "\n<script>"
 
                 + "\n<adapter>aaa;<include>/foo_module.js</include>bbb;</adapter>"
                 + "\n</script>"
