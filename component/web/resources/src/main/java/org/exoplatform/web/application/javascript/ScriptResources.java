@@ -23,16 +23,11 @@
 package org.exoplatform.web.application.javascript;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.gatein.portal.controller.resource.script.StaticScriptResource;
 
 /**
@@ -44,7 +39,6 @@ import org.gatein.portal.controller.resource.script.StaticScriptResource;
  * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
  */
 public class ScriptResources {
-    private static final Log log = ExoLogger.getLogger(ScriptResources.class);
 
     /**
      * An immutable variant of {@link ScriptResources}.
@@ -56,182 +50,13 @@ public class ScriptResources {
             super(Collections.unmodifiableList(new ArrayList<ScriptResourceDescriptor>(
                     scriptResources.scriptResourceDescriptors)), Collections
                     .unmodifiableList(new ArrayList<StaticScriptResource>(scriptResources.staticScriptResources)),
-                    new ImmutablePathsBuilder(scriptResources.paths).build());
+                    Collections.unmodifiableMap(new LinkedHashMap<String, List<String>>(scriptResources.paths)));
         }
 
         /**
          * returns {@code this}.
          */
         public ImmutableScriptResources toImmutable() {
-            return this;
-        }
-    }
-
-    /**
-     * A builder for producing immutable paths {@link Map}s.
-     *
-     * @see {@link ScriptResources#paths}
-     * @see {@link JavascriptConfigService#paths}
-     *
-     * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
-     */
-    public static class ImmutablePathsBuilder {
-        /**
-         * @return an empty immutable {@link Map}.
-         */
-        public static Map<String, List<String>> buildEmpty() {
-            return Collections.emptyMap();
-        }
-
-        /**
-         * The result for {@link #build()} is collected here.
-         */
-        private final Map<String, List<String>> paths;
-
-        /**
-         * Creates a new builder based on the given {@code paths}. The values from {@code paths}
-         * are deeply copied into a new {@link LinkedHashMap}. It is a {@link LinkedHashMap} because
-         * the order of paths matters.
-         *
-         * @param paths the initial {@link #paths}
-         */
-        public ImmutablePathsBuilder(Map<String, List<String>> paths) {
-            super();
-            this.paths = new LinkedHashMap<String, List<String>>(paths);
-            for (Map.Entry<String, List<String>> en : this.paths.entrySet()) {
-                en.setValue(Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
-            }
-        }
-
-        /**
-         * Adds those elements of {@code pathEntries} to {@link #paths} which are not there yet and
-         * removes those elements from {@code pathEntries} which are available in {@link #paths} already.
-         * Hence, {@code pathEntries} parameter can be modified during the call.
-         * <p>
-         * To put it in other words, the status of {@code pathEntries} map on the caller will be the same
-         * as before minus the entries that were already in {@link #paths}:
-         *
-         * @param pathEntries
-         * @return see above
-         */
-        public ImmutablePathsBuilder accept(Map<String, List<String>> pathEntries) throws DuplicateResourceKeyException {
-            for (Iterator<Map.Entry<String, List<String>>> it = pathEntries.entrySet().iterator(); it.hasNext();) {
-                Map.Entry<String, List<String>> en = it.next();
-                List<String> availableValue = this.paths.get(en.getKey());
-                if (availableValue != null) {
-                    throw new DuplicateResourceKeyException("Ignoring path entry " + en + " because the given resource path was already provided: "
-                            + availableValue);
-                } else {
-                    /* add only if not there already */
-                    if (log.isDebugEnabled()) {
-                        log.debug("Adding path entry " + en);
-                    }
-                    this.paths.put(en.getKey(), Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
-                }
-            }
-            return this;
-        }
-
-        /**
-         * @return a new immutable paths {@link Map} that can be used in {@link JavascriptConfigService#paths}.
-         */
-        public Map<String, List<String>> build() {
-            return Collections.unmodifiableMap(paths);
-        }
-
-        /**
-         * Removes all keys given in {@code keysToRemove} from the underlying {@link #paths}.
-         *
-         * @param keysToRemove
-         * @return
-         */
-        public ImmutablePathsBuilder removeAll(Collection<String> keysToRemove) {
-            for (String prefix : keysToRemove) {
-                paths.remove(prefix);
-            }
-            return this;
-        }
-    }
-
-    /**
-     * A builder for producing immutable static script resources {@link Map}s.
-     *
-     * @see {@link ScriptResources#staticScriptResources}
-     * @see {@link JavascriptConfigService#staticScriptResources}
-     *
-     * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
-     *
-     */
-    public static class ImmutableStaticScriptResourcesBuilder {
-        /**
-         * @return an empty immutable {@link Map}.
-         */
-        public static Map<String, StaticScriptResource> buildEmpty() {
-            return Collections.emptyMap();
-        }
-
-        /**
-         * The result for {@link #build()} is collected here.
-         */
-        private final Map<String, StaticScriptResource> staticScriptResources;
-
-        /**
-         * Creates a new builder based on the given {@code staticScriptResources}. The values from {@code paths}
-         * are copied into a new {@link HashMap}.
-         *
-         * @param staticScriptResources
-         */
-        public ImmutableStaticScriptResourcesBuilder(Map<String, StaticScriptResource> staticScriptResources) {
-            super();
-            this.staticScriptResources = new HashMap<String, StaticScriptResource>(staticScriptResources);
-        }
-
-        /**
-         * Adds those elements of {@code toAdd} to {@link #staticScriptResources} which are not there yet and
-         * removes those elements from {@code toAdd} which are available in {@link #staticScriptResources} already.
-         * Hence, {@code toAdd} can be modified during the call.
-         * <p>
-         * To put it in other words, the status of {@code toAdd} collection on the caller will be the same
-         * as before minus the entries that were already in {@link #staticScriptResources}:
-         *
-         * @param toAdd entriess to add
-         * @return
-         */
-        public ImmutableStaticScriptResourcesBuilder accept(Collection<StaticScriptResource> toAdd) throws DuplicateResourceKeyException {
-            for (Iterator<StaticScriptResource> it = toAdd.iterator(); it.hasNext();) {
-                StaticScriptResource staticScriptResource = it.next();
-                String resourcePath = staticScriptResource.getResourcePath();
-                StaticScriptResource availableValue = staticScriptResources.get(resourcePath);
-                if (availableValue != null) {
-                    throw new DuplicateResourceKeyException("Ignoring " + StaticScriptResource.class.getSimpleName() + " " + staticScriptResource
-                            + " because the given resource path was already provided by " + availableValue);
-                } else {
-                    /* add only if not there already */
-                    if (log.isDebugEnabled()) {
-                        log.debug("Adding " + staticScriptResource);
-                    }
-                    staticScriptResources.put(resourcePath, staticScriptResource);
-                }
-            }
-            return this;
-        }
-
-        /**
-         * @return a new immutable staticScriptResources {@link Map} that can be used in {@link JavascriptConfigService#staticScriptResources}.
-         */
-        public Map<String, StaticScriptResource> build() {
-            return Collections.unmodifiableMap(staticScriptResources);
-        }
-
-        /**
-         * Removes all entries given in {@code toRemove} from the underlying {@link #staticScriptResources}.
-         * @param toRemoveStaticScriptResources
-         * @return
-         */
-        public ImmutableStaticScriptResourcesBuilder removeAll(Collection<StaticScriptResource> toRemove) {
-            for (StaticScriptResource staticScriptResource : toRemove) {
-                staticScriptResources.remove(staticScriptResource.getResourcePath());
-            }
             return this;
         }
     }

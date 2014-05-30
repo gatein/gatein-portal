@@ -34,12 +34,14 @@ import java.util.TreeSet;
 import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.Javascript.Local;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 import org.exoplatform.web.application.javascript.ScriptResources;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
@@ -251,7 +253,10 @@ public class TestAmdParser extends junit.framework.TestCase {
      */
     private void assertConfigMatchesResult(String config, String[] expectedPaths) throws SAXException, IOException,
             ParserConfigurationException, UnsupportedEncodingException {
-        JavascriptConfigParser parser = new JavascriptConfigParser(new MockAMDServletContext(), new ByteArrayInputStream(config.getBytes("UTF-8")));
+        DocumentSource source = DocumentSource.create("gatein-resources.xml", new ByteArrayInputStream(config.getBytes("UTF-8")));
+        Document document = GateInResourcesSchemaValidator.validate(source);
+
+        JavascriptConfigParser parser = new JavascriptConfigParser(new MockAMDServletContext(), document);
         ScriptResources resources = parser.parse();
         List<ScriptResourceDescriptor> scripts = resources.getScriptResourceDescriptors();
         assertEqualPaths(new TreeSet<String>(Arrays.asList(expectedPaths)), scripts);

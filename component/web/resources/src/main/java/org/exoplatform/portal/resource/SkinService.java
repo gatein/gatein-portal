@@ -54,6 +54,7 @@ import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.management.rest.annotations.RESTEndpoint;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
+import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
@@ -63,16 +64,13 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.exoplatform.web.url.MimeType;
 import org.gatein.portal.controller.resource.ResourceRequestHandler;
-import org.gatein.wci.ServletContainerFactory;
-import org.gatein.wci.WebAppListener;
-import org.picocontainer.Startable;
 
 @Managed
 @NameTemplate({ @Property(key = "view", value = "portal"), @Property(key = "service", value = "management"),
         @Property(key = "type", value = "skin") })
 @ManagedDescription("Skin service")
 @RESTEndpoint(path = "skinservice")
-public class SkinService extends AbstractResourceService implements Startable {
+public class SkinService extends AbstractResourceService {
 
     protected static Log log = ExoLogger.getLogger("portal.SkinService");
 
@@ -100,9 +98,6 @@ public class SkinService extends AbstractResourceService implements Startable {
     private static final Pattern RT = Pattern.compile("[^{;]*;\\s*/\\*\\s*orientation=rt\\s*\\*/");
 
     public static final String DEFAULT_SKIN = "Default";
-
-    /** The deployer. */
-    private final WebAppListener deployer;
 
     private final Map<SkinKey, SkinConfig> portalSkins_;
 
@@ -197,7 +192,6 @@ public class SkinService extends AbstractResourceService implements Startable {
         rtCache = new FutureMap<String, CachedStylesheet, SkinContext>(loader);
         portletThemes_ = new HashMap<String, Set<String>>();
         portalContainerName = context.getPortalContainerName();
-        deployer = new GateInSkinConfigDeployer(portalContainerName, this);
 
         addResourceResolver(new CompositeResourceResolver(portalContainerName, skinConfigs_));
     }
@@ -379,6 +373,15 @@ public class SkinService extends AbstractResourceService implements Startable {
         }
         ltCache.remove(cssPath);
         rtCache.remove(cssPath);
+    }
+
+    /**
+     * @param skinTasks
+     */
+    public void addSkins(List<SkinConfigTask> skinTasks, ServletContext scontext) {
+        for (SkinConfigTask task : skinTasks) {
+            task.execute(this, scontext);
+        }
     }
 
     /**
@@ -893,23 +896,4 @@ public class SkinService extends AbstractResourceService implements Startable {
         rtCache.remove(skinId);
     }
 
-    /**
-     * Start service. Registry org.exoplatform.portal.resource.GateInSkinConfigDeployer and
-     * org.exoplatform.portal.resource.GateInSkinConfigRemoval into ServletContainer.
-     *
-     * @see org.picocontainer.Startable#start()
-     */
-    public void start() {
-        ServletContainerFactory.getServletContainer().addWebAppListener(deployer);
-    }
-
-    /**
-     * Stop service Remove org.exoplatform.portal.resource.GateInSkinConfigDeployer and
-     * org.exoplatform.portal.resource.GateInSkinConfigRemoval from ServletContainer.
-     *
-     * @see org.picocontainer.Startable#stop()
-     */
-    public void stop() {
-        ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
-    }
 }

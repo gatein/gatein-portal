@@ -35,6 +35,15 @@
   </component>
 
   <component>
+    <type>org.exoplatform.portal.resource.SkinService</type>
+  </component>
+
+  <component>
+    <key>org.exoplatform.portal.resource.ResourceDeploymentService</key>
+    <type>org.exoplatform.portal.resource.ResourceDeploymentService</type>
+  </component>
+
+  <component>
     <type>org.exoplatform.portal.application.ApplicationStatisticService</type>
   </component>
 

@@ -34,6 +34,7 @@ import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 
+import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
@@ -50,6 +51,7 @@ import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMode;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
@@ -83,7 +85,9 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
             jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
             URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
-            ScriptResources scriptResources = new JavascriptConfigParser(mockServletContext, url.openStream()).parse();
+            DocumentSource source = DocumentSource.create(url);
+            Document document = GateInResourcesSchemaValidator.validate(source);
+            ScriptResources scriptResources = new JavascriptConfigParser(mockServletContext, document).parse();
             jsService.add(scriptResources);
 
             isFirstStartup = false;
