@@ -38,6 +38,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.services.security.MembershipEntry;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -87,7 +88,10 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
     private static final String PRODUCER_NAME_META_INFO_KEY = "producer-name";
     public static final String PRODUCER_CATEGORY_NAME_SUFFIX = " Producer";
 
-    public ApplicationRegistryServiceImpl(ChromatticManager manager, POMSessionManager mopManager) {
+    private UserACL acl;
+    private String anyOfAdminGroup;
+
+    public ApplicationRegistryServiceImpl(ChromatticManager manager, POMSessionManager mopManager, UserACL userACL) {
         ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle) manager.getLifeCycle("app");
         lifeCycle.registry = this;
 
@@ -95,6 +99,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
         this.manager = manager;
         this.lifeCycle = lifeCycle;
         this.mopManager = mopManager;
+        this.acl = userACL;
+        this.anyOfAdminGroup = new MembershipEntry(acl.getAdminGroups()).toString();
     }
 
     public ContentRegistry getContentRegistry() {
@@ -336,7 +342,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
         //
         if (eXoGadgets != null) {
             ArrayList<String> permissions = new ArrayList<String>();
-            permissions.add(UserACL.EVERYONE);
+            permissions.add(anyOfAdminGroup);
             String categoryName = "Gadgets";
 
             //
@@ -409,7 +415,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
             }
 
             ArrayList<String> permissions = new ArrayList<String>();
-            permissions.add(UserACL.EVERYONE);
+            permissions.add(anyOfAdminGroup);
             // If no keywords, use the portlet application name
             if (categoryNames.isEmpty()) {
                 categoryNames.add(portletApplicationName.trim());
