@@ -35,8 +35,8 @@ public class TestSkinConfigParser extends TestCase {
         assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_4.xml");
     }
 
-    public void testResources1_4_1() throws IOException, SAXException {
-        assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_4_1.xml");
+    public void testResources1_5() throws IOException, SAXException {
+        assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_5.xml");
     }
 
     private void assertDescriptorCanBeLoaded(String descriptorPath) throws IOException, SAXException {
