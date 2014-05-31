@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.resource;
+package org.exoplatform.web.application.javascript;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -34,6 +34,9 @@ import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.exoplatform.commons.xml.DocumentSource;
+import org.exoplatform.portal.resource.GateInResourcesSchemaValidator;
+import org.exoplatform.portal.resource.TestJavascriptConfigService;
+import org.exoplatform.portal.resource.TestJavascriptConfigService.MockJSServletContext;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.Javascript.Local;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
@@ -45,7 +48,7 @@ import org.xml.sax.SAXException;
 
 /**
  */
-public class TestAmdParser extends junit.framework.TestCase {
+public class TestJavascriptConfigParserAmd extends junit.framework.TestCase {
 
     private static final String GATEIN_RESOURCES_ELEMENT = "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
             + " xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5\""

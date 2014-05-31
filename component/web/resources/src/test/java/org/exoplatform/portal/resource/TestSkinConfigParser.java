@@ -11,7 +11,7 @@ import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-public class TestGateInResourceParser extends TestCase {
+public class TestSkinConfigParser extends TestCase {
     public void testResources1_0() throws IOException, SAXException {
         assertDescriptorCanBeLoaded("org/exoplatform/portal/resource/gatein-resources-1_0.xml");
     }
