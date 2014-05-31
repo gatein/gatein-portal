@@ -32,7 +32,6 @@ import javax.servlet.ServletContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
-import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.application.javascript.ScriptResources;

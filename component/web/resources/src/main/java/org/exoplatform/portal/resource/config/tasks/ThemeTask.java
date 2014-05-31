@@ -24,8 +24,8 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import org.exoplatform.portal.resource.SkinConfigParser;
 import org.exoplatform.portal.resource.SkinService;
-import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

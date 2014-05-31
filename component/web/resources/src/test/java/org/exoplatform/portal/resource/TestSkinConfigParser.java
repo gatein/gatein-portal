@@ -7,7 +7,6 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
-import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
