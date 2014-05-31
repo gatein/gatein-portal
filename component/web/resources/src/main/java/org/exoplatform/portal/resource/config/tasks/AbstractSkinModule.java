@@ -18,7 +18,7 @@
  */
 package org.exoplatform.portal.resource.config.tasks;
 
-import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
+import org.exoplatform.portal.resource.SkinConfigParser;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 

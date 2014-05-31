@@ -38,7 +38,6 @@ import org.exoplatform.component.test.web.ServletContextImpl;
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
-import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.test.mocks.servlet.MockServletRequest;
 import org.exoplatform.web.ControllerContext;
