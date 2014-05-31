@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.resource;
+package org.exoplatform.web.application.javascript;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.component.test.AbstractGateInTest;
+import org.exoplatform.portal.resource.GateInResourcesSchemaValidator;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.javascript.DependencyDescriptor;
 import org.exoplatform.web.application.javascript.Javascript;
@@ -43,7 +44,7 @@ import org.xml.sax.SAXParseException;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestParser extends AbstractGateInTest {
+public class TestJavascriptConfigParser extends AbstractGateInTest {
 
     private static final String GATEIN_15_RESOURCES_ELEMENT = "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\""
             + " xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5\""
