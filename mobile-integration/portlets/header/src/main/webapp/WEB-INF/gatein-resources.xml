@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_5 http://www.gatein.org/xml/ns/gatein_resources_1_5"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_5">
 
 <!-- TODO: make this PORTAL scope, it doesn't seem to work at the moment for some reason ... -->
     <module>
