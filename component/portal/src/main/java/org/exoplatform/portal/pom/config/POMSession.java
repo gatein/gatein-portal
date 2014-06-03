@@ -31,6 +31,7 @@ import javax.jcr.Session;
 
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.UndeclaredRepositoryException;
+import org.chromattic.api.query.QueryBuilder;
 import org.chromattic.api.query.QueryResult;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.exoplatform.commons.chromattic.SessionContext;
@@ -250,10 +251,20 @@ public final class POMSession {
             }
         }
 
+        String defaultOrderBy = "gtn:name";
+
         // Temporary work around, to fix in MOP and then remove
         ChromatticSession session = context.getSession();
         Class<O> mappedClass = (Class<O>) mapping.get(type);
-        return session.createQueryBuilder(mappedClass).where(statement).get().objects((long) offset, (long) limit);
+
+        QueryBuilder<O> queryBuilder;
+        if (type == ObjectType.PAGE) {
+            queryBuilder = session.createQueryBuilder(mappedClass).where(statement).orderBy(defaultOrderBy);
+        } else {
+            queryBuilder = session.createQueryBuilder(mappedClass).where(statement);
+        }
+
+        return queryBuilder.get().objects((long) offset, (long) limit);
     }
 
     private final SynchronizationListener listener = new SynchronizationListener() {
