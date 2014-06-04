@@ -278,4 +278,11 @@
       </xsl:copy>
    </xsl:template>
 
+   <xsl:template name="wsdl-host">jbossws.undefined.host</xsl:template>
+   <xsl:template match="node()[name(.)='wsdl-host']">
+      <xsl:copy>
+         <xsl:call-template name="wsdl-host" />
+      </xsl:copy>
+   </xsl:template>
+
 </xsl:stylesheet>
