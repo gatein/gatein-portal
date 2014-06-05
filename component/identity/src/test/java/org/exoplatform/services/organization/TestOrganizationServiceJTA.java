@@ -33,7 +33,7 @@ import org.junit.ClassRule;
 @ConfiguredBy({
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-jta-configuration.xml"),
-        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-configuration.xml") })
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganization-picket-link-jta-configuration.xml") })
 public class TestOrganizationServiceJTA extends AbstractTestOrganizationService {
     @ClassRule
     public static KernelLifeCycle kernel = new KernelLifeCycle();
