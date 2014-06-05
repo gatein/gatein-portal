@@ -72,41 +72,4 @@ public class TestDownloadService extends AbstractKernelTest
       assertNull(cache.get("" + s.hashCode()));
       cache.clearCache();
    }
-
-   @Test
-   public void testMemoryLeakWithMultiThread() throws Exception
-   {
-      final AtomicInteger counter = new AtomicInteger(0);
-      Thread t1 = new Thread()
-      {
-         @Override
-         public void run()
-         {
-            for(int i = counter.incrementAndGet(); i < 100; i = counter.incrementAndGet())
-            {
-               service.addDownloadResource(new MockDownloadResource("" + i));
-            }
-         }
-      };
-
-      Thread t2 = new Thread()
-      {
-         @Override
-         public void run()
-         {
-            for(int i = counter.incrementAndGet(); i < 100; i = counter.incrementAndGet())
-            {
-               service.addDownloadResource(new MockDownloadResource("" + i));
-            }
-         }
-      };
-
-      t1.start();
-      t2.start();
-      t1.join();
-      t2.join();
-
-      assertTrue(cache.getCacheSize() <= 10);
-   }
-
 }
