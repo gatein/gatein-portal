@@ -30,13 +30,13 @@
   </component>
 
   <component>
-    <key>org.infinispan.transaction.lookup.TransactionManagerLookup</key>
-    <type>org.exoplatform.services.transaction.infinispan.JBossStandaloneJTAManagerLookup</type>
+    <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
+    <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
   </component>
 
   <component>
     <key>org.exoplatform.services.transaction.TransactionService</key>
-    <type>org.exoplatform.services.transaction.infinispan.JBossTransactionsService</type>
+    <type>org.exoplatform.services.transaction.jbosscache.JBossTransactionsService</type>
     <init-params>
       <value-param>
         <name>timeout</name>
@@ -127,7 +127,7 @@
     <init-params>
       <value-param>
         <name>config</name>
-        <value>jar:/conf/exo.portal.component.identity-picketlink-idm-config.xml</value>
+        <value>jar:/conf/exo.portal.component.identity-picketlink-idm-jta-config.xml</value>
       </value-param>
       <value-param>
         <name>apiCacheConfig</name>
@@ -192,16 +192,6 @@
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
                     <field name="type">
-                      <string>*</string>
-                    </field>
-                    <field name="description">
-                      <string>Any membership type</string>
-                    </field>
-                  </object>
-                </value>
-                <value>
-                  <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
-                    <field name="type">
                       <string>member</string>
                     </field>
                     <field name="description">
@@ -222,21 +212,9 @@
                     <field name="parentId">
                       <string></string>
                     </field>
+                    <!--<field  name="type"><string>hierachy</string></field>-->
                     <field name="description">
                       <string>the /users group</string>
-                    </field>
-                  </object>
-                </value>
-                <value>
-                  <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                    <field name="name">
-                      <string>administrators</string>
-                    </field>
-                    <field name="parentId">
-                      <string></string>
-                    </field>
-                    <field name="description">
-                      <string>the /administrators group</string>
                     </field>
                   </object>
                 </value>
@@ -263,7 +241,7 @@
                       <string>demo@localhost</string>
                     </field>
                     <field name="groups">
-                      <string>member:/users, *:/administrators</string>
+                      <string>member:/users</string>
                     </field>
                   </object>
                 </value>
