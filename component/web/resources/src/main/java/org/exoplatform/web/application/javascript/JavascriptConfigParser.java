@@ -150,7 +150,7 @@ public class JavascriptConfigParser {
      * @return a {@link ScriptResources}
      */
     public ScriptResources parse() {
-        ScriptResources result = new ScriptResources();
+        ScriptResources result = new ScriptResources(servletContext.getContextPath());
         Element element = document.getDocumentElement();
         for (String tagName : PARSEABLE_SCRIPT_TAGS) {
             for (Element childElt : XMLTools.getChildren(element, tagName)) {

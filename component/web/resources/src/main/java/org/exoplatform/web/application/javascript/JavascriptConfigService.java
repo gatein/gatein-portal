@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -71,89 +72,184 @@ import org.json.JSONObject;
 public class JavascriptConfigService extends AbstractResourceService {
 
     /**
-     * A builder for producing immutable paths {@link Map}s.
-     *
-     * @see {@link ScriptResources#paths}
-     * @see {@link JavascriptConfigService#paths}
+     * <a href="http://requirejs.org/docs/api.html#config-paths">require.js path mappings</a>
+     * for module names not found directly under require.js's {@code baseUrl}.
+     * For a given {@link #pathMappings} entry, the key is the prefix not found in under {@code baseUrl}
+     * and the value is (possibly a portal-external) path to be used instead of the prefix.
+     * The value of an entry is actually a {@link List} of substitute paths, to mirror the
+     * <a href="http://requirejs.org/docs/api.html#pathsfallbacks">fallback paths</a>
+     * feature of require.js.
+     * <p>
+     * Internally, a {@link LinkedHashMap} is used is used to store the prefix to target path mapping,
+     * because the order of paths matters - they represent a fallback sequence tried in the given
+     * order by require.js.
+     * <p>
+     * This class is deeply immutable, {@link #add(String, Map)} and {@link #remove(String)} methods
+     * return a new {@link PathMappings} instance or {@code this} if there is nothing to change.
      *
      * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
      */
-    static class ImmutablePathsBuilder {
+    static class PathMappings {
+        private static final PathMappings EMPTY = new PathMappings();
+        public static PathMappings empty() {
+            return EMPTY;
+        }
+
+        /** Path prefixes are mapped to target paths. Always a {@link LinkedHashMap}
+         * because the order matters - see above. */
+        private final Map<String, List<String>> entries;
+
+        /** A place to store which prefixes were registered from which servlet context. */
+        private final Map<String, Set<String>> prefixesToContextPaths;
+
         /**
-         * @return an empty immutable {@link Map}.
+         * Both parameters must be immutable.
+         *
+         * @param entries
+         * @param prefixesToContextPaths
          */
-        public static Map<String, List<String>> buildEmpty() {
-            return Collections.emptyMap();
+        private PathMappings(Map<String, List<String>> entries, Map<String, Set<String>> prefixesToContextPaths) {
+            super();
+            this.entries = entries;
+            this.prefixesToContextPaths = prefixesToContextPaths;
+        }
+
+        public PathMappings() {
+            this.entries = Collections.emptyMap();
+            this.prefixesToContextPaths = Collections.emptyMap();
         }
 
         /**
-         * The result for {@link #build()} is collected here.
-         */
-        private final Map<String, List<String>> paths;
-
-        /**
-         * Creates a new builder based on the given {@code paths}. The values from {@code paths}
-         * are deeply copied into a new {@link LinkedHashMap}. It is a {@link LinkedHashMap} because
-         * the order of paths matters - they represent a fallback sequence tried in the given order.
+         * Creates a new {@link PathMappings} instance by first copying {@link #entries} from
+         * {@code this}, then adding all elements from {@code pathEntries} parameter to the
+         * {@link #entries} of the new instance, returning the new instance.
          *
-         * @param paths the initial {@link #paths}
+         * In this methid, we are adding a map of path entries like
+         * {@code ['/dojo' -> 'http://cdn.com/dojo', '/whatever' -> 'http://cdn.com/whatever']}.
+         * Keys in that map are called <i>prefixes</i> and values are called <i>target paths</i>.
+         * We are adding these entries to a map of entries that have been registered before and for
+         * each of the entries that are being added, we check, if it breaks the internal consistency
+         * of the newly created PathMappings. There are three cases possible:
+         * <ol>
+         * <li>If the prefix is still not available in {@link #entries}, the entry is
+         * added to {@link #entries}</li>
+         * <li>If the prefix is already available in {@link #entries} and the available
+         * target path is equal to the one being added, the entry is also added to {@link #entries}</li>
+         * <li>If the prefix is already available in {@link #entries} and the available
+         * target path is not equal to the one being added, a {@link DuplicateResourceKeyException} is thrown.</li>
+         * </ol>
+         * @param contextPath the servlet context path
+         * @param pathEntries the entries to add
+         * @return see above
+         * @throws DuplicateResourceKeyException if a key of an added entry is available
+         *                          in {@link #pathMappings} and the available
+         *                          target path is not equal to the one being added
          */
-        public ImmutablePathsBuilder(Map<String, List<String>> paths) {
-            super();
-            this.paths = new LinkedHashMap<String, List<String>>(paths);
-            for (Map.Entry<String, List<String>> en : this.paths.entrySet()) {
-                en.setValue(Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
+        public PathMappings add(String contextPath, Map<String, List<String>> pathEntries) throws DuplicateResourceKeyException {
+            if (pathEntries == null || pathEntries.isEmpty()) {
+                return this;
+            } else {
+                final Map<String, List<String>> newPrefixesToTargetPaths = new LinkedHashMap<String, List<String>>(this.entries);
+                final Map<String, Set<String>> newPrefixesToContextPaths = new HashMap<String, Set<String>>(this.prefixesToContextPaths);
+                for (Entry<String, List<String>> en : pathEntries.entrySet()) {
+                    String prefix = en.getKey();
+                    List<String> availableValue = newPrefixesToTargetPaths.get(prefix);
+                    if (availableValue != null) {
+                        if (availableValue.equals(en.getValue())) {
+                            /* no need to add to newPrefixesToTargetPaths because it is already there
+                             * just remember the present context path */
+                            Set<String> newContextPaths = new HashSet<String>(newPrefixesToContextPaths.get(prefix));
+                            newContextPaths.add(contextPath);
+                            newPrefixesToContextPaths.put(prefix, Collections.unmodifiableSet(newContextPaths));
+                        } else {
+                            Set<String> contextPaths = newPrefixesToContextPaths.get(prefix);
+                            throw new DuplicateResourceKeyException("Cannot accept path mapping entry " + en
+                                    + " from servlet context '"+ contextPath
+                                    +"' because the given prefix '"+ prefix +"' was already registered by servlet contexts "+ contextPaths +". The registered target path is "
+                                    + availableValue);
+                        }
+                    } else {
+                        /* The prefix is not available yet. */
+                        if (log.isDebugEnabled()) {
+                            log.debug("Adding path entry " + en);
+                        }
+                        newPrefixesToTargetPaths.put(prefix, Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
+                        newPrefixesToContextPaths.put(prefix, Collections.singleton(contextPath));
+                    }
+                }
+                return new PathMappings(Collections.unmodifiableMap(newPrefixesToTargetPaths), Collections.unmodifiableMap(newPrefixesToContextPaths));
             }
         }
 
         /**
-         * Adds the all elements from {@code pathEntries} to {@link #paths}. If a key of an added entry
-         * is available in {@link #paths}, a {@link DuplicateResourceKeyException} is thrown.
+         * Creates a new {@link PathMappings} instance by copying {@link #entries} from {@code this},
+         * removes all entries that were registered for the given {@code contextPath} from the
+         * new instance and returns the new instance.
          *
-         * @param pathEntries
+         * @param contextPath the servlet context path
          * @return see above
-         * @throws DuplicateResourceKeyException if a key of an added entry is available in {@link #paths}
          */
-        public ImmutablePathsBuilder add(Map<String, List<String>> pathEntries) throws DuplicateResourceKeyException {
-            for (Entry<String, List<String>> en : pathEntries.entrySet()) {
-                List<String> availableValue = this.paths.get(en.getKey());
-                if (availableValue != null) {
-                    throw new DuplicateResourceKeyException("Ignoring path entry " + en + " because the given resource path was already provided: "
-                            + availableValue);
-                } else {
-                    /* add only if not there already */
-                    if (log.isDebugEnabled()) {
-                        log.debug("Adding path entry " + en);
+        public PathMappings remove(String contextPath) {
+            Map<String, List<String>> newPrefixesToTargetPaths = this.entries;
+            Map<String, Set<String>> newPrefixesToContextPaths = this.prefixesToContextPaths;
+            for (Entry<String, Set<String>> en : this.prefixesToContextPaths.entrySet()) {
+                String prefix = en.getKey();
+                Set<String> contextPaths = en.getValue();
+                if (contextPaths.contains(contextPath)) {
+                    if (newPrefixesToTargetPaths == this.entries) {
+                        /* we hit the first change, so prepare mutable objects */
+                        newPrefixesToTargetPaths = new LinkedHashMap<String, List<String>>(this.entries);
+                        newPrefixesToContextPaths = new HashMap<String, Set<String>>(this.prefixesToContextPaths);
                     }
-                    this.paths.put(en.getKey(), Collections.unmodifiableList(new ArrayList<String>(en.getValue())));
+                    switch (contextPaths.size()) {
+                        case 0:
+                            /* should never happen */
+                            throw new IllegalStateException("contextPaths set should never have size 0");
+                        case 1:
+                            /* we are removing the last context that relied on this prefix
+                             * hence we can remove the entry from newPrefixesToTargetPaths */
+                            newPrefixesToTargetPaths.remove(prefix);
+                            newPrefixesToContextPaths.remove(prefix);
+                            break;
+                        default:
+                            /* copy the set and remove the present context path from it */
+                            Set<String> newContextPaths = new HashSet<String>(newPrefixesToContextPaths.get(prefix));
+                            newContextPaths.remove(contextPath);
+                            newPrefixesToContextPaths.put(prefix, Collections.unmodifiableSet(newContextPaths));
+                            break;
+                    }
                 }
             }
-            return this;
-        }
-
-        /**
-         * @return a new immutable paths {@link Map} that can be used in {@link JavascriptConfigService#paths}.
-         */
-        public Map<String, List<String>> build() {
-            return Collections.unmodifiableMap(paths);
-        }
-
-        /**
-         * Removes all keys given in {@code keysToRemove} from the underlying {@link #paths}.
-         *
-         * @param keysToRemove
-         * @return
-         */
-        public ImmutablePathsBuilder removeAll(Collection<String> keysToRemove) {
-            for (String prefix : keysToRemove) {
-                paths.remove(prefix);
+            if (newPrefixesToTargetPaths == this.entries) {
+                return this;
+            } else {
+                return new PathMappings(Collections.unmodifiableMap(newPrefixesToTargetPaths), Collections.unmodifiableMap(newPrefixesToContextPaths));
             }
-            return this;
+        }
+
+        /**
+         * @return the {@link #entries}
+         */
+        public Map<String, List<String>> getEntries() {
+            return entries;
+        }
+
+        /**
+         * Returns a {@link Set} of servlet context paths which registered the given {@code prefix}.
+         * For testing purposes only, therefore the package visibility.
+         *
+         * @return {@link #prefixesToContextPaths}
+         */
+        Map<String, Set<String>> getPrefixesToContextPaths() {
+            return prefixesToContextPaths;
         }
     }
 
     /**
-     * A builder for producing immutable static script resources {@link Map}s.
+     * A immutable collection of {@link StaticScriptResource}s.
+     * <p>
+     * Immutable because there may happen concurrent invocations of say
+     * {@link JavascriptConfigService#remove(ImmutableScriptResources)} and {@link JavascriptConfigService#getJSConfig(ControllerContext, Locale)}
      *
      * @see {@link ScriptResources#staticScriptResources}
      * @see {@link JavascriptConfigService#staticScriptResources}
@@ -161,75 +257,100 @@ public class JavascriptConfigService extends AbstractResourceService {
      * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
      *
      */
-    static class ImmutableStaticScriptResourcesBuilder {
+    static class StaticScriptResources {
+        private static final StaticScriptResources EMPTY = new StaticScriptResources();
+
         /**
          * @return an empty immutable {@link Map}.
          */
-        public static Map<String, StaticScriptResource> buildEmpty() {
-            return Collections.emptyMap();
+        public static StaticScriptResources empty() {
+            return EMPTY;
         }
 
         /**
-         * The result for {@link #build()} is collected here.
+         * A collection of {@link StaticScriptResource}s keyed by the given
+         * {@link StaticScriptResource#getResourcePath()}
          */
-        private final Map<String, StaticScriptResource> staticScriptResources;
+        private final Map<String, StaticScriptResource> entries;
 
         /**
-         * Creates a new builder based on the given {@code staticScriptResources}. The values from {@code paths}
+         * Creates a new builder based on the given {@code entries}. The values from {@code paths}
          * are copied into a new {@link HashMap}.
          *
-         * @param staticScriptResources
+         * @param entries
          */
-        public ImmutableStaticScriptResourcesBuilder(Map<String, StaticScriptResource> staticScriptResources) {
-            super();
-            this.staticScriptResources = new HashMap<String, StaticScriptResource>(staticScriptResources);
+        private StaticScriptResources(Map<String, StaticScriptResource> entries) {
+            this.entries = entries;
+        }
+
+        private StaticScriptResources() {
+            this.entries = Collections.emptyMap();
         }
 
         /**
-         * Adds the all elements from {@code toAdd} to {@link #staticScriptResources}. If a {@code resourcePath}
-         * of an added entry is available in {@link #staticScriptResources} as a key,
+         * Adds the all elements from {@code toAdd} to {@link #entries}. If a {@code resourcePath}
+         * of an added entry is available in {@link #entries} as a key,
          * a {@link DuplicateResourceKeyException} is thrown.
          *
          * @param toAdd entries to add
          * @return
          * @throws DuplicateResourceKeyException if a {@code resourcePath} of an added entry is
-         *          available in {@link #staticScriptResources} as a key, a {@link DuplicateResourceKeyException} is thrown.
+         *          available in {@link #entries} as a key, a {@link DuplicateResourceKeyException} is thrown.
          */
-        public ImmutableStaticScriptResourcesBuilder add(Collection<StaticScriptResource> toAdd) throws DuplicateResourceKeyException {
-            for (StaticScriptResource staticScriptResource : toAdd) {
-                String resourcePath = staticScriptResource.getResourcePath();
-                StaticScriptResource availableValue = staticScriptResources.get(resourcePath);
-                if (availableValue != null) {
-                    throw new DuplicateResourceKeyException("Ignoring " + StaticScriptResource.class.getSimpleName() + " " + staticScriptResource
-                            + " because the given resource path was already provided by " + availableValue);
-                } else {
-                    /* add only if not there already */
-                    if (log.isDebugEnabled()) {
-                        log.debug("Adding " + staticScriptResource);
+        public StaticScriptResources add(Collection<StaticScriptResource> toAdd) throws DuplicateResourceKeyException {
+            if (toAdd == null || toAdd.isEmpty()) {
+                return this;
+            } else {
+                Map<String, StaticScriptResource> newStaticScriptResources = new HashMap<String, StaticScriptResource>(this.entries);
+                for (StaticScriptResource staticScriptResource : toAdd) {
+                    String resourcePath = staticScriptResource.getResourcePath();
+                    StaticScriptResource availableValue = entries.get(resourcePath);
+                    if (availableValue != null) {
+                        throw new DuplicateResourceKeyException("Ignoring " + StaticScriptResource.class.getSimpleName() + " " + staticScriptResource
+                                + " because the given resource path was already provided by " + availableValue);
+                    } else {
+                        /* add only if not there already */
+                        if (log.isDebugEnabled()) {
+                            log.debug("Adding " + staticScriptResource);
+                        }
+                        newStaticScriptResources.put(resourcePath, staticScriptResource);
                     }
-                    staticScriptResources.put(resourcePath, staticScriptResource);
                 }
+                return new StaticScriptResources(Collections.unmodifiableMap(newStaticScriptResources));
             }
-            return this;
         }
 
         /**
-         * @return a new immutable staticScriptResources {@link Map} that can be used in {@link JavascriptConfigService#staticScriptResources}.
-         */
-        public Map<String, StaticScriptResource> build() {
-            return Collections.unmodifiableMap(staticScriptResources);
-        }
-
-        /**
-         * Removes all entries given in {@code toRemove} from the underlying {@link #staticScriptResources}.
-         * @param toRemove
+         * Copies this into a new {@link StaticScriptResources} instance, removes all entries
+         * with the given {@code contextPath} from {@link #entries} of the new instance and returns
+         * the new instance. Returns {@code this} if there is nothing to change.
+         *
+         * @param contextPath a servlet context path
          * @return
          */
-        public ImmutableStaticScriptResourcesBuilder removeAll(Collection<StaticScriptResource> toRemove) {
-            for (StaticScriptResource staticScriptResource : toRemove) {
-                staticScriptResources.remove(staticScriptResource.getResourcePath());
+        public StaticScriptResources remove(String contextPath) {
+            Map<String, StaticScriptResource> newStaticScriptResources = this.entries;
+            for (StaticScriptResource staticScriptResource : this.entries.values()) {
+                if (staticScriptResource.getContextPath().equals(contextPath)) {
+                    if (newStaticScriptResources == this.entries) {
+                        /* we hit the first change, so prepare a mutable object */
+                        newStaticScriptResources = new HashMap<String, StaticScriptResource>(this.entries);
+                    }
+                    newStaticScriptResources.remove(staticScriptResource.getResourcePath());
+                }
             }
-            return this;
+            if (newStaticScriptResources == this.entries) {
+                return this;
+            } else {
+                return new StaticScriptResources(Collections.unmodifiableMap(newStaticScriptResources));
+            }
+        }
+
+        /**
+         * @return the entries
+         */
+        public Map<String, StaticScriptResource> getEntries() {
+            return entries;
         }
     }
 
@@ -240,32 +361,14 @@ public class JavascriptConfigService extends AbstractResourceService {
     private final ScriptGraph scripts;
 
     /**
-     * <a href="http://requirejs.org/docs/api.html#config-paths">require.js path mappings</a>
-     *  for module names not found directly under require.js's {@code baseUrl}.
-     * For a given {@link #paths} entry, the key is the prefix not found in under {@code baseUrl}
-     * and the value is (possibly a portal-external) path to be used instead of the prefix.
-     * The value of an entry is actually a {@link List} of substitute paths, to mirror the
-     * <a href="http://requirejs.org/docs/api.html#pathsfallbacks">fallback paths</a>
-     * feature of require.js.
-     * <p>
-     * Internally, a {@link LinkedHashMap} is used, because the order of paths matters - they
-     * represent a fallback sequence tried in the given order by require.js.
-     * <p>
-     * Within {@link JavascriptConfigService}, {@link #paths} is always assigned a deeply immutable instance.
+     * require.js path mappings.
      *
-     * {@link Map}. This is because there may happen concurrent invocations of say
-     * {@link #remove(ImmutableScriptResources, String)} and {@link #getJSConfig(ControllerContext, Locale)}.
+     * @see PathMappings
      */
-    private Map<String, List<String>> paths;
+    private PathMappings pathMappings;
 
-    /** A collection of {@link StaticScriptResource}s keyed by the given
-     * {@link StaticScriptResource#getResourcePath()}
-     * <p>
-     * Within {@link JavascriptConfigService}, {@link #paths} is always assigned a deeply immutable
-     * {@link Map}. This is because there may happen concurrent invocations of say
-     * {@link #remove(ImmutableScriptResources, String)} and {@link #getJSConfig(ControllerContext, Locale)}.
-     */
-    private Map<String, StaticScriptResource> staticScriptResources;
+    /** A collection of {@link StaticScriptResource}s. */
+    private StaticScriptResources staticScriptResources;
 
     /**
      * @see #getSharedBaseUrl(ControllerContext)
@@ -292,8 +395,8 @@ public class JavascriptConfigService extends AbstractResourceService {
 
         //
         this.scripts = new ScriptGraph();
-        this.paths = ImmutablePathsBuilder.buildEmpty();
-        this.staticScriptResources = ImmutableStaticScriptResourcesBuilder.buildEmpty();
+        this.pathMappings = PathMappings.empty();
+        this.staticScriptResources = StaticScriptResources.empty();
     }
 
     public Reader getScript(ResourceId resourceId, Locale locale) throws Exception {
@@ -446,7 +549,7 @@ public class JavascriptConfigService extends AbstractResourceService {
         JSONObject paths = new JSONObject();
         JSONObject shim = new JSONObject();
 
-        for (Entry<String, List<String>> en : this.paths.entrySet()) {
+        for (Entry<String, List<String>> en : this.pathMappings.getEntries().entrySet()) {
             String prefix = en.getKey();
             List<String> pathValues = en.getValue();
             switch (pathValues.size()) {
@@ -724,14 +827,14 @@ public class JavascriptConfigService extends AbstractResourceService {
     }
 
     /**
-     * Equivalent to {@code staticScriptResources.get(resourcePath)}.
-     * See {@link #staticScriptResources} and {@link StaticScriptResource#getResourcePath()}
+     * Equivalent to {@code entries.get(resourcePath)}.
+     * See {@link #entries} and {@link StaticScriptResource#getResourcePath()}
      *
      * @param resourcePath see {@link StaticScriptResource#getResourcePath()}
      * @return
      */
     public StaticScriptResource getStaticScriptResource(String resourcePath) {
-        return staticScriptResources.get(resourcePath);
+        return staticScriptResources.getEntries().get(resourcePath);
     }
 
     /**
@@ -745,20 +848,12 @@ public class JavascriptConfigService extends AbstractResourceService {
      * @param scriptResources entities to add to this {@link JavascriptConfigService}
      */
     public void add(ScriptResources scriptResources) throws DuplicateResourceKeyException {
-        Map<String, StaticScriptResource> newStaticScriptResources = null;
-        Map<String, List<String>> newPaths = null;
 
-        List<StaticScriptResource> toAddStaticScriptResources = scriptResources.getStaticScriptResources();
-        if (toAddStaticScriptResources != null && !toAddStaticScriptResources.isEmpty()) {
-            newStaticScriptResources = new ImmutableStaticScriptResourcesBuilder(
-                    this.staticScriptResources).add(toAddStaticScriptResources).build();
-        }
+        /* combine the present resources with the ones being added */
+        StaticScriptResources newStaticScriptResources = this.staticScriptResources.add(scriptResources.getStaticScriptResources());
 
-        Map<String, List<String>> toAddPaths = scriptResources.getPaths();
-        if (toAddPaths != null && !toAddPaths.isEmpty()) {
-            newPaths = new ImmutablePathsBuilder(this.paths)
-                    .add(toAddPaths).build();
-        }
+        /* combine the present paths with the ones being added */
+        PathMappings newPaths = this.pathMappings.add(scriptResources.getContextPath(), scriptResources.getPaths());
 
         for (ScriptResourceDescriptor desc : scriptResources.getScriptResourceDescriptors()) {
             String contextPath = null;
@@ -780,13 +875,9 @@ public class JavascriptConfigService extends AbstractResourceService {
             }
         }
 
-        /* No exception was thrown, now we can at once assign these two local variables to service fields */
-        if (newStaticScriptResources != null) {
-            this.staticScriptResources = newStaticScriptResources;
-        }
-        if (newPaths != null) {
-            this.paths = newPaths;
-        }
+        /* No exception was thrown, now we can at once assign these two local variables to the fields of the this service */
+        this.staticScriptResources = newStaticScriptResources;
+        this.pathMappings = newPaths;
 
     }
 
@@ -797,23 +888,21 @@ public class JavascriptConfigService extends AbstractResourceService {
      * @param scriptResources entities to remove from this {@link JavascriptConfigService}
      * @param contextPath for which which context path the script resources should be removed
      */
-    public void remove(ImmutableScriptResources scriptResources, String contextPath) {
+    public void remove(ImmutableScriptResources scriptResources) {
         for (ScriptResourceDescriptor desc : scriptResources.getScriptResourceDescriptors()) {
-            scripts.removeResource(desc.id, contextPath);
+            scripts.removeResource(desc.id, scriptResources.getContextPath());
         }
 
         List<StaticScriptResource> toRemoveStaticScriptResources = scriptResources.getStaticScriptResources();
         if (toRemoveStaticScriptResources != null && !toRemoveStaticScriptResources.isEmpty()) {
-            Map<String, StaticScriptResource> newStaticScriptResources = new ImmutableStaticScriptResourcesBuilder(
-                    this.staticScriptResources).removeAll(toRemoveStaticScriptResources).build();
+            StaticScriptResources newStaticScriptResources = this.staticScriptResources.remove(scriptResources.getContextPath());
             this.staticScriptResources = newStaticScriptResources;
         }
 
         Map<String, List<String>> toRemovePaths = scriptResources.getPaths();
         if (toRemovePaths != null && !toRemovePaths.isEmpty()) {
-            Map<String, List<String>> newPaths = new ImmutablePathsBuilder(this.paths)
-                    .removeAll(toRemovePaths.keySet()).build();
-            this.paths = newPaths;
+            PathMappings newPaths = this.pathMappings.remove(scriptResources.getContextPath());
+            this.pathMappings = newPaths;
         }
 
     }
