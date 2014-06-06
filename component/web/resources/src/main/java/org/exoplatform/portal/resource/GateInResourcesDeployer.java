@@ -117,7 +117,7 @@ public class GateInResourcesDeployer implements WebAppListener {
         try {
             /* Validate straight away here before creating the PortalContainerPostInitTask */
             final Document document = GateInResourcesSchemaValidator.validate(url);
-            /* Also parse both before creating the PortalContainerPostInitTask */
+            /* Also parse both js and skin resources before creating the PortalContainerPostInitTask */
             final ScriptResources scriptResources = new JavascriptConfigParser(scontext, document).parse();
             final List<SkinConfigTask> skinTasks = SkinConfigParser.parse(document);
 
@@ -173,7 +173,7 @@ public class GateInResourcesDeployer implements WebAppListener {
             ServletContext scontext = webApp.getServletContext();
             ImmutableScriptResources scriptResources = (ImmutableScriptResources) scontext.getAttribute(SCRIPT_RESOURCES_ATTR);
             if (scriptResources != null) {
-                javascriptConfigService.remove(scriptResources, scontext.getContextPath());
+                javascriptConfigService.remove(scriptResources);
                 scontext.removeAttribute(SCRIPT_RESOURCES_ATTR);
             }
         } catch (Exception ex) {
