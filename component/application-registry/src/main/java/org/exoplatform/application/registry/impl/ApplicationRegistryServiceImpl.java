@@ -86,12 +86,22 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
     /** Should match WSRPPortletInfo.PRODUCER_NAME_META_INFO_KEY */
     private static final String PRODUCER_NAME_META_INFO_KEY = "producer-name";
+
+    /*
+     * MIN and MAX values similar to StringLengthValidator.
+     *
+     * @see org.exoplatform.applicationregistry.webui.component.UIApplicationForm
+     */
+    private static final int MIN = 3;
+    private static final int MAX = 30;
+
     public static final String PRODUCER_CATEGORY_NAME_SUFFIX = " Producer";
 
     private UserACL acl;
     private String anyOfAdminGroup;
 
     public ApplicationRegistryServiceImpl(ChromatticManager manager, POMSessionManager mopManager, UserACL userACL) {
+
         ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle) manager.getLifeCycle("app");
         lifeCycle.registry = this;
 
@@ -438,6 +448,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
             // Process category names
             for (String categoryName : categoryNames) {
+                categoryName = sanitizeCategoryName(categoryName);
                 CategoryDefinition category = registry.getCategory(categoryName);
 
                 //
@@ -501,8 +512,37 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
         if (lastDotIndex > 0) {
             sanitizedPortletName = sanitizedPortletName.substring(lastDotIndex + 1);
         }
+        /*
+         * PortletName should validate similar to UIApplicationForm for Application Name
+         * as this is read-only value in Application Registry.
+         *
+         * @see org.exoplatform.applicationregistry.webui.component.UIApplicationForm
+         */
+        int sizePortletName = sanitizedPortletName.length();
+        if (sizePortletName >= MAX) {
+            sanitizedPortletName = sanitizedPortletName.substring(0, MAX - 1);
+        } else if (sizePortletName <= MIN) {
+            sanitizedPortletName += "Portlet";
+
+        }
 
         return sanitizedPortletName;
+    }
+
+    private String sanitizeCategoryName(String categoryName) {
+        /*
+         * CategoryName should validate similar to UIApplicationForm for Application Name
+         * as this is read-only value in Application Registry.
+         *
+         * @see org.exoplatform.applicationregistry.webui.component.UIApplicationForm
+         */
+        int sizeCategoryName = categoryName.length();
+        if (sizeCategoryName >= MAX) {
+            categoryName = categoryName.substring(0, MAX - 1);
+        } else if (sizeCategoryName <= MIN) {
+            categoryName += "Category";
+        }
+        return categoryName;
     }
 
     private boolean isApplicationType(Application app, ApplicationType<?>... appTypes) {
