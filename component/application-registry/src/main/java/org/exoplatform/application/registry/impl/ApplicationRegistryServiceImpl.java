@@ -381,8 +381,8 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
 
             // Need to sanitize portlet and application names in case they contain characters that would
             // cause an improper Application name
-            portletApplicationName = portletApplicationName.replace('/', '_');
-            portletName = portletName.replace('/', '_');
+            portletApplicationName = sanitizePortletApplicationName(portletApplicationName);
+            portletName = sanitizePortletName(portletName);
 
             MetaInfo metaInfo = portlet.getInfo().getMeta();
             LocalizedString keywordsLS = metaInfo.getMetaValue(MetaInfo.KEYWORDS);
@@ -471,7 +471,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                     }
 
                     if (!isExist) {
-                        app = category.createContent(displayName, contentType, contentId);
+                        app = category.createContent(portletName, contentType, contentId);
                         app.setDisplayName(displayName);
                         app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
                         app.setAccessPermissions(permissions);
@@ -479,6 +479,24 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                 }
             }
         }
+    }
+
+    private String sanitizePortletApplicationName(String portletApplicationName) {
+        return portletApplicationName.replace('/', '_');
+    }
+
+    private String sanitizePortletName(String portletName) {
+        String sanitizedPortletName = portletName.replace('/', '_');
+
+        // PortletName can have following format in the auto-import task:
+        // local._responsive-community-portlet.ResponsiveCommunityPortlet
+        // We are going to return last token as sanitizedPortletName
+        int lastDotIndex = sanitizedPortletName.lastIndexOf('.');
+        if (lastDotIndex > 0) {
+            sanitizedPortletName = sanitizedPortletName.substring(lastDotIndex + 1);
+        }
+
+        return sanitizedPortletName;
     }
 
     private boolean isApplicationType(Application app, ApplicationType<?>... appTypes) {
