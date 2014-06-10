@@ -19,33 +19,74 @@
 
 package org.gatein.portal.controller.resource.script;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
+import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.ScriptGraph.ScriptGraphBuilder;
 
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
+ * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
  */
 public class ScriptGroup extends BaseScriptResource<ScriptGroup> {
-    final Set<ResourceId> scripts;
-    final String contextPath;
 
-    ScriptGroup(ScriptGraph graph, ResourceId id, String contextPath) {
-        super(graph, id);
+    static class ScriptGroupBuilder extends BaseScriptResourceBuilder {
 
-        //
-        this.scripts = new HashSet<ResourceId>();
-        this.contextPath = contextPath;
+        private final Set<ResourceId> dependencies;
+        private ScriptGroup result;
+
+        ScriptGroupBuilder(ScriptGraphBuilder scriptGraphBuilder, ResourceId grpId, String contextPath) {
+            super(scriptGraphBuilder, grpId, contextPath);
+            this.dependencies = new HashSet<ResourceId>();
+        }
+
+        ScriptGroupBuilder(ScriptGraphBuilder scriptGraphBuilder, ResourceId grpId, String contextPath, Set<ResourceId> dependencies,
+                Map<QualifiedName, String> parameters,
+                Map<Locale, Map<QualifiedName, String>> parametersMap, Map<QualifiedName, String> minParameters,
+                Map<Locale, Map<QualifiedName, String>> minParametersMap) {
+            super(scriptGraphBuilder, grpId, contextPath, parameters, parametersMap, minParameters, minParametersMap);
+            this.dependencies = new HashSet<ResourceId>(dependencies);
+        }
+
+        boolean hasDependencies() {
+            return !dependencies.isEmpty();
+        }
+
+        void addDependency(ResourceId id) {
+            dependencies.add(id);
+        }
+
+        void removeDependency(ResourceId id) {
+            dependencies.remove(id);
+        }
+
+        ScriptGroup build() {
+            if (result == null) {
+                result = new ScriptGroup(id, contextPath, parameters, parametersMap, minParameters, minParametersMap, dependencies);
+            }
+            return result;
+        }
     }
 
-    void addDependency(ResourceId id) {
-        scripts.add(id);
+    private final Set<ResourceId> dependencies;
+
+    private ScriptGroup(ResourceId id, String contextPath,
+            Map<QualifiedName, String> parameters,
+            Map<Locale, Map<QualifiedName, String>> parametersMap, Map<QualifiedName, String> minParameters,
+            Map<Locale, Map<QualifiedName, String>> minParametersMap,
+            Set<ResourceId> dependencies) {
+        super(id, contextPath,  parameters, parametersMap, minParameters, minParametersMap);
+        this.dependencies = Collections.unmodifiableSet(new HashSet<ResourceId>(dependencies));
     }
 
     @Override
     public Set<ResourceId> getDependencies() {
-        return scripts;
+        return dependencies;
     }
 
     @Override
@@ -63,6 +104,10 @@ public class ScriptGroup extends BaseScriptResource<ScriptGroup> {
             return false;
         ScriptGroup other = (ScriptGroup) obj;
         return getId().equals(other.getId());
+    }
+
+    ScriptGroupBuilder newBuilder(ScriptGraphBuilder scriptGraphBuilder) {
+        return new ScriptGroupBuilder(scriptGraphBuilder, id, contextPath, dependencies, parameters, parametersMap, minParameters, minParametersMap);
     }
 
 }

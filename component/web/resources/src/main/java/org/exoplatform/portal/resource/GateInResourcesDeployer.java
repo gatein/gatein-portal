@@ -35,7 +35,6 @@ import org.exoplatform.portal.resource.config.tasks.SkinConfigTask;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.application.javascript.ScriptResources;
-import org.exoplatform.web.application.javascript.ScriptResources.ImmutableScriptResources;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.WebApp;
@@ -168,21 +167,16 @@ public class GateInResourcesDeployer implements WebAppListener {
      * @param webApp
      */
     protected void remove(WebApp webApp) {
+        String contextPath = webApp.getServletContext().getContextPath();
         javascriptConfigService.unregisterServletContext(webApp);
         try {
-            ServletContext scontext = webApp.getServletContext();
-            ImmutableScriptResources scriptResources = (ImmutableScriptResources) scontext.getAttribute(SCRIPT_RESOURCES_ATTR);
-            if (scriptResources != null) {
-                javascriptConfigService.remove(scriptResources);
-                scontext.removeAttribute(SCRIPT_RESOURCES_ATTR);
-            }
+            javascriptConfigService.remove(contextPath);
         } catch (Exception ex) {
             log.error(
                 "An error occurred while removing script resources for the context '"
                     + webApp.getServletContext().getServletContextName() + "'", ex);
         }
 
-        String contextPath = webApp.getServletContext().getContextPath();
         try {
             skinService.removeSkins(SkinDependentManager.getPortalSkins(contextPath));
             skinService.removeSkins(SkinDependentManager.getPortletSkins(contextPath));

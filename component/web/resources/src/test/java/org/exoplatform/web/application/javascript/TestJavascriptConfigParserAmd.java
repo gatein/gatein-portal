@@ -36,7 +36,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.portal.resource.GateInResourcesSchemaValidator;
 import org.exoplatform.portal.resource.TestJavascriptConfigService;
-import org.exoplatform.portal.resource.TestJavascriptConfigService.MockJSServletContext;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.Javascript.Local;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;

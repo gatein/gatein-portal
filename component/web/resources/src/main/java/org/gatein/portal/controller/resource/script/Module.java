@@ -39,6 +39,7 @@ import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceRequestHandler;
 
 /**
@@ -58,30 +59,18 @@ public abstract class Module {
     };
 
     /** . */
-    protected ScriptResource resource;
+    private final int priority;
+    private final String uri;
 
-    /** . */
-    protected final String contextPath;
-
-    /** . */
-    protected int priority;
-
-    Module(ScriptResource resource, String contextPath, int priority) {
-        this.resource = resource;
-        this.contextPath = contextPath;
+    Module(String uri, int priority) {
         this.priority = priority;
+        this.uri = uri;
     }
 
     public static class Remote extends Module {
 
-        /** . */
-        private final String uri;
-
-        Remote(ScriptResource resource, String contextPath, String uri, int priority) {
-            super(resource, contextPath, priority);
-
-            //
-            this.uri = uri;
+        Remote(String uri, int priority) {
+            super(uri, priority);
         }
 
         @Override
@@ -89,13 +78,20 @@ public abstract class Module {
             return true;
         }
 
-        @Override
-        public String getURI() {
-            return uri;
-        }
     }
 
     public static class Local extends Module {
+
+        private static String getUri(String contextPath, Content[] contents) {
+            for (Content ct : contents) {
+                if (ct.isPath()) {
+                    return contextPath + ct.getSource();
+                }
+            }
+            return null;
+
+        }
+
         /** . */
         private final Content[] contents;
 
@@ -105,18 +101,15 @@ public abstract class Module {
         /** . */
         private final Map<QualifiedName, String> parameters;
 
-        Local(ScriptResource resource, String contextPath, String path, String resourceBundle, int priority) {
-            this(resource, contextPath, new Content[] { new Content(path) }, resourceBundle, priority);
-        }
 
-        Local(ScriptResource resource, String contextPath, Content[] contents, String resourceBundle, int priority) {
-            super(resource, contextPath, priority);
+        Local(ResourceId id, String contextPath, Content[] contents, String resourceBundle, int priority) {
+            super(getUri(contextPath, contents), priority);
 
             //
             Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
             parameters.put(WebAppController.HANDLER_PARAM, "script");
-            parameters.put(ResourceRequestHandler.RESOURCE_QN, resource.getId().getName());
-            parameters.put(ResourceRequestHandler.SCOPE_QN, resource.getId().getScope().name());
+            parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
+            parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
 
             //
             if (contents == null) {
@@ -125,19 +118,6 @@ public abstract class Module {
             this.contents = contents;
             this.parameters = parameters;
             this.resourceBundle = resourceBundle;
-        }
-
-        public String getPath() {
-            for (Content ct : contents) {
-                if (ct.isPath()) {
-                    return ct.getSource();
-                }
-            }
-            return null;
-        }
-
-        public Content[] getContents() {
-            return contents;
         }
 
         public String getResourceBundle() {
@@ -151,11 +131,6 @@ public abstract class Module {
         @Override
         public boolean isRemote() {
             return false;
-        }
-
-        @Override
-        public String getURI() {
-            return contextPath + getPath();
         }
 
         /**
@@ -244,16 +219,10 @@ public abstract class Module {
         }
     }
 
-    public ScriptResource getResource() {
-        return resource;
-    }
-
     public abstract boolean isRemote();
 
-    public abstract String getURI();
-
-    public String getContextPath() {
-        return contextPath;
+    public String getURI() {
+        return uri;
     }
 
     public int getPriority() {

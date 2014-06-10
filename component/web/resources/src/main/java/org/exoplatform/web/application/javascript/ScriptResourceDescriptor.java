@@ -94,6 +94,10 @@ public class ScriptResourceDescriptor {
         return group;
     }
 
+    public FetchMode getFetchMode() {
+        return fetchMode;
+    }
+
     /**
      * Returns {@code true} if this is an AMD resource. See the invocations of {@link #isNativeAmd()} in
      * {@link JavascriptConfigService#getScript(ResourceId, Locale)} to learn more about the purpose

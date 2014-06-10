@@ -24,6 +24,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -33,20 +34,42 @@ import javax.servlet.ServletContext;
 
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.component.test.web.ServletContextImpl;
+import org.exoplatform.portal.resource.InvalidResourceException;
+import org.exoplatform.web.application.javascript.Javascript;
+import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 import org.gatein.common.io.IOTools;
+import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.Module.Local;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class TestModule extends AbstractGateInTest {
+    private static final String CONTEXT_PATH_1 = "/my-app-1";
 
     /** . */
     private ServletContext servletContext;
 
     /** . */
     private ClassLoader classLoader;
+
+    private static Module.Local local(String path) throws InvalidResourceException {
+        return local(path, null);
+    }
+
+    private static Module.Local local(String path, String bundleRs) throws InvalidResourceException {
+        return local(new Content[] {new Content(path)}, bundleRs);
+    }
+    private static Module.Local local(Content[] contents, String bundleRs) throws InvalidResourceException {
+        ResourceId id = ResourceScope.SHARED.create("testModule");
+        ScriptResourceDescriptor desc = new ScriptResourceDescriptor(id, FetchMode.IMMEDIATE);
+        desc.getModules().add(new Javascript.Local(desc.getId(), CONTEXT_PATH_1, contents, bundleRs, 0));
+        ScriptGraph sp = ScriptGraph.empty().add(CONTEXT_PATH_1, Arrays.asList(desc));
+        ScriptResource resource = sp.getResource(id);
+        return (Local) resource.getModules().get(0);
+    }
 
     @Override
     protected void setUp() throws Exception {
@@ -70,90 +93,68 @@ public class TestModule extends AbstractGateInTest {
     }
 
     public void testScriptServing() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource module = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local bar = module.addLocalModule("/webapp", "/simple.js", null, 0);
+        Module.Local bar = local("/simple.js");
         Reader reader = bar.read(null, servletContext, classLoader);
         assertReader("pass", reader);
     }
 
     public void testScriptNotFound() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource module = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local bar = module.addLocalModule("/webapp", "/notfound.js", null, 0);
+        Module.Local bar = local("/notfound.js");
         assertNull(bar.read(null, servletContext, classLoader));
     }
 
     public void testResolveNotLocalized() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", null, 0);
+        Module.Local module = local("/localized.js");
         Reader reader = module.read(null, servletContext, classLoader);
         assertReader("${foo}", reader);
     }
 
     public void testNotResolved() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/missing.js", "bundle", 0);
+        Module.Local module = local("/missing.js", "bundle");
         Reader reader = module.read(null, servletContext, classLoader);
         assertReader("", reader);
     }
 
     public void testEscapeDoubleQuote() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "double_quote_bundle", 0);
+        Module.Local module = local("/localized.js", "double_quote_bundle");
         Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
         assertReader("\"", reader);
     }
 
     public void testEscapeSimpleQuote() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "simple_quote_bundle", 0);
+        Module.Local module = local("/localized.js", "simple_quote_bundle");
         Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
         assertReader("'", reader);
     }
 
     public void testEnglishAsDefaultLocale() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
+        Module.Local module = local("/localized.js", "bundle");
         Reader reader = module.read(null, servletContext, classLoader);
         assertReader("foo_en", reader);
     }
 
     public void testEnglishAsFallbackLocale() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
+        Module.Local module = local("/localized.js", "bundle");
         Reader reader = module.read(Locale.CANADA, servletContext, classLoader);
         assertReader("foo_en", reader);
     }
 
     public void testSpecificLanguage() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
+        Module.Local module = local("/localized.js", "bundle");
         Reader reader = module.read(Locale.FRENCH, servletContext, classLoader);
         assertReader("foo_fr", reader);
     }
 
     public void testSpecificCountry() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
-        Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
+        Module.Local module = local("/localized.js", "bundle");
         Reader reader = module.read(Locale.FRANCE, servletContext, classLoader);
         assertReader("foo_fr_FR", reader);
     }
 
     public void testAdapter() throws Exception {
-        ScriptGraph graph = new ScriptGraph();
-        ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("testModule"));
         Content[] contents = new Content[] { new Content("var a;", false), new Content("/localized.js"),
                 new Content("var b;", false) };
-        Module.Local module = foo.addLocalModule("/webapp", contents, "bundle", 0);
+        Module.Local module = local(contents, "bundle");
         Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
         assertReader("foo_en", reader);
     }
