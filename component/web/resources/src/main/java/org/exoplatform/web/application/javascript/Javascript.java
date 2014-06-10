@@ -20,9 +20,7 @@
 package org.exoplatform.web.application.javascript;
 
 import org.gatein.portal.controller.resource.ResourceId;
-import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
-import org.gatein.portal.controller.resource.script.ScriptResource;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -35,17 +33,6 @@ public abstract class Javascript {
             return new Remote(resource, contextPath, path, priority);
         } else {
             return new Local(resource, contextPath, path, null, priority);
-        }
-    }
-
-    public static Javascript create(Module module) {
-        if (module instanceof Module.Remote) {
-            Module.Remote remote = (Module.Remote) module;
-            return new Remote(module.getResource().getId(), remote.getContextPath(), remote.getURI(), remote.getPriority());
-        } else {
-            Module.Local local = (Module.Local) module;
-            return new Local(local.getResource().getId(), local.getContextPath(), local.getContents(),
-                    local.getResourceBundle(), local.getPriority());
         }
     }
 
@@ -76,8 +63,6 @@ public abstract class Javascript {
         return priority;
     }
 
-    abstract Module addModuleTo(ScriptResource resource);
-
     public abstract boolean isExternalScript();
 
     public static class Local extends Javascript {
@@ -101,11 +86,6 @@ public abstract class Javascript {
             }
             this.contents = contents;
             this.resourceBundle = resourceBundle;
-        }
-
-        @Override
-        Module addModuleTo(ScriptResource resource) {
-            return resource.addLocalModule(contextPath, contents, resourceBundle, priority);
         }
 
         public Content[] getContents() {
@@ -134,9 +114,8 @@ public abstract class Javascript {
             this.uri = uri;
         }
 
-        @Override
-        Module addModuleTo(ScriptResource resource) {
-            return resource.addRemoteModule(contextPath, uri, priority);
+        public String getUri() {
+            return uri;
         }
 
         @Override

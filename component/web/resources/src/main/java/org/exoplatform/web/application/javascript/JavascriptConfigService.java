@@ -45,17 +45,20 @@ import javax.servlet.ServletContext;
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.container.ContainerLifecyclePlugin;
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.resource.AbstractResourceService;
+import org.exoplatform.portal.resource.InvalidResourceException;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.application.javascript.ScriptResources.ImmutableScriptResources;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.portal.controller.resource.ResourceId;
-import org.gatein.portal.controller.resource.ResourceRequestHandler;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.BaseScriptResource;
 import org.gatein.portal.controller.resource.script.FetchMode;
@@ -70,7 +73,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class JavascriptConfigService extends AbstractResourceService {
-
     /**
      * <a href="http://requirejs.org/docs/api.html#config-paths">require.js path mappings</a>
      * for module names not found directly under require.js's {@code baseUrl}.
@@ -124,7 +126,7 @@ public class JavascriptConfigService extends AbstractResourceService {
          * {@code this}, then adding all elements from {@code pathEntries} parameter to the
          * {@link #entries} of the new instance, returning the new instance.
          *
-         * In this methid, we are adding a map of path entries like
+         * In this method, we are adding a map of path entries like
          * {@code ['/dojo' -> 'http://cdn.com/dojo', '/whatever' -> 'http://cdn.com/whatever']}.
          * Keys in that map are called <i>prefixes</i> and values are called <i>target paths</i>.
          * We are adding these entries to a map of entries that have been registered before and for
@@ -249,7 +251,7 @@ public class JavascriptConfigService extends AbstractResourceService {
      * A immutable collection of {@link StaticScriptResource}s.
      * <p>
      * Immutable because there may happen concurrent invocations of say
-     * {@link JavascriptConfigService#remove(ImmutableScriptResources)} and {@link JavascriptConfigService#getJSConfig(ControllerContext, Locale)}
+     * {@link JavascriptConfigService#remove(String)} and {@link JavascriptConfigService#getJSConfig(ControllerContext, Locale)}
      *
      * @see {@link ScriptResources#staticScriptResources}
      * @see {@link JavascriptConfigService#staticScriptResources}
@@ -354,11 +356,59 @@ public class JavascriptConfigService extends AbstractResourceService {
         }
     }
 
+    private class ShutDownListener implements ContainerLifecyclePlugin {
+
+        @Override
+        public void stopContainer(ExoContainer container) throws Exception {
+            log.debug("Will ignore cleanup on application undeploy from now on because the container is shutting down.");
+            rootContainerShuttingDown = true;
+        }
+
+        @Override
+        public void startContainer(ExoContainer container) throws Exception {
+        }
+
+        @Override
+        public void setName(String s) {
+        }
+
+        @Override
+        public void setInitParams(InitParams params) {
+        }
+
+        @Override
+        public void setDescription(String s) {
+        }
+
+        @Override
+        public void initContainer(ExoContainer container) throws Exception {
+        }
+
+        @Override
+        public String getName() {
+            return getClass().getName();
+        }
+
+        @Override
+        public InitParams getInitParams() {
+            return null;
+        }
+
+        @Override
+        public String getDescription() {
+            return null;
+        }
+
+        @Override
+        public void destroyContainer(ExoContainer container) throws Exception {
+        }
+    }
+
     /** Our logger. */
     private static final Log log = ExoLogger.getLogger(JavascriptConfigService.class);
 
     /** The scripts. */
-    private final ScriptGraph scripts;
+    private ScriptGraph scripts;
 
     /**
      * require.js path mappings.
@@ -374,6 +424,8 @@ public class JavascriptConfigService extends AbstractResourceService {
      * @see #getSharedBaseUrl(ControllerContext)
      */
     private volatile String sharedBaseUrl;
+
+    private boolean rootContainerShuttingDown = false;
 
     /** . */
     public static final List<String> RESERVED_MODULE = Arrays.asList("require", "exports", "module");
@@ -393,10 +445,11 @@ public class JavascriptConfigService extends AbstractResourceService {
     public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor) {
         super(compressor);
 
-        //
-        this.scripts = new ScriptGraph();
+        this.scripts = ScriptGraph.empty();
         this.pathMappings = PathMappings.empty();
         this.staticScriptResources = StaticScriptResources.empty();
+        RootContainer.getInstance().addContainerLifecylePlugin(new ShutDownListener());
+
     }
 
     public Reader getScript(ResourceId resourceId, Locale locale) throws Exception {
@@ -479,9 +532,9 @@ public class JavascriptConfigService extends AbstractResourceService {
                     buffer.append("\nreturn ");
                 }
 
-                //
+                final WebApp app = contexts.get(resource.getContextPath());
                 for (Module js : modules) {
-                    Reader jScript = getJavascript(js, locale);
+                    Reader jScript = getJavascript(app, js, locale);
                     if (jScript != null) {
                         readers.add(new StringReader(buffer.toString()));
                         buffer.setLength(0);
@@ -579,7 +632,7 @@ public class JavascriptConfigService extends AbstractResourceService {
                         || (modules.size() > 0 && modules.get(0) instanceof Module.Remote)) {
                     JSONArray deps = new JSONArray();
                     for (ResourceId id : resource.getDependencies()) {
-                        deps.put(getResource(id).getId());
+                        deps.put(id);
                     }
                     if (deps.length() > 0) {
                         shim.put(name, new JSONObject().put("deps", deps));
@@ -616,14 +669,11 @@ public class JavascriptConfigService extends AbstractResourceService {
         return scripts.getResource(resource);
     }
 
-    private Reader getJavascript(Module module, Locale locale) {
+    private Reader getJavascript(WebApp webApp, Module module, Locale locale) {
         if (module instanceof Module.Local) {
             Module.Local localModule = (Module.Local) module;
-            final WebApp webApp = contexts.get(localModule.getContextPath());
-            if (webApp != null) {
-                ServletContext sc = webApp.getServletContext();
-                return localModule.read(locale, sc, webApp.getClassLoader());
-            }
+            ServletContext sc = webApp.getServletContext();
+            return localModule.read(locale, sc, webApp.getClassLoader());
         }
         return null;
     }
@@ -780,7 +830,7 @@ public class JavascriptConfigService extends AbstractResourceService {
      * loader on the client side.
      *
      * Rather than concatenating the above values this method uses
-     * {@link BaseScriptResource#createBaseParameters()} and delegates to
+     * {@link BaseScriptResource#createBaseParameters(ResourceScope, String)} and delegates to
      * {@link ControllerContext#renderURL(Map, URIWriter)} which seems to be safer for
      * any future changes.
      *
@@ -797,9 +847,7 @@ public class JavascriptConfigService extends AbstractResourceService {
              * It does not matter if this.sharedBaseUrl gets initialized several times
              * concurrently as the result will be the same every time.*/
 
-            Map<QualifiedName, String> baseParams = BaseScriptResource.createBaseParameters();
-            baseParams.put(ResourceRequestHandler.SCOPE_QN, ResourceScope.SHARED.name());
-            baseParams.put(ResourceRequestHandler.RESOURCE_QN, "fake");
+            Map<QualifiedName, String> baseParams = BaseScriptResource.createBaseParameters(ResourceScope.SHARED, "fake");
 
             /* 52 is the length of /portal/scripts/3.8.0.Beta01-SNAPSHOT/SHARED/fake.js
              * it should be a little bit more than necessary in most cases */
@@ -827,8 +875,8 @@ public class JavascriptConfigService extends AbstractResourceService {
     }
 
     /**
-     * Equivalent to {@code entries.get(resourcePath)}.
-     * See {@link #entries} and {@link StaticScriptResource#getResourcePath()}
+     * Equivalent to {@code staticScriptResources.getEntries().get(resourcePath)}.
+     * See {@link StaticScriptResources#entries} and {@link StaticScriptResource#getResourcePath()}
      *
      * @param resourcePath see {@link StaticScriptResource#getResourcePath()}
      * @return
@@ -839,43 +887,34 @@ public class JavascriptConfigService extends AbstractResourceService {
 
     /**
      * Adds the entities provided in the given {@link ScriptResources} to this
-     * {@link JavascriptConfigService}. The object provided in the {@code scriptResources} parameter can
-     * be modified during the call. Namely, the values (paths and static script resources) already
-     * available in this {@link JavascriptConfigService} are removed from the object. The purpose of
-     * this is to inform the caller which entities were actually added (and can thus be safely
-     * removed later).
+     * {@link JavascriptConfigService}.
+     *
+     * {@link InvalidResourceException} is thrown if the addition of the given {@code scriptResources}
+     * would break the internal consistency of this {@link JavascriptConfigService}. See the
+     * documentation of the following methods to see which specific conditions are illegal:
+     * {@link StaticScriptResources#add(Collection)}, {@link PathMappings#add(String, Map)}
+     * and {@link ScriptGraph#add(String, List)}.
+     *
+     * In case this method throws an {@link InvalidResourceException}, the the internal state of
+     * this {@link JavascriptConfigService} stays as it was before the invocation of this method.
      *
      * @param scriptResources entities to add to this {@link JavascriptConfigService}
+     * @throws InvalidResourceException see above.
      */
-    public void add(ScriptResources scriptResources) throws DuplicateResourceKeyException {
+    public void add(ScriptResources scriptResources) throws InvalidResourceException {
 
-        /* combine the present resources with the ones being added */
+        /* Combine the present resources with the ones being added */
         StaticScriptResources newStaticScriptResources = this.staticScriptResources.add(scriptResources.getStaticScriptResources());
 
-        /* combine the present paths with the ones being added */
+        /* Combine the present paths with the ones being added */
         PathMappings newPaths = this.pathMappings.add(scriptResources.getContextPath(), scriptResources.getPaths());
 
-        for (ScriptResourceDescriptor desc : scriptResources.getScriptResourceDescriptors()) {
-            String contextPath = null;
-            if (desc.modules.size() > 0) {
-                contextPath = desc.modules.get(0).getContextPath();
-            }
+        /* We might get an exception here, if there are resources in getScriptResourceDescriptors
+         * which were registered already in the past by other apps. If that is the case, the
+         * deployment will be interrupted, and the state of this is the same as before the call */
+        this.scripts = this.scripts.add(scriptResources.getContextPath(), scriptResources.getScriptResourceDescriptors());
 
-            ScriptResource resource = scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group, contextPath, desc.nativeAmd);
-            if (resource != null) {
-                for (Javascript module : desc.modules) {
-                    module.addModuleTo(resource);
-                }
-                for (Locale locale : desc.getSupportedLocales()) {
-                    resource.addSupportedLocale(locale);
-                }
-                for (DependencyDescriptor dependency : desc.dependencies) {
-                    resource.addDependency(dependency.getResourceId(), dependency.getAlias(), dependency.getPluginResource());
-                }
-            }
-        }
-
-        /* No exception was thrown, now we can at once assign these two local variables to the fields of the this service */
+        /* No exception was thrown, now we can at once assign these two local variables to the fields of this service */
         this.staticScriptResources = newStaticScriptResources;
         this.pathMappings = newPaths;
 
@@ -885,26 +924,22 @@ public class JavascriptConfigService extends AbstractResourceService {
      * Removes the entities provided in the given {@link ScriptResources} from this
      * {@link JavascriptConfigService}.
      *
-     * @param scriptResources entities to remove from this {@link JavascriptConfigService}
      * @param contextPath for which which context path the script resources should be removed
      */
-    public void remove(ImmutableScriptResources scriptResources) {
-        for (ScriptResourceDescriptor desc : scriptResources.getScriptResourceDescriptors()) {
-            scripts.removeResource(desc.id, scriptResources.getContextPath());
+    public void remove(String contextPath) {
+        final boolean debug = log.isDebugEnabled();
+        if (this.rootContainerShuttingDown) {
+            if (debug) {
+                log.debug("Going without script cleanup for context '"+ contextPath +"' because the container is shutting down.");
+            }
+        } else {
+            if (debug) {
+                log.debug("Removing scripts coming from context '"+ contextPath +"'.");
+            }
+            this.scripts = this.scripts.remove(contextPath);
+            this.staticScriptResources = this.staticScriptResources.remove(contextPath);
+            this.pathMappings = this.pathMappings.remove(contextPath);
         }
-
-        List<StaticScriptResource> toRemoveStaticScriptResources = scriptResources.getStaticScriptResources();
-        if (toRemoveStaticScriptResources != null && !toRemoveStaticScriptResources.isEmpty()) {
-            StaticScriptResources newStaticScriptResources = this.staticScriptResources.remove(scriptResources.getContextPath());
-            this.staticScriptResources = newStaticScriptResources;
-        }
-
-        Map<String, List<String>> toRemovePaths = scriptResources.getPaths();
-        if (toRemovePaths != null && !toRemovePaths.isEmpty()) {
-            PathMappings newPaths = this.pathMappings.remove(scriptResources.getContextPath());
-            this.pathMappings = newPaths;
-        }
-
     }
 
 }

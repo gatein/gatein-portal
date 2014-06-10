@@ -20,30 +20,36 @@
     * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
     */
 
-package org.exoplatform.web.application.javascript;
-
-import org.exoplatform.portal.resource.InvalidResourceException;
+package org.exoplatform.portal.resource;
 
 /**
- * Thrown when there is an attempt to register two equal CSS or JavaScript resources.
+ * Thrown when there is some consistency problem with JavaScript or CSS resources.
  *
  * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
+ *
  */
-public class DuplicateResourceKeyException extends InvalidResourceException {
+public class InvalidResourceException extends Exception {
+
+    /**
+     * @param message
+     */
+    public InvalidResourceException(String message) {
+        super(message);
+    }
+
+    /**
+     * @param cause
+     */
+    public InvalidResourceException(Throwable cause) {
+        super(cause);
+    }
 
     /**
      * @param message
      * @param cause
      */
-    public DuplicateResourceKeyException(String message, Throwable cause) {
+    public InvalidResourceException(String message, Throwable cause) {
         super(message, cause);
-    }
-
-    /**
-     * @param message
-     */
-    public DuplicateResourceKeyException(String message) {
-        super(message);
     }
 
 }

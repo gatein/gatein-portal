@@ -35,7 +35,10 @@ public class ResourceId implements Serializable {
     /** . */
     private final String name;
 
-    /** . */
+    /** Used to mark old style (non native AMD) remote resources, i.e. those that were
+     * declared using the &lt;url&gt; element gatein-resources.xml.
+     * Note that {@link #isFullId} is used neither in {@link #hashCode()} or {@link #equals(Object)}
+     * and is not final. */
     private boolean isFullId;
 
     public ResourceId(ResourceScope scope, String name) {
@@ -54,6 +57,10 @@ public class ResourceId implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isFullId() {
+        return isFullId;
     }
 
     public void setFullId(boolean isFullId) {
