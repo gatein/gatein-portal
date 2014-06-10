@@ -324,7 +324,7 @@ public class PortalRequestContext extends WebuiRequestContext {
 
         //. Check SSO Enable
         ExoContainer container = getApplication().getApplicationServiceContainer();
-        SSOHelper ssoHelper = container.getComponentInstanceOfType(SSOHelper.class);
+        SSOHelper ssoHelper = (SSOHelper) container.getComponentInstanceOfType(SSOHelper.class);
         if(ssoHelper != null && ssoHelper.isSSOEnabled()) {
             loginPath.append(request_.getContextPath()).append(ssoHelper.getSSORedirectURLSuffix());
         } else {
