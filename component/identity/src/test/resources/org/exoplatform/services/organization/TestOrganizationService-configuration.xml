@@ -127,7 +127,7 @@
     <init-params>
       <value-param>
         <name>config</name>
-        <value>jar:/conf/exo.portal.component.identity-picketlink-idm-config.xml</value>
+        <value>jar:/conf/portal/idm-config.xml</value>
       </value-param>
       <value-param>
         <name>apiCacheConfig</name>

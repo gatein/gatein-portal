@@ -88,14 +88,6 @@
             <name>isRealmAware</name>
             <value>true</value>
           </option>
-          <option>
-            <name>manageTransactionDuringBootstrap</name>
-            <value>true</value>
-          </option>
-          <option>
-            <name>lazyStartOfHibernateTransaction</name>
-            <value>true</value>
-          </option>
         </options>
       </identity-store>
     </identity-stores>

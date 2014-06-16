@@ -35,9 +35,7 @@ import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.idm.Config;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
-import org.exoplatform.services.organization.idm.PicketLinkIDMService;
 import org.exoplatform.services.organization.idm.UserDAOImpl;
-import org.exoplatform.services.organization.idm.MembershipDAOImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,8 +65,6 @@ public class AbstractTestOrganizationService {
     private MembershipTypeHandler mtHandler_;
 
     private MembershipHandler membershipHandler_;
-    
-    private PicketLinkIDMService idmService_;
 
     boolean runtest = true;
 
@@ -93,7 +89,6 @@ public class AbstractTestOrganizationService {
 
         manager = PortalContainer.getInstance();
         service_ = (OrganizationService) manager.getComponentInstanceOfType(OrganizationService.class);
-        idmService_ = (PicketLinkIDMService) manager.getComponentInstanceOfType(PicketLinkIDMService.class);
         userHandler_ = service_.getUserHandler();
         profileHandler_ = service_.getUserProfileHandler();
         groupHandler_ = service_.getGroupHandler();
@@ -148,57 +143,6 @@ public class AbstractTestOrganizationService {
         assertEquals(config.getGroupType("/toto"), "toto_type");
         assertEquals(config.getGroupType("/toto/lolo"), "toto_type");
         assertEquals(config.getGroupType("/toto/lolo/tutu"), "toto_type");
-    }
-
-    @Test
-    public void testCommit() throws Exception {
-        /* Create 1 user */
-        User user = createUser("test");
-        /* Create "Group1" */
-        Group group1 = groupHandler_.createGroupInstance();
-        group1.setGroupName(Group1);
-        groupHandler_.addChild(null, group1, true);
-        /* Create "Group2" */
-        Group group2 = groupHandler_.createGroupInstance();
-        group2.setGroupName(Group2);
-        groupHandler_.addChild(null, group2, true);
-        /* Create membership1 and assign Benj to "Group1" with this membership */
-        MembershipType mt = mtHandler_.createMembershipTypeInstance();
-        mt.setName("testmembership");
-        mtHandler_.createMembershipType(mt, true);
-        membershipHandler_.linkMembership(user, group1, mt, true);
-        ((ComponentRequestLifecycle)service_).endRequest(manager);
-
-        /* invoke error in commit */
-        String plGroupName = ((MembershipDAOImpl)membershipHandler_).getPLIDMGroupName(Group1);
-        String groupId = idmService_.getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
-            ((PicketLinkIDMOrganizationServiceImpl)service_).getConfiguration().getGroupType(null));
-
-        ((ComponentRequestLifecycle) service_).startRequest(manager);
-        try {
-          idmService_.getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
-        } catch(Exception e) {
-          // Rollback will be done here but the transaction will remain open
-          ((ComponentRequestLifecycle)service_).endRequest(manager);
-        }
-
-        /* should fail here */
-        try {
-          ((ComponentRequestLifecycle) service_).startRequest(manager);
-          membershipHandler_.linkMembership(user, group2, mt, true);
-        } catch (Exception e) {
-          fail("Not good at all");
-        } finally {
-        	((ComponentRequestLifecycle)service_).endRequest(manager);
-        }
-        // Cleanup after test
-        RequestLifeCycle.end();
-        RequestLifeCycle.begin((ComponentRequestLifecycle) service_);
-        membershipHandler_.removeMembershipByUser("test", true);
-        userHandler_.removeUser(USER, true);
-        groupHandler_.removeGroup(group1, true);
-        groupHandler_.removeGroup(group2, true);
-        mtHandler_.removeMembershipType("testmembership", true);
     }
 
     @Test
