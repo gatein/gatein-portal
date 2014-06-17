@@ -42,7 +42,7 @@
     <org.exoplatform.ws.version>2.4.0-GA</org.exoplatform.ws.version>
     <org.exoplatform.jcr.version>1.16.0-GA</org.exoplatform.jcr.version>
     <org.exoplatform.framework.junit.version>1.2.4-GA</org.exoplatform.framework.junit.version>
-    <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
+    <org.shindig.version>2.0.2.Final-gatein-5</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-4</nl.captcha.simplecaptcha.version>
     <org.gatein.api.version>1.1.0.Final</org.gatein.api.version>
     <org.gatein.common.version>2.2.2.Final</org.gatein.common.version>
