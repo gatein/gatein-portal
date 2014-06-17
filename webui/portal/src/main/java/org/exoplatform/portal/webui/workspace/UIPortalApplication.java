@@ -915,8 +915,12 @@ public class UIPortalApplication extends UIApplication {
             String skinId = uiPortlet.getSkinId();
             if (skinId != null) {
                 SkinConfig skinConfig = skinService.getSkin(skinId, skin_);
-                if (skinConfig != null)
+                if (skinConfig == null && skin_ != null && !SkinService.DEFAULT_SKIN.equals(skin_)) {
+                    skinConfig = skinService.getSkin(skinId, SkinService.DEFAULT_SKIN);
+                }
+                if (skinConfig != null) {
                     skins.add(skinConfig);
+                }
             }
         }
         StringBuilder b = new StringBuilder(1000);
