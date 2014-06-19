@@ -54,7 +54,9 @@ public class ResourceDeploymentService implements Startable {
      */
     @Override
     public void start() {
-        log.debug("Registering FederatedResourceService for servlet container events");
+        if (log.isDebugEnabled()) {
+            log.debug("Registering "+ deployer.getClass().getSimpleName() +" for servlet container events");
+        }
         ServletContainerFactory.getServletContainer().addWebAppListener(deployer);
     }
 
@@ -65,7 +67,9 @@ public class ResourceDeploymentService implements Startable {
      */
     @Override
     public void stop() {
-        log.debug("Unregistering JavascriptConfigService for servlet container events");
+        if (log.isDebugEnabled()) {
+            log.debug("Registering "+ deployer.getClass().getSimpleName() +" for servlet container events");
+        }
         ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
     }
 
