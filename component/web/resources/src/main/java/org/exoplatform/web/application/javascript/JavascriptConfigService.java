@@ -619,39 +619,43 @@ public class JavascriptConfigService extends AbstractResourceService {
         }
 
         Map<ResourceId, String> groupURLs = new HashMap<ResourceId, String>();
-        for (ScriptResource resource : getAllResources()) {
-            if (!resource.isNativeAmd() /* exclude native AMD modules to reduce the size
-                                         * of the HTTP response as there may be thosands of them
-                                         * They are always SHARED so there is no need to put their URLs here
-                                         * explicitly. */
-                    && (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))) {
-                String name = resource.getId().toString();
-                List<Module> modules = resource.getModules();
+        /* use local ScriptGraph variable to stay consistent throughout the loop */
+        ScriptGraph graph = this.scripts;
+        for (ResourceScope scope : ResourceScope.values()) {
+            for (ScriptResource resource : graph.getResources(scope)) {
+                if (!resource.isNativeAmd() /* exclude native AMD modules to reduce the size
+                                             * of the HTTP response as there may be thosands of them
+                                             * They are always SHARED so there is no need to put their URLs here
+                                             * explicitly. */
+                        && (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))) {
+                    String name = resource.getId().toString();
+                    List<Module> modules = resource.getModules();
 
-                if (FetchMode.IMMEDIATE.equals(resource.getFetchMode())
-                        || (modules.size() > 0 && modules.get(0) instanceof Module.Remote)) {
-                    JSONArray deps = new JSONArray();
-                    for (ResourceId id : resource.getDependencies()) {
-                        deps.put(id);
+                    if (FetchMode.IMMEDIATE.equals(resource.getFetchMode())
+                            || (modules.size() > 0 && modules.get(0) instanceof Module.Remote)) {
+                        JSONArray deps = new JSONArray();
+                        for (ResourceId id : resource.getDependencies()) {
+                            deps.put(id);
+                        }
+                        if (deps.length() > 0) {
+                            shim.put(name, new JSONObject().put("deps", deps));
+                        }
                     }
-                    if (deps.length() > 0) {
-                        shim.put(name, new JSONObject().put("deps", deps));
-                    }
-                }
 
-                String url;
-                ScriptGroup group = resource.getGroup();
-                if (group != null) {
-                    ResourceId grpId = group.getId();
-                    url = groupURLs.get(grpId);
-                    if (url == null) {
-                        url = buildURL(grpId, controllerContext, locale);
-                        groupURLs.put(grpId, url);
+                    String url;
+                    ScriptGroup group = resource.getGroup();
+                    if (group != null) {
+                        ResourceId grpId = group.getId();
+                        url = groupURLs.get(grpId);
+                        if (url == null) {
+                            url = buildURL(grpId, controllerContext, locale);
+                            groupURLs.put(grpId, url);
+                        }
+                    } else {
+                        url = buildURL(resource.getId(), controllerContext, locale);
                     }
-                } else {
-                    url = buildURL(resource.getId(), controllerContext, locale);
+                    paths.put(name, url);
                 }
-                paths.put(name, url);
             }
         }
 
@@ -686,14 +690,6 @@ public class JavascriptConfigService extends AbstractResourceService {
         } else {
             return null;
         }
-    }
-
-    private List<ScriptResource> getAllResources() {
-        List<ScriptResource> resources = new LinkedList<ScriptResource>();
-        for (ResourceScope scope : ResourceScope.values()) {
-            resources.addAll(scripts.getResources(scope));
-        }
-        return resources;
     }
 
     private String encode(LinkedList<String> params, String alias) {
