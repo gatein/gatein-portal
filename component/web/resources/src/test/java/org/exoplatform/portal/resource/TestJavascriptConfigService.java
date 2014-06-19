@@ -18,32 +18,21 @@
  */
 package org.exoplatform.portal.resource;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.test.mocks.servlet.MockServletContext;
-import org.exoplatform.test.mocks.servlet.MockServletRequest;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.application.javascript.ScriptResources;
-import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.io.IOTools;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
@@ -58,19 +47,15 @@ import org.w3c.dom.Document;
  */
 public class TestJavascriptConfigService extends AbstractWebResourceTest {
     private static final ControllerContext CONTROLLER_CONTEXT = new MockControllerContext();
-
-    private JavascriptConfigService jsService;
-
     private static ServletContext mockServletContext;
-
-    private static boolean isFirstStartup = true;
+    private JavascriptConfigService jsService;
 
     @Override
     protected void setUp() throws Exception {
         final PortalContainer portalContainer = getContainer();
-        jsService = (JavascriptConfigService) portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+        jsService = portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
 
-        if (isFirstStartup) {
+        if (mockServletContext == null) {
             Map<String, String> resources = new HashMap<String, String>(6);
             resources.put("/js/script1.js", "aaa;");
             resources.put("/js/script2.js", "bbb;");
@@ -88,7 +73,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
             ScriptResources scriptResources = new JavascriptConfigParser(mockServletContext, document).parse();
             jsService.add(scriptResources);
 
-            isFirstStartup = false;
         }
     }
 
@@ -231,12 +215,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
      * assertNotNull(script); }
      */
 
-    private void assertReader(String expected, Reader actual) throws Exception {
-        StringWriter buffer = new StringWriter();
-        IOTools.copy(actual, buffer, 1);
-        assertEquals(expected, buffer.toString());
-    }
-
     /*
      * public void testPortalJScript() throws IOException { Collection<Javascript> site = jsService.getPortalJScripts("site1");
      * assertEquals(1, site.size()); Iterator<Javascript> iterator = site.iterator();
@@ -265,92 +243,4 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
      * assertEquals("bar1", jScript); }
      */
 
-    private static class MockControllerContext extends ControllerContext {
-        public MockControllerContext() {
-            super(null, null, new MockServletRequest(null, null), null, null);
-        }
-
-        @Override
-        public void renderURL(Map<QualifiedName, String> parameters, URIWriter uriWriter) throws IOException {
-            uriWriter.append('/');
-            uriWriter.appendSegment("mock_context");
-            uriWriter.append('/');
-            uriWriter.appendSegment("mock_url_of_" + parameters.get(QualifiedName.create("gtn", "resource")) + ".js");
-        }
-    }
-
-    public static class MockJSServletContext extends MockServletContext {
-        protected Map<String, String> resources;
-
-        public MockJSServletContext(String contextName, Map<String, String> resources) {
-            super(contextName);
-            this.resources = expandDirectories(resources);
-        }
-
-        /**
-         * Creates a {@link Map} that contains directory entries present implicitly in the given map.
-         *
-         * E.g. for a map containing single entry {@code ["/path/to/amds", "aaa"]} it would return
-         * a map containing the following entries:
-         * {@code ["/path", null]}, {@code ["/path/to", null]} and {@code ["/path/to/amds", "aaa"]}.
-         *
-         * @param resources
-         * @return
-         */
-        private Map<String, String> expandDirectories(Map<String, String> resources) {
-            Map<String, String> result = new TreeMap<String, String>(resources);
-            for (String path : resources.keySet()) {
-                if (path.charAt(0) != '/') {
-                    throw new IllegalArgumentException("Resource path '"+ path +"' does not start with slash.");
-                }
-                for (int slashPos = path.indexOf('/', 1); slashPos >= 0; slashPos = path.indexOf('/', slashPos + 1)) {
-                    String parentPath = path.substring(0, slashPos + 1);
-                    if (!result.containsKey(parentPath)) {
-                        result.put(parentPath, null);
-                    }
-                }
-            }
-            return result;
-        }
-
-        public String getContextPath() {
-            return "/" + getServletContextName();
-        }
-
-        @Override
-        public InputStream getResourceAsStream(String s) {
-            String input = resources.get(s);
-            if (input != null) {
-                return new ByteArrayInputStream(input.getBytes());
-            } else {
-                return null;
-            }
-        }
-
-        /**
-         * @see org.exoplatform.test.mocks.servlet.MockServletContext#getResourcePaths(java.lang.String)
-         */
-        @Override
-        public Set<?> getResourcePaths(String prefix) {
-            if (!prefix.endsWith("/")) {
-                throw new IllegalArgumentException("Only prefixes ending with '/' are supported.");
-            }
-            Set<String> result = new TreeSet<String>();
-
-            for (String resourcePath : resources.keySet()) {
-                if (resourcePath.startsWith(prefix)) {
-
-                    int slashPos = resourcePath.indexOf('/', prefix.length());
-                    int restLength = resourcePath.length() - prefix.length();
-                    if (restLength > 0 && (slashPos < 0 || slashPos == resourcePath.length() - 1)) {
-                        /* a file residing directly under prefix directory
-                         * or a subdirectory of the prefix directory */
-                        result.add(resourcePath);
-                    }
-                }
-            }
-            return result.size() == 0 ? null : result;
-        }
-
-    }
 }

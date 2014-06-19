@@ -201,7 +201,7 @@ public class GateInResourcesDeployer implements WebAppListener {
         skinService.unregisterServletContext(webApp);
     }
 
-    protected URL getGateinResourcesXml(final WebApp webApp) {
+    static URL getGateinResourcesXml(final WebApp webApp) {
         try {
             return webApp.getServletContext().getResource(GATEIN_CONFIG_RESOURCE);
         } catch (MalformedURLException e) {
