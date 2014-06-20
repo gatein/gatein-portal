@@ -52,6 +52,7 @@ import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
 import org.exoplatform.portal.url.URLWriter;
+import org.exoplatform.portal.resource.SkinVisitor;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -543,6 +544,15 @@ public class UIPortalApplication extends UIApplication {
         return service.getJSConfig(prc.getControllerContext(), prc.getLocale());
     }
 
+    public Collection<SkinConfig> getPortalSkins(SkinVisitor visitor) {
+        SkinService skinService = getApplicationComponent(SkinService.class);
+        if (visitor != null) {
+            return skinService.findSkins(visitor);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     /**
      * Return corresponding collection of Skin objects depends on current skin name,
      * this object help to build URL that point to SkinResourceRequestHandler. this handler is responsible to serves for css files <br/>
@@ -550,9 +560,6 @@ public class UIPortalApplication extends UIApplication {
      * The collection contains:
      * - portal skin modules <br/>
      * - skin for specific site<br/>
-     * - skin for portlets that belongs to portal (not in the page).
-     * Those portlet skins will be merged into one css resource called CompositeSkin <br/>
-     * we are using ajax to change navigation, if only page is change, only the skin of portlet in page is changed (not the portlet belongs to portal)
      */
     public Collection<Skin> getPortalSkins() {
         SkinService skinService = getApplicationComponent(SkinService.class);
@@ -566,13 +573,6 @@ public class UIPortalApplication extends UIApplication {
             skins.add(skinConfig);
         }
 
-        //
-        Set<SkinConfig> portletConfigs = getPortalPortletSkins();
-        // don't merge portlet if portlet not available
-        if (!portletConfigs.isEmpty()) {
-            skins.add(skinService.merge(portletConfigs));
-        }
-        //
         return skins;
     }
 
@@ -627,10 +627,14 @@ public class UIPortalApplication extends UIApplication {
             toolPanel.findComponentOfType(uiportlets, UIPortlet.class);
         }
 
-        // Get portal portlets to filter since they are already in the portal
-        // skins
-        Set<SkinConfig> portletConfigs = getPortalPortletSkins();
-        List<SkinConfig> portletSkins = new ArrayList<SkinConfig>();
+        List<Skin> portletSkins = new ArrayList<Skin>();
+        //
+        Set<SkinConfig> portalPortletSkins = getPortalPortletSkins();
+        // don't merge portlet if portlet not available
+        if (!portalPortletSkins.isEmpty()) {
+            SkinService skinService = getApplicationComponent(SkinService.class);
+            portletSkins.add(skinService.merge(portalPortletSkins));
+        }
 
         //
         for (UIPortlet uiPortlet : uiportlets) {
@@ -638,22 +642,28 @@ public class UIPortalApplication extends UIApplication {
             if (skinConfig == null) {
                 skinConfig = getDefaultPortletSkinConfig(uiPortlet);
             }
-            if (skinConfig != null && !portletConfigs.contains(skinConfig)) {
+            if (skinConfig != null && !portalPortletSkins.contains(skinConfig)) {
                 portletSkins.add(skinConfig);
             }
         }
 
         // Sort skins by priority
-        Collections.sort(portletSkins, new Comparator<SkinConfig>() {
-            public int compare(SkinConfig o1, SkinConfig o2) {
-                if (o1.getCSSPriority() == o2.getCSSPriority())
-                    return 1;// Can indicate others condition here
-                else if (o1.getCSSPriority() < 0)
-                    return 1;
-                else if (o2.getCSSPriority() < 0)
-                    return -1;
-                else
-                    return o1.getCSSPriority() - o2.getCSSPriority();
+        Collections.sort(portletSkins, new Comparator<Skin>() {
+            public int compare(Skin s1, Skin s2) {
+                if ((s1 instanceof SkinConfig) && (s2 instanceof SkinConfig)) {
+                    SkinConfig o1 = (SkinConfig)s1;
+                    SkinConfig o2 = (SkinConfig)s2;
+                    if (o1.getCSSPriority() == o2.getCSSPriority())
+                        return 1;// Can indicate others condition here
+                    else if (o1.getCSSPriority() < 0)
+                        return 1;
+                    else if (o2.getCSSPriority() < 0)
+                        return -1;
+                    else
+                        return o1.getCSSPriority() - o2.getCSSPriority();
+                } else {
+                    return 0;
+                }
             }
         });
 
