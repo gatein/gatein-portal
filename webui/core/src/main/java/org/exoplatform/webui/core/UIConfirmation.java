@@ -19,6 +19,7 @@ package org.exoplatform.webui.core;
 import java.io.Serializable;
 import java.util.List;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -35,6 +36,7 @@ import org.exoplatform.webui.event.EventListener;
 @ComponentConfig(template = "system:/groovy/webui/core/UIConfirmation.gtmpl", events = {
         @EventConfig(listeners = UIConfirmation.CloseActionListener.class),
         @EventConfig(listeners = UIConfirmation.ClickActionListener.class) })
+@Serialized
 public class UIConfirmation extends UIPopupWindow {
     private String message_;
 
