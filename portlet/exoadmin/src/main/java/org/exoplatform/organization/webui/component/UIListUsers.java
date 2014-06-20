@@ -98,7 +98,6 @@ public class UIListUsers extends UISearch {
                 new SelectItemOption<String>("Any", UserStatus.ANY.name())
             ));
 
-    private OrganizationService orgService;
     private Query lastQuery_;
     private UserStatus statusFilter = UserStatus.ENABLED;
 
@@ -112,7 +111,7 @@ public class UIListUsers extends UISearch {
         UIFormInputSet inputSet = getUISearchForm().getQuickSearchInputSet();
 
         boolean showDisableUserFilterCheckbox = true;
-        orgService = this.getApplicationComponent(OrganizationService.class);
+        OrganizationService orgService = this.getApplicationComponent(OrganizationService.class);
         if(orgService instanceof PicketLinkIDMOrganizationServiceImpl
                 && !((PicketLinkIDMOrganizationServiceImpl) orgService).getConfiguration().isFilterDisabledUsersInQueries()) {
             showDisableUserFilterCheckbox = false;
