@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -514,6 +515,26 @@ public class SkinService extends AbstractResourceService implements Startable {
     }
 
     /**
+     * Return a collection of SkinConfig based on SkinVisitor provided as the argument
+     *
+     * @param visitor
+     * @return
+     */
+    public Collection<SkinConfig> findSkins(SkinVisitor visitor) {
+        Set<Entry<SkinKey,SkinConfig>> entrySet = portalSkins_.entrySet();
+        for (Entry<SkinKey,SkinConfig> entry : entrySet) {
+            visitor.visitPortalSkin(entry);
+        }
+
+        entrySet = skinConfigs_.entrySet();
+        for (Entry<SkinKey,SkinConfig> entry : entrySet) {
+            visitor.visitSkin(entry);
+        }
+
+        return visitor.getSkins();
+    }
+
+    /**
      * Return the map of portlet themes
      *
      * @return the map of portlet themes
@@ -531,8 +552,9 @@ public class SkinService extends AbstractResourceService implements Startable {
      */
     public SkinConfig getSkin(String module, String skinName) {
         SkinConfig config = skinConfigs_.get(new SkinKey(module, skinName));
-        if (config == null)
-            skinConfigs_.get(new SkinKey(module, SkinService.DEFAULT_SKIN));
+        if (config == null) {
+            config = skinConfigs_.get(new SkinKey(module, SkinService.DEFAULT_SKIN));
+        }
         return config;
     }
 

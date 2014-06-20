@@ -25,7 +25,7 @@ package org.exoplatform.portal.resource;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class SkinKey {
+public class SkinKey {
 
     private final String module;
 
