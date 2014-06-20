@@ -106,8 +106,8 @@ public class UIAccountChangePass extends UIForm {
             }
             try {
                 user.setPassword(newPass);
-                uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.success", null));
                 service.getUserHandler().saveUser(user, true);
+                uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.change.pass.success", null));
                 UIAccountSetting ui = uiForm.getParent();
                 ui.getChild(UIAccountProfiles.class).setRendered(true);
                 ui.getChild(UIAccountChangePass.class).setRendered(false);
