@@ -18,16 +18,6 @@
  */
 package org.exoplatform.portal.resource;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.component.test.AbstractKernelTest;
@@ -43,6 +33,18 @@ import org.exoplatform.test.mocks.servlet.MockServletRequest;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.Router;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
 
 @ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml") })
 public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
@@ -134,6 +136,38 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
         assertNotNull(portalSkin);
         assertEquals("Module1", portalSkin.getModule());
         assertEquals(contextPath + "/skin/module1/Stylesheet.css", portalSkin.getCSSPath());
+    }
+
+    public void testPortalSkinVisitor() {
+        String contextPath = mockServletContext.getContextPath();
+        Collection<SkinConfig> portalSkinConfigs = skinService.findSkins(new SkinVisitor() {
+
+            Collection<SkinConfig> list = new HashSet<SkinConfig>();
+
+            @Override
+            public void visitPortalSkin(Entry<SkinKey, SkinConfig> entry) {
+                if (entry.getKey().getModule().equals("CoreSkin")) {
+                    list.add(entry.getValue());
+                }
+            }
+
+            @Override
+            public void visitSkin(Entry<SkinKey, SkinConfig> entry) {
+            }
+
+            @Override
+            public Collection<SkinConfig> getSkins() {
+                return list;
+            }
+        });
+
+        assertNotNull(portalSkinConfigs);
+        assertEquals(1, portalSkinConfigs.size());
+        SkinConfig[] arr = portalSkinConfigs.toArray(new SkinConfig[1]);
+        SkinConfig portalSkin = arr[0];
+        assertNotNull(portalSkin);
+        assertEquals("CoreSkin", portalSkin.getModule());
+        assertEquals(contextPath + "/skin/core/Stylesheet.css", portalSkin.getCSSPath());
     }
 
     public void testPortletSkin() {
@@ -228,6 +262,44 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
         assertEquals("background:url(/background/url/images/foo.gif);\n" + "background:url('/images/foo.gif');\n"
                 + "aaa; background: #fff url('/background/url/images/foo.gif') no-repeat center -614px; ccc;",
                 skinService.getCSS(newControllerContext(getRouter(), skinURL.toString()), false));
+    }
+
+    public void testCustomSkinKey() {
+        skinService.addSkin("jcr/foo", "bar", "/path/to/customkey.css", -1, false);
+        SkinConfig skin = skinService.getSkin("foo", "bar");
+        assertNull(skin);
+        skin = skinService.getSkin("jcr/foo", "bar");
+        assertNotNull(skin);
+        assertEquals("/path/to/customkey.css", skin.getCSSPath());
+
+        Collection<SkinConfig> list = skinService.findSkins(new SkinVisitor() {
+
+            Collection<SkinConfig> list = new HashSet<SkinConfig>();
+
+            @Override
+            public void visitPortalSkin(Entry<SkinKey, SkinConfig> entry) {
+                if (entry.getKey().getModule().startsWith("jcr/")) {
+                    list.add(entry.getValue());
+                }
+            }
+
+            @Override
+            public void visitSkin(Entry<SkinKey, SkinConfig> entry) {
+                if (entry.getKey().getModule().startsWith("jcr/")) {
+                    list.add(entry.getValue());
+                }
+            }
+
+            @Override
+            public Collection<SkinConfig> getSkins() {
+                return list;
+            }
+        });
+
+        assertNotNull(list);
+        assertEquals(1, list.size());
+        SkinConfig next = list.iterator().next();
+        assertEquals("/path/to/customkey.css", next.getCSSPath());
     }
 
     ControllerContext getControllerContext() {

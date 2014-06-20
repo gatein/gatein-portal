@@ -40,8 +40,6 @@ import org.gatein.portal.controller.resource.ResourceRequestHandler;
  */
 class SimpleSkin implements SkinConfig {
 
-    private final SkinService service_;
-
     private final String module_;
 
     private final String name_;
@@ -57,7 +55,6 @@ class SimpleSkin implements SkinConfig {
     }
 
     public SimpleSkin(SkinService service, String module, String name, String cssPath, int cssPriority) {
-        service_ = service;
         module_ = module;
         name_ = name;
         cssPath_ = cssPath;
