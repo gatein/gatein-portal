@@ -64,7 +64,7 @@
             if (even) rowClass = "EvenRow";
             else rowClass = "OddRow portlet-table-alternate";
             even = !even;
-            if (bean instanceof org.exoplatform.services.organization.impl.UserImpl) {
+            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
                 if(!uicomponent.getFieldValue(bean, "enabled")) {
                     rowStyle = "font-style: italic; background: darkgray";
                 } else {
@@ -118,7 +118,7 @@
                         }
                         classIcon = action + "Icon";
                         if (action == "DisableEnableUser") {
-                            if (bean instanceof org.exoplatform.services.organization.impl.UserImpl) {
+                            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
                                 if (uicomponent.getFieldValue(bean, "enabled")) {
                                     title = "Disabled User";
                                     classIcon = "CheckDisable";

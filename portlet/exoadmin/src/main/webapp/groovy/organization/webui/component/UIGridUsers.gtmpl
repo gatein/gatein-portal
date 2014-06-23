@@ -68,7 +68,7 @@
 
             def beanIdField = uicomponent.getBeanIdField();
             def beanId = uicomponent.getBeanIdFor(bean);
-            if (bean instanceof org.exoplatform.services.organization.impl.UserImpl) {
+            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
                 if(!uicomponent.getFieldValue(bean, "enabled")) {
                     rowStyle = "font-style: italic; background: #dedfdf";
                 } else {
@@ -100,7 +100,7 @@
                }%>
 
                <!-- EnableDisableUser action -->
-               <% if (bean instanceof org.exoplatform.services.organization.impl.UserImpl) {%>
+               <% if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {%>
                    <td headers="DisableEnableUser">
                     <div class="ActionContainer">
                         <%
@@ -145,7 +145,7 @@
                             }
                             classIcon = action + "Icon";
                             if (action == "DisableEnableUser") {
-                                if (bean instanceof org.exoplatform.services.organization.impl.UserImpl) {
+                                if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
                                     if (uicomponent.getFieldValue(bean, "enabled")) {
                                         title = "Disabled User";
                                         classIcon = "CheckDisable";
