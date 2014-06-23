@@ -63,12 +63,17 @@ public class UIListMembershipType extends UIContainer {
         return "UIMembershipList";
     }
 
-    @SuppressWarnings("unchecked")
     public void loadData() {
+        int currentPage = getChild(UIGrid.class).getUIPageIterator().getCurrentPage();
         getChild(UIGrid.class).getUIPageIterator().setPageList(new FindMembershipTypesPageList(5));
+        try {
+            getChild(UIGrid.class).getUIPageIterator().setCurrentPage(currentPage);
+        } catch (Exception e) {
+        }
     }
 
     public void processRender(WebuiRequestContext context) throws Exception {
+        loadData();
         Writer w = context.getWriter();
         w.write("<div class=\"UIListMembershipType\">");
         renderChildren();
@@ -82,17 +87,20 @@ public class UIListMembershipType extends UIContainer {
 
             OrganizationService service = uiMembership.getApplicationComponent(OrganizationService.class);
             MembershipType mt = service.getMembershipTypeHandler().findMembershipType(name);
+
+            if (mt == null) {
+                UIApplication uiApp = event.getRequestContext().getUIApplication();
+                uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.MembershipNotExist", new String[] { name }));
+                uiMembership.loadData();
+                return;
+            }
+
             if (mt.getDescription() == null) {
                 mt.setDescription("");
             }
             UIMembershipManagement uiMembershipManager = uiMembership.getParent();
             UIMembershipTypeForm uiForm = uiMembershipManager.getChild(UIMembershipTypeForm.class);
             uiForm.setMembershipType(mt);
-            if (mt == null) {
-                UIApplication uiApp = event.getRequestContext().getUIApplication();
-                uiApp.addMessage(new ApplicationMessage("UIMembershipTypeForm.msg.MembershipNotExist", new String[] { name }));
-                uiMembership.loadData();
-            }
         }
     }
 
