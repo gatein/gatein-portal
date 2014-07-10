@@ -42,6 +42,7 @@
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/wsrp${container.name.suffix}"/>
               <property name="db-tablename-suffix" value="WSRPSYS"/>
+              <property name="use-sequence-for-order-number" value="${gatein.jcr.use-sequence}" />
             </properties>
             <value-storages>
               <value-storage id="wsrp-system"
@@ -106,6 +107,7 @@
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/pc${container.name.suffix}"/>
+              <property name="use-sequence-for-order-number" value="${gatein.jcr.use-sequence}" />
             </properties>
             <value-storages>
               <value-storage id="pc-system"

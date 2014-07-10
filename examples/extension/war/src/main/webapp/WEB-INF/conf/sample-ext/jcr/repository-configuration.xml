@@ -37,6 +37,7 @@
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/sample-ws${container.name.suffix}"/>
+              <property name="use-sequence-for-order-number" value="${gatein.jcr.use-sequence}" />
             </properties>
             <value-storages>
               <value-storage id="sample-ws"

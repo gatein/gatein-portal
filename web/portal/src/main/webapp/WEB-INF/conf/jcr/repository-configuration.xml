@@ -39,6 +39,7 @@
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/system${container.name.suffix}"/>
+              <property name="use-sequence-for-order-number" value="${gatein.jcr.use-sequence}" />
             </properties>
             <value-storages>
               <value-storage id="system"
@@ -103,6 +104,7 @@
               <property name="swap-directory"
                         value="${gatein.jcr.data.dir}/swap/portal-system${container.name.suffix}"/>
               <property name="db-tablename-suffix" value="PSYSTEM"/>
+              <property name="use-sequence-for-order-number" value="${gatein.jcr.use-sequence}" />
             </properties>
             <value-storages>
               <value-storage id="portal-system"
@@ -166,6 +168,7 @@
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/portal-work${container.name.suffix}"/>
               <property name="db-tablename-suffix" value="PWORK"/>
+              <property name="use-sequence-for-order-number" value="${gatein.jcr.use-sequence}" />
             </properties>
             <value-storages>
               <value-storage id="portal-work"
