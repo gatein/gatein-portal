@@ -481,7 +481,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                     }
 
                     if (!isExist) {
-                        app = category.createContent(portletName, contentType, contentId);
+                        app = category.createContent(uniqueDefinitionName(portletName, contentId), contentType, contentId);
                         app.setDisplayName(displayName);
                         app.setDescription(getLocalizedStringValue(descriptionLS, portletName));
                         app.setAccessPermissions(permissions);
@@ -491,20 +491,18 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
         }
     }
 
+    private String uniqueDefinitionName(String portletName, String contentId) {
+        String unique = portletName.substring(0,Math.min(portletName.length(), 20)) + String.valueOf(contentId.hashCode());
+        String sanitized = sanitizePortletName(unique);
+        return sanitized;
+    }
+
     private String sanitizePortletApplicationName(String portletApplicationName) {
         return portletApplicationName.replace('/', '_');
     }
 
     private String sanitizePortletName(String portletName) {
         String sanitizedPortletName = portletName.replace('/', '_');
-
-        // PortletName can have following format in the auto-import task:
-        // local._responsive-community-portlet.ResponsiveCommunityPortlet
-        // We are going to return last token as sanitizedPortletName
-        int lastDotIndex = sanitizedPortletName.lastIndexOf('.');
-        if (lastDotIndex > 0) {
-            sanitizedPortletName = sanitizedPortletName.substring(lastDotIndex + 1);
-        }
         /*
          * PortletName should validate similar to UIApplicationForm for Application Name
          * as this is read-only value in Application Registry.
