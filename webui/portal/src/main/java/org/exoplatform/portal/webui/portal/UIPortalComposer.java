@@ -248,6 +248,7 @@ public class UIPortalComposer extends UIContainer {
                 siteBody.setUIComponent(editPortal);
             }
             uiEditWS.setRendered(false);
+            uiEditWS.setUIComponent(null);
             uiPortal = (UIPortal) siteBody.getUIComponent();
 
             // Update the cache of UIPortal from UIPortalApplication
@@ -435,6 +436,7 @@ public class UIPortalComposer extends UIContainer {
             UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
             uiEditWS.getComposer().setEditted(false);
             uiEditWS.setRendered(false);
+            uiEditWS.setUIComponent(null);
 
             UITabPane tabPane = uiEditWS.getComposer().getChild(UITabPane.class);
             tabPane.setSelectedTab(1);

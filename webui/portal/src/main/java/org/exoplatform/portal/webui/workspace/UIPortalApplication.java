@@ -698,12 +698,12 @@ public class UIPortalApplication extends UIApplication {
      */
     private void initWorkspaces() throws Exception {
         UIWorkingWorkspace uiWorkingWorkspace = addChild(UIWorkingWorkspace.class, UIPortalApplication.UI_WORKING_WS_ID, null);
+        uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
         UIComponentDecorator uiViewWS = uiWorkingWorkspace.addChild(UIComponentDecorator.class, null, UI_VIEWING_WS_ID);
 
         DataStorage dataStorage = getApplicationComponent(DataStorage.class);
         Container container = dataStorage.getSharedLayout();
 
-        uiWorkingWorkspace.addChild(UIEditInlineWorkspace.class, null, UI_EDITTING_WS_ID).setRendered(false);
         if (container != null) {
             org.exoplatform.portal.webui.container.UIContainer uiContainer = createUIComponent(
                     org.exoplatform.portal.webui.container.UIContainer.class, null, null);
