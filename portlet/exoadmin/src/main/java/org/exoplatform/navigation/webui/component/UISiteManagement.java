@@ -288,7 +288,7 @@ public class UISiteManagement extends UIContainer {
             uiEditWS.setUIComponent(editPortal);
 
             // Check if edit current portal
-            if (uiPortal.getName().equals(editPortal.getName())) {
+            if (uiPortal.getSiteKey().equals(editPortal.getSiteKey())) {
                 // editPortal.setSelectedNode(uiPortal.getSelectedNode());
                 // editPortal.setNavigation(uiPortal.getNavigation());
                 // editPortal.setSelectedPath(uiPortal.getSelectedPath());
