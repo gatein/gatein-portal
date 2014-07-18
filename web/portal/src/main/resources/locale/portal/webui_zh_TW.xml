@@ -13,8 +13,6 @@
   <PopupPermissionSelector>
     <title>
       <null>null</null>
-      <UIGroupMembershipSelector>權限選擇</UIGroupMembershipSelector>
-      <PermissionSelector>權限選擇</PermissionSelector>
     </title>
   </PopupPermissionSelector>
   <UIPermissionForm>
@@ -1013,11 +1011,6 @@
       <ListPermissionSelector>群組和會員選擇</ListPermissionSelector>
     </title>
   </UIPopupGroupMembershipSelector>
-  <UIPageFormPopupGroupMembershipSelector>
-    <title>
-      <ListPermissionSelector>群組和會員選擇</ListPermissionSelector>
-    </title>
-  </UIPageFormPopupGroupMembershipSelector>
   <UIUserMembershipSelector>
     <header>
       <userName>使用者名稱</userName>

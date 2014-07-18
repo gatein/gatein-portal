@@ -13,8 +13,6 @@
   <PopupPermissionSelector>
     <title>
       <null>null</null>
-      <UIGroupMembershipSelector>퍼미션 선택기</UIGroupMembershipSelector>
-      <PermissionSelector>퍼미션 선택기</PermissionSelector>
     </title>
   </PopupPermissionSelector>
   <UIPermissionForm>
@@ -941,11 +939,6 @@
       <ListPermissionSelector>그룹/퍼미션 선택기</ListPermissionSelector>
     </title>
   </UIPopupGroupMembershipSelector>
-  <UIPageFormPopupGroupMembershipSelector>
-    <title>
-      <ListPermissionSelector>그룹/퍼미션 선택기</ListPermissionSelector>
-    </title>
-  </UIPageFormPopupGroupMembershipSelector>
   <UIUserMembershipSelector>
     <header>
       <userName>사용자 이름</userName>

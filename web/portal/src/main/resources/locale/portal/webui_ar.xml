@@ -38,8 +38,6 @@
   <PopupPermissionSelector>
     <title>
       <null>عديم الوجود</null>
-      <UIGroupMembershipSelector>إذن محدد</UIGroupMembershipSelector>
-      <PermissionSelector>إذن محدد</PermissionSelector>
     </title>
   </PopupPermissionSelector>
   <UIPermissionForm>
@@ -1187,12 +1185,6 @@
       </ListPermissionSelector>
     </title>
   </UIPopupGroupMembershipSelector>
-  <UIPageFormPopupGroupMembershipSelector>
-    <title>
-      <ListPermissionSelector>مجموعة ومحدد العضوية
-      </ListPermissionSelector>
-    </title>
-  </UIPageFormPopupGroupMembershipSelector>
   <!--
     #############################################################################
     #
