@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-   xmlns:xalan="http://xml.apache.org/xalan" 
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+   xmlns:xalan="http://xml.apache.org/xalan"
    xmlns:j="urn:jboss:domain:1.3"
    version="2.0"
    exclude-result-prefixes="xalan j">
 
    <xsl:param name="config"/>
-   
+
    <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" xalan:indent-amount="4" standalone="no"/>
    <xsl:strip-space elements="*"/>
 
@@ -15,12 +15,15 @@
    <xsl:template name="extensions">
         <extension module="org.gatein"/>
    </xsl:template>
-   
+
    <xsl:template name="system-properties">
       <xsl:if test="$config='default'">
          <system-properties>
             <property name="gatein.jcr.config.type" value="local"/>
             <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>
+            <xsl:comment>jboss.as.management.blocking.timeout expects a value in seconds.
+2147483 is the maximum that corresponds to more than 24 days.</xsl:comment>
+            <property name="jboss.as.management.blocking.timeout" value="2147483"/>
          </system-properties>
       </xsl:if>
       <xsl:if test="$config='clustering'">
@@ -29,16 +32,19 @@
             <property name="gatein.jcr.config.type" value="cluster"/>
             <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.ispn.ISPNIndexChangesFilter"/>
             <property name="gatein.jcr.storage.enabled" value="false"/>
+            <xsl:comment>jboss.as.management.blocking.timeout expects a value in seconds.
+2147483 is the maximum that corresponds to more than 24 days.</xsl:comment>
+            <property name="jboss.as.management.blocking.timeout" value="2147483"/>
          </system-properties>
-      </xsl:if>     
-   </xsl:template> 
+      </xsl:if>
+   </xsl:template>
 
    <xsl:template name="loggers">
       <logger category="com.google.javascript.jscomp">
          <level name="WARN"/>
       </logger>
    </xsl:template>
-   
+
    <xsl:template name="datasources">
       <xsl:variable name='connection-url-idm'>
          <xsl:choose>
@@ -52,7 +58,7 @@
             <xsl:otherwise>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcjcr_portal;DB_CLOSE_DELAY=-1</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
-              
+
       <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true" use-java-context="true">
          <connection-url><xsl:value-of select="$connection-url-idm"/></connection-url>
          <driver>h2</driver>
@@ -70,9 +76,9 @@
          </security>
       </datasource>
    </xsl:template>
-   
+
    <xsl:template name="datasources-samples">
-      <xsl:if test="$config='default'">   
+      <xsl:if test="$config='default'">
          <xsl:comment> Uncommented this when deploying gatein-sample-portal </xsl:comment>
          <xsl:comment>
                 <![CDATA[<datasource jndi-name="java:/jdbcidm_sample-portal" pool-name="IDMSamplePortalDS" enabled="true" use-java-context="true">
@@ -95,8 +101,8 @@
                     </security>
                 </datasource>]]>
                 </xsl:comment>
-      </xsl:if> 
-      <xsl:if test="$config='clustering'">   
+      </xsl:if>
+      <xsl:if test="$config='clustering'">
          <xsl:comment> Uncommented this when deploying gatein-sample-portal </xsl:comment>
          <xsl:comment>
                 <![CDATA[<datasource jndi-name="java:/jdbcidm_sample-portal" pool-name="IDMSamplePortalDS" enabled="true" use-java-context="true">
@@ -121,11 +127,11 @@
                 </xsl:comment>
       </xsl:if>
    </xsl:template>
-   
+
    <xsl:template name="deployment-scanner">
       <xsl:attribute name="deployment-timeout">300</xsl:attribute>
    </xsl:template>
-   
+
    <xsl:template name="subsystem">
       <subsystem xmlns="urn:jboss:domain:gatein:1.0">
          <portlet-war-dependencies>
@@ -133,9 +139,9 @@
             <dependency name="org.gatein.pc"/>
             <dependency name="javax.portlet.api"/>
          </portlet-war-dependencies>
-      </subsystem>   
+      </subsystem>
    </xsl:template>
-   
+
    <xsl:template name="security-domains">
       <security-domain name="gatein-domain" cache-type="default">
          <authentication>
@@ -163,9 +169,9 @@
                <module-option name="realmName" value="gatein-domain"/>
             </login-module>
          </authentication>
-      </security-domain>   
+      </security-domain>
    </xsl:template>
-   
+
    <xsl:template name="security-domains-samples">
       <xsl:comment> Uncommented this when deploying gatein-sample-portal </xsl:comment>
       <xsl:comment>
@@ -188,11 +194,11 @@
                         </login-module>
                     </authentication>
                 </security-domain>]]>
-                </xsl:comment>   
+                </xsl:comment>
    </xsl:template>
-   
+
    <xsl:template name="virtual-server-clustering">
-      <xsl:if test="$config='clustering'">   
+      <xsl:if test="$config='clustering'">
          <sso cache-container="web" cache-name="sso" reauthenticate="false"/>
       </xsl:if>
    </xsl:template>
@@ -209,8 +215,8 @@
          <xsl:value-of select="'&#xa;&#09;-->'" disable-output-escaping="yes" />
       </xsl:if>
    </xsl:template>
-   
-   <!-- matching rules -->   
+
+   <!-- matching rules -->
 
    <xsl:template match="node()[name(.)='extensions']">
       <xsl:copy>
@@ -271,7 +277,7 @@
       </xsl:copy>
       <xsl:call-template name="cache-container-web-end"/>
    </xsl:template>
-   
+
    <xsl:template match="@*|node()">
       <xsl:copy>
          <xsl:apply-templates select="@*|node()" />
