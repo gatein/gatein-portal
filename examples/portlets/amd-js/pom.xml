@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.gatein.portal.examples.portlets</groupId>
     <artifactId>parent</artifactId>
-    <version>3.5.11.Final-SNAPSHOT</version>
+    <version>3.5.11.Final</version>
   </parent>
 
   <artifactId>gatein-amd-js</artifactId>
