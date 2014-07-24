@@ -107,16 +107,32 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
     private JCRConsumerRegistry consumerRegistry;
     private ExoContainer container;
     private final ExoKernelIntegration exoKernelIntegration;
-    private final boolean bypass;
     private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
     private int consumersInitDelay;
+
+    /**
+     * Indicates whether the integration has been initialized or not. This is required because we need to perform the
+     * initial setup only once, and this component is created once for each context/portal.
+     * We could have the option of moving this component to a higher level, so that it's created only once, but we
+     * need access to each of the contexts/portals, as we need to set the consumer's registry to each of them.
+     * So, we still get created N times, but we initialize only once.
+     */
+    private final boolean initialized;
 
     public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
             ExoKernelIntegration pc, NodeHierarchyCreator nhc, AS7Plugins plugins) throws Exception {
         // IMPORTANT: even though NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
         // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
 
-        if ("portal".equals(context.getName())) {
+        ConsumerRegistry existingRegistry = ExoContainerContext.getTopContainer().getComponentInstanceOfType(ConsumerRegistry.class);
+        container = context.getContainer();
+        exoKernelIntegration = pc;
+
+        // if we have already an existing consumer registry, then we bypass the init
+        // as we are going to reuse it on the start() method
+        initialized = (null != existingRegistry);
+
+        if (!initialized) {
             if (params != null) {
                 producerConfigLocation = computePath(params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue());
                 consumersConfigLocation = computePath(params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue());
@@ -145,23 +161,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
                 consumersConfigurationIS = configurationManager.getInputStream(DEFAULT_CONSUMERS_CONFIG_LOCATION);
             }
 
-            container = context.getContainer();
-
-            exoKernelIntegration = pc;
-
-            bypass = false;
-
             PluginsAccess.register(plugins);
-        } else {
-            log.info("The WSRP service can only be started in the default portal context. WSRP was not started for '"
-                    + context.getName() + "'");
-
-            producerConfigLocation = null;
-            consumersConfigLocation = null;
-            producerConfigurationIS = null;
-            consumersConfigurationIS = null;
-            exoKernelIntegration = null;
-            bypass = true;
         }
     }
 
@@ -176,7 +176,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
     }
 
     public void start() {
-        if (!bypass) {
+        if (!initialized) {
             try {
                 startProducer();
                 startConsumers();
@@ -190,6 +190,15 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
             } catch (Exception e) {
                 log.error("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' FAILED to start", e);
             }
+        } else {
+            // reuse the consumer registry
+            FederatingPortletInvoker federatingPortletInvoker = (FederatingPortletInvoker) container.getComponentInstanceOfType(FederatingPortletInvoker.class);
+            JCRConsumerRegistry existingRegistry = (JCRConsumerRegistry) ExoContainerContext.getTopContainer().getComponentInstanceOfType(ConsumerRegistry.class);
+
+            RegisteringPortletInvokerResolver resolver = new RegisteringPortletInvokerResolver();
+            resolver.setConsumerRegistry(existingRegistry);
+            federatingPortletInvoker.setPortletInvokerResolver(resolver);
+
         }
     }
 
@@ -361,7 +370,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
             throw new RuntimeException("Couldn't start WSRP consumers registry from configuration " + consumersConfigLocation,
                     e);
         }
-        container.registerComponentInstance(ConsumerRegistry.class, consumerRegistry);
+        ExoContainerContext.getTopContainer().registerComponentInstance(consumerRegistry);
 
         log.info("WSRP Consumers started");
     }
@@ -370,7 +379,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
      * Stops the component if the event is related to the main portal context.
      */
     public void stop() {
-        if (!bypass) {
+        if (!initialized) {
             // stop listening to web app events
             ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
             servletContainer.removeWebAppListener(this);
@@ -387,7 +396,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener {
         // this code was originally on the stop() method, but it seems that it's called "too late" in the process,
         // as we don't have access to the RepositoryContainer anymore, so, we are unable to properly get a fresh
         // list of consumers, for instance.
-        if (!bypass) {
+        if (!initialized) {
             stopProducer();
             stopConsumers();
         }
