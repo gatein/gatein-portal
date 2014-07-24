@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.11.Final</version>
+    <version>3.5.12.Final-SNAPSHOT</version>
   </parent>
 
   <artifactId>exo.portal.portlet</artifactId>

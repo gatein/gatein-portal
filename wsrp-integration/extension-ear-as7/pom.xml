@@ -29,7 +29,7 @@
   <parent>
     <groupId>org.gatein.integration</groupId>
     <artifactId>gatein-wsrp-integration-parent</artifactId>
-    <version>3.5.11.Final</version>
+    <version>3.5.12.Final-SNAPSHOT</version>
   </parent>
 
   <artifactId>extension-ear-as7</artifactId>
