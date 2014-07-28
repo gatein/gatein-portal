@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.Method;
 
+import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
@@ -68,18 +70,23 @@ public class FilterDisabledLoginModule extends AbstractLoginModule {
                 OrganizationService service = (OrganizationService) getContainer().getComponentInstanceOfType(
                         OrganizationService.class);
 
-                UserHandler uHandler = service.getUserHandler();
-                User user = uHandler.findUserByName(username, UserStatus.ANY);
+                try {
+                    begin(service);
+                    UserHandler uHandler = service.getUserHandler();
+                    User user = uHandler.findUserByName(username, UserStatus.ANY);
 
-                if (user == null) {
-                    log.debug("user {0} doesn't exists. FilterDisabledLoginModule will be ignored.", username);
-                } else if (user instanceof UserImpl && !((UserImpl) user).isEnabled()) {
-                    HttpServletRequest request = getCurrentHttpServletRequest();
-                    if (request != null) {
-                        request.setAttribute(DISABLED_USER_NAME, username);
+                    if (user == null) {
+                        log.debug("user {0} doesn't exists. FilterDisabledLoginModule will be ignored.", username);
+                    } else if (user instanceof UserImpl && !((UserImpl) user).isEnabled()) {
+                        HttpServletRequest request = getCurrentHttpServletRequest();
+                        if (request != null) {
+                            request.setAttribute(DISABLED_USER_NAME, username);
+                        }
+
+                        throw new LoginException("Can't authenticate. user " + username + " is disabled");
                     }
-
-                    throw new LoginException("Can't authenticate. user " + username + " is disabled");
+                } finally {
+                    end(service);
                 }
             } else {
                 log.debug("No username has been committed. FilterDisabledLoginModule will be ignored.");
@@ -139,5 +146,17 @@ public class FilterDisabledLoginModule extends AbstractLoginModule {
     @Override
     protected Log getLogger() {
         return log;
+    }
+
+    private void begin(OrganizationService orgService) {
+        if (orgService instanceof ComponentRequestLifecycle) {
+            RequestLifeCycle.begin((ComponentRequestLifecycle) orgService);
+        }
+    }
+
+    private void end(OrganizationService orgService) {
+        if (orgService instanceof ComponentRequestLifecycle) {
+            RequestLifeCycle.end();
+        }
     }
 }
