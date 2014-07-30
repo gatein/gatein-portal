@@ -31,13 +31,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.navigation.NodeChange;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.NodeState.Builder;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
 import org.gatein.api.EntityAlreadyExistsException;
 import org.gatein.api.EntityNotFoundException;
 import org.gatein.api.Portal;
@@ -50,6 +55,7 @@ import org.gatein.api.internal.Parameters;
 import org.gatein.api.navigation.Visibility.Status;
 import org.gatein.api.page.PageId;
 import org.gatein.api.site.SiteId;
+import org.gatein.api.site.SiteType;
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
@@ -169,13 +175,58 @@ public class ApiNode implements Node {
         if (displayName == null) {
             String simple = context.getState().getLabel();
             if (simple != null) {
-                displayName = new LocalizedString(simple);
+                displayName = resolveExpression(simple);
             } else if (context.getId() != null) {
                 Map<Locale, Described.State> descriptions = navigation.loadDescriptions(context.getId());
                 displayName = ObjectFactory.createLocalizedString(descriptions);
             }
         }
         return displayName;
+    }
+
+    /**
+     * Resolves the given WebUI style i18n place holder. Under the hood a similar thing happens in
+     * {@link NavigationImpl#resolve(NodeContext)}.
+     * <p>
+     * In particuler, it checks whether {@code expression} is a WebUI style i18n place holder of form
+     * <code>#{resource.bundle.key}</code>. In case it is, it iterates over {@link LocaleConfigService#getLocalConfigs()} and
+     * resolves the key against each available {@link LocaleConfig#getNavigationResourceBundle(String, String)}. The resolved
+     * values are stored in a new {@link LocalizedString} and returned.
+     * <p>
+     * If {@code expression} is not a WebUI style i18n place holder or if the resoltion does not succed for any locale,
+     * {@code new LocalizedString(expression) is returned.}
+     *
+     * @param expression possibly a WebUI style i18n place holder
+     * @return
+     */
+    private LocalizedString resolveExpression(String expression) {
+        LocalizedString result = null;
+        if (ExpressionUtil.isResourceBindingExpression(expression)) {
+            String key = expression.substring(2, expression.length() - 1);
+            LocaleConfigService configService = ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
+                    LocaleConfigService.class);
+            String ownerId = siteId.getName();
+            if (siteId.getType() == SiteType.SPACE) {
+                /* Remove the initial '/' in a group name */
+                ownerId = ownerId.substring(1);
+            }
+            for (LocaleConfig localeConfig : configService.getLocalConfigs()) {
+                Locale locale = localeConfig.getLocale();
+                ResourceBundle rb = localeConfig.getNavigationResourceBundle(Util.from(siteId).getTypeName(), ownerId);
+                try {
+                    String value = rb.getString(key);
+                    if (value != null) {
+                        if (result == null) {
+                            result = new LocalizedString(locale, value);
+                        } else {
+                            result.setLocalizedValue(locale, value);
+                        }
+                    }
+                } catch (MissingResourceException e) {
+                }
+            }
+        }
+        return result == null ? new LocalizedString(expression) : result;
     }
 
     @Override
@@ -316,7 +367,8 @@ public class ApiNode implements Node {
         checkChildrenLoaded();
 
         if (!hasChild(childName)) {
-            throw new EntityNotFoundException("Cannot remove child '" + childName + "' because it does not exist for parent node " + getNodePath());
+            throw new EntityNotFoundException("Cannot remove child '" + childName
+                    + "' because it does not exist for parent node " + getNodePath());
         }
 
         return context.removeNode(childName);

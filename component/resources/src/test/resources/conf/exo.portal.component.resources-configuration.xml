@@ -79,6 +79,7 @@
         <description>The resources that start with the following package name should be load from file system
         </description>
         <value>locale.portlet</value>
+        <value>locale.navigation.portal.classic</value>
       </values-param>
 
       <values-param>

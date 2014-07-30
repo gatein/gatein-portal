@@ -160,9 +160,12 @@ public class NavigationImplTest extends AbstractApiTest {
     public void displayNames() throws Exception {
         Node node = navigation.getRootNode(Nodes.visitAll());
         node.addChild("simple");
+        node.addChild("expression");
         node.addChild("extended");
 
         node.getChild("simple").setDisplayName("simple");
+
+        node.getChild("expression").setDisplayName("#{my.test.key}");
 
         LocalizedString localizedString = new LocalizedString(Locale.ENGLISH, "english");
         localizedString.setLocalizedValue(Locale.CHINA, "chinese");
@@ -174,6 +177,15 @@ public class NavigationImplTest extends AbstractApiTest {
         Node saved = navigation.getRootNode(Nodes.visitAll());
 
         assertEquals("simple", saved.getChild("simple").getDisplayName());
+
+        Node savedExpression = saved.getChild("expression");
+        assertEquals("My English value", savedExpression.getDisplayName());
+        assertEquals(4, savedExpression.getDisplayNames().getLocalizedValues().size());
+        assertEquals("My English value", savedExpression.getDisplayNames().getLocalizedValue(Locale.ENGLISH).getValue());
+        assertEquals("My French value", savedExpression.getDisplayNames().getLocalizedValue(Locale.FRENCH).getValue());
+        assertEquals("My Arabic value", savedExpression.getDisplayNames().getLocalizedValue(new Locale("ar")).getValue());
+        assertEquals("My Vietnamese value", savedExpression.getDisplayNames().getLocalizedValue(new Locale("vi")).getValue());
+
         assertNotNull(saved.getChild("extended").getDisplayNames());
         assertEquals("english", saved.getChild("extended").getDisplayNames().getLocalizedValue(Locale.ENGLISH).getValue());
         assertEquals("chinese", saved.getChild("extended").getDisplayNames().getLocalizedValue(Locale.CHINA).getValue());
