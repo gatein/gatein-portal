@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -376,6 +377,10 @@ public abstract class UIComponent {
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         ExoContainer container = context.getApplication().getApplicationServiceContainer();
         return type.cast(container.getComponentInstanceOfType(type));
+    }
+
+    public ModelObject buildModelObject() {
+        throw new UnsupportedOperationException();
     }
 
     public Event<UIComponent> createEvent(String name, Phase phase, WebuiRequestContext context) throws Exception {
