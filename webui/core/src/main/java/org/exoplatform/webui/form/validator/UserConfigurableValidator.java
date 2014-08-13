@@ -32,7 +32,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Pattern;
+
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.PrivilegedSystemHelper;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -78,33 +80,48 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
 
     public static final String EMAIL_VALIDATION_REGEX = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-    private static Map<String, ValidatorConfiguration> configurations = new HashMap<String, ValidatorConfiguration>(3);
+    private static Map<String, ValidatorConfiguration> configurations;
 
     public static final String KEY_PREFIX = "gatein.validators.";
 
-    static {
-        String gateinConfDir = System.getProperty("gatein.conf.dir");
-        File conf = new File(gateinConfDir, "configuration.properties");
-        if (conf.exists()) {
-            try {
-                Properties properties = new Properties();
-                properties.load(new FileInputStream(conf));
-                int length = KEY_PREFIX.length();
-                for (Object objectKey : properties.keySet()) {
-                    String key = (String) objectKey;
-                    if (key.startsWith(KEY_PREFIX)) {
-                        // extract property key
-                        String propertyKey = key.substring(length, key.indexOf('.', length));
-                        if (!configurations.containsKey(propertyKey)) {
-                            configurations.put(propertyKey, new ValidatorConfiguration(propertyKey, properties));
+    private static Map<String, ValidatorConfiguration> getConfigurations() {
+        if (configurations == null) {
+            synchronized (UserConfigurableValidator.class) {
+                if (configurations == null) {
+                    configurations = new HashMap<String, ValidatorConfiguration>(3);
+
+                    String gateinConfDir = System.getProperty("gatein.conf.dir");
+                    File conf = new File(gateinConfDir, "configuration.properties");
+                    Properties properties = null;
+                    if (conf.exists()) {
+                        try {
+                            properties = new Properties();
+                            properties.load(new FileInputStream(conf));
+                        } catch (IOException e) {
+                            log.info(e.getLocalizedMessage());
+                            log.debug(e);
+                        }
+                    } else {
+                        properties = PrivilegedSystemHelper.getProperties();
+                    }
+
+                    if (properties != null) {
+                        int length = KEY_PREFIX.length();
+                        for (Object objectKey : properties.keySet()) {
+                            String key = (String) objectKey;
+                            if (key.startsWith(KEY_PREFIX)) {
+                                // extract property key
+                                String propertyKey = key.substring(length, key.indexOf('.', length));
+                                if (!configurations.containsKey(propertyKey)) {
+                                    configurations.put(propertyKey, new ValidatorConfiguration(propertyKey, properties));
+                                }
+                            }
                         }
                     }
                 }
-            } catch (IOException e) {
-                log.info(e.getLocalizedMessage());
-                log.debug(e);
             }
         }
+        return configurations;
     }
 
     private final String validatorName;
@@ -151,7 +168,7 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
 
     @Override
     protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
-        ValidatorConfiguration configuration = configurations.get(validatorName);
+        ValidatorConfiguration configuration = getConfigurations().get(validatorName);
 
         if (value == null) {
             value = "";
@@ -199,7 +216,7 @@ public class UserConfigurableValidator extends MultipleConditionsValidator {
      * @return a set containing all known configuration key names.
      */
     public static final Set<String> getConfigurationNames() {
-        return Collections.unmodifiableSet(configurations.keySet());
+        return Collections.unmodifiableSet(getConfigurations().keySet());
     }
 
     private static class ValidatorConfiguration {
