@@ -88,6 +88,7 @@
               <property name="infinispan-cl-cache.jdbc.timestamp.column" value="timestamp" />
               <property name="infinispan-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
               <property name="infinispan-cl-cache.jdbc.connectionFactory" value="org.exoplatform.services.jcr.infinispan.ManagedConnectionFactory" />
+              <property name="infinispan-cl-cache.jdbc.dialect" value="${gatein.jcr.datasource.dialect}"/>
             </properties>
           </lock-manager>
         </workspace>
@@ -153,6 +154,7 @@
               <property name="infinispan-cl-cache.jdbc.timestamp.column" value="timestamp" />
               <property name="infinispan-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
               <property name="infinispan-cl-cache.jdbc.connectionFactory" value="org.exoplatform.services.jcr.infinispan.ManagedConnectionFactory" />
+              <property name="infinispan-cl-cache.jdbc.dialect" value="${gatein.jcr.datasource.dialect}"/>
             </properties>
           </lock-manager>
         </workspace>
@@ -217,6 +219,7 @@
               <property name="infinispan-cl-cache.jdbc.timestamp.column" value="timestamp" />
               <property name="infinispan-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
               <property name="infinispan-cl-cache.jdbc.connectionFactory" value="org.exoplatform.services.jcr.infinispan.ManagedConnectionFactory" />
+              <property name="infinispan-cl-cache.jdbc.dialect" value="${gatein.jcr.datasource.dialect}"/>
             </properties>
           </lock-manager>
         </workspace>

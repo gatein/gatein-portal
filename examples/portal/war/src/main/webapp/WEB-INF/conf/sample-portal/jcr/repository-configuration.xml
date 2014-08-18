@@ -32,7 +32,7 @@
           <container class="org.exoplatform.services.jcr.impl.storage.jdbc.optimisation.CQJDBCWorkspaceDataContainer">
             <properties>
               <property name="source-name" value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
-              <property name="dialect" value="auto"/>
+              <property name="dialect" value="${gatein.jcr.datasource.dialect}"/>
               <property name="db-structure-type" value="${gatein.jcr.db-structure-type}"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
@@ -85,6 +85,7 @@
               <property name="infinispan-cl-cache.jdbc.timestamp.column" value="timestamp" />
               <property name="infinispan-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
               <property name="infinispan-cl-cache.jdbc.connectionFactory" value="org.exoplatform.services.jcr.infinispan.ManagedConnectionFactory" />
+              <property name="infinispan-cl-cache.jdbc.dialect" value="${gatein.jcr.datasource.dialect}"/>
             </properties>
           </lock-manager>
         </workspace>
