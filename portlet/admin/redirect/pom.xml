@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.portlet</artifactId>
-    <version>3.8.6.Final</version>
+    <version>3.8.7.Final-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
 

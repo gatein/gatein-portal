@@ -31,7 +31,7 @@
 
   <groupId>org.gatein.portal</groupId>
   <artifactId>exo.portal.parent</artifactId>
-  <version>3.8.6.Final</version>
+  <version>3.8.7.Final-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>GateIn - Portal</name>
@@ -497,183 +497,183 @@
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.api</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.common</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.controller</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.security</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.security-jboss</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.oauth-common</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.oauth-common</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.oauth-web</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.server</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.api</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.web.resources</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.portal</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.portal</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.pc</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.identity</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.identity</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.resources</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.resources</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.application-registry</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.scripting</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.management</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.webui.framework</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.webui.portlet</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.webui.portal</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.webui.eXo</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.webui.core</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.webui.dashboard</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.gadgets-core</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.core</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.core</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.jcr</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.jcr</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.web</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.test.web</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>test-jar</type>
       </dependency>
       <dependency>
@@ -684,61 +684,61 @@
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.web.portal</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.gadgets-server</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.eXoGadgets</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.portlet.web</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.web.rest</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.portlet.exoadmin</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.web.eXoResources</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal.examples.skins</groupId>
         <artifactId>gatein-sample-skin</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.portlet.dashboard</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.starter.war</artifactId>
-        <version>3.8.6.Final</version>
+        <version>3.8.7.Final-SNAPSHOT</version>
         <type>war</type>
       </dependency>
 
