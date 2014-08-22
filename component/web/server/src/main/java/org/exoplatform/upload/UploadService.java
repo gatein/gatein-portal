@@ -24,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -48,6 +49,13 @@ import org.gatein.common.logging.LoggerFactory;
 public class UploadService {
     /** . */
     private static final Logger log = LoggerFactory.getLogger(UploadService.class);
+
+    /**
+     * These are list ascii-codes of special characters. We should not enable these characters in fileName.
+     * They are control codes - that can not printable (from 0 to 31) or special characters like: *, <, >, \, /, :, ?, ", etc.
+     * For mor details about ascii-code please see at: http://www.ascii-code.com/
+     */
+    private static final int[] illegalChars = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 34, 42, 47, 58, 60, 62, 63, 92, 124};
 
     private List<MimeTypeUploadPlugin> plugins;
 
@@ -130,6 +138,7 @@ public class UploadService {
         if (fileName == null)
             fileName = uploadId;
         fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
+        fileName = this.correctFileName(fileName);
         String storeLocation = uploadLocation_ + "/" + uploadId + "." + fileName;
 
         // commons-fileupload will store the temp file with name *.tmp
@@ -297,6 +306,19 @@ public class UploadService {
      */
     public Map<String, UploadLimit> getUploadLimits() {
         return uploadLimits;
+    }
+
+    public String correctFileName(String fileName) {
+        if(fileName == null || fileName.isEmpty()) return "NULL";
+
+        char[] chars = fileName.toCharArray();
+        for(int i = 0; i < chars.length; i++) {
+            if (Arrays.binarySearch(illegalChars, chars[i]) >= 0) {
+                chars[i] = '_';
+            }
+        }
+
+        return new String(chars);
     }
 
     private ServletFileUpload makeServletFileUpload(final UploadResource upResource) {
