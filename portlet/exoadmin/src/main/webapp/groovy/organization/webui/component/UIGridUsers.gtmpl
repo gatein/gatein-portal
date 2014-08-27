@@ -105,8 +105,8 @@
                     <div class="ActionContainer">
                         <%
                         String enableDisableAction = "DisableEnableUser";
-                        String enableDisableTitle = _ctx.appRes(uiParent.getName() + ".action.title." + enableDisableAction);
-                        String enableDisableActionLink = "";
+                        String enableDisableTitle;
+                        String enableDisableActionLink;
                         if (uiForm != null) {
                             enableDisableActionLink = uiForm.event(enableDisableAction, uiParent.getId(), beanId);
                         } else {
@@ -115,10 +115,10 @@
 
                         String classIcon = "";
                         if (uicomponent.getFieldValue(bean, "enabled")) {
-                            enableDisableTitle = "Enabled User";
+                            enableDisableTitle = _ctx.appRes(uiParent.getName() + ".action.title.disableUser");
                             classIcon = "Check";
                         } else {
-                            enableDisableTitle = "Disabled User";
+                            enableDisableTitle = _ctx.appRes(uiParent.getName() + ".action.title.enableUser");
                             classIcon = "CheckDisable";
                         }
                         %>
@@ -136,8 +136,8 @@
                          def classIcon = "";
                          for (action in beanActions) {
                             if (action == null) continue;
-                            String title = _ctx.appRes(uiParent.getName() + ".action.title." + action);
-                            String actionLink = "";
+                            String title;
+                            String actionLink;
                             if (uiForm != null) {
                                actionLink = uiForm.event(action, uiParent.getId(), beanId);
                             } else {
@@ -147,10 +147,10 @@
                             if (action == "DisableEnableUser") {
                                 if (bean instanceof org.exoplatform.services.organization.impl.UserImpl) {
                                     if (uicomponent.getFieldValue(bean, "enabled")) {
-                                        title = "Disabled User";
+                                        title = _ctx.appRes(uiParent.getName() + ".action.title.disableUser");
                                         classIcon = "CheckDisable";
                                     } else {
-                                        title = "Enabled User";
+                                        title = _ctx.appRes(uiParent.getName() + ".action.title.enableUser");
                                         classIcon = "Check";
                                     }
                                 }
