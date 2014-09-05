@@ -397,6 +397,20 @@
           <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
           <value>picketlink-idm/sybase-mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
         </values-param>
+        <values-param profiles="mssql">
+          <name>hibernate.mapping</name>
+          <value>picketlink-idm/mssql-mappings/HibernateRealm.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObject.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectCredential.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectType.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
+          <value>picketlink-idm/mssql-mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
+        </values-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>
