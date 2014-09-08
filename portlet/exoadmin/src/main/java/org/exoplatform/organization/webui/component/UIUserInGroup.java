@@ -114,7 +114,7 @@ public class UIUserInGroup extends UIContainer {
         if (group == null) {
             pageList = EmptySerializablePageList.get();
         } else {
-            pageList = new FindMembershipByGroupPageList(group.getId(), 5);
+            pageList = new FindMembershipByGroupPageList(group.getId(), 10);
         }
         UIGridUser uiGrid = getChild(UIGridUser.class);
 
@@ -137,7 +137,7 @@ public class UIUserInGroup extends UIContainer {
                     removeChild(UIGroupMembershipForm.class);
                 uiGrid.configure("id", USER_BEAN_FIELD, null);
             } else {
-                pageList.setPageSize(5);
+                pageList.setPageSize(10);
                 uiGrid.configure("id", USER_BEAN_FIELD, USER_ACTION);
                 if (getChild(UIGroupMembershipForm.class) == null)
                     addChild(UIGroupMembershipForm.class, null, null);

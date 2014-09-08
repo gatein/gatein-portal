@@ -65,7 +65,7 @@ public class UIListMembershipType extends UIContainer {
 
     public void loadData() {
         int currentPage = getChild(UIGrid.class).getUIPageIterator().getCurrentPage();
-        getChild(UIGrid.class).getUIPageIterator().setPageList(new FindMembershipTypesPageList(5));
+        getChild(UIGrid.class).getUIPageIterator().setPageList(new FindMembershipTypesPageList(10));
         try {
             getChild(UIGrid.class).getUIPageIterator().setCurrentPage(currentPage);
         } catch (Exception e) {

@@ -99,7 +99,7 @@ public class UICategorySelector extends UIForm {
 
         UIFormPageIterator uiIterator = uiTableInputSet.getChild(UIFormPageIterator.class);
         SerializablePageList<UIFormInputSet> pageList = new SerializablePageList<UIFormInputSet>(UIFormInputSet.class,
-                uiInputSetList, 5);
+                uiInputSetList, 10);
         uiIterator.setPageList(pageList);
     }
 
