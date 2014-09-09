@@ -394,7 +394,8 @@
             <field name="name"><string>MOPSessionManager</string></field>
             <field name="strategy"><string>LIRS</string></field>
             <field name="maxEntries"><int>${gatein.cache.mop.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.mop.expiration:600000}</long></field>
+            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
+            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
             <field name="replicated"><boolean>true</boolean></field>
           </object>
         </object-param>
@@ -416,7 +417,8 @@
             <field name="name"><string>NavigationService</string></field>
             <field name="strategy"><string>LIRS</string></field>
             <field name="maxEntries"><int>${gatein.cache.navigation.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.navigation.expiration:600000}</long></field>
+            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
+            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
             <field name="replicated"><boolean>true</boolean></field>
           </object>
         </object-param>
@@ -438,7 +440,8 @@
             <field name="name"><string>DescriptionService</string></field>
             <field name="strategy"><string>LIRS</string></field>
             <field name="maxEntries"><int>${gatein.cache.description.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.description.expiration:600000}</long></field>
+            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
+            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
             <field name="replicated"><boolean>true</boolean></field>
           </object>
         </object-param>
@@ -460,7 +463,8 @@
             <field name="name"><string>PageService</string></field>
             <field name="strategy"><string>LIRS</string></field>
             <field name="maxEntries"><int>${gatein.cache.page.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.page.expiration:600000}</long></field>
+            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
+            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
             <field name="replicated"><boolean>true</boolean></field>
           </object>
         </object-param>
@@ -482,7 +486,8 @@
             <field name="name"><string>TemplateService</string></field>
             <field name="strategy"><string>LIRS</string></field>
             <field name="maxEntries"><int>${gatein.cache.template.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.template.expiration:600000}</long></field>
+            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
+            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
             <field name="replicated"><boolean>true</boolean></field>
           </object>
         </object-param>

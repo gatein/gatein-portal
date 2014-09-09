@@ -32,7 +32,10 @@
         </evictionScheduledExecutor>
 
         <globalJmxStatistics jmxDomain="platform.insp.cache.portal-system" enabled="true" allowDuplicateDomains="true"/>
-        <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport" clusterName="${gatein.infinispan.cluster.name}" distributedSyncTimeout="20000">
+        <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
+                   clusterName="${gatein.infinispan.cluster.name}-portal-system"
+                   distributedSyncTimeout="20000"
+                   nodeName="${jboss.node.name:gtn}">
             <properties>
                 <property name="configurationFile" value="${gatein.jcr.jgroups.config}"/>
             </properties>
@@ -42,7 +45,7 @@
     <default>
         <clustering mode="replication">
             <stateTransfer timeout="20000" fetchInMemoryState="false" />
-            <sync replTimeout="20000"/>
+            <sync replTimeout="60000"/>
         </clustering>
         <locking isolationLevel="READ_COMMITTED" lockAcquisitionTimeout="20000" writeSkewCheck="false" concurrencyLevel="500" useLockStriping="false"/>
         <transaction transactionManagerLookupClass="org.exoplatform.services.transaction.infinispan.JBossStandaloneJTAManagerLookup" syncRollbackPhase="true" syncCommitPhase="true" transactionMode="TRANSACTIONAL"/>
