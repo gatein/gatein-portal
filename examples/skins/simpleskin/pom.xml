@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.gatein.portal.examples.skins</groupId>
     <artifactId>parent</artifactId>
-    <version>3.8.7.Final</version>
+    <version>3.8.8.Final-SNAPSHOT</version>
   </parent>
 
   <artifactId>gatein-sample-skin</artifactId>
