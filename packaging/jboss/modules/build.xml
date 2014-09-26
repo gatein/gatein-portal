@@ -357,12 +357,6 @@
       <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-spi"/>
     </module-def>
 
-    <!-- We need to override old version on AS 7.1.1 with newer version. TODO: remove once support for AS 7.1.1 will be dropped -->
-    <module-def name="org.picketlink" slot="gatein">
-      <maven-resource group="org.picketlink" artifact="picketlink-core" />
-      <maven-resource group="org.picketlink.distribution" artifact="picketlink-jbas7" />
-    </module-def>
-
     <module-def name="org.picocontainer">
       <maven-resource group="picocontainer" artifact="picocontainer"/>
     </module-def>

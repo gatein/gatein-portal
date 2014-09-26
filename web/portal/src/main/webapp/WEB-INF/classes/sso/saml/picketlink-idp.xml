@@ -1,6 +1,6 @@
 <PicketLink xmlns="urn:picketlink:identity-federation:config:2.1">
   <PicketLinkIDP xmlns="urn:picketlink:identity-federation:config:1.0"
-                 ServerEnvironment="tomcat" BindingType="POST" SupportsSignatures="true">
+                 ServerEnvironment="tomcat" BindingType="POST" SupportsSignatures="true" RoleGenerator="org.picketlink.identity.federation.core.impl.EmptyRoleGenerator">
     <IdentityURL>${gatein.sso.idp.url}</IdentityURL>
     <Trust>
       <Domains>${gatein.sso.sp.domains}</Domains>
