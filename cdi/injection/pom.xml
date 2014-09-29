@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.gatein.cdi</groupId>
     <artifactId>gatein-cdi-parent</artifactId>
-    <version>3.8.8.Final-SNAPSHOT</version>
+    <version>3.8.8.Final</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
