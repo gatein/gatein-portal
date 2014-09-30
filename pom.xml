@@ -68,6 +68,8 @@
 
     <!-- BZ1138166 CVE-2014-3574 CVE-2014-3529 apache-poi: various flaws -->
     <version.org.apache.poi>3.10.1</version.org.apache.poi>
+    <!-- GTNPORTAL-3547 -->
+    <version.org.jasig.cas.client>3.3.3</version.org.jasig.cas.client>
 
     <!-- to move to gatein-dep -->
     <version.scribe>1.3.5</version.scribe>
@@ -1126,6 +1128,11 @@
         <groupId>org.apache.poi</groupId>
         <artifactId>poi-scratchpad</artifactId>
         <version>${version.org.apache.poi}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jasig.cas.client</groupId>
+        <artifactId>cas-client-core</artifactId>
+        <version>${version.org.jasig.cas.client}</version>
       </dependency>
 
       <dependency>
