@@ -145,6 +145,9 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
 
         try {
             foundUser = getIdentitySession().getPersistenceManager().findUser(userName);
+        } catch (IllegalArgumentException e) {
+            // Don't rethrow the exception to be compatible with other Org Service implementations
+            log.debug("Can NOT find any user with username is NULL");
         } catch (Exception e) {
             // TODO:
             handleException("Identity operation error: ", e);
@@ -225,6 +228,9 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
 
         try {
             u = getIdentitySession().getPersistenceManager().findUser(userName);
+        } catch (IllegalArgumentException e) {
+            // Don't rethrow the exception to be compatible with other Org Service implementations
+            log.debug("Can NOT find any user with username is NULL");
         } catch (Exception e) {
             // TODO:
             handleException("Identity operation error: ", e);

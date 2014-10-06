@@ -235,8 +235,10 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         try {
             orgService.flush();
-
             foundUser = session.getPersistenceManager().findUser(userName);
+        } catch (IllegalArgumentException e) {
+            // Don't rethrow the exception to be compatible with other Org Service implementations
+            log.debug("Can NOT find any user with username is NULL");
         } catch (Exception e) {
             handleException("Cannot obtain user: " + userName + "; ", e);
 
@@ -725,9 +727,11 @@ public class UserDAOImpl extends AbstractDAOImpl implements UserHandler {
 
         try {
             u = session.getPersistenceManager().findUser(userName);
+        } catch (IllegalArgumentException e) {
+            // Don't rethrow the exception to be compatible with other Org Service implementations
+            log.debug("Can NOT find any user with username is NULL");
         } catch (Exception e) {
             handleException("Cannot obtain user: " + userName + "; ", e);
-
         }
 
         if (u == null) {

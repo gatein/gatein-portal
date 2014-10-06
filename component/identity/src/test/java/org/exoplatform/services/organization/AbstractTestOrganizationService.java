@@ -206,6 +206,21 @@ public class AbstractTestOrganizationService {
     }
 
     @Test
+    public void testFindUserWithIllegalArgument() throws Exception {
+      String USER = "test";
+       createUser(USER);
+       User user = userHandler_.findUserByName(null);
+       assertTrue(user == null);
+       user = userHandler_.findUserByName("sdg*Ssd\"sd'sd%");
+       assertTrue(user == null);
+       user = userHandler_.removeUser(null, true);
+       assertTrue(user == null);
+       user = userHandler_.findUserByName(USER);
+       assertTrue("NOT found user instance ", user != null);
+       userHandler_.removeUser(USER, true);
+    }
+
+    @Test
     public void testUniqueAttribute() throws Exception {
         if (userHandler_ instanceof UserDAOImpl) {
             UserDAOImpl ud = (UserDAOImpl) userHandler_;
