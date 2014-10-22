@@ -103,14 +103,13 @@ public class UIGadgetInfo extends UIContainer {
             UIGadgetManagement uiManagement = uiInfo.getParent();
             Gadget gadget = uiInfo.getGadget();
             GadgetRegistryService service = uiInfo.getApplicationComponent(GadgetRegistryService.class);
-            if (service.getGadget(gadget.getName()) == null) {
+            if (gadget == null || service.getGadget(gadget.getName()) == null) {
                 UIApplication uiApp = ctx.getUIApplication();
                 uiApp.addMessage(new ApplicationMessage("UIGadgetInfo.msg.gadgetNotExist", null));
                 uiManagement.reload();
                 return;
             }
             service.saveGadget(GadgetUtil.toGadget(gadget.getName(), gadget.getUrl(), gadget.isLocal()));
-            uiManagement.initData();
             uiManagement.setSelectedGadget(gadget.getName());
             ctx.addUIComponentToUpdateByAjax(uiManagement);
         }
@@ -125,7 +124,7 @@ public class UIGadgetInfo extends UIContainer {
 
             UIGadgetManagement uiManagement = uiInfo.getParent();
             GadgetRegistryService service = uiInfo.getApplicationComponent(GadgetRegistryService.class);
-            if (service.getGadget(gadget.getName()) == null) {
+            if (gadget == null || service.getGadget(gadget.getName()) == null) {
                 UIApplication uiApp = event.getRequestContext().getUIApplication();
                 uiApp.addMessage(new ApplicationMessage("UIGadgetInfo.msg.gadgetNotExist", null));
                 uiManagement.reload();
@@ -165,6 +164,14 @@ public class UIGadgetInfo extends UIContainer {
             }
 
             Gadget gadget = gadgetInfo.getGadget();
+            GadgetRegistryService service = gadgetInfo.getApplicationComponent(GadgetRegistryService.class);
+            if (gadget == null || service.getGadget(gadget.getName()) == null) {
+                UIApplication uiApp = event.getRequestContext().getUIApplication();
+                uiApp.addMessage(new ApplicationMessage("UIGadgetInfo.msg.gadgetNotExist", null));
+                UIGadgetManagement uiManagement = gadgetInfo.getParent();
+                uiManagement.reload();
+                return;
+            }
             gadgetInfo.removeChild(UICategorySelector.class);
             UICategorySelector selector = gadgetInfo.addChild(UICategorySelector.class, null, CATEGORY_ID);
             Application app = new Application();

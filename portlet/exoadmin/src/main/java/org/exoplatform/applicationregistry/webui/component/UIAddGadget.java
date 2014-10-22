@@ -81,7 +81,6 @@ public class UIAddGadget extends UIForm {
                 return;
             }
             service.saveGadget(gadget);
-            uiManagement.initData();
             uiManagement.setSelectedGadget(name);
             context.addUIComponentToUpdateByAjax(uiManagement);
         }

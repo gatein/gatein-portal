@@ -1,5 +1,6 @@
 <%	
 	def selectedGadget = uicomponent.getSelectedGadget();
+   def selectedName = selectedGadget == null ? "" : selectedGadget.getName(); 
 	boolean isSelected = false;
 	String cssItem;
 %>
@@ -17,7 +18,7 @@
 		 			<% 
 		 			for(gadget in uicomponent.getGadgets()) {
 		 				String gadgetType = (gadget.isLocal() ? "LocalGadget" : "RemoteGadget");
-		 				if(!isSelected && gadget.getName().equals(selectedGadget.getName())) {
+		 				if(!isSelected && gadget.getName().equals(selectedName)) {
 		 					cssItem = "SelectedItem";
 		 					isSelected = true;
 		 				} else cssItem = "Item";

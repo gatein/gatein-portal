@@ -190,7 +190,6 @@ public class UIGadgetEditor extends UIForm {
                 // This will update the source and also update the gadget related
                 // cached meta data
                 // from the source
-                uiManagement.initData();
                 uiManagement.setSelectedGadget(gadget.getName());
                 event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
 

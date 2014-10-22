@@ -6,6 +6,8 @@
 
 	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 	def gadget = uicomponent.getGadget();
+	if (gadget != null) {
+	    	
 	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
 	String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 	String idSrcBG = WebuiRequestContext.generateUUID("srcBG");
@@ -93,3 +95,4 @@
 		} %>
 	</div>
 </div>
+<%} %>

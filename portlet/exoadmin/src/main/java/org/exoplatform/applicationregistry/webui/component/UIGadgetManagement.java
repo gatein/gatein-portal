@@ -54,8 +54,6 @@ public class UIGadgetManagement extends UIContainer {
 
     public static final String EXO_GADGET_GROUP = "eXoGadgets";
 
-    private List<Gadget> gadgets_;
-
     private Gadget selectedGadget_;
 
     public UIGadgetManagement() throws Exception {
@@ -63,28 +61,26 @@ public class UIGadgetManagement extends UIContainer {
     }
 
     public void reload() throws Exception {
-        initData();
-        if (gadgets_ == null || gadgets_.isEmpty()) {
+        List<Gadget> gadgets = getGadgets();
+
+        if (gadgets == null || gadgets.isEmpty()) {
             selectedGadget_ = null;
             getChildren().clear();
             UIMessageBoard uiMessageBoard = addChild(UIMessageBoard.class, null, null);
             uiMessageBoard.setMessage(new ApplicationMessage("UIGadgetManagement.msg.noGadget", null));
         } else {
-            setSelectedGadget(gadgets_.get(0));
+            setSelectedGadget(getGadgets().get(0));
         }
     }
 
-    public void initData() throws Exception {
-        GadgetRegistryService service = getApplicationComponent(GadgetRegistryService.class);
-        gadgets_ = service.getAllGadgets(new Util.GadgetComparator());
-    }
-
     public List<Gadget> getGadgets() {
-        return gadgets_;
+        GadgetRegistryService service = getApplicationComponent(GadgetRegistryService.class);
+        List<Gadget> gadgets = service.getAllGadgets(new Util.GadgetComparator());
+        return gadgets;
     }
 
     public Gadget getGadget(String name) {
-        for (Gadget ele : gadgets_) {
+        for (Gadget ele : getGadgets()) {
             if (ele.getName().equals(name))
                 return ele;
         }
@@ -96,12 +92,7 @@ public class UIGadgetManagement extends UIContainer {
     }
 
     public void setSelectedGadget(String name) throws Exception {
-        for (Gadget ele : gadgets_) {
-            if (ele.getName().equals(name)) {
-                setSelectedGadget(ele);
-                return;
-            }
-        }
+        setSelectedGadget(getGadget(name));
     }
 
     public void setSelectedGadget(Gadget gadget) throws Exception {
@@ -110,10 +101,6 @@ public class UIGadgetManagement extends UIContainer {
         UIGadgetInfo uiGadgetInfo = addChild(UIGadgetInfo.class, null, null);
         uiGadgetInfo.setGadget(selectedGadget_);
         uiGadgetInfo.getChild(UICategorySelector.class).setRendered(false);
-    }
-
-    public void processRender(WebuiRequestContext context) throws Exception {
-        super.processRender(context);
     }
 
     public static class AddRemoteGadgetActionListener extends EventListener<UIGadgetManagement> {
@@ -148,10 +135,10 @@ public class UIGadgetManagement extends UIContainer {
                     return;
                 }
             }
+            Gadget gadget = uiManagement.getGadget(name);
             service.removeGadget(name);
             WebAppController webController = uiManagement.getApplicationComponent(WebAppController.class);
             webController.removeApplication(EXO_GADGET_GROUP + "/" + name);
-            Gadget gadget = uiManagement.getGadget(name);
             if (gadget.isLocal()) {
                 // get dir path of gadget
                 String gadgetUrl = gadget.getUrl();
@@ -201,7 +188,13 @@ public class UIGadgetManagement extends UIContainer {
         public void execute(Event<UIGadgetManagement> event) throws Exception {
             UIGadgetManagement uiManagement = event.getSource();
             String name = event.getRequestContext().getRequestParameter(OBJECTID);
-            uiManagement.setSelectedGadget(name);
+            Gadget gadget = uiManagement.getGadget(name);
+            if (gadget == null) {
+                UIApplication uiApp = event.getRequestContext().getUIApplication();
+                uiApp.addMessage(new ApplicationMessage("UIGadgetManagement.msg.gadgetNotExist", null, ApplicationMessage.WARNING));
+                return;
+            }
+            uiManagement.setSelectedGadget(gadget);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
         }
 
