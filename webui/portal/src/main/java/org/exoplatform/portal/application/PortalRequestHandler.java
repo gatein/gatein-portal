@@ -248,7 +248,11 @@ public class PortalRequestHandler extends WebRequestHandler {
                 lifecycle.onFailRequest(app, context, RequestFailure.CONCURRENCY_FAILURE);
             }
         } catch (Exception NonStaleModelEx) {
-            log.error("Error while handling request", NonStaleModelEx);
+            // We want to ignore the ClientAbortException since this is caused by the users
+            // browser closing the connection and is not something we should be logging.
+            if(!NonStaleModelEx.getClass().toString().contains("ClientAbortException")) {
+                log.error("Error while handling request", NonStaleModelEx);
+            }
         } finally {
 
             // We close the writer here once and for all
