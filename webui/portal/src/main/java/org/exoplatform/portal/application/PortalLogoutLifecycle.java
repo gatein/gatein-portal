@@ -74,9 +74,12 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
     private void logout(User user, WebuiRequestContext context) throws Exception {
         LogoutControl.wantLogout();
 
-        LoginError error = new LoginError(LoginError.DISABLED_USER_ERROR, user.getUserName());
-        Map<String, String> param = new HashMap<String, String>();
-        param.put(LoginError.ERROR_PARAM, error.toString());
+        Map<String, String> param = null;
+        if(user != null) {
+            LoginError error = new LoginError(LoginError.DISABLED_USER_ERROR, user.getUserName());
+            param = new HashMap<String, String>();
+            param.put(LoginError.ERROR_PARAM, error.toString());
+        }
 
         PortalRequestContext prContext = (PortalRequestContext)context;
         prContext.requestAuthenticationLogin(param);

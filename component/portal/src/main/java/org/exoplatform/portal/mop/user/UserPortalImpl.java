@@ -40,6 +40,8 @@ import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -68,6 +70,8 @@ public class UserPortalImpl implements UserPortal {
             }
         }
     };
+
+    private final Logger log = LoggerFactory.getLogger(UserPortalImpl.class);
 
     /** . */
     final UserPortalConfigService service;
@@ -144,23 +148,28 @@ public class UserPortalImpl implements UserPortal {
                         }
                     }
                 } else {
-                    Collection<?> groups;
+                    Collection<?> groups = null;
                     try {
                         groups = service.getOrganizationService().getGroupHandler().findGroupsOfUser(userName);
                     } catch (Exception e) {
-                        throw new UserPortalException("Could not retrieve groups", e);
+                        if(log.isDebugEnabled()) {
+                            log.debug("Could not retrieve groups", e);
+                        }
+                        //throw new UserPortalException("Could not retrieve groups", e);
                     }
 
                     //
-                    for (Object group : groups) {
-                        Group m = (Group) group;
-                        String groupId = m.getId().trim();
-                        if (!groupId.equals(service.getUserACL().getGuestsGroup())) {
-                            NavigationContext groupNavigation = service.getNavigationService().loadNavigation(
-                                    SiteKey.group(groupId));
-                            if (groupNavigation != null && groupNavigation.getState() != null) {
-                                navigations.add(new UserNavigation(this, groupNavigation, service.getUserACL()
-                                        .hasEditPermissionOnNavigation(groupNavigation.getKey())));
+                    if(groups != null) {
+                        for (Object group : groups) {
+                            Group m = (Group) group;
+                            String groupId = m.getId().trim();
+                            if (!groupId.equals(service.getUserACL().getGuestsGroup())) {
+                                NavigationContext groupNavigation = service.getNavigationService().loadNavigation(
+                                        SiteKey.group(groupId));
+                                if (groupNavigation != null && groupNavigation.getState() != null) {
+                                    navigations.add(new UserNavigation(this, groupNavigation, service.getUserACL()
+                                            .hasEditPermissionOnNavigation(groupNavigation.getKey())));
+                                }
                             }
                         }
                     }
