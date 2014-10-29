@@ -25,6 +25,8 @@ package org.gatein.security.oauth.data;
 
 import java.lang.reflect.Method;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
@@ -49,7 +51,7 @@ import org.gatein.security.oauth.spi.SocialNetworkService;
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCodec {
+public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCodec, ComponentRequestLifecycle {
 
     private static Logger log = LoggerFactory.getLogger(SocialNetworkServiceImpl.class);
 
@@ -172,6 +174,20 @@ public class SocialNetworkServiceImpl implements SocialNetworkService, OAuthCode
         } else {
             return codec.decode(input);
         }
+    }
+
+    @Override
+    public void endRequest(ExoContainer container) {
+      if (orgService instanceof ComponentRequestLifecycle) {
+        ((ComponentRequestLifecycle)orgService).endRequest(container);
+      }
+    }
+
+    @Override
+    public void startRequest(ExoContainer container) {
+      if (orgService instanceof ComponentRequestLifecycle) {
+        ((ComponentRequestLifecycle)orgService).startRequest(container);
+      }
     }
 
 }

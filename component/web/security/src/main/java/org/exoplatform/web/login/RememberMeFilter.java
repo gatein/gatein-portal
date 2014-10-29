@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
@@ -97,6 +99,7 @@ public class RememberMeFilter extends AbstractFilter {
                     try {
                         String username = credentials.getUsername();
 
+                        begin(orgService);
                         User portalUser = orgService.getUserHandler().findUserByName(username, UserStatus.ENABLED);
                         if(portalUser != null) {
                             authRegistry.setAttributeOfClient(req, ATTRIBUTE_AUTHENTICATED_PORTAL_USER_FOR_JAAS, portalUser);
@@ -105,6 +108,8 @@ public class RememberMeFilter extends AbstractFilter {
                         }
                     } catch (Exception e) {
                         // Could not authenticate
+                    } finally {
+                      end(orgService);
                     }
                 }
 
@@ -132,4 +137,16 @@ public class RememberMeFilter extends AbstractFilter {
 
     public void destroy() {
     }
+
+    public void begin(OrganizationService orgService) {
+      if (orgService instanceof ComponentRequestLifecycle) {
+          RequestLifeCycle.begin((ComponentRequestLifecycle) orgService);
+      }
+  }
+
+  public void end(OrganizationService orgService) {
+      if (orgService instanceof ComponentRequestLifecycle) {
+          RequestLifeCycle.end();
+      }
+  }
 }

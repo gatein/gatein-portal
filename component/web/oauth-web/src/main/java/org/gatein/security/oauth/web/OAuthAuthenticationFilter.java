@@ -32,6 +32,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.gatein.common.logging.Logger;
@@ -108,12 +109,16 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
         OAuthPrincipal principal = (OAuthPrincipal)authenticationRegistry.getAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL);
 
         if (principal != null) {
-            processPrincipal(httpRequest, httpResponse, principal);
+            try {
+                begin();
+                processPrincipal(httpRequest, httpResponse, principal);
+            } finally {
+                end();
+            }
         }  else {
             chain.doFilter(request, response);
         }
     }
-
 
     protected void processPrincipal(HttpServletRequest httpRequest, HttpServletResponse httpResponse, OAuthPrincipal principal) throws IOException {
         User portalUser = socialNetworkService.findUserByOAuthProviderUsername(principal.getOauthProviderType(), principal.getUserName());
@@ -198,4 +203,15 @@ public class OAuthAuthenticationFilter extends AbstractSSOInterceptor {
         authenticationRegistry.removeAttributeOfClient(httpRequest, OAuthConstants.ATTRIBUTE_AUTHENTICATED_PORTAL_USER);
     }
 
+    private void begin() {
+        if (socialNetworkService instanceof ComponentRequestLifecycle) {
+            ((ComponentRequestLifecycle)socialNetworkService).startRequest(getExoContainer());
+        }
+    }
+
+    private void end() {
+        if (socialNetworkService instanceof ComponentRequestLifecycle) {
+            ((ComponentRequestLifecycle)socialNetworkService).endRequest(getExoContainer());
+        }
+    }
 }
