@@ -1,7 +1,6 @@
 package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.services.organization.Query;
-import org.exoplatform.services.organization.UserStatus;
 import org.gatein.common.NotYetImplemented;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -118,8 +117,8 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
      * @param query
      * @param list
      */
-    void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list, UserStatus userStatus) {
-        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, userStatus));
+    void putGtnUserLazyPageList(String ns, Query query, IDMUserListAccess list) {
+        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
 
         Node ioNode = addNode(nodeFqn);
 
@@ -127,7 +126,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
             ioNode.put(NODE_OBJECT_KEY, list);
 
             if (log.isTraceEnabled()) {
-                log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query, userStatus) + ";namespace=" + ns);
+                log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query) + ";namespace=" + ns);
             }
         }
     }
@@ -139,9 +138,9 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
      * @param query
      * @return LazyPageList
      */
-    IDMUserListAccess getGtnUserLazyPageList(String ns, Query query, UserStatus userStatus) {
+    IDMUserListAccess getGtnUserLazyPageList(String ns, Query query) {
 
-        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query, userStatus));
+        Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
 
         Node node = getNode(nodeFqn);
 
@@ -149,7 +148,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
             IDMUserListAccess list = (IDMUserListAccess) node.get(NODE_OBJECT_KEY);
 
             if (log.isTraceEnabled() && list != null) {
-                log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query, userStatus)
+                log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query)
                         + ";namespace=" + ns);
             }
 
@@ -206,13 +205,13 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider {
 
     }
 
-    String getQueryKey(Query query, UserStatus userStatus) {
+    String getQueryKey(Query query) {
         StringBuilder sb = new StringBuilder();
         String SEP = ":::";
 
         sb.append(query.getEmail()).append(SEP).append(query.getFirstName()).append(SEP).append(query.getLastName())
                 .append(SEP).append(query.getUserName()).append(SEP).append(query.getFromLoginDate()).append(SEP)
-                .append(query.getToLoginDate()).append(SEP).append(userStatus.name()).append(SEP);
+                .append(query.getToLoginDate()).append(SEP);
 
         return sb.toString();
     }

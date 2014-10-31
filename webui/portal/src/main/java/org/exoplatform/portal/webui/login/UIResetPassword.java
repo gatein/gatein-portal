@@ -23,7 +23,6 @@ import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.security.RemindPasswordTokenService;
@@ -118,12 +117,9 @@ public class UIResetPassword extends UIForm {
             }
 
             if (setPassword) {
-                User user = orgService.getUserHandler().findUserByName(uiForm.getUserName(), UserStatus.ANY);
+                User user = orgService.getUserHandler().findUserByName(uiForm.getUserName());
                 if (user == null) {
                     uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
-                    return;
-                } else if (!user.isEnabled()) {
-                    uiApp.addMessage(new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
                     return;
                 } else {
                     try {

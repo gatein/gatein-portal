@@ -38,7 +38,6 @@ import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -105,8 +104,6 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
     private String selectedUsers;
 
     private boolean multi = true;
-
-    private UserStatus statusFilter = UserStatus.ENABLED;
 
     public UIUserSelector() throws Exception {
         addUIFormInput(new UIFormStringInput(FIELD_KEYWORD, FIELD_KEYWORD, null));
@@ -254,7 +251,7 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
             }
         }
         List results = new CopyOnWriteArrayList();
-        ListAccess<User> listUsers = service.getUserHandler().findUsersByQuery(q, statusFilter);
+        ListAccess<User> listUsers = service.getUserHandler().findUsersByQuery(q);
         for (User user : listUsers.load(0, listUsers.getSize())) {
             results.add(user);
         }
@@ -274,14 +271,6 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
 
     public boolean isShowSearchUser() {
         return isShowSearchUser;
-    }
-
-    public UserStatus getStatusFilter() {
-        return statusFilter;
-    }
-
-    public void setStatusFilter(UserStatus statusFilter) {
-        this.statusFilter = statusFilter;
     }
 
     public String getSelectedGroup() {

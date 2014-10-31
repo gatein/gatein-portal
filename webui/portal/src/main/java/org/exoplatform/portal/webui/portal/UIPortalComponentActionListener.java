@@ -49,7 +49,6 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequireJS;
 import org.exoplatform.web.security.GateInToken;
@@ -407,12 +406,9 @@ public class UIPortalComponentActionListener {
 
             OrganizationService orgSrc = uiPortal.getApplicationComponent(OrganizationService.class);
             // get user
-            User user = orgSrc.getUserHandler().findUserByName(token.getPayload().getUsername(), UserStatus.ANY);
+            User user = orgSrc.getUserHandler().findUserByName(token.getPayload().getUsername());
             if (user == null) {
                 requestContext.getUIApplication().addMessage(new ApplicationMessage("UIForgetPassword.msg.user-delete", null));
-                return;
-            } else if (!user.isEnabled()) {
-                requestContext.getUIApplication().addMessage(new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
                 return;
             }
 

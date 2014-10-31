@@ -35,7 +35,7 @@ public class WSRPContainerLifecyclePlugin extends BaseContainerLifecyclePlugin {
 
     @Override
     public void stopContainer(ExoContainer container) {
-        WSRPServiceIntegration service = container.getComponentInstanceOfType(WSRPServiceIntegration.class);
+        WSRPServiceIntegration service = (WSRPServiceIntegration) container.getComponentInstanceOfType(WSRPServiceIntegration.class);
         service.stopContainer();
     }
 

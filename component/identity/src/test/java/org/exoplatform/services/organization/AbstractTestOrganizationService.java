@@ -336,14 +336,11 @@ public class AbstractTestOrganizationService {
         } catch (Exception e) {}
         assertNotNull("Expect ParentGroup is not removed:", groupHandler_.findGroupById(groupParent.getId()));
         assertEquals("Expect all child group is not removed: ", 1, groupHandler_.findGroups(groupParent).size());
-        
+
         Collection<Group> groups = groupHandler_.findGroupByMembership("demo", "member");
         assertNotNull(groups);
         assertEquals(1, groups.size());
-        
-        groups = groupHandler_.resolveGroupByMembership("demo", "member");
-        assertNotNull(groups);
-        assertEquals(2, groups.size());
+
     }
 
     @Test
@@ -374,7 +371,6 @@ public class AbstractTestOrganizationService {
          * membership type, it is created at startup time)
          */
         assertEquals("Expect 4 membership in collection: ", 4, mtHandler_.findMembershipTypes().size());
-        assertEquals("The * should be the first one in collection: ", MembershipTypeHandler.ANY_MEMBERSHIP_TYPE, mtHandler_.findMembershipTypes().iterator().next().getName());
 
         /* remove "testmembership" */
         mtHandler_.removeMembershipType(testType, true);

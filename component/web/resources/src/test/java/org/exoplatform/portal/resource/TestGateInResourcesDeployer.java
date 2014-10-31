@@ -70,8 +70,8 @@ public class TestGateInResourcesDeployer extends AbstractWebResourceTest {
     @Override
     protected void setUp() throws Exception {
         final PortalContainer portalContainer = getContainer();
-        JavascriptConfigService javascriptConfigService = portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
-        SkinService skinService = portalContainer.getComponentInstanceOfType(SkinService.class);
+        JavascriptConfigService javascriptConfigService = (JavascriptConfigService) portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+        SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
         deployer = new GateInResourcesDeployer("portal", skinService, javascriptConfigService);
 
         if (mockServletContext == null) {
@@ -89,8 +89,8 @@ public class TestGateInResourcesDeployer extends AbstractWebResourceTest {
      */
     public void testAddRemoveValid() throws Exception {
         final PortalContainer portalContainer = getContainer();
-        JavascriptConfigService javascriptConfigService = portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
-        SkinService skinService = portalContainer.getComponentInstanceOfType(SkinService.class);
+        JavascriptConfigService javascriptConfigService = (JavascriptConfigService) portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+        SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
 
         /* ensure there is none of the two apps there initially */
         assertNull(getTargetPathMapping(javascriptConfigService, PREFIX_1));
@@ -168,8 +168,8 @@ public class TestGateInResourcesDeployer extends AbstractWebResourceTest {
 
     public void testAddRemoveBrokenGmdDependencies() throws Exception {
         final PortalContainer portalContainer = getContainer();
-        JavascriptConfigService javascriptConfigService = portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
-        SkinService skinService = portalContainer.getComponentInstanceOfType(SkinService.class);
+        JavascriptConfigService javascriptConfigService = (JavascriptConfigService) portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+        SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
 
         assertNull(getTargetPathMapping(javascriptConfigService, PREFIX_1));
         assertNull(javascriptConfigService.getScript(M1, null));
@@ -189,8 +189,8 @@ public class TestGateInResourcesDeployer extends AbstractWebResourceTest {
 
     public void testAddRemoveBrokenAmdPaths() throws Exception {
         final PortalContainer portalContainer = getContainer();
-        JavascriptConfigService javascriptConfigService = portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
-        SkinService skinService = portalContainer.getComponentInstanceOfType(SkinService.class);
+        JavascriptConfigService javascriptConfigService = (JavascriptConfigService) portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+        SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
 
         assertNull(getTargetPathMapping(javascriptConfigService, PREFIX_1));
         assertNull(getTargetPathMapping(javascriptConfigService, PREFIX_2));

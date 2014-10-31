@@ -53,7 +53,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest {
     @Override
     protected void setUp() throws Exception {
         final PortalContainer portalContainer = getContainer();
-        jsService = portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+        jsService = (JavascriptConfigService) portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
 
         if (mockServletContext == null) {
             Map<String, String> resources = new HashMap<String, String>(6);

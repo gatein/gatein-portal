@@ -298,61 +298,61 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
     }
 
 
-    @Override
-    public Collection<Group> resolveGroupByMembership(String userName, String membershipType) throws Exception {
-        if (log.isTraceEnabled()) {
-            Tools.logMethodIn(log, LogLevel.TRACE, "findGroupsByMembership", new Object[] { "userName", membershipType });
-        }
-
-        Collection<Role> roles = new HashSet<Role>();
-
-        try {
-            orgService.flush();
-
-            roles.addAll(getIdentitySession().getRoleManager().findRoles(userName, membershipType));
-
-            roles.addAll(getIdentitySession().getRoleManager().findRoles(userName, MembershipTypeHandler.ANY_MEMBERSHIP_TYPE));
-        } catch (Exception e) {
-            handleException("Identity operation error: ", e);
-        }
-
-        Set<Group> exoGroups = new HashSet<Group>();
-
-        MembershipDAOImpl mmm = (MembershipDAOImpl) orgService.getMembershipHandler();
-
-        for (org.picketlink.idm.api.Role role : roles) {
-            Group exoGroup = convertGroup(role.getGroup());
-            if (mmm.isCreateMembership(role.getRoleType().getName(), exoGroup.getId())) {
-                exoGroups.add(exoGroup);
-            }
-        }
-
-        if (mmm.isAssociationMapped() && mmm.getAssociationMapping().equals(membershipType)) {
-            Collection<org.picketlink.idm.api.Group> groups = new HashSet<org.picketlink.idm.api.Group>();
-
-            try {
-                orgService.flush();
-
-                groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
-            } catch (Exception e) {
-                handleException("Identity operation error: ", e);
-            }
-
-            for (org.picketlink.idm.api.Group group : groups) {
-                exoGroups.add(convertGroup(group));
-            }
-
-        }
-
-        // UI has hardcoded casts to List
-        Collection<Group> result = new LinkedList<Group>(exoGroups);
-
-        if (log.isTraceEnabled()) {
-            Tools.logMethodOut(log, LogLevel.TRACE, "findGroupByMembership", result);
-        }
-
-        return result;
-    }
+//    @Override
+//    public Collection<Group> resolveGroupByMembership(String userName, String membershipType) throws Exception {
+//        if (log.isTraceEnabled()) {
+//            Tools.logMethodIn(log, LogLevel.TRACE, "findGroupsByMembership", new Object[] { "userName", membershipType });
+//        }
+//
+//        Collection<Role> roles = new HashSet<Role>();
+//
+//        try {
+//            orgService.flush();
+//
+//            roles.addAll(getIdentitySession().getRoleManager().findRoles(userName, membershipType));
+//
+//            roles.addAll(getIdentitySession().getRoleManager().findRoles(userName, MembershipTypeHandler.ANY_MEMBERSHIP_TYPE));
+//        } catch (Exception e) {
+//            handleException("Identity operation error: ", e);
+//        }
+//
+//        Set<Group> exoGroups = new HashSet<Group>();
+//
+//        MembershipDAOImpl mmm = (MembershipDAOImpl) orgService.getMembershipHandler();
+//
+//        for (org.picketlink.idm.api.Role role : roles) {
+//            Group exoGroup = convertGroup(role.getGroup());
+//            if (mmm.isCreateMembership(role.getRoleType().getName(), exoGroup.getId())) {
+//                exoGroups.add(exoGroup);
+//            }
+//        }
+//
+//        if (mmm.isAssociationMapped() && mmm.getAssociationMapping().equals(membershipType)) {
+//            Collection<org.picketlink.idm.api.Group> groups = new HashSet<org.picketlink.idm.api.Group>();
+//
+//            try {
+//                orgService.flush();
+//
+//                groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+//            } catch (Exception e) {
+//                handleException("Identity operation error: ", e);
+//            }
+//
+//            for (org.picketlink.idm.api.Group group : groups) {
+//                exoGroups.add(convertGroup(group));
+//            }
+//
+//        }
+//
+//        // UI has hardcoded casts to List
+//        Collection<Group> result = new LinkedList<Group>(exoGroups);
+//
+//        if (log.isTraceEnabled()) {
+//            Tools.logMethodOut(log, LogLevel.TRACE, "findGroupByMembership", result);
+//        }
+//
+//        return result;
+//    }
 
     //
     public Group findGroupById(String groupId) throws Exception {

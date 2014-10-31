@@ -168,7 +168,7 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
     }
 
     PicketLinkIDMService getIDMService() {
-        return ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PicketLinkIDMService.class);
+        return (PicketLinkIDMService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PicketLinkIDMService.class);
     }
 
     PicketLinkIDMOrganizationServiceImpl getOrganizationService() {

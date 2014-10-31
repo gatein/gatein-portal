@@ -22,17 +22,17 @@
 
 package org.gatein.portal.installer;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.PBEParameterSpec;
-import javax.jcr.Session;
-
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.PBEParameterSpec;
+import javax.jcr.Session;
 
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
@@ -48,7 +48,6 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.picocontainer.Startable;
 
 /**
@@ -129,7 +128,7 @@ public class PortalSetupService implements Startable {
     }
 
     public User getRootUser() throws Exception {
-        User root = orgService.getUserHandler().findUserByName("root", UserStatus.ANY);
+        User root = orgService.getUserHandler().findUserByName("root");
         // In the case the root user is not present
         // This case can happens if organization-configuration.xml is not well configured
         if (root == null) {

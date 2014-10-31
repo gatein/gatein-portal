@@ -33,7 +33,6 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.services.security.Identity;
@@ -64,8 +63,6 @@ import org.gatein.web.security.impersonation.ImpersonationUtils;
  * Created by The eXo Platform SARL Author : chungnv nguyenchung136@yahoo.com Jun 23, 2006 10:07:15 AM
  */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class, events = {
-        @EventConfig(listeners = UIListUsers.DisableEnableUserActionListener.class),
-        @EventConfig(listeners = UIListUsers.ConfirmCloseActionListener.class),
         @EventConfig(listeners = UIListUsers.AbortCloseActionListener.class),
         @EventConfig(listeners = UIListUsers.ViewUserInfoActionListener.class),
         @EventConfig(listeners = UIListUsers.SelectUserActionListener.class),
@@ -82,8 +79,6 @@ public class UIListUsers extends UISearch {
 
     public static final String EMAIL = "email";
 
-    public static final String USER_STATUS_FILTER = "userStatusFilter";
-
     private static final String[] USER_BEAN_FIELD = { USER_NAME, LAST_NAME, FIRST_NAME, EMAIL };
 
     private static final String[] USER_ACTION = { "ViewUserInfo", "DeleteUser", "ImpersonateUser" };
@@ -92,14 +87,7 @@ public class UIListUsers extends UISearch {
             new SelectItemOption<String>(USER_NAME, USER_NAME), new SelectItemOption<String>(LAST_NAME, LAST_NAME),
             new SelectItemOption<String>(FIRST_NAME, FIRST_NAME), new SelectItemOption<String>(EMAIL, EMAIL)));
 
-    private static final List<SelectItemOption<String>> USER_STATUS_OPTIONS = Collections.unmodifiableList(Arrays.asList(
-                new SelectItemOption<String>("Enabled", UserStatus.ENABLED.name()),
-                new SelectItemOption<String>("Disabled", UserStatus.DISABLED.name()),
-                new SelectItemOption<String>("Any", UserStatus.ANY.name())
-            ));
-
     private Query lastQuery_;
-    private UserStatus statusFilter = UserStatus.ENABLED;
 
     private String userSelected_;
 
@@ -109,20 +97,6 @@ public class UIListUsers extends UISearch {
         super(OPTIONS_);
 
         UIFormInputSet inputSet = getUISearchForm().getQuickSearchInputSet();
-
-        boolean showDisableUserFilterCheckbox = true;
-        OrganizationService orgService = this.getApplicationComponent(OrganizationService.class);
-        if(orgService instanceof PicketLinkIDMOrganizationServiceImpl
-                && !((PicketLinkIDMOrganizationServiceImpl) orgService).getConfiguration().isFilterDisabledUsersInQueries()) {
-            showDisableUserFilterCheckbox = false;
-        }
-
-        if(showDisableUserFilterCheckbox) {
-            UIFormSelectBox selectBox = new UIFormSelectBox("UIListUsers-" + USER_STATUS_FILTER, null, USER_STATUS_OPTIONS);
-            selectBox.setValue(UserStatus.ENABLED.name());
-            selectBox.setId("UIListUsers-" + USER_STATUS_FILTER);
-            inputSet.addChild(selectBox);
-        }
 
         grid_ = addChild(UIGridUsers.class, null, "UIListUsersGird");
         grid_.configure(USER_NAME, USER_BEAN_FIELD, USER_ACTION);
@@ -158,7 +132,7 @@ public class UIListUsers extends UISearch {
 
     public void search(Query query) {
         lastQuery_ = query;
-        grid_.getUIPageIterator().setPageList(new FindUsersPageList(query, 10, statusFilter));
+        grid_.getUIPageIterator().setPageList(new FindUsersPageList(query, 10));
     }
 
     public void quickSearch(UIFormInputSet quickSearchInput) throws Exception {
@@ -183,16 +157,6 @@ public class UIListUsers extends UISearch {
                 query.setFirstName(name);
             if (selectBoxValue.equals(EMAIL))
                 query.setEmail(name);
-        }
-
-        //Fetch user status
-        UIFormSelectBox selectBox = getUISearchForm().getQuickSearchInputSet()
-                .getChildById("UIListUsers-" + USER_STATUS_FILTER);
-        if(selectBox != null) {
-            String status = selectBox.getValue();
-            statusFilter = UserStatus.valueOf(status);
-        } else {
-            statusFilter = UserStatus.ANY;
         }
 
         search(query);
@@ -224,40 +188,12 @@ public class UIListUsers extends UISearch {
         uiConfirmation.setActions(actionConfirms);
     }
 
-    private boolean executeDisableUser(Event<UIListUsers> event, String userName) throws Exception {
-        if(userName == null) {
-            return false;
-        }
-
-        UIListUsers uiListUser = event.getSource();
-        OrganizationService service = uiListUser.getApplicationComponent(OrganizationService.class);
-
-        User user = service.getUserHandler().findUserByName(userName, UserStatus.ANY);
-
-        if(user == null) {
-            UIApplication uiApp = event.getRequestContext().getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null, ApplicationMessage.WARNING));
-            return false;
-        }
-
-        UserACL userACL = uiListUser.getApplicationComponent(UserACL.class);
-        if (userACL.getSuperUser().equals(userName) && user.isEnabled()) {
-            UIApplication uiApp = event.getRequestContext().getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UIListUsers.msg.DisableSuperUser", new String[] { userName },
-                    ApplicationMessage.WARNING));
-            return false;
-        }
-
-        service.getUserHandler().setEnabled(userName, !user.isEnabled(), true);
-        return true;
-    }
-
     public static class ViewUserInfoActionListener extends EventListener<UIListUsers> {
         public void execute(Event<UIListUsers> event) throws Exception {
             String username = event.getRequestContext().getRequestParameter(OBJECTID);
             UIListUsers uiListUsers = event.getSource();
             OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
-            User user = service.getUserHandler().findUserByName(username, UserStatus.ANY);
+            User user = service.getUserHandler().findUserByName(username);
             if (user == null) {
                 UIApplication uiApplication = event.getRequestContext().getUIApplication();
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,
@@ -306,7 +242,7 @@ public class UIListUsers extends UISearch {
             UIApplication uiApplication = event.getRequestContext().getUIApplication();
 
             OrganizationService service = uiListUsers.getApplicationComponent(OrganizationService.class);
-            User userToImpersonate = service.getUserHandler().findUserByName(userName, UserStatus.ANY);
+            User userToImpersonate = service.getUserHandler().findUserByName(userName);
             if (userToImpersonate == null) {
                 uiApplication.addMessage(new ApplicationMessage("UIListUsers.msg.user-is-deleted", null,
                         ApplicationMessage.WARNING));
@@ -350,47 +286,6 @@ public class UIListUsers extends UISearch {
             UIGroupMembershipForm groupMembershipForm = popup.getParent();
             groupMembershipForm.setUserName(userName);
             event.getRequestContext().addUIComponentToUpdateByAjax(groupMembershipForm);
-        }
-    }
-
-    public static class DisableEnableUserActionListener extends EventListener<UIListUsers> {
-        @Override
-        public void execute(Event<UIListUsers> event) throws Exception {
-            UIListUsers uiListUser = event.getSource();
-            String userName = event.getRequestContext().getRequestParameter(OBJECTID);
-            OrganizationService service = uiListUser.getApplicationComponent(OrganizationService.class);
-
-            if(userName != null && userName.equals(event.getRequestContext().getRemoteUser())) {
-                //Need to confirm to disable current user
-                //Current user will be disable on confirmed
-                ResourceBundle resourceBundle = event.getRequestContext().getApplicationResourceBundle();
-                String disableMessage = resourceBundle.getString("UIListUsers.msg.DisableYourSelf");
-                uiListUser.showConfirmWindow(disableMessage);
-                return;
-            }
-
-            uiListUser.executeDisableUser(event, userName);
-        }
-    }
-
-    public static class ConfirmCloseActionListener extends EventListener<UIListUsers> {
-
-        @Override
-        public void execute(Event<UIListUsers> event) throws Exception {
-            UIListUsers uiListUsers = event.getSource();
-
-            UIConfirmation uiConfirmation = uiListUsers.getChild(UIConfirmation.class);
-            uiConfirmation.createEvent("Close", event.getExecutionPhase(), event.getRequestContext()).broadcast();
-
-            //Disable current user
-            String userName = event.getRequestContext().getRemoteUser();
-            if(userName != null) {
-                if(uiListUsers.executeDisableUser(event, userName)) {
-                    LogoutControl.wantLogout();
-                }
-            }
-            UIComponent uiToUpdateAjax = uiListUsers.getAncestorOfType(UIUserManagement.class);
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiToUpdateAjax);
         }
     }
 

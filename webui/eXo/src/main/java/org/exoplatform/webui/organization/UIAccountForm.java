@@ -27,7 +27,6 @@ import javax.xml.namespace.QName;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.InitParams;
@@ -130,7 +129,7 @@ public class UIAccountForm extends UIFormTabPane {
             }
 
             String userName = usernameInput.getValue();
-            if (service.getUserHandler().findUserByName(userName, UserStatus.ANY) != null) {
+            if (service.getUserHandler().findUserByName(userName) != null) {
                 uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", null, ApplicationMessage.WARNING));
                 return;
             }

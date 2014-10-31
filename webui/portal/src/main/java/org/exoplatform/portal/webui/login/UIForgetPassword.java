@@ -26,14 +26,12 @@ import java.util.ResourceBundle;
 import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.mail.MailService;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.security.security.RemindPasswordTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -89,14 +87,10 @@ public class UIForgetPassword extends UIForm {
 
             // User provided his username
             if (userName != null) {
-                user = orgSrc.getUserHandler().findUserByName(userName, UserStatus.ANY);
+                user = orgSrc.getUserHandler().findUserByName(userName);
                 if (user == null) {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.user-not-exist", null));
-                    return;
-                } else if (!user.isEnabled()) {
-                    requestContext.getUIApplication().addMessage(
-                            new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
                     return;
                 }
             }
@@ -107,18 +101,13 @@ public class UIForgetPassword extends UIForm {
                 // Querying on email won't work. PLIDM-12
                 // Note that querying on email is inefficient as it loops over all users...
                 query.setEmail(email);
-                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query, UserStatus.ANY);
+                ListAccess<User> users = orgSrc.getUserHandler().findUsersByQuery(query);
                 if (users == null || users.getSize() == 0) {
                     requestContext.getUIApplication().addMessage(
                             new ApplicationMessage("UIForgetPassword.msg.email-not-exist", null));
                     return;
                 } else if (users.getSize() == 1) {
                     user = users.load(0, 1)[0];
-                    if (!user.isEnabled()) {
-                        requestContext.getUIApplication().addMessage(
-                                new ApplicationMessage("UIForgetPassword.msg.user-is-disabled", null));
-                        return;
-                    }
                 }
             }
 

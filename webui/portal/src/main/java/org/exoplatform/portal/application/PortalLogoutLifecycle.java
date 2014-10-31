@@ -27,7 +27,6 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
@@ -58,11 +57,11 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
             if (exoContainer != null) {
                 OrganizationService organizationService = (OrganizationService) exoContainer
                         .getComponentInstanceOfType(OrganizationService.class);
-                user = organizationService.getUserHandler().findUserByName(uid, UserStatus.ANY);
+                user = organizationService.getUserHandler().findUserByName(uid);
             }
 
             // If user is not existed OR disabled
-            if (user == null || !user.isEnabled()) {
+            if (user == null) {
                 // If we are in the middle of impersonation, we won't logout
                 if (!(ConversationState.getCurrent().getIdentity() instanceof ImpersonatedIdentity)) {
                     logout(context);

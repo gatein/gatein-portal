@@ -145,10 +145,6 @@
    <xsl:template name="security-domains">
       <security-domain name="gatein-domain" cache-type="default">
          <authentication>
-           <login-module code="org.exoplatform.web.login.FilterDisabledLoginModule" flag="required">
-             <module-option name="portalContainerName" value="portal"/>
-             <module-option name="realmName" value="gatein-domain"/>
-           </login-module>
            <login-module code="org.gatein.security.oauth.jaas.OAuthLoginModule" flag="required">
              <module-option name="portalContainerName" value="portal"/>
              <module-option name="realmName" value="gatein-domain"/>

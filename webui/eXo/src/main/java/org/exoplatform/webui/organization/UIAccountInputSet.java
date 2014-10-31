@@ -23,7 +23,6 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
@@ -106,7 +105,7 @@ public class UIAccountInputSet extends UIFormInputWithActions {
             User user = service.getUserHandler().createUserInstance(username);
             invokeSetBindingField(user);
             // user.setPassword(Util.encodeMD5(pass1x)) ;
-            if (service.getUserHandler().findUserByName(user.getUserName(), UserStatus.ANY) != null) {
+            if (service.getUserHandler().findUserByName(user.getUserName()) != null) {
                 Object[] args = { user.getUserName() };
                 uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", args, ApplicationMessage.ERROR));
                 return false;
@@ -114,7 +113,7 @@ public class UIAccountInputSet extends UIFormInputWithActions {
 
             Query query = new Query();
             query.setEmail(getUIStringInput("email").getValue());
-            if (service.getUserHandler().findUsersByQuery(query, UserStatus.ANY).getSize() > 0) {
+            if (service.getUserHandler().findUsersByQuery(query).getSize() > 0) {
                 Object[] args = { user.getUserName() };
                 uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.ERROR));
                 return false;

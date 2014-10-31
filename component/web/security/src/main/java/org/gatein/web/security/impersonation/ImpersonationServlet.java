@@ -23,11 +23,23 @@
 
 package org.gatein.web.security.impersonation;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.exoplatform.container.web.AbstractHttpServlet;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationRegistry;
 import org.exoplatform.services.security.ConversationState;
@@ -40,18 +52,6 @@ import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.session.SessionTask;
 import org.gatein.wci.session.SessionTaskVisitor;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Servlet, which handles impersonation and impersonalization (de-impersonation) of users
@@ -122,7 +122,7 @@ public class ImpersonationServlet extends AbstractHttpServlet {
         OrganizationService orgService = (OrganizationService)getContainer().getComponentInstanceOfType(OrganizationService.class);
         User userToImpersonate;
         try {
-            userToImpersonate = orgService.getUserHandler().findUserByName(usernameToImpersonate, UserStatus.ANY);
+            userToImpersonate = orgService.getUserHandler().findUserByName(usernameToImpersonate);
         } catch (Exception e) {
             throw new ServletException(e);
         }

@@ -27,7 +27,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -35,16 +34,13 @@ import org.exoplatform.services.organization.UserStatus;
  */
 public class FindUsersPageList extends PageListAccess<User, Query> {
 
-    private final UserStatus status;
-
-    public FindUsersPageList(Query state, int pageSize, UserStatus status) {
+    public FindUsersPageList(Query state, int pageSize) {
         super(state, pageSize);
-        this.status = status;
     }
 
     protected ListAccess<User> create(Query state) throws Exception {
         ExoContainer container = PortalContainer.getInstance();
         OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
-        return service.getUserHandler().findUsersByQuery(state, status);
+        return service.getUserHandler().findUsersByQuery(state);
     }
 }

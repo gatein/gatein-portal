@@ -33,7 +33,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.gatein.wci.ServletContainer;
@@ -61,7 +60,7 @@ public class RememberMeFilter extends AbstractFilter {
             String token = LoginServlet.getRememberMeTokenCookie(req);
             if (token != null) {
                 ExoContainer container = getContainer();
-                CookieTokenService tokenservice = container.getComponentInstanceOfType(CookieTokenService.class);
+                CookieTokenService tokenservice = (CookieTokenService) container.getComponentInstanceOfType(CookieTokenService.class);
                 Credentials credentials = tokenservice.validateToken(token, false);
                 if (credentials != null) {
                     ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
@@ -87,17 +86,17 @@ public class RememberMeFilter extends AbstractFilter {
             String token = LoginServlet.getOauthRememberMeTokenCookie(req);
             if(token != null) {
                 ExoContainer container = getContainer();
-                CookieTokenService tokenService = container.getComponentInstanceOfType(CookieTokenService.class);
+                CookieTokenService tokenService = (CookieTokenService) container.getComponentInstanceOfType(CookieTokenService.class);
                 Credentials credentials = tokenService.validateToken(token, false);
-                AuthenticationRegistry authRegistry = container.getComponentInstanceOfType(AuthenticationRegistry.class);
-                OrganizationService orgService = container.getComponentInstanceOfType(OrganizationService.class);
+                AuthenticationRegistry authRegistry = (AuthenticationRegistry) container.getComponentInstanceOfType(AuthenticationRegistry.class);
+                OrganizationService orgService = (OrganizationService) container.getComponentInstanceOfType(OrganizationService.class);
 
                 if (credentials != null) {
                     ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
                     try {
                         String username = credentials.getUsername();
 
-                        User portalUser = orgService.getUserHandler().findUserByName(username, UserStatus.ENABLED);
+                        User portalUser = orgService.getUserHandler().findUserByName(username);
                         if(portalUser != null) {
                             authRegistry.setAttributeOfClient(req, ATTRIBUTE_AUTHENTICATED_PORTAL_USER_FOR_JAAS, portalUser);
 

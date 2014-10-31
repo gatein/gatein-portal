@@ -36,7 +36,6 @@ import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileEventListener;
 import org.exoplatform.services.organization.UserProfileHandler;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.organization.impl.UserProfileImpl;
 import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.IdentitySession;
@@ -93,7 +92,7 @@ public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHa
 
         String username = profile.getUserName();
         UserHandler userHandler = this.orgService.getUserHandler();
-        User user = userHandler.findUserByName(username, UserStatus.ANY);
+        User user = userHandler.findUserByName(username);
         if(user == null) {
             throw new InvalidNameException("User " + username + " not exists");
         }

@@ -24,7 +24,6 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.services.organization.UserStatus;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -108,7 +107,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         UIApplication uiApp = context.getUIApplication();
         String username = getUIStringInput(USERNAME).getValue();
 
-        User user = userDAO.findUserByName(username, UserStatus.ANY);
+        User user = userDAO.findUserByName(username);
         if (user == null) {
             String messageBundle = "UIAccountInputSet.msg.user-is-deleted";
             uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));
@@ -122,12 +121,6 @@ public class UIAccountEditInputSet extends UIFormInputSet {
                 context.setProcessRender(true);
             }
             return false;
-        }
-
-        //need to enable user before saving
-        boolean enable = user.isEnabled();
-        if (!enable) {
-            user = userDAO.setEnabled(username, true, false);
         }
 
         String oldEmail = user.getEmail();
@@ -147,7 +140,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         Query query = new Query();
         String email = getUIStringInput("email").getValue();
         query.setEmail(email);
-        if (service.getUserHandler().findUsersByQuery(query, UserStatus.ANY).getSize() > 0 && !oldEmail.equals(email)) {
+        if (service.getUserHandler().findUsersByQuery(query).getSize() > 0 && !oldEmail.equals(email)) {
             // Be sure it keep old value
             user.setEmail(oldEmail);
             query.setEmail(oldEmail);
@@ -161,10 +154,6 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         } catch (Exception e) {
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
             return false;
-        }
-
-        if (!enable) {
-            user = userDAO.setEnabled(username, false, false);
         }
 
         enableChangePassword(false);

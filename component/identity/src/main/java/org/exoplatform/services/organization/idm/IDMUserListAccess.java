@@ -26,7 +26,7 @@ import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserStatus;
+//import org.exoplatform.services.organization.UserStatus;
 import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -46,7 +46,7 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
 
     private final boolean countAll;
 
-    private final UserStatus userStatus;
+    //private final UserStatus userStatus;
 
     private List<org.picketlink.idm.api.User> fullResults;
 
@@ -54,11 +54,11 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
 
     private User lastExisting;
 
-    public IDMUserListAccess(UserQueryBuilder userQueryBuilder, int pageSize, boolean countAll, UserStatus userStatus) {
+    public IDMUserListAccess(UserQueryBuilder userQueryBuilder, int pageSize, boolean countAll) {
         this.userQueryBuilder = userQueryBuilder;
         this.pageSize = pageSize;
         this.countAll = countAll;
-        this.userStatus = userStatus;
+        //this.userStatus = userStatus;
     }
 
     public User[] load(int index, int length) throws Exception {
@@ -156,7 +156,7 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable {
     }
 
     PicketLinkIDMService getIDMService() {
-        return ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PicketLinkIDMService.class);
+        return (PicketLinkIDMService) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(PicketLinkIDMService.class);
     }
 
     PicketLinkIDMOrganizationServiceImpl getOrganizationService() {

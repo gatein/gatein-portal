@@ -102,7 +102,7 @@ public class UIContainerForm extends UIFormTabPane {
             uiPermissionSetting.setSelectedComponent(uiAccessPermissionSelector.getId());
 
             ExoContainer container = ExoContainerContext.getCurrentContainer();
-            UserACL acl = container.getComponentInstanceOfType(UserACL.class);
+            UserACL acl = (UserACL) container.getComponentInstanceOfType(UserACL.class);
             if(acl.isSuperUser() || acl.isUserInGroup(acl.getAdminGroups())) {
                 //Move permission
                 UIListPermissionSelector uiMoveAppsPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, "MoveAppsPermissions");

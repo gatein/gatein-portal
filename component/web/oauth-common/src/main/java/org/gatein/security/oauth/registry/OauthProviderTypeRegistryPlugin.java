@@ -65,12 +65,12 @@ public class OauthProviderTypeRegistryPlugin<T extends AccessTokenContext> exten
             ClassLoader oauth = OAuthProviderType.class.getClassLoader();
             ClassLoader delegating = new DelegatingClassLoader(tccl, oauth);
             Class<OAuthProviderProcessor<T>> processorClass = (Class<OAuthProviderProcessor<T>>)delegating.loadClass(oauthProviderProcessorClass);
-            OAuthProviderProcessor<T> oauthProviderProcessor = containerContext.getContainer().getComponentInstanceOfType(processorClass);
+            OAuthProviderProcessor<T> oauthProviderProcessor = (OAuthProviderProcessor<T>) containerContext.getContainer().getComponentInstanceOfType(processorClass);
 
             OAuthPrincipalProcessor principalProcessor = null;
             Class<OAuthPrincipalProcessor> principalProcessorClass = (Class<OAuthPrincipalProcessor>) (principalProcessorClassName != null ? delegating
                     .loadClass(principalProcessorClassName) : DefaultPrincipalProcessor.class);
-            principalProcessor = containerContext.getContainer().getComponentInstanceOfType(principalProcessorClass);
+            principalProcessor = (OAuthPrincipalProcessor) containerContext.getContainer().getComponentInstanceOfType(principalProcessorClass);
             if (principalProcessor == null) {
                 principalProcessor = principalProcessorClass.newInstance();
             }

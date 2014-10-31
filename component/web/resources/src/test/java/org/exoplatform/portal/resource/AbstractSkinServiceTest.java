@@ -74,7 +74,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest {
 
         PortalContainer portalContainer = getContainer();
 
-        skinService = portalContainer.getComponentInstanceOfType(SkinService.class);
+        skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
 
         controllerCtx = getControllerContext();
 

@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
-import org.exoplatform.container.spi.ComponentAdapter;
 import org.gatein.integration.jboss.as7.web.StartupService;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.ServiceController;
@@ -35,6 +34,7 @@ import org.jboss.msc.service.ServiceTarget;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
+import org.picocontainer.ComponentAdapter;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -52,7 +52,7 @@ public class GateInRuntimeService implements Service<GateInContext> {
     public void start(StartContext context) throws StartException {
         RootContainer root = RootContainer.getInstance();
         @SuppressWarnings("unchecked")
-        List<ComponentAdapter<PortalContainer>> adapters = root.getComponentAdaptersOfType(PortalContainer.class);
+        List<ComponentAdapter> adapters = root.getComponentAdaptersOfType(PortalContainer.class);
         for (ComponentAdapter adapter : adapters) {
             gateInContext.addPortalName((String) adapter.getComponentKey());
         }

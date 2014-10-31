@@ -49,7 +49,7 @@ public class ApplicationRegistryImpl implements ApplicationRegistry {
         As mentioned, the "reuse" argument seems the strongest right now, and we might revisit this decision in the
         future, should it present severe performance problems.
          */
-        this.applicationRegistryService = PortalContainer
+        this.applicationRegistryService = (ApplicationRegistryService) PortalContainer
                 .getInstance()
                 .getComponentInstanceOfType(ApplicationRegistryService.class);
     }

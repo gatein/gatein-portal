@@ -69,9 +69,9 @@ public abstract class OAuthProviderFilter<T extends AccessTokenContext> extends 
     protected void initImpl() {
         this.providerKey = this.getInitParameter("providerKey");
 
-        authenticationRegistry = getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
-        oAuthProviderTypeRegistry = getExoContainer().getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
-        socialNetworkService = getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
+        authenticationRegistry = (AuthenticationRegistry) getExoContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+        oAuthProviderTypeRegistry = (OAuthProviderTypeRegistry) getExoContainer().getComponentInstanceOfType(OAuthProviderTypeRegistry.class);
+        socialNetworkService = (SocialNetworkService) getExoContainer().getComponentInstanceOfType(SocialNetworkService.class);
         oauthProviderProcessor = getOAuthProvider().getOauthProviderProcessor();
     }
 
