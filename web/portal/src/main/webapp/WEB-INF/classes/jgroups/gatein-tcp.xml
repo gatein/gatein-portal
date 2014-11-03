@@ -24,74 +24,81 @@
 <config>
   <TCP
       singleton_name="gatein-tcp"
-      bind_addr="${jgroups.tcp.address:127.0.0.1}"
-      start_port="${gatein.jgroups.tcp.port:7700}"
-      tcp_nodelay="true"
+      bind_addr="${jboss.bind.address:127.0.0.1}"
+      bind_port="${gatein.jgroups.tcp.port:7700}"
       loopback="true"
-      recv_buf_size="20000000"
-      send_buf_size="640000"
-      discard_incompatible_packets="true"
+      port_range="30"
+      recv_buf_size="20m"
+      send_buf_size="640k"
       max_bundle_size="64000"
       max_bundle_timeout="30"
-      use_incoming_packet_handler="true"
-      enable_bundling="false"
-      use_send_queues="false"
-      sock_conn_timeout="300"
-      skip_suspected_members="true"
-      timer.num_threads="12"
-      enable_diagnostics="${jboss.jgroups.enable_diagnostics:false}"
-      diagnostics_addr="${jboss.jgroups.diagnostics_addr:224.0.75.75}"
-      diagnostics_port="${jboss.jgroups.diagnostics_port:7500}"
+      enable_bundling="true"
+      use_send_queues="true"
+      enable_diagnostics="false"
+      bundler_type="old"
+
+      thread_naming_pattern="pl"
 
       thread_pool.enabled="true"
-      thread_pool.min_threads="20"
-      thread_pool.max_threads="200"
+      thread_pool.min_threads="500"
+      thread_pool.max_threads="500"
       thread_pool.keep_alive_time="5000"
       thread_pool.queue_enabled="true"
-      thread_pool.queue_max_size="1000"
-      thread_pool.rejection_policy="discard"
+      thread_pool.queue_max_size="100"
+      thread_pool.rejection_policy="Discard"
 
       oob_thread_pool.enabled="true"
-      oob_thread_pool.min_threads="20"
-      oob_thread_pool.max_threads="200"
+      oob_thread_pool.min_threads="800"
+      oob_thread_pool.max_threads="800"
       oob_thread_pool.keep_alive_time="1000"
       oob_thread_pool.queue_enabled="false"
-      oob_thread_pool.rejection_policy="discard"/>
-  <!-- Alternative 1: multicast-based automatic discovery. -->
+      oob_thread_pool.rejection_policy="Discard"/>
+
+  <!-- Alternative 1: multicast-based automatic discovery.
   <MPING
       bind_addr="${jgroups.bind_addr:127.0.0.1}" break_on_coord_rsp="true"
       num_initial_members="3"
       mcast_addr="${gatein.mping.mcast_addr:235.15.15.15}"
       mcast_port="${gatein.tcp.mping_mcast_port:46700}"
       ip_ttl="${jgroups.udp.ip_ttl:2}"/>
+  -->
   <!-- Alternative 2: non multicast-based replacement for MPING. Requires a static configuration
       of *all* possible cluster members.
- <TCPPING timeout="3000"
-          initial_hosts="${gatein.jgroups.tcp.tcpping.initial_hosts:localhost[7700],localhost[7701]}"
-          port_range="1"
-          num_initial_members="3"/>
   -->
-  <MERGE2 max_interval="100000" min_interval="20000"/>
-  <FD_SOCK start_port="${gatein.jgroups.tcp.fd_sock_port:58600}"/>
-  <FD timeout="6000" max_tries="5"/>
+  <TCPPING timeout="3000"
+           initial_hosts="${gatein.jgroups.tcp.tcpping.initial_hosts:localhost[7700],localhost[7701]}"
+           port_range="1"
+           num_initial_members="3"/>
+  <MERGE2 max_interval="30000" min_interval="10000"/>
+  <FD_SOCK/>
+  <FD timeout="3000" max_tries="3"/>
   <VERIFY_SUSPECT timeout="1500"/>
-  <BARRIER/>
-  <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
-                 retransmit_timeout="300,600,1200,2400,4800"
-                 discard_delivered_msgs="true"/>
-  <UNICAST timeout="300,600,1200,2400,3600"/>
-  <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
-                 max_bytes="400000"/>
-  <VIEW_SYNC avg_send_interval="10000"/>
-  <pbcast.GMS print_local_addr="true" join_timeout="3000"
-              view_bundling="true"
-              view_ack_collection_timeout="5000"
-              resume_task_timeout="7500"/>
-  <FC max_credits="2000000" min_threshold="0.10"
-      ignore_synchronous_response="true"/>
+  <pbcast.NAKACK2 use_mcast_xmit="false"
+                  xmit_interval="1000"
+                  xmit_table_num_rows="100"
+                  xmit_table_msgs_per_row="10000"
+                  xmit_table_max_compaction_time="10000"
+                  max_msg_batch_size="100"/>
+  <UNICAST2 stable_interval="5000"
+            xmit_interval="500"
+            max_bytes="1m"
+            xmit_table_num_rows="20"
+            xmit_table_msgs_per_row="10000"
+            xmit_table_max_compaction_time="10000"
+            max_msg_batch_size="100"
+            conn_expiry_timeout="0"/>
+  <pbcast.STABLE stability_delay="500"
+                 desired_avg_gossip="5000"
+                 max_bytes="1m"/>
+  <pbcast.GMS print_local_addr="false"
+              join_timeout="3000"
+              view_bundling="true"/>
+  <UFC max_credits="200k"
+       min_threshold="0.20"/>
+  <MFC max_credits="200k"
+       min_threshold="0.20"/>
   <FRAG2 frag_size="60000"/>
-  <!-- pbcast.STREAMING_STATE_TRANSFER/ -->
-  <pbcast.STATE_TRANSFER/>
-  <pbcast.FLUSH timeout="0" start_flush_timeout="10000"/>
+  <RSVP timeout="60000"
+        resend_interval="500"
+        ack_on_delivery="false" />
 </config>
-

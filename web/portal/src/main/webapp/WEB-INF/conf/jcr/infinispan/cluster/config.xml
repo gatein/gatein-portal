@@ -21,38 +21,39 @@
 -->
 
 <infinispan
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="urn:infinispan:config:5.2 http://www.infinispan.org/schemas/infinispan-config-5.2.xsd"
-      xmlns="urn:infinispan:config:5.2">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:infinispan:config:5.2 http://www.infinispan.org/schemas/infinispan-config-5.2.xsd"
+    xmlns="urn:infinispan:config:5.2">
 
-   <global>
-      <evictionScheduledExecutor factory="org.infinispan.executors.DefaultScheduledExecutorFactory">
-         <properties>
-            <property name="threadNamePrefix" value="EvictionThread"/>
-         </properties>
-      </evictionScheduledExecutor>
+  <global>
+    <evictionScheduledExecutor factory="org.infinispan.executors.DefaultScheduledExecutorFactory">
+      <properties>
+        <property name="threadNamePrefix" value="EvictionThread"/>
+      </properties>
+    </evictionScheduledExecutor>
 
-      <globalJmxStatistics jmxDomain="platform.insp.cache.jcr" enabled="true" allowDuplicateDomains="true"/>
+    <globalJmxStatistics jmxDomain="platform.insp.cache.jcr" enabled="true" allowDuplicateDomains="true"/>
 
-      <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
-                 clusterName="${gatein.infinispan.cluster.name}" distributedSyncTimeout="20000"
-                 nodeName="${jboss.node.name:gtn}">
-         <properties>
-            <property name="configurationFile" value="${gatein.jcr.jgroups.config}"/>
-         </properties>
-      </transport>
-   </global>
+    <transport transportClass="org.infinispan.remoting.transport.jgroups.JGroupsTransport"
+               clusterName="${gatein.infinispan.cluster.name}-jcr"
+               distributedSyncTimeout="20000"
+               nodeName="${jboss.node.name:gtn}">
+      <properties>
+        <property name="configurationFile" value="${gatein.jcr.jgroups.config}"/>
+      </properties>
+    </transport>
+  </global>
 
-   <default>
-      <clustering mode="replication">
-         <stateTransfer timeout="20000" fetchInMemoryState="false" />
-         <sync replTimeout="20000"/>
-      </clustering>
+  <default>
+    <clustering mode="replication">
+      <stateTransfer timeout="20000" fetchInMemoryState="false" />
+      <sync replTimeout="60000"/>
+    </clustering>
 
-      <locking isolationLevel="READ_COMMITTED" lockAcquisitionTimeout="20000" writeSkewCheck="false" concurrencyLevel="500" useLockStriping="false"/>
-      <transaction transactionManagerLookupClass="org.exoplatform.services.transaction.infinispan.JBossStandaloneJTAManagerLookup" syncRollbackPhase="true" syncCommitPhase="true" transactionMode="TRANSACTIONAL"/>
-      <jmxStatistics enabled="true"/>
-      <eviction strategy="LIRS" threadPolicy="DEFAULT" maxEntries="1000000"/>
-      <expiration wakeUpInterval="5000"/>
-   </default>
+    <locking isolationLevel="READ_COMMITTED" lockAcquisitionTimeout="20000" writeSkewCheck="false" concurrencyLevel="500" useLockStriping="false"/>
+    <transaction transactionManagerLookupClass="org.exoplatform.services.transaction.infinispan.JBossStandaloneJTAManagerLookup" syncRollbackPhase="true" syncCommitPhase="true" transactionMode="TRANSACTIONAL"/>
+    <jmxStatistics enabled="true"/>
+    <eviction strategy="LIRS" threadPolicy="DEFAULT" maxEntries="1000000"/>
+    <expiration wakeUpInterval="5000"/>
+  </default>
 </infinispan>
