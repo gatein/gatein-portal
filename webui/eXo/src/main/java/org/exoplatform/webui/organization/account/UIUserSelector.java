@@ -255,21 +255,20 @@ public class UIUserSelector extends UIForm implements UIPopupComponent {
         }
         List results = new CopyOnWriteArrayList();
         ListAccess<User> listUsers = service.getUserHandler().findUsersByQuery(q, statusFilter);
-        for (User user : listUsers.load(0, listUsers.getSize())) {
-            results.add(user);
-        }
-        // remove if user doesn't exist in selected group
-        MembershipHandler memberShipHandler = service.getMembershipHandler();
 
         if (groupId != null && (groupId = groupId.trim()).length() != 0) {
-            for (Object user : results) {
-                if (memberShipHandler.findMembershipsByUserAndGroup(((User) user).getUserName(), groupId).size() == 0) {
-                    results.remove(user);
+            MembershipHandler memberShipHandler = service.getMembershipHandler();
+            for (User user : listUsers.load(0, listUsers.getSize())) {
+                if (memberShipHandler.findMembershipsByUserAndGroup(((User) user).getUserName(), groupId).size() > 0) {
+                    results.add(user);
                 }
             }
+
+            PageList objPageList = new SerializablePageList(new ListAccessImpl(User.class, results), 10);
+            uiIterator_.setPageList(objPageList);
+        } else {
+            uiIterator_.setPageList(new SerializablePageList(listUsers, 10));
         }
-        PageList objPageList = new SerializablePageList(new ListAccessImpl(User.class, results), 10);
-        uiIterator_.setPageList(objPageList);
     }
 
     public boolean isShowSearchUser() {
