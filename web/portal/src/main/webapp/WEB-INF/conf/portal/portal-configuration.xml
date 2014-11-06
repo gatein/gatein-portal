@@ -381,84 +381,194 @@
           <name>cache.config.MOPSessionManager</name>
           <description>The JBoss Cache configuration for the MOP session Manager</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
-            <field name="name"><string>MOPSessionManager</string></field>
-            <field name="maxSize"><int>${gatein.cache.mop.maxsize:5000}</int></field>
-            <field name="liveTime"><long>${gatein.cache.mop.livetime:600}</long></field>
-            <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
+            <field name="name">
+              <string>MOPSessionManager</string>
+            </field>
+            <field name="maxSize">
+              <int>${gatein.cache.mop.maxsize:5000}</int>
+            </field>
+            <field name="liveTime">
+              <long>${gatein.cache.mop.livetime:600}</long>
+            </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+            </field>
           </object>
         </object-param>
-        <object-param profiles="cluster">
+      </init-params>
+    </component-plugin>
+    <component-plugin profiles="cluster">
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
+        <object-param>
           <name>cache.config.MOPSessionManager</name>
           <description>The JBoss Cache configuration for the MOP session Manager</description>
-          <object type="org.exoplatform.services.cache.impl.infinispan.generic.GenericExoCacheConfig">
-            <field name="name"><string>MOPSessionManager</string></field>
-            <field name="strategy"><string>LIRS</string></field>
-            <field name="maxEntries"><int>${gatein.cache.mop.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
-            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
-            <field name="replicated"><boolean>true</boolean></field>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
+            <field name="name">
+              <string>MOPSessionManager</string>
+            </field>
+            <field name="expirationTimeout">
+              <long>${gatein.cache.mop.expiration:600000}</long>
+            </field>
+            <field name="maxNodes">
+              <int>${gatein.cache.mop.maxnodes:5000}</int>
+            </field>
+            <field name="distributed">
+              <boolean>true</boolean>
+            </field>
           </object>
         </object-param>
-        <!-- NavigationService configuration -->
+      </init-params>
+    </component-plugin>
+
+    <!-- NavigationService configuration -->
+    <component-plugin>
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
         <object-param>
           <name>cache.config.NavigationService</name>
           <description>The JBoss Cache configuration for the navigation service</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
-            <field name="name"><string>NavigationService</string></field>
-            <field name="maxSize"><int>${gatein.cache.navigation.maxsize:5000}</int></field>
-            <field name="liveTime"><long>${gatein.cache.navigation.livetime:600}</long></field>
-            <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
+            <field name="name">
+              <string>NavigationService</string>
+            </field>
+            <field name="maxSize">
+              <int>${gatein.cache.navigation.maxsize:5000}</int>
+            </field>
+            <field name="liveTime">
+              <long>${gatein.cache.navigation.livetime:600}</long>
+            </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+            </field>
           </object>
         </object-param>
-        <object-param profiles="cluster">
+      </init-params>
+    </component-plugin>
+    <component-plugin profiles="cluster">
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
+        <object-param>
           <name>cache.config.NavigationService</name>
           <description>The JBoss Cache configuration for the navigation service</description>
-          <object type="org.exoplatform.services.cache.impl.infinispan.generic.GenericExoCacheConfig">
-            <field name="name"><string>NavigationService</string></field>
-            <field name="strategy"><string>LIRS</string></field>
-            <field name="maxEntries"><int>${gatein.cache.navigation.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
-            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
-            <field name="replicated"><boolean>true</boolean></field>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
+            <field name="name">
+              <string>NavigationService</string>
+            </field>
+            <field name="expirationTimeout">
+              <long>${gatein.cache.navigation.expiration:600000}</long>
+            </field>
+            <field name="maxNodes">
+              <int>${gatein.cache.navigation.maxnodes:5000}</int>
+            </field>
+            <field name="distributed">
+              <boolean>true</boolean>
+            </field>
           </object>
         </object-param>
-        <!-- DescriptionService configuration -->
+      </init-params>
+    </component-plugin>
+
+    <!-- DescriptionService configuration -->
+    <component-plugin>
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
         <object-param>
           <name>cache.config.DescriptionService</name>
           <description>The JBoss Cache configuration for the description service</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
-            <field name="name"><string>DescriptionService</string></field>
-            <field name="maxSize"><int>${gatein.cache.description.maxsize:5000}</int></field>
-            <field name="liveTime"><long>${gatein.cache.description.livetime:600}</long></field>
-            <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
+            <field name="name">
+              <string>DescriptionService</string>
+            </field>
+            <field name="maxSize">
+              <int>${gatein.cache.description.maxsize:5000}</int>
+            </field>
+            <field name="liveTime">
+              <long>${gatein.cache.description.livetime:600}</long>
+            </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+            </field>
           </object>
         </object-param>
-        <object-param profiles="cluster">
+      </init-params>
+    </component-plugin>
+    <component-plugin profiles="cluster">
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
+        <object-param>
           <name>cache.config.DescriptionService</name>
           <description>The JBoss Cache configuration for the description service</description>
-          <object type="org.exoplatform.services.cache.impl.infinispan.generic.GenericExoCacheConfig">
-            <field name="name"><string>DescriptionService</string></field>
-            <field name="strategy"><string>LIRS</string></field>
-            <field name="maxEntries"><int>${gatein.cache.description.maxnodes:5000}</int></field>
-            <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
-            <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
-            <field name="replicated"><boolean>true</boolean></field>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
+            <field name="name">
+              <string>DescriptionService</string>
+            </field>
+            <field name="expirationTimeout">
+              <long>${gatein.cache.description.expiration:600000}</long>
+            </field>
+            <field name="maxNodes">
+              <int>${gatein.cache.description.maxnodes:5000}</int>
+            </field>
+            <field name="distributed">
+              <boolean>true</boolean>
+            </field>
           </object>
         </object-param>
-        <!-- PageService configuration -->
+      </init-params>
+    </component-plugin>
+
+    <!-- PageService configuration -->
+    <component-plugin>
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
         <object-param>
           <name>cache.config.PageService</name>
           <description>The JBoss Cache configuration for the page service</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
-            <field name="name"><string>PageService</string></field>
-            <field name="maxSize"><int>${gatein.cache.page.maxsize:5000}</int></field>
-            <field name="liveTime"><long>${gatein.cache.page.livetime:600}</long></field>
-            <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
+            <field name="name">
+              <string>PageService</string>
+            </field>
+            <field name="maxSize">
+              <int>${gatein.cache.page.maxsize:5000}</int>
+            </field>
+            <field name="liveTime">
+              <long>${gatein.cache.page.livetime:600}</long>
+            </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+            </field>
           </object>
         </object-param>
-        <object-param profiles="cluster">
+      </init-params>
+    </component-plugin>
+    <component-plugin profiles="cluster">
+      <name>addExoCacheConfig</name>
+      <set-method>addExoCacheConfig</set-method>
+      <type>org.exoplatform.services.cache.ExoCacheConfigPlugin</type>
+      <description>add Exo Cache Config</description>
+      <init-params>
+        <object-param>
           <name>cache.config.PageService</name>
           <description>The JBoss Cache configuration for the page service</description>
+<<<<<<< HEAD
           <object type="org.exoplatform.services.cache.impl.infinispan.generic.GenericExoCacheConfig">
             <field name="name"><string>PageService</string></field>
             <field name="strategy"><string>LIRS</string></field>
@@ -489,6 +599,21 @@
             <field name="lifespan"><long>${gatein.cache.mop.expiration:-1}</long></field>
             <field name="maxIdle"><long>${gatein.cache.mop.maxidle:600000}</long></field>
             <field name="replicated"><boolean>true</boolean></field>
+=======
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
+            <field name="name">
+              <string>PageService</string>
+            </field>
+            <field name="expirationTimeout">
+              <long>${gatein.cache.page.expiration:600000}</long>
+            </field>
+            <field name="maxNodes">
+              <int>${gatein.cache.page.maxnodes:5000}</int>
+            </field>
+            <field name="distributed">
+              <boolean>true</boolean>
+            </field>
+>>>>>>> parent of 722675f... GTNPORTAL-3390 : Migration to JCR 1.16.0-Alpha4
           </object>
         </object-param>
       </init-params>
@@ -517,7 +642,7 @@
       <set-method>addListener</set-method>
       <type>org.exoplatform.portal.pom.config.cache.LayoutUpdateListener</type>
     </component-plugin>
-    
+
     <component-plugin>
       <name>org.exoplatform.portal.mop.navigation.navigation_created</name>
       <set-method>addListener</set-method>

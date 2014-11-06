@@ -26,13 +26,13 @@
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.infinispan.transaction.lookup.TransactionManagerLookup</key>
-    <type>org.exoplatform.services.transaction.infinispan.JBossStandaloneJTAManagerLookup</type>
+    <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
+    <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
   </component>
 
   <component>
     <key>org.exoplatform.services.transaction.TransactionService</key>
-    <type>org.exoplatform.services.transaction.infinispan.JBossTransactionsService</type>
+    <type>org.exoplatform.services.transaction.jbosscache.JBossTransactionsService</type>
     <init-params>
       <value-param>
         <name>timeout</name>
@@ -140,15 +140,15 @@
 
   <component>
     <key>org.exoplatform.services.cache.ExoCacheFactory</key>
-    <type>org.exoplatform.services.cache.impl.infinispan.ExoCacheFactoryImpl</type>
+    <type>org.exoplatform.services.cache.impl.jboss.ExoCacheFactoryImpl</type>
     <init-params>
       <value-param>
         <name>cache.config.template</name>
-        <value>war:/conf/infinispan/local/config.xml</value>
+        <value>war:/conf/jbosscache/local/config.xml</value>
       </value-param>
       <value-param profiles="cluster">
         <name>cache.config.template</name>
-        <value>war:/conf/infinispan/cluster/config.xml</value>
+        <value>war:/conf/jbosscache/cluster/config.xml</value>
       </value-param>
     </init-params>
   </component>
@@ -203,35 +203,20 @@
     <component-plugin>
       <name>addCreator</name>
       <set-method>addCreator</set-method>
-      <type>org.exoplatform.services.cache.impl.infinispan.ExoCacheCreatorPlugin</type>
+      <type>org.exoplatform.services.cache.impl.jboss.ExoCacheCreatorPlugin</type>
       <description>add Exo Cache Creator</description>
       <init-params>
         <object-param>
-          <name>Generic-insp-cacheCreator</name>
-          <description>The generic cache creator</description>
-            <object type="org.exoplatform.services.cache.impl.infinispan.generic.GenericExoCacheCreator">
-              <field name="implementations">
-                <collection type="java.util.HashSet">
-                  <value>
-                    <string>NONE</string>
-                  </value>
-                  <value>
-                    <string>LRU</string>
-                  </value>
-                  <value>
-                    <string>UNORDERED</string>
-                  </value>
-                  <value>
-                    <string>LIRS</string>
-                  </value>
-                </collection>
-              </field>
-              <field name="defaultStrategy"><string>LIRS</string></field>
-              <field name="defaultMaxIdle"><long>-1</long></field>
-              <field name="defaultWakeUpInterval"><long>5000</long></field>
-            </object>
-          </object-param>
-       </init-params>
+          <name>LRU</name>
+          <description>The LRU cache creator</description>
+          <object type="org.exoplatform.services.cache.impl.jboss.lru.LRUExoCacheCreator"></object>
+        </object-param>
+        <object-param>
+          <name>EA</name>
+          <description>The EA cache creator</description>
+          <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheCreator"></object>
+        </object-param>
+      </init-params>
     </component-plugin>
   </external-component-plugins>
 

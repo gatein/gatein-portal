@@ -24,7 +24,6 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.gatein.common.NotYetImplemented;
 import org.gatein.wci.WebApp;
@@ -76,11 +75,14 @@ public class WebAppImpl implements WebApp {
     }
 
     @Override
+<<<<<<< HEAD
     public HttpSession getHttpSession(String sessId) {
         throw new NotYetImplemented();
     }
 
     @Override
+=======
+>>>>>>> parent of 722675f... GTNPORTAL-3390 : Migration to JCR 1.16.0-Alpha4
     public void fireRequestDestroyed(ServletRequest servletRequest) {
         //Do Nothing
     }

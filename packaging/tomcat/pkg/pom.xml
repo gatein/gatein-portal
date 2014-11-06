@@ -88,6 +88,10 @@
       <artifactId>jboss-logging</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jboss.cache</groupId>
+      <artifactId>jbosscache-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jboss.jbossts</groupId>
       <artifactId>jbossjts</artifactId>
     </dependency>
@@ -127,7 +131,7 @@
     </dependency>
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.component.ext.cache.impl.infinispan.v5</artifactId>
+      <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
     </dependency>
     <dependency>
       <groupId>org.exoplatform.core</groupId>
@@ -642,10 +646,6 @@
       <artifactId>google-api-services-oauth2</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.antlr</groupId>
-      <artifactId>antlr</artifactId>
-    </dependency>
-    <dependency>
       <groupId>antlr</groupId>
       <artifactId>antlr</artifactId>
     </dependency>
@@ -711,19 +711,11 @@
     </dependency>
     <dependency>
       <groupId>org.htmlparser</groupId>
-      <artifactId>htmllexer</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.htmlparser</groupId>
       <artifactId>htmlparser</artifactId>
     </dependency>
     <dependency>
       <groupId>org.infinispan</groupId>
       <artifactId>infinispan-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.infinispan</groupId>
-      <artifactId>infinispan-cachestore-jdbc</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.marshalling</groupId>
@@ -856,7 +848,7 @@
       <artifactId>xmlbeans</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ogce</groupId>
+      <groupId>xpp3</groupId>
       <artifactId>xpp3</artifactId>
     </dependency>
     <dependency>

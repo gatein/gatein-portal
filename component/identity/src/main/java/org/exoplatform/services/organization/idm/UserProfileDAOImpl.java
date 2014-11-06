@@ -30,6 +30,7 @@ import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
+import org.apache.poi.hslf.model.Placeholder;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;

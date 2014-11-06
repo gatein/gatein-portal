@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller;
 
+import org.jboss.util.NullArgumentException;
+
 /**
  * <p>
  * A qualified name that is a qualifier and a name. It can be seen as a simplified version of an XML QName that retains only the
@@ -40,7 +42,7 @@ public class QualifiedName implements Comparable<QualifiedName> {
      *
      * @param qname the qname to parse
      * @return the corresponding qualified name
-     * @throws java.lang.NullPointerException if the qname argument is null
+     * @throws NullArgumentException if the qname argument is null
      * @throws IllegalArgumentException if the qname argument contains more than one colon character
      */
     public static QualifiedName parse(String qname) throws IllegalArgumentException {

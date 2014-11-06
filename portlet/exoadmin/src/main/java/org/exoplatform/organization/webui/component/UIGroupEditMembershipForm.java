@@ -98,8 +98,8 @@ public class UIGroupEditMembershipForm extends UIForm {
             }
             String userName = formMembership.getUserName();
             Group group = service.getGroupHandler().findGroupById(uiForm.groupId);
-            User user = service.getUserHandler().findUserByName(userName);
-            if(user == null) {
+            User user = service.getUserHandler().findUserByName(userName, false);
+            if(user == null || !user.isEnabled()) {
                 String messageBundle = (user == null ? "UIAccountInputSet.msg.user-is-deleted" : "UIAccountInputSet.msg.user-is-disabled");
                 uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));
                 return;

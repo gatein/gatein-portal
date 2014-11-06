@@ -96,6 +96,10 @@
       <artifactId>jboss-logging</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.jboss.cache</groupId>
+      <artifactId>jbosscache-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jboss.jbossts</groupId>
       <artifactId>jbossjts</artifactId>
     </dependency>
@@ -660,10 +664,6 @@
     <dependency>
       <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.htmlparser</groupId>
-      <artifactId>htmllexer</artifactId>
     </dependency>
     <dependency>
       <groupId>org.htmlparser</groupId>
