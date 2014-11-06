@@ -89,8 +89,8 @@
     <module name="org.gatein.wsrp.integration"/>
     <module name="org.hibernate"/>
     <module name="org.htmlparser"/>
-    <module name="org.infinispan" export="true"/>
-    <module name="org.infinispan.cachestore.jdbc"/>
+    <module name="org.infinispan" slot="gatein" export="true"/>
+    <module name="org.infinispan.cachestore.jdbc" slot="gatein"/>
     <module name="org.jibx"/>
     <module name="org.jboss.as.web"/>
     <module name="org.jboss.common-core"/>
