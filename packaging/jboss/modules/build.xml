@@ -198,6 +198,7 @@
     </module-def>
 
     <module-def name="org.htmlparser">
+      <maven-resource group="org.htmlparser" artifact="htmllexer"/>
       <maven-resource group="org.htmlparser" artifact="htmlparser"/>
     </module-def>
 

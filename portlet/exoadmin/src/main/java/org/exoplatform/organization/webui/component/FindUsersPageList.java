@@ -22,7 +22,6 @@ package org.exoplatform.organization.webui.component;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.commons.utils.PageListAccess;
-import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
@@ -35,16 +34,13 @@ import org.exoplatform.services.organization.User;
  */
 public class FindUsersPageList extends PageListAccess<User, Query> {
 
-    boolean enabledOnly = false;
-
-    public FindUsersPageList(Query state, int pageSize, boolean enabledOnly) {
+    public FindUsersPageList(Query state, int pageSize) {
         super(state, pageSize);
-        this.enabledOnly = enabledOnly;
     }
 
     protected ListAccess<User> create(Query state) throws Exception {
         ExoContainer container = PortalContainer.getInstance();
         OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
-        return service.getUserHandler().findUsersByQuery(state, enabledOnly);
+        return service.getUserHandler().findUsersByQuery(state);
     }
 }

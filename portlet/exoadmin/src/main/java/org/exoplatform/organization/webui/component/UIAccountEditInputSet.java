@@ -23,6 +23,7 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -33,7 +34,7 @@ import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
+import org.exoplatform.webui.form.validator.PasswordPolicyValidator;
 import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
@@ -75,12 +76,12 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         uiCheckbox.setOnChange("ToggleChangePassword", "UIUserInfo");
         addUIFormInput(uiCheckbox);
         UIFormInputBase<String> uiInput = new UIFormStringInput(PASSWORD1X, null, null)
-                .setType(UIFormStringInput.PASSWORD_TYPE).addValidator(PasswordStringLengthValidator.class, 6, 30)
+                .setType(UIFormStringInput.PASSWORD_TYPE).addValidator(PasswordPolicyValidator.class)
                 .addValidator(MandatoryValidator.class);
         uiInput.setRendered(false);
         addUIFormInput(uiInput);
         uiInput = new UIFormStringInput(PASSWORD2X, null, null).setType(UIFormStringInput.PASSWORD_TYPE)
-                .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30);
+                .addValidator(MandatoryValidator.class).addValidator(PasswordPolicyValidator.class);
         uiInput.setRendered(false);
         addUIFormInput(uiInput);
     }
@@ -101,12 +102,14 @@ public class UIAccountEditInputSet extends UIFormInputSet {
     }
 
     public boolean save(OrganizationService service) throws Exception {
+        UserHandler userDAO = service.getUserHandler();
         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
         UIApplication uiApp = context.getUIApplication();
         String username = getUIStringInput(USERNAME).getValue();
-        User user = service.getUserHandler().findUserByName(username, false);
-        if (user == null || !user.isEnabled()) {
-            String messageBundle = (user == null ? "UIAccountInputSet.msg.user-is-deleted" : "UIAccountInputSet.msg.user-is-disabled");
+
+        User user = userDAO.findUserByName(username);
+        if (user == null) {
+            String messageBundle = "UIAccountInputSet.msg.user-is-deleted";
             uiApp.addMessage(new ApplicationMessage(messageBundle, null, ApplicationMessage.WARNING));
             UIUserInfo userInfo = getParent();
             if (userInfo != null) {
@@ -119,6 +122,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
             }
             return false;
         }
+
         String oldEmail = user.getEmail();
         invokeSetBindingField(user);
         if (isChangePassword()) {
@@ -136,7 +140,7 @@ public class UIAccountEditInputSet extends UIFormInputSet {
         Query query = new Query();
         String email = getUIStringInput("email").getValue();
         query.setEmail(email);
-        if (service.getUserHandler().findUsersByQuery(query, false).getSize() > 0 && !oldEmail.equals(email)) {
+        if (service.getUserHandler().findUsersByQuery(query).getSize() > 0 && !oldEmail.equals(email)) {
             // Be sure it keep old value
             user.setEmail(oldEmail);
             query.setEmail(oldEmail);
@@ -144,9 +148,15 @@ public class UIAccountEditInputSet extends UIFormInputSet {
             uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.email-exist", args, ApplicationMessage.WARNING));
             return false;
         }
-        service.getUserHandler().saveUser(user, true);
-        enableChangePassword(false);
 
+        try {
+            service.getUserHandler().saveUser(user, true);
+        } catch (Exception e) {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.fail.update.user", null, ApplicationMessage.ERROR));
+            return false;
+        }
+
+        enableChangePassword(false);
         ConversationState state = ConversationState.getCurrent();
         if (username.equals(((User) state.getAttribute(CacheUserProfileFilter.USER_PROFILE)).getUserName())) {
             state.setAttribute(CacheUserProfileFilter.USER_PROFILE, user);

@@ -77,7 +77,7 @@ public class UIUserInfo extends UIFormTabPane {
     public void setUser(String userName) throws Exception {
         username_ = userName;
         OrganizationService service = getApplicationComponent(OrganizationService.class);
-        User user = service.getUserHandler().findUserByName(userName, false);
+        User user = service.getUserHandler().findUserByName(userName);
 
         getChild(UIAccountEditInputSet.class).setValue(user);
         getChild(UIUserProfileInputSet.class).setUserProfile(userName);
