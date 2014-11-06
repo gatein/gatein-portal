@@ -64,34 +64,46 @@
                         value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
             </properties>
           </initializer>
-          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.infinispan.ISPNCacheWorkspaceStorageCache">
+          <cache enabled="true"
+                 class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="infinispan-configuration" value="${gatein.jcr.cache.config}" />
-             </properties>
+              <property name="jbosscache-configuration" value="${gatein.jcr.cache.config}"/>
+              <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
+            </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
             <properties>
               <property name="index-dir"
                         value="${gatein.jcr.index.data.dir}/wsrp-system${container.name.suffix}"/>
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}"/>
-              <property name="infinispan-configuration" value="${gatein.jcr.index.cache.config}"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}"/>
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
-              <property name="infinispan-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
               <property name="max-volatile-time" value="60"/>
             </properties>
           </query-handler>
-          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.infinispan.ISPNCacheableLockManagerImpl">
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
             <properties>
-              <property name="time-out" value="15m" />
-              <property name="infinispan-configuration" value="${gatein.jcr.lock.cache.config}" />
-              <property name="infinispan-cl-cache.jdbc.table.name" value="lk" />
-              <property name="infinispan-cl-cache.jdbc.table.create" value="true" />
-              <property name="infinispan-cl-cache.jdbc.table.drop" value="false" />
-              <property name="infinispan-cl-cache.jdbc.id.column" value="id" />
-              <property name="infinispan-cl-cache.jdbc.data.column" value="data" />
-              <property name="infinispan-cl-cache.jdbc.timestamp.column" value="timestamp" />
-              <property name="infinispan-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
-              <property name="infinispan-cl-cache.jdbc.connectionFactory" value="org.exoplatform.services.jcr.infinispan.ManagedConnectionFactory" />
+              <property name="time-out" value="15m"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}"/>
+              <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrlock${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock"/>
+              <property name="jbosscache-cl-cache.jdbc.table.create" value="true"/>
+              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false"/>
+              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk"/>
+              <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn"/>
+              <property name="jbosscache-cl-cache.jdbc.node.column" value="node"/>
+              <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent"/>
+              <property name="jbosscache-cl-cache.jdbc.datasource"
+                        value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
             </properties>
           </lock-manager>
         </workspace>
@@ -129,34 +141,45 @@
                         value="*:/platform/administrators read;*:/platform/administrators add_node;*:/platform/administrators set_property;*:/platform/administrators remove"/>
             </properties>
           </initializer>
-          <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.infinispan.ISPNCacheWorkspaceStorageCache">
+          <cache enabled="true"
+                 class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="infinispan-configuration" value="${gatein.jcr.cache.config}" />
+              <property name="jbosscache-configuration" value="${gatein.jcr.cache.config}"/>
+              <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
             <properties>
-              <property name="index-dir"
-                              value="${gatein.jcr.index.data.dir}/pc-system${container.name.suffix}"/>
+              <property name="index-dir" value="${gatein.jcr.index.data.dir}/pc-system${container.name.suffix}"/>
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}"/>
-              <property name="infinispan-configuration" value="${gatein.jcr.index.cache.config}"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}"/>
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
-              <property name="infinispan-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
               <property name="max-volatile-time" value="60"/>
             </properties>
           </query-handler>
-          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.infinispan.ISPNCacheableLockManagerImpl">
+          <lock-manager class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.CacheableLockManagerImpl">
             <properties>
-              <property name="time-out" value="15m" />
-              <property name="infinispan-configuration" value="${gatein.jcr.lock.cache.config}" />
-              <property name="infinispan-cl-cache.jdbc.table.name" value="lk" />
-              <property name="infinispan-cl-cache.jdbc.table.create" value="true" />
-              <property name="infinispan-cl-cache.jdbc.table.drop" value="false" />
-              <property name="infinispan-cl-cache.jdbc.id.column" value="id" />
-              <property name="infinispan-cl-cache.jdbc.data.column" value="data" />
-              <property name="infinispan-cl-cache.jdbc.timestamp.column" value="timestamp" />
-              <property name="infinispan-cl-cache.jdbc.datasource" value="${gatein.jcr.datasource.name}${container.name.suffix}" />
-              <property name="infinispan-cl-cache.jdbc.connectionFactory" value="org.exoplatform.services.jcr.infinispan.ManagedConnectionFactory" />
+              <property name="time-out" value="15m"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}"/>
+              <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrlock${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock"/>
+              <property name="jbosscache-cl-cache.jdbc.table.create" value="true"/>
+              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false"/>
+              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk"/>
+              <property name="jbosscache-cl-cache.jdbc.fqn.column" value="fqn"/>
+              <property name="jbosscache-cl-cache.jdbc.node.column" value="node"/>
+              <property name="jbosscache-cl-cache.jdbc.parent.column" value="parent"/>
+              <property name="jbosscache-cl-cache.jdbc.datasource"
+                        value="${gatein.jcr.datasource.name}${container.name.suffix}"/>
             </properties>
           </lock-manager>
         </workspace>

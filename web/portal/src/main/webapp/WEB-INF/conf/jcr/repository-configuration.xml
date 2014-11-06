@@ -70,9 +70,11 @@
             <properties>
               <property name="index-dir" value="${gatein.jcr.index.data.dir}/system${container.name.suffix}"/>
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}"/>
-              <property name="infinispan-configuration" value="${gatein.jcr.index.cache.config}"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}"/>
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
-              <property name="infinispan-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
               <property name="max-volatile-time" value="60"/>
             </properties>
           </query-handler>
@@ -135,9 +137,11 @@
             <properties>
               <property name="index-dir" value="${gatein.jcr.index.data.dir}/portal-system${container.name.suffix}"/>
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}"/>
-              <property name="infinispan-configuration" value="${gatein.jcr.index.cache.config}"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}"/>
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
-              <property name="infinispan-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
               <property name="max-volatile-time" value="60"/>
             </properties>
           </query-handler>
@@ -199,9 +203,11 @@
             <properties>
               <property name="index-dir" value="${gatein.jcr.index.data.dir}/portal-work${container.name.suffix}"/>
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}"/>
-              <property name="infinispan-configuration" value="${gatein.jcr.index.cache.config}"/>
+              <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}"/>
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}"/>
-              <property name="infinispan-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jgroups-multiplexer-stack" value="false"/>
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}"/>
+              <property name="jbosscache-shareable" value="true"/>
               <property name="max-volatile-time" value="60"/>
             </properties>
           </query-handler>

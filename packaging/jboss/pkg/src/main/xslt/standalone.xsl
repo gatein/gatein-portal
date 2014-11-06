@@ -30,7 +30,7 @@
          <system-properties>
             <property name="exo.profiles" value="cluster"/>
             <property name="gatein.jcr.config.type" value="cluster"/>
-            <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.ispn.ISPNIndexChangesFilter"/>
+            <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.jbosscache.LocalIndexChangesFilter"/>
             <property name="gatein.jcr.storage.enabled" value="false"/>
             <xsl:comment>jboss.as.management.blocking.timeout expects a value in seconds.
 2147483 is the maximum that corresponds to more than 24 days.</xsl:comment>
