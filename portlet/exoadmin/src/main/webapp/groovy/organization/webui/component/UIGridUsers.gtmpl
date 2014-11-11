@@ -27,8 +27,6 @@
                 <th class="portlet-table-header" id="<%= field%>" scope="col"><%=_ctx.appRes(name + ".header." + field)%></th>
             <%}%>
 
-                <th class="portlet-table-header" id="DisableEnableUser" scope="col"><%=_ctx.appRes(name + ".header.DisableEnableUser")%></th>
-
             <% if (beanActions != null) { %>
                 <th class="portlet-table-header" id="actions" scope="col"><%=_ctx.appRes(name + ".header.action")%></th>
             <%}
@@ -38,8 +36,6 @@
             for (field in beanFields) { %>
                 <th class="portlet-table-header" id="<%= field%>" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
             <%}%>
-
-                <th class="portlet-table-header" id="DisableEnableUser" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header.DisableEnableUser")%></th>
 
             <% if (beanActions != null && beanActions.length > 0) { %>
                 <th class="portlet-table-header" id="actions" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
@@ -68,13 +64,7 @@
 
             def beanIdField = uicomponent.getBeanIdField();
             def beanId = uicomponent.getBeanIdFor(bean);
-            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
-                if(!uicomponent.getFieldValue(bean, "enabled")) {
-                    rowStyle = "font-style: italic; background: #dedfdf";
-                } else {
-                    rowStyle = null;
-                }
-            } %>
+            %>
             <tr class="$rowClass" style="$rowStyle">
             <%
                EntityEncoder encoder = HTMLEntityEncoder.getInstance();
@@ -99,36 +89,6 @@
                   println "<td headers=\"$field\"><div class=\""+cssClass+"\" title='$value'>"+value+"</div></td>";
                }%>
 
-               <!-- EnableDisableUser action -->
-               <% if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {%>
-                   <td headers="DisableEnableUser">
-                    <div class="ActionContainer">
-                        <%
-                        String enableDisableAction = "DisableEnableUser";
-                        String enableDisableTitle = _ctx.appRes(uiParent.getName() + ".action.title." + enableDisableAction);
-                        String enableDisableActionLink = "";
-                        if (uiForm != null) {
-                            enableDisableActionLink = uiForm.event(enableDisableAction, uiParent.getId(), beanId);
-                        } else {
-                            enableDisableActionLink = uiParent.event(enableDisableAction, beanId);
-                        }
-
-                        String classIcon = "";
-                        if (uicomponent.getFieldValue(bean, "enabled")) {
-                            enableDisableTitle = "Enabled User";
-                            classIcon = "Check";
-                        } else {
-                            enableDisableTitle = "Disabled User";
-                            classIcon = "CheckDisable";
-                        }
-                        %>
-                        <a href="javascript:;" onclick="$enableDisableActionLink">
-                            <img alt="$enableDisableTitle" title="$enableDisableTitle" src="/eXoResources/skin/sharedImages/Blank.gif" class="${classIcon}"/>
-                        </a>
-                    </div>
-                   </td>
-               <%}%>
-
                <% if (beanActions != null && beanActions.length > 0) {%>
                  <td headers="actions">
                     <div class="ActionContainer">
@@ -144,17 +104,7 @@
                                actionLink = uiParent.event(action, beanId);
                             }
                             classIcon = action + "Icon";
-                            if (action == "DisableEnableUser") {
-                                if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
-                                    if (uicomponent.getFieldValue(bean, "enabled")) {
-                                        title = "Disabled User";
-                                        classIcon = "CheckDisable";
-                                    } else {
-                                        title = "Enabled User";
-                                        classIcon = "Check";
-                                    }
-                                }
-                            }%>
+                            %>
                             <a href="javascript:;" onclick="$actionLink">
                             <img alt="$title" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${classIcon}"/>
                             </a>

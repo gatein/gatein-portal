@@ -35,9 +35,12 @@
          		if (name == null)
          		{
          			for (field in beanFields)
-         			{ %>
+         			{
+         				if (!"".equals(field)) {
+         				}
+         			%>
          				<th class="portlet-table-header" id="<%= field%>" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header." + field)%></th>
-         	 <% }
+         		 <% }
          			if (beanActions != null && beanActions.length > 0)
          			{ %>
          				<th class="portlet-table-header" id="actions" scope="col"><%=_ctx.appRes(uiParent.getName() + ".header.action")%></th>
@@ -65,11 +68,11 @@
             else rowClass = "OddRow portlet-table-alternate";
             even = !even;
             if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
-                if(!uicomponent.getFieldValue(bean, "enabled")) {
+//                if(!uicomponent.getFieldValue(bean, "enabled")) {
                     rowStyle = "font-style: italic; background: darkgray";
-                } else {
-                    rowStyle = null;
-                }
+//                } else {
+//                    rowStyle = null;
+//                }
             }
       %>
       <tr class="$rowClass" style="$rowStyle">
@@ -117,17 +120,6 @@
                            actionLink = uiParent.event(action, beanId);
                         }
                         classIcon = action + "Icon";
-                        if (action == "DisableEnableUser") {
-                            if (bean instanceof org.exoplatform.services.organization.idm.UserImpl) {
-                                if (uicomponent.getFieldValue(bean, "enabled")) {
-                                    title = "Disabled User";
-                                    classIcon = "CheckDisable";
-                                } else {
-                                    title = "Enabled User";
-                                    classIcon = "Check";
-                                }
-                            }
-                        }
                %>
                <a href="javascript:;" onclick="$actionLink">
                <img alt="$title" title="$title" src="/eXoResources/skin/sharedImages/Blank.gif" class="${classIcon}"/>
