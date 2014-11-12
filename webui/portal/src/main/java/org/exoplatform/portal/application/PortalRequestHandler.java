@@ -19,10 +19,10 @@
 
 package org.exoplatform.portal.application;
 
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 import java.util.ServiceLoader;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +47,6 @@ import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
-import org.gatein.common.text.EntityEncoder;
 
 /**
  * Created by The eXo Platform SAS Dec 9, 2006
@@ -73,6 +72,9 @@ public class PortalRequestHandler extends WebRequestHandler {
 
     /** . */
     public static final QualifiedName LANG = QualifiedName.create("gtn", "lang");
+
+    /** Used to sanitize the CacheControl HTTP header */
+    private static final Pattern CACHE_CONTROL_SANITIZE_PATTERN = Pattern.compile("[\\r\\n]");
 
     static {
         ServiceLoader<PortalApplicationFactory> loader = ServiceLoader.load(PortalApplicationFactory.class);
@@ -178,7 +180,7 @@ public class PortalRequestHandler extends WebRequestHandler {
                     // A feature request to allow portals to set their own policy caused this change, but we might
                     // revert if there are bad side-effects. If so, please replace this comment with the background information,
                     // so that it gets documented why the no-cache setting is forced.
-                    res.setHeader("Cache-Control", URLEncoder.encode(cacheControl, "UTF-8"));
+                    res.setHeader("Cache-Control", getSanitizedCacheControl(cacheControl));
                 }
             }
             processRequest(context, app);
@@ -285,5 +287,12 @@ public class PortalRequestHandler extends WebRequestHandler {
     @Override
     protected boolean getRequiresLifeCycle() {
         return true;
+    }
+
+    public String getSanitizedCacheControl(String cacheControl) {
+        if (null == cacheControl) {
+            return null;
+        }
+        return CACHE_CONTROL_SANITIZE_PATTERN.matcher(cacheControl).replaceAll("");
     }
 }
