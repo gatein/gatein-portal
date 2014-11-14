@@ -33,7 +33,7 @@
                distributedSyncTimeout="60000"
                nodeName="${jboss.node.name:gtn}">
       <properties>
-        <property name="configurationFile" value="${gatein.jcr.jgroups.config.idm}"/>
+        <property name="configurationFile" value="jgroups/gatein-${gatein.default.jgroups.stack:udp}-idm.xml"/>
       </properties>
     </transport>
 
