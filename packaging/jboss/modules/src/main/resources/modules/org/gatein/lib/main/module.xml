@@ -101,7 +101,7 @@
     <module name="org.mozilla.universalchardet"/>
     <module name="org.objectweb.howl"/>
     <module name="org.picketlink.idm"/>
-    <module name="org.picocontainer"/>
+    <module name="org.picocontainer" export="true"/>
     <module name="org.slf4j"/>
     <module name="org.staxnav"/>
     <module name="org.twitter4j" />
