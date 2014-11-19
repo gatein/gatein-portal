@@ -85,20 +85,14 @@
 							<% } %>
 							<%
 								def rowClass = null;
-                                def rowStyle = null;
 								boolean even = true;
 								for (User data : uicomponent.getData()) {
 									if(even) rowClass = "EvenRow";
 									else rowClass = "OddRow";
 									even = !even;
 									checkboxField = uicomponent.getChildById(data.getUserName());
-                                    if (!data.isEnabled()) {
-                                        rowStyle = "font-style: italic; background: darkgray";
-                                    } else {
-                                        rowStyle = null;
-                                    }
 							%>
-								<tr class="$rowClass" style="$rowStyle">
+								<tr class="$rowClass">
 									<% if(isMulti) { %>
 									<td>
 										<div class="ActionContainer">
