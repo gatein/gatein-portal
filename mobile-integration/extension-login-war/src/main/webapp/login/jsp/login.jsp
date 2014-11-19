@@ -54,7 +54,6 @@
   //
   String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
   boolean error = request.getAttribute("org.gatein.portal.login.error") != null;
-  String disabledUser = (String)request.getAttribute(org.exoplatform.web.login.FilterDisabledLoginModule.DISABLED_USER_NAME);
   
   response.setCharacterEncoding("UTF-8"); 
   response.setContentType("text/html; charset=UTF-8");
@@ -81,11 +80,7 @@
         <%/*Begin form*/%>
         <% if (error) {%>
         <div id="error-pane"><p>
-        <%    if (disabledUser != null) {%>
-        <span><%=disabledUser%> <%=res.getString("UILoginForm.label.DisabledUserSignin")%></span>
-        <%	 } else {%>
         <span><%=res.getString("UILoginForm.label.SigninFail")%></span>
-        <%   }%>
         <button id="button-close-alert" type="button"><%=res.getString("UILoginForm.label.mobile.login.Close")%></button></p></div>
         <% }%>
         <form id="login-form" action="<%= contextPath + "/login"%>" method="post">
