@@ -49,13 +49,13 @@
       <xsl:variable name='connection-url-idm'>
          <xsl:choose>
             <xsl:when test="$config='clustering'">jdbc:h2:tcp://localhost/~/jdbcidm_portal</xsl:when>
-            <xsl:otherwise>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcidm_portal;DB_CLOSE_DELAY=-1</xsl:otherwise>
+            <xsl:otherwise>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcidm_portal;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
       <xsl:variable name='connection-url-jcr'>
          <xsl:choose>
             <xsl:when test="$config='clustering'">jdbc:h2:tcp://localhost/~/jdbcjcr_portal</xsl:when>
-            <xsl:otherwise>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcjcr_portal;DB_CLOSE_DELAY=-1</xsl:otherwise>
+            <xsl:otherwise>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcjcr_portal;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false</xsl:otherwise>
          </xsl:choose>
       </xsl:variable>
 
@@ -82,7 +82,7 @@
          <xsl:comment> Uncommented this when deploying gatein-sample-portal </xsl:comment>
          <xsl:comment>
                 <![CDATA[<datasource jndi-name="java:/jdbcidm_sample-portal" pool-name="IDMSamplePortalDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcidm_sample_portal;DB_CLOSE_DELAY=-1</connection-url>
+                    <connection-url>jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcidm_sample_portal;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false</connection-url>
                     <driver>h2</driver>
                     <security>
                         <user-name>sa</user-name>
@@ -93,7 +93,7 @@
          <xsl:comment> Uncommented this when deploying gatein-sample-portal </xsl:comment>
          <xsl:comment>
                 <![CDATA[<datasource jndi-name="java:/jdbcjcr_sample-portal" pool-name="JCRSamplePortalDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcjcr_sample_portal;DB_CLOSE_DELAY=-1</connection-url>
+                    <connection-url>jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcjcr_sample_portal;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false</connection-url>
                     <driver>h2</driver>
                     <security>
                         <user-name>sa</user-name>
