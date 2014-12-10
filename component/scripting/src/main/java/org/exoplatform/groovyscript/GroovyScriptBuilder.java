@@ -18,23 +18,22 @@
  */
 package org.exoplatform.groovyscript;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyCodeSource;
+
+import org.codehaus.groovy.control.CompilationFailedException;
+import org.codehaus.groovy.control.CompilerConfiguration;
+import org.exoplatform.commons.utils.SecurityHelper;
+import org.gatein.common.classloader.DelegatingClassLoader;
+
+import java.io.Reader;
+import java.io.StringReader;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.codehaus.groovy.control.CompilationFailedException;
-import org.codehaus.groovy.control.CompilerConfiguration;
-
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyCodeSource;
-import org.exoplatform.commons.utils.SecurityHelper;
-import org.gatein.common.classloader.DelegatingClassLoader;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -170,16 +169,10 @@ public class GroovyScriptBuilder {
         CompilerConfiguration config = new CompilerConfiguration();
 
         //
-        byte[] bytes;
-        try {
-            config.setScriptBaseClass(BaseScript.class.getName());
-            bytes = groovyText.getBytes(config.getSourceEncoding());
-        } catch (UnsupportedEncodingException e) {
-            throw new TemplateCompilationException(e, groovyText);
-        }
+        config.setScriptBaseClass(BaseScript.class.getName());
 
         //
-        InputStream in = new ByteArrayInputStream(bytes);
+        Reader in = new StringReader(groovyText);
         GroovyCodeSource gcs = new GroovyCodeSource(in, templateName, "/groovy/shell");
         GroovyClassLoader loader = new GroovyClassLoader(prepareClassLoader(), config);
         Class<?> scriptClass;
