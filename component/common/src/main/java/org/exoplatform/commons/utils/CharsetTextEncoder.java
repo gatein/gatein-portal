@@ -87,9 +87,9 @@ public final class CharsetTextEncoder implements TextEncoder {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(baos, encoder);
         try {
-           writer.write(chars, off, len - off);
+            writer.write(chars, off, len - off);
         } finally {
-           writer.close();
+            writer.close();
         }
         out.write(baos.toByteArray());
     }
@@ -99,9 +99,9 @@ public final class CharsetTextEncoder implements TextEncoder {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(baos, encoder);
         try {
-           writer.write(str, off, len - off);
+            writer.write(str, off, len - off);
         } finally {
-           writer.close();
+            writer.close();
         }
         out.write(baos.toByteArray());
     }
