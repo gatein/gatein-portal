@@ -22,8 +22,6 @@ package org.exoplatform.commons.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
@@ -38,25 +36,14 @@ public class CharsetCharEncoder implements CharEncoder {
 
     private static final CharEncoder UTF8 = new CharsetCharEncoder(Charset.forName("UTF8"));
 
-    private static final byte[] EMPTY = new byte[0];
-
     public static CharEncoder getUTF8() {
         return UTF8;
     }
 
     private final Charset charset;
 
-    private final java.nio.CharBuffer in;
-
-    private final ByteBuffer out;
-
-    private final byte[][] arrays;
-
     public CharsetCharEncoder(Charset charset) {
         this.charset = charset;
-        this.in = CharBuffer.allocate(1);
-        this.out = ByteBuffer.allocate(100);
-        this.arrays = new byte[][] { new byte[0], new byte[1], new byte[2], new byte[3], new byte[4], new byte[5] };
     }
 
     public Charset getCharset() {
@@ -64,12 +51,6 @@ public class CharsetCharEncoder implements CharEncoder {
     }
 
     public byte[] encode(char c) {
-        /*
-         * switch (Character.getType(c)) { case Character.SURROGATE: case Character.PRIVATE_USE: return EMPTY; default: if
-         * (encoder.canEncode(c)) { in.rewind(); out.rewind(); in.put(0, c); encoder.reset(); encoder.encode(in, out, true);
-         * encoder.flush(out); int length = out.position(); byte[] bytes = arrays[length]; System.arraycopy(out.array(), 0,
-         * bytes, 0, length); return bytes; } else { return EMPTY; } }
-         */
         try {
             CharsetEncoder encoder = charset.newEncoder();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();

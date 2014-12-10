@@ -19,9 +19,12 @@
 
 package org.exoplatform.commons.utils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 
 
 /**
@@ -80,16 +83,26 @@ public final class CharsetTextEncoder implements TextEncoder {
     }
 
     public void encode(char[] chars, int off, int len, OutputStream out) throws IOException {
-        for (int i = off; i < len; i++) {
-            char c = chars[i];
-            encode(c, out);
+        CharsetEncoder encoder = getCharset().newEncoder();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(baos, encoder);
+        try {
+           writer.write(chars, off, len - off);
+        } finally {
+           writer.close();
         }
+        out.write(baos.toByteArray());
     }
 
     public void encode(String str, int off, int len, OutputStream out) throws IOException {
-        for (int i = off; i < len; i++) {
-            char c = str.charAt(i);
-            encode(c, out);
+        CharsetEncoder encoder = getCharset().newEncoder();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(baos, encoder);
+        try {
+           writer.write(str, off, len - off);
+        } finally {
+           writer.close();
         }
+        out.write(baos.toByteArray());
     }
 }
