@@ -19,10 +19,10 @@
 
 package org.exoplatform.web.controller.router;
 
+import org.exoplatform.web.controller.QualifiedName;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import org.exoplatform.web.controller.QualifiedName;
 
 /**
  * The render context used to compute the rendering of a parameter map.
@@ -75,7 +75,7 @@ public class RenderContext {
     private final Map<QualifiedName, Parameter> parameters;
 
     /** . */
-    private BitStack stack = new BitStack();
+    BitStack stack = new BitStack();
 
     /** . */
     Regex.Matcher[] matchers;

@@ -135,10 +135,10 @@ class Route {
     private static final RequestParam[] EMPTY_REQUEST_PARAM_ARRAY = new RequestParam[0];
 
     /** . */
-    private final Router router;
+    final Router router;
 
     /** . */
-    private Route parent;
+    Route parent;
 
     /** . */
     private boolean terminal;
@@ -156,7 +156,7 @@ class Route {
     private Map<String, RequestParam> requestParamMap;
 
     /** . */
-    private RequestParam[] requestParamArray;
+    RequestParam[] requestParamArray;
 
     Route(Router router) {
         this.router = router;
@@ -325,8 +325,9 @@ class Route {
         // Match first the static parameteters
         for (RouteParam param : routeParamArray) {
             RenderContext.Parameter entry = context.getParameter(param.name);
-            if (entry != null && !entry.isMatched() && param.value.equals(entry.getValue())) {
-                entry.remove(entry.getValue());
+            String value;
+            if (entry != null && !entry.isMatched() && param.value.equals(value = entry.getValue())) {
+                entry.remove(value);
             } else {
                 return null;
             }
@@ -370,8 +371,9 @@ class Route {
                         case PRESERVE_PATH:
                             for (int j = 0; j < param.matchingRegex.length; j++) {
                                 Regex renderingRegex = param.matchingRegex[j];
-                                if (context.matcher(renderingRegex).matches(s.getValue())) {
-                                    matched = param.templatePrefixes[j] + s.getValue() + param.templateSuffixes[j];
+                                String value;
+                                if (context.matcher(renderingRegex).matches(value = s.getValue())) {
+                                    matched = param.templatePrefixes[j] + value + param.templateSuffixes[j];
                                     break;
                                 }
                             }

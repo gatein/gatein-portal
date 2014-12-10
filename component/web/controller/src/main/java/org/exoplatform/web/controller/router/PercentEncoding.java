@@ -19,12 +19,12 @@
 
 package org.exoplatform.web.controller.router;
 
-import java.io.IOException;
-import java.util.BitSet;
-
 import org.exoplatform.commons.utils.CharEncoder;
 import org.exoplatform.commons.utils.CharsetCharEncoder;
 import org.gatein.common.io.UndeclaredIOException;
+
+import java.io.IOException;
+import java.util.BitSet;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -123,13 +123,15 @@ public final class PercentEncoding {
 
     /** . */
     private final BitSet allowed;
+    private final int length;
 
     private PercentEncoding(BitSet allowed) {
         this.allowed = allowed;
+        this.length = allowed.length();
     }
 
     boolean accept(char c) {
-        return c < allowed.length() && allowed.get(c);
+        return c < length && allowed.get(c);
     }
 
     public void encode(CharSequence s, Appendable appendable) throws IOException {

@@ -29,16 +29,16 @@ class BitStack {
     private static class Frame {
 
         /** . */
-        private Frame previous;
+        Frame previous;
 
         /** . */
-        private Frame next;
+        Frame next;
 
         /** . */
-        private long bits;
+        long bits;
 
         /** . */
-        private int cardinality;
+        int cardinality;
 
         private Frame() {
             this(0, 0);
