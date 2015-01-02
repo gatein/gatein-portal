@@ -97,7 +97,7 @@
 
     <!-- maven-release-plugin -->
     <useReleaseProfile>false</useReleaseProfile>
-    <version.release.plugin>2.2.1</version.release.plugin>
+    <version.release.plugin>2.5</version.release.plugin>
     <pushChanges>false</pushChanges>
 
     <!-- checkstyle -->
