@@ -75,7 +75,7 @@
     <version.scribe>1.3.5</version.scribe>
 
     <!-- downgrade to JCR 1.15.x -->
-    <version.org.jgroups>2.6.20.Final</version.org.jgroups>
+    <version.org.jgroups>2.6.22.Final</version.org.jgroups>
     <version.jboss.cache>3.2.7.GA</version.jboss.cache>
     <version.xpp3>1.1.4c</version.xpp3>
     <version.apache.lucene>3.5.0</version.apache.lucene>
