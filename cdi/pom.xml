@@ -28,14 +28,14 @@
 
   <groupId>org.gatein.cdi</groupId>
   <artifactId>gatein-cdi-parent</artifactId>
-  <version>3.8.9.Alpha03-SNAPSHOT</version>
+  <version>3.8.12.Final</version>
 
   <packaging>pom</packaging>
 
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.8.9.Alpha03-SNAPSHOT</version>
+    <version>3.8.12.Final</version>
   </parent>
 
   <description>GateIn CDI Enhancements parent</description>
