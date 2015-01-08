@@ -134,7 +134,13 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
 
         if (isCreateMembership(mt.getName(), g.getId())) {
             if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null) {
-                getIdentitySession().getRoleManager().createRoleType(mt.getName());
+                try {
+                    getIdentitySession().getRoleManager().createRoleType(mt.getName());
+                } catch (Exception e) {
+                    // TODO:
+                    handleException("Identity operation error: ", e);
+
+                }
             }
 
             if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName())) {
@@ -152,13 +158,25 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         }
 
         if (isAssociationMapped() && getAssociationMapping().equals(mt.getName())) {
-            if(!getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, user.getUserName())) {
-                getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
+            try {
+               if(!getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, user.getUserName())) {
+                   getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
+               }
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
             }
         }
 
         if (isCreateMembership(mt.getName(), g.getId())) {
-            getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
+            try {
+                getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
+            }
         }
 
         if (broadcast) {
@@ -335,7 +353,13 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
                 preDelete(m);
             }
 
-            getIdentitySession().getRoleManager().removeRole(role);
+            try {
+                getIdentitySession().getRoleManager().removeRole(role);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
+            }
 
             if (broadcast) {
                 postDelete(m);
@@ -580,8 +604,15 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
     }
 
     public ListAccess<Membership> findAllMembershipsByUser(User user) throws Exception {
-        org.picketlink.idm.api.User gtnUser = service_.getIdentitySession().getPersistenceManager()
+        org.picketlink.idm.api.User gtnUser = null;
+        try {
+            gtnUser = service_.getIdentitySession().getPersistenceManager()
                 .findUser(user.getUserName());
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
 
         if (gtnUser == null) {
             log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain user: " + user.getUserName());
