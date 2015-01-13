@@ -37,10 +37,10 @@
   <name>GateIn - Portal</name>
 
   <properties>
-    <org.exoplatform.kernel.version>2.4.10-GA</org.exoplatform.kernel.version>
-    <org.exoplatform.core.version>2.5.10-GA</org.exoplatform.core.version>
-    <org.exoplatform.ws.version>2.3.10-GA</org.exoplatform.ws.version>
-    <org.exoplatform.jcr.version>1.15.10-GA</org.exoplatform.jcr.version>
+    <org.exoplatform.kernel.version>2.4.11-GA</org.exoplatform.kernel.version>
+    <org.exoplatform.core.version>2.5.11-GA</org.exoplatform.core.version>
+    <org.exoplatform.ws.version>2.3.11-GA</org.exoplatform.ws.version>
+    <org.exoplatform.jcr.version>1.15.11-GA</org.exoplatform.jcr.version>
     <org.exoplatform.framework.junit.version>1.2.4-GA</org.exoplatform.framework.junit.version>
     <org.shindig.version>2.0.2.Final-gatein-5</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-4</nl.captcha.simplecaptcha.version>
