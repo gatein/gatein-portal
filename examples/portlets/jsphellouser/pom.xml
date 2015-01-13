@@ -9,7 +9,7 @@
   <parent>
     <groupId>org.gatein.portal.examples.portlets</groupId>
     <artifactId>parent</artifactId>
-    <version>3.8.13.Final-SNAPSHOT</version>
+    <version>3.8.13.Final</version>
   </parent>
 
   <artifactId>gatein-jsp-hellouser</artifactId>
