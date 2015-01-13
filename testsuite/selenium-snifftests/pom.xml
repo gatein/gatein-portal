@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.testsuite</artifactId>
-    <version>3.8.13.Final</version>
+    <version>3.8.14.Final-SNAPSHOT</version>
   </parent>
 
   <artifactId>exo.portal.selenium.snifftests</artifactId>
