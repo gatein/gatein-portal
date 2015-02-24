@@ -18,19 +18,15 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.services.jcr.impl.Constants;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 
 /**
@@ -39,11 +35,9 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GroovyTemplate implements Externalizable {
+public class GroovyTemplate implements Serializable {
 
     private static final long serialVersionUID = -8220112880199970451L;
-
-    private static final String DEFAULT_ENCODING = "UTF-8";
 
     // todo : move that to {@link org.gatein.common.io.IOTools}
     private static String read(Reader reader) throws IOException {
@@ -56,15 +50,13 @@ public class GroovyTemplate implements Externalizable {
     }
 
     /** The text of the template. */
-    private String templateText;
+    private final String templateText;
 
-    private String templateId;
-    private String templateName;
+    private final String templateId;
+    private final String templateName;
 
     /** The groovy script. */
-    private volatile GroovyScript script;
-
-    public GroovyTemplate() {}
+    private transient GroovyScript script;
 
     public GroovyTemplate(String id, String name, Reader scriptReader) throws IOException, TemplateCompilationException {
         this(id, name, read(scriptReader));
@@ -148,88 +140,15 @@ public class GroovyTemplate implements Externalizable {
 
     private GroovyScript getScript() {
         if(this.script == null) {
-            synchronized (this) {
-                if(this.script == null) {
-                    try {
-                        GroovyScriptBuilder compiler = new GroovyScriptBuilder(templateId, templateName, templateText);
-                        this.script = compiler.build();
-                    } catch (TemplateCompilationException ex) {
-                        Logger log = LoggerFactory.getLogger(GroovyTemplate.class);
-                        log.error(ex.getMessage(), ex);
-                    }
-                }
+            try {
+                GroovyScriptBuilder compiler = new GroovyScriptBuilder(templateId, templateName, templateText);
+                this.script = compiler.build();
+            } catch (TemplateCompilationException ex) {
+                Logger log = LoggerFactory.getLogger(GroovyTemplate.class);
+                log.error(ex.getMessage(), ex);
             }
         }
 
         return this.script;
-    }
-
-    /**
-     * @see java.io.Externalizable#writeExternal(java.io.ObjectOutput)
-     */
-    @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
-        byte[] bytes = templateId.getBytes(DEFAULT_ENCODING);
-        out.writeInt(bytes.length);
-        out.write(bytes);
-        bytes = templateName.getBytes(DEFAULT_ENCODING);
-        out.writeInt(bytes.length);
-        out.write(bytes);
-        bytes = templateText.getBytes(DEFAULT_ENCODING);
-        out.writeInt(bytes.length);
-        out.write(bytes);
-    }
-
-    /**
-     * @see java.io.Externalizable#readExternal(java.io.ObjectInput)
-     */
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException  {
-        byte[] bytes = new byte[in.readInt()];
-        in.readFully(bytes);
-        templateId = new String(bytes, Constants.DEFAULT_ENCODING);
-        bytes = new byte[in.readInt()];
-        in.readFully(bytes);
-        templateName = new String(bytes, Constants.DEFAULT_ENCODING);
-        bytes = new byte[in.readInt()];
-        in.readFully(bytes);
-        templateText = new String(bytes, Constants.DEFAULT_ENCODING);
-    }
-
-   @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((templateId == null) ? 0 : templateId.hashCode());
-        result = prime * result + ((templateName == null) ? 0 : templateName.hashCode());
-        result = prime * result + ((templateText == null) ? 0 : templateText.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        GroovyTemplate other = (GroovyTemplate)obj;
-        if (templateId == null) {
-            if (other.templateId != null)
-                return false;
-        } else if (!templateId.equals(other.templateId))
-            return false;
-        if (templateName == null) {
-            if (other.templateName != null)
-                return false;
-        } else if (!templateName.equals(other.templateName))
-            return false;
-        if (templateText == null) {
-            if (other.templateText != null)
-                return false;
-        } else if (!templateText.equals(other.templateText))
-            return false;
-        return true;
     }
 }
