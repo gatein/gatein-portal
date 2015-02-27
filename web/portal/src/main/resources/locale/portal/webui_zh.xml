@@ -382,7 +382,7 @@
       <ForAccount>立即注册一个帐户</ForAccount>
       <SigninFail>登录失败。用户名或密码错误。</SigninFail>
       <Copyright>
-        <![CDATA[Copyright &copy; 2009-2014. All rights Reserved, eXo Platform SAS and Red Hat, Inc.]]></Copyright>
+        <![CDATA[Copyright &copy; 2009-2015. All rights Reserved, eXo Platform SAS and Red Hat, Inc.]]></Copyright>
     </label>
   </UILoginForm>
 
@@ -1414,7 +1414,7 @@
 
   <UIPortalToolPanel>
     <label>
-      <copyrightText><![CDATA[Copyright &copy; 2009-2014. All rights reserved,]]></copyrightText>
+      <copyrightText><![CDATA[Copyright &copy; 2009-2015. All rights reserved,]]></copyrightText>
       <companyTitleText>eXo Platform SAS and Red Hat, Inc..</companyTitleText>
     </label>
   </UIPortalToolPanel>
