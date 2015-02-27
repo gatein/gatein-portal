@@ -41,7 +41,10 @@ function initTabbedDashboardPortlet(id)
     function renameTabLabel(input)
     {
       var newLabel = input.val();
-      if (newLabel && newLabel.length > 0)
+     /*
+         Check surrogate pair characters in the newLabel
+      */
+      if (newLabel && newLabel.length > 0 && newLabel.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g) == null)
       {
         var portletID = input.closest(".PORTLET-FRAGMENT").parent().attr("id");
 
