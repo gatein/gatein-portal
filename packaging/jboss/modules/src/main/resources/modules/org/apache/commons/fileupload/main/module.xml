@@ -30,5 +30,6 @@
   <dependencies>
     <module name="javax.servlet.api"/>
     <module name="javax.portlet.api"/>
+    <module name="org.apache.commons.io" />
   </dependencies>
 </module>
