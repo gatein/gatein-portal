@@ -155,7 +155,7 @@ public class PortletApplication extends WebuiApplication {
             // Store ui root
             sm.storeUIRootComponent(context);
         } finally {
-            context.setProcessAction(true);
+            context.setAppLifecycleStarted(true);
             WebuiRequestContext.setCurrentInstance(parentAppRequestContext);
         }
     }
@@ -187,6 +187,7 @@ public class PortletApplication extends WebuiApplication {
             // Store ui root
             sm.storeUIRootComponent(context);
         } finally {
+            context.setAppLifecycleStarted(true);
             WebuiRequestContext.setCurrentInstance(parentAppRequestContext);
         }
     }
@@ -221,6 +222,13 @@ public class PortletApplication extends WebuiApplication {
             // Store ui root
             sm.storeUIRootComponent(context);
         } finally {
+            try {
+                for (ApplicationLifecycle<RequestContext> lifecycle : getApplicationLifecycle()) {
+                    lifecycle.onEndRequest(this, context);
+                }
+            } catch (Exception exception) {
+                log.error("Error while trying to call onEndRequest of the portlet ApplicationLifecycle", exception);
+            }
             WebuiRequestContext.setCurrentInstance(parentAppRequestContext);
         }
     }
@@ -242,7 +250,7 @@ public class PortletApplication extends WebuiApplication {
         PortletRequestContext context = createRequestContext(req, res, parentAppRequestContext);
         WebuiRequestContext.setCurrentInstance(context);
         try {
-            if (!context.hasProcessAction()) {
+            if (!context.isAppLifecycleStarted()) {
                 for (ApplicationLifecycle<RequestContext> lifecycle : getApplicationLifecycle()) {
                     lifecycle.onStartRequest(this, context);
                 }

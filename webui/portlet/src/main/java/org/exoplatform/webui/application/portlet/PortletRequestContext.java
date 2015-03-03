@@ -67,7 +67,7 @@ public class PortletRequestContext extends WebuiRequestContext {
 
     private Writer writer_;
 
-    private boolean hasProcessAction_ = false;
+    private boolean isAppLifecycleStarted = false;
 
     /** . */
     private PortletURLBuilder urlBuilder;
@@ -188,12 +188,12 @@ public class PortletRequestContext extends WebuiRequestContext {
         return getParentAppRequestContext().getUserPortal();
     }
 
-    public boolean hasProcessAction() {
-        return hasProcessAction_;
+    public boolean isAppLifecycleStarted() {
+        return isAppLifecycleStarted;
     }
 
-    public void setProcessAction(boolean b) {
-        hasProcessAction_ = b;
+    public void setAppLifecycleStarted(boolean b) {
+        isAppLifecycleStarted = b;
     }
 
     public URLBuilder<UIComponent> getURLBuilder() {
