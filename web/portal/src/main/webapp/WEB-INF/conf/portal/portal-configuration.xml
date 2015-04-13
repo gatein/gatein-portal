@@ -252,7 +252,7 @@
       </value-param>
       <value-param>
         <name>destroy.user.portal</name>
-        <value>${gatein.portal.idm.destroyserportal}</value>
+        <value>${gatein.portal.idm.destroyuserportal}</value>
       </value-param>
       <value-param>
         <name>default.import.mode</name>
